@@ -1,69 +1,64 @@
-<div class="down">
-    <section class="index_center">
-        <table>
+<section class="main">
+        <div class="slogen">
             <#if service_item_list??>
-                <tr>
-                    <#list service_item_list as item>
-                        <td>
-                            <a href="javascript:;"><img src="${item.logo!''}" />${item.title!''}<br>${item.description!''}</a>
-                        </td>
-                    </#list>
-                </tr>
-            </#if>
-        </table>
-    </section><!--index_center END-->
-</div>
-<div class="down2">
-    <div class="main">
-        <ul style="height:30px;">
-            <#if help_level0_cat_list??>
-                <#list help_level0_cat_list as item>
-                    <li><a href="/info/list/${help_id!'0'}?catId=${item.id?c!''}">${item.title!''}</a></li>
+                <#list service_item_list as item>
+                    <#if item_index lt 6 >
+                        <span><i><img src="${item.logo!''}"></i>${item.title!''}</span>
+                    </#if>
                 </#list>
             </#if>
-        </ul>
-        
-        <div class="clear"></div>
-        
-        <p>
-        友情链接： 
-        <#if site_link_list??>
-            <#list site_link_list as item>
-                <span class="youqin"><a href="${item.linkUri!''}">${item.title!''}</a></span>
-            </#list>
-        </#if>
-        <br />
-        ${site.copyright!''}
-        <br />
-        ${site.address!''} 电话：${site.telephone!''}
-        <br />
-        <span class="flr"><a title="天度网络信息技术有限公司" href="http://www.ynyes.com" target="_blank">网站建设</a>技术支持：<a title="天度网络信息技术有限公司" href="http://www.ynyes.com" target="_blank">昆明天度网络公司</a></span>
-            <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254586643'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s95.cnzz.com/z_stat.php%3Fid%3D1254586643%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
-        </p>
-        <!--add 2015-7-28 18:45:37 mdj-->
-        <p>
-        <#if site??&&site.bottomLogoUri1??&&site.bottomLogoLink1??>
-        <span style="margin-right:10px;">
-            <a href="${site.bottomLogoLink1}">
-            <img src="${site.bottomLogoUri1}" /><img>
-        </span>
-        </#if>
-        <#if site??&&site.bottomLogoUri2??&&site.bottomLogoLink2??>
-            <span style="margin-right:10px;">
-            <a href="${site.bottomLogoLink2}">
-            <img src="${site.bottomLogoUri2}" /><img>
-            </span>
-        </#if>
-        <#if site??&&site.bottomLogoUri3??&&site.bottomLogoLink3??>
-            <span style="margin-right:10px;">
-                <a href="${site.bottomLogoLink3}">
-                <img src="${site.bottomLogoUri3}" /><img>
-            </span>
-        </#if>
-        <#if site??&&((site.bottomLogoUri3??&&site.bottomLogoLink3??)||(site.bottomLogoUri2?? && site.bottomLogoLink2??)||(site.bottomLogoUri1??&&site.bottomLogoLink1??))>
-            <br />
-        </#if>
-		</p>
-		<!--add 2015-7-28 18:45:37 mdj-->
-    </div>
-</div>
+        </div>
+    </section>
+
+    <footer class="foot">
+        <div class="main">
+            <dl>
+                <dt>新手指南</dt>
+                <dd><a href="#">用户注册</a></dd>
+                <dd><a href="#">购物流程</a></dd>
+                <dd><a href="#">新手帮助</a></dd>
+                <dd><a href="#">隐私声明</a></dd>
+            </dl>
+            <dl>
+                <dt>支付方式</dt>
+                <dd><a href="#">在线支付</a></dd>
+                <dd><a href="#">支付宝支付</a></dd>
+                <dd><a href="#">网银支付</a></dd>
+                <dd><a href="#">公司转账</a></dd>
+            </dl>
+            <dl>
+                <dt>配送方式</dt>
+                <dd><a href="#">送货上门</a></dd>
+                <dd><a href="#">配货点自提</a></dd>
+                <dd><a href="#">配送标准</a></dd>
+                <dd><a href="#">配送查询</a></dd>
+            </dl>
+            <dl>
+                <dt>售后服务</dt>
+                <dd><a href="#">退货流程</a></dd>
+                <dd><a href="#">售后政策</a></dd>
+            </dl>
+            <dl>
+                <dt>帮助中心</dt>
+                <dd><a href="#">常见问题</a></dd>
+                <dd><a href="#">关于我们</a></dd>
+                <dd><a href="#">联系我们</a></dd>
+                <dd><a href="#">交易条款</a></dd>
+                <dd><a href="#">商家入住</a></dd>
+            </dl>
+            <div class="b_contact">
+                <a href="#" class="qq"><img src="/client/images/qq01.png"></a>
+                <span><i><img src="/client/images/phone01.png"></i>13888888888</span>
+            </div>
+            <div class="clear"></div>
+
+            <menu class="bottom_nav">
+                <a href="#">首页<span>丨</span></a>
+                <a href="#">本地特产<span>丨</span></a>
+                <a href="#">政企采购<span>丨</span></a>
+                <a href="#">生活服务<span>丨</span></a>
+                <a href="#">商家入驻</a>
+            </menu>
+            <p class="copyright">copyright©2015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司版权所有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技术支持：<a href="http://www.ynyes.com">昆明天度网络信息技术有限公司</a></p>
+        </div>
+    </footer>

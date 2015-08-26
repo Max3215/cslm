@@ -307,7 +307,9 @@ textarea { resize:none;}
 .mymember_info_show a {
 	position:absolute;
 	top:10px;
-	right:10px;}
+	right:10px;
+	z-index: 2;
+}
 .mymember_info_show h5 {
 	width:100%;
 	border-bottom:1px solid #ddd;

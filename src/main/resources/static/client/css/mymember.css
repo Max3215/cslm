@@ -7,7 +7,7 @@ img {border:0;}
 .myclear {height:0px;line-height: 0px;font-size: 0px;clear: both;visibility: hidden;overflow:hidden;padding:0;margin:0;}
 div,ul,dl,dd,dt,li,td,tr,table,p,span,h1,h2,h3,h4,h5,h6,form{ margin:0px;  padding:0px; list-style:none; list-style-type: none; word-wrap:break-word;border:none;}
 a {color:#555;text-decoration: none;cursor:pointer;}
-a:hover {color:#ff4454;}
+a:hover {}
 textarea { resize:none;}
 
 .mymember_out {
@@ -100,7 +100,7 @@ textarea { resize:none;}
 	left:0;
 	*left:2%;
 	top:10px;}
-.mymember_menu_tit:hover {color:#ff4454;}
+.mymember_menu_tit:hover {color:#317ef3;}
 .mymember_menu_part div a {
 	display:block;
 	line-height:20px;
@@ -113,7 +113,7 @@ textarea { resize:none;}
     -o-transition: all 0.2s ease-in-out 0.01s;
     -ms-transition: all 0.2s ease-in-out 0.01s;
     transition: all 0.2s ease-in-out 0.01s;
-	color:#ff4454;
+	color:#317ef3;
 	text-indent:1em;}
 .mymember_hot {
 	position:relative;
@@ -163,13 +163,13 @@ textarea { resize:none;}
 	line-height:20px;
 	height:40px;
 	overflow:hidden;
-	color:#1c2b38;
+	color:#555;
 	padding-top:5px;
 	margin-bottom:5px;}
 .mymember_hot_list b {
 	font-size:14px;
-	color:#ff4454;}
-.mymember_hot_list:hover p{color:#ff4454;}
+	color:#ff8800;}
+.mymember_hot_list:hover p{color:#ff8800;}
 .mymember_hot_story {
 	position:relative;
 	float:left;
@@ -249,8 +249,7 @@ textarea { resize:none;}
 	background:#f5f5f5;
 	line-height:35px;
 	font-weight:400;
-	text-align:center;
-	align:center
+	text-align:left;
 	padding:0 5px;
 	color:#333;
 	font-size:12px;}
@@ -269,7 +268,7 @@ textarea { resize:none;}
 .mymember_info02 td.td001 a img {width:50px;height:50px;}
 .mymember_info02 td.td002 {border-left:none; text-align:left;}
 .mymember_info02 td.td003 p,.mymember_info02 td.td003 a{color:#989898;}
-.mymember_info02 td.td003 a:hover{color:#ff4454;}
+.mymember_info02 td.td003 a:hover{color:#ff8800;}
 .mymember_info02 td h4 {color:#ff1000;}
 .mymember_infotab_show { background:url(../images/mymember/arrow05.gif) no-repeat right center;display:inline-block; padding-right:15px;}
 .mymember_info_show {
@@ -290,7 +289,9 @@ textarea { resize:none;}
 .mymember_info_show a {
 	position:absolute;
 	top:10px;
-	right:10px;}
+	right:10px;
+	z-index: 2;
+}
 .mymember_info_show h5 {
 	width:100%;
 	border-bottom:1px solid #ddd;
@@ -299,7 +300,7 @@ textarea { resize:none;}
 	display:inline-block;
 	width:140px;}
 .mymember_info_show p {line-height:20px; padding-top:5px;}
-.mymember_info02 a:hover {color:#ff4454;}
+.mymember_info02 a:hover {color:#ff8800;}
 .mymember_botad { margin:0 12px;}
 #mymember_right_check {
 	position:relative;
@@ -322,7 +323,7 @@ textarea { resize:none;}
 	height:180px;}
 .mymember_gzlist:hover { opacity:0.7;}
 .mymember_gzlist p {line-height:20px;color:#555;}
-.mymember_gzlist h6 {color:#ff4454; text-align:center;}
+.mymember_gzlist h6 {color:#ff8800; text-align:center;}
 #mymember_gzbox {width:100%;position:relative;height:241px; padding-top:5px;}
 #mymember_gznext {position:absolute;right:0px;top:100px;}
 .mymember_shine {
@@ -384,24 +385,26 @@ textarea { resize:none;}
 	font-size:12px;}
 .mymember_info03 h3 a.a001:hover {color:#ff8800;}
 .mymember_info03 h3 a.a002 {
-	position:absolute;
-	right:0;
-	top:0;
-	color:#fff;
-	display:inline-block;
-	padding:0 10px;
-	border-radius:3px;
-	background:#ff4454;
-	font-size:12px;}
-.mymember_info03 h3 a.a002:hover { background:#1c2b38;}
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #fff;
+	display: inline-block;
+	padding: 0 10px;
+	border-radius: 3px;
+	background: #ff1000;
+	font-size: 12px;
+	background-color: #39bee9;
+}
+.mymember_info03 h3 a.a002:hover { background:#ff8800;}
 .mymember_info03 p {
 	font-size:14px;
 	color:#999;
 	line-height:25px;}
 .mymember_info03 p a {color:#999;}
-.mymember_info03 p a:hover {color:#ff4454;}
+.mymember_info03 p a:hover {color:#ff8800;}
 .mymember_info03 p a.a001 {color:#0060aa;}
-.mymember_info03 p a.a001:hover {color:#ff4454;}
+.mymember_info03 p a.a001:hover {color:#ff8800;}
 .mymember_order_search {
 	width:100%;
 	line-height:30px;
@@ -415,7 +418,7 @@ textarea { resize:none;}
 	line-height:28px;
 	text-indent:1em;
 	background:#fff;
-	float:right;}
+	float:right;margin-left: 5px;}
 .mymember_order_search .mysub {
 	width:60px;
 	cursor:pointer;
@@ -513,8 +516,8 @@ textarea { resize:none;}
 	color:#555;
 	padding:5px 0;}
 .mymember_evaluate td.td001 {border-left:1px solid #eee;}
-.mymember_evaluate td a {color:#1c2b38;}
-.mymember_evaluate td a:hover {color:#ff4454;}
+.mymember_evaluate td a {color:#0060aa;}
+.mymember_evaluate td a:hover {color:#ff8800;}
 .mymember_evaluate td.td002 {
 	padding-right:10px;
 	text-align:left;
@@ -559,10 +562,12 @@ textarea { resize:none;}
 .mymember_eva_div .mysub {
 	width:100px;
 	height:30px;
-	border:1px solid #ddd;
-	background:#fff;
+	border:none;
+	color:#FFF;
+	 font-family:"微软雅黑";
+	background:#39bee9;
 	cursor:pointer;}
-.mymember_eva_div .mysub:hover { background:#eee;}
+.mymember_eva_div .mysub:hover { background:#ff5b7d;}
 .mymember_evabox { display:none;}
 .mymember_scan_check {
 	position:relative;
@@ -577,7 +582,7 @@ textarea { resize:none;}
 	border-radius:20px;
 	color:#777;
 	}
-.mymember_scan_check a.mysel {background:#ff4454;color:#fff;}
+.mymember_scan_check a.mysel {background:#39bee9;color:#fff;}
 .mymember_scan {
 	position:relative;
 	width:94%;
@@ -638,7 +643,7 @@ textarea { resize:none;}
 	margin-top:10px;
 	font-size:18px;}
 .mymember_scanpart:hover {
-	border:1px solid #ff4454;}
+	border:1px solid #ff8800;}
 .mymember_info04 h3 {
 	position:relative;
 	width:100%;
@@ -682,7 +687,7 @@ textarea { resize:none;}
 	width:70px;
 	color:#999;
 	text-align:center;}
-.mymember_green p.mysel {color:#ff4544;}
+.mymember_green p.mysel { color:#000;}
 .mymember_green p i {
 	display:block;
 	position:absolute;
@@ -694,7 +699,7 @@ textarea { resize:none;}
 	height:20px;
 	background:#fff;
 	width:20px;}
-.mymember_green p.mysel i {border:4px solid #ff4544;}
+.mymember_green p.mysel i {border:4px solid #39bee9;}
 .mymember_green p b {
 	display:block;
 	position:absolute;
@@ -703,7 +708,7 @@ textarea { resize:none;}
 	width:95px;
 	height:8px;
 	background:#ddd;}
-.mymember_green p.mysel b {background:#ff4544;}
+.mymember_green p.mysel b {background:#39bee9;}
 .mymember_info04 table{
 	margin-top:15px;
 	width:100%;
@@ -733,3 +738,39 @@ textarea { resize:none;}
 	padding:10px;}
 #mymember_ordersum01 { display:none;}
 #mymember_ordersum02 { display:none;}
+.center_tab th{ text-align:center;}
+.center_tab td a{ color:#0060aa;}
+.mymember_address {
+	border-collapse:collapse;
+	width:100%;}
+.mymember_address th {
+	text-align:right;
+	padding:0 10px 0 0;
+	background:none;
+	width:120px;
+	vertical-align:middle;
+	border:none;}
+.mymember_address td {
+	text-align:left;
+	padding:10px 0;
+	background:none;
+	border:none;}
+.mymember_address input.mytext {
+	width:50%;
+	border:1px solid #ddd;
+	height:28px;
+	line-height:28px;
+	text-indent:1em;
+	}
+.mymember_address input.mysub {
+	width:180px;
+	height:35px;
+	border:none;
+	cursor:pointer;
+	color:#fff;
+	font-family:"微软雅黑";
+	font-size:16px;
+	border-radius:3px;
+	background:#ff5b7d;}
+.mymember_address input.mysub:hover {
+	background:#39bee9;}

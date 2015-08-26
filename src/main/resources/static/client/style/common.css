@@ -2,11 +2,24 @@
 
 /* CSS Document */
 * {padding: 0;margin: 0;}
-body {margin: 0px;padding: 0px;color: #666;font-family:"微软雅黑", Arial, Helvetica, sans-serif;font-size:14px;background:#fff;text-align:left;position:relative; line-height:20px;overflow-x: hidden;}
+body {margin: 0px;padding: 0px;color: #666;font-family:"微软雅黑", Arial, Helvetica, sans-serif;font-size:14px;background:#fff;text-align:left;position:relative; line-height:20px;}
 img {border: 0;position:relative;}
 .clear {height:0px;line-height: 0px;font-size: 0px;clear: both;visibility: hidden;overflow:hidden;padding:0;margin:0;}
-div,ul,dl,dd,dt,li,td,tr,table,p,span,h1,h2,h3,h4,h5,h6,form{ margin:0px;  padding:0px; list-style:none; list-style-type: none; word-wrap:break-word;position:relative; border:none;}
-a {color:#222222;text-decoration: none;position:relative;cursor:pointer;}
+div,ul,dl,dd,dt,li,td,tr,table,p,span,h1,h2,h3,h4,h5,h6,form{
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	list-style-type: none;
+	word-wrap: break-word;
+	position: relative;
+	border: none;
+}
+a {
+	color: #222222;
+	text-decoration: none;
+	position: relative;
+	cursor: pointer;
+}
 a:hover {color:#e8323d;}
 header, footer, nav, section, article, menu, aside {  display:block;position:relative;  } 
 textarea { resize:none;font-family:"微软雅黑";font-size:14px;}
@@ -454,15 +467,8 @@ a.white:hover { color:#ff7d43;}
 	border-left:1px solid #eee;}
 .index_center {width:100%;background:#f3f0f2; padding:15px 0; height:80px;}
 .index_center table { width:1200px; table-layout:fixed; margin:0 auto; margin-top:20px;}
-.index_center a {
-display: block;
-height: 71px;
-font-size: 14px;}
-.index_center a img {
-float: left;
-margin-right: 10px;
-top: 0;
-}
+.index_center a { display:block; padding:3px 0 0 190px; height:37px; font-size:14px;}
+.index_center a img { position:absolute;left:90px;top:0;}
 .index_center a:hover img {
 	-webkit-transition: all 0.4s ease-in-out 0.01s;
     -moz-transition: all 0.4s ease-in-out 0.01s;
@@ -739,27 +745,3 @@ margin:0 2px;}
 .darkpage .text { height:30px; line-height:30px; width:50px;border:1px solid #2b3243; float:left; text-align:center;}
 .darkpage .sp1 { border:none;}
 .darkpage .sub { height:32px; width:50px;float:left; text-align:center; background:#2b3243; color:#fff; cursor:pointer;}
-
-.floatboxlist {
-	display:none;
-	position:absolute;
-	right:43px;
-	top:34px;
-	width:100px;
-	padding:10px;
-	}
-.floatboxlist a {
-	width:100%;
-	opacity:1;
-	line-height:30px;
-	border:1px solid #ddd;
-	background:#fff;
-	height:30px;
-	text-align:center;}
-
-
-
-
-
-
-

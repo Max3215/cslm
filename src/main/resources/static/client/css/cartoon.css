@@ -1,4 +1,4 @@
-div,ul,dl,dd,dt,li,p,span,h2,h3,h4,h5,h6,img,a,i,b,input {
+div,ul,dl,dd,dt,p,span,h2,h3,h4,h5,h6,img,a,i,b,input {
 	-webkit-transition: all 0.2s ease-in-out 0.01s;
     -moz-transition: all 0.2s ease-in-out 0.01s;
     -o-transition: all 0.2s ease-in-out 0.01s;
