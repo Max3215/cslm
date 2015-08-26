@@ -105,6 +105,7 @@ function change2cn(en, cninput) {
       <span class="Validform_checktip">*数字，越小越向前</span>
     </dd>
   </dl>
+  
   <dl>
     <dt>类别名称</dt>
     <dd>

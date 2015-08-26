@@ -167,7 +167,7 @@ $(function () {
                 <#if !diy_site?? || !diy_site.city??>
                     <option value="">请选择城市...</option>
                 </#if>
-                <option value="昆明" <#if diy_site?? && diy_site.city?? && diy_site.city=="昆明">selected="selected"</#if>>昆明</option>
+                <option value="重庆" <#if diy_site?? && diy_site.city?? && diy_site.city=="重庆">selected="selected"</#if>>重庆</option>
                 <option value="曲靖" <#if diy_site?? && diy_site.city?? && diy_site.city=="曲靖">selected="selected"</#if>>曲靖</option>
                 <option value="大理" <#if diy_site?? && diy_site.city?? && diy_site.city=="大理">selected="selected"</#if>>大理</option>
             </select>

@@ -185,13 +185,13 @@ $(function () {
     </dl>
     <!--lichong -->
   <dl>
-    <dt>用户粮草</dt>
+    <dt>用户积分</dt>
     <dd><span><#if user??>${user.totalPoints!"0"}</#if></span></dd>
   </dl>
   <dl>
-    <dt>修改用户粮草</dt>
+    <dt>修改用户积分</dt>
     <dd>
-        <input name="totalPoints1" id="totalPoints" type="text" class="input" value="${user.totalPoints!"0"}">
+        <input name="totalPoints1" id="totalPoints" type="text" class="input" value="<#if user??>${user.totalPoints!"0"}</#if>">
         <input name="btnEditRemark" type="button" id="btnEditRemark" class="ibtn" value="确认修改" style="margin-top: -3px;">
     </dd>
   </dl> 

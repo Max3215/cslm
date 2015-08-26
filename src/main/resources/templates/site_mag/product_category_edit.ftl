@@ -104,6 +104,7 @@
       <span class="Validform_checktip">*数字，越小越向前</span>
     </dd>
   </dl>
+  
   <dl>
     <dt>类别名称</dt>
     <dd>
@@ -117,6 +118,23 @@
       <input name="callIndex" type="text" id="txtCallIndex" value="<#if cat??>${cat.callIndex!""}</#if>" class="input normal" datatype="/^\s*$|^[a-zA-Z0-9\-\_]{2,50}$/" errormsg="请填写正确的别名" sucmsg=" ">
       <span class="Validform_checktip">类别的调用别名，只允许字母、数字、下划线</span>
     </dd>
+  </dl>
+  <dl>
+    <dt>标签</dt>
+    <dd>
+        <div class="rule-multi-checkbox">
+            <span>
+                <#if tag_list??>
+                    <#list tag_list as item>
+                        <#if item.title!="">
+                        <input type="checkbox" name="tagList" value="${item.title}" datatype="*0-255" <#if cat?? && cat.tagValueCollect?? && cat.tagValueCollect?contains("["+item.title+"]")>checked="checked"</#if>> 
+                        <label>${item.title}</label>
+                        </#if>
+                    </#list>
+                </#if>
+            </span>
+        </div>
+    </dd>  
   </dl>
   <dl>
     <dt>关联参数</dt>

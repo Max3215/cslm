@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.ynyes</groupId>
-	<artifactId>cheyou</artifactId>
+	<artifactId>cslm</artifactId>
 	<version>1.0</version>
 
-	<name>cheyou</name>
-	<description>cheyou project for ynyes</description>
+	<name>cslm</name>
+	<description>cslm project for ynyes</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -227,7 +227,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>com.ynyes.cheyou.Application</start-class>
+		<start-class>com.ynyes.cslm.Application</start-class>
 		<java.version>1.7</java.version>
 	</properties>
 

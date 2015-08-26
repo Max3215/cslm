@@ -537,6 +537,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
+        <#--
         <dl>
             <dt>成本价</dt>
             <dd>
@@ -544,6 +545,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">成本价，不在前台显示</span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>市场价</dt>
             <dd>
@@ -559,7 +561,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">电话卡销售时包含的话费</span>
             </dd>
         </dl>
-        -->
+        
         <dl>
             <dt>供货价</dt>
             <dd>
@@ -567,6 +569,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>销售价</dt>
             <dd>
@@ -575,17 +578,17 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         <dl>
-            <dt>赠送粮草</dt>
+            <dt>赠送积分</dt>
             <dd>
                 <input name="returnPoints" type="text" value="<#if goods?? && goods.returnPoints??>${goods.returnPoints?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
-                <span class="Validform_checktip">购买该商品赠送的粮草</span>
+                <span class="Validform_checktip">购买该商品赠送的积分</span>
             </dd>
         </dl>
         <dl>
-            <dt>同盟店返利比例</dt>
+            <dt>加盟店返利比例</dt>
             <dd>
                 <input name="shopReturnRation" type="text" value="<#if goods?? && goods.shopReturnRation??>${goods.shopReturnRation?string("0.00")}<#else>0</#if>" class="input normal" sucmsg="">
-                <span class="Validform_checktip">同盟店返利 = 成本价 * 同盟店返利比例</span>
+                <span class="Validform_checktip">加盟店返利 = 成本价 * 加盟店返利比例</span>
             </dd>
         </dl>
         <dl>
@@ -612,7 +615,7 @@ function del_goods_comb(obj) {
         </dl>
         -->
         <dl>
-            <dt>粮草购买限额</dt>
+            <dt>积分购买限额</dt>
             <dd>
                 <input id="pointLimited" name="pointLimited" type="text" value="<#if goods?? && goods.pointLimited??>${goods.pointLimited?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
                 <span class="Validform_checktip">购买时可使用的粮草限额</span>
