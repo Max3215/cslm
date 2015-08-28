@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ynyes.cslm.entity.TdAd;
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdBrand;
@@ -75,13 +76,15 @@ public class TdListController {
         }
         
         // 列表页轮播广告
-        TdAdType adType = tdAdTypeService.findByTitle("列表页轮播大图广告");
+        TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
 
         if (null != adType) {
             map.addAttribute("list_scroll_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
         
+        List<TdAd> list = tdAdService.findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId());
+       
         // 商城资讯
         List<TdArticleCategory> articleCatList = tdArticleCategoryService
                 .findByMenuId(10L);

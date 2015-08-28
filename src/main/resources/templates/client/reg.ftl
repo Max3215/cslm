@@ -2,171 +2,87 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>${site.company!''}</title>
-<meta name="keywords" content="${site.seoKeywords!''}">
-<meta name="description" content="${site.seoDescription!''}">
-<meta name="copyright" content="${site.copyright!''}" />
+<title></title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="copyright" content="" />
 <!--[if IE]>
-   <script src="/client/js/html5.js"></script>
+   <script src="js/html5.js"></script>
 <![endif]-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
-<script src="/client/js/common.js"></script>
-<script src="/client/js/ljs-v1.01.js"></script>
 
+<link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />
-<link href="/client/style/cartoon.css" rel="stylesheet" type="text/css" />
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript">
-var seed=60;    //60秒  
-var t1=null; 
-
+<script>
 $(document).ready(function(){
-    //初始化表单验证
+    changeYzm(); 
+   //初始化表单验证
     $("#form1").Validform({
         tiptype: 3
     });
-     
-    $("#smsCodeBtn").bind("click", function() {  
-        
-        var mob = $('#mobileNumber').val();
-        
-        var re = /^1\d{10}$/;
-        
-        if (!re.test(mob)) {
-            alert("请输入正确的手机号");
-            return;
-        }
-        
-        $("#smsCodeBtn").attr("disabled","disabled"); 
-        
-        $.ajax({  
-            url : "/reg/smscode",  
-            async : true,  
-            type : 'GET',  
-            data : {"mobile": mob},  
-            success : function(data) {  
-                
-                if(data.statusCode == '000000')
-                {  
-                    t1 = setInterval(tip, 1000);  
-                }
-                else
-                {
-                    $("#smsCodeBtn").removeAttr("disabled");
-                }
-            },  
-            error : function(XMLHttpRequest, textStatus,  
-                    errorThrown) {  
-                alert("error");
-            }  
-  
-        });
-        
-    }); 
-
 });
 
-function enableBtn()
-{  
-    $("#smsCodeBtn").removeAttr("disabled");   
-} 
-
-function tip() 
-{  
-    seed--;  
-    if (seed < 1) 
-    {  
-        enableBtn();  
-        seed = 60;  
-        $("#smsCodeBtn").val('点击获取短信验证码');  
-        var t2 = clearInterval(t1);  
-    } else {  
-        $("#smsCodeBtn").val(seed + "秒后重新获取");  
-    }  
-} 
+<!--  验证码   -->
+function changeYzm(){
+    var image = document.getElementById("yzm_image");
+    image.src = "/code?date="+Math.random()
+}
 </script>
 </head>
 
 <body>
 <header class="logintop">
-  <div class="main pt20">
-    <a class="fl" href="/"><img src="/client/images/liebiao_03.png" /></a>
-    <p class="p3">售后保障</p>
-    <p class="p2">100%品牌制造商</p>
-    <p class="p1">100%正品保障</p>
-    <div class="clear"></div>
+  <div class="main pt20 pb20">
+    <a href="/"><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
   </div>
 </header>
-<div class="logingbg">
-    <section class="loginbox">
-        <span style="color: #F00"><#if errCode??>
-            <#if errCode==1>
-                验证码错误
-            <#elseif errCode==4>
-                短信验证码错误
-            </#if>
-        </#if></span>
-        <form id="form1" method="post" action="/reg">
-            <div>
-                <p><b style="color: #FF0000;">*</b> 请输入用户名 </p>
-                <input class="text" name="username" type="text" datatype="s6-20" ajaxurl="/reg/check/username" value = "${username!''}"/>
-            </div>
-            <div>
-                <p>请输入车牌号码（选填）</p>
-                <input class="text" name="carCode" type="text" value ="${carCode!''}"/>
-            </div>
-            <div>
-                <p><b style="color: #FF0000;">*</b> 请输入密码</p>
-                <input class="text" name="password" type="password" datatype="s6-20"/>
-            </div>
-            <div>
-                <p><b style="color: #FF0000;">*</b> 请确认密码</p>
-                <input class="text" type="password" datatype="*" recheck="password"/>
-            </div>
-            <div>
-                <p><b style="color: #FF0000;">*</b> 手机验证 </p>
-                <input id="mobileNumber" class="text" name="mobile" type="text" datatype="m"  ajaxurl="/reg/check/mobile"/>
-            </div>
-            <div>
-                <p><b style="color: #FF0000;">*</b> 短信验证码</p>
-                <input class="text fl" type="text" name="smsCode" style="width:35%;" />
-                <input id="smsCodeBtn" onclick="javascript:;" readOnly="true" class="sub" style="text-align:center;width: 50%; border-radius: 3px; margin-left:55px; background: #1c2b38; color: #fff; line-height: 35px; height: 35px;" value="点击获取短信验证码" />
+    <form id="form1" method="post" action="/reg">
+        <div class="logingbg">
+             <section class="loginbox">
+                <div>
+                    <p>请输入用户名</p>
+                    <input class="text" name="username" type="text" datatype="s6-20" ajaxurl="/reg/check/username"/>
+                    <span class="Validform_checktip Validform_wrong" style=""></span>
+                </div>
+                <div>
+                    <p>请输入手机号</p>
+                    <input id="mobileNumber" class="text" name="mobile" type="text" datatype="m"/>
+                    <span class="Validform_checktip Validform_wrong"></span>
+                </div>
+                <div>
+                    <p>请输入密码</p>
+                    <input class="text" name="password" type="password" datatype="s6-20"/>
+                    <span class="Validform_checktip Validform_wrong"></span>
+                </div>
+                <div>
+                    <p>请确认密码</p>
+                    <input class="text" type="password" datatype="*" recheck="password"/>
+                    <span class="Validform_checktip Validform_wrong"></span>
+                </div>
+                <div>
+                    <p>请输入验证码</p>
+                    <div class="clear"></div>
+                    <input class="text fl" type="text" name="code" style="width:35%;" />
+                    <a class="yzm01" href="javascript:changeYzm()"><img id="yzm_image" src="" width="100px;" height="37px;"/></a>
+                    <a class="yzm02" href="javascript:changeYzm()">看不清楚？换一张</a>
+                    <span class="Validform_checktip Validform_wrong"></span>
+                </div>
                 <div class="clear h15"></div>
-            </div>
-            <div>
-                <p><b style="color: #FF0000;">*</b> 验证码</p>
-                <div class="clear"></div>
-                <input class="text fl" name="code" type="text" style="width:35%;" datatype="s4-4" errormsg="请填写4位字符"/>
-                <img src="/code" onclick="this.src = '/code?date='+Math.random();" id="yzm" height="37" style="padding-left: 55px;"/>
-            </div>
-            <div class="clear h15"></div>
-            
-            <input type="submit" class="sub" value="注册" />
-        </form>
-        <div class="clear h15"></div>
-    </section>
-</div><!--logingbg END-->
-
-<footer class="loginfoot">
-    <nav>
-        <#if help_level0_cat_list??>
-            <#list help_level0_cat_list as item>
-                <a href="/info/list/${item.id?c!''}">${item.title!''}</a>
-            </#list>
-        </#if>
-    </nav>
-    <p>友情链接：
-        <#if site_link_list??>
-            <#list site_link_list as item>
-                <a href="${item.linkUri!''}">${item.title!''}</a> |
-            </#list>
-        </#if>
-    </p>
-    <p>${site.copyright!''}</p>
-    <p>${site.address!''} 电话：${site.telephone!''} </p>
-    <p><a title="云南网站建设" href="http://www.ynyes.com" target="_blank">网站建设</a>技术支持：<a title="云南网站建设" href="http://www.ynyes.com" target="_blank">昆明天度网络公司</a></p>
-</footer>
+                <p class="pb10">
+                <input type="checkbox" />
+                <span>我已阅读并同意<a href="#">《超市联盟用户协议》</a></span>
+                <span class="absolute-r">已有账号？<a href="/login">点击登录</a></span>
+                </p>
+                <input type="submit" class="sub" value="注册" />
+                <div class="clear h15"></div>
+             </section>
+        </div>
+    </form><!--logingbg END-->
+    
+  <!--  底部  -->
+  <#include "/client/common_footer.ftl" />
 </body>
 </html>

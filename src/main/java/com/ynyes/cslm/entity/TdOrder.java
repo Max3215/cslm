@@ -37,14 +37,6 @@ public class TdOrder {
     @JoinColumn(name="tdOrderId")
     private List<TdOrderGoods> orderGoodsList;
     
-    //车牌
-    @Column
-    private String carCode;
-       
-	//车型
-    @Column
-    private String carType;
-    
     // 收货地址
     @Column
     private String shippingAddress;
@@ -157,20 +149,10 @@ public class TdOrder {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date payTime;
     
-    // 付尾款时间
-    @Column
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date payLeftTime;
-    
     // 配送时间
     @Column
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date deliveryTime;
-    
-    // 服务时间
-    @Column
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date serviceTime;
     
     // 收货时间
     @Column
@@ -191,7 +173,6 @@ public class TdOrder {
     @Column
     private Long statusId;
     
-    // 订单类型 1：普通订单 2：组合购买订单 3：抢购订单 4：十人团订单  5：百人团订单
     @Column
     private Long typeId;
     
@@ -278,14 +259,6 @@ public class TdOrder {
 	public void setId(Long id) {
         this.id = id;
     }
-
-	public Long getTypeId() {
-			return typeId;
-	}
-
-	public void setTypeId(Long typeId) {
-			this.typeId = typeId;
-	}
 	
     public String getOrderNumber() {
         return orderNumber;
@@ -487,7 +460,15 @@ public class TdOrder {
         this.statusId = statusId;
     }
 
-    public String getCancelReason() {
+    public Long getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getCancelReason() {
         return cancelReason;
     }
 
@@ -654,21 +635,6 @@ public class TdOrder {
     public void setAppointmentTime(Date appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
-    public String getCarCode() {
-		return carCode;
-	}
-
-	public void setCarCode(String carCode) {
-		this.carCode = carCode;
-	}
-
-	public String getCarType() {
-		return carType;
-	}
-
-	public void setCarType(String carType) {
-		this.carType = carType;
-	}
 
     public Double getTotalLeftPrice() {
         return totalLeftPrice;
@@ -678,19 +644,4 @@ public class TdOrder {
         this.totalLeftPrice = totalLeftPrice;
     }
 
-    public Date getPayLeftTime() {
-        return payLeftTime;
-    }
-
-    public void setPayLeftTime(Date payLeftTime) {
-        this.payLeftTime = payLeftTime;
-    }
-
-    public Date getServiceTime() {
-        return serviceTime;
-    }
-
-    public void setServiceTime(Date serviceTime) {
-        this.serviceTime = serviceTime;
-    }
 }

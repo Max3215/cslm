@@ -377,7 +377,6 @@ public class TdDiysiteController {
 					}
                 	if (order.getOrderNumber().substring(order.getOrderNumber().length() - 4).equals(password)) {
                 		order.setStatusId(5L);
-                        order.setServiceTime(new Date());
 					}else{
 						res.put("message", "消费密码错误!");
 						return res;

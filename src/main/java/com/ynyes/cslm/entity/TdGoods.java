@@ -1173,6 +1173,7 @@ public class TdGoods {
 
     @Override
 	public String toString() {
-		return "TdGoods [id=" + id + ", productId=" + productId + ", name=" + name + "]";
+		return "TdGoods [id=" + id + ", title=" + title + ", selectOneValue=" + selectOneValue + ", selectTwoValue="
+				+ selectTwoValue + ", selectThreeValue=" + selectThreeValue + "]";
 	}
 }

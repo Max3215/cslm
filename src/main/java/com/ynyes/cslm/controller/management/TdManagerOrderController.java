@@ -1373,7 +1373,6 @@ public class TdManagerOrderController {
                 if (order.getStatusId().equals(3L))
                 {
                     order.setStatusId(4L);
-                    order.setPayLeftTime(new Date());
                     /**
 					 * @author lc
 					 * @注释：添加同盟店所获返利
@@ -1475,7 +1474,6 @@ public class TdManagerOrderController {
                 if (order.getStatusId().equals(4L))
                 {
                     order.setStatusId(5L);
-                    order.setServiceTime(new Date());
                 }
             }
             // 货到付款确认付款

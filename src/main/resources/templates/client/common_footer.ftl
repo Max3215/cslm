@@ -2,7 +2,7 @@
         <div class="slogen">
             <#if service_item_list??>
                 <#list service_item_list as item>
-                    <#if item_index lt 6 >
+                    <#if item_index lt 4 >
                         <span><i><img src="${item.logo!''}"></i>${item.title!''}</span>
                     </#if>
                 </#list>

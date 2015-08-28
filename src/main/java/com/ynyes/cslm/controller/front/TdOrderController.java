@@ -710,15 +710,8 @@ public class TdOrderController {
 
         // 安装信息
         if (null != address) {
-            // 增加车牌 by zhangji
-            tdOrder.setCarCode(address.getReceiverCarcode());
-            // 增加车型 by zhangji
-            tdOrder.setCarType(address.getReceiverCartype());
-
-            tdOrder.setPostalCode(address.getPostcode());
 
             tdOrder.setShippingName(address.getReceiverName());
-            tdOrder.setShippingPhone(address.getReceiverMobile());
             tdOrder.setShippingAddress(address.getProvince()
                     + address.getCity() + address.getDisctrict()
                     + address.getDetailAddress());
@@ -1272,10 +1265,6 @@ public class TdOrderController {
 
         // 安装信息
         if (null != address) {
-            // 增加车牌 by zhangji
-            tdOrder.setCarCode(address.getReceiverCarcode());
-            // 增加车型 by zhangji
-            tdOrder.setCarType(address.getReceiverCartype());
 
             tdOrder.setPostalCode(address.getPostcode());
 
@@ -2007,4 +1996,39 @@ public class TdOrderController {
             tdDiySiteService.save(tdShop);
         }
     }
+    
+    /**
+     * 立即购买
+     * @param id
+     * @param req
+     * @param map
+     * @return
+     */
+    @RequestMapping(value="/byNow/{goodsId}")
+    public String ByNow(@PathVariable Long goodsId,Long quantity, HttpServletRequest req, ModelMap map){
+    	String username = (String) req.getSession().getAttribute("username");
+
+		if (null == username) {
+			return "redirect:/login";
+		}
+		
+		TdGoods goods = tdGoodsService.findOne(goodsId);
+		
+		TdGoodsDto buyGoods = new TdGoodsDto();
+		
+		buyGoods.setGoodsId(goods.getId());
+        buyGoods.setGoodsTitle(goods.getTitle());
+        buyGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
+        buyGoods.setPrice(goods.getSalePrice());
+        buyGoods.setQuantity(quantity);
+        buyGoods.setSaleId(0);
+		
+        map.addAttribute("buyGoods",buyGoods);
+        
+        req.getSession().setAttribute("butGoods", buyGoods);
+		
+        
+    	return "/";
+    }
+    
 }

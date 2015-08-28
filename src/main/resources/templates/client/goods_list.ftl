@@ -67,15 +67,24 @@ function setprice() {
 	</section>
 
 	<!--banner-->
-	<#if list_scroll_ad_list?? && list_scroll_ad_list?size gt 0 >
+	<#if list_scroll_ad_list?? && list_scroll_ad_list?size gt 0>
     	<section id="n_banner_box">
     		<ul id="n_banner_sum">
     		  <#list list_scroll_ad_list as ad>
-    			<li style="display:block;">
-    				<a href="${ad.linkUri!''}" title="${ad.title!''}" target="_blank">
-    					<img src="${ad.fileUri!''}" alt="">
-    				</a>
-    			</li>
+    		      <#if ad_index == 0>
+        		      <li style="display:block;">
+        			       <a href="${ad.linkUri!''}" title="${ad.title!''}" target="_blank">
+        				        <img src="${ad.fileUri!''}" alt="">
+        				   </a>
+        			  </li>
+    			  </#if>
+    			  <#if ad_index gt 0 && ad_index lt 6 >
+    			     <li>
+    			         <a href="${ad.linkUri!''}" title="${ad.title!''}" target="_blank">
+                             <img src="${ad.fileUri!''}" alt="">
+                         </a>
+    			     </li>
+    			  </#if>
     		  </#list>
     		</ul>
     	</section>

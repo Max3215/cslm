@@ -2,133 +2,179 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>${site.company!''}</title>
+<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 <!--[if IE]>
-   <script src="/client/js/html5.js"></script>
+   <script src="js/html5.js"></script>
 <![endif]-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
-<script src="/client/js/common.js"></script>
-<script src="/client/js/ljs-v1.01.js"></script>
 
+
+<link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />
 <link href="/client/style/cartoon.css" rel="stylesheet" type="text/css" />
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
-	$(function(){
-	
-	    $("#btn_login").click(function(){
-	    	login();
-	    });
-	     
-	});
+var seed=60;    //60秒  
+var t1=null; 
 
-
-   document.onkeydown = function(event){
-    if((event.keyCode || event.which) == 13){
-        login();
-    }
-   }
-   
-   function login(){
+$(function(){
+    $("#btn_login").click(function(){
+            login();
+     });
+    
+    <!-- 点击获取短信验证  start -->
+    $("#smsCodeBtn").bind("click", function() {  
         var username = $("#txt_loginId").val();
-        var password = $("#txt_loginPwd").val();
-        
-        if (username.length < 6 || password.length < 6)
-        {
-            alert("用户名或密码长度输入不足");
-            return;
-        }
+        <!--   查询用户是否存在  -->
         $.ajax({
-                type: "post",
-                url: "login",
-                data: { "username": username, "password": password },
-                dataType: "json",
-                success: function (data) { 
-                <!-- 修改 -->
-                    if (data.role == 2){
-                        window.location.href="/user/diysite/order/list/0";
-                    }    
-                    else if (data.code == 0) {
-                        var url = document.referrer;          
-                        if(undefined==url || ""==url){
-                            window.location.href="/";
-                        }else{
-                            window.location.href = url; 
-                        }
-                    } else {
-                        alert(data.msg);
-                    }
+            url : "/login/user",
+            async : true,
+            type : 'GET',
+            data : {"username" : username},
+            success : function(data){
+            
+                if(data.msg){
+                    alert(data.msg);
+                    return;
                 }
-            });
-    }
+               <!-- 验证手机号 --> 
+                var mob = data.mobile;
+        
+                var re = /^1\d{10}$/;
+            
+                if (!re.test(mob)) {
+                    alert("请输入正确的手机号");
+                    return;
+                }
+            
+                $("#smsCodeBtn").attr("disabled","disabled"); 
+                
+                <!--   获取短信验证码-->
+                $.ajax({  
+                    url : "/reg/smscode",  
+                    async : true,  
+                    type : 'GET',  
+                    data : {"mobile": mob},  
+                    success : function(data) {  
+                    
+                        if(data.statusCode == '000000')
+                        {  
+                            t1 = setInterval(tip, 1000);  
+                        }
+                        else
+                        {
+                            $("#smsCodeBtn").removeAttr("disabled");
+                        }
+                    },  
+                    error : function(XMLHttpRequest, textStatus,errorThrown) {  
+                        alert("error");
+                    }  
+                });
+            }
+        })
+     }); <!-- END  -->
+         
+});
+
+document.onkeydown = function(event){
+   if((event.keyCode || event.which) == 13){
+        login();
+   }
+}
+   
+function login(){
+     var username = $("#txt_loginId").val();
+     var password = $("#txt_loginPwd").val();
+     var smsCode = $("#smsCode").val();
+        
+     if (username.length < 6 || password.length < 6)
+     {
+          alert("用户名或密码长度输入不足");
+          return;
+      }
+     $.ajax({
+          type: "post",
+          url: "login",
+          data: { "username": username, "password": password ,"smsCode":smsCode},
+          dataType: "json",
+          success: function (data) { 
+          <!-- 修改 -->
+          if (data.role == 2){
+              window.location.href="/user/diysite/order/list/0";
+          }    
+          else if (data.code == 0) {
+                   var url = document.referrer;          
+                   if(undefined==url || ""==url){
+                        window.location.href="/";
+                    }else{
+                        window.location.href = url; 
+                    }
+                } else {
+                    alert(data.msg);
+                }
+          }
+      });
+}
+<!--   登录END       -->
+
+ function enableBtn()
+{  
+    $("#smsCodeBtn").removeAttr("disabled");   
+} 
+
+function tip() 
+{  
+    seed--;  
+    if (seed < 1) 
+    {  
+        enableBtn();  
+        seed = 60;  
+        $("#smsCodeBtn").val('点击获取短信验证码');  
+        var t2 = clearInterval(t1);  
+    } else {  
+        $("#smsCodeBtn").val(seed + "秒后重新获取");  
+    }  
+} 
 </script>
+
 </head>
 
 <body>
 <header class="logintop">
-  <div class="main pt20">
-    <a class="fl" href="/"><img src="/client/images/liebiao_03.png" /></a>
-    <p class="p3">售后保障</p>
-    <p class="p2">100%品牌制造商</p>
-    <p class="p1">100%正品保障</p>
-    <div class="clear"></div>
+  <div class="main pt20 pb20">
+    <a href="/"><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
   </div>
 </header>
 <div class="logingbg">
-    <section class="loginbox">
-        <p>请输入用户名/邮箱/车牌号码/手机号</p>
-        <input id="txt_loginId" class="text" type="text" />
-        <p>请输入密码</p>
-        <input id="txt_loginPwd" class="text" type="password" />
-        <div class="clear h15"></div>
-        <p class="pb10">
-            <input type="checkbox" />
-            <span>记住密码</span>
-            <span class="absolute-r"><a href="/login/password_retrieve">忘记密码</a> | <a href="/reg">免费注册</a></span>
-        </p>
-        <span>合作账号登录</span>
-        <p>
-            <span>
-                <a href="/qq/login" title="QQ登录">
-                    <img src="/client/images/20150619110939448_easyicon_net_72.png" width="30" height="30" />
-                </a>
-            </span>
-            <span class="ml20">
-                <a href="/login/alipay_login" title="支付宝登录">
-                    <img src="/client/images/20150619110924540_easyicon_net_72.png" width="30" height="30" />
-                </a>
-            </span>
-        </p>
-        <div class="clear h40"></div>
-        <input id="btn_login" type="submit" class="sub" value="登录" />
-        <div class="clear h20"></div>
-    </section>
+
+  <section class="loginbox">
+  
+    <p>请输入用户名</p>
+    <input class="text" type="text" id="txt_loginId"/>
+    <p>请输入密码</p>
+    <input class="text" type="text" id="txt_loginPwd"/>    
+    <p>请输入验证码</p>
+    <input class="text fl" type="text" style="width:40%;" id="smsCode"/> 
+<!--    <a href="javascript:;" id="smsCodeBtn" class="get_code">获取手机验证码</a>   -->
+    <input id="smsCodeBtn" onclick="javascript:;" readOnly="true" class="sub" style="text-align:center;width: 50%; border-radius: 3px;  float:left; margin-left:10px; background: #ff5b7d; color: #fff; height: 35px;" value="点击获取短信验证码" />
+
+    <div class="clear h15"></div>
+    <p class="pb10">
+      <input type="checkbox" />
+      <span>记住密码</span>
+      <span class="absolute-r"><a href="#">忘记密码</a> | <a href="/reg">免费注册</a></span>
+    </p>
+    <div class="clear h40"></div>
+    <input type="submit" class="sub" id="btn_login" value="登录" />
+    <div class="clear h20"></div>
+  </section>
 </div><!--logingbg END-->
 
-<footer class="loginfoot">
-    <nav>
-        <#if help_level0_cat_list??>
-            <#list help_level0_cat_list as item>
-                <a href="/info/list/${item.id?c!''}">${item.title!''}</a>
-            </#list>
-        </#if>
-    </nav>
-    <p>友情链接：
-    <#if site_link_list??>
-        <#list site_link_list as item>
-            <a href="${item.linkUri!''}">${item.title!''}</a> |
-        </#list>
-    </#if>
-    </p>
-    <p>${site.copyright!''}</p>
-    <p>${site.address!''} 电话：${site.telephone!''} </p>
-  <p><a title="云南网站建设" href="http://www.ynyes.com" target="_blank">网站建设</a>技术支持：<a title="云南网站建设" href="http://www.ynyes.com" target="_blank">昆明天度网络公司</a>
-</p>
-</footer>
+    <!--  底部    -->
+    <#include "/client/common_footer.ftl" />
 </body>
 </html>

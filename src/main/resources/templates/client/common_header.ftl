@@ -15,7 +15,7 @@
     </header>
     <!--logo 搜索框部分-->
     <section class="main">
-        <a href="#" class="logo"><img src="images/logo.png"></a>
+        <a href="#" class="logo"><img src="/client/images/logo.png"></a>
         <div class="choose_mar">
             <a href="#" class="click_a">选择超市</a>
             <menu id="show_menu">

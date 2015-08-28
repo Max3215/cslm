@@ -15,9 +15,24 @@
 .logo{display: block;width: 142px;height: 35px;float: left;padding-top: 30px;}
 .choose_mar{width: 150px;height: 25px;float: left;padding: 35px 30px 30px 30px;}
 .choose_mar .click_a{width: 128px;height: 23px;border:1px solid #8e8e8e;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;-ms-border-radius:3px;line-height: 25px;color:#8e8e8e;font-size: 12px;background: url(../images/arrow01.png) no-repeat 128px center;display: block;padding: 0 10px;}
-.choose_mar #show_menu{width: 140px;height:auto;border:1px solid #8e8e8e;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;-ms-border-radius:3px;border-top:none;padding: 10px 0 10px 8px;position: absolute;top:56px;left:30px;background: #fff;border-top-left-radius:0;border-top-right-radius: 0;display: none;z-index: 100;}
-.choose_mar #show_menu a{color:#8e8e8e;font-size: 12px;display: block;padding-left: 5px;width: 130px;}
-.choose_mar #show_menu a:hover{background: #39bee9;color:#fff;}
+
+
+.winbox {z-index: 9999;width: 100%;height: 100%;position: absolute;left: 0;top: 0;background: url(../images/darkbg.png) repeat;display: none;}
+.mar_box{width: 1160px;margin: 100px auto;background: #fff;padding:20px;color:#474848;height:700px;overflow-y:auto;}
+.mar_box .tit{font-size: 18px;line-height: 22px;}
+.mar_box .tit a{display: block;width: 22px;height: 22px;position: absolute;top:0;right:0;background: url(../images/close.png) no-repeat;}
+.mar_box .select{padding:40px 0 30px 50px;border-bottom:1px solid #b1b1b1;}
+.mar_box .select span{font-size: 16px;padding-right:30px;}
+.mar_box .select select{border:1px solid #b1b1b1;height: 24px;color:#474848;font-size: 14px;margin-right: 20px;font-family: "微软雅黑";line-height: 24px;}
+.mar_box .select .sub{width: 60px;height: 25px;background: #ff5b7d;color:#fff;text-align: center;line-height: 25px;}
+.mar_box .select .sub:hover{background:#39bee9;}
+.mar_list{padding: 24px 0 0 50px;}
+.mar_list th{font-size: 16px;vertical-align: top;font-weight: 400;}
+.mar_list td{width: 184px;display: inline-block;padding-bottom: 10px;}
+.mar_list td p{font-size: 16px;padding-bottom: 4px;}
+.mar_list td a{display: block;}
+
+
 .m_box{width: 500px;float: left;margin-top: 22px;}
 .search_box{width: 498px;height: 38px;background: #39bee9;border:1px solid #19a6d3;}
 .search_box .text{width: 420px;height: 34px;background:#fff;margin: 2px 0 0 2px;_margin:1px 0 0 -5px;*margin:1px 0 0 -5px;text-indent: 8px;line-height: 34px;}
@@ -99,8 +114,8 @@
 
 /*banner*/
 #banner_box{width: 100%;overflow: hidden;height: 400px;text-align: center;}
-#banner_sum{display: block;width: 1100px;margin: 0 auto;height: 550px;}
-#banner_sum li{  position: absolute;left: -450px;top: 0;display:none;}
+#banner_sum{display: block;width: 100%;margin: 0 auto;height: 550px;}
+#banner_sum li{  position: absolute;left: 50%;top: 0;display:none;margin-left: -960px;}
 
 #banner_num{position: absolute;left:45%;bottom: 10px;z-index: 999;}
 #banner_num a{float: left;width: 18px;height: 18px;margin: 0 5px;cursor: pointer;background: url(../images/print.png) no-repeat center center;text-indent: -9999px;}
@@ -219,7 +234,7 @@
 
 /*底部*/
 .slogen{padding:26px 18px;border:1px solid #d5d3d3;margin-top: 40px;}
-.slogen span{display: inline-block;font-size: 18px;color:#252525;line-height: 50px;width: 220px;text-align: right;padding-right: 90px;}
+.slogen span{display: inline-block;font-size: 18px;color:#252525;line-height: 50px;width: 220px;text-align: right;padding-right: 60px;}
 .slogen span.pr0{padding-right: 0;}
 .slogen span i{position: absolute;top:0;left:0;}
 

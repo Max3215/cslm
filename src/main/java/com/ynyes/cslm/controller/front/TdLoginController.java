@@ -89,20 +89,22 @@ public class TdLoginController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> login(String username, String password, String alipayuser_id,String type, String code,
+	public Map<String, Object> login(String username, String password,String smsCode, String alipayuser_id,String type, String code,
 			Boolean isSave, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<String, Object>();
+		String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
 
 		res.put("code", 1);
 
 		if (username.isEmpty() || password.isEmpty()) {
 			res.put("msg", "用户名及密码不能为空");
 		}
-		/**
-		 * 按账号查找登录验证 密码验证 修改最后登录时间
-		 * 
-		 * @author libiao
-		 */
+		if (!smsCodeSave.equalsIgnoreCase(smsCode)){
+			res.put("msa", "短信验证码输入错误");
+		}
+		
+		 //按账号查找登录验证 密码验证 修改最后登录时间
+		
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
 		if (null != user) {
@@ -111,22 +113,13 @@ public class TdLoginController {
 				return res;
 			}
 			user.setLastLoginTime(new Date());
-			/**
-			 * @author libiao
-			 * 判断是首页直接登录还是绑定第三方账号
-			 */
+			//判断是首页直接登录还是绑定第三方账号
 			if(null !=type){
-				/**
-				 * @author libiao
-				 * 判断绑定类型为绑定QQ
-				 */
+				 // 判断绑定类型为绑定QQ
 				if("qq".equals(type)){
 					user.setQqUserId(alipayuser_id);
 				}
-				/**
-				 * @author lc
-				 * @注释：添加支付宝第三方登陆用户名
-				 */
+				 // @注释：添加支付宝第三方登陆用户名
 				if("zfb".equals(type)){
 					user.setAlipayUserId(alipayuser_id);
 				}
@@ -136,10 +129,7 @@ public class TdLoginController {
 
 			res.put("code", 0);
 
-			/**
-			 * @author lichong
-			 * @注释：判断用户类型
-			 */
+			// @注释：判断用户类型
 			if(null != user.getRoleId() && user.getRoleId().equals(2L)){
 				res.put("role", 2);
 				request.getSession().setAttribute("diysiteUsername", user.getUsername());
@@ -148,62 +138,96 @@ public class TdLoginController {
 			request.getSession().setAttribute("username", user.getUsername());
 			request.getSession().setAttribute("usermobile", user.getMobile());
 			return res;
-		}
-		/**
-		 * 如果账号验证未通过，再进行手机登录验证 密码验证 修改最后登录时间
-		 * 
-		 * @author libiao
-		 */
-		user = tdUserService.findByMobileAndIsEnabled(username);
-		if (null != user) {
-			if (!user.getPassword().equals(password)) {
-				res.put("msg", "密码错误");
-				return res;
-			}
-			user.setLastLoginTime(new Date());
-			/**
-			 * @author libiao
-			 * 判断是首页直接登录还是绑定第三方账号
-			 */
-			if(null !=type){
-				/**
-				 * @author libiao
-				 * 判断绑定类型为绑定QQ
-				 */
-				if("qq".equals(type)){
-					user.setQqUserId(alipayuser_id);
-				}
-				/**
-				 * @author lc
-				 * @注释：添加支付宝第三方登陆用户名
-				 */
-				if("zfb".equals(type)){
-					user.setAlipayUserId(alipayuser_id);
-				}
-			}
-			user = tdUserService.save(user);
-			
-
-			res.put("code", 0);
-
-			/**
-			 * @author lichong
-			 * @注释：判断用户类型
-			 */
-			if (user.getRoleId() == 2L) {
-				res.put("role", 2);
-				request.getSession().setAttribute("diysiteUsername", user.getUsername());
-				return res;
-			}
-			request.getSession().setAttribute("username", user.getUsername());
-			request.getSession().setAttribute("usermobile", user.getMobile());
-			return res;
+//		}
+//		// 如果账号验证未通过，再进行手机登录验证 密码验证 修改最后登录时间
+//		user = tdUserService.findByMobileAndIsEnabled(username);
+//		if (null != user) {
+//			if (!user.getPassword().equals(password)) {
+//				res.put("msg", "密码错误");
+//				return res;
+//			}
+//			user.setLastLoginTime(new Date());
+//			/**
+//			 * @author libiao
+//			 * 判断是首页直接登录还是绑定第三方账号
+//			 */
+//			if(null !=type){
+//				/**
+//				 * @author libiao
+//				 * 判断绑定类型为绑定QQ
+//				 */
+//				if("qq".equals(type)){
+//					user.setQqUserId(alipayuser_id);
+//				}
+//				/**
+//				 * @author lc
+//				 * @注释：添加支付宝第三方登陆用户名
+//				 */
+//				if("zfb".equals(type)){
+//					user.setAlipayUserId(alipayuser_id);
+//				}
+//			}
+//			user = tdUserService.save(user);
+//			
+//
+//			res.put("code", 0);
+//
+//			/**
+//			 * @author lichong
+//			 * @注释：判断用户类型
+//			 */
+//			if (user.getRoleId() == 2L) {
+//				res.put("role", 2);
+//				request.getSession().setAttribute("diysiteUsername", user.getUsername());
+//				return res;
+//			}
+//			request.getSession().setAttribute("username", user.getUsername());
+//			request.getSession().setAttribute("usermobile", user.getMobile());
+//			return res;
 		} else { // 账号-手机都未通过验证，则用户不存在
 			res.put("msg", "不存在该用户");
 			return res;
 		}
 	}
 
+	/**
+	 * 登录时查找用户手机号以便获取短信验证
+	 * 
+	 * @author libiao
+	 * @param username
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="/login/user", method=RequestMethod.GET)
+	@ResponseBody
+	public Map<String ,Object> findUser(String username, HttpServletRequest req){
+		Map<String, Object> res = new HashMap<String, Object>();
+		if (username.isEmpty()) {
+			res.put("msg", "用户名不能为空！");
+			return res;
+		}
+		
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		
+		if(null == user){
+			res.put("msg", "用户不存在！");
+			return res;
+		}
+		
+		if(null == user.getMobile()){
+			res.put("msg","用户不存在手机号！");
+		}
+		
+		res.put("mobile", user.getMobile());
+		
+		return res;
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * @author lc
 	 * @return 
@@ -405,20 +429,15 @@ public class TdLoginController {
 
 		tdCommonService.setHeader(map, request);
 		try {
-			System.err.println("code-------"+code);
-			System.err.println("state-------"+state);
 			AccessToken accessTokenObj = (new Oauth()).getAccessTokenByRequest(request);
-			System.err.println("accessTokenObj--------"+accessTokenObj);
 			String accessToken = null, openID = null;
 			long tokenExpireIn = 0L;
 
 			if (accessTokenObj.getAccessToken().equals("")) {
 				// 我们的网站被CSRF攻击了或者用户取消了授权
 				// 做一些数据统计工作
-				System.err.print("没有获取到响应参数");
 			} else {
 				accessToken = accessTokenObj.getAccessToken();
-				System.err.println("accessToken-------"+accessToken);
 				
 				tokenExpireIn = accessTokenObj.getExpireIn();
 
