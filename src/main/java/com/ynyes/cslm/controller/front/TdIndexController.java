@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -71,14 +72,14 @@ public class TdIndexController {
         
         tdCommonService.setHeader(map, req);
 
-        // 商城快报
+        // 超市快讯
         List<TdArticleCategory> catList = tdArticleCategoryService
                 .findByMenuId(10L);
 
         if (null != catList && catList.size() > 0) {
             for (TdArticleCategory tdCat : catList)
             {
-                if (null != tdCat.getTitle() && tdCat.getTitle().equals("商城快报"))
+                if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
                 {
                     map.addAttribute("news_page", tdArticleService
                             .findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(10L,
@@ -110,10 +111,13 @@ public class TdIndexController {
                             "top_cat_goods_page" + i,
                             tdGoodsService
                                     .findByCategoryIdAndIsRecommendIndexTrueAndIsOnSaleTrueOrderByIdDesc(
-                                            topCat.getId(), 0, 3));
+                                            topCat.getId(), 0, 10));
                 }
             }
         }
+        
+     // 首页推荐商品 
+        map.addAttribute("recommed_index_page",tdGoodsService.findByIsRecommendIndexTrueAndIsOnSaleTrueOrderByIdDesc(0, 8));
 
         // 首页大图轮播广告
         TdAdType adType = tdAdTypeService.findByTitle("首页轮播大图广告");
@@ -123,110 +127,78 @@ public class TdIndexController {
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
         
-        // 商品分类底部广告
-        adType = tdAdTypeService.findByTitle("首页顶部横幅广告");
+        // 新品推荐广告
+        adType = tdAdTypeService.findByTitle("新品推荐广告");
 
         if (null != adType) {
-            map.addAttribute("index_top_ad_list", tdAdService
+            map.addAttribute("new_goods_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 商品分类底部广告
-        adType = tdAdTypeService.findByTitle("商品分类底部广告");
+        // 一楼商品中部广告
+        adType = tdAdTypeService.findByTitle("一楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("cat_bottom_ad_list", tdAdService
+            map.addAttribute("index_1F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 页面中部轮播广告
-        adType = tdAdTypeService.findByTitle("页面中部轮播广告");
+        // 二楼商品中部广告
+        adType = tdAdTypeService.findByTitle("二楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("mid_scroll_ad_list", tdAdService
+            map.addAttribute("index_2F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 页面中部大图广告
-        adType = tdAdTypeService.findByTitle("页面中部大图广告");
+        // 三楼商品中部广告
+        adType = tdAdTypeService.findByTitle("三楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("mid_big_ad_list", tdAdService
+            map.addAttribute("index_3F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 商品分类轮播广告
-        adType = tdAdTypeService.findByTitle("商品分类轮播广告");
+        // 四楼商品中部广告
+        adType = tdAdTypeService.findByTitle("四楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("type_scroll_ad_list", tdAdService
+            map.addAttribute("index_4F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 昆明自驾游大图广告
-        adType = tdAdTypeService.findByTitle("昆明自驾游大图广告");
+        // 五楼商品中部广告
+        adType = tdAdTypeService.findByTitle("五楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("tour_km_big_ad_list", tdAdService
+            map.addAttribute("index_5F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 省内自驾游大图广告
-        adType = tdAdTypeService.findByTitle("省内自驾游大图广告");
+        // 六楼商品中部广告
+        adType = tdAdTypeService.findByTitle("六楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("tour_province_big_ad_list", tdAdService
+            map.addAttribute("index_6F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 国内自驾游大图广告
-        adType = tdAdTypeService.findByTitle("国内自驾游大图广告");
+        // 七楼商品中部广告
+        adType = tdAdTypeService.findByTitle("七楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("tour_country_big_ad_list", tdAdService
+            map.addAttribute("index_7F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
-        // 昆明自驾游列表广告
-        adType = tdAdTypeService.findByTitle("昆明自驾游列表广告");
+        // 八楼商品中部广告
+        adType = tdAdTypeService.findByTitle("八楼分类底部广告");
 
         if (null != adType) {
-            map.addAttribute("tour_km_list_ad_list", tdAdService
+            map.addAttribute("index_8F_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
-
-        // 省内自驾游列表广告
-        adType = tdAdTypeService.findByTitle("省内自驾游列表广告");
-
-        if (null != adType) {
-            map.addAttribute("tour_province_list_ad_list", tdAdService
-                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-        }
-
-        // 国内自驾游列表广告
-        adType = tdAdTypeService.findByTitle("国内自驾游列表广告");
-
-        if (null != adType) {
-            map.addAttribute("tour_country_list_ad_list", tdAdService
-                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-        }
-
-        // 首页底部大图广告
-        adType = tdAdTypeService.findByTitle("首页底部大图广告");
-
-        if (null != adType) {
-            map.addAttribute("bottom_big_ad_list", tdAdService
-                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-        }
-
-        // 首页底部小图广告
-        adType = tdAdTypeService.findByTitle("首页底部小图广告");
-
-        if (null != adType) {
-            map.addAttribute("bottom_small_ad_list", tdAdService
-                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-        }
-
+        
         /*
          * 团购相关产品 
          */
@@ -391,7 +363,10 @@ public class TdIndexController {
                             "top_cat_goods_page" + i,
                             tdGoodsService
                                     .findByCategoryIdAndIsRecommendIndexTrueAndIsOnSaleTrueOrderByIdDesc(
-                                            topCat.getId(), 0, 3));
+                                            topCat.getId(), 0, 10));
+                    Page<TdGoods> page = tdGoodsService.findByCategoryIdAndIsRecommendIndexTrueAndIsOnSaleTrueOrderByIdDesc(
+                            topCat.getId(), 0, 10);
+                    System.err.println(page.getContent().size());
                 }
             }
         }

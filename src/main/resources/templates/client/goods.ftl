@@ -17,6 +17,7 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script type="text/javascript" src="/client/js/goods.js"></script>
 <script type="text/javascript" src="/client/js/goods_comment_consult.js"></script>
+<script src="/client/js/Validform_v5.3.2_min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){

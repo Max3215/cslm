@@ -40,6 +40,11 @@ $(document).ready(function(){
 		$(this).next().hide();
 	})
 })
+
+function submitSearch(){
+    var search = document.getElementById("search_form");
+    search.submit();
+}
 </script>
 
 </head>
@@ -48,40 +53,48 @@ $(document).ready(function(){
 	<header class="main_top">
 		<div class="main">
 			<h1>您好！欢迎光临王明辉超市！</h1>
-			<a href="#">请登陆</a>
-			<a href="#">注册</a>
+			<#if username??>
+			    <a href="/user">${username}</a>
+			    <a href="/logout">退出</a>
+			<#else>
+    			<a href="/login">请登陆</a>
+    			<a href="/reg">注册</a>
+			</#if>
 			<menu class="top_menu">
 				<a href="#">我的订单<span>丨</span></a>
 				<a href="#">我的购物车<span>丨</span></a>
 				<a href="#">超市会员<span>丨</span></a>
 				<a href="#">客户服务<span>丨</span></a>
-				<a href="#">我的收藏</a>
+				<a href="/user/collect/list">我的收藏</a>
 			</menu>
 			<div class="clear"></div>
 		</div>
 	</header>
 	<!--logo 搜索框部分-->
 	<section class="main">
-		<a href="#" class="logo"><img src="images/logo.png"></a>
+		<a href="/" class="logo"><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
 		<div class="choose_mar">
 			<a href="javascript:void(0);" class="click_a" onclick="$('#mar_box').fadeIn(300);">选择地区超市</a>
 		</div>
 		<div class="m_box">
 			<div class="search_box">
-				<input class="text" type="text">
-				<a href="#">搜索</a>
+			     <form action="/search" method="get" id="search_form" >
+        			 <input class="text" type="text" id="keywords" name="keywords" value="<#if keywords_list?? && keywords_list[0]??>${keywords_list[0].title!''}</#if>">
+        			 <a href="javascript:submitSearch()">搜索</a>
+				</form>
 			</div>
 			<menu class="hot_search">
-				<a href="#">洗发水<span>丨</span></a>
-				<a href="#">牙膏<span>丨</span></a>
-				<a href="#">纸巾<span>丨</span></a>
-				<a href="#">垃圾袋<span>丨</span></a>
-				<a href="#">桶<span>丨</span></a>
-				<a href="#">零食<span>丨</span></a>
+			     <#if keywords_list??>
+                    <#list keywords_list as item>
+                        <#if item_index gt 0>
+                            <a href="/search?keywords=${item.title}"  >${item.title}<span>丨</span></a>
+                        </#if>
+                    </#list>
+                </#if>
 			</menu>
 		</div>
 		<div class="gu_car">
-			<a href="#">去购物车结算<span>5</span></a>
+			<a href="/cart">去购物车结算<span>5</span></a>
 		</div>
 		<div class="clear"></div>
 	</section>
@@ -256,240 +269,65 @@ $(document).ready(function(){
 	<nav class="nav_box">
 		<div class="main">
 			<section class="nav_list" id="mainnavdown">
-				<a href="#" class="a2">全部商品分类</a>
+				<a class="a2">全部商品分类</a>
 				<ul id="nav_down" class="nav_down">
-					<li>
-						<a href="#" class="list">食品、酒水、茗茶 </a>
-						<span>></span>
-						<div class="nav_show">
-							<table>
-								<tr>
-									<th width="60">进口牛奶</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-								<tr>
-									<th width="60">酒水</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-								<tr>
-									<th width="60">茗茶</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</li>
-					<li>
-						<a href="#" class="list">粮油副食 </a>
-						<span>></span>
-						<div class="nav_show">
-							<table>
-								<tr>
-									<th width="60">进口牛奶</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-								<tr>
-									<th width="60">酒水</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-								<tr>
-									<th width="60">茗茶</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</li>
-					<li>
-						<a href="#" class="list">美容洗护 </a>
-						<span>></span>
-						<div class="nav_show">
-							<table>
-								<tr>
-									<th width="60">进口牛奶</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-								<tr>
-									<th width="60">酒水</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-								<tr>
-									<th width="60">茗茶</th>
-									<td>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-										<a href="#">牛奶</a>
-										<a href="#">牛奶奶</a>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</li>
-				</ul>
+				    <#if top_cat_list??>
+                        <#list top_cat_list as item>
+					       <li>
+						      <a href="/list/${item.id?c}" class="list">${item.title!''}</a><span>></span>
+						      <div class="nav_show">
+						          <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+							           <table>
+							               <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+								            <tr>
+									             <th width="60"><a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a></th>
+									             <td>
+									                  <#if ("third_level_"+item_index+secondLevelItem_index+"_cat_list")?eval?? >
+                                                            <#list ("third_level_"+item_index+secondLevelItem_index+"_cat_list")?eval as thirdLevelItem>
+                                                                <a href="/list/${thirdLevelItem.id?c}">${thirdLevelItem.title!''}</a>
+                                                            </#list>
+                                                      </#if>
+									
+									               </td>
+								            </tr>
+								            </#list>
+								       </table>
+								   </#if>
+							    </div>
+							  </li>
+					      </#list>
+					 </#if>
+			     </ul>
 			</section>
+			<#if navi_item_list??>
+                <#list navi_item_list as item>
+                    <a class="a1" href="${item.linkUri!''}">${item.title!''}</a>
+                </#list>
+             </#if> 
+             <!--
 			<a href="#" class="a1 sel">首页</a>
-			<a href="#" class="a1">商品推荐</a>
-			<a href="#" class="a1">本地特产</a>
-			<a href="#" class="a1">商品预定</a>
-			<a href="#" class="a1">进口商品</a>
-			<a href="#" class="a1">政企采购</a>
-			<a href="#" class="a1">生活服务</a>
-			<a href="#" class="a1">商家入驻</a>
-
+            -->
 			<div class="right_kx">
 				<h3>超市快讯<a href="#">更多></a></h3>
 				<ul>
-					<li><a href="#">恒生系统近2周强平150亿</a></li>
-					<li><a href="#">恒生系统近2周强平150亿</a></li>
-					<li><a href="#">恒生系统近2周强平150亿</a></li>
-					<li><a href="#">恒生系统近2周强平150亿</a></li>
-					<li><a href="#">恒生系统近2周强平150亿</a></li>
+				    <#if news_page??>
+				        <#list news_page.content as item>
+				            <#if item_index < 5 >
+					            <li><a target="_blank" href="/info/content/${item.id}?mid=12&catId=${item.categoryId}">${item.title!''}</a></li>
+					        </#if>
+					    </#list>
+					</#if>
 				</ul>
-				<div class="kx_banner"><a href="#"><img src="images/pic01.jpg"></a></div>
-				<div class="ewm">
-					<div class="clear"></div>
-					<img src="images/ewm.jpg" width="93" height="93">
-					<p class="pt20">微信扫描</p>
-					<p>二维码</p>
-					<div class="clear"></div>
-				</div>
+				<div class="kx_banner"></div>
+				<#if site.wxQrCode??>
+    				<div class="ewm">
+    					<div class="clear"></div>
+        					<img src="${site.wxQrCode!''}"  width="93" height="93">
+        					<p class="pt20">微信扫描</p>
+        					<p>二维码</p>
+    					<div class="clear"></div>
+    				</div>
+				</#if>
 			</div>
 		</div>
 	</nav>
@@ -497,929 +335,412 @@ $(document).ready(function(){
 	<!--banner-->
 	<section id="banner_box">
 		<ul id="banner_sum">
-			<li style="display:block;">
-				<a href="#">
-					<img src="images/banner01.jpg" alt="">
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<img src="images/banner02.jpg" alt="">
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<img src="images/banner03.jpg" alt="">
-				</a>
-			</li>
+		   <#if big_scroll_ad_list??>
+                <#list big_scroll_ad_list as item>
+                    <#if item_index < 3 >
+            			<li style="display:block;">
+            				<a href="${item.linkUri!''}" target="_blank">
+                                  <img src="${item.fileUri!''}" />
+                            </a>
+            			</li>
+            		 </#if>
+                 </#list>
+            </#if>
 		</ul>
 	</section>
 
 	<!--左边楼层浮动-->
 	<aside class="index_floor" id="indexfloor">
-	    <a class="sel" href="javascript:void(0);"><span>进口商品</span><span>进口商品</span></a>
-	    <a href="javascript:void(0);" class=""><span>食品饮料</span><span>食品饮料</span></a>
-	    <a href="javascript:void(0);" class=""><span>粮油副食</span><span>粮油副食</span></a>
-	    <a href="javascript:void(0);" class=""><span>美容洗护</span><span>美容洗护</span></a>
-	    <a href="javascript:void(0);" class=""><span>家居家电</span><span>家居家电</span></a>
-	    <a href="javascript:void(0);" class=""><span>家庭清洁</span><span>家庭清洁</span></a>
-	    <a href="javascript:void(0);" class=""><span>母婴用品</span><span>母婴用品</span></a>
-	    <a href="javascript:void(0);" class=""><span>生活服务</span><span>生活服务</span></a>
+	   <#if top_category_list?? && top_category_list?size gt 0 >
+           <#list top_category_list as item>
+                <#if item_index == 0 >
+        	       <a class="sel" href="javascript:void(0);"><span>${item.title!""}</span><span>${item.title!""}</span></a>
+        	    <#elseif item_index lt 8 >
+        	       <a href="javascript:void(0);"><span>${item.title!""}</span><span>${item.title!""}</span></a>
+        	    </#if>
+           </#list>
+	   </#if>
 	</aside>
 
 	<!--右边悬浮框-->
-	<aside class="float_box">
-		<a href="#" class="user"></a>
-		<a href="#" class="car">购物车<span>1</span></a>
-		<a href="#" class="col"></a>
-		<a href="#" class="history"></a>
-		<a href="#" class="ewm"></a>
-		<div class="ewm_show"><img src="images/ewm.jpg"></div>
-		<a href="#" class="service"></a>
-		<a href="#" class="go_top">TOP</a>
-	</aside>
+	<#include "/client/common_float_box.ftl" />
 
 	<!--main-->
 	<section class="main">
 		<div class="index_tj">
-			<h3>新品推荐</h3>
-			<div class="left_pic"><a href="#"><img src="images/pic02.jpg" width="400" height="400"></a></div>
+			<h3>今日推荐</h3>
+			<div class="left_pic">
+			    <#if new_goods_ad_list?? >
+        			<a href="${new_goods_ad_list[0].linkUri!''}">
+        			     <img src="${new_goods_ad_list[0].fileUri!''}" width="400px" height="400px">
+        			</a>
+    			</#if>
+			</div>
 			<ul class="right_pro">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+			     <#if recommed_index_page?? && recommed_index_page.content?size gt 0 >
+			         <#list recommed_index_page.content as item>
+			             <#if item_index < 8 >
+            				<li>
+            					<a href="/goods/${item.id?c}">
+            						<img src="${item.coverImageUri!''}" width="130px" height="130px">
+            						<p class="p1">￥${item.salePrice?string('0.00')}</p>
+            						<p class="p2">${item.stitle!""}</p>
+            					</a>
+            				</li>
+            		      </#if>
+            		  </#list>
+            	  </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
-
+        
+        <!-- 一层  -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_one">
-				<p class="tit">进口商品</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+			    <#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 0>
+				            <p class="tit">${item.title!''}</p>
+            				<menu>
+            				    <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                					<div class="clear"></div>
+                					<#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                					    <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                					</#list>
+                					<div class="clear"></div>
+            					</#if>
+            				</menu>
+            			</#if>
+				    </#list>
+				</#if>
+				<#if index_1F_ad_list?? && index_1F_ad_list?size gt 0>
+				    <a href="${index_1F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_1F_ad_list[0].fileUri!''}" ></a>
+				</#if>
 			</div>
 			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+			 <#if top_cat_goods_page0?? && top_cat_goods_page0.content?size gt 0 >
+			     <#list top_cat_goods_page0.content as item>
+			         <#if item_index < 10 >
+            			<li>
+            				<a href="/goods/${item.id?c!''}" target="_blank">
+            					<img src="${item.coverImageUri!''}" width="130px" height="130px";>
+            					<p class="p1">￥${item.salePrice?string('0.00')}</p>
+            					<p class="p2">${item.title!''}</p>
+            				</a>
+            			</li>
+				     </#if>
+				 </#list>
+			 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
-
+        
+        <!--  二层  -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_two">
-				<p class="tit">食品饮料</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+				<#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 1>
+                            <p class="tit">${item.title!''}</p>
+                            <menu>
+                                <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                    <div class="clear"></div>
+                                    <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                    </#list>
+                                    <div class="clear"></div>
+                                </#if>
+                            </menu>
+                        </#if>
+                    </#list>
+                </#if>
+                <#if index_2F_ad_list?? && index_2F_ad_list?size gt 0>
+                    <a href="${index_2F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_2F_ad_list[0].fileUri!''}" ></a>
+                </#if>
 			</div>
 			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+    			 <#if top_cat_goods_page1?? && top_cat_goods_page1.content?size gt 0 >
+                     <#list top_cat_goods_page1.content as item>
+                         <#if item_index < 10 >
+                            <li>
+                                <a href="/goods/${item.id?c!''}" target="_blank">
+                                    <img src="${item.coverImageUri!''}" width="130px" height="130px";>
+                                    <p class="p1">￥${item.salePrice?string('0.00')}</p>
+                                    <p class="p2">${item.title!''}</p>
+                                </a>
+                            </li>
+                         </#if>
+                     </#list>
+                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
-
+        
+        <!--  三层  -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_three">
-				<p class="tit">粮油副食</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+				<#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 2>
+                            <p class="tit">${item.title!''}</p>
+                            <menu>
+                                <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                    <div class="clear"></div>
+                                    <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                    </#list>
+                                    <div class="clear"></div>
+                                </#if>
+                            </menu>
+                        </#if>
+                    </#list>
+                </#if>
+                <#if index_3F_ad_list?? && index_3F_ad_list?size gt 0>
+                    <a href="${index_3F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_3F_ad_list[0].fileUri!''}" ></a>
+                </#if>
 			</div>
 			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+    			 <#if top_cat_goods_page2?? && top_cat_goods_page2.content?size gt 0 >
+                      <#list top_cat_goods_page2.content as item>
+                             <#if item_index < 10 >
+                                <li>
+                                    <a href="/goods/${item.id?c!''}" target="_blank">
+                                        <img src="${item.coverImageUri!''}" width="130px" height="130px";>
+                                        <p class="p1">￥${item.salePrice?string('0.00')}</p>
+                                        <p class="p2">${item.title!''}</p>
+                                    </a>
+                                </li>
+                             </#if>
+                       </#list>
+                  </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
 
+        <!-- 四层  -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_four">
-				<p class="tit">美容洗护</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+			     <#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 3>
+                            <p class="tit">${item.title!''}</p>
+                            <menu>
+                                <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                    <div class="clear"></div>
+                                    <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                    </#list>
+                                    <div class="clear"></div>
+                                </#if>
+                            </menu>
+                        </#if>
+                    </#list>
+                </#if>
+                <#if index_4F_ad_list?? && index_4F_ad_list?size gt 0>
+                    <a href="${index_4F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_4F_ad_list[0].fileUri!''}" ></a>
+                </#if>
 			</div>
 			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+			     <#if top_cat_goods_page3?? && top_cat_goods_page3.content?size gt 0 >
+                     <#list top_cat_goods_page3.content as item>
+                         <#if item_index < 10 >
+                            <li>
+                                <a href="/goods/${item.id?c!''}" target="_blank">
+                                    <img src="${item.coverImageUri!''}" width="130px" height="130px";>
+                                    <p class="p1">￥${item.salePrice?string('0.00')}</p>
+                                    <p class="p2">${item.title!''}</p>
+                                </a>
+                            </li>
+                         </#if>
+                     </#list>
+                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
 
+        <!--  五层  -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_five">
-				<p class="tit">家居家电</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+			     <#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 4>
+                            <p class="tit">${item.title!''}</p>
+                            <menu>
+                                <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                    <div class="clear"></div>
+                                    <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                    </#list>
+                                    <div class="clear"></div>
+                                </#if>
+                            </menu>
+                        </#if>
+                    </#list>
+                </#if>
+                <#if index_5F_ad_list?? && index_5F_ad_list?size gt 0>
+                    <a href="${index_5F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_5F_ad_list[0].fileUri!''}" ></a>
+                </#if>
 			</div>
-			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+			<ul class="right_list"> 
+			   <#if top_cat_goods_page4?? && top_cat_goods_page4.content?size gt 0 >
+                     <#list top_cat_goods_page4.content as item>
+                         <#if item_index < 10 >
+                            <li>
+                                <a href="/goods/${item.id?c!''}" target="_blank">
+                                    <img src="${item.coverImageUri!''}" width="130px" height="130px";>
+                                    <p class="p1">￥${item.salePrice?string('0.00')}</p>
+                                    <p class="p2">${item.title!''}</p>
+                                </a>
+                            </li>
+                         </#if>
+                     </#list>
+                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
 
+        <!--  六层  -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_six">
-				<p class="tit">家庭清洁</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+				<#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 5>
+                            <p class="tit">${item.title!''}</p>
+                            <menu>
+                                <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                    <div class="clear"></div>
+                                    <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                    </#list>
+                                    <div class="clear"></div>
+                                </#if>
+                            </menu>
+                        </#if>
+                    </#list>
+                </#if>
+                <#if index_6F_ad_list?? && index_6F_ad_list?size gt 0>
+                    <a href="${index_6F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_6F_ad_list[0].fileUri!''}" ></a>
+                </#if>
 			</div>
 			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+			     <#if top_cat_goods_page5?? && top_cat_goods_page5.content?size gt 0 >
+                     <#list top_cat_goods_page5.content as item>
+                         <#if item_index < 10 >
+                            <li>
+                                <a href="/goods/${item.id?c!''}" target="_blank">
+                                    <img src="${item.coverImageUri!''}" width="130px" height="130px";>
+                                    <p class="p1">￥${item.salePrice?string('0.00')}</p>
+                                    <p class="p2">${item.title!''}</p>
+                                </a>
+                            </li>
+                         </#if>
+                     </#list>
+                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
 
+        <!-- 七层  -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_seven">
-				<p class="tit">母婴用品</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+				<#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 6>
+                            <p class="tit">${item.title!''}</p>
+                            <menu>
+                                <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                    <div class="clear"></div>
+                                    <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                    </#list>
+                                    <div class="clear"></div>
+                                </#if>
+                            </menu>
+                        </#if>
+                    </#list>
+                </#if>
+                <#if index_7F_ad_list?? && index_7F_ad_list?size gt 0>
+                    <a href="${index_7F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_7F_ad_list[0].fileUri!''}" ></a>
+                </#if>
 			</div>
 			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+			     <#if top_cat_goods_page6?? && top_cat_goods_page6.content?size gt 0 >
+                     <#list top_cat_goods_page6.content as item>
+                         <#if item_index < 10 >
+                            <li>
+                                <a href="/goods/${item.id?c!''}" target="_blank">
+                                    <img src="${item.coverImageUri!''}" width="130px" height="130px";>
+                                    <p class="p1">￥${item.salePrice?string('0.00')}</p>
+                                    <p class="p2">${item.title!''}</p>
+                                </a>
+                            </li>
+                         </#if>
+                     </#list>
+                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
 
+        <!--  八层    -->
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_eight">
-				<p class="tit">生活服务</p>
-				<menu>
-					<div class="clear"></div>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口牛奶</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口母婴用品</a>
-					<a href="#">进口牛奶</a>
-					<div class="clear"></div>
-				</menu>
-				<a href="#" class="b_pic"><img src="images/pic01.png"></a>
+				<#if top_category_list?? && top_category_list?size gt 0 >
+                    <#list top_cat_list as item>
+                        <#if item_index == 7>
+                            <p class="tit">${item.title!''}</p>
+                            <menu>
+                                <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                    <div class="clear"></div>
+                                    <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                    </#list>
+                                    <div class="clear"></div>
+                                </#if>
+                            </menu>
+                        </#if>
+                    </#list>
+                </#if>
+                <#if index_8F_ad_list?? && index_8F_ad_list?size gt 0>
+                    <a href="${index_8F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_8F_ad_list[0].fileUri!''}" ></a>
+                </#if>
 			</div>
 			<ul class="right_list">
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic04.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<img src="images/pic03.jpg">
-						<p class="p1">￥12.5</p>
-						<p class="p2">菲律宾进口CEBU宿雾牌芒果干</p>
-					</a>
-				</li>
+			     <#if top_cat_goods_page7?? && top_cat_goods_page7.content?size gt 0 >
+                     <#list top_cat_goods_page7.content as item>
+                         <#if item_index < 10 >
+                            <li>
+                                <a href="/goods/${item.id?c!''}" target="_blank">
+                                    <img src="${item.coverImageUri!''}" width="130px" height="130px";>
+                                    <p class="p1">￥${item.salePrice?string('0.00')}</p>
+                                    <p class="p2">${item.title!''}</p>
+                                </a>
+                            </li>
+                         </#if>
+                     </#list>
+                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
 	</section>
 
-	<section class="main">
-		<div class="slogen">
-			<span><i><img src="images/bottom01.png"></i>品质保证  服务精致</span>
-			<span><i><img src="images/bottom02.png"></i>品类齐全  一站购物</span>
-			<span><i><img src="images/bottom03.png"></i>中心直发  配送快捷</span>
-			<span class="pr0"><i><img src="images/bottom04.png"></i>退换随心  低价无忧</span>
-		</div>
-	</section>
-
-	<footer class="foot">
-		<div class="main">
-			<dl>
-				<dt>新手指南</dt>
-				<dd><a href="#">用户注册</a></dd>
-				<dd><a href="#">购物流程</a></dd>
-				<dd><a href="#">新手帮助</a></dd>
-				<dd><a href="#">隐私声明</a></dd>
-			</dl>
-			<dl>
-				<dt>支付方式</dt>
-				<dd><a href="#">在线支付</a></dd>
-				<dd><a href="#">支付宝支付</a></dd>
-				<dd><a href="#">网银支付</a></dd>
-				<dd><a href="#">公司转账</a></dd>
-			</dl>
-			<dl>
-				<dt>配送方式</dt>
-				<dd><a href="#">送货上门</a></dd>
-				<dd><a href="#">配货点自提</a></dd>
-				<dd><a href="#">配送标准</a></dd>
-				<dd><a href="#">配送查询</a></dd>
-			</dl>
-			<dl>
-				<dt>售后服务</dt>
-				<dd><a href="#">退货流程</a></dd>
-				<dd><a href="#">售后政策</a></dd>
-			</dl>
-			<dl>
-				<dt>帮助中心</dt>
-				<dd><a href="#">常见问题</a></dd>
-				<dd><a href="#">关于我们</a></dd>
-				<dd><a href="#">联系我们</a></dd>
-				<dd><a href="#">交易条款</a></dd>
-				<dd><a href="#">商家入住</a></dd>
-			</dl>
-			<div class="b_contact">
-				<a href="#" class="qq"><img src="images/qq01.png"></a>
-				<span><i><img src="images/phone01.png"></i>13888888888</span>
-			</div>
-			<div class="clear"></div>
-
-			<menu class="bottom_nav">
-				<a href="#">首页<span>丨</span></a>
-				<a href="#">本地特产<span>丨</span></a>
-				<a href="#">政企采购<span>丨</span></a>
-				<a href="#">生活服务<span>丨</span></a>
-				<a href="#">商家入驻</a>
-			</menu>
-			<p class="copyright">copyright©2015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司版权所有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技术支持：<a href="http://www.ynyes.com">昆明天度网络信息技术有限公司</a></p>
-		</div>
-	</footer>
-
+    <!--底部footer-->
+    <#include "/client/common_footer.ftl" />
 </body>
 </html>

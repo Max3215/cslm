@@ -14,7 +14,7 @@ function navDownList(boxid, _sumname, _showname) {
         var _index = $(this).index();
         var _top = 0;
         for (var i = 0; i < _index; i++) {
-            _top = _top - _arr.eq(i).height() - 6;
+            _top = _top - _arr.eq(i).height() + 30;
         }
         $(this).find(_showname).css("top", _top + "px");
         _top = -_top - 8;
@@ -31,6 +31,8 @@ function navDownList(boxid, _sumname, _showname) {
 			_mybg.css("display","none");
 			});
 }
+
+
 //下拉菜单
 function menuDownList(boxid, _showname, _name, _hover) {
     var _box = $("#" + boxid);

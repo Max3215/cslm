@@ -72,7 +72,7 @@ function changeYzm(){
                 </div>
                 <div class="clear h15"></div>
                 <p class="pb10">
-                <input type="checkbox" />
+                <input type="checkbox" checked="checked"/>
                 <span>我已阅读并同意<a href="#">《超市联盟用户协议》</a></span>
                 <span class="absolute-r">已有账号？<a href="/login">点击登录</a></span>
                 </p>
