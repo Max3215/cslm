@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.service.TdCommonService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.SiteMagConstant;
@@ -30,7 +30,7 @@ import com.ynyes.cslm.util.SiteMagConstant;
 
 @Controller
 @RequestMapping(value="/diysite/order")
-public class TdDiysiteController {
+public class TdDistributorController {
 	
 	@Autowired
 	TdOrderService tdOrderService;
@@ -42,7 +42,7 @@ public class TdDiysiteController {
 	TdUserService tdUserService;
 	
 	@Autowired
-	TdDiySiteService tdDiySiteService;
+	TdDistributorService TdDistributorService;
 	
 	/**
 	 * @author lc
@@ -69,10 +69,10 @@ public class TdDiysiteController {
             timeId = 0;
         }
 
-        TdDiySite tdDiySite = tdDiySiteService.findbyUsername(username);
+        TdDistributor TdDistributor = TdDistributorService.findbyUsername(username);
         Double rebates = new Double(0.00);
         
-        List<TdUser> tdUserlist = tdUserService.findByUpperDiySiteIdAndIsEnabled(tdDiySite.getId());
+        List<TdUser> tdUserlist = tdUserService.findByUpperDiySiteIdAndIsEnabled(TdDistributor.getId());
         List<String> tdUsers = new ArrayList<>();
         for(int i = 0; i < tdUserlist.size(); i++){
         	tdUsers.add(tdUserlist.get(i).getUsername());
@@ -216,12 +216,12 @@ public class TdDiysiteController {
         
         Double sales = new Double(0.00);
 
-        TdDiySite tdDiySite = tdDiySiteService.findbyUsername(username);        
+        TdDistributor TdDistributor = TdDistributorService.findbyUsername(username);        
         
         if (timeId.equals(0)) {
-        	List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitle(tdDiySite.getTitle());
+        	List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitle(TdDistributor.getTitle());
         	sales = countsales(list);
-        	map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleOrderByIdDesc(tdDiySite.getTitle(), page, SiteMagConstant.pageSize));
+        	map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleOrderByIdDesc(TdDistributor.getTitle(), page, SiteMagConstant.pageSize));
 		}else if (timeId.equals(1)) {
 			Date cur = new Date(); 
             Calendar calendar = Calendar.getInstance();// 日历对象
@@ -232,9 +232,9 @@ public class TdDiysiteController {
             time.setHours(0);
             time.setMinutes(0);
             
-            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(tdDiySite.getTitle(), time);
+            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
             sales = countsales(list);
-            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(tdDiySite.getTitle(), time, page, SiteMagConstant.pageSize));
+            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
             
 		}else if (timeId.equals(2)) {
 			Date cur = new Date(); 
@@ -246,9 +246,9 @@ public class TdDiysiteController {
             time.setHours(0);
             time.setMinutes(0);
             
-            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(tdDiySite.getTitle(), time);
+            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
             sales = countsales(list);
-            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(tdDiySite.getTitle(), time, page, SiteMagConstant.pageSize));
+            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
 		}else if (timeId.equals(3)) {
 			Date cur = new Date(); 
             Calendar calendar = Calendar.getInstance();// 日历对象
@@ -259,9 +259,9 @@ public class TdDiysiteController {
             time.setHours(0);
             time.setMinutes(0);
             
-            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(tdDiySite.getTitle(), time);
+            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
             sales = countsales(list);
-            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(tdDiySite.getTitle(), time, page, SiteMagConstant.pageSize));
+            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
 		}else if (timeId.equals(4)) {
 			Date cur = new Date(); 
             Calendar calendar = Calendar.getInstance();// 日历对象
@@ -272,9 +272,9 @@ public class TdDiysiteController {
             time.setHours(0);
             time.setMinutes(0);
             
-            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(tdDiySite.getTitle(), time);
+            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
             sales = countsales(list);
-            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(tdDiySite.getTitle(), time, page, SiteMagConstant.pageSize));
+            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
 		}else if (timeId.equals(6)) {
 			Date cur = new Date(); 
             Calendar calendar = Calendar.getInstance();// 日历对象
@@ -285,9 +285,9 @@ public class TdDiysiteController {
             time.setHours(0);
             time.setMinutes(0);
             
-            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(tdDiySite.getTitle(), time);
+            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
             sales = countsales(list);
-            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(tdDiySite.getTitle(), time, page, SiteMagConstant.pageSize));
+            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
 		}else if (timeId.equals(12)) {
 			Date cur = new Date(); 
             Calendar calendar = Calendar.getInstance();// 日历对象
@@ -298,9 +298,9 @@ public class TdDiysiteController {
             time.setHours(0);
             time.setMinutes(0);
             
-            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(tdDiySite.getTitle(), time);
+            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
             sales = countsales(list);
-            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(tdDiySite.getTitle(), time, page, SiteMagConstant.pageSize));
+            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
 		}
         map.addAttribute("time_id", timeId);
         map.addAttribute("sales",sales);

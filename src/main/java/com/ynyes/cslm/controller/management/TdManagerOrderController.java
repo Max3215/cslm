@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDeliveryType;
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
@@ -37,7 +37,7 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdDeliveryTypeService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdOrderService;
@@ -84,7 +84,7 @@ public class TdManagerOrderController {
     TdDeliveryTypeService tdDeliveryTypeService;
     
     @Autowired
-    TdDiySiteService tdDiySiteService;
+    TdDistributorService TdDistributorService;
     
     @Autowired
     TdUserPointService tdUserPointService;
@@ -216,12 +216,12 @@ public class TdManagerOrderController {
                 if (null == keywords)
                 {
                     map.addAttribute("diy_site_page", 
-                            tdDiySiteService.findAllOrderBySortIdAsc(page, size));
+                            TdDistributorService.findAllOrderBySortIdAsc(page, size));
                 }
                 else
                 {
                     map.addAttribute("diy_site_page", 
-                            tdDiySiteService.searchAllOrderBySortIdAsc(keywords, page, size));
+                            TdDistributorService.searchAllOrderBySortIdAsc(keywords, page, size));
                 }
                 
                 return "/site_mag/diy_site_list";
@@ -270,7 +270,7 @@ public class TdManagerOrderController {
             {
                 if (null != id)
                 {
-                    map.addAttribute("diy_site", tdDiySiteService.findOne(id));
+                    map.addAttribute("diy_site", TdDistributorService.findOne(id));
                 }
                 
                 return "/site_mag/diy_site_edit";
@@ -304,7 +304,7 @@ public class TdManagerOrderController {
         } 
         else // 修改，查找除当前ID的所有
         {
-            TdDiySite dSite = tdDiySiteService.findOne(id);
+            TdDistributor dSite = TdDistributorService.findOne(id);
             
             if (null == dSite)
             {
@@ -1101,7 +1101,7 @@ public class TdManagerOrderController {
     }
     
     @RequestMapping(value="/setting/diysite/save", method = RequestMethod.POST)
-    public String save(TdDiySite tdDiySite,
+    public String save(TdDistributor TdDistributor,
                         String[] hid_photo_name_show360,
                         ModelMap map,
                         HttpServletRequest req){
@@ -1113,9 +1113,9 @@ public class TdManagerOrderController {
         
         String uris = parsePicUris(hid_photo_name_show360);
         
-        tdDiySite.setShowPictures(uris);
+        TdDistributor.setShowPictures(uris);
         
-        if (null == tdDiySite.getId())
+        if (null == TdDistributor.getId())
         {
             tdManagerLogService.addLog("add", "新增同盟店", req);
         }
@@ -1124,7 +1124,7 @@ public class TdManagerOrderController {
             tdManagerLogService.addLog("edit", "修改同盟店", req);
         }
         
-        tdDiySiteService.save(tdDiySite);
+        TdDistributorService.save(TdDistributor);
         
         return "redirect:/Verwalter/order/setting/diysite/list";
     }
@@ -1276,13 +1276,13 @@ public class TdManagerOrderController {
                         TdUser tdUser = tdUserService.findByUsername(order.getUsername());
                         
                         // 同盟店
-                        TdDiySite tdShop = null;
+                        TdDistributor tdShop = null;
                         if (null != tdUser.getUpperDiySiteId()) {
                         	// 同盟店
-                            tdShop = tdDiySiteService.findOne(tdUser.getUpperDiySiteId());
+                            tdShop = TdDistributorService.findOne(tdUser.getUpperDiySiteId());
                 		}else{
                 			// 同盟店
-                	        tdShop = tdDiySiteService.findOne(order.getShopId());
+                	        tdShop = TdDistributorService.findOne(order.getShopId());
                 		}
                         List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
                         
@@ -1360,7 +1360,7 @@ public class TdManagerOrderController {
                             order.setPlatformService(platformService);//设置订单平台服务费
                             order.setTrainService(trainService);//设置订单培训服务费
                             order = tdOrderService.save(order);
-                            tdDiySiteService.save(tdShop);
+                            TdDistributorService.save(tdShop);
                         }
                     }
 
@@ -1381,13 +1381,13 @@ public class TdManagerOrderController {
                     TdUser tdUser = tdUserService.findByUsername(order.getUsername());
 
                     // 同盟店
-                    TdDiySite tdShop = null;
+                    TdDistributor tdShop = null;
                     if (null != tdUser.getUpperDiySiteId()) {
                     	// 同盟店
-                        tdShop = tdDiySiteService.findOne(tdUser.getUpperDiySiteId());
+                        tdShop = TdDistributorService.findOne(tdUser.getUpperDiySiteId());
             		}else{
             			// 同盟店
-            	        tdShop = tdDiySiteService.findOne(order.getShopId());
+            	        tdShop = TdDistributorService.findOne(order.getShopId());
             		}
 
                     List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
@@ -1464,7 +1464,7 @@ public class TdManagerOrderController {
                         order.setPlatformService(platformService);//设置订单平台服务费
                         order.setTrainService(trainService);//设置订单培训服务费
                         order = tdOrderService.save(order);
-                        tdDiySiteService.save(tdShop);
+                        TdDistributorService.save(tdShop);
                     }
                 }
             }
@@ -1586,7 +1586,7 @@ public class TdManagerOrderController {
         }
         
         if (null != diySiteId) {
-            model.addAttribute("tdDiySite", tdDiySiteService.findOne(diySiteId));
+            model.addAttribute("TdDistributor", TdDistributorService.findOne(diySiteId));
         }
     }
     
@@ -1635,14 +1635,14 @@ public class TdManagerOrderController {
             }
             else if (type.equalsIgnoreCase("diysite"))
             {
-                TdDiySite e = tdDiySiteService.findOne(id);
+                TdDistributor e = TdDistributorService.findOne(id);
                 
                 if (null != e)
                 {
                     if (sortIds.length > i)
                     {
                         e.setSortId(sortIds[i]);
-                        tdDiySiteService.save(e);
+                        TdDistributorService.save(e);
                     }
                 }
             }
@@ -1678,7 +1678,7 @@ public class TdManagerOrderController {
                 }
                 else if (type.equalsIgnoreCase("diysite"))
                 {
-                    tdDiySiteService.delete(id);
+                    TdDistributorService.delete(id);
                 }
             }
         }

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDemand;
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
@@ -36,7 +36,7 @@ import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.entity.TdUserSuggestion;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDemandService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
@@ -86,7 +86,7 @@ public class TdUserController{
     private TdUserCommentService tdUserCommentService;
 
     @Autowired
-    private TdDiySiteService tdDiySiteService;
+    private TdDistributorService TdDistributorService;
     /**
      * 投诉service
      * 
@@ -151,7 +151,11 @@ public class TdUserController{
                 tdOrderService.countByUsernameAndStatusId(username, 4));
         map.addAttribute("total_finished",
                 tdOrderService.countByUsernameAndStatusId(username, 6));
-
+        //热卖商品
+        map.addAttribute("hot_goods_page",tdGoodsService.findByIsHotTrueAndIsOnSaleTrueOrderByIdDesc(0, ClientConstant.pageSize));
+        //推荐商品
+        map.addAttribute("recommend_goods_page",
+				tdGoodsService.findByIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(0, ClientConstant.pageSize));
         return "/client/user_index";
     }
 
@@ -387,7 +391,7 @@ public class TdUserController{
         }
 
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-        TdDiySite tdDiySite = tdDiySiteService.findbyUsername(username);
+        TdDistributor TdDistributor = TdDistributorService.findbyUsername(username);
         
         map.addAttribute("user", tdUser);
         map.addAttribute("status_id", statusId);
@@ -399,20 +403,20 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService.findByDiysitenameAndSearch(
-                    		tdDiySite.getTitle(), keywords, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), keywords, page, ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByDiysitename(tdDiySite.getTitle(), page,
+                    orderPage = tdOrderService.findByDiysitename(TdDistributor.getTitle(), page,
                             ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndSearch(tdDiySite.getTitle(),
+                            .findByDiysitenameAndStatusIdAndSearch(TdDistributor.getTitle(),
                                     statusId, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService.findByDiysitenameAndStatusId(
-                    		tdDiySite.getTitle(), statusId, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), statusId, page, ClientConstant.pageSize);
                 }
             }
         } else if (timeId.equals(1)) {
@@ -427,22 +431,22 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(tdDiySite.getTitle(),
+                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
                                     time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		tdDiySite.getTitle(), time, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
                             .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		tdDiySite.getTitle(), statusId, time, keywords, page,
+                            		TdDistributor.getTitle(), statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(tdDiySite.getTitle(),
+                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
                                     statusId, time, page,
                                     ClientConstant.pageSize);
                 }
@@ -458,22 +462,22 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(tdDiySite.getTitle(),
+                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
                                     time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		tdDiySite.getTitle(), time, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
                             .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		tdDiySite.getTitle(), statusId, time, keywords, page,
+                            		TdDistributor.getTitle(), statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(tdDiySite.getTitle(),
+                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
                                     statusId, time, page,
                                     ClientConstant.pageSize);
                 }
@@ -489,22 +493,22 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(tdDiySite.getTitle(),
+                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
                                     time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		tdDiySite.getTitle(), time, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
                             .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		tdDiySite.getTitle(), statusId, time, keywords, page,
+                            		TdDistributor.getTitle(), statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(tdDiySite.getTitle(),
+                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
                                     statusId, time, page,
                                     ClientConstant.pageSize);
                 }
@@ -519,22 +523,22 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(tdDiySite.getTitle(),
+                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
                                     time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		tdDiySite.getTitle(), time, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
                             .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		tdDiySite.getTitle(), statusId, time, keywords, page,
+                            		TdDistributor.getTitle(), statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(tdDiySite.getTitle(),
+                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
                                     statusId, time, page,
                                     ClientConstant.pageSize);
                 }
@@ -549,22 +553,22 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(tdDiySite.getTitle(),
+                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
                                     time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		tdDiySite.getTitle(), time, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
                             .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		tdDiySite.getTitle(), statusId, time, keywords, page,
+                            		TdDistributor.getTitle(), statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(tdDiySite.getTitle(),
+                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
                                     statusId, time, page,
                                     ClientConstant.pageSize);
                 }
@@ -579,22 +583,22 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(tdDiySite.getTitle(),
+                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
                                     time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		tdDiySite.getTitle(), time, page, ClientConstant.pageSize);
+                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
                             .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		tdDiySite.getTitle(), statusId, time, keywords, page,
+                            		TdDistributor.getTitle(), statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(tdDiySite.getTitle(),
+                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
                                     statusId, time, page,
                                     ClientConstant.pageSize);
                 }
@@ -654,19 +658,19 @@ public class TdUserController{
 
          map.addAttribute("user", tdUser);
          
-         TdDiySite tdDiySite = tdDiySiteService.findbyUsername(username);
+         TdDistributor TdDistributor = TdDistributorService.findbyUsername(username);
          
          Page<TdUser> memberPage = null;
          
          if (null == keywords || keywords.isEmpty()) {
-        	 if (null != tdDiySite) {
-        		 memberPage = tdUserService.findByshopId(tdDiySite.getId(), page,
+        	 if (null != TdDistributor) {
+        		 memberPage = tdUserService.findByshopId(TdDistributor.getId(), page,
                          ClientConstant.pageSize);
 			}       		        	 
          } else { 
-        	 if (null != tdDiySite) {
+        	 if (null != TdDistributor) {
         		 memberPage = tdUserService.findByShopIdAndSearch(
-            			 tdDiySite.getId(), keywords, page, ClientConstant.pageSize);
+            			 TdDistributor.getId(), keywords, page, ClientConstant.pageSize);
 			}       	 
          }
 

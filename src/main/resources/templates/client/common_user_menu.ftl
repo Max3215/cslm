@@ -1,59 +1,26 @@
-<div class="mymember_menu">
+ <div class="mymember_menu">
     <div class="mymember_menu_part">
-        <a class="mymember_menu_tit" href="/user/order/list/0"><img src="/client/images/mymember/menu01.png" />订单中心</a>
-        <div>
-            <a href="/user/order/list/0">全部订单</a>
-            <#--
-            <a href="/user/order/list/1">待确认订单</a>
-            -->
-            <a href="/user/order/list/2">待付款订单</a>
-            <a href="/user/order/list/3">待付尾款订单</a>
-            <a href="/user/order/list/4">待服务订单</a>
-            <a href="/user/order/list/5">待评价订单</a>
-            <a href="/user/order/list/6">已完成订单</a>
-            <a href="/user/order/list/7">取消订单记录</a>
-        </div>
-    </div>
-    
+      <a class="mymember_menu_tit"  title="订单中心"><img src="/client/images/mymember/menu01.png" />订单中心</a>
+      <div>
+        <a href="/user/order/list/0"  title="我的订单">我的订单</a>
+        <a href="#"  title="评价结单">评价结单</a>
+        <a href="/user/order/list/7" title="取消订单记录">取消订单记录</a>
+      </div>
+    </div><!--mymember_menu_part END-->
     <div class="mymember_menu_part">
-        <a class="mymember_menu_tit" href="/user/collect/list"><img src="/client/images/mymember/menu02.png" />关注中心</a>
-        <div>
-            <a href="/user/collect/list">收藏商品</a>
-            <a href="/user/recent/list">浏览历史</a>
-        </div>
-    </div>
-    
+      <a class="mymember_menu_tit" title="我的收藏"><img src="/client/images/mymember/menu02.png" />我的收藏</a>
+      <div>
+        <a href="/user/collect/list" title="收藏商品">收藏的商品</a>
+        <a href="/user/recent/list" title="浏览历史">浏览历史</a>
+      
+      </div>
+    </div><!--mymember_menu_part END-->
     <div class="mymember_menu_part">
-        <a class="mymember_menu_tit" href="/user/point/list"><img src="/client/images/mymember/menu03.png" />资产中心</a>
-        <div>
-            <a href="#">优惠券</a>
-            <a href="/user/point/list">粮草</a>
-        </div>
-    </div>
-    
-    <div class="mymember_menu_part">
-        <a class="mymember_menu_tit" href="/user/return/list"><img src="/client/images/mymember/menu04.png" />客户服务</a>
-        <div>
-            <a href="/user/return/list">返修退换货</a>
-            <a href="/user/consult/list">购买咨询</a>
-            <a href="/user/comment/list">我的评论</a>
-       <#--      <a href="/user/suggestion/list">我的投诉</a> -->
-        </div>
-    </div>
-    
-    <div class="mymember_menu_part">
-        <a class="mymember_menu_tit" href="/user/info"><img src="/client/images/mymember/menu05.png" />设置</a>
-        <div>
-            <a href="/user">个人中心</a>
-            <a href="/user/info">编辑信息</a>
-            <a href="/user/password">修改密码</a>
-           <a href="/user/address/list">安装信息</a> 
-        </div>
-    </div>
-<!--    
-    <div class="mymember_menu_part"> 
-        <a class="mymember_menu_tit" href="#"><img src="/client/images/mymember/menu05.png" />加盟商中心</a>
-        <div> <a href="/user/shop">进入加盟商中心</a> </div>
-    </div>
-    -->
-</div>
+      <a class="mymember_menu_tit"  title="设置"><img src="/client/images/mymember/menu05.png" />设置</a>
+      <div>
+        <a href="/user" title="个人信息">个人信息</a>
+        <a href="/user/address/list" title="收货地址">收货地址</a>
+        <a href="/user/password" title="修改密码">修改密码</a>
+      </div>
+    </div><!--mymember_menu_part END-->
+  </div><!--mymember_menu END-->

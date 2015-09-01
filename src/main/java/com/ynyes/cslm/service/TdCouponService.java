@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.repository.TdCouponRepo;
 
 /**
@@ -33,7 +33,7 @@ public class TdCouponService {
     TdCouponTypeService tdCouponTypeService;
     
     @Autowired
-    TdDiySiteService tdDiySiteService;
+    TdDistributorService TdDistributorService;
     
     /**
      * 删除
@@ -218,7 +218,7 @@ public class TdCouponService {
         
         if (null != e.getDiySiteId())
         {
-            TdDiySite diySite = tdDiySiteService.findOne(e.getDiySiteId());
+            TdDistributor diySite = TdDistributorService.findOne(e.getDiySiteId());
             
             if (null != diySite)
             {

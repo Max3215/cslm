@@ -70,6 +70,18 @@ public class TdGoodsService {
     @Autowired
     TdSiteService tdSiteService;
 
+    
+    /**
+     * 热销
+     * 2015-9-1  11:32
+     * @author libiao
+     * @return
+     */
+    public Page<TdGoods> findByIsHotTrueAndIsOnSaleTrueOrderByIdDesc(int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(
+                Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
+    	return repository.findByIsHotTrueAndIsOnSaleTrueOrderByIdDesc(pageRequest);
+    }
     /**
      * 查找所有商品
      * 

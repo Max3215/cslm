@@ -92,16 +92,16 @@ public class TdLoginController {
 	public Map<String, Object> login(String username, String password,String smsCode, String alipayuser_id,String type, String code,
 			Boolean isSave, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<String, Object>();
-		String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
+//		String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
 
 		res.put("code", 1);
 
 		if (username.isEmpty() || password.isEmpty()) {
 			res.put("msg", "用户名及密码不能为空");
 		}
-		if (!smsCodeSave.equalsIgnoreCase(smsCode)){
-			res.put("msa", "短信验证码输入错误");
-		}
+//		if (!smsCodeSave.equalsIgnoreCase(smsCode)){
+//			res.put("msa", "短信验证码输入错误");
+//		}
 		
 		 //按账号查找登录验证 密码验证 修改最后登录时间
 		

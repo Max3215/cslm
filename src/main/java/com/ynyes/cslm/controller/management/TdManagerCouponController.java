@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.service.TdCouponService;
 import com.ynyes.cslm.service.TdCouponTypeService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.util.SiteMagConstant;
@@ -47,7 +47,7 @@ public class TdManagerCouponController {
     private TdManagerLogService tdManagerLogService;
     
     @Autowired 
-    private TdDiySiteService tdDiySiteService;
+    private TdDistributorService TdDistributorService;
     
     @Autowired
     private TdProductCategoryService tdProductCategoryService;
@@ -248,7 +248,7 @@ public class TdManagerCouponController {
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         
-        map.addAttribute("diy_site_list", tdDiySiteService.findByIsEnableTrue());
+        map.addAttribute("diy_site_list", TdDistributorService.findByIsEnableTrue());
         
         List<TdCouponType> couponTypeList = null;
         
@@ -347,9 +347,9 @@ public class TdManagerCouponController {
         {
             tdManagerLogService.addLog("add", "用户修改优惠券", req);
             
-            List<TdDiySite> tdDiySiteList = tdDiySiteService.findByIsEnableTrue();
+            List<TdDistributor> TdDistributorList = TdDistributorService.findByIsEnableTrue();
             
-            if (null != tdDiySiteList && tdDiySiteList.size() > 0
+            if (null != TdDistributorList && TdDistributorList.size() > 0
                     && null != leftNumbers && leftNumbers.length > 0
                     && null != typeId)
             {
@@ -360,9 +360,9 @@ public class TdManagerCouponController {
             	TdCouponType tdCouponType = tdCouponTypeService.findOne(typeId);
             	
             	if (tdCouponType.getTitle().equals("免费打蜡券") || tdCouponType.getTitle().equals("免费洗车券")) {
-            		 for (int i=0; i<tdDiySiteList.size(); i++)
+            		 for (int i=0; i<TdDistributorList.size(); i++)
                      {
-                         TdDiySite tds = tdDiySiteList.get(i);
+                         TdDistributor tds = TdDistributorList.get(i);
                          
                          if (null != tds && leftNumbers.length > i)
                          {

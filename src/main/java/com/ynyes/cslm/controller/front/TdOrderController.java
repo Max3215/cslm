@@ -27,7 +27,7 @@ import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
 import com.ynyes.cslm.entity.TdDeliveryType;
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdGoodsCombination;
 import com.ynyes.cslm.entity.TdGoodsDto;
@@ -42,7 +42,7 @@ import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdCouponService;
 import com.ynyes.cslm.service.TdCouponTypeService;
 import com.ynyes.cslm.service.TdDeliveryTypeService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
@@ -96,7 +96,7 @@ public class TdOrderController {
     private TdCouponTypeService tdCouponTypeService;
 
     @Autowired
-    private TdDiySiteService tdDiySiteService;
+    private TdDistributorService TdDistributorService;
 
     @Autowired
     private TdPayRecordService payRecordService;
@@ -289,7 +289,7 @@ public class TdOrderController {
         req.getSession().setAttribute("buyType", type);
 
         // 线下同盟店
-        map.addAttribute("shop_list", tdDiySiteService.findByIsEnableTrue());
+        map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
 
         // 支付方式列表
 //        setPayTypes(map, true, false, req);
@@ -740,7 +740,7 @@ public class TdOrderController {
 
         // 线下同盟店
         if (null != shopId) {
-            TdDiySite shop = tdDiySiteService.findOne(shopId);
+            TdDistributor shop = TdDistributorService.findOne(shopId);
 
             if (null != shop) {
                 tdOrder.setShopId(shop.getId());
@@ -1002,7 +1002,7 @@ public class TdOrderController {
         map.addAttribute("total_point_limit", totalPointLimited);
 
         // 线下同盟店
-        map.addAttribute("shop_list", tdDiySiteService.findByIsEnableTrue());
+        map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
 
         // 支付方式列表
 //        setPayTypes(map, true, false, req);
@@ -1298,7 +1298,7 @@ public class TdOrderController {
 
         // 线下同盟店
         if (null != shopId) {
-            TdDiySite shop = tdDiySiteService.findOne(shopId);
+            TdDistributor shop = TdDistributorService.findOne(shopId);
 
             if (null != shop) {
                 tdOrder.setShopId(shop.getId());
@@ -1887,13 +1887,13 @@ public class TdOrderController {
 		 * @author lc
 		 * @注释：根据用户所属同盟店id查询同盟店
 		 */
-        TdDiySite tdShop = null;
+        TdDistributor tdShop = null;
         if (null != tdUser.getUpperDiySiteId()) {
         	// 同盟店
-            tdShop = tdDiySiteService.findOne(tdUser.getUpperDiySiteId());
+            tdShop = TdDistributorService.findOne(tdUser.getUpperDiySiteId());
 		}else{
 			// 同盟店
-	        tdShop = tdDiySiteService.findOne(tdOrder.getShopId());
+	        tdShop = TdDistributorService.findOne(tdOrder.getShopId());
 		}
         
 
@@ -1993,7 +1993,7 @@ public class TdOrderController {
             tdOrder.setPlatformService(platformService);//设置订单平台服务费
             tdOrder.setTrainService(trainService);//设置订单培训服务费
             tdOrder = tdOrderService.save(tdOrder);
-            tdDiySiteService.save(tdShop);
+            TdDistributorService.save(tdShop);
         }
     }
     

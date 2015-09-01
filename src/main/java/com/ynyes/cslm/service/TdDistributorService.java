@@ -11,13 +11,13 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserComment;
-import com.ynyes.cslm.repository.TdDiySiteRepo;
+import com.ynyes.cslm.repository.TdDistributorRepo;
 
 /**
- * TdDiySite 服务类
+ * TdDistributor 服务类
  * 
  * @author Sharon
  *
@@ -25,9 +25,9 @@ import com.ynyes.cslm.repository.TdDiySiteRepo;
 
 @Service
 @Transactional
-public class TdDiySiteService {
+public class TdDistributorService {
     @Autowired
-    TdDiySiteRepo repository;
+    TdDistributorRepo repository;
     
     @Autowired
     TdUserCommentService TdUserCommentService;
@@ -53,7 +53,7 @@ public class TdDiySiteService {
      * 
      * @param e 菜单项
      */
-    public void delete(TdDiySite e)
+    public void delete(TdDistributor e)
     {
         if (null != e)
         {
@@ -61,7 +61,7 @@ public class TdDiySiteService {
         }
     }
     
-    public void delete(List<TdDiySite> entities)
+    public void delete(List<TdDistributor> entities)
     {
         if (null != entities)
         {
@@ -75,7 +75,7 @@ public class TdDiySiteService {
      * @param id ID
      * @return
      */
-    public TdDiySite findOne(Long id)
+    public TdDistributor findOne(Long id)
     {
         if (null == id)
         {
@@ -91,17 +91,17 @@ public class TdDiySiteService {
      * @param ids
      * @return
      */
-    public List<TdDiySite> findAll(Iterable<Long> ids)
+    public List<TdDistributor> findAll(Iterable<Long> ids)
     {
-        return (List<TdDiySite>) repository.findAll(ids);
+        return (List<TdDistributor>) repository.findAll(ids);
     }
     
-    public List<TdDiySite> findByIsEnableTrue()
+    public List<TdDistributor> findByIsEnableTrue()
     {
         return repository.findByIsEnableTrue();
     }
     
-    public List<TdDiySite> findByCityAndIsEnableTrueOrderBySortIdAsc(String city)
+    public List<TdDistributor> findByCityAndIsEnableTrueOrderBySortIdAsc(String city)
     {
         if (null == city)
         {
@@ -111,14 +111,14 @@ public class TdDiySiteService {
         return repository.findByCityAndIsEnableTrueOrderBySortIdAsc(city);
     }
     
-    public Page<TdDiySite> findAllOrderBySortIdAsc(int page, int size)
+    public Page<TdDistributor> findAllOrderBySortIdAsc(int page, int size)
     {
         PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.ASC, "sortId"));
         
         return repository.findAll(pageRequest);
     }
     
-    public Page<TdDiySite> searchAllOrderBySortIdAsc(String keywords, int page, int size)
+    public Page<TdDistributor> searchAllOrderBySortIdAsc(String keywords, int page, int size)
     {
         PageRequest pageRequest = new PageRequest(page, size);
         
@@ -131,7 +131,7 @@ public class TdDiySiteService {
      * @param e
      * @return
      */
-    public TdDiySite save(TdDiySite e)
+    public TdDistributor save(TdDistributor e)
     {
         if (null != e.getUsername())    
         {
@@ -155,17 +155,17 @@ public class TdDiySiteService {
         return repository.save(e);
     }
     
-    public List<TdDiySite> save(List<TdDiySite> entities)
+    public List<TdDistributor> save(List<TdDistributor> entities)
     {
         
-        return (List<TdDiySite>) repository.save(entities);
+        return (List<TdDistributor>) repository.save(entities);
     }
     
     /**
 	 * @author lc
 	 * @注释：
 	 */
-    public TdDiySite findbyUsername(String username){
+    public TdDistributor findbyUsername(String username){
 		
     	return (repository.findByUsernameAndIsEnableTrue(username)); 	
     }

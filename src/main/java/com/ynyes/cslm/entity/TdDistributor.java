@@ -7,14 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * 自提点
+ * 分销商
  * 
  * @author Sharon
  *
  */
 
 @Entity
-public class TdDiySite {
+public class TdDistributor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

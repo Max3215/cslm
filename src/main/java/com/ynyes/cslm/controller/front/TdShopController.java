@@ -10,12 +10,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ynyes.cslm.entity.TdDiySite;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCommonService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdUserRecentVisitService;
 import com.ynyes.cslm.util.ClientConstant;
@@ -35,7 +35,7 @@ public class TdShopController {
     private TdArticleCategoryService tdArticleCategoryService;
 	
 	@Autowired 
-    private TdDiySiteService tdDiySiteService;
+    private TdDistributorService TdDistributorService;
 	
 	@Autowired 
     private TdOrderService tdOrderService;
@@ -77,56 +77,56 @@ public class TdShopController {
         map.addAttribute("cid", cid);
         
         
-        List<TdDiySite> tdDiySitelist;
+        List<TdDistributor> TdDistributorlist;
         switch (cid)
         {
         case 1:
-            map.addAttribute("shop_list", tdDiySiteService.findByCityAndIsEnableTrueOrderBySortIdAsc("曲靖"));
+            map.addAttribute("shop_list", TdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc("曲靖"));
             
-            tdDiySitelist  = tdDiySiteService.findByCityAndIsEnableTrueOrderBySortIdAsc("曲靖");
-            if (null != tdDiySitelist) {
-            	 for (TdDiySite diySite : tdDiySitelist) 
+            TdDistributorlist  = TdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc("曲靖");
+            if (null != TdDistributorlist) {
+            	 for (TdDistributor diySite : TdDistributorlist) 
                  {
                      List<TdOrder> tdOrders = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 5L);
                      List<TdOrder> tdOrders1 = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 6L);
                      map.addAttribute("shop_orderFinish_"+diySite.getId(), tdOrders.size()+tdOrders1.size());
-                     map.addAttribute("shop_orderComment_"+diySite.getId(), tdDiySiteService.ContdiysiteComment(diySite.getId()));
-                     map.addAttribute("shop_serviceStars"+diySite.getId(), tdDiySiteService.diysiteServiceStars(diySite.getId()));
+                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
+                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
                  }
 			}
                    
             break;
             
         case 2:
-            map.addAttribute("shop_list", tdDiySiteService.findByCityAndIsEnableTrueOrderBySortIdAsc("大理"));
+            map.addAttribute("shop_list", TdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc("大理"));
             
-            tdDiySitelist  = tdDiySiteService.findByCityAndIsEnableTrueOrderBySortIdAsc("大理");
-            if (null != tdDiySitelist) {
-            	 for (TdDiySite diySite : tdDiySitelist) 
+            TdDistributorlist  = TdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc("大理");
+            if (null != TdDistributorlist) {
+            	 for (TdDistributor diySite : TdDistributorlist) 
                  {
                      List<TdOrder> tdOrders = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 5L);
                      List<TdOrder> tdOrders1 = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 6L);
                      
                      map.addAttribute("shop_orderFinish_"+diySite.getId(), tdOrders.size()+tdOrders1.size());
-                     map.addAttribute("shop_orderComment_"+diySite.getId(), tdDiySiteService.ContdiysiteComment(diySite.getId()));
-                     map.addAttribute("shop_serviceStars"+diySite.getId(), tdDiySiteService.diysiteServiceStars(diySite.getId()));
+                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
+                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
                  }
 			}
             break;
             
         default:
           
-            map.addAttribute("shop_list", tdDiySiteService.findByCityAndIsEnableTrueOrderBySortIdAsc("昆明"));
-            tdDiySitelist  = tdDiySiteService.findByCityAndIsEnableTrueOrderBySortIdAsc("昆明");
-            if (null != tdDiySitelist) {
-            	 for (TdDiySite diySite : tdDiySitelist) 
+            map.addAttribute("shop_list", TdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc("昆明"));
+            TdDistributorlist  = TdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc("昆明");
+            if (null != TdDistributorlist) {
+            	 for (TdDistributor diySite : TdDistributorlist) 
                  {
                      List<TdOrder> tdOrders = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 5L);
                      List<TdOrder> tdOrders1 = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 6L);
                      map.addAttribute("shop_orderFinish_"+diySite.getId(), tdOrders.size()+tdOrders1.size());
-                     map.addAttribute("shop_orderComment_"+diySite.getId(), tdDiySiteService.ContdiysiteComment(diySite.getId()));
-//                     int a  = tdDiySiteService.ContdiysiteComment(diySite.getId());
-                     map.addAttribute("shop_serviceStars"+diySite.getId(), tdDiySiteService.diysiteServiceStars(diySite.getId()));
+                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
+//                     int a  = TdDistributorService.ContdiysiteComment(diySite.getId());
+                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
                  }
 			}
         }
@@ -138,7 +138,7 @@ public class TdShopController {
     public String shop(@PathVariable Long id, ModelMap map, HttpServletRequest req){
 	    tdCommonService.setHeader(map, req);
 	    
-	    map.addAttribute("shop", tdDiySiteService.findOne(id));
+	    map.addAttribute("shop", TdDistributorService.findOne(id));
 	    
         return "/client/shop_detail";
     }

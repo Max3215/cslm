@@ -20,7 +20,7 @@ import com.ynyes.cslm.entity.TdCouponType;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdCouponService;
 import com.ynyes.cslm.service.TdCouponTypeService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdUserRecentVisitService;
 import com.ynyes.cslm.util.SMSUtil;
 
@@ -33,7 +33,7 @@ import com.ynyes.cslm.util.SMSUtil;
 @RequestMapping("/coupon")
 public class TdCouponController {
 	@Autowired 
-	private TdDiySiteService tdDiySiteService;
+	private TdDistributorService TdDistributorService;
 	
 	@Autowired 
     private TdCouponService tdCouponService;
@@ -55,7 +55,7 @@ public class TdCouponController {
 	    tdCommonService.setHeader(map, req);
         
         // 同盟店列表
-        map.addAttribute("shop_list", tdDiySiteService.findByIsEnableTrue());
+        map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
         
         // 优惠券种类
         List<TdCouponType> couponTypeList = tdCouponTypeService.findAllOrderBySortIdAsc();

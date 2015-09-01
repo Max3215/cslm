@@ -1,8 +1,13 @@
 <header class="main_top">
         <div class="main">
             <h1>您好！欢迎光临王明辉超市！</h1>
-            <a href="/login">请登陆</a>
-            <a href="/reg">注册</a>
+            <#if username??>
+                <a href="/user">${username}</a>
+                <a href="/logout">退出</a>
+            <#else>
+                <a href="/login">请登陆</a>
+                <a href="/reg">注册</a>
+            </#if>
             <menu class="top_menu">
                 <a href="#">我的订单<span>丨</span></a>
                 <a href="#">我的购物车<span>丨</span></a>
@@ -15,255 +20,147 @@
     </header>
     <!--logo 搜索框部分-->
     <section class="main">
-        <a href="#" class="logo"><img src="/client/images/logo.png"></a>
+        <a href="/" class="logo"><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
         <div class="choose_mar">
-            <a href="#" class="click_a">选择超市</a>
-            <menu id="show_menu">
-                <a href="#">联盟超市名字</a>
-                <a href="#">联盟超市名字</a>
-                <a href="#">联盟超市名字</a>
-                <a href="#">联盟超市名字</a>
-            </menu>
+            <a href="javascript:void(0);" class="click_a" onclick="$('#mar_box').fadeIn(300);">选择地区超市</a>
         </div>
         <div class="m_box">
             <div class="search_box">
-                <input class="text" type="text">
-                <a href="#">搜索</a>
+                <form action="/search" method="get" id="search_form" >
+                     <input class="text" type="text" id="keywords" name="keywords" value="<#if keywords_list?? && keywords_list[0]??>${keywords_list[0].title!''}</#if>">
+                     <a href="javascript:submitSearch()">搜索</a>
+                </form>
             </div>
             <menu class="hot_search">
-                <a href="#">洗发水<span>丨</span></a>
-                <a href="#">牙膏<span>丨</span></a>
-                <a href="#">纸巾<span>丨</span></a>
-                <a href="#">垃圾袋<span>丨</span></a>
-                <a href="#">桶<span>丨</span></a>
-                <a href="#">零食<span>丨</span></a>
+                <#if keywords_list??>
+                    <#list keywords_list as item>
+                        <#if item_index gt 0>
+                            <a href="/search?keywords=${item.title}"  >${item.title}<span>丨</span></a>
+                        </#if>
+                    </#list>
+                </#if>
             </menu>
         </div>
         <div class="gu_car">
-            <a href="#">去购物车结算<span>5</span></a>
+            <a href="/cart">去购物车结算<span>5</span></a>
         </div>
         <div class="clear"></div>
     </section>
 
+    <!--选择超市弹出框-->
+    <aside class="winbox" id="mar_box">
+        <div class="mar_box">
+            <p class="tit">请选择超市<a href="javascript:void(0);" onclick="$(this).parent().parent().parent().fadeOut(300);"></a></p>
+            <div class="select">
+                <span>云南省</span>
+                <select>
+                    <option>请选择&nbsp;&nbsp;市</option>
+                    <option>昆明市</option>
+                </select>
+                <select>
+                    <option>请选择&nbsp;&nbsp;区</option>
+                    <option>五华区</option>
+                </select>
+                <select>
+                    <option>请选择&nbsp;&nbsp;超市</option>
+                    <option>超市名字</option>
+                </select>
+                <input class="sub" type="submit" value="确定">
+            </div>
+            <div class="mar_list">
+                <table>
+                    <tr>
+                        <th width="100">昆明市：</th>
+                        <td>
+                            <p>五华区</p>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>    
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>    
+                        </td>
+                        <td>
+                            <p>五华区</p>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>    
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="100">昆明市：</th>
+                        <td>
+                            <p>五华区</p>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>    
+                        </td>
+                        <td>
+                            <p>五华区</p>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>
+                            <a href="#">超市名字</a>    
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </aside>
+    
     <!--导航部分-->
     <nav class="nav_box">
         <div class="main">
             <section class="nav_list" id="mainnavdown">
-                <a href="#" class="a2">全部商品分类</a>
+                <a  class="a2">全部商品分类</a>
                 <ul id="nav_down" class="nav_down dis_none">
-                    <li>
-                        <a href="#" class="list">食品、酒水、茗茶 </a>
-                        <span>></span>
-                        <div class="nav_show">
-                            <table>
-                                <tr>
-                                    <th width="60">进口牛奶</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="60">酒水</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="60">茗茶</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="list">粮油副食 </a>
-                        <span>></span>
-                        <div class="nav_show">
-                            <table>
-                                <tr>
-                                    <th width="60">进口牛奶</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="60">酒水</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="60">茗茶</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="#" class="list">美容洗护 </a>
-                        <span>></span>
-                        <div class="nav_show">
-                            <table>
-                                <tr>
-                                    <th width="60">进口牛奶</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="60">酒水</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="60">茗茶</th>
-                                    <td>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                        <a href="#">牛奶</a>
-                                        <a href="#">牛奶奶</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </li>
+                    <#if top_cat_list??>
+                        <#list top_cat_list as item>
+                           <li>
+                              <a href="/list/${item.id?c}" class="list">${item.title!''}</a><span>></span>
+                              <div class="nav_show">
+                                  <#if ("second_level_"+item_index+"_cat_list")?eval?? >
+                                       <table>
+                                           <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
+                                            <tr>
+                                                 <th width="60"><a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a></th>
+                                                 <td>
+                                                      <#if ("third_level_"+item_index+secondLevelItem_index+"_cat_list")?eval?? >
+                                                            <#list ("third_level_"+item_index+secondLevelItem_index+"_cat_list")?eval as thirdLevelItem>
+                                                                <a href="/list/${thirdLevelItem.id?c}">${thirdLevelItem.title!''}</a>
+                                                            </#list>
+                                                      </#if>
+                                    
+                                                   </td>
+                                            </tr>
+                                            </#list>
+                                       </table>
+                                   </#if>
+                                </div>
+                             </li>
+                          </#list>
+                     </#if>
                 </ul>
             </section>
-            <a href="#" class="a1 sel">首页</a>
-            <a href="#" class="a1">商品推荐</a>
-            <a href="#" class="a1">本地特产</a>
-            <a href="#" class="a1">商品预定</a>
-            <a href="#" class="a1">进口商品</a>
-            <a href="#" class="a1">政企采购</a>
-            <a href="#" class="a1">生活服务</a>
-            <a href="#" class="a1">商家入驻</a>
+            <#if navi_item_list??>
+                <#list navi_item_list as item>
+                    <a class="a1" href="${item.linkUri!''}">${item.title!''}</a>
+                </#list>
+             </#if> 
         </div>
     </nav>

@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="">
-<meta name="description" content="">
-<meta name="copyright" content="">
+<meta name="keywords" content="${site.seoKeywords!''}">
+<meta name="description" content="${site.seoDescription!''}">
+<meta name="copyright" content="${site.copyright!''}" />
 <!--[if IE]>
    <script src="js/html5.js"></script>
 <![endif]-->
-<title>首页</title>
+<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
 
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
@@ -81,7 +81,7 @@ function submitSearch(){
 			     <form action="/search" method="get" id="search_form" >
         			 <input class="text" type="text" id="keywords" name="keywords" value="<#if keywords_list?? && keywords_list[0]??>${keywords_list[0].title!''}</#if>">
         			 <a href="javascript:submitSearch()">搜索</a>
-				</form>
+				 </form>
 			</div>
 			<menu class="hot_search">
 			     <#if keywords_list??>
@@ -147,99 +147,9 @@ function submitSearch(){
 							<a href="#">超市名字</a>
 							<a href="#">超市名字</a>	
 						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
 					</tr>
 					<tr>
 						<th width="100">昆明市：</th>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
-						<td>
-							<p>五华区</p>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>
-							<a href="#">超市名字</a>	
-						</td>
 						<td>
 							<p>五华区</p>
 							<a href="#">超市名字</a>

@@ -231,5 +231,6 @@ public interface TdGoodsRepo extends
     
     Page<TdGoods> findByReturnPriceNotAndTitleContainingAndIsOnSaleTrue(double returnPrice, String keywords, Pageable page);
     
-    
+    //热销
+    Page<TdGoods> findByIsHotTrueAndIsOnSaleTrueOrderByIdDesc(Pageable page);
 }

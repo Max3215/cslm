@@ -21,7 +21,7 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserConsult;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCommonService;
-import com.ynyes.cslm.service.TdDiySiteService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -80,7 +80,7 @@ public class TdGoodsController {
     private TdUserPointService tdUserPointService;
 
     @Autowired
-    private TdDiySiteService tdDiySiteService;
+    private TdDistributorService TdDistributorService;
 
     @RequestMapping("/goods/{goodsId}")
     public String product(@PathVariable Long goodsId, Long shareId,
@@ -162,7 +162,7 @@ public class TdGoodsController {
                 tdGoodsService.findTop10ByIsOnSaleTrueOrderBySoldNumberDesc());
 
         // 同盟店
-        map.addAttribute("diy_site_list", tdDiySiteService.findByIsEnableTrue());
+        map.addAttribute("diy_site_list", TdDistributorService.findByIsEnableTrue());
 
         // 收藏总数
         map.addAttribute("total_collects",
