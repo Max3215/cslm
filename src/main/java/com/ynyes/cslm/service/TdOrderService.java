@@ -369,4 +369,9 @@ public class TdOrderService {
     public List<TdOrder> findAll(Long statusId){
     	return (List<TdOrder>) repository.findAll();
     }
+    
+    public List<TdOrder> findByUsernameAndGoodId(String username,Long gid)
+    {
+    	return repository.findByUsernameAndGoodsId(username, gid);
+    }
 }

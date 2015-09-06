@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ynyes.cslm.entity.TdGoods;
+import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdProduct;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdSetting;
@@ -24,6 +25,7 @@ import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
+import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProductService;
 import com.ynyes.cslm.service.TdSettingService;
@@ -81,6 +83,10 @@ public class TdGoodsController {
 
     @Autowired
     private TdDistributorService TdDistributorService;
+    
+    //TdOrder服务类   libiao  
+    @Autowired
+    private TdOrderService tdOrderService;
 
     @RequestMapping("/goods/{goodsId}")
     public String product(@PathVariable Long goodsId, Long shareId,
@@ -153,6 +159,17 @@ public class TdGoodsController {
         // 差评数
         map.addAttribute("one_star_comment_count", tdUserCommentService
                 .countByGoodsIdAndStarsAndIsShowable(goodsId, 1L));
+        
+       /**
+        * 测试
+        * 
+        * 成交数
+        */
+        List<TdOrder> list = tdOrderService.findByUsernameAndGoodId(username, goodsId);
+        for (TdOrder tdOrder : list) {
+			
+        	System.err.println(tdOrder.getOrderNumber());
+		}
 
         // 咨询
         map.addAttribute("consult_page", consultPage);

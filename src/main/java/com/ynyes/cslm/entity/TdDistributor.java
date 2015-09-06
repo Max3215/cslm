@@ -1,29 +1,32 @@
 package com.ynyes.cslm.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 /**
  * 分销商
  * 
- * @author Sharon
+ * @author libiao
  *
  */
-
 @Entity
 public class TdDistributor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    // 加盟店名称
+    // 分销商名称
     @Column
     private String title;
     
-    // 加盟店地址
+    // 分销商地址
     @Column
     private String address;
     
@@ -90,7 +93,12 @@ public class TdDistributor {
     // 返利
     @Column
     private Double totalCash;
-
+    
+    //分销商商品
+    @OneToMany
+    @JoinColumn(name = "distributorId")
+    private List<TdDistributorGoods> goodsList;
+    
     public Long getId() {
         return id;
     }
@@ -242,4 +250,15 @@ public class TdDistributor {
     public void setTotalCash(Double totalCash) {
         this.totalCash = totalCash;
     }
+
+	public List<TdDistributorGoods> getGoodsList() {
+		return goodsList;
+	}
+
+	public void setGoodsList(List<TdDistributorGoods> goodsList) {
+		this.goodsList = goodsList;
+	}
+
+	
+    
 }

@@ -317,7 +317,9 @@ function submitSearch(){
             				    <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                 					<div class="clear"></div>
                 					<#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                					    <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                					    <#if secondLevelItem_index < 8 >
+                					       <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                					    </#if>
                 					</#list>
                 					<div class="clear"></div>
             					</#if>
@@ -360,7 +362,9 @@ function submitSearch(){
                                 <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                                     <div class="clear"></div>
                                     <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        <#if secondLevelItem_index < 8 >
+                                            <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        </#if>
                                     </#list>
                                     <div class="clear"></div>
                                 </#if>
@@ -403,7 +407,9 @@ function submitSearch(){
                                 <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                                     <div class="clear"></div>
                                     <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        <#if secondLevelItem_index < 8 >
+                                            <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        </#if>
                                     </#list>
                                     <div class="clear"></div>
                                 </#if>
@@ -446,7 +452,9 @@ function submitSearch(){
                                 <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                                     <div class="clear"></div>
                                     <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        <#if secondLevelItem_index < 8 >
+                                            <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        </#if>
                                     </#list>
                                     <div class="clear"></div>
                                 </#if>
@@ -489,7 +497,9 @@ function submitSearch(){
                                 <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                                     <div class="clear"></div>
                                     <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        <#if secondLevelItem_index < 8 >
+                                            <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        </#if>
                                     </#list>
                                     <div class="clear"></div>
                                 </#if>
@@ -532,7 +542,9 @@ function submitSearch(){
                                 <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                                     <div class="clear"></div>
                                     <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        <#if secondLevelItem_index < 8 >
+                                            <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        </#if>
                                     </#list>
                                     <div class="clear"></div>
                                 </#if>
@@ -575,7 +587,9 @@ function submitSearch(){
                                 <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                                     <div class="clear"></div>
                                     <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        <#if secondLevelItem_index < 8 >
+                                            <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        </#if>
                                     </#list>
                                     <div class="clear"></div>
                                 </#if>
@@ -618,7 +632,9 @@ function submitSearch(){
                                 <#if ("second_level_"+item_index+"_cat_list")?eval?? >
                                     <div class="clear"></div>
                                     <#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
-                                        <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        <#if secondLevelItem_index < 8 >
+                                            <a href="/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a>
+                                        </#if>
                                     </#list>
                                     <div class="clear"></div>
                                 </#if>

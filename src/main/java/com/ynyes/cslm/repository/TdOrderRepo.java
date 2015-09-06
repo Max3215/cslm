@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.cslm.entity.TdOrder;
@@ -110,5 +111,7 @@ public interface TdOrderRepo extends
      */
     List<TdOrder> findByStatusId(Long statusId);
 //    List<TdOrder> findAll();
+    @Query("select o from TdOrder o join o.orderGoodsList g where o.username=?1 and g.goodsId=?2")
+    List<TdOrder> findByUsernameAndGoodsId(String username, Long gid);
     
 }

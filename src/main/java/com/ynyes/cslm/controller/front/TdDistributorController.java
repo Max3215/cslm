@@ -29,7 +29,7 @@ import com.ynyes.cslm.util.SiteMagConstant;
 
 
 @Controller
-@RequestMapping(value="/diysite/order")
+@RequestMapping(value="/distributor")
 public class TdDistributorController {
 	
 	@Autowired
@@ -49,7 +49,7 @@ public class TdDistributorController {
 	 * @注释：返利收入
 	 */
 
-	@RequestMapping(value = "/rebateincome")
+	@RequestMapping(value = "/order/rebateincome")
 	public String rebateincome(Integer page,
 	                        Integer timeId, 
 	                        HttpServletRequest req,
@@ -192,7 +192,7 @@ public class TdDistributorController {
 	 * @author lc
 	 * @注释：订单收入
 	 */
-	@RequestMapping(value = "/orderincome")
+	@RequestMapping(value = "/order/orderincome")
 	public String orderincome(Integer page,
 	                        Integer timeId, 
 	                        HttpServletRequest req,
@@ -332,7 +332,7 @@ public class TdDistributorController {
     	return sales;
     }
 	
-	@RequestMapping(value="/param/edit", method = RequestMethod.POST)
+	@RequestMapping(value="/order/param/edit", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> paramEdit(String orderNumber, String password,
                         String type,
@@ -396,4 +396,13 @@ public class TdDistributorController {
         res.put("message", "参数错误!");
         return res;
     }
+	
+	@RequestMapping(value="/save", method = RequestMethod.GET)
+	public String distributorSave(HttpServletRequest req,ModelMap map)
+	{
+		tdCommonService.setHeader(map, req);
+		
+		return "/client/distrbutor_save";
+	}
+	
 }
