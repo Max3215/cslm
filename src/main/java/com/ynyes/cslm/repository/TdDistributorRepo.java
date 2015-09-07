@@ -26,9 +26,11 @@ public interface TdDistributorRepo extends
     
     List<TdDistributor> findByCityAndIsEnableTrueOrderBySortIdAsc(String city);
     
-    /**
-	 * @author lc
-	 * @注释：
-	 */
     TdDistributor findByUsernameAndIsEnableTrue(String username);
+    
+    List<TdDistributor> findByDisctrictAndIsEnableTrue(String disctrict);
+    
+    TdDistributor findByVirtualAccountAndIsEnableTrue(String virtualAccount);
+    
+//    TdDistributor findByIdAndIsEnableTrue(Long id);
 }

@@ -129,12 +129,12 @@ public class TdLoginController {
 
 			res.put("code", 0);
 
-			// @注释：判断用户类型
-			if(null != user.getRoleId() && user.getRoleId().equals(2L)){
-				res.put("role", 2);
-				request.getSession().setAttribute("diysiteUsername", user.getUsername());
-				return res;
-			}
+//			// @注释：判断用户类型
+//			if(null != user.getRoleId() && user.getRoleId().equals(2L)){
+//				res.put("role", 2);
+//				request.getSession().setAttribute("diysiteUsername", user.getUsername());
+//				return res;
+//			}
 			request.getSession().setAttribute("username", user.getUsername());
 			request.getSession().setAttribute("usermobile", user.getMobile());
 			return res;

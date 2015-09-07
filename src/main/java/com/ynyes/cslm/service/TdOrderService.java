@@ -374,4 +374,10 @@ public class TdOrderService {
     {
     	return repository.findByUsernameAndGoodsId(username, gid);
     }
+    
+    public Page<TdOrder> findByShopId(Long shopId,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size);
+    	return repository.findByShopIdOrderByIdDesc(shopId, pageRequest);
+    	
+    }
 }

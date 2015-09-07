@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.mobile.device.site.SitePreference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,11 +46,29 @@ public class TdDistributorController {
 	@Autowired
 	TdDistributorService TdDistributorService;
 	
-	/**
-	 * @author lc
-	 * @注释：返利收入
-	 */
-
+	@RequestMapping(value="/index")
+	public String distributroindex(HttpServletRequest req, ModelMap map)
+	{
+		String username = (String) req.getSession().getAttribute("diysiteUsername");
+		if (null == username) {
+            return "redirect:/login";
+        }
+        
+        tdCommonService.setHeader(map, req);
+        
+        TdDistributor distributor = TdDistributorService.findbyUsername(username);
+        
+        if(null == distributor){
+        	return "/client/error_404";
+        }
+        
+        
+		
+        
+		return "";
+	}
+	
+	
 	@RequestMapping(value = "/order/rebateincome")
 	public String rebateincome(Integer page,
 	                        Integer timeId, 
@@ -396,13 +416,144 @@ public class TdDistributorController {
         res.put("message", "参数错误!");
         return res;
     }
+//========================================================================================================================================================================================
+//========================================================================================================================================================================================
+	/**
+   	 * @注释：通过地区获取同盟店列表
+   	 */
+     @RequestMapping(value="/getdiysites", method = RequestMethod.POST)
+     @ResponseBody
+     public Map<String, Object> getdiysites(String disctrict){
+       Map<String, Object> res = new HashMap<String, Object>();         
+       res.put("code", 1);
+            
+       if (null != disctrict) {
+   			List<TdDistributor> TdDistributor = TdDistributorService.findBydisctrict(disctrict);
+   			
+   			res.put("tdDiySites", TdDistributor);
+   			res.put("code", 0);
+       }
+            
+       return res;
+    }
+	
+//	@RequestMapping(value="/getaddress", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Map<String, Object> getaddress(Long id){
+//    	 Map<String, Object> res = new HashMap<String, Object>();         
+//         res.put("code", 1);
+//         
+//         if (null != id) {
+//        	 TdDistributor TdDistributor = TdDistributorService.findOne(id);
+//			res.put("address", TdDistributor.getAddress());
+//			res.put("code", 0);
+//		}else{
+//			res.put("address", " ");
+//			res.put("code", 0);
+//		}
+//         
+//         return res;
+//    }
+	
 	
 	@RequestMapping(value="/save", method = RequestMethod.GET)
 	public String distributorSave(HttpServletRequest req,ModelMap map)
 	{
 		tdCommonService.setHeader(map, req);
 		
-		return "/client/distrbutor_save";
+		return "/client/distributor_save";
+	}
+	
+	@RequestMapping(value="/save",method = RequestMethod.POST)
+	public String distributorSave(TdDistributor tdDistributor,HttpServletRequest req,ModelMap map)
+	{
+		tdCommonService.setHeader(map, req);
+		TdDistributorService.save(tdDistributor);
+		
+		return "";
+	}
+	
+	/**
+	 * 验证登录名和虚拟账号
+	 * 
+	 * @param type
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value="/check/{type}",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,String> validateForm(@PathVariable String type,String param)
+	{
+		 Map<String, String> res = new HashMap<String, String>();
+		 res.put("status", "n");
+		 
+		 if(null == type)
+		 {
+			 res.put("info","参数错误");
+			 return res;
+		 }
+		 //登录账号验证
+		 if (type.equalsIgnoreCase("username"))
+	        {
+	        	if (null == param || param.isEmpty()) {
+	                res.put("info", "用户名不能为空");
+	                return res;
+	            }
+	        	
+	        	TdUser user = tdUserService.findByUsername(param);
+	        	
+	        	if (null != user)
+	        	{
+	        		res.put("info", "该账号已经存在");
+	                return res;
+	        	}
+	        }
+		 //虚拟账号验证
+		 if("virtualAccount".equalsIgnoreCase(type))
+		 {
+			 if (null == param || param.isEmpty()) {
+	                res.put("info", "虚拟账户不能为空");
+	                return res;
+	            }
+			 TdDistributor distributor = TdDistributorService.findByVirtualAccount(param);
+			 if(null !=distributor){
+				 res.put("info", "虚拟账号已被占用");
+				 return res;
+			 }
+		 }
+		 res.put("info", "通过信息验证！");
+		 return res;
+	}
+	
+	@RequestMapping(value="/sale", method=RequestMethod.GET)
+	public String distributorSale(Integer page,HttpServletRequest req,ModelMap map)
+	{
+		String username=(String)req.getSession().getAttribute("username");
+		
+		tdCommonService.setHeader(map, req);
+		
+		if(null == username)
+		{
+			return "/client/login";
+		}
+		
+		if(null == page)
+		{
+			page = 0;
+		}
+		
+		TdDistributor distributor = TdDistributorService.findbyUsername(username);
+		
+		Page<TdOrder> dist_order_page = tdOrderService.findByDiysitename(username, page, 5);
+		
+		dist_order_page = tdOrderService.findByShopId(distributor.getId(), page, 5);
+		for (TdOrder order : dist_order_page.getContent()) {
+			System.err.println(order);
+		}
+		System.err.println(dist_order_page);
+		map.addAttribute("dist_order_page", dist_order_page);
+		
+		return "/client/distributor_sale";
 	}
 	
 }

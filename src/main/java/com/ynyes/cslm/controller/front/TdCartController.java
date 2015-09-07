@@ -197,10 +197,10 @@ public class TdCartController {
         
         tdCommonService.setHeader(map, req);
 
-        if (null == resList || resList.size() == 0)
-        {
-            return "/client/cart_null";
-        }
+//        if (null == resList || resList.size() == 0)
+//        {
+//            return "/client/cart_null";
+//        }
 
         return "/client/cart";
     }

@@ -35,6 +35,9 @@ public class TdDistributorService {
     @Autowired
     TdUserService tdUserService;
     
+    @Autowired
+    TdDistributorGoodsService tdDistributorGoodsService;
+    
     /**
      * 删除
      * 
@@ -83,6 +86,18 @@ public class TdDistributorService {
         }
         
         return repository.findOne(id);
+    }
+    
+    public List<TdDistributor> findBydisctrict(String disctrict){
+    	return repository.findByDisctrictAndIsEnableTrue(disctrict);
+    }
+    
+    public TdDistributor findByVirtualAccount(String virtualAccount)
+    {
+    	if(null == virtualAccount){
+    		return null;
+    	}
+    	return repository.findByVirtualAccountAndIsEnableTrue(virtualAccount);
     }
     
     /**
@@ -141,7 +156,7 @@ public class TdDistributorService {
             {
                 user = tdUserService.addNewUser(e.getUsername(), e.getPassword(), e.getMobile(), null, null);
                 
-                user.setRoleId(2L); // 加盟商用户
+                user.setRoleId(1L); // 加盟商用户
             }
             // 修改加盟店密码也需要修改用户密码 @author: Sharon
             else
@@ -150,6 +165,9 @@ public class TdDistributorService {
             }
             
             tdUserService.save(user);
+            
+            //保存分销商商品
+            tdDistributorGoodsService.save(e.getGoodsList());
         }
         
         return repository.save(e);
@@ -160,6 +178,9 @@ public class TdDistributorService {
         
         return (List<TdDistributor>) repository.save(entities);
     }
+    
+    
+    
     
     /**
 	 * @author lc

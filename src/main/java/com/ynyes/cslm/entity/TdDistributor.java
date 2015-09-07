@@ -46,9 +46,17 @@ public class TdDistributor {
     @Column
     private String complainTele;
     
-    // 加盟点城市
+    //省
+    @Column
+    private String province;
+    
+    // 市
     @Column
     private String city;
+    
+    // 区
+    @Column
+    private String disctrict;
     
     // 是否启用
     @Column
@@ -89,6 +97,10 @@ public class TdDistributor {
     // 手机号
     @Column
     private String mobile;
+    
+    //虚拟账号
+    @Column
+    private String virtualAccount;
     
     // 返利
     @Column
@@ -163,15 +175,31 @@ public class TdDistributor {
         this.latitude = latitude;
     }
 
-    public String getCity() {
-        return city;
-    }
+    public String getProvince() {
+		return province;
+	}
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+	public void setProvince(String province) {
+		this.province = province;
+	}
 
-    public String getImageUri() {
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getDisctrict() {
+		return disctrict;
+	}
+
+	public void setDisctrict(String disctrict) {
+		this.disctrict = disctrict;
+	}
+
+	public String getImageUri() {
         return imageUri;
     }
 
@@ -243,7 +271,15 @@ public class TdDistributor {
         this.mobile = mobile;
     }
 
-    public Double getTotalCash() {
+    public String getVirtualAccount() {
+		return virtualAccount;
+	}
+
+	public void setVirtualAccount(String virtualAccount) {
+		this.virtualAccount = virtualAccount;
+	}
+
+	public Double getTotalCash() {
         return totalCash;
     }
 
@@ -257,6 +293,15 @@ public class TdDistributor {
 
 	public void setGoodsList(List<TdDistributorGoods> goodsList) {
 		this.goodsList = goodsList;
+	}
+
+	@Override
+	public String toString() {
+		return "TdDistributor [id=" + id + ", title=" + title + ", openTimeSpan=" + openTimeSpan + ", serviceTele="
+				+ serviceTele + ", complainTele=" + complainTele + ", province=" + province + ", city=" + city
+				+ ", disctrict=" + disctrict + ", sortId=" + sortId + ", imageUri=" + imageUri + ", username="
+				+ username + ", password=" + password + ", mobile=" + mobile + ", virtualAccount=" + virtualAccount
+				+ "]";
 	}
 
 	

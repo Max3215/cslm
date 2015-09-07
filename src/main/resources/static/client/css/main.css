@@ -430,8 +430,26 @@
 
 
 
-
-
+/*360度图片展示样式*/
+.photo-list_show360{ margin:0; padding:10px 0 0 0; }
+    .photo-list_show360 ul{ margin:0; list-style:none; *display:inline-block; }
+    .photo-list_show360 ul:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+    .photo-list_show360 ul li{ float:left; margin-right:10px; text-align:center; *width:139px;}
+    .photo-list_show360 ul li .img-box{ margin:5px 5px 5px auto; position:relative; width:128px; height:128px; overflow:hidden; border:2px #efefed solid; cursor:pointer; }
+    .photo-list_show360 ul li .img-box.selected{ border:2px #EA5D0E solid }
+    .photo-list_show360 ul li .img-box img{ width:128px; height:128px; opacity:1; }
+    .photo-list_show360 ul li .img-box .remark{ top:106px; left:0px; margin:0; padding:3px 2px; position:absolute; display:block; width:124px; height:122px; overflow:hidden; background:#000; filter:alpha(opacity=50); opacity:0.5; -moz-opacity:0.5; text-align:left; font-family:"Microsoft Yahei"; }
+    .photo-list_show360 ul li .img-box .remark:hover{ top:0px; }
+    .photo-list_show360 ul li .img-box .remark i{ color:#fff; font-style:normal; position:relative; line-height:18px; }
+    .photo-list_show360 ul li a{ padding-right:1em; }
+    
+    .photo-list_show360 ul li .img-box1{ margin:5px 5px 5px auto; position:relative; max-height:80px; overflow:hidden; border:2px #efefed solid; cursor:pointer; }
+    
+    .photo-list_show360 ul li .img-box.selected{ border:2px #F5450A solid }
+    .photo-list_show360 ul li .img-box1 img{ max-height:80px; opacity:1; }
+    .photo-list_show360 ul li .img-box1 .remark{ top:106px; left:0px; margin:0; padding:3px 2px; position:absolute; display:block; width:124px; height:122px; overflow:hidden; background:#000; filter:alpha(opacity=50); opacity:0.5; -moz-opacity:0.5; text-align:left; font-family:"Microsoft Yahei"; }
+    .photo-list_show360 ul li .img-box1 .remark:hover{ top:0px; }
+    .photo-list_show360 ul li .img-box1 .remark i{ color:#fff; font-style:normal; position:relative; line-height:18px; }
 
 
 

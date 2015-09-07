@@ -37,6 +37,10 @@ public class TdSetting {
     @Column
     private String company;
     
+    //虚拟账号    libiao
+    @Column
+    private String virtualAccount;
+    
     // 通信地址
     @Column
     private String address;
@@ -243,7 +247,15 @@ public class TdSetting {
         this.company = company;
     }
 
-    public String getAddress() {
+    public String getVirtualAccount() {
+		return virtualAccount;
+	}
+
+	public void setVirtualAccount(String virtualAccount) {
+		this.virtualAccount = virtualAccount;
+	}
+
+	public String getAddress() {
         return address;
     }
 

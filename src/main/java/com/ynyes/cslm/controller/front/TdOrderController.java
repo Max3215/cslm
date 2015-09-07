@@ -61,7 +61,7 @@ import net.sf.json.JSONObject;
  */
 @Controller
 @RequestMapping("/order")
-public class TdOrderController {
+public class TdOrderController extends AbstractPaytypeController{
 
     private static final String PAYMENT_ALI = "ALI";
 
@@ -838,28 +838,25 @@ public class TdOrderController {
 
         // 保存订单商品及订单
         tdOrderGoodsService.save(orderGoodsList);
-        /**
-		 * @author lc
-		 * @注释：订单类型设置 
-		 */
+       
         tdOrder.setTypeId(0L);
-        for(TdOrderGoods tdOrderGoods : orderGoodsList){
-        	if (tdOrderGoods.getGoodsSaleType() == 1) {
-				tdOrder.setTypeId(2L);
-			}       	
-        }
-        //抢购 团购 都只有一个商品
-        for(TdOrderGoods tdOrderGoods : orderGoodsList){
-        	if (tdOrderGoods.getGoodsSaleType() == 2) {
-				tdOrder.setTypeId(3L);
-			}
-        	else if (tdOrderGoods.getGoodsSaleType() == 3) {
-        		tdOrder.setTypeId(4L);
-			}
-        	else if (tdOrderGoods.getGoodsSaleType() == 4) {
-        		tdOrder.setTypeId(5L);
-			}
-        }
+//        for(TdOrderGoods tdOrderGoods : orderGoodsList){
+//        	if (tdOrderGoods.getGoodsSaleType() == 1) {
+//				tdOrder.setTypeId(2L);
+//			}       	
+//        }
+//        //抢购 团购 都只有一个商品
+//        for(TdOrderGoods tdOrderGoods : orderGoodsList){
+//        	if (tdOrderGoods.getGoodsSaleType() == 2) {
+//				tdOrder.setTypeId(3L);
+//			}
+//        	else if (tdOrderGoods.getGoodsSaleType() == 3) {
+//        		tdOrder.setTypeId(4L);
+//			}
+//        	else if (tdOrderGoods.getGoodsSaleType() == 4) {
+//        		tdOrder.setTypeId(5L);
+//			}
+//        }
         
         tdOrder = tdOrderService.save(tdOrder);
 
@@ -917,84 +914,6 @@ public class TdOrderController {
             }
         }
 
-        // 优惠券
-        // TODO: 满减券， 单品类券，普通券查找
-        // List<TdCoupon> userCoupons =
-        // tdCouponService.findByUsernameAndIsUseable(username);//根据账号查询所有优惠券
-        //
-        // /**
-        // * 判断能使用的优惠券
-        // * 1，满购券金额是否达到要求
-        // * 2，单品类券是否包含有订单商品能使用的
-        // * 3，普通券
-        // * @author libiao
-        // */
-        // List<TdCoupon> userCouponList =null;
-        // if(null != userCoupons)
-        // {
-        // if(userCoupons.size()>0)
-        // {
-        // for (int i = 0; i < userCoupons.size(); i++)
-        // {
-        // //查看优惠券
-        // TdCouponType couponType =
-        // tdCouponTypeService.findOne(userCoupons.get(i).getTypeId());
-        // //判断为满购券
-        // if(couponType.getCategoryId().equals(1L))
-        // {
-        // //判断购物总价>满购券使用金额
-        // if(totalPrice>couponType.getCanUsePrice())
-        // {
-        // userCouponList.add(userCoupons.get(i));
-        // }
-        // }
-        // //判断为普通券
-        // if(couponType.getCategoryId().equals(0L))
-        // {
-        // userCouponList.add(userCoupons.get(i));
-        // }
-        // //判断为单品类券
-        // if(couponType.getCategoryId().equals(2L))
-        // {
-        //
-        // }
-        // /**
-        // * 取出购物车所有商品Id
-        // * @author libiao
-        // */
-        // List<Long> goodIds =new ArrayList<>();
-        // for (int j = 0; j < selectedGoodsList.size(); i++)
-        // {
-        // Long goodsId = selectedGoodsList.get(j).getGoodsId();
-        // goodIds.add(goodsId);
-        // }
-        // /**
-        // * 根据取出商品Id查找其所属分类Id
-        // * @author libiao
-        // */
-        // List<Long> productIds =new ArrayList<>();
-        //
-        //
-        // for (int y = 0; i < goodIds.size(); i++) {
-        // Long productId =
-        // tdGoodsService.findProductIdById(goodIds.get(y)).getProductId();
-        // if(!productIds.contains(productId)){
-        // productIds.add(productId);
-        // }
-        // }
-        // // /**
-        // // * 查找所有能用的单品类券
-        // // */
-        // // for (int i = 0; i < productIds.size(); i++) {
-        // // List<TdCouponType> counponTypes =
-        // tdCouponTypeService.findByCategoryId(productIds.get(i));
-        // // }
-        //
-        // }
-        //
-        // }
-        // }
-
         map.addAttribute("coupon_list",
                 tdCouponService.findByUsernameAndIsUseable(username));
 
@@ -1005,8 +924,9 @@ public class TdOrderController {
         map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
 
         // 支付方式列表
-//        setPayTypes(map, true, false, req);
-
+        setPayTypes(map, true, false, req);
+        
+        map.addAttribute("totalPrice", totalPrice);
         // 配送方式
         map.addAttribute("delivery_type_list",
                 tdDeliveryTypeService.findByIsEnableTrue());
@@ -1091,16 +1011,16 @@ public class TdOrderController {
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public String submit(Long addressId, // 送货地址
-            Long shopId, Long payTypeId, // 支付方式ID
-            Long deliveryTypeId, // 配送方式ID
+            Long payTypeId, // 支付方式ID
             Long pointUse, // 使用粮草
             Boolean isNeedInvoice, // 是否需要发票
             String invoiceTitle, // 发票抬头
             String userMessage, // 用户留言
             Long couponId, // 优惠券ID
-            String appointmentTime, HttpServletRequest req, ModelMap map) {
+            HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
-
+        Long tdDistributorId= (Long)req.getSession().getAttribute("distributorId");
+        
         if (null == username) {
             return "redirect:/login";
         }
@@ -1111,6 +1031,12 @@ public class TdOrderController {
             return "/client/error_404";
         }
 
+        if(null == tdDistributorId)
+        {
+        	tdDistributorId = 1L;
+        }
+        TdDistributor distributor = TdDistributorService.findOne(tdDistributorId);
+        
         double payTypeFee = 0.0;
         double deliveryTypeFee = 0.0;
         double pointFee = 0.0;
@@ -1241,19 +1167,19 @@ public class TdOrderController {
         String curStr = sdf.format(current);
         Random random = new Random();
 
-        // 预约时间
-        if (null != appointmentTime) {
-            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 小写的mm表示的是分钟
-
-            try {
-                Date appTime = sdf.parse(appointmentTime);
-
-                tdOrder.setAppointmentTime(appTime);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+//        // 预约时间
+//        if (null != appointmentTime) {
+//            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 小写的mm表示的是分钟
+//
+//            try {
+//                Date appTime = sdf.parse(appointmentTime);
+//
+//                tdOrder.setAppointmentTime(appTime);
+//
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         // 基本信息
         tdOrder.setUsername(user.getUsername());
@@ -1263,7 +1189,7 @@ public class TdOrderController {
         tdOrder.setOrderNumber("P" + curStr
                 + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
 
-        // 安装信息
+        // 发货信息
         if (null != address) {
 
             tdOrder.setPostalCode(address.getPostcode());
@@ -1286,32 +1212,32 @@ public class TdOrderController {
             tdOrder.setIsOnlinePay(payType.getIsOnlinePay());
         }
 
-        // 配送方式
-        if (null != deliveryTypeId) {
-            TdDeliveryType deliveryType = tdDeliveryTypeService
-                    .findOne(deliveryTypeId);
-            tdOrder.setDeliverTypeId(deliveryType.getId());
-            tdOrder.setDeliverTypeTitle(deliveryType.getTitle());
-            tdOrder.setDeliverTypeFee(deliveryType.getFee());
-            deliveryTypeFee = deliveryType.getFee();
-        }
+//        // 配送方式
+//        if (null != deliveryTypeId) {
+//            TdDeliveryType deliveryType = tdDeliveryTypeService
+//                    .findOne(deliveryTypeId);
+//            tdOrder.setDeliverTypeId(deliveryType.getId());
+//            tdOrder.setDeliverTypeTitle(deliveryType.getTitle());
+//            tdOrder.setDeliverTypeFee(deliveryType.getFee());
+//            deliveryTypeFee = deliveryType.getFee();
+//        }
 
-        // 线下同盟店
-        if (null != shopId) {
-            TdDistributor shop = TdDistributorService.findOne(shopId);
-
-            if (null != shop) {
-                tdOrder.setShopId(shop.getId());
-                tdOrder.setShopTitle(shop.getTitle());
-                
-                // 用户归属
-                if (null != user.getUpperDiySiteId())
-                {
-                    user.setUpperDiySiteId(shop.getId());
-                    user = tdUserService.save(user);
-                }
-            }
-        }
+//        // 线下同盟店
+//        if (null != shopId) {
+//            TdDistributor shop = TdDistributorService.findOne(shopId);
+//
+//            if (null != shop) {
+//                tdOrder.setShopId(shop.getId());
+//                tdOrder.setShopTitle(shop.getTitle());
+//                
+//                // 用户归属
+//                if (null != user.getUpperDiySiteId())
+//                {
+//                    user.setUpperDiySiteId(shop.getId());
+//                    user = tdUserService.save(user);
+//                }
+//            }
+//        }
 
         // 使用积分
         tdOrder.setPointUse(pointUse);
@@ -1362,11 +1288,15 @@ public class TdOrderController {
 
         // 保存订单商品及订单
         tdOrderGoodsService.save(orderGoodsList);
-        /**
-		 * @author lc
-		 * @注释：设置订单类型
-		 */
-        tdOrder.setTypeId(1L);
+       
+        //设置订单类型
+		if(1==user.getRoleId()){
+			tdOrder.setTypeId(1L);  //超市进货
+		}else{
+			tdOrder.setTypeId(0L);
+			tdOrder.setShopId(distributor.getId());
+			tdOrder.setShopTitle(distributor.getTitle());
+		}
         tdOrder = tdOrderService.save(tdOrder);
 
         // 添加积分使用记录

@@ -44,23 +44,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="myclear"></div>
 <div class="mymember_out">
 <div class="mymember_main">
-  <div class="mymember_head">
-    <h2><a href="/">超市联盟</a></h2>
-    <div class="mymember_head_part">
-      <a class="a001" >个人主页</a>
-    </div> 
-    <div id="mymember_nav01" class="mymember_head_part">
-      <a class="a001 a002" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>
-      <div id="mymember_navshow01">
-        <a href="/user">个人信息</a>
-        <a href="/user/password/list">收货地址</a>
-
-      </div>
-    </div>
-    <div class="myclear"></div>
-    <a class="mymember_head_kf" href="#">在线客服 >> </a>
-  </div><!--mymember_head END-->
-  <div class="myclear" style="height:20px;"></div>
+  
   
  <!-- 左侧 -->
   <#include "/client/common_user_menu.ftl" />

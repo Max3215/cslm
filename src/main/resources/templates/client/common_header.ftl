@@ -51,7 +51,14 @@
     <aside class="winbox" id="mar_box">
         <div class="mar_box">
             <p class="tit">请选择超市<a href="javascript:void(0);" onclick="$(this).parent().parent().parent().fadeOut(300);"></a></p>
-            <div class="select">
+            <div class="select" id="address">
+               
+                      <select id="prov" class="prov" style="width: 100px;"></select>
+                      <select id="city" class="city" style="width: 100px;"></select>
+                      <select id="dist" class="dist" style="width: 100px;"></select>
+                      <select id="diys" class="diys" style="width: 100px;" name="shopId" onchange="showaddress()" datatype="n" nullmsg="请选择同盟店" errormsg="请选择同盟店"></select>
+                      <p id="shopaddress"></p>
+                      
                 <span>云南省</span>
                 <select>
                     <option>请选择&nbsp;&nbsp;市</option>

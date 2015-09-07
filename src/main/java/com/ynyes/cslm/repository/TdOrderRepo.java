@@ -114,4 +114,6 @@ public interface TdOrderRepo extends
     @Query("select o from TdOrder o join o.orderGoodsList g where o.username=?1 and g.goodsId=?2")
     List<TdOrder> findByUsernameAndGoodsId(String username, Long gid);
     
+    @Query("select o from TdOrder o join o.orderGoodsList g where o.shopId=?1")
+    Page<TdOrder> findByShopIdOrderByIdDesc(Long shopTitle, Pageable page);
 }

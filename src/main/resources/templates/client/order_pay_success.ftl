@@ -7,53 +7,56 @@
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 <!--[if IE]>
-   <script src="/client/js/html5.js"></script>
+   <script src="js/html5.js"></script>
 <![endif]-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
-<script src="/client/js/Validform_v5.3.2_min.js"></script>
-<script src="/client/js/common.js"></script>
-<script src="/client/js/ljs-v1.01.js"></script>
-<script src="/client/js/cart.js"></script>
+<script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/order_info.js"></script>
-<script src="/client/js/jquery.cityselect.js"></script>
+<script src="/client/js/Validform_v5.3.2_min.js"></script>
 
+
+<link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />
-<link href="/client/style/cytm.css" rel="stylesheet" type="text/css" />
-<link href="/client/style/cartoon.css" rel="stylesheet" type="text/css" />
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
-<link href="/client/style/payment_status.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
-  $(document).ready(function(){
-    menuDownList("top_phone","#top_phonelist",".a1","sel");
-    phoneListMore();//单独下拉
-    menuDownList("top_order","#top_orderlist",".a4","sel");//顶部下拉
-    searchTextClear(".toptext","请输入品牌或商品名称","#999","#666");
-    searchTextClear(".bottext","查看所有门店","#fff","#fff");
-    checkNowHover("shopping_down","shopping_sel");
-    navDownList("navdown","li",".nav_showbox");
-    menuDownList("mainnavdown","#navdown",".a2","sel");
-});
+$(document).ready(function(){
+  $(".click_a").click(function(){
+    if($(this).next().is(":visible")==false){
+      $(this).next().slideDown(300);
+    }else{
+      $(this).next().slideUp(300);
+    }
+  });//选择超市下拉效果
+
+  navDownList("nav_down","li",".nav_show");
+  menuDownList("mainnavdown","#nav_down",".a2","sel");
+  adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+
+  $(".float_box .ewm").hover(function(){
+    $(this).next().show();
+  },function(){
+    $(this).next().hide();
+  })
+})
 </script>
 </head>
 <body>
 <#include "/client/common_header.ftl" />
-  <div class="main">
+
+    <div class="car_success">
     <#if order??>
-    <h3>订单号:${order.orderNumber!''}</h3>
-    <h3>支付金额:${order.totalPrice?string('0.00')}</h3>
-    <h3>支付方式:${order.payTypeTitle!''}</h3>
-    </#if>
-    <h3>订单状态</h3>
-    <div class="clear h20"></div>
-    <div id="trans-status">
-        <div class="notice-title status-success">
-            <img class="notice-icon" title="付款成功" src="/client/img/transsucc.png"></img>
-            <span class="notice-content">付款成功，我们将尽快安排为您送货！</span>
-        </div>
-    </div>
-    <div class="clear h40"></div>
+    <p class="fc fs30 lh40 pb10">您已成功付款 ${order.totalPrice?string('0.00')}元</p>
+    <p>对方将立即收到您的付款。</p>
+    <#-->
+    <p>如果您有未付款信息，<a class="blue" href="#">查看并继续付款</a></p>
+    -->
+    <p class="pt20"><a class="c9" href="/">继续购物</a></p>
+    <img class="img" src="/client/images/ewm.jpg" height="150" />
   </div>
+
+    <div class="clear h40"></div>
+  
 <#include "/client/common_footer.ftl" />
 </body>
 </html>

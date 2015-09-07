@@ -104,7 +104,7 @@ function login(){
           success: function (data) { 
           <!-- 修改 -->
           if (data.role == 2){
-              window.location.href="/user/diysite/order/list/0";
+              window.location.href="/user";
           }    
           else if (data.code == 0) {
                    var url = document.referrer;          

@@ -15,9 +15,19 @@
 
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
+<script src="/client/js/jquery.diysiteselect.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#address").citySelect({
+        nodata:"none",
+        prov: "云南",
+        city: "昆明",
+        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
+        required:false
+    });
+
+
 	$(".click_a").click(function(){
 		if($(this).next().is(":visible")==false){
 			$(this).next().slideDown(300);
@@ -45,6 +55,7 @@ function submitSearch(){
     var search = document.getElementById("search_form");
     search.submit();
 }
+
 </script>
 
 </head>
@@ -103,20 +114,11 @@ function submitSearch(){
 	<aside class="winbox" id="mar_box">
 		<div class="mar_box">
 			<p class="tit">请选择超市<a href="javascript:void(0);" onclick="$(this).parent().parent().parent().fadeOut(300);"></a></p>
-			<div class="select">
-				<span>云南省</span>
-				<select>
-					<option>请选择&nbsp;&nbsp;市</option>
-					<option>昆明市</option>
-				</select>
-				<select>
-					<option>请选择&nbsp;&nbsp;区</option>
-					<option>五华区</option>
-				</select>
-				<select>
-					<option>请选择&nbsp;&nbsp;超市</option>
-					<option>超市名字</option>
-				</select>
+			<div class="select" id="address">
+				   <select id="prov" class="prov" style="width: 100px;"></select>
+                   <select id="city" class="city" style="width: 100px;"></select>
+                   <select id="dist" class="dist" style="width: 100px;"></select>
+                   <select id="diys" class="diys" style="width: 100px;" name="shopId" datatype="n" nullmsg="请选择同盟店" errormsg="请选择同盟店"></select>
 				<input class="sub" type="submit" value="确定">
 			</div>
 			<div class="mar_list">
@@ -294,7 +296,7 @@ function submitSearch(){
             					<a href="/goods/${item.id?c}">
             						<img src="${item.coverImageUri!''}" width="130px" height="130px">
             						<p class="p1">￥${item.salePrice?string('0.00')}</p>
-            						<p class="p2">${item.stitle!""}</p>
+            						<p class="p2">${item.title!""}</p>
             					</a>
             				</li>
             		      </#if>

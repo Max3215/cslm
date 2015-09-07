@@ -11,11 +11,21 @@
 <script type="text/javascript" src="/mag/js/swfupload.queue.js"></script>
 <script type="text/javascript" src="/mag/js/swfupload.handlers.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
+<script type="text/javascript" src="/mag/js/Validform_v5.3.2_min.js"></script>
+<script src="/mag/js/jquery.cityselect.js"></script>
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 $(function () {
     //初始化表单验证
     $("#form1").initValidform();
+    
+    $("#address").citySelect({
+        nodata:"none",
+        <#if address?? && address.province??>prov: "${address.province!''}",</#if>
+        <#if address?? && address.city??>city: "${address.city!''}",</#if>
+        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
+        required:false
+    });
     
     //初始化上传控件
     $(".upload-img").each(function () {
@@ -84,10 +94,10 @@ $(function () {
 
 <div class="tab-content">
   <dl>
-    <dt>同盟店名称</dt>
+    <dt>分销商名称</dt>
     <dd>
         <input name="title" type="text" value="<#if diy_site??>${diy_site.title!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
-        <span class="Validform_checktip">*同盟店名称</span>
+        <span class="Validform_checktip">*分销商名称</span>
     </dd>
   </dl>
   <dl>
@@ -118,7 +128,13 @@ $(function () {
         <span class="Validform_checktip">*用于接收通知短信</span>
     </dd>
   </dl>
-  
+  <dl>
+    <dt>分销商虚拟账号</dt>
+    <dd>
+        <input name="virtualAccount" type="text" value="<#if diy_site??>${diy_site.virtualAccount!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
+        <span class="Validform_checktip">*虚拟账号</span>
+    </dd>
+  </dl>
   <dl>
     <dt>店面图片</dt>
     <dd>
@@ -162,7 +178,11 @@ $(function () {
   <dl>
     <dt>城市</dt>
     <dd>
-        <div class="rule-single-select">
+        <div id="address">
+           <select name="province" class="prov" style="width: 100px;" datatype="*"></select>
+           <select name="city" class="city" style="width: 100px;" datatype="*"></select>
+           <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10"></select>
+            <!--
             <select name="city" datatype="*" sucmsg=" ">
                 <#if !diy_site?? || !diy_site.city??>
                     <option value="">请选择城市...</option>
@@ -171,6 +191,7 @@ $(function () {
                 <option value="曲靖" <#if diy_site?? && diy_site.city?? && diy_site.city=="曲靖">selected="selected"</#if>>曲靖</option>
                 <option value="大理" <#if diy_site?? && diy_site.city?? && diy_site.city=="大理">selected="selected"</#if>>大理</option>
             </select>
+            -->
         </div>
     </dd>
   </dl>
@@ -182,7 +203,7 @@ $(function () {
       <span class="Validform_checktip">该信息可以帮助用户选择最合适的同盟店</span>
     </dd>
   </dl>
-  
+  <#--
   <dl>
     <dt>经度</dt>
     <dd>
@@ -200,7 +221,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  -->
   <dl>
     <dt>付款方式</dt>
     <dd>

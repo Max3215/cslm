@@ -53,11 +53,11 @@ public class TdOrder {
     @Column
     private String postalCode;
     
-    // 线下同盟店
+    // 线下超市
     @Column
     private Long shopId;
     
-    // 同盟店名称
+    // 超市名称
     @Column
     private String shopTitle;
     
@@ -173,6 +173,7 @@ public class TdOrder {
     @Column
     private Long statusId;
     
+    //订单类型  0：普通订单  1：分销商购货订单
     @Column
     private Long typeId;
     

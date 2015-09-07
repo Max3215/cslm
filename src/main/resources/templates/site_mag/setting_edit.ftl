@@ -166,6 +166,13 @@ $(function () {
             </dd>
         </dl>
         <dl>
+            <dt>虚拟账户</dt>
+            <dd>
+                <input name="virtualAccount" type="text" <#if setting?? && setting.virtualAccount??>value="${setting.virtualAccount!''}" disabled="disabled" style="background: #EEE;"</#if> class="input normal" datatype="*0-20" sucmsg=" ">
+                <span class="Validform_checktip"></span>
+            </dd>
+        </dl>
+        <dl>
             <dt>网站LOGO</dt>
             <dd>
                 <input id="txtImgUrl" name="logoUri" type="text" datatype="*0-255" value="<#if setting??>${setting.logoUri!""}</#if>" class="input normal upload-path">
