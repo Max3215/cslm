@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdUser;
 
 /**
@@ -111,9 +112,10 @@ public interface TdOrderRepo extends
      */
     List<TdOrder> findByStatusId(Long statusId);
 //    List<TdOrder> findAll();
-    @Query("select o from TdOrder o join o.orderGoodsList g where o.username=?1 and g.goodsId=?2")
-    List<TdOrder> findByUsernameAndGoodsId(String username, Long gid);
     
-    @Query("select o from TdOrder o join o.orderGoodsList g where o.shopId=?1")
+    @Query("select o from TdOrder o join o.orderGoodsList g where o.shopId=?1 and g.goodsId=?2")
+    Page<TdOrder> findByShopIdAndGoodsId(Long shopId, Long gid,Pageable page);
+    
+//    @Query("select o from TdOrder o join o.orderGoodsList g where o.shopId=?1")
     Page<TdOrder> findByShopIdOrderByIdDesc(Long shopTitle, Pageable page);
 }

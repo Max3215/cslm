@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdGoods;
@@ -34,6 +35,8 @@ import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserRecentVisit;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.entity.TdUserSuggestion;
+import com.ynyes.cslm.service.TdAdService;
+import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdDistributorService;
@@ -116,6 +119,13 @@ public class TdUserController{
 
     @Autowired
     private TdCommonService tdCommonService;
+    
+    //广告  libiao
+    @Autowired
+    private TdAdTypeService tdAdTypeService;
+    
+    @Autowired
+    private TdAdService tdAdService;
 
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, ModelMap map) {
@@ -161,7 +171,7 @@ public class TdUserController{
 
     @RequestMapping(value = "/user/order/list/{statusId}")
     public String orderList(@PathVariable Integer statusId, Integer page,
-            String keywords, Integer timeId, HttpServletRequest req,
+            String keywords, Integer timeId,Integer statusid, HttpServletRequest req,
             ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 
@@ -182,12 +192,28 @@ public class TdUserController{
         if (null == statusId) {
             statusId = 0;
         }
+        if(null != statusid){
+        	statusId = statusid;
+        }
+        
 
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
 
         map.addAttribute("user", tdUser);
         map.addAttribute("status_id", statusId);
         map.addAttribute("time_id", timeId);
+        
+        // 热卖
+        map.addAttribute("hot_list",
+                tdGoodsService.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc());
+        
+        //底部广告
+        TdAdType adType = tdAdTypeService.findByTitle("个人中心底部广告");
+
+        if (null != adType) {
+            map.addAttribute("user_bottom_ad_list", tdAdService
+                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
+        }
 
         Page<TdOrder> orderPage = null;
 
@@ -820,6 +846,14 @@ public class TdUserController{
 
         if (null == page) {
             page = 0;
+        }
+        
+      //底部广告
+        TdAdType adType = tdAdTypeService.findByTitle("个人中心底部广告");
+
+        if (null != adType) {
+            map.addAttribute("user_bottom_ad_list", tdAdService
+                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
 
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);

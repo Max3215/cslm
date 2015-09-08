@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdProduct;
@@ -95,6 +96,13 @@ public class TdGoodsController {
         tdCommonService.setHeader(map, req);
 
         String username = (String) req.getSession().getAttribute("username");
+        Long tdDistributorId= (Long)req.getSession().getAttribute("distributorId");
+        
+        if(null == tdDistributorId)
+        {
+        	tdDistributorId = 1L;
+        }
+        TdDistributor distributor = TdDistributorService.findOne(tdDistributorId);
 
         // 添加浏览记录
         if (null != username) {
@@ -132,6 +140,8 @@ public class TdGoodsController {
         Page<TdUserConsult> consultPage = tdUserConsultService
                 .findByGoodsIdAndIsShowable(goodsId, 0, ClientConstant.pageSize);
 
+        
+        
         // 商品
         map.addAttribute("goods", goods);
 
@@ -160,23 +170,15 @@ public class TdGoodsController {
         map.addAttribute("one_star_comment_count", tdUserCommentService
                 .countByGoodsIdAndStarsAndIsShowable(goodsId, 1L));
         
-       /**
-        * 测试
-        * 
-        * 成交数
-        */
-        List<TdOrder> list = tdOrderService.findByUsernameAndGoodId(username, goodsId);
-        for (TdOrder tdOrder : list) {
-			
-        	System.err.println(tdOrder.getOrderNumber());
-		}
+        //成交数
+        map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(tdDistributorId, goodsId,0,5));
 
         // 咨询
         map.addAttribute("consult_page", consultPage);
 
         // 热卖
         map.addAttribute("hot_list",
-                tdGoodsService.findTop10ByIsOnSaleTrueOrderBySoldNumberDesc());
+                tdGoodsService.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc());
 
         // 同盟店
         map.addAttribute("diy_site_list", TdDistributorService.findByIsEnableTrue());

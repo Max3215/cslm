@@ -55,6 +55,7 @@ function addNum(){
         }
    <#else>
         $("#quantity").val(q+1);
+        $("#number").val(q+1);
    </#if>
     $("#addCart").attr("href", "/cart/init?id=${goods.id?c}&quantity=" + $("#quantity").val());
 }
@@ -65,6 +66,7 @@ function minusNum(){
         
     if (q > 1){
         $("#quantity").val(q-1);
+        $("#number").val(q-1);
     }
     $("#addCart").attr("href", "/cart/init?id=${goods.id?c}&quantity=" + $("#quantity").val());
 }
@@ -231,7 +233,7 @@ function byNow(){
 				<p class="tit">
 					<a href="#detail_tit" tid="0" class="sel stab">商品详情</a>
 					<a href="#detail_tit" tid="1" class="stab">商品评价</a>
-					<a href="#detail_tit" tid="2" class="stab">成交记录</a>
+					<a href="#detail_tit" tid="2" class="stab">销售记录</a>
 				</p>
 				<!-- 商品详情  -->
 				<div class="text_pic php_z" id="tab0">
@@ -312,28 +314,28 @@ function byNow(){
                                     <td>买家</td>
                                     <td>款式/型号</td>
                                     <td>数量</td>
-                                    <td>成交时间</td>
+                                    <td>时间</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>152****5448</td>
-                                    <td>口味：其他</td>
-                                    <td>1</td>
-                                    <td>2015-01-15<span>15:01:15</span></td>
-                                </tr>
-                                <tr>
-                                    <td>152****5448</td>
-                                    <td>口味：其他</td>
-                                    <td>1</td>
-                                    <td>2015-01-15<span>15:01:15</span></td>
-                                </tr>
-                                <tr>
-                                    <td>152****5448</td>
-                                    <td>口味：其他</td>
-                                    <td>1</td>
-                                    <td>2015-01-15<span>15:01:15</span></td>
-                                </tr>
+                                <#if bargain_record_page?? && bargain_record_page.content?size gt 0 >
+                                    <#list bargain_record_page.content as item>
+                                        <#if item.orderGoodsList?? && item.orderGoodsList?size gt 0>
+                                            <#list item.orderGoodsList as og>
+                                                <#if goods??>
+                                                    <#if og.goodsId?c == goods.id?c>
+                                                        <tr>
+                                                            <td>${item.username!''}</td>
+                                                            <td>${og.selectOneValue!''}</td>
+                                                            <td>${og.quantity!'0'}</td>
+                                                            <td>${item.orderTime!''}</td>
+                                                        </tr>
+                                                    </#if>
+                                                </#if>
+                                            </#list>
+                                        </#if>
+                                    </#list>
+                                </#if>
                             </tbody>
                         </table>
                     </div>
@@ -371,7 +373,6 @@ function byNow(){
 			<div class="clear"></div>
 		</div>
 	</div>
-
 
 	<!--  底部    -->
     <#include "/client/common_footer.ftl" />

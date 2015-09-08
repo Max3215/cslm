@@ -38,17 +38,17 @@ public class TdOrderGoods {
     @Column
     private String goodsCoverImageUri;
     
-    // 商品版本颜色
+    // 商品参数一
     @Column
-    private String goodsColor;
+    private String selectOneValue;
     
-    // 商品版本容量
+    // 商品参数二
     @Column
-    private String goodsCapacity;
+    private String selectTwoValue;
     
-    // 商品版本名称
+    // 商品参数三
     @Column
-    private String goodsVersion;
+    private String selectThreeValue;
     
     // 商品销售方式
     @Column
@@ -122,31 +122,31 @@ public class TdOrderGoods {
         this.goodsCoverImageUri = goodsCoverImageUri;
     }
 
-    public String getGoodsColor() {
-        return goodsColor;
-    }
+    public String getSelectOneValue() {
+		return selectOneValue;
+	}
 
-    public void setGoodsColor(String goodsColor) {
-        this.goodsColor = goodsColor;
-    }
+	public void setSelectOneValue(String selectOneValue) {
+		this.selectOneValue = selectOneValue;
+	}
 
-    public String getGoodsCapacity() {
-        return goodsCapacity;
-    }
+	public String getSelectTwoValue() {
+		return selectTwoValue;
+	}
 
-    public void setGoodsCapacity(String goodsCapacity) {
-        this.goodsCapacity = goodsCapacity;
-    }
+	public void setSelectTwoValue(String selectTwoValue) {
+		this.selectTwoValue = selectTwoValue;
+	}
 
-    public String getGoodsVersion() {
-        return goodsVersion;
-    }
+	public String getSelectThreeValue() {
+		return selectThreeValue;
+	}
 
-    public void setGoodsVersion(String goodsVersion) {
-        this.goodsVersion = goodsVersion;
-    }
+	public void setSelectThreeValue(String selectThreeValue) {
+		this.selectThreeValue = selectThreeValue;
+	}
 
-    public Integer getGoodsSaleType() {
+	public Integer getGoodsSaleType() {
         return goodsSaleType;
     }
 

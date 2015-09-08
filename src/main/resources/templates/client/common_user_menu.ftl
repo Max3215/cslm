@@ -1,7 +1,7 @@
  <div class="mymember_head">
     <h2><a href="/">超市联盟</a></h2>
     <div class="mymember_head_part">
-      <a class="a001" >个人主页</a>
+      <a class="a001" href="/user">个人主页</a>
     </div> 
     <div id="mymember_nav01" class="mymember_head_part">
       <a class="a001 a002" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.repository.TdOrderRepo;
 
@@ -370,9 +371,10 @@ public class TdOrderService {
     	return (List<TdOrder>) repository.findAll();
     }
     
-    public List<TdOrder> findByUsernameAndGoodId(String username,Long gid)
+    public Page<TdOrder> findByShopIdAndGoodId(Long shopId,Long gid,int page,int size)
     {
-    	return repository.findByUsernameAndGoodsId(username, gid);
+    	PageRequest pageRequest = new PageRequest(page, size);
+    	return repository.findByShopIdAndGoodsId(shopId, gid,pageRequest);
     }
     
     public Page<TdOrder> findByShopId(Long shopId,int page,int size){

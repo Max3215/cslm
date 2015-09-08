@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorService;
@@ -46,27 +47,27 @@ public class TdDistributorController {
 	@Autowired
 	TdDistributorService TdDistributorService;
 	
-	@RequestMapping(value="/index")
-	public String distributroindex(HttpServletRequest req, ModelMap map)
-	{
-		String username = (String) req.getSession().getAttribute("diysiteUsername");
-		if (null == username) {
-            return "redirect:/login";
-        }
-        
-        tdCommonService.setHeader(map, req);
-        
-        TdDistributor distributor = TdDistributorService.findbyUsername(username);
-        
-        if(null == distributor){
-        	return "/client/error_404";
-        }
-        
-        
-		
-        
-		return "";
-	}
+//	@RequestMapping(value="/index")
+//	public String distributroindex(HttpServletRequest req, ModelMap map)
+//	{
+//		String username = (String) req.getSession().getAttribute("diysiteUsername");
+//		if (null == username) {
+//            return "redirect:/login";
+//        }
+//        
+//        tdCommonService.setHeader(map, req);
+//        
+//        TdDistributor distributor = TdDistributorService.findbyUsername(username);
+//        
+//        if(null == distributor){
+//        	return "/client/error_404";
+//        }
+//        
+//        
+//		
+//        
+//		return "";
+//	}
 	
 	
 	@RequestMapping(value = "/order/rebateincome")
@@ -544,14 +545,7 @@ public class TdDistributorController {
 		
 		TdDistributor distributor = TdDistributorService.findbyUsername(username);
 		
-		Page<TdOrder> dist_order_page = tdOrderService.findByDiysitename(username, page, 5);
-		
-		dist_order_page = tdOrderService.findByShopId(distributor.getId(), page, 5);
-		for (TdOrder order : dist_order_page.getContent()) {
-			System.err.println(order);
-		}
-		System.err.println(dist_order_page);
-		map.addAttribute("dist_order_page", dist_order_page);
+		map.addAttribute("dist_order_page", tdOrderService.findByShopId(distributor.getId(), page, 5));
 		
 		return "/client/distributor_sale";
 	}

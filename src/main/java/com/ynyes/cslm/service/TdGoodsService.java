@@ -176,8 +176,8 @@ public class TdGoodsService {
         return repository.findByIsOnSaleTrue(pageRequest);
     }
 
-    public List<TdGoods> findTop10ByIsOnSaleTrueOrderBySoldNumberDesc() {
-        return repository.findTop10ByIsOnSaleTrueOrderBySoldNumberDesc();
+    public List<TdGoods> findTop12ByIsOnSaleTrueOrderBySoldNumberDesc() {
+        return repository.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc();
     }
 
     public Page<TdGoods> searchAndOrderBySortIdAsc(String keywords, int page,

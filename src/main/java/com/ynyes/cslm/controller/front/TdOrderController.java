@@ -1099,6 +1099,9 @@ public class TdOrderController extends AbstractPaytypeController{
                     orderGoods.setGoodsTitle(goods.getTitle());
                     orderGoods.setGoodsSubTitle(goods.getSubTitle());
                     orderGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
+                    orderGoods.setSelectOneValue(goods.getSelectOneValue());
+                    orderGoods.setSelectTwoValue(goods.getSelectTwoValue());
+                    orderGoods.setSelectThreeValue(goods.getSelectThreeValue());
 
                     // 是否已申请退货
                     orderGoods.setIsReturnApplied(false);

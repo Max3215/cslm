@@ -57,62 +57,43 @@ DD_belatedPNG.fix('.,img,background');
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
           <h3>已售的商品</h3>
+          <#-->
           <input class="mysub" type="submit" value="查询" />
           <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
           <input class="mytext" type="text" onFocus="if(value=='商品编码') {value=''}" onBlur="if (value=='') {value='商品编码'}"  value="商品编码" style="width:150px;" />
           <input class="mytext" type="text" onFocus="if(value=='商品名称') {value=''}" onBlur="if (value=='') {value='商品名称'}"  value="商品名称" />
-
+            -->
           <div class="clear"></div>
         </div>
         <table>
           <tr class="mymember_infotab_tit01">
                 <th width="150">订单编号</th>
                 <th width="300">商品名称</th>
-                <th>商品编码</th>
+                <th>数量</th>
                 <th>价格</th>
-                <th>成交时间</th>
+                <th>时间</th>
           </tr>
           <#if dist_order_page??>
-                <#list dist_order_page.content as item>
-                
+                <#list dist_order_page.content as order>
+                    <#if order.orderGoodsList??>
+                        <#list order.orderGoodsList as og>
+                            <tr id="tr_1424195166">
+                                <td>${order.orderNumber!''}</td>
+                                <td>
+                                    <a href="/goods/${og.goodsId!''}" target="_blank" >
+                                        <strong><img width="80" height="80" src="${og.goodsCoverImageUri!''}"  /></strong>
+                                        <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${og.goodsTitle!''}</p>
+                                    </a>
+                                </td>
+                                <td class="tb01">${og.quantity!'0'}</td>
+                                <td class="tb02">￥${og.price?string('0.00')}</td>
+                                <td><p>${order.orderTime!''}</p>
+                                </td>
+                            </tr>
+                        </#list>
+                    </#if>
                 </#list>
            </#if>
-          <tr id="tr_1424195166">
-                <td>201548656361</td>
-                <td><a href="#" target="_blank" ><strong><img width="80" height="80" src="/client/images/pic03.jpg"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;">2015春装新款 婉约淑女圆领赫本款连衣裙公主裙 粉绿G0</p></a> </td>
-                <td class="tb01">MUK5698321</td>
-                <td class="tb02">￥196.00</td>
-                <td><p>2015-06-01</p>              
-                  <p>15:21:01</p>
-                </td>
-          </tr>
-          <tr id="tr_1424195166">
-            <td>201548656361</td>
-            <td><a href="#" target="_blank" ><strong><img width="80" height="80" src="/client/images/pic03.jpg"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;">2015春装新款 婉约淑女圆领赫本款连衣裙公主裙 粉绿G0</p></a> </td>
-            <td class="tb01">MUK5698321</td>
-            <td class="tb02">￥196.00</td>
-            <td><p>2015-06-01</p>              
-              <p>15:21:01</p>
-            </td>
-          </tr> 
-          <tr id="tr_1424195166">
-            <td>201548656361</td>
-            <td><a href="#" target="_blank" ><strong><img width="80" height="80" src="/client/images/pic03.jpg"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;">2015春装新款 婉约淑女圆领赫本款连衣裙公主裙 粉绿G0</p></a> </td>
-            <td class="tb01">MUK5698321</td>
-            <td class="tb02">￥196.00</td>
-            <td><p>2015-06-01</p>              
-              <p>15:21:01</p>
-            </td>
-          </tr> 
-          <tr id="tr_1424195166">
-            <td>201548656361</td>
-            <td><a href="#" target="_blank" ><strong><img width="80" height="80" src="/client/images/pic03.jpg"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;">2015春装新款 婉约淑女圆领赫本款连衣裙公主裙 粉绿G0</p></a> </td>
-            <td class="tb01">MUK5698321</td>
-            <td class="tb02">￥196.00</td>
-            <td><p>2015-06-01</p>              
-              <p>15:21:01</p>
-            </td>
-          </tr> 	    
         </table>
         <div class="myclear" style="height:10px;"></div>
 
