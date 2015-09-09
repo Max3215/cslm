@@ -1263,6 +1263,14 @@ public class TdUserController{
             statusId = 0;
         }
 
+      //底部广告
+        TdAdType adType = tdAdTypeService.findByTitle("个人中心底部广告");
+
+        if (null != adType) {
+            map.addAttribute("user_bottom_ad_list", tdAdService
+                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
+        }
+        
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
 
         map.addAttribute("user", tdUser);

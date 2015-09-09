@@ -84,6 +84,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     <li>
                         <a class="all"><span>销售额：￥${sales!0.00}</span></a>
                     </li>
+                    <!--
                     <li>
                     	<a class="all" href="/Verwalter/order/list/${statusId!''}/1"><span>普通订单</span></a>
                     </li>                  
@@ -110,12 +111,12 @@ function __doPostBack(eventTarget, eventArgument) {
                                 <option value="12" <#if time_id==12>selected="selected"</#if>>最近一年</option>                              
                          </select>
                     </li>
+                    -->
                     <li>
                     	<a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a>
                     
                     </li>
                 </ul>
-                
                     <div class="rule-single-select">
                         <select name="timeId" onchange="javascript:setTimeout(__doPostBack('btnTime',''), 0)">
                             <option value="0" <#if !time_id?? || time_id==0>selected="selected"</#if>>所有订单</option>

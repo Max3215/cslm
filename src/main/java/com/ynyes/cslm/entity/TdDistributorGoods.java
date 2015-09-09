@@ -40,6 +40,10 @@ public class TdDistributorGoods {
 	@Column
 	private Long number;
 	
+	//是否上架
+	@Column
+	private Boolean isOnSale;
+	
 	
 	public Long getId() {
 		return id;
@@ -88,6 +92,15 @@ public class TdDistributorGoods {
 	public void setNumber(Long number) {
 		this.number = number;
 	}
+
+	public Boolean getIsOnSale() {
+		return isOnSale;
+	}
+
+	public void setIsOnSale(Boolean isOnSale) {
+		this.isOnSale = isOnSale;
+	}
+	
 	
 	
 }

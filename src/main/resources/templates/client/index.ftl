@@ -72,9 +72,8 @@ function submitSearch(){
     			<a href="/reg">注册</a>
 			</#if>
 			<menu class="top_menu">
-				<a href="#">我的订单<span>丨</span></a>
-				<a href="#">我的购物车<span>丨</span></a>
-				<a href="#">超市会员<span>丨</span></a>
+				<a href="/user/order/list/0">我的订单<span>丨</span></a>
+				<a href="/cart">我的购物车<span>丨</span></a>
 				<a href="#">客户服务<span>丨</span></a>
 				<a href="/user/collect/list">我的收藏</a>
 			</menu>
@@ -105,7 +104,7 @@ function submitSearch(){
 			</menu>
 		</div>
 		<div class="gu_car">
-			<a href="/cart">去购物车结算<span>5</span></a>
+			<a href="/cart">去购物车结算<span><#if cart_goods_list??>${cart_goods_list?size}<#else>0</#if></span></a>
 		</div>
 		<div class="clear"></div>
 	</section>

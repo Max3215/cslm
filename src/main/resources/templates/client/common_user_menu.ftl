@@ -37,7 +37,7 @@
       <a class="mymember_menu_tit"  title="订单中心"><img src="/client/images/mymember/menu01.png" />订单中心</a>
       <div>
         <a href="/user/order/list/0"  title="我的订单">我的订单</a>
-        <a href="#"  title="评价结单">评价结单</a>
+        <a href="/user/comment/list"  title="评价结单">评价结单</a>
         <a href="/user/order/list/7" title="取消订单记录">取消订单记录</a>
       </div>
     </div><!--mymember_menu_part END-->
