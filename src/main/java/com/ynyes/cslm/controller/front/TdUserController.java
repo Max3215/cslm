@@ -1631,7 +1631,7 @@ public class TdUserController{
     }
 
     @RequestMapping(value = "/user/info", method = RequestMethod.POST)
-    public String userInfo(HttpServletRequest req, String realName, String sex,
+    public String userInfo(HttpServletRequest req, String realName,String nickname, String sex,
             String email, String mobile, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 
@@ -1643,6 +1643,7 @@ public class TdUserController{
 
         if (null != email && null != mobile) {
             user.setRealName(realName);
+            user.setNickname(nickname);
             user.setSex(sex);
             user.setEmail(email);
             user.setMobile(mobile);

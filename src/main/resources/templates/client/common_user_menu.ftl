@@ -52,7 +52,7 @@
     <div class="mymember_menu_part">
       <a class="mymember_menu_tit"  title="设置"><img src="/client/images/mymember/menu05.png" />设置</a>
       <div>
-        <a href="/user" title="个人信息">个人信息</a>
+        <a href="/user/info" title="个人信息">个人信息</a>
         <a href="/user/address/list" title="收货地址">收货地址</a>
         <a href="/user/password" title="修改密码">修改密码</a>
       </div>
