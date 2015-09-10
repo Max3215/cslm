@@ -156,12 +156,13 @@ function tip()
     <p>请输入用户名</p>
     <input class="text" type="text" id="txt_loginId"/>
     <p>请输入密码</p>
-    <input class="text" type="password" id="txt_loginPwd"/>    
+    <input class="text" type="password" id="txt_loginPwd"/>   
+    <#-- 
     <p>请输入验证码</p>
     <input class="text fl" type="text" style="width:40%;" id="smsCode"/> 
-<!--    <a href="javascript:;" id="smsCodeBtn" class="get_code">获取手机验证码</a>   -->
+   <a href="javascript:;" id="smsCodeBtn" class="get_code">获取手机验证码</a> 
     <input id="smsCodeBtn" onclick="javascript:;" readOnly="true" class="sub" style="text-align:center;width: 50%; border-radius: 3px;  float:left; margin-left:10px; background: #ff5b7d; color: #fff; height: 35px;" value="点击获取短信验证码" />
-
+    -->
     <div class="clear h15"></div>
     <p class="pb10">
       <input type="checkbox" />

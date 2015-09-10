@@ -319,9 +319,11 @@ function del_goods_comb(obj) {
                     <li><a href="javascript:;" onclick="tabs(this);" class="">扩展选项</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">详细描述</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">价格与库存</a></li>
+                    <#--
                     <li><a href="javascript:;" onclick="tabs(this);" class="">促销</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">赠品</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">组合商品</a></li>
+                    -->
                     <li><a href="javascript:;" onclick="tabs(this);" class="">SEO选项</a></li>
                 </ul>
             </div>
@@ -561,15 +563,15 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">电话卡销售时包含的话费</span>
             </dd>
         </dl>
+        -->
         
         <dl>
-            <dt>供货价</dt>
+            <dt>批发价</dt>
             <dd>
                 <input id="outFactoryPrice" name="outFactoryPrice" type="text" value="<#if goods?? && goods.outFactoryPrice??>${goods.outFactoryPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl>
-        -->
         <dl>
             <dt>销售价</dt>
             <dd>
@@ -651,7 +653,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
     </div>
-    
+    <#--
     <div class="tab-content" style="display: none;">
         <dl>
             <dt>支持一元抢拍</dt>
@@ -864,7 +866,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
     </div>
-    
+   
     <div class="tab-content" style="display: none;">
         <dl>
             <dt>赠品</dt>
@@ -927,6 +929,7 @@ function del_goods_comb(obj) {
         </dl>
     </div>
     
+   
     <div class="tab-content" style="display: none;">
         <dl>
             <dt>商品组合</dt>
@@ -994,7 +997,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
     </div>
-    
+    -->
     <div class="tab-content" style="display: none;">
         <dl>
             <dt>SEO标题</dt>

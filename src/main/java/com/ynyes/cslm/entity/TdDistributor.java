@@ -102,6 +102,10 @@ public class TdDistributor {
     @Column
     private String virtualAccount;
     
+    //虚拟账户金额
+    @Column(scale=2)
+    private Double virtualMoney;
+    
     // 返利
     @Column
     private Double totalCash;
@@ -279,6 +283,14 @@ public class TdDistributor {
 		this.virtualAccount = virtualAccount;
 	}
 
+	public Double getVirtualMoney() {
+		return virtualMoney;
+	}
+
+	public void setVirtualMoney(Double virtualMoney) {
+		this.virtualMoney = virtualMoney;
+	}
+
 	public Double getTotalCash() {
         return totalCash;
     }
@@ -295,15 +307,4 @@ public class TdDistributor {
 		this.goodsList = goodsList;
 	}
 
-	@Override
-	public String toString() {
-		return "TdDistributor [id=" + id + ", title=" + title + ", openTimeSpan=" + openTimeSpan + ", serviceTele="
-				+ serviceTele + ", complainTele=" + complainTele + ", province=" + province + ", city=" + city
-				+ ", disctrict=" + disctrict + ", sortId=" + sortId + ", imageUri=" + imageUri + ", username="
-				+ username + ", password=" + password + ", mobile=" + mobile + ", virtualAccount=" + virtualAccount
-				+ "]";
-	}
-
-	
-    
 }

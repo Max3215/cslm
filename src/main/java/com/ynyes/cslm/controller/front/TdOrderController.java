@@ -34,6 +34,7 @@ import com.ynyes.cslm.entity.TdGoodsDto;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayType;
+import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
@@ -49,6 +50,7 @@ import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdPayTypeService;
+import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.SMSUtil;
@@ -107,6 +109,9 @@ public class TdOrderController extends AbstractPaytypeController{
     @Autowired
     private TdPayTypeService tdPayTypeService;
 
+    @Autowired
+    private TdSettingService tdSettingService;
+    
 //    @Autowired
 //    private PaymentChannelCEB payChannelCEB;
 //
@@ -1112,7 +1117,13 @@ public class TdOrderController extends AbstractPaytypeController{
                     long quantity = 0;
 
                     // 成交价
-                    orderGoods.setPrice(goods.getSalePrice());
+                    if(1==user.getRoleId()){
+                    	//超市批发价
+                    	orderGoods.setPrice(goods.getOutFactoryPrice());
+                    }else{
+                    	//用户销售价
+                    	orderGoods.setPrice(goods.getSalePrice());
+                    }
 
                     // 数量
                     quantity = Math.min(cartGoods.getQuantity(),
@@ -1291,10 +1302,24 @@ public class TdOrderController extends AbstractPaytypeController{
 
         // 保存订单商品及订单
         tdOrderGoodsService.save(orderGoodsList);
+        
+        
+        // 网站基本信息
+        TdSetting setting = tdSettingService.findTopBy();
        
         //设置订单类型
 		if(1==user.getRoleId()){
 			tdOrder.setTypeId(1L);  //超市进货
+			
+			distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
+			TdDistributorService.save(distributor);
+			
+			//平台虚拟账户增加金额
+			setting.setVirtualMoney(tdOrder.getTotalPrice());
+			tdSettingService.save(setting);
+			
+			tdOrder.setSortId(3L);//待发货
+			
 		}else{
 			tdOrder.setTypeId(0L);
 			tdOrder.setShopId(distributor.getId());
@@ -1330,10 +1355,13 @@ public class TdOrderController extends AbstractPaytypeController{
         // 删除已生成订单的购物车项
         tdCartGoodsService.delete(cartSelectedGoodsList);
 
-        // if (tdOrder.getIsOnlinePay()) {
-        return "redirect:/order/pay?orderId=" + tdOrder.getId();
-        // }
+         if (1==user.getRoleId()) {//判断为超市订单  直接跳往支付成功页面
+        	 map.addAttribute("order",tdOrder);
+        	 return "redirect:/order_pay_success";
+         }
 
+         
+         return "redirect:/order/pay?orderId=" + tdOrder.getId();
         // return "redirect:/order/success?orderId=" + tdOrder.getId();
     }
 

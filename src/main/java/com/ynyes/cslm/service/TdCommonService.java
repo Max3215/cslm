@@ -154,21 +154,35 @@ public class TdCommonService {
         Long helpId = 12L;
 
         map.addAttribute("help_id", helpId);
+        
+        List<TdArticleCategory> articleCategoryList = tdArticleCategoryService.findByMenuId(helpId);
+	    map.addAttribute("td_art_list",articleCategoryList);
+	    
+	    if(null != articleCategoryList && articleCategoryList.size() > 0)
+	    {
+	    	for (int i = 0; i < articleCategoryList.size()&& i<4 ; i++)
+	    	{
+				TdArticleCategory category = articleCategoryList.get(i);
+				map.addAttribute("second_level_"+i+"_category_list",
+						tdArticleService.findByCategoryId(category.getId()));
+			}
+	    }
+        
 
-        List<TdArticleCategory> level0HelpList = tdArticleCategoryService
-                .findByMenuIdAndParentId(helpId, 0L);
-
-        map.addAttribute("help_level0_cat_list", level0HelpList);
-
-        if (null != level0HelpList) {
-
-            for (int i = 0; i < level0HelpList.size() && i < 4; i++) {
-                TdArticleCategory articleCat = level0HelpList.get(i);
-                map.addAttribute("help_" + i + "_cat_list",
-                        tdArticleCategoryService.findByMenuIdAndParentId(
-                                helpId, articleCat.getId()));
-            }
-        }
+//        List<TdArticleCategory> level0HelpList = tdArticleCategoryService
+//                .findByMenuIdAndParentId(helpId, 0L);
+//
+//        map.addAttribute("help_level0_cat_list", level0HelpList);
+//
+//        if (null != level0HelpList) {
+//
+//            for (int i = 0; i < level0HelpList.size() && i < 4; i++) {
+//                TdArticleCategory articleCat = level0HelpList.get(i);
+//                map.addAttribute("help_" + i + "_cat_list",
+//                        tdArticleCategoryService.findByMenuIdAndParentId(
+//                                helpId, articleCat.getId()));
+//            }
+//        }
 
         // 友情链接
         map.addAttribute("site_link_list",

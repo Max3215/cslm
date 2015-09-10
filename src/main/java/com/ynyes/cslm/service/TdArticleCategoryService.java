@@ -60,29 +60,29 @@ public class TdArticleCategoryService {
         List<TdArticleCategory> resList = new ArrayList<TdArticleCategory>();
         List<TdArticleCategory> tacList = repository.findByMenuIdAndParentIdOrderBySortIdAsc(menuId, 0L);
         
-        for (TdArticleCategory tac : tacList)
-        {
-            resList.add(tac);
-            
-            List<TdArticleCategory> level2List = repository.findByParentIdOrderBySortIdAsc(tac.getId());
-            
-            if (null != level2List && level2List.size() > 0)
-            {
-                for (TdArticleCategory l2Tac : level2List)
-                {
-                    resList.add(l2Tac);
-                    
-                    List<TdArticleCategory> level3List = repository.findByParentIdOrderBySortIdAsc(l2Tac.getId());
-                    
-                    if (null != level3List && level3List.size() > 0)
-                    {
-                        resList.addAll(level3List);
-                    }
-                }
-            }
-        }
+//        for (TdArticleCategory tac : tacList)
+//        {
+//            resList.add(tac);
+//            
+//            List<TdArticleCategory> level2List = repository.findByParentIdOrderBySortIdAsc(tac.getId());
+//            
+//            if (null != level2List && level2List.size() > 0)
+//            {
+//                for (TdArticleCategory l2Tac : level2List)
+//                {
+//                    resList.add(l2Tac);
+//                    
+//                    List<TdArticleCategory> level3List = repository.findByParentIdOrderBySortIdAsc(l2Tac.getId());
+//                    
+//                    if (null != level3List && level3List.size() > 0)
+//                    {
+//                        resList.addAll(level3List);
+//                    }
+//                }
+//            }
+//        }
         
-        return resList;
+        return tacList;
     }
     
     /**
@@ -197,4 +197,7 @@ public class TdArticleCategoryService {
         return repository.save(e);
     }
     
+    public List<TdArticleCategory> findAll(){
+    	return (List<TdArticleCategory>) repository.findAll();
+    }
 }

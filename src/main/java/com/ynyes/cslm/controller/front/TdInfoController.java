@@ -90,6 +90,7 @@ public class TdInfoController {
 	        map.addAttribute("info_page", tdArticleService.findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(mid, catId, page, ClientConstant.pageSize));
 	    }
         
+	    
 	    map.addAttribute("catId", catId);
 	    map.addAttribute("mid", mid);
 	    map.addAttribute("info_category_list", catList);
@@ -141,6 +142,6 @@ public class TdInfoController {
         // 最近添加
         map.addAttribute("latest_info_page", tdArticleService.findByMenuIdAndIsEnableOrderByIdDesc(mid, 0, ClientConstant.pageSize));
         
-        return "/client/info";
+        return "/client/info_list";
     }
 }

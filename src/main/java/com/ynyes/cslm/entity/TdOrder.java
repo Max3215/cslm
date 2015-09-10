@@ -169,6 +169,11 @@ public class TdOrder {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date finishTime;
     
+    //订单支付过期时间
+    @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date orderTimeExpice;
+    
     // 订单状态 1：待确认  2:待付款 3:待发货 4:待收货 5:待评价 6: 已完成 7: 已取消 8: 支付取消(失败) 9: 已删除
     @Column
     private Long statusId;
@@ -448,8 +453,16 @@ public class TdOrder {
     public Date getFinishTime() {
         return finishTime;
     }
+    
+    public Date getOrderTimeExpice() {
+		return orderTimeExpice;
+	}
 
-    public void setFinishTime(Date finishTime) {
+	public void setOrderTimeExpice(Date orderTimeExpice) {
+		this.orderTimeExpice = orderTimeExpice;
+	}
+
+	public void setFinishTime(Date finishTime) {
         this.finishTime = finishTime;
     }
 

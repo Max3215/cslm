@@ -18,6 +18,7 @@ import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
+import com.ynyes.cslm.service.TdUserService;
 
 /**
  * 购物车
@@ -40,6 +41,9 @@ public class TdCartController {
     
     @Autowired
     private TdGoodsService tdGoodService;
+    
+    @Autowired
+    private TdUserService tdUserService;
 
     /**
      * 加入购物车
@@ -152,6 +156,7 @@ public class TdCartController {
             // 已登录用户的购物车
             List<TdCartGoods> cartUserGoodsList = tdCartGoodsService
                     .findByUsername(username);
+            
             for (TdCartGoods cg : cartSessionGoodsList)
             {
             // 将未登录用户的购物车加入已登录用户购物车中
@@ -177,21 +182,23 @@ public class TdCartController {
         List<TdCartGoods> resList = tdCartGoodsService.findByUsername(username);
         
         /*  添加gift  mdj 2015-8-7 09:57:28*/
-        List<TdGoods> tdGoodsList = new ArrayList<>();
-        for (TdCartGoods tdCartGoods : resList) 
-        { 
-			TdGoods tdGoods = tdGoodService.findById(tdCartGoods.getGoodsId());
-			List<TdGoodsGift> tdGoodGiftUserList = tdGoods.getGiftList();
-			if (tdGoodGiftUserList != null && tdGoodGiftUserList.size()>=1)
-			{
-				tdGoodsList.add(tdGoods);
-			}
-		}
+//        List<TdGoods> tdGoodsList = new ArrayList<>();
+//        for (TdCartGoods tdCartGoods : resList) 
+//        { 
+//			TdGoods tdGoods = tdGoodService.findById(tdCartGoods.getGoodsId());
+//			List<TdGoodsGift> tdGoodGiftUserList = tdGoods.getGiftList();
+//			if (tdGoodGiftUserList != null && tdGoodGiftUserList.size()>=1)
+//			{
+//				tdGoodsList.add(tdGoods);
+//			}
+//		}
+//        
+//        if (tdGoodsList != null && tdGoodsList.size()>=1)
+//        {
+//        	map.addAttribute("goods_list",tdGoodsList);
+//		}
         
-        if (tdGoodsList != null && tdGoodsList.size()>=1)
-        {
-        	map.addAttribute("goods_list",tdGoodsList);
-		}
+        map.addAttribute("user",tdUserService.findByUsername(username));
         
         map.addAttribute("cart_goods_list", tdCartGoodsService.updateGoodsInfo(resList));
         

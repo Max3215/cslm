@@ -41,6 +41,10 @@ public class TdSetting {
     @Column
     private String virtualAccount;
     
+    //虚拟账户金额
+    @Column(scale=2)
+    private Double virtualMoney;
+    
     // 通信地址
     @Column
     private String address;
@@ -253,6 +257,14 @@ public class TdSetting {
 
 	public void setVirtualAccount(String virtualAccount) {
 		this.virtualAccount = virtualAccount;
+	}
+
+	public Double getVirtualMoney() {
+		return virtualMoney;
+	}
+
+	public void setVirtualMoney(Double virtualMoney) {
+		this.virtualMoney = virtualMoney;
 	}
 
 	public String getAddress() {
