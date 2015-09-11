@@ -554,5 +554,3 @@ function submitSearch(){
 
 
 
-
-

@@ -15,6 +15,7 @@
 <script src="/client/js/mymember.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
 <script src="/client/js/jquery.cityselect.js"></script>
+<script type="text/javascript" src="/client/js/common.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
      //初始化表单验证
@@ -22,25 +23,24 @@ $(document).ready(function(){
         tiptype: 3
     });
 
-  $(".click_a").click(function(){
-    if($(this).next().is(":visible")==false){
-      $(this).next().slideDown(300);
-    }else{
-      $(this).next().slideUp(300);
-    }
-  });//选择超市下拉效果
+    $(".click_a").click(function(){
+        if($(this).next().is(":visible")==false){
+            $(this).next().slideDown(300);
+        }else{
+            $(this).next().slideUp(300);
+        }
+    });//选择超市下拉效果
 
-  $("#nav_down li").hover(function(){
-    $(this).find(".nav_show").fadeIn(10);
-  },function(){
-    $(this).find(".nav_show").stop(true,true).fadeOut(10);
-  })  
+    navDownList("nav_down","li",".nav_show");
+    menuDownList("mainnavdown","#nav_down",".a2","sel");
+    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
-  $(".float_box .ewm").hover(function(){
-    $(this).next().show();
-  },function(){
-    $(this).next().hide();
-  })
+    $(".float_box .ewm").hover(function(){
+        $(this).next().show();
+    },function(){
+        $(this).next().hide();
+    })
+
   
   $("#pcd").citySelect({
         nodata:"none",
@@ -110,7 +110,7 @@ DD_belatedPNG.fix('.,img,background');
                              <tr>
                                 <th>收货人：</th>
                                 <td>
-                                    <input class="mytext" type="text" name="receiverName" datatype="*2-128" errormsg="最少两个字符！" value="<#if address.receiverName??>${address.receiverName!''}</#if>"/>
+                                    <input class="mytext" type="text" name="receiverName" datatype="*2-128" errormsg="最少两个字符！" value="<#if address??>${address.receiverName!''}</#if>"/>
                                     <span class="Validform_checktip">*收货人姓名</span>
                                 </td>
                              </tr>
@@ -127,21 +127,21 @@ DD_belatedPNG.fix('.,img,background');
                              <tr>
                                 <th>地址：</th>
                                 <td>
-                                    <input class="mytext" name="detailAddress" datatype="*2-128" errormsg="最少两个字符！" value="<#if address.detailAddress??>${address.detailAddress!''}</#if>" type="text">
+                                    <input class="mytext" name="detailAddress" datatype="*2-128" errormsg="最少两个字符！" value="<#if address??>${address.detailAddress!''}</#if>" type="text">
                                     <span class="Validform_checktip">*详细地址</span>
                                 </td>
                              </tr>
                              <tr>
                                 <th>邮政编码：</th>
                                 <td>
-                                    <input class="mytext" name="postcode" datatype="p" errormsg="邮政编码为6位数字！" value="<#if address.postcode??>${address.postcode!''}</#if>" type="text">
+                                    <input class="mytext" name="postcode" datatype="p" errormsg="邮政编码为6位数字！" value="<#if address??>${address.postcode!''}</#if>" type="text">
                                     <span class="Validform_checktip">*邮政编码</span>
                                 </td>
                              </tr>
                              <tr>
                                 <th>手机号码：</th>
                                 <td>
-                                    <input class="mytext" name="receiverMobile" datatype="m" errormsg="请输入正确的电话号码格式！" value="<#if address.receiverMobile??>${address.receiverMobile!''}</#if>" type="text">
+                                    <input class="mytext" name="receiverMobile" datatype="m" errormsg="请输入正确的电话号码格式！" value="<#if address??>${address.receiverMobile!''}</#if>" type="text">
                                     <span class="Validform_checktip">*手机号码</span>
                                 </td>
                              </tr>

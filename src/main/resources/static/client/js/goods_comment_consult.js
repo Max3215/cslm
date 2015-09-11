@@ -1,9 +1,9 @@
-$(document).ready(function(){
-    $("#consultForm").Validform({
-        tiptype: 1
-    });
-    
-});
+//$(document).ready(function(){
+//    $("#consultForm").Validform({
+//        tiptype: 1
+//    });
+//    
+//});
 
 // 按星级获取评论
 function getCommentByStars(goodsId, stars, page)

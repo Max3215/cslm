@@ -14,6 +14,7 @@
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="/client/js/common.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
      //初始化表单验证
@@ -21,25 +22,23 @@ $(document).ready(function(){
         tiptype: 3
     });
 
-  $(".click_a").click(function(){
-    if($(this).next().is(":visible")==false){
-      $(this).next().slideDown(300);
-    }else{
-      $(this).next().slideUp(300);
-    }
-  });//选择超市下拉效果
+    $(".click_a").click(function(){
+        if($(this).next().is(":visible")==false){
+            $(this).next().slideDown(300);
+        }else{
+            $(this).next().slideUp(300);
+        }
+    });//选择超市下拉效果
 
-  $("#nav_down li").hover(function(){
-    $(this).find(".nav_show").fadeIn(10);
-  },function(){
-    $(this).find(".nav_show").stop(true,true).fadeOut(10);
-  })  
+    navDownList("nav_down","li",".nav_show");
+    menuDownList("mainnavdown","#nav_down",".a2","sel");
+    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
-  $(".float_box .ewm").hover(function(){
-    $(this).next().show();
-  },function(){
-    $(this).next().hide();
-  })
+    $(".float_box .ewm").hover(function(){
+        $(this).next().show();
+    },function(){
+        $(this).next().hide();
+    })
 })
 </script>
 <!--[if IE]>
