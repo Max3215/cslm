@@ -307,4 +307,10 @@ public class TdDistributor {
 		this.goodsList = goodsList;
 	}
 
+	@Override
+	public String toString() {
+		return "TdDistributor [id=" + id + ", title=" + title + ", city=" + city + ", disctrict=" + disctrict
+				+ ", isEnable=" + isEnable + ", username=" + username + "]";
+	}
+
 }

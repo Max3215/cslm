@@ -9,11 +9,11 @@
                 <a href="/reg">注册</a>
             </#if>
             <menu class="top_menu">
-                <a href="#">我的订单<span>丨</span></a>
-                <a href="#">我的购物车<span>丨</span></a>
-                <a href="#">超市会员<span>丨</span></a>
-                <a href="#">客户服务<span>丨</span></a>
-                <a href="#">我的收藏</a>
+                <a href="/user/order/list/0">我的订单<span>丨</span></a>
+                <a href="/cart">我的购物车<span>丨</span></a>
+                <a href="/user">超市会员<span>丨</span></a>
+                <a href="/">客户服务<span>丨</span></a>
+                <a href="/user/recent/list">我的收藏</a>
             </menu>
             <div class="clear"></div>
         </div>
@@ -42,7 +42,7 @@
             </menu>
         </div>
         <div class="gu_car">
-            <a href="/cart">去购物车结算<span>5</span></a>
+            <a href="/cart">去购物车结算<span><#if cart_goods_list??>${cart_goods_list?size}<#else>0</#if></span></a>
         </div>
         <div class="clear"></div>
     </section>
@@ -51,33 +51,20 @@
     <aside class="winbox" id="mar_box">
         <div class="mar_box">
             <p class="tit">请选择超市<a href="javascript:void(0);" onclick="$(this).parent().parent().parent().fadeOut(300);"></a></p>
-            <div class="select" id="address">
-               
-                      <select id="prov" class="prov" style="width: 100px;"></select>
-                      <select id="city" class="city" style="width: 100px;"></select>
-                      <select id="dist" class="dist" style="width: 100px;"></select>
-                      <select id="diys" class="diys" style="width: 100px;" name="shopId" onchange="showaddress()" datatype="n" nullmsg="请选择同盟店" errormsg="请选择同盟店"></select>
-                      <p id="shopaddress"></p>
-                      
-                <span>云南省</span>
-                <select>
-                    <option>请选择&nbsp;&nbsp;市</option>
-                    <option>昆明市</option>
-                </select>
-                <select>
-                    <option>请选择&nbsp;&nbsp;区</option>
-                    <option>五华区</option>
-                </select>
-                <select>
-                    <option>请选择&nbsp;&nbsp;超市</option>
-                    <option>超市名字</option>
-                </select>
+            <div class="select" id="add">
+                   <select id="prov" class="prov" style="width: 100px;"></select>
+                   <select id="city" class="city" style="width: 100px;"></select>
+                   <select id="dist" class="dist" style="width: 100px;"></select>
+                   <select id="diys" class="diys" style="width: 100px;" name="shopId" datatype="n" nullmsg="请选择超市" errormsg="请选择超市"></select>
                 <input class="sub" type="submit" value="确定">
             </div>
             <div class="mar_list">
                 <table>
+            <#--    <#if dis_list??>
+                    <#list dis_list as item>  -->
                     <tr>
                         <th width="100">昆明市：</th>
+                        
                         <td>
                             <p>五华区</p>
                             <a href="#">超市名字</a>

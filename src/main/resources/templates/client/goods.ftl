@@ -17,7 +17,7 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script type="text/javascript" src="/client/js/goods.js"></script>
 <script type="text/javascript" src="/client/js/goods_comment_consult.js"></script>
-<script src="/client/js/Validform_v5.3.2_min.js"></script>
+
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -72,9 +72,9 @@ function minusNum(){
 }
 
 <!--  加入购物车   -->
-function cartInit(){
+function cartInit(quantity){
     var quantity = document.getElementById("quantity").value;
-    window.location.href = "/cart/init?id=${goods.id}&quantity="+quantity;
+    window.open("/cart/init?id=${goods.id}&quantity="+quantity)
 }
 
 <!--  立即购买   -->
@@ -217,10 +217,8 @@ function byNow(){
 				</p>
 				<div class="buy_btn">
 					<div class="clear"></div>
-					<!--
 					<a href="javascript:byNow();" target="_blank" title="立即购买" class="buy">立即购买</a>
-					-->
-					<a href="javascript:cartInit();" target="_blank" title="加入购物车" class="car">加入购物车</a>
+					<a href="javascript:cartInit();" target="_blank"  title="加入购物车" class="car">加入购物车</a>
 					<div class="clear"></div>
 				</div>
 			</section>
@@ -237,7 +235,7 @@ function byNow(){
 				</p>
 				<!-- 商品详情  -->
 				<div class="text_pic php_z" id="tab0">
-					<ul>
+					<ul class="pic_ul">
 						<p class="pro_cs">商品参数</p>
 						<#if goods.paramList??>
                             <#list goods.paramList as param>

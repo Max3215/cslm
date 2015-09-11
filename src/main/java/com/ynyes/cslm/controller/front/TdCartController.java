@@ -40,9 +40,6 @@ public class TdCartController {
     private TdCommonService tdCommonService;
     
     @Autowired
-    private TdGoodsService tdGoodService;
-    
-    @Autowired
     private TdUserService tdUserService;
 
     /**
@@ -200,7 +197,8 @@ public class TdCartController {
         
         map.addAttribute("user",tdUserService.findByUsername(username));
         
-        map.addAttribute("cart_goods_list", tdCartGoodsService.updateGoodsInfo(resList));
+        map.addAttribute("cart_goods_list",tdCartGoodsService.updateGoodsInfo(resList));
+        
         
         tdCommonService.setHeader(map, req);
 
@@ -290,10 +288,12 @@ public class TdCartController {
 
         if (null != id) {
             TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
-            
+            TdGoods goods = tdGoodsService.findOne(id);
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
-                cartGoods.setQuantity(quantity + 1);
+                if(quantity < goods.getLeftNumber()){
+                	cartGoods.setQuantity(quantity + 1);
+                }
                 tdCartGoodsService.save(cartGoods);
             }
         }

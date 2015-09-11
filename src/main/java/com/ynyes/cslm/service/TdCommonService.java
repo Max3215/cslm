@@ -1,9 +1,11 @@
 package com.ynyes.cslm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.aspectj.lang.annotation.Around;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -11,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdDemand;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdSetting;
 
@@ -53,9 +56,12 @@ public class TdCommonService {
     @Autowired
     private TdAdService tdAdService;
     
-    //团购 zhangji
+//    //团购 zhangji
+//    @Autowired
+//    private TdDemandService tdDemandService;
+    
     @Autowired
-    private TdDemandService tdDemandService;
+    private TdDistributorService tdDistributorService;
 
     public void setHeader(ModelMap map, HttpServletRequest req) {
         String username = (String) req.getSession().getAttribute("username");
@@ -162,6 +168,7 @@ public class TdCommonService {
 	    {
 	    	for (int i = 0; i < articleCategoryList.size()&& i<4 ; i++)
 	    	{
+	    		//分类文章
 				TdArticleCategory category = articleCategoryList.get(i);
 				map.addAttribute("second_level_"+i+"_category_list",
 						tdArticleService.findByCategoryId(category.getId()));
@@ -188,9 +195,57 @@ public class TdCommonService {
         map.addAttribute("site_link_list",
                 tdSiteLinkService.findByIsEnableTrue());
         
-        //团购留言     
-        List<TdDemand> tdDemand = tdDemandService.findByStatusIdAndIsShowable();
-        map.addAttribute("demand_list",tdDemand);
+//        //团购留言     
+//        List<TdDemand> tdDemand = tdDemandService.findByStatusIdAndIsShowable();
+//        map.addAttribute("demand_list",tdDemand);
+        
+        //全部超市
+        List<TdDistributor> dis_list = tdDistributorService.findByIsEnableTrue();
+        
+        map.addAttribute("dis_list",dis_list);
+        
+        
+        if(null != dis_list && dis_list.size() > 0)
+        {
+        	for (int i = 0; i < dis_list.size(); i++) 
+        	{
+        		ArrayList<String> citylist = new ArrayList<>();			//存市的集合
+        		//判断集合是否已经存入市
+        		if(!citylist.contains(dis_list.get(i).getCity()))		
+        		{
+        			citylist.add(dis_list.get(i).getCity());		//存入市
+        			
+        			//查询该市所有超市
+        			List<TdDistributor> dis_discaric_list = tdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc(dis_list.get(i).getCity());
+        			if(null != dis_discaric_list && dis_discaric_list.size() > 0)
+        			{
+        				for(int j = 0 ; j< dis_discaric_list.size();j++)
+        				{
+        					ArrayList<String> disctrictList = new ArrayList<>();	//存区的集合
+        					//判断是否存入该区
+        					if(!disctrictList.contains(dis_discaric_list.get(j).getDisctrict()))
+        					{
+        						disctrictList.add(dis_discaric_list.get(j).getDisctrict()); 	//存入区
+        						//查询内所有超市
+        						List<TdDistributor> dis_name_list = tdDistributorService.findBydisctrict(dis_discaric_list.get(j).getDisctrict());
+        						if(null != dis_name_list && dis_name_list.size() > 0)
+        						{
+        							ArrayList<TdDistributor> arrayList = new ArrayList<>();
+        							for(int l = 0 ; l < dis_name_list.size() ;l++)
+        							{
+        								arrayList.add(dis_name_list.get(l));	//存入区内超市信息
+        							}
+        							map.addAttribute("", arrayList);
+        						}
+        					}
+        					map.addAttribute("", disctrictList);
+        				}
+        			}
+        			
+        		}
+        		map.addAttribute("", citylist);
+			}
+        }
         
     }
 

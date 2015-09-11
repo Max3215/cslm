@@ -90,8 +90,8 @@ public class TdShopController {
                      List<TdOrder> tdOrders = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 5L);
                      List<TdOrder> tdOrders1 = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 6L);
                      map.addAttribute("shop_orderFinish_"+diySite.getId(), tdOrders.size()+tdOrders1.size());
-                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
-                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
+//                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
+//                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
                  }
 			}
                    
@@ -108,8 +108,8 @@ public class TdShopController {
                      List<TdOrder> tdOrders1 = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 6L);
                      
                      map.addAttribute("shop_orderFinish_"+diySite.getId(), tdOrders.size()+tdOrders1.size());
-                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
-                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
+//                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
+//                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
                  }
 			}
             break;
@@ -124,9 +124,9 @@ public class TdShopController {
                      List<TdOrder> tdOrders = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 5L);
                      List<TdOrder> tdOrders1 = tdOrderService.findByshopIdAndstatusId(diySite.getId(), 6L);
                      map.addAttribute("shop_orderFinish_"+diySite.getId(), tdOrders.size()+tdOrders1.size());
-                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
-//                     int a  = TdDistributorService.ContdiysiteComment(diySite.getId());
-                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
+//                     map.addAttribute("shop_orderComment_"+diySite.getId(), TdDistributorService.ContdiysiteComment(diySite.getId()));
+////                     int a  = TdDistributorService.ContdiysiteComment(diySite.getId());
+//                     map.addAttribute("shop_serviceStars"+diySite.getId(), TdDistributorService.diysiteServiceStars(diySite.getId()));
                  }
 			}
         }

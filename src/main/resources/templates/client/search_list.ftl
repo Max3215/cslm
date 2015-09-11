@@ -18,15 +18,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#add").citySelect({
-    nodata:"none",
-    prov: "云南",
-    city: "昆明",
-    <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
-    required:false
-    });
-
-
 	$(".click_a").click(function(){
 		if($(this).next().is(":visible")==false){
 			$(this).next().slideDown(300);
@@ -46,15 +37,7 @@ $(document).ready(function(){
 	})
 })
 
-function setprice() {
-    var p1 = $.trim($('#ParamFiltern_price1').val()), p2 = $.trim($('#ParamFiltern_price2').val())
-    if (isNaN(p1) || p1=="") { p1 = 0 }
-    if (isNaN(p2) || p2== "") { p2 = 0 }
-    var price = p1 + '-' + p2;
-    var url = "/list/${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}";
-    if (price != "0-0") { url += "_" + price; }
-    location.href = url;
-}
+
 </script>
 
 </head>
@@ -66,12 +49,7 @@ function setprice() {
 	<!--END nav-->
 	<section class="bread_nav main">
 		<p>您的位置：<a href="/" title="首页">首页</a>
-    		<#if category_tree_list??> 
-                <#list category_tree_list as item> 
-                    &nbsp;&nbsp;&gt;&nbsp;&nbsp; 
-                    <a href="/list/${item.id}" title="${item.title!''}" >${item.title!''}</a>
-                </#list> 
-            </#if>
+		&nbsp;&nbsp;&gt;&nbsp;&nbsp; <#if keywords??>${keywords!''}</#if>
         </p>
 	</section>
 
@@ -104,66 +82,23 @@ function setprice() {
 	<!--main-->
 	<section class="main">
 		<div class="select_box">
-		  <#if brand_list??>
-		    <dl>
-                <dt>品牌：</dt>
-                <dd>
-                    <a <#if brandIndex==0>class="sel"</#if> href="${categoryId!'0'}-0<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">全部</a>
-                
-                    <#list brand_list as brand>
-                        <td><a href="${categoryId!'0'}-${brand_index+1}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if brandIndex==brand_index+1>class="sel"</#if>>${brand.title?trim!''}</a>
-                    </#list>
-                </dd>
-                <div class="clear"></div>
-            </dl>
-            </#if>
-            <!-- 参数开始   -->
-            <#if param_list??>
-                <#list param_list as param>
-        			<dl>
-        				<dt>${param.title!""}：</dt>
-        				<dd>
-        				<a href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex><#if param_index==pindex_index>-0<#else>-${pindex!'0'}</#if></#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if param_index_list[param_index]==0>class="sel"</#if>>全部</a>
-        					<#if param.valueList??>
-                                <#list param.valueList?split(",") as value>
-                                    <#if value!="">
-                                        <a href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex><#if param_index==pindex_index>-${value_index+1}<#else>-${pindex!'0'}</#if></#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if param_index_list[param_index]==value_index+1>class="sel"</#if>>${value?trim!""}</a>
-                                    </#if>
-                                </#list>
-                             </#if>
-        				</dd>
-        				<div class="clear"></div>
-        			</dl>
-    			</#list>
-            </#if>
 		</div><!--  参数结束  -->
 
 		<div class="left_list">
 			<div class="tit">
-				<menu class="sort">
-					<span>排序：</span>
-					<a <#if orderId==0><#if soldId==0>class="sel"<#else></#if></#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-0-<#if orderId!=0 || soldId==1>0<#else>1</#if>-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">销量↑↓</a>
-                    <a <#if orderId==1><#if priceId==0>class="sel"<#else></#if></#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-1-${soldId!'0'}-<#if orderId!=1 || priceId==1>0<#else>1</#if>-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">价格↑↓</a>
-				</menu>
-				<div class="price">
-					<span>价格区间：</span>
-					<input type="text" id="ParamFiltern_price1" class="text" value="<#if priceLow??>${priceLow?string("#.##")}</#if>"/>-
-                    <input type="text" id="ParamFiltern_price2" class="text" value="<#if priceHigh??>${priceHigh?string("#.##")}</#if>"/>
-                    <input type="submit" class="sub" onclick="setprice()" value="确定" />
-				</div>
 				<div class="page">
 					<span><b><#if goods_page.totalPages==0>0<#else>${goods_page.number+1}</#if></b>/${goods_page.totalPages!"0"}</span>
 					
 					<#if goods_page.number+1 == goods_page.totalPages || goods_page.totalPages==0>
                         <a href="javascript:;">上一页</a>
                     <#else>
-                        <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number+1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">上一页</a> <#-- goods_page.number+1 -->
+                        <a href="/search?keywords=${keywords!''}&page=${goods_page.number+1}">上一页</a> <#-- goods_page.number+1 -->
                     </#if>
                             
                     <#if goods_page.number+1 == 1>
                         <a href="javascript:;">下一页</a>
                     <#else>
-                        <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number-1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">下一页</a> <#-- goods_page.number-1 -->
+                        <a href="/search?keywords=${keywords!''}&page=${goods_page.number-1}">下一页</a> <#-- goods_page.number-1 -->
                     </#if>
 				</div>
 			</div>
@@ -198,7 +133,7 @@ function setprice() {
 				    <#if goods_page.number == 0>
                          <a href="javascript:;">上一页</a>
                     <#else>
-                         <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number-1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">上一页</a>
+                         <a href="/search?keywords=${keywords!''}&page=${goods_page.number-1}">上一页</a>
                     </#if>
 				    <#if goods_page.totalPages gt 0>
                         <#list 1..goods_page.totalPages as page>
@@ -206,7 +141,7 @@ function setprice() {
                                 <#if page == goods_page.number+1>
                                     <a class="sel" href="javascript:;">${page}</a>
                                 <#else>
-                                    <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${page-1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">${page}</a> 
+                                    <a href="/search?keywords=${keywords!''}&page=${page-1}">${page}</a> 
                                 </#if>
                                 <#assign continueEnter=false>
                             <#else>
@@ -221,7 +156,7 @@ function setprice() {
                     <#if goods_page.number+1 == goods_page.totalPages || goods_page.totalPages==0>
                         <a href="javascript:;">下一页</a>
                     <#else>
-                        <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number+1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">下一页</a>
+                        <a href="/search?keywords=${keywords!''}&page=${goods_page.number+1}">下一页</a>
                     </#if>
                 </#if>
 			</div>

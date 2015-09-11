@@ -85,7 +85,7 @@ public class TdDistributorService {
             return null;
         }
         
-        return repository.findOne(id);
+        return repository.findByIdAndIsEnableTrue(id);
     }
     
     public List<TdDistributor> findBydisctrict(String disctrict){
@@ -191,32 +191,39 @@ public class TdDistributorService {
     	return (repository.findByUsernameAndIsEnableTrue(username)); 	
     }
     
-    /**
-	 * @author lc
-	 * @注释：同盟店评价信息
-	 */
-    public int ContdiysiteComment(Long diysiteId) {
-		List<TdUserComment> tdUserComment_list = TdUserCommentService.findByDiysiteIdOrderByIdDesc(diysiteId);
-		return tdUserComment_list.size();
-	}
+//    /**
+//	 * @author lc
+//	 * @注释：同盟店评价信息
+//	 */
+//    public int ContdiysiteComment(Long diysiteId) {
+//		List<TdUserComment> tdUserComment_list = TdUserCommentService.findByDiysiteIdOrderByIdDesc(diysiteId);
+//		return tdUserComment_list.size();
+//	}
+//    
+//    public float diysiteServiceStars(Long diysiteId){
+//    	List<TdUserComment> tdUserComment_list = TdUserCommentService.findByDiysiteIdOrderByIdDesc(diysiteId);
+//    	
+//    	if (null != tdUserComment_list) {
+//    		Long[] result = new Long[20];
+//        	int temp = 0;
+//        	if (tdUserComment_list.size()==0) {
+//				return (float) 0.0;
+//			}
+//        	for(int i = 0; i < 20; i++){
+//        		result[i] = tdUserComment_list.get(Math.abs(new Random().nextInt())%tdUserComment_list.size()).getServiceStar();
+//        		temp = (int) (temp + result[i]);
+//        	}
+//        	return temp/20;
+//		}
+//    	
+//    	return (float) 0.0;
+//    	
+//    }
     
-    public float diysiteServiceStars(Long diysiteId){
-    	List<TdUserComment> tdUserComment_list = TdUserCommentService.findByDiysiteIdOrderByIdDesc(diysiteId);
-    	
-    	if (null != tdUserComment_list) {
-    		Long[] result = new Long[20];
-        	int temp = 0;
-        	if (tdUserComment_list.size()==0) {
-				return (float) 0.0;
-			}
-        	for(int i = 0; i < 20; i++){
-        		result[i] = tdUserComment_list.get(Math.abs(new Random().nextInt())%tdUserComment_list.size()).getServiceStar();
-        		temp = (int) (temp + result[i]);
-        	}
-        	return temp/20;
-		}
-    	
-    	return (float) 0.0;
-    	
-    }
+//    public List<TdDistributor> findByIsEnableTrueGreoupByCity()
+//    {
+//    	return repository.findByIsENableTrueGroupByCity();
+//    }
+    
+    
 }

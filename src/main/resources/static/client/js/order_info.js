@@ -89,12 +89,12 @@ function submitAddress()
   //  var prov = $("#prov").val();
   //  var city = $("#city").val();
   //  var dist = $("#dist").val();
-  //  var detail = $("#detailAdd").val();
+    var detail = $("#detailAddress").val();
   //  var postcode = $("#postcode").val();
     
     var mobile = $("#mobile").val();
-    var receiverCarcode = $("#receiverCarcode").val();     //增加车牌 by zhangji
-    var receiverCartype = $("#receiverCartype").val();     //车型
+//    var receiverCarcode = $("#receiverCarcode").val();     //增加车牌 by zhangji
+//    var receiverCartype = $("#receiverCartype").val();     //车型
     
     if (undefined == receiverName || "" == receiverName)
     {
@@ -116,14 +116,14 @@ function submitAddress()
         $("#city").focus();
         return;
     }
+    **/
     
     if (undefined == detail || "" == detail)
     {
         alert("详细地址不能为空");
-        $("#detailAdd").focus();
+        $("#detailAddress").focus();
         return;
     }
-    **/
     if (undefined == mobile || "" == mobile)
     {
         alert("手机号码不能为空");
@@ -139,11 +139,11 @@ function submitAddress()
          //   "prov": prov,
          //   "city": city,
          //   "dist": dist,
-         //   "detail": detail,
+            "detail": detail,
          //   "postcode": postcode,
             "mobile": mobile, 
-            "receiverCarcode":receiverCarcode,     //新加车牌  by zhangji
-            "receiverCartype":receiverCartype       //新加车型
+//            "receiverCarcode":receiverCarcode,     //新加车牌  by zhangji
+//            "receiverCartype":receiverCartype       //新加车型
         },
         
         success:function(res) {

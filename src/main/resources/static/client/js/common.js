@@ -32,7 +32,6 @@ function navDownList(boxid, _sumname, _showname) {
 			});
 }
 
-
 //下拉菜单
 function menuDownList(boxid, _showname, _name, _hover) {
     var _box = $("#" + boxid);
@@ -522,6 +521,11 @@ window.onload = function(){
 		 
 }
 
+//弹出框
+function submitSearch(){
+    var search = document.getElementById("search_form");
+    search.submit();
+}
 
 
 

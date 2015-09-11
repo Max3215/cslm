@@ -25,18 +25,20 @@
                 </#list>
              </#if>
             <div class="b_contact">
-                <a href="#" class="qq"><img src="/client/images/qq01.png"></a>
+                <a  class="qq"><img src="/client/images/qq01.png"></a>
                 <span><i><img src="/client/images/phone01.png"></i><#if site.telephone??>${site.telephone}</#if></span>
             </div>
             <div class="clear"></div>
 
             <menu class="bottom_nav">
-                <a href="#">首页<span>丨</span></a>
-                <a href="#">本地特产<span>丨</span></a>
-                <a href="#">政企采购<span>丨</span></a>
-                <a href="#">生活服务<span>丨</span></a>
-                <a href="#">商家入驻</a>
+                友情链接：
+                <#if site_link_list??>
+                <#list site_link_list as item>
+                    <a href="${item.linkUri!''}">${item.title!''}<span>丨</span></a>
+                </#list>
+                </#if>
             </menu>
-            <p class="copyright">copyright©2015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司版权所有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技术支持：<a href="http://www.ynyes.com">昆明天度网络信息技术有限公司</a></p>
+            <p class="copyright"> ${site.copyright!''}<br>
+            技术支持：<a href="http://www.ynyes.com">昆明天度网络信息技术有限公司</a></p>
         </div>
     </footer>

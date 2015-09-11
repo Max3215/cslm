@@ -57,6 +57,22 @@ $(document).ready(function(){
 	},function(){
 		$(this).next().hide();
 	})
+	
+	$(".upload-show360").each(function () {
+        $(this).InitSWFUpload_show360({ 
+            btntext: "上传营业执照", 
+            btnwidth: 90, 
+            single: false, 
+            water: true, 
+            thumbnail: true, 
+            filesize: "5120", 
+            sendurl: "/client/upload", 
+            flashurl: "/mag/js/swfupload.swf", 
+            filetypes: "*.jpg;*.jpge;*.png;*.gif;" 
+        });
+    });
+	
+	
 })
 
 </script>
@@ -77,8 +93,8 @@ $(document).ready(function(){
     <#include "/client/common_float_box.ftl" />
 
 	<!--main-->
+	<form id="form1" action="/distributor/save"  method="post">
 	<div class="main">
-	   <form id="form1" action="/distributor/save" method="post">
 		<section class="apply">
 			<h3>商家入驻申请</h3>
 			<table>
@@ -158,8 +174,30 @@ $(document).ready(function(){
 					<th>超市介绍：</th>
 					<td>
 						<textarea></textarea>
-                        <p>上传营业执照</p>
 					</td>
+				</tr>
+				<tr>
+				    <th></th>
+				    <td>
+				        <div class="upload-box upload-show360"></div>
+                        <div class="photo-list_show360">
+                            <ul>
+                                <#if diy_site?? && diy_site.showPictures??>
+                                    <#list diy_site.showPictures?split(",") as uri>
+                                        <#if uri != "">
+                                        <li>
+                                            <input type="hidden" name="hid_photo_name_show360" value="0|${uri!""}|${uri!""}">
+                                            <div class="img-box">
+                                                <img src="${uri!""}" bigsrc="${uri!""}">
+                                            </div>
+                                            <a href="javascript:;" onclick="delImg(this);">删除</a>
+                                        </li>
+                                        </#if>
+                                    </#list>
+                                </#if>
+                            </ul>
+                        </div>
+				    </td>
 				</tr>
 				<tr>
 					<th></th>
@@ -167,8 +205,8 @@ $(document).ready(function(){
 				</tr>
 			</table>
 		</section>
-		</form>
-	</div>
+	</div
+	</form>
 
 
 	<!--  底部    -->

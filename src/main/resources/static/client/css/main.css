@@ -127,7 +127,7 @@
 #n_banner_sum{display: block;width: 1100px;margin: 0 auto;height: 550px;}
 #n_banner_sum li{  position: absolute;left: -450px;top: 0;display:none;}
 
-#n_banner_num{position: absolute;left:45%;bottom: 10px;z-index: 999;}
+#n_banner_num{position: absolute;left:45%;bottom: 10px;z-index: 10;}
 #n_banner_num a{float: left;width: 18px;height: 18px;margin: 0 5px;cursor: pointer;background: url(../images/print.png) no-repeat center center;text-indent: -9999px;}
 #n_banner_num a.sel{background: url(../images/print_sel.png) no-repeat center center;}
 
@@ -143,7 +143,7 @@
 .right_pro li a{display: block;width: 166px;height: 179px;padding: 10px 16px;overflow:hidden;text-align: center;}
 .right_pro li a img{max-height: 130px;_height:130px;}
 .right_pro li a .p1{color:#ff5b7d;font-weight: bold;padding-top: 5px;}
-.right_pro li a .p2{color:#252525;font-size: 12px;}
+.right_pro li a .p2{color:#252525;font-size: 12px;max-height: 16px;overflow: hidden;}
 .right_pro li a:hover{opacity: 0.8; filter:alpha(opacity=80);}
 .right_pro li a:hover img{top:3px;}
 .right_pro li a:hover .p2{color:#39bee9;}
@@ -151,7 +151,7 @@
 .index_part{margin-top: 40px;}
 .index_part menu{height: 160px;max-height: 160px;min-height: 160px;}
 .left_one{width: 215px;background: #39bee9;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_one .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index01.png) no-repeat;}
+.left_one .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index01.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_one menu{padding-top: 15px;}
 .left_one menu a{display: block;float: left;color:#39bee9;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_one menu a:hover{background: #ff5b7d;color:#fff;}
@@ -170,7 +170,7 @@
 .right_list li a:hover .p2{color:#39bee9;}
 
 .left_two{width: 215px;background: #ffa21d;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_two .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index02.png) no-repeat;}
+.left_two .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index02.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_two menu{padding-top: 15px;}
 .left_two menu a{display: block;float: left;color:#ffa21d;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_two menu a:hover{background: #04c768;color:#fff;}
@@ -179,7 +179,7 @@
 .left_two .b_pic:hover{right:6px;}
 
 .left_three{width: 215px;background: #4a90d8;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_three .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index03.png) no-repeat;}
+.left_three .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index03.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_three menu{padding-top: 15px;}
 .left_three menu a{display: block;float: left;color:#4a90d8;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_three menu a:hover{background: #fb53a2;color:#fff;}
@@ -188,7 +188,7 @@
 .left_three .b_pic:hover{right:6px;}
 
 .left_four{width: 215px;background: #ff5b7d;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_four .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index04.png) no-repeat;}
+.left_four .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index04.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_four menu{padding-top: 15px;}
 .left_four menu a{display: block;float: left;color:#ff5b7d;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_four menu a:hover{background: #39bee9;color:#fff;}
@@ -197,7 +197,7 @@
 .left_four .b_pic:hover{right:6px;}
 
 .left_five{width: 215px;background: #04c768;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_five .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index05.png) no-repeat;}
+.left_five .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index05.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_five menu{padding-top: 15px;}
 .left_five menu a{display: block;float: left;color:#04c768;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_five menu a:hover{background: #ffa21d;color:#fff;}
@@ -206,7 +206,7 @@
 .left_five .b_pic:hover{right:6px;}
 
 .left_six{width: 215px;background: #fb53a2;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_six .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index06.png) no-repeat;}
+.left_six .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index06.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_six menu{padding-top: 15px;}
 .left_six menu a{display: block;float: left;color:#fb53a2;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_six menu a:hover{background: #4a90d8;color:#fff;}
@@ -215,7 +215,7 @@
 .left_six .b_pic:hover{right:6px;}
 
 .left_seven{width: 215px;background: #ffb8b8;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_seven .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index07.png) no-repeat;}
+.left_seven .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index07.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_seven menu{padding-top: 15px;}
 .left_seven menu a{display: block;float: left;color:#ffb8b8;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_seven menu a:hover{background: #a2cffd;color:#fff;}
@@ -224,7 +224,7 @@
 .left_seven .b_pic:hover{right:6px;}
 
 .left_eight{width: 215px;background: #01948a;float: left;padding-left:15px;padding-bottom:15px;height: 410px;min-height: 410px;max-height: 410px;overflow: hidden;}
-.left_eight .tit{width: 164px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index08.png) no-repeat;}
+.left_eight .tit{width: 144px;height: 76px;margin: 0 auto;font-size: 18px;color:#fff;text-align: center;line-height: 60px;background: url(../images/index08.png) no-repeat;padding: 0 10px;overflow: hidden;}
 .left_eight menu{padding-top: 15px;}
 .left_eight menu a{display: block;float: left;color:#01948a;padding: 5px 10px;background: #fff;margin-right: 15px;margin-bottom: 10px;_display:inline-block;}
 .left_eight menu a:hover{background: #e36e45;color:#fff;}
@@ -245,7 +245,7 @@
 .foot dl dd{color:#8e8e8e;line-height: 22px;}
 .b_contact{float: left;}
 .b_contact .qq{display: block;padding: 15px 0;border-bottom:1px solid #d1d1d1;}
-.b_contact span{display: block;font-size:16px;color:#16bddf;line-height: 40px;text-align:right;padding-top:30px;}
+.b_contact span{display: block;font-size:16px;color:#16bddf;line-height: 40px;text-align:right;padding-top:30px;height: 40px;}
 .b_contact span i{position: absolute;left:0;top:30px;}
 
 .bottom_nav{width: 100%;text-align: center;padding-top:20px;border-top:1px solid #d1d1d1;margin-top: 20px;}
@@ -290,7 +290,7 @@
 .pro_list li:hover img{top:3px;}
 .pro_list li .a1{display: block;width: 100%;}
 .pro_list li .a1 img{width: 100%;max-height: 206px;}
-.pro_list li .a1 p{padding-top:6px;}
+.pro_list li .a1 p{padding-top:6px;min-height: 40px;height: 40px;width: 100%;overflow: hidden;}
 .pro_list li .price{color:#ff5b7d;font-weight: bold;padding: 15px 0;font-size: 16px;}
 .pro_list li .price span{color: #8e8e8e;text-decoration: line-through;font-size: 12px;position: absolute;top:15px;right:0;font-weight: normal;}
 
@@ -311,7 +311,7 @@
 .right_hot li:hover img{opacity: 0.8;filter:alpha(opacity=80);top:3px;}
 .right_hot li a{display: block;width: 100%;}
 .right_hot li a img{width: 100%;max-height: 206px;}
-.right_hot li a p{padding-top:6px;}
+.right_hot li a p{padding-top:6px;width: 100%;min-height: 23px;height: 23px;overflow: hidden;}
 .right_hot li .price{color:#ff5b7d;font-weight: bold;padding: 15px 0;font-size: 16px;}
 .right_hot li .price span{color: #8e8e8e;text-decoration: line-through;font-size: 12px;position: absolute;top:15px;right:0;font-weight: normal;}
 
@@ -382,7 +382,7 @@
 .info_left .tit a.sel,.info_left .tit a:hover{border-bottom:2px solid #2f4047;color:#ff5b7d;}
 .info_left .text_pic{padding: 0 30px;}
 .info_left .text_pic .pro_cs {color:#fa5e5f;font-size: 16px;padding-top: 20px;border-bottom:1px dotted #424957;padding-bottom: 5px;}
-.info_left .text_pic li{width: 50%;display: block;float: left;padding: 5px 0;border-bottom:1px dotted #424957;color:#424957;}
+.info_left .text_pic .pic_ul li{width: 50%;display: block;float: left;padding: 5px 0;border-bottom:1px dotted #424957;color:#424957;}
 .info_left .con{width: 100%;padding-top: 50px;}
 .info_left .con img{width: 100%;}
 

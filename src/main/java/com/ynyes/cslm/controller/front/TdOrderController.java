@@ -1972,24 +1972,37 @@ public class TdOrderController extends AbstractPaytypeController{
 		if (null == username) {
 			return "redirect:/login";
 		}
+		if(null== quantity){
+			quantity = 1L;
+		}
+		
+		tdCommonService.setHeader(map, req);
 		
 		TdGoods goods = tdGoodsService.findOne(goodsId);
 		
-		TdGoodsDto buyGoods = new TdGoodsDto();
+		List<TdCartGoods> cartGoodsList = new ArrayList<>();
+		TdCartGoods cartGoods = new TdCartGoods();
 		
-		buyGoods.setGoodsId(goods.getId());
-        buyGoods.setGoodsTitle(goods.getTitle());
-        buyGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
-        buyGoods.setPrice(goods.getSalePrice());
-        buyGoods.setQuantity(quantity);
-        buyGoods.setSaleId(0);
+		Double totalPrice = new Double(0);
 		
-        map.addAttribute("buyGoods",buyGoods);
+		cartGoods.setUsername(username);
+		cartGoods.setGoodsId(goods.getId());
+		cartGoods.setGoodsTitle(goods.getTitle());
+		cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
+		cartGoods.setQuantity(quantity);
+		cartGoods.setPrice(goods.getSalePrice());
+		
+		cartGoodsList.add(cartGoods);
+
+		map.addAttribute("totalPrice",goods.getSalePrice()*quantity);
+		
+        map.addAttribute("selected_goods_list",cartGoodsList);
         
-        req.getSession().setAttribute("butGoods", buyGoods);
+        setPayTypes(map, true, false, req);
+        
 		
         
-    	return "/";
+    	return "/client/order_info";
     }
     
 }

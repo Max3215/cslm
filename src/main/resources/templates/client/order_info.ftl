@@ -68,13 +68,13 @@ $(document).ready(function(){
             <tr>
                 <th width="140">
                   <p>收货地址</p>
-                  <a class="red" href="#">新增收货地址</a>
+                  <a class="red" href="javascript:toggleNewAddress();">新增收货地址</a>
                 </th>
                 <td>
                         <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
+                            <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择收货地址!"/>
                             <#list user.shippingAddressList as address>
-                                <input id="input-address-id" type="hidden" name="addressId" value="<#if address.isDefaultAddress>${address.id?c}</#if>" datatype="n" nullmsg="请选择收货地址!"/>
-                                 <a <#if address.isDefaultAddress> class="sel"</#if> href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});">
+                                 <a  href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});">
                                     <p>收货人：${address.receiverName!''}</p>
                                     <p class="p1">收货地址：${address.province!''}${address.city!''}${address.disctrict!''}${address.detailAddress!''}</p>
                                     <p>电话：${address.receiverMobile!''}</p>
@@ -85,6 +85,34 @@ $(document).ready(function(){
                 </td>
             </tr>
         </table>
+        <div id="addressForm" class="hide">
+            <table class="mymember_address">
+                  <tbody>
+                  <tr>
+                    <th>*姓名：</th>
+                    <td>
+                        <input class="mytext" id="receiverName" value="" type="text">
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>*手机：</th>
+                    <td>
+                        <input class="mytext" id="mobile" value="" type="text">
+                    </td>
+                  </tr>
+                  <tr>
+                  <th>*地址：</th>
+                  <td>
+                  <input class="mytext" id="detailAddress"  value="" type="text"/>
+                  </td>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <td><input onclick="javascript:submitAddress();" class="mysub" type="button" value="保存"></td>
+                  </tr>
+                </tbody>
+                </table>
+            </div>
     <div class="clear h20"></div>
     <div class="clear h20"></div>
     

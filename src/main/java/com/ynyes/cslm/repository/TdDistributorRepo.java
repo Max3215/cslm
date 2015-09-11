@@ -32,5 +32,7 @@ public interface TdDistributorRepo extends
     
     TdDistributor findByVirtualAccountAndIsEnableTrue(String virtualAccount);
     
-//    TdDistributor findByIdAndIsEnableTrue(Long id);
+    TdDistributor findByIdAndIsEnableTrue(Long id);
+    
+//    List<TdDistributor> findByIsEnableTrueGroupCity();
 }

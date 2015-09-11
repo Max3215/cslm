@@ -19,14 +19,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#address").citySelect({
-        nodata:"none",
-        prov: "云南",
-        city: "昆明",
-        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
-        required:false
-    });
-
 
 	$(".click_a").click(function(){
 		if($(this).next().is(":visible")==false){
@@ -51,10 +43,6 @@ $(document).ready(function(){
 	})
 })
 
-function submitSearch(){
-    var search = document.getElementById("search_form");
-    search.submit();
-}
 
 </script>
 
@@ -117,13 +105,16 @@ function submitSearch(){
 				   <select id="prov" class="prov" style="width: 100px;"></select>
                    <select id="city" class="city" style="width: 100px;"></select>
                    <select id="dist" class="dist" style="width: 100px;"></select>
-                   <select id="diys" class="diys" style="width: 100px;" name="shopId" datatype="n" nullmsg="请选择同盟店" errormsg="请选择同盟店"></select>
+                   <select id="diys" class="diys" style="width: 100px;" name="shopId" datatype="n" nullmsg="请选择超市" errormsg="请选择超市"></select>
 				<input class="sub" type="submit" value="确定">
 			</div>
 			<div class="mar_list">
 				<table>
+			<#--	<#if dis_list??>
+				    <#list dis_list as item>  -->
 					<tr>
 						<th width="100">昆明市：</th>
+						
 						<td>
 							<p>五华区</p>
 							<a href="#">超市名字</a>
@@ -374,7 +365,7 @@ function submitSearch(){
                     </#list>
                 </#if>
                 <#if index_2F_ad_list?? && index_2F_ad_list?size gt 0>
-                    <a href="${index_2F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_2F_ad_list[0].fileUri!''}" ></a>
+                    <a href="${index_2F_ad_list[0].linkUri!''}" class="b_pic"><img src="${index_2F_ad_list[0].fileUri!''}" height="130px;"></a>
                 </#if>
 			</div>
 			<ul class="right_list">
