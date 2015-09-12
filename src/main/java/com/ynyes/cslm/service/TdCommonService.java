@@ -195,6 +195,17 @@ public class TdCommonService {
         map.addAttribute("site_link_list",
                 tdSiteLinkService.findByIsEnableTrue());
         
+//        map.addAttribute("dis_list", tdDistributorService.findByProvince("云南"));
+//        
+//        List<TdDistributor> list = tdDistributorService.findByProvince("云南");
+//        
+//        for (int i = 0; i < list.size(); i++) {
+//			System.err.println(list.get(i).getProvince());
+//			System.err.println(list.get(i).getCity());
+//			System.err.println(list.get(i).getDisctrict());
+//			System.err.println("---------------");
+//		}
+        
 //        //团购留言     
 //        List<TdDemand> tdDemand = tdDemandService.findByStatusIdAndIsShowable();
 //        map.addAttribute("demand_list",tdDemand);
@@ -207,46 +218,43 @@ public class TdCommonService {
         
         if(null != dis_list && dis_list.size() > 0)
         {
+        	ArrayList<String> citylist = new ArrayList<>();			//存市的集合
         	for (int i = 0; i < dis_list.size(); i++) 
         	{
-        		ArrayList<String> citylist = new ArrayList<>();			//存市的集合
         		//判断集合是否已经存入市
         		if(!citylist.contains(dis_list.get(i).getCity()))		
         		{
         			citylist.add(dis_list.get(i).getCity());		//存入市
-        			
-        			//查询该市所有超市
-        			List<TdDistributor> dis_discaric_list = tdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc(dis_list.get(i).getCity());
-        			if(null != dis_discaric_list && dis_discaric_list.size() > 0)
-        			{
-        				for(int j = 0 ; j< dis_discaric_list.size();j++)
-        				{
-        					ArrayList<String> disctrictList = new ArrayList<>();	//存区的集合
-        					//判断是否存入该区
-        					if(!disctrictList.contains(dis_discaric_list.get(j).getDisctrict()))
-        					{
-        						disctrictList.add(dis_discaric_list.get(j).getDisctrict()); 	//存入区
-        						//查询内所有超市
-        						List<TdDistributor> dis_name_list = tdDistributorService.findBydisctrict(dis_discaric_list.get(j).getDisctrict());
-        						if(null != dis_name_list && dis_name_list.size() > 0)
-        						{
-        							ArrayList<TdDistributor> arrayList = new ArrayList<>();
-        							for(int l = 0 ; l < dis_name_list.size() ;l++)
-        							{
-        								arrayList.add(dis_name_list.get(l));	//存入区内超市信息
-        							}
-        							map.addAttribute("", arrayList);
-        						}
-        					}
-        					map.addAttribute("", disctrictList);
-        				}
-        			}
-        			
         		}
-        		map.addAttribute("", citylist);
-			}
-        }
+        	}
+        	map.addAttribute("city_list", citylist);
+        	
+        	for (int j = 0; j < citylist.size(); j++)
+        	{
+        		List<TdDistributor> dis_discaric_list = tdDistributorService.findByCityAndIsEnableTrueOrderBySortIdAsc(citylist.get(j));
+        		//查询该市所有超市
+    			if(null != dis_discaric_list && dis_discaric_list.size() > 0)
+    			{
+    				ArrayList<String> disctrictList = new ArrayList<>();	//存区的集合
+    				for(int l = 0 ; l< dis_discaric_list.size();l++)
+    				{
+    					//判断是否存入该区
+    					if(!disctrictList.contains(dis_discaric_list.get(l).getDisctrict()))
+    					{
+    						disctrictList.add(dis_discaric_list.get(l).getDisctrict()); 	//存入区
+    					}
+    				}
+    				map.addAttribute("disc_"+j+"_list", disctrictList);
+    				
+    				//查询内所有超市
+    				for (int k = 0; k < disctrictList.size(); k++) 
+    				{
+    					map.addAttribute("distributor_"+j+k+"_list", tdDistributorService.findBydisctrict(disctrictList.get(k)));
+						
+					}
+    			}
+        	}
         
+        }
     }
-
 }

@@ -144,8 +144,8 @@ function setprice() {
 			<div class="tit">
 				<menu class="sort">
 					<span>排序：</span>
-					<a <#if orderId==0><#if soldId==0>class="sel"<#else></#if></#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-0-<#if orderId!=0 || soldId==1>0<#else>1</#if>-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">销量↑↓</a>
-                    <a <#if orderId==1><#if priceId==0>class="sel"<#else></#if></#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-1-${soldId!'0'}-<#if orderId!=1 || priceId==1>0<#else>1</#if>-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">价格↑↓</a>
+					<a <#if orderId==0>class="sel"</#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-0-<#if orderId!=0 || soldId==1>0<#else>1</#if>-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><#if orderId==0><#if soldId==0>销量↓<#else>销量↑</#if><#else>销量</#if></a>
+                    <a <#if orderId==1>class="sel"</#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-1-${soldId!'0'}-<#if orderId!=1 || priceId==1>0<#else>1</#if>-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><#if orderId==1><#if priceId==0>价格↓<#else>价格↑</#if><#else>价格</#if></a>
 				</menu>
 				<div class="price">
 					<span>价格区间：</span>
@@ -178,7 +178,7 @@ function setprice() {
         						<img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.title!''}"/>
         						<p>${goods.subTitle!""}</p>
         					</a>
-        					<p class="price">￥${goods.salePrice?string("0.00")}<span>原价：￥${goods.marketPrice?string("0.00")}</span></p>
+        					<p class="price">￥${goods.salePrice?string("#.##")}<span>原价：￥${goods.marketPrice?string("#.##")}</span></p>
         					<menu class="btn">
         						<a href="/cart/init?id=${goods.id?c}" class="car" title="加入购物车"></a>
         						<a href="/order/byNow/${goods.id}" class="buy">立即购买</a> 
@@ -240,7 +240,7 @@ function setprice() {
             						<img src="${item.coverImageUri!''}" title="${item.title!''}"/>
             						<p>${item.title!''}</p>
             					</a>
-            					<p class="price">￥<#if item.salePrice??>${item.salePrice?string("0.00")}</#if><span>原价：￥<#if item.marketPrice??>${item.marketPrice?string("0.00")}</#if></span></p>
+            					<p class="price">￥<#if item.salePrice??>${item.salePrice?string("#.##")}</#if><span>原价：￥<#if item.marketPrice??>${item.marketPrice?string("#.##")}</#if></span></p>
             				</li>
                          </#if>
                     </#list>

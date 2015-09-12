@@ -12,10 +12,9 @@
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/cart.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
-
+<script src="/client/js/jquery.diysiteselect.js"></script>
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />
-
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">

@@ -56,61 +56,29 @@
                    <select id="city" class="city" style="width: 100px;"></select>
                    <select id="dist" class="dist" style="width: 100px;"></select>
                    <select id="diys" class="diys" style="width: 100px;" name="shopId" datatype="n" nullmsg="请选择超市" errormsg="请选择超市"></select>
-                <input class="sub" type="submit" value="确定">
+                <input class="sub" type="submit" value="确定" onclick="changeDistributor()">
             </div>
             <div class="mar_list">
                 <table>
-            <#--    <#if dis_list??>
-                    <#list dis_list as item>  -->
+                <#if city_list??>
+                    <#list city_list as city> 
                     <tr>
-                        <th width="100">昆明市：</th>
-                        
-                        <td>
-                            <p>五华区</p>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>    
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>    
-                        </td>
-                        <td>
-                            <p>五华区</p>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>    
-                        </td>
+                        <th width="100">${city}：</th>
+                        <#if ("disc_"+city_index+"_list")?eval??>
+                              <#list ("disc_"+city_index+"_list")?eval as disc>
+                                    <td>
+                                        <p>${disc}</p>
+                                        <#if ("distributor_"+city_index+disc_index+"_list")?eval??>
+                                             <#list ("distributor_"+city_index+disc_index+"_list")?eval as dis>
+                                                 <a href="javascript:;" onclick="chooseDistributor(${dis.id?c})">${dis.title}</a>
+                                             </#list>
+                                         </#if>
+                                    </td>
+                              </#list>
+                         </#if>
                     </tr>
-                    <tr>
-                        <th width="100">昆明市：</th>
-                        <td>
-                            <p>五华区</p>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>    
-                        </td>
-                        <td>
-                            <p>五华区</p>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>
-                            <a href="#">超市名字</a>    
-                        </td>
-                    </tr>
+                    </#list>
+                 </#if>
                 </table>
             </div>
 

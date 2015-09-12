@@ -100,6 +100,13 @@ public class TdDistributorService {
     	return repository.findByVirtualAccountAndIsEnableTrue(virtualAccount);
     }
     
+//    public List<TdDistributor> findByProvince(String province)
+//    {
+//    	Sort sort = new Sort(Direction.ASC,"city").and(new Sort(Direction.ASC,"disctrict"));
+//    	
+//    	return repository.findByProvinceAndIsEnableTrueOrderByCityAndDisctrict(province, sort);
+//    }
+    
     /**
      * 查找
      * 

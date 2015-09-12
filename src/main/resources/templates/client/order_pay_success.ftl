@@ -13,7 +13,7 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/order_info.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
-
+<script src="/client/js/jquery.diysiteselect.js"></script>
 
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />

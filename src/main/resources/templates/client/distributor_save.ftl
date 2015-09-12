@@ -16,7 +16,7 @@
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
-<script src="/client/js/jquery.cityselect.js"></script>
+<script src="/client/js/jquery.diysiteselect.js"></script>
 <!--<script src="/client/js/city.min.js"></script>-->
 
 <script type="text/javascript" src="/client/js/swfupload.js"></script>
@@ -30,13 +30,6 @@ $(document).ready(function(){
     $("#form1").Validform({
         tiptype: 3
     })
-    $("#pcd").citySelect({
-        nodata:"none",
-        <#if address?? && address.province??>prov: "${address.province!''}",</#if>
-        <#if address?? && address.city??>city: "${address.city!''}",</#if>
-        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
-        required:false
-    });
 
     $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){

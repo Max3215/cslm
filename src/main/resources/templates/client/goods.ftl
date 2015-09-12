@@ -17,7 +17,7 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script type="text/javascript" src="/client/js/goods.js"></script>
 <script type="text/javascript" src="/client/js/goods_comment_consult.js"></script>
-
+<script src="/client/js/jquery.diysiteselect.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){

@@ -527,9 +527,50 @@ function submitSearch(){
     search.submit();
 }
 
+//超市选择
+function changeDistributor(){
+	var distributor = $("#diys").val();
+	$.ajax({
+		url : "/distributor/change",
+		async : true,
+		type : 'GET',
+		dataType : "json",
+		data : {"disId":distributor},
+		success : function(data){
+			if(data.msg){
+				alter(data.msg)
+			}
+			$("#mar_box").hide();
+		}
+	})
+	
+}
 
+function chooseDistributor(disId){
+	$.ajax({
+		url : "/distributor/change",
+		async : true,
+		type : 'GET',
+		dataType : "json",
+		data : {"disId":disId},
+		success : function(data){
+			if(data.msg){
+				alter(data.msg)
+			}
+			$("#mar_box").hide();
+		}
+	})
+}
 
+$(function() {
+	 $("#add").citySelect({
+	    nodata:"none",
+	    prov: "云南",
+	    city: "昆明",
+	    required:false
+	    });
 
+})
 
 
 

@@ -7,8 +7,13 @@
         <a  class="ewm" title=""></a>
         <div class="ewm_show"><img src="${site.wxQrCode!''}"></div>
         <a href="javascript:;" title="在线咨询" id="floatqq" class="service"></a>
-        <a href="#" class="go_top" title="跳转顶部">TOP</a>
-        
+        <a href="javascript:move()" class="go_top" title="跳转顶部">TOP</a>
+ <script>       
+function move()
+{
+    $('html,body').animate({scrollTop:0},500);
+}
+</script>
     </aside>
     <#--
         <div class="floatboxlist" id="floatboxlist">

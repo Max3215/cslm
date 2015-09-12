@@ -550,4 +550,31 @@ public class TdDistributorController {
 		return "/client/distributor_sale";
 	}
 	
+	@RequestMapping(value="/change" , method=RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> changeDistributor(HttpServletRequest req,Long disId)
+	{
+		Map<String,Object> res = new HashMap<>();
+		if(null ==disId)
+		{
+			res.put("msg", "请选择超市");
+			return res;
+		}
+		
+		TdDistributor distributor = TdDistributorService.findOne(disId);
+		 if(null == distributor)
+		 {
+			 res.put("msg","选择的超市不存在");
+			 return res;
+		 }
+		 
+		req.getSession().setAttribute("DISTRIBUTOR_ID", distributor.getId());
+		return res;
+	}
+	
+	
+	
+	
+	
 }
+
