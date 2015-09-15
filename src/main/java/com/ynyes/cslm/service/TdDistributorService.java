@@ -1,7 +1,6 @@
 package com.ynyes.cslm.service;
 
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdUser;
-import com.ynyes.cslm.entity.TdUserComment;
 import com.ynyes.cslm.repository.TdDistributorRepo;
 
 /**
@@ -231,6 +230,14 @@ public class TdDistributorService {
 //    {
 //    	return repository.findByIsENableTrueGroupByCity();
 //    }
-    
-    
+    	public TdDistributorGoods findByIdAndGoodId(Long id,Long goodsId)
+    	{
+    		return repository.findByIdAndGoodsId(id, goodsId);
+    	}
+
+    	public Page<TdDistributorGoods> findByIdAndIsOnSale(Long id,Boolean isOnSale,int page,int size)
+    	{
+    		PageRequest pageRequest = new PageRequest(page, size);
+    		return repository.findByIdAndIsOnSale(id, isOnSale, pageRequest);
+    	}
 }

@@ -23,6 +23,23 @@ function getCommentByStars(goodsId, stars, page)
     });
 }
 
+//获取成交记录
+function getBargainRecord(goodsId,page)
+{
+	if (null == goodsId || null == page)
+    {
+        return;
+    }
+	$.ajax({
+		type : "post",
+		url : "/goods/record/"+goodsId+"?page="+page,
+		success:function(res){
+			$("#record_list").html(res);
+		}
+	})
+}
+
+
 //获取咨询
 function getConsult(goodsId, page)
 {

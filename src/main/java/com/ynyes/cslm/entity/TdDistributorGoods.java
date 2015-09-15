@@ -36,6 +36,10 @@ public class TdDistributorGoods {
 	@Column
 	private String coverImageUri;
 	
+	//商品编码
+	@Column 
+	private String code;
+	
 	//商品库存   
 	@Column
 	private Long number;
@@ -83,6 +87,14 @@ public class TdDistributorGoods {
 
 	public void setCoverImageUri(String coverImageUri) {
 		this.coverImageUri = coverImageUri;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Long getNumber() {

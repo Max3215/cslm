@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
@@ -203,7 +204,7 @@ public class TdUserController{
         map.addAttribute("status_id", statusId);
         map.addAttribute("time_id", timeId);
         
-        // 热卖
+     // 热卖
         map.addAttribute("hot_list",
                 tdGoodsService.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc());
         
@@ -1143,7 +1144,7 @@ public class TdUserController{
     @RequestMapping(value = "/user/comment/add", method=RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> commentAdd(HttpServletRequest req,
-            TdUserComment tdComment, Long orderId, Long ogId, String code,
+            TdUserComment tdComment, Long orderId, Long ogId,Long quantity, String code,
             ModelMap map) {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
@@ -1176,7 +1177,35 @@ public class TdUserController{
         tdComment.setUsername(username);
         
         tdComment = tdUserCommentService.save(tdComment);
-
+        
+        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+        
+        if(null != user )
+        {
+        	// 判断为超市购物
+        	if(user.getRoleId() ==1)
+        	{
+        		TdDistributor distributor = TdDistributorService.findbyUsername(user.getUsername());
+        		//查看当前有无该商品
+        		TdDistributorGoods disGoods = TdDistributorService.findByIdAndGoodId(distributor.getId(), goods.getId());
+        		if(null!= disGoods)
+        		{
+        			disGoods.setNumber(disGoods.getNumber()+quantity);
+        		}else{
+        			//新建一条超市商品信息
+        			disGoods = new TdDistributorGoods();
+        			disGoods.setCoverImageUri(goods.getCoverImageUri());
+        			disGoods.setGoodsId(goods.getId());
+        			disGoods.setGoodsPrice(goods.getSalePrice());
+        			disGoods.setGoodsTitle(goods.getTitle());
+        			disGoods.setIsOnSale(false);
+        			disGoods.setNumber(quantity);
+        			disGoods.setCode(goods.getCode());
+        		}
+        		distributor.getGoodsList().add(disGoods);//更新超市商品库
+        		TdDistributorService.save(distributor);
+        	}
+        }
         // 设置订单信息
         if (null != orderId) {
             TdOrder tdOrder = tdOrderService.findOne(orderId);
@@ -1216,7 +1245,6 @@ public class TdUserController{
             }
         }
 
-        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
         if (null != user) {
             tdComment.setUserHeadUri(user.getHeadImageUri());

@@ -160,7 +160,7 @@ DD_belatedPNG.fix('.,img,background');
                             </#if> 
                       </td>
                       <td class="td003"> 
-                            <p><a href="#">查看</a></p>
+                            <p><a href="/user/order?id=${order.id?c}">查看</a></p>
                       </td>
                   </tr>
                   </#list>
@@ -191,26 +191,27 @@ DD_belatedPNG.fix('.,img,background');
             </div>
         </div><!--mymember_info END-->
     </form>
+    
     <div class="mymember_info">
         <h3 id="mymember_likecheck">
             
             <span>猜你喜欢</span>
         </h3>
         <ul id="mymember_likelist">
-            <#if hot_list??>
                 <li>
-                <#list hot_list as goods>
-                 <#if goods_index < 4 >
-                  <a href="${goods.id?c}">
-                    <img src="${goods.coverImageUri!''}" width="208px" height="208px;"/>
-                    <p>${goods.title!''}</p>
-                    <p>￥<span>${goods.salePrice?string('0.00')}</span></p>
-                    <i>已售 ${goods.soldNumber!'0'} 件</i>
-                  </a>
-                  </#if>
+            <#if hot_list?? && hot_list?size gt 0> 
+                <#list hot_list as goods> 
+                    <#if goods_index < 4 >
+                      <a href="${goods.id?c}">
+                        <img src="${goods.coverImageUri!''}" width="208px" height="208px;"/>
+                        <p>${goods.title!''}</p>
+                        <p>￥<span>${goods.salePrice?string('0.00')}</span></p>
+                        <i>已售 ${goods.soldNumber!'0'} 件</i>
+                      </a>
+                    </#if>
                 </#list>
-                </li>
             </#if>
+                </li>
         </ul>
         <div class="myclear"></div>
     </div>

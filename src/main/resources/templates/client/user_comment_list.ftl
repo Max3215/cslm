@@ -136,6 +136,7 @@ DD_belatedPNG.fix('.,img,background');
                                         <input type="hidden" name="orderId" value=${order.id?c} />
                                         <input type="hidden" name="ogId" value=${item.id?c} />
                                         <input type="hidden" name="goodsId" value=${item.goodsId?c} />
+                                        <input type="hidden" name="quantity" value=${item.quantity} />
                                         <td class="td004" colspan="4">
                                             <div class="pb20 lh25">
                                                 <input class="ml20" type="radio" name="stars" value="3" datatype="n" nullmsg="请点击进行评价"/><span class="mr20"> 好评</span>

@@ -20,18 +20,20 @@
        <div class="mymember_menu_part"> 
             <a class="mymember_menu_tit" title="商品管理"><img src="/client/images/mymember/menu06.png" />商品管理</a>
             <div> 
-                <a href="/">发布商品</a> 
-                <a href="#">出售中的商品</a> 
-                <a href="#">仓库中的商品</a> 
+                <a href="/distributor/goods/sale/1">出售中的商品</a> 
+                <a href="/distributor/goods/sale/0">仓库中的商品</a> 
+                <a href="/distributor/sale">已卖出的商品</a> 
              </div>
         </div>
+        <#--
         <div class="mymember_menu_part">
             <a class="mymember_menu_tit" titlef="交易管理"><img src="/client/images/mymember/menu07.png" />交易管理</a>
             <div>
-                <a href="/distributor/sale">已卖出的商品</a> 
+                
                 <a href="#">评价管理</a> 
             </div>
         </div>
+        -->
      </#if>
     <div class="mymember_menu_part">
       <a class="mymember_menu_tit"  title="订单中心"><img src="/client/images/mymember/menu01.png" />订单中心</a>

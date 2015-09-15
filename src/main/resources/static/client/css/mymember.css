@@ -469,11 +469,11 @@ textarea { resize:none;}
 	background:#ddd;}
 #mymember_likecheck a.mysel {background:#ff1000;}
 #mymember_likelist {
-	margin-top:15px;
+	margin-top:35px;
 	position:relative;
 	display:block;
 	width:100%;}
-#mymember_likelist li {width:100%;display:none;}
+#mymember_likelist li {width:100%;}
 #mymember_likelist a {
 	float:left;
 	display:block;
@@ -487,6 +487,8 @@ textarea { resize:none;}
 #mymember_likelist a img { width:100%; margin-bottom:5px;}
 #mymember_likelist a p {
 	width:90%;
+	height:25px;
+	overflow:hidden;
 	font-size:12px;
 	margin:0 auto;}
 #mymember_likelist a p span {

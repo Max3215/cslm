@@ -57,6 +57,41 @@ function setprice() {
     if (price != "0-0") { url += "_" + price; }
     location.href = url;
 }
+
+<!--  加入购物车   -->
+function cartInit(goodsId){
+   
+    $.ajax({
+        type: "get",
+        url: "/goods/incart",
+        data: {"id":goodsId},
+        success: function (data) { 
+            if(data.msg){
+                alert(data.msg);
+                return;
+            }
+            window.open("/cart/init?id="+goodsId);
+        }
+    });
+}
+
+<!--  立即购买   -->
+function byNow(goodsId){
+   
+    $.ajax({
+        type: "get",
+        url: "/goods/incart",
+        data: {"id":goodsId},
+        success: function (data) { 
+            if(data.msg){
+                alert(data.msg);
+                return;
+            }
+            window.location.href = "/order/byNow/"+goodsId;
+        }
+    });
+}
+
 </script>
 
 </head>
@@ -180,8 +215,8 @@ function setprice() {
         					</a>
         					<p class="price">￥${goods.salePrice?string("#.##")}<span>原价：￥${goods.marketPrice?string("#.##")}</span></p>
         					<menu class="btn">
-        						<a href="/cart/init?id=${goods.id?c}" class="car" title="加入购物车"></a>
-        						<a href="/order/byNow/${goods.id}" class="buy">立即购买</a> 
+        						<a href="javascript:cartInit(${goods.id?c});" class="car" title="加入购物车"></a>
+        						<a href="javascript:byNow(${goods.id?c});" class="buy">立即购买</a> 
         						<div class="clear"></div>
         					</menu>
         				</li>

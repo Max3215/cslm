@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 
 /**
  * TdDistributor 实体数据库操作接口
@@ -38,4 +39,13 @@ public interface TdDistributorRepo extends
 //    List<TdDistributor> findByIsEnableTrueGroupCity();
     
 //    List<TdDistributor> findByProvinceAndIsEnableTrueOrderByCityAndDisctrict(String province,Sort sort);
+    
+    @Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsId=?2")
+    TdDistributorGoods findByIdAndGoodsId(Long id, Long goodsId);
+    
+   
+    @Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=?2")
+    Page<TdDistributorGoods> findByIdAndIsOnSale(Long id, Boolean isOnSale, Pageable page);
+    
+    
 }

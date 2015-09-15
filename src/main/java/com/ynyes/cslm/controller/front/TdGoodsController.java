@@ -2,7 +2,9 @@ package com.ynyes.cslm.controller.front;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,8 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdProduct;
@@ -23,6 +26,7 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserConsult;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
@@ -82,12 +86,15 @@ public class TdGoodsController {
     @Autowired
     private TdUserPointService tdUserPointService;
 
+    //TdOrder服务类   libiao  
     @Autowired
     private TdDistributorService TdDistributorService;
     
-    //TdOrder服务类   libiao  
     @Autowired
     private TdOrderService tdOrderService;
+    
+    @Autowired
+    private TdDistributorGoodsService tdDistributorGoodsService;
 
     @RequestMapping("/goods/{goodsId}")
     public String product(@PathVariable Long goodsId, Long shareId,
@@ -96,13 +103,18 @@ public class TdGoodsController {
         tdCommonService.setHeader(map, req);
 
         String username = (String) req.getSession().getAttribute("username");
-        Long tdDistributorId= (Long)req.getSession().getAttribute("distributorId");
-        
-        if(null == tdDistributorId)
+        if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
         {
-        	tdDistributorId = 1L;
+        	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        	
+        	 //成交数
+            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, goodsId,0,5));
+        }else
+        {
+        	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,0,5));
+        	 Page<TdOrder> page = tdOrderService.findByShopIdAndGoodId(null, goodsId,0, 5);
+        	 System.err.println(page.getContent().size());
         }
-        TdDistributor distributor = TdDistributorService.findOne(tdDistributorId);
 
         // 添加浏览记录
         if (null != username) {
@@ -170,9 +182,6 @@ public class TdGoodsController {
         map.addAttribute("one_star_comment_count", tdUserCommentService
                 .countByGoodsIdAndStarsAndIsShowable(goodsId, 1L));
         
-        //成交数
-        map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(tdDistributorId, goodsId,0,5));
-
         // 咨询
         map.addAttribute("consult_page", consultPage);
 
@@ -526,4 +535,76 @@ public class TdGoodsController {
 
         return "/client/goods_consult";
     }
+
+    @RequestMapping(value="/goods/record/{goodsId}")
+    public String record(@PathVariable Long goodsId,Integer page,ModelMap map,HttpServletRequest req)
+    {
+    	if (null == goodsId) {
+    		return "error_404";
+    	}
+    	
+    	if (null == page) {
+    		page = 0;
+    	}
+    	if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+        {
+        	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        	
+        	 //成交数
+            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, goodsId,page,5));
+        }else
+        {
+        	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,page,5));
+        }
+        return "/client/goods_record";
+    }
+    
+    /**
+     * 用户选择超市后点击加入购物车或立即购买
+     * 		前判断超市是否存在商品或者库存是否大于购买数量
+     * @param id
+     * @param quantity
+     * @param req
+     * @return
+     */
+    @RequestMapping(value ="/goods/incart")
+    @ResponseBody
+    public Map<String,Object> goodsBeforIncart(Long id,Long quantity,HttpServletRequest req)
+    {
+    	Map<String,Object> res =new HashMap<>();
+    	if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
+    	{
+    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+    	
+	    	if(null == id)
+	    	{
+	    		res.put("msg","该商品不存在！");
+	    		return res;
+	    	}
+	    	
+	//    	List<TdDistributorGoods> disGoods = tdDistributorGoodsService.findByGoodsId(id);
+	    	TdDistributorGoods distributorGoods = TdDistributorService.findByIdAndGoodId(disId, id);
+	    	
+	    	
+	    	if(null == distributorGoods)
+	    	{
+	    		res.put("msg", "本超市没有该商品，您可以选择其他超市购买！");
+	    		return res;
+	    	}
+	    	
+	    	if(null ==quantity)
+	    	{
+	    		quantity =1L;
+	    	}
+	    	
+	    	if(quantity > distributorGoods.getNumber())
+	    	{
+	    		res.put("msg", "本超市库存不足！");
+	    		return res;
+	    	}
+    	}
+    	return res;
+    }
 }
+
+    

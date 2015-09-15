@@ -23,7 +23,7 @@
 .mar_box .tit a{display: block;width: 22px;height: 22px;position: absolute;top:0;right:0;background: url(../images/close.png) no-repeat;}
 .mar_box .select{padding:40px 0 30px 50px;border-bottom:1px solid #b1b1b1;}
 .mar_box .select span{font-size: 16px;padding-right:30px;}
-.mar_box .select select{border:1px solid #b1b1b1;height: 24px;color:#474848;font-size: 14px;margin-right: 20px;font-family: "微软雅黑";line-height: 24px;}
+.mar_box .select select{border:1px solid #b1b1b1;height: 24px;color:#474848;font-size: 14px;margin-right: 20px;font-family: "微软雅黑";line-height: 24px;float: left;}
 .mar_box .select .sub{width: 60px;height: 25px;background: #ff5b7d;color:#fff;text-align: center;line-height: 25px;}
 .mar_box .select .sub:hover{background:#39bee9;}
 .mar_list{padding: 24px 0 0 50px;}
@@ -442,7 +442,7 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 
 .service .right_con{width: 1004px;border:1px solid #d5d3d3;padding: 30px;float: right;margin-top: 20px;}
 
-
+.photo-list_show360 ul li img{width:128px;height:128px;opacity:1;}
 
 
 

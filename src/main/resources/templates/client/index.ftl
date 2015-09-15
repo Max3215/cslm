@@ -102,10 +102,10 @@ $(document).ready(function(){
 		<div class="mar_box">
 			<p class="tit">请选择超市<a href="javascript:void(0);" onclick="$(this).parent().parent().parent().fadeOut(300);"></a></p>
 			<div class="select" id="add">
-				   <select id="prov" class="prov" style="width: 100px;"></select>
-                   <select id="city" class="city" style="width: 100px;"></select>
-                   <select id="dist" class="dist" style="width: 100px;"></select>
-                   <select id="diys" class="diys" style="width: 100px;" name="shopId" datatype="n" nullmsg="请选择超市" errormsg="请选择超市"></select>
+				   <select id="prov" class="prov" style="width: 120px;"></select>
+                   <select id="city" class="city" style="width: 120px;"></select>
+                   <select id="dist" class="dist" style="width: 120px;"></select>
+                   <select id="diys" class="diys" style="width: 120px;" name="shopId" datatype="n" nullmsg="请选择超市" errormsg="请选择超市"></select>
 				<input class="sub" type="submit" value="确定" onclick="changeDistributor()">
 			</div>
 			<div class="mar_list">

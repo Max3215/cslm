@@ -101,8 +101,26 @@ DD_belatedPNG.fix('.,img,background');
         <div class="myclear" style="height:10px;"></div>
 
         <div class="mymember_page"> 
-        <a class="mysel" href="#">1</a> 
-        <a href="#">2</a> 
+            <#if dist_order_page??>
+                <#assign continueEnter=false>
+                <#if dist_order_page.totalPages gt 0>
+                    <#list 1..dist_order_page.totalPages as page>
+                        <#if page <= 3 || (dist_order_page.totalPages-page) < 3 || (dist_order_page.number+1-page)?abs<3 >
+                            <#if page == dist_order_page.number+1>
+                                <a class="mysel" href="javascript:;">${page}</a>
+                            <#else>
+                                <a href="/distributor/sale?page=${page-1}">${page}</a>
+                            </#if>
+                            <#assign continueEnter=false>
+                        <#else>
+                            <#if !continueEnter>
+                                <b class="pn-break">&hellip;</b>
+                                <#assign continueEnter=true>
+                            </#if>
+                        </#if>
+                    </#list>
+                </#if>
+            </#if>
         </div>
       </div>
       <!--mymember_info END-->

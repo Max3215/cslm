@@ -179,7 +179,7 @@ $(document).ready(function(){
                                         <li>
                                             <input type="hidden" name="hid_photo_name_show360" value="0|${uri!""}|${uri!""}">
                                             <div class="img-box">
-                                                <img src="${uri!""}" bigsrc="${uri!""}">
+                                                <img src="${uri!""}" bigsrc="${uri!""}" width="80px" max-height="80px">
                                             </div>
                                             <a href="javascript:;" onclick="delImg(this);">删除</a>
                                         </li>

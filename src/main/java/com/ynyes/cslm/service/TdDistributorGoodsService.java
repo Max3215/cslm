@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.ynyes.cslm.entity.TdDistributorGoods;
@@ -80,5 +82,26 @@ public class TdDistributorGoodsService {
     	return (List<TdDistributorGoods>) repository.save(entities);
     }
 	
+    
+    public Page<TdDistributorGoods> findByUsenameAndIsOnSale(String username,Boolean onsale ,int page ,int size)
+	{
+		if(null == username)
+		{
+			return null;
+		}
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository.findByUsernameAndIsOnSale(username,onsale, pageRequest);
+	}
+    
+//    public Page<TdDistributorGoods> findByDistributorIdAndIsOnSale(Long disId,Boolean onsale ,int page ,int size)
+//	{
+//		PageRequest pageRequest = new PageRequest(page, size);
+//		return repository.findByDistributorIdAndIsOnSale(disId,onsale,pageRequest);
+//	}
+    
+    public TdDistributorGoods findOne(Long id)
+    {
+    	return repository.findOne(id);
+    }
     
 }
