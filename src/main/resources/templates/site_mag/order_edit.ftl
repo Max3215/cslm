@@ -407,7 +407,7 @@
                         <div class="order-flow-wait">
                             <a class="order-flow-input"></a>
                             <span>
-                                <p class="name">待服务</p>
+                                <p class="name">待发货</p>
                             </span>
                         </div>
                         <div class="order-flow-wait">
@@ -449,7 +449,7 @@
                         <div class="order-flow-wait">
                             <a class="order-flow-input"></a>
                             <span>
-                                <p class="name">待服务</p>
+                                <p class="name">待发货</p>
                             </span>
                         </div>
                         <div class="order-flow-wait">
@@ -492,7 +492,7 @@
                         <div class="order-flow-wait">
                             <a class="order-flow-input"></a>
                             <span>
-                                <p class="name">待服务</p>
+                                <p class="name">待发货</p>
                             </span>
                         </div>
                         <div class="order-flow-wait">
@@ -535,7 +535,7 @@
                         <div class="order-flow-arrive">
                             <a class="order-flow-input"></a>
                             <span>
-                                <p class="name">已服务</p>
+                                <p class="name">已发货</p>
                                 <p>${order.serviceTime!''}</p>
                             </span>
                         </div>
@@ -578,7 +578,7 @@
                         <div class="order-flow-arrive">
                             <a class="order-flow-input"></a>
                             <span>
-                                <p class="name">已服务</p>
+                                <p class="name">已发货</p>
                                 <p>${order.serviceTime!''}</p>
                             </span>
                         </div>
@@ -721,7 +721,7 @@
                     </tr>
                     <tr>
                         <th>
-                            可获取粮草总计
+                            可获取积分总计
                         </th>
                         <td>
                             <div class="position">
@@ -756,13 +756,13 @@
         </dl>
         
         <dl>
-            <dt>安装信息</dt>
+            <dt>订单信息</dt>
             <dd>
                 <table border="0" cellspacing="0" cellpadding="0" class="border-table" width="98%">
                 <tbody>
                     <tr>
                         <th width="20%">
-                            同盟店
+                            加盟店
                         </th>
                         <td>
                             <span id="spanArea"></span> 
@@ -771,11 +771,11 @@
                     </tr>
                     <tr>
                         <th>
-                            预约时间
+                            下单时间
                         </th>
                         <td>
                             <span></span> 
-                            <span><#if order.appointmentTime??>${order.appointmentTime?string("yyyy-MM-dd HH:mm:ss")}</#if></span>
+                            <span><#if order.orderTime??>${order.orderTime?string("yyyy-MM-dd HH:mm:ss")}</#if></span>
                         </td>
                     </tr>
                 </tbody>
@@ -885,11 +885,11 @@
                 <input type="button" id="btnPayment" value="确认付款" class="btn">
                 <input type="button" id="btnCancel" value="取消订单" class="btn green">
             <#elseif order.statusId==3>
-                <input type="button" id="btnPaymentLeft" value="确认尾款已付" class="btn">
+                <input type="button" id="btnPaymentLeft" value="等待发货" class="btn">
             <#elseif order.statusId==4>
-                <input type="button" id="btnService" value="确认到店消费" class="btn green">
+                <input type="button" id="btnService" value="待收货" class="btn green">
             <#elseif order.statusId==5>
-                <input type="button" id="btnOrderComplete" value="确认完成" class="btn">
+                <input type="button" id="btnOrderComplete" value="待评价" class="btn">
             </#if>
             <#if order.statusId != 7>
                 <input type="button" id= "btnPrint" value="打印订单" class="btn violet">

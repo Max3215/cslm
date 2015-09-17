@@ -82,7 +82,7 @@ var theForm = document.forms['form1'];
     <th align="center" width="12%">邮箱</th>
     <th width="12%">手机号</th>
     <th width="8%">最近登录</th>
-    <th width="8%">粮草</th>
+    <th width="8%">积分</th>
     <th width="6%">状态</th>
     <th width="6%">操作</th>
   </tr>
@@ -115,7 +115,7 @@ var theForm = document.forms['form1'];
                     </span>
                   </div>
                 </td>
-                <td><#if user.roleId?? && user.roleId==0>普通会员<#elseif user.roleId?? && user.roleId==1>同盟店</#if></td>
+                <td><#if user.roleId?? && user.roleId==0>普通会员<#elseif user.roleId?? && user.roleId==1>加盟店</#if></td>
                 <td align="center">${user.email!""}</td>
                 <td align="center">${user.mobile!""}</td>
                 <td align="center">${user.lastLoginTime!""}</td>

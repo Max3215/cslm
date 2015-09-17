@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="myclear"></div>
-    <a class="mymember_head_kf" href="#">在线客服 >> </a>
+    <a class="mymember_head_kf" href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>">在线客服 >> </a>
   </div><!--mymember_head END-->
   <div class="myclear" style="height:20px;"></div>
  <div class="mymember_menu">

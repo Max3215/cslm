@@ -6,7 +6,7 @@
         <a href="/user/recent/list" class="history" title=""浏览记录></a>
         <a  class="ewm" title=""></a>
         <div class="ewm_show"><img src="${site.wxQrCode!''}"></div>
-        <a href="javascript:;" title="在线咨询" id="floatqq" class="service"></a>
+        <a href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>" title="在线咨询" id="floatqq" class="service"></a>
         <a href="javascript:move()" class="go_top" title="跳转顶部">TOP</a>
  <script>       
 function move()

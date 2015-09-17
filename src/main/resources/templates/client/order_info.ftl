@@ -104,9 +104,9 @@ $(document).ready(function(){
                   <th>地区：</th>
                   <td>
                     <div id="pcd">
-                        <select name="province" class="prov" style="width: 100px;" datatype="*"></select>
-                        <select name="city" class="city" style="width: 100px;" datatype="*"></select>
-                        <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10"></select>
+                        <select name="province" class="prov" style="width: 100px;" ></select>
+                        <select name="city" class="city" style="width: 100px;" ></select>
+                        <select name="disctrict" class="dist" style="width: 100px;" ></select>
                      </div>
                   </td>
                 </tr>

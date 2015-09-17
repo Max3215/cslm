@@ -1158,7 +1158,7 @@ public class TdOrderController extends AbstractPaytypeController{
 
          if (1==user.getRoleId()) {//判断为超市订单  直接跳往支付成功页面
         	 map.addAttribute("order",tdOrder);
-        	 return "redirect:/order_pay_success";
+        	 return "/client/order_pay_success";
          }
 
          
