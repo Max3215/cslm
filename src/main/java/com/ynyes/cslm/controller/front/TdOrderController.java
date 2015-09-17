@@ -293,7 +293,7 @@ public class TdOrderController extends AbstractPaytypeController{
         // 购买类型
         req.getSession().setAttribute("buyType", type);
 
-        // 线下同盟店
+        // 线下加盟店
         map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
 
         // 支付方式列表
@@ -544,7 +544,7 @@ public class TdOrderController extends AbstractPaytypeController{
             deliveryTypeFee = deliveryType.getFee();
         }
 
-        // 线下同盟店
+        // 线下加盟超市
         if (null != shopId) {
             TdDistributor shop = TdDistributorService.findOne(shopId);
 
@@ -726,7 +726,7 @@ public class TdOrderController extends AbstractPaytypeController{
         // 积分限额
         map.addAttribute("total_point_limit", totalPointLimited);
 
-        // 线下同盟店
+        // 线下加盟超市
         map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
 
         // 支付方式列表
@@ -1037,7 +1037,7 @@ public class TdOrderController extends AbstractPaytypeController{
 //            deliveryTypeFee = deliveryType.getFee();
 //        }
 
-//        // 线下同盟店
+//        // 线下加盟超市
 //        if (null != shopId) {
 //            TdDistributor shop = TdDistributorService.findOne(shopId);
 //
@@ -1647,14 +1647,14 @@ public class TdOrderController extends AbstractPaytypeController{
         
         /**
 		 * @author lc
-		 * @注释：根据用户所属同盟店id查询同盟店
+		 * @注释：根据用户所属加盟超市id查询加盟超市
 		 */
         TdDistributor tdShop = null;
         if (null != tdUser.getUpperDiySiteId()) {
-        	// 同盟店
+        	// 加盟超市
             tdShop = TdDistributorService.findOne(tdUser.getUpperDiySiteId());
 		}else{
-			// 同盟店
+			// 加盟超市
 	        tdShop = TdDistributorService.findOne(tdOrder.getShopId());
 		}
         
@@ -1692,7 +1692,7 @@ public class TdOrderController extends AbstractPaytypeController{
                     new String[] { tdShop.getTitle(), tdUser.getUsername(),
                             tdOrder.getOrderGoodsList().get(0).getGoodsTitle(),
                             tdOrder.getAppointmentTime().toString() });
-            System.out.println("---Sharon---: 向同盟店"+tdShop.getMobile()+"发送短信");
+            System.out.println("---Sharon---: 向加盟超市"+tdShop.getMobile()+"发送短信");
         }
         
         List<TdOrderGoods> tdOrderGoodsList = tdOrder.getOrderGoodsList();
@@ -1744,14 +1744,14 @@ public class TdOrderController extends AbstractPaytypeController{
             }
         }
              
-        // 同盟店返利
+        // 加盟超市返利
         if (null != tdShop) {
             if (null == tdShop.getTotalCash()) {
                 tdShop.setTotalCash(totalCash);
             } else {
                 tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
             }
-            tdOrder.setRebate(totalCash);//设置订单同盟店所获返利
+            tdOrder.setRebate(totalCash);//设置订单加盟超市所获返利
             tdOrder.setPlatformService(platformService);//设置订单平台服务费
             tdOrder.setTrainService(trainService);//设置订单培训服务费
             tdOrder = tdOrderService.save(tdOrder);

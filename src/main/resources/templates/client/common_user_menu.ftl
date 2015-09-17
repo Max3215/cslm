@@ -6,8 +6,8 @@
     <div id="mymember_nav01" class="mymember_head_part">
       <a class="a001 a002" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>
       <div id="mymember_navshow01">
-        <a href="/user">个人信息</a>
-        <a href="/user/password/list">收货地址</a>
+        <a href="/user/info">个人信息</a>
+        <a href="/user/address/list">收货地址</a>
 
       </div>
     </div>

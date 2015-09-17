@@ -92,13 +92,13 @@ $(document).ready(function(){
 					<#if goods_page.number+1 == goods_page.totalPages || goods_page.totalPages==0>
                         <a href="javascript:;">上一页</a>
                     <#else>
-                        <a href="/search?keywords=${keywords!''}&page=${goods_page.number+1}">上一页</a> <#-- goods_page.number+1 -->
+                        <a href="/search?keywords=${keywords!''}&page=${goods_page.number-1}">上一页</a> <#-- goods_page.number+1 -->
                     </#if>
                             
                     <#if goods_page.number+1 == 1>
                         <a href="javascript:;">下一页</a>
                     <#else>
-                        <a href="/search?keywords=${keywords!''}&page=${goods_page.number-1}">下一页</a> <#-- goods_page.number-1 -->
+                        <a href="/search?keywords=${keywords!''}&page=${goods_page.number+1}">下一页</a> <#-- goods_page.number-1 -->
                     </#if>
 				</div>
 			</div>

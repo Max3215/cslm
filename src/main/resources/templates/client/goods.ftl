@@ -72,6 +72,9 @@ function minusNum(){
 <!--  加入购物车   -->
 function cartInit(){
     var quantity = document.getElementById("quantity").value;
+    if(quantity==0){
+        return;
+    }
     $.ajax({
         type: "get",
         url: "/goods/incart",
@@ -89,6 +92,9 @@ function cartInit(){
 <!--  立即购买   -->
 function byNow(){
     var quantity = document.getElementById("quantity").value;
+    if(quantity==0){
+        return;
+    }
     $.ajax({
         type: "get",
         url: "/goods/incart",

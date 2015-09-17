@@ -49,6 +49,9 @@ DD_belatedPNG.fix('.,img,background');
 <body>
     <!--  顶部  -->
     <#include "/client/common_header.ftl">
+    
+    <!--右边悬浮框-->
+    <#include "/client/common_float_box.ftl" />
 <!--mymember-->
 <div class="myclear"></div>
 <div class="mymember_out">

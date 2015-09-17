@@ -80,8 +80,8 @@ $(document).ready(function(){
                   <a class="red" href="javascriput:viod(0);" onclick="$('.add_address').fadeIn();">新增收货地址</a>
                 </th>
                 <td>
+                     <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择收货地址!"/>
                     <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
-                        <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择收货地址!"/>
                         <#list user.shippingAddressList as address>
                              <a  href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});">
                                 <p>收货人：${address.receiverName!''}</p>

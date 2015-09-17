@@ -572,15 +572,20 @@ public class TdGoodsController {
     public Map<String,Object> goodsBeforIncart(Long id,Long quantity,HttpServletRequest req)
     {
     	Map<String,Object> res =new HashMap<>();
-    	if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
-    	{
-    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
     	
 	    	if(null == id)
 	    	{
 	    		res.put("msg","该商品不存在！");
 	    		return res;
 	    	}
+	    	if(null ==quantity)
+	    	{
+	    		quantity =1L;
+	    	}
+	    	
+	    	if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
+	    	{
+	    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
 	    	
 	//    	List<TdDistributorGoods> disGoods = tdDistributorGoodsService.findByGoodsId(id);
 	    	TdDistributorGoods distributorGoods = TdDistributorService.findByIdAndGoodId(disId, id);
@@ -592,12 +597,14 @@ public class TdGoodsController {
 	    		return res;
 	    	}
 	    	
-	    	if(null ==quantity)
-	    	{
-	    		quantity =1L;
-	    	}
-	    	
 	    	if(quantity > distributorGoods.getNumber())
+	    	{
+	    		res.put("msg", "本超市库存不足！");
+	    		return res;
+	    	}
+    	}else{
+    		TdGoods goods = tdGoodsService.findById(id);
+    		if(quantity > goods.getLeftNumber())
 	    	{
 	    		res.put("msg", "本超市库存不足！");
 	    		return res;

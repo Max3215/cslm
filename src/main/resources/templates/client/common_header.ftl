@@ -13,7 +13,7 @@
                 <a href="/cart">我的购物车<span>丨</span></a>
                 <a href="/user">超市会员<span>丨</span></a>
                 <a href="/">客户服务<span>丨</span></a>
-                <a href="/user/recent/list">我的收藏</a>
+                <a href="/user/collect/list">我的收藏</a>
             </menu>
             <div class="clear"></div>
         </div>
