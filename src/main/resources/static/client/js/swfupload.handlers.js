@@ -8,7 +8,7 @@ $(function () {
         sendurl: null, //发送地址
         filetypes: "*.jpg;*.jpge;*.png;*.gif;", //文件类型
         filesize: "1024000", //文件大小
-        btntext: "更换头像", //上传按钮的文字
+        btntext: "上传营业执照", //上传按钮的文字
         btnwidth: 80, //上传按钮的宽度
         btnheight: 28, //上传按钮的高度
         flashurl: null //FLASH上传控件相对地址
@@ -41,7 +41,7 @@ $(function () {
             file_size_limit: p.filesize, //文件大小
             file_types: p.filetypes, //文件类型
             file_types_description: "JPG Images",
-            file_upload_limit: "0", //一次能上传的文件数量
+            file_upload_limit: "1", //一次能上传的文件数量
 
             file_queue_error_handler: fileQueueError,
             file_dialog_complete_handler: fileDialogComplete,
@@ -236,6 +236,8 @@ function uploadProgress(file, bytesLoaded) {
 //上传被终止或者没有成功完成时触发
 function uploadError(file, errorCode, message) {
     var progress;
+    console.debug(file)
+    console.debug(errorCode)
     try {
         switch (errorCode) {
             case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:

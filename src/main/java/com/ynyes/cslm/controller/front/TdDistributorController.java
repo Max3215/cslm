@@ -474,9 +474,10 @@ public class TdDistributorController {
 	public String distributorSave(TdDistributor tdDistributor,HttpServletRequest req,ModelMap map)
 	{
 		tdCommonService.setHeader(map, req);
+		tdDistributor.setVirtualMoney(new Double(0));
 		TdDistributorService.save(tdDistributor);
 		
-		return "";
+		return "redirect:/";
 	}
 	
 	/**

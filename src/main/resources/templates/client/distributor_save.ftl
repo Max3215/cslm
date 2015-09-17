@@ -48,7 +48,26 @@ $(document).ready(function(){
     },function(){
         $(this).next().hide();
     })
+    
+     //初始化上传控件
+    $(".upload-img").each(function () {
+        $(this).InitSWFUpload({ 
+            sendurl: "/client/upload", 
+            flashurl: "/mag/js/swfupload.swf"
+        });
+    });
+    
+    //（缩略图）
+    var txtPic = $("#txtImgUrl").val();
+    if (txtPic == "" || txtPic == null) {
+        $(".thumb_ImgUrl_show").hide();
+    }
+    else {
+        $(".thumb_ImgUrl_show").html("<ul><li><div class='img-box1'><img src='" + txtPic + "' bigsrc='" + txtPic + "' /></div></li></ul>");
+        $(".thumb_ImgUrl_show").show();
+    }
 	
+	<!--
 	$(".upload-show360").each(function () {
         $(this).InitSWFUpload_show360({ 
             btntext: "上传营业执照", 
@@ -62,7 +81,14 @@ $(document).ready(function(){
             filetypes: "*.jpg;*.jpge;*.png;*.gif;" 
         });
     });
-	
+    -->
+	$("#pcd").citySelect({
+        nodata:"none",
+        <#if diy_site?? && diy_site.province??>prov: "${diy_site.province!''}",</#if>
+        <#if diy_site?? && diy_site.city??>city: "${diy_site.city!''}",</#if>
+        <#if diy_site?? && diy_site.disctrict??>dist: "${diy_site.disctrict!''}",</#if>
+        required:false
+    });
 	
 })
 
@@ -170,6 +196,17 @@ $(document).ready(function(){
 				<tr>
 				    <th></th>
 				    <td>
+                        <div class="upload-box upload-img"></div>
+                        <div class="photo-list thumb_ImgUrl_show">
+                            <ul>
+                                <li>
+                                    <div class="img-box1"></div>
+                                </li>
+                            </ul>
+                        </div>
+                        <span class="Validform_checktip"></span>
+				        
+				        <#--
 				        <div class="upload-box upload-show360"></div>
                         <div class="photo-list_show360">
                             <ul>
@@ -188,6 +225,7 @@ $(document).ready(function(){
                                 </#if>
                             </ul>
                         </div>
+                            -->
 				    </td>
 				</tr>
 				<tr>

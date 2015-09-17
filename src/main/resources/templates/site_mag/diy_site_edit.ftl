@@ -21,9 +21,9 @@ $(function () {
     
     $("#address").citySelect({
         nodata:"none",
-        <#if address?? && address.province??>prov: "${address.province!''}",</#if>
-        <#if address?? && address.city??>city: "${address.city!''}",</#if>
-        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
+        <#if diy_site?? && diy_site.province??>prov: "${diy_site.province!''}",</#if>
+        <#if diy_site?? && diy_site.city??>city: "${diy_site.city!''}",</#if>
+        <#if diy_site?? && diy_site.disctrict??>dist: "${diy_site.disctrict!''}",</#if>
         required:false
     });
     
@@ -96,6 +96,7 @@ $(function () {
   <dl>
     <dt>分销商名称</dt>
     <dd>
+        <input type="hidden" name="id"  value="<#if diy_site??>${diy_site.id?c}</#if>">
         <input name="title" type="text" value="<#if diy_site??>${diy_site.title!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
         <span class="Validform_checktip">*分销商名称</span>
     </dd>
@@ -133,6 +134,13 @@ $(function () {
     <dd>
         <input name="virtualAccount" type="text" value="<#if diy_site??>${diy_site.virtualAccount!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
         <span class="Validform_checktip">*虚拟账号</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>虚拟账号余额</dt>
+    <dd>
+        <input name="virtualMoney" type="text" value="<#if diy_site??>${diy_site.virtualMoney?string("0.00")}</#if>" class="input normal" sucmsg=" "> 
+        <span class="Validform_checktip">*账号余额</span>
     </dd>
   </dl>
   <dl>

@@ -86,11 +86,11 @@ function submitAddress()
 {
     var receiverName = $("#receiverName").val();
   
-  //  var prov = $("#prov").val();
-  //  var city = $("#city").val();
-  //  var dist = $("#dist").val();
+    var prov = $("#prov").val();
+    var city = $("#city").val();
+    var dist = $("#dist").val();
     var detail = $("#detailAddress").val();
-  //  var postcode = $("#postcode").val();
+    var postcode = $("#postcode").val();
     
     var mobile = $("#mobile").val();
 //    var receiverCarcode = $("#receiverCarcode").val();     //增加车牌 by zhangji
@@ -136,11 +136,11 @@ function submitAddress()
         url:"/user/address/ajax/add",
         data:{
             "receiverName": receiverName, 
-         //   "prov": prov,
-         //   "city": city,
-         //   "dist": dist,
+            "prov": prov,
+            "city": city,
+            "dist": dist,
             "detail": detail,
-         //   "postcode": postcode,
+            "postcode": postcode,
             "mobile": mobile, 
 //            "receiverCarcode":receiverCarcode,     //新加车牌  by zhangji
 //            "receiverCartype":receiverCartype       //新加车型

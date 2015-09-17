@@ -287,10 +287,12 @@ public class TdCartController {
         }
 
         if (null != id) {
-            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+            TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
             TdGoods goods = tdGoodsService.findOne(id);
+            
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
+                
                 if(quantity < goods.getLeftNumber()){
                 	cartGoods.setQuantity(quantity + 1);
                 }
@@ -314,7 +316,8 @@ public class TdCartController {
         }
 
         if (null != id) {
-            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+//            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+        	TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
 
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();

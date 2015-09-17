@@ -19,9 +19,9 @@
               <td width="400" style="text-align:left;"><a href="/goods/${cg.goodsId!''}">${cg.goodsTitle!''}</a></td>
               <td class="red">￥${cg.price?string("0.00")}</td>
               <td width="150" class="num">
-                <a href="javascript:minusNum(${cg.id?c});"> - </a>
+                <a href="javascript:minusNum(${cg.goodsId});"> - </a>
                 <input class="text" type="text" value="${cg.quantity!''}" />
-                <a href="javascript:addNum(${cg.id?c});"> + </a>
+                <a href="javascript:addNum(${cg.goodsId});"> + </a>
               </td>
               <td class="red">￥${(cg.price*cg.quantity)?string("0.00")}</td>
               <td><a class="del" href="javascript:delCartItem(${cg.id?c});">删除</a></td>

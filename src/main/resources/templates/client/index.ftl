@@ -12,7 +12,7 @@
 
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
-
+<link href="" rel="shortcut icon">
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
@@ -178,12 +178,12 @@ $(document).ready(function(){
 			<a href="#" class="a1 sel">首页</a>
             -->
 			<div class="right_kx">
-				<h3>超市快讯<a href="#">更多></a></h3>
+				<h3>超市快讯<!--<a href="#">更多></a>--></h3>
 				<ul>
 				    <#if news_page??>
 				        <#list news_page.content as item>
 				            <#if item_index < 5 >
-					            <li><a target="_blank" href="/info/content/${item.id}?mid=12&catId=${item.categoryId}">${item.title!''}</a></li>
+					            <li><a target="_blank" href="/info/content/${item.id}?mid=12">${item.title!''}</a></li>
 					        </#if>
 					    </#list>
 					</#if>
@@ -251,7 +251,7 @@ $(document).ready(function(){
 			         <#list recommed_index_page.content as item>
 			             <#if item_index < 8 >
             				<li>
-            					<a href="/goods/${item.id?c}">
+            					<a href="/goods/${item.id?c}" target="_blank">
             						<img src="${item.coverImageUri!''}" width="130px" height="130px">
             						<p class="p1">￥${item.salePrice?string('0.00')}</p>
             						<p class="p2">${item.title!""}</p>

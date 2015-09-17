@@ -40,7 +40,6 @@ function addNum(id)
 // 商品数量减1
 function minusNum(id)
 {
-	console.debug("111")
     $.ajax({
         type:"post",
         url:"/cart/numberMinus",

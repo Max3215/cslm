@@ -1083,7 +1083,14 @@ menu.leftpart a { display:inline-block; white-space:nowrap; font-size:12px; marg
 
 
 
-
+/*====== 添加地址弹出框 ========*/
+.add_address{width: 460px; border: solid 5px #b7b7b7;background: #fff;padding: 20px;box-shadow: 0 0 20px #000;position: fixed;z-index: 10;top:20%;left:40%;display: none;}
+.add_address table{}
+.add_address th{font-weight: 400px;text-align: right;padding-bottom: 20px;}
+.add_address td{padding-bottom: 20px;}
+.add_address td .text{height: 30px;border:1px solid #b7b7b7;line-height: 30px;width: 150px;}
+.add_address td select{height: 30px;width: 80px;}
+.add_address td .sub{width: 100px;height: 30px;color:#fff;text-align: center;line-height: 30px;font-size: 16px;background:#39bee9;}
 
 
 

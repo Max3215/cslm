@@ -23,7 +23,7 @@
 $(document).ready(function(){
     
     $("#form1").Validform({
-        tiptype: 1
+         tiptype: 1
     });
     
   $(".click_a").click(function(){
@@ -43,6 +43,15 @@ $(document).ready(function(){
   },function(){
     $(this).next().hide();
   })
+  
+  $("#pcd").citySelect({
+        nodata:"none",
+        <#if address?? && address.province??>prov: "${address.province!''}",</#if>
+        <#if address?? && address.city??>city: "${address.city!''}",</#if>
+        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
+        required:false
+    }); 
+  
 })
 </script>
 </head>
@@ -68,50 +77,59 @@ $(document).ready(function(){
             <tr>
                 <th width="140">
                   <p>收货地址</p>
-                  <a class="red" href="javascript:toggleNewAddress();">新增收货地址</a>
+                  <a class="red" href="javascriput:viod(0);" onclick="$('.add_address').fadeIn();">新增收货地址</a>
                 </th>
                 <td>
-                        <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
-                            <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择收货地址!"/>
-                            <#list user.shippingAddressList as address>
-                                 <a  href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});">
-                                    <p>收货人：${address.receiverName!''}</p>
-                                    <p class="p1">收货地址：${address.province!''}${address.city!''}${address.disctrict!''}${address.detailAddress!''}</p>
-                                    <p>电话：${address.receiverMobile!''}</p>
-                                 </a>
-                            </#list>                                                 
-                         </#if>
+                    <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
+                        <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择收货地址!"/>
+                        <#list user.shippingAddressList as address>
+                             <a  href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});">
+                                <p>收货人：${address.receiverName!''}</p>
+                                <p class="p1">收货地址：${address.province!''}${address.city!''}${address.disctrict!''}${address.detailAddress!''}</p>
+                                <p>电话：${address.receiverMobile!''}</p>
+                             </a>
+                        </#list>                                                 
+                     </#if>
                     <div class="clear"></div>
                 </td>
             </tr>
         </table>
-        <div id="addressForm" class="hide">
-            <table class="mymember_address">
-                  <tbody>
-                  <tr>
-                    <th>*姓名：</th>
-                    <td>
-                        <input class="mytext" id="receiverName" value="" type="text">
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>*手机：</th>
-                    <td>
-                        <input class="mytext" id="mobile" value="" type="text">
-                    </td>
-                  </tr>
-                  <tr>
-                  <th>*地址：</th>
+        <div class="add_address">
+              <table>
+                <tr>
+                  <th>收货人姓名：</th>
+                  <td><input type="text" class="text" id="receiverName"></td>
+                </tr>
+                <tr>
+                  <th>地区：</th>
                   <td>
-                  <input class="mytext" id="detailAddress"  value="" type="text"/>
+                    <div id="pcd">
+                        <select name="province" class="prov" style="width: 100px;" datatype="*"></select>
+                        <select name="city" class="city" style="width: 100px;" datatype="*"></select>
+                        <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10"></select>
+                     </div>
                   </td>
-                  </tr>
-                  <tr>
-                    <th></th>
-                    <td><input onclick="javascript:submitAddress();" class="mysub" type="button" value="保存"></td>
-                  </tr>
-                </tbody>
-                </table>
+                </tr>
+                <tr>
+                  <th>街道地址：</th>
+                  <td><input type="text" class="text" style="width:300px;" id="detailAddress"></td>
+                </tr>
+                <tr>
+                  <th>邮政编码：</th>
+                  <td><input type="text" class="text" id="postcode"></td>
+                </tr>
+                <tr>
+                  <th>手机号码：</th>
+                  <td><input type="text" class="text" id="mobile"></td>
+                </tr>
+                <tr>
+                  <th></th>
+                  <td>
+                    <input type="button" class="sub" value="保存" onclick="submitAddress();">
+                    <input type="button" class="sub" value="取消" onclick="$('.add_address').fadeOut();">
+                  </td>
+                </tr>
+              </table>
             </div>
     <div class="clear h20"></div>
     <div class="clear h20"></div>
@@ -122,7 +140,7 @@ $(document).ready(function(){
            <#list pay_type_list_bank as pay_type>
                <div class="pay_style">
                     <input type="radio" name="payTypeId" value="${pay_type.id?c}"/>
-                        <span><img src="${pay_type.coverImageUri}" width="148" /></span>
+                     <span><img src="${pay_type.coverImageUri}" width="148" /></span>
                </div>
             </#list>
         </#if>
