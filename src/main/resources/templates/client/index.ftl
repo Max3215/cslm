@@ -117,10 +117,10 @@ $(document).ready(function(){
 						<#if ("disc_"+city_index+"_list")?eval??>
 						      <#list ("disc_"+city_index+"_list")?eval as disc>
             						<td>
-            							<p>${disc}</p>
+            							<p>${disc!''}</p>
             							<#if ("distributor_"+city_index+disc_index+"_list")?eval??>
             							     <#list ("distributor_"+city_index+disc_index+"_list")?eval as dis>
-            							         <a href="javascript:;" onclick="chooseDistributor(${dis.id?c})">${dis.title}</a>
+            							         <a href="javascript:;" onclick="chooseDistributor(${dis.id?c})">${dis.title!''}</a>
             							     </#list>
             							 </#if>
             						</td>

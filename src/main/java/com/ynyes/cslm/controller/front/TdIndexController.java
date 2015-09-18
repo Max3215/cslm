@@ -66,9 +66,9 @@ public class TdIndexController {
     public String index(HttpServletRequest req, Device device, ModelMap map) {
         
         // 触屏
-        if (device.isMobile() || device.isTablet()) {
-            return "redirect:/touch/";
-        }
+//        if (device.isMobile() || device.isTablet()) {
+//            return "redirect:/touch/";
+//        }
         
         tdCommonService.setHeader(map, req);
 
@@ -90,7 +90,7 @@ public class TdIndexController {
             }
         }
 
-        // 养车宝典
+        // 
         if (null != catList && catList.size() > 0) {
 
             map.addAttribute("curing_page", tdArticleService
@@ -199,22 +199,22 @@ public class TdIndexController {
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
         
-        /*
-         * 团购相关产品 
-         */
-        // 已经结束团购
-        map.addAttribute("tuan_prev_page", tdGoodsService
-                .findByGroupSaleEndedOrderByGroupSaleStartTimeAsc(0, 5));
-        // 下期预告团购
-        map.addAttribute("tuan_next_page", tdGoodsService
-                .findByGroupSaleGoingToStartOrderByGroupSaleStartTimeAsc(0, 5));
-        // 正在进行团购
-        map.addAttribute("tuan_cur_page", tdGoodsService
-                .findByGroupSalingOrderByGroupSaleStartTimeAsc(0, 5));
-        
-        // 正在进行百人团购
-        map.addAttribute("baituan_cur_page", tdGoodsService
-                .findByGroupSalingHundredOrderByGroupSaleStartTimeAsc(0, 6));
+//        /*
+//         * 团购相关产品 
+//         */
+//        // 已经结束团购
+//        map.addAttribute("tuan_prev_page", tdGoodsService
+//                .findByGroupSaleEndedOrderByGroupSaleStartTimeAsc(0, 5));
+//        // 下期预告团购
+//        map.addAttribute("tuan_next_page", tdGoodsService
+//                .findByGroupSaleGoingToStartOrderByGroupSaleStartTimeAsc(0, 5));
+//        // 正在进行团购
+//        map.addAttribute("tuan_cur_page", tdGoodsService
+//                .findByGroupSalingOrderByGroupSaleStartTimeAsc(0, 5));
+//        
+//        // 正在进行百人团购
+//        map.addAttribute("baituan_cur_page", tdGoodsService
+//                .findByGroupSalingHundredOrderByGroupSaleStartTimeAsc(0, 6));
 
 
 //         已经结束秒杀
@@ -231,77 +231,77 @@ public class TdIndexController {
          * 秒杀相关产品
          */
         // 8点
-        Calendar cal = Calendar.getInstance();
-        
-        cal.set(Calendar.HOUR_OF_DAY, 10);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        
-        map.addAttribute("miao_cur_8_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        map.addAttribute("miao_10_leftnumber", countleft(tdGoodsService.findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime())));
-        
-        cal.set(Calendar.HOUR_OF_DAY, 14);
-        
-        map.addAttribute("miao_cur_15_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        map.addAttribute("miao_14_leftnumber", countleft(tdGoodsService.findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime())));
-        
-        cal.set(Calendar.HOUR_OF_DAY, 20);
-        
-        map.addAttribute("miao_cur_23_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        map.addAttribute("miao_20_leftnumber", countleft(tdGoodsService.findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime())));
-        
-        cal.add(Calendar.DATE, 1);
-        cal.set(Calendar.HOUR_OF_DAY, 10);
-        
-        map.addAttribute("miao_next_8_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        
-        cal.set(Calendar.HOUR_OF_DAY, 14);
-        
-        map.addAttribute("miao_next_15_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        
-        cal.set(Calendar.HOUR_OF_DAY, 20);
-        
-        map.addAttribute("miao_next_23_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        
-        cal.add(Calendar.DATE, -2);
-        cal.set(Calendar.HOUR_OF_DAY, 10);
-        
-        map.addAttribute("miao_prev_8_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        
-        cal.set(Calendar.HOUR_OF_DAY, 14);
-       
-        map.addAttribute("miao_prev_15_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
-        
-        cal.set(Calendar.HOUR_OF_DAY, 20);
-        
-        map.addAttribute("miao_prev_23_page", tdGoodsService
-                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        Calendar cal = Calendar.getInstance();
+//        
+//        cal.set(Calendar.HOUR_OF_DAY, 10);
+//        cal.set(Calendar.MINUTE, 0);
+//        cal.set(Calendar.SECOND, 0);
+//        cal.set(Calendar.MILLISECOND, 0);
+//        
+//        map.addAttribute("miao_cur_8_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        map.addAttribute("miao_10_leftnumber", countleft(tdGoodsService.findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime())));
+//        
+//        cal.set(Calendar.HOUR_OF_DAY, 14);
+//        
+//        map.addAttribute("miao_cur_15_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        map.addAttribute("miao_14_leftnumber", countleft(tdGoodsService.findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime())));
+//        
+//        cal.set(Calendar.HOUR_OF_DAY, 20);
+//        
+//        map.addAttribute("miao_cur_23_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        map.addAttribute("miao_20_leftnumber", countleft(tdGoodsService.findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime())));
+//        
+//        cal.add(Calendar.DATE, 1);
+//        cal.set(Calendar.HOUR_OF_DAY, 10);
+//        
+//        map.addAttribute("miao_next_8_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        
+//        cal.set(Calendar.HOUR_OF_DAY, 14);
+//        
+//        map.addAttribute("miao_next_15_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        
+//        cal.set(Calendar.HOUR_OF_DAY, 20);
+//        
+//        map.addAttribute("miao_next_23_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        
+//        cal.add(Calendar.DATE, -2);
+//        cal.set(Calendar.HOUR_OF_DAY, 10);
+//        
+//        map.addAttribute("miao_prev_8_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        
+//        cal.set(Calendar.HOUR_OF_DAY, 14);
+//       
+//        map.addAttribute("miao_prev_15_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
+//        
+//        cal.set(Calendar.HOUR_OF_DAY, 20);
+//        
+//        map.addAttribute("miao_prev_23_page", tdGoodsService
+//                .findByIsFlashSaleTrueAndFlashSaleStartTimeOrderByFlashSaleStartTimeAsc(cal.getTime(), 0, 5));
         
         // 首页推荐商品
         map.addAttribute("index_recommend_goods_page", tdGoodsService
                 .findByIsRecommendIndexTrueAndIsOnSaleTrueOrderByIdDesc(0, 4));
 
-        // 自驾游
-        TdProductCategory pCat = tdProductCategoryService.findByTitle("自驾游");
-
-        if (null != pCat) {
-            map.addAttribute(
-                    "self_drive_product_category", pCat);
-            map.addAttribute(
-                    "self_drive_goods_page",
-                    tdGoodsService
-                            .findByCategoryIdTreeContainingAndIsOnSaleTrueOrderBySortIdAsc(
-                                    pCat.getId(), 0, 5));
-        }
+//        // 自驾游
+//        TdProductCategory pCat = tdProductCategoryService.findByTitle("自驾游");
+//
+//        if (null != pCat) {
+//            map.addAttribute(
+//                    "self_drive_product_category", pCat);
+//            map.addAttribute(
+//                    "self_drive_goods_page",
+//                    tdGoodsService
+//                            .findByCategoryIdTreeContainingAndIsOnSaleTrueOrderBySortIdAsc(
+//                                    pCat.getId(), 0, 5));
+//        }
 
         return "/client/index";
     }

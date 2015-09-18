@@ -270,7 +270,9 @@ public class TdManagerOrderController {
             {
                 if (null != id)
                 {
-                    map.addAttribute("diy_site", TdDistributorService.findOne(id));
+                    map.addAttribute("diy_site", TdDistributorService.findById(id));
+                    TdDistributor dis = TdDistributorService.findById(id);
+                    System.err.println(dis);
                 }
                 
                 return "/site_mag/diy_site_edit";

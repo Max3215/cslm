@@ -35,6 +35,7 @@ import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProductService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSiteService;
+import com.ynyes.cslm.service.TdTagService;
 import com.ynyes.cslm.service.TdWarehouseService;
 import com.ynyes.cslm.util.SiteMagConstant;
 
@@ -83,6 +84,9 @@ public class TdManagerGoodsController {
     
     @Autowired
     TdSiteService tdSiteService;
+    
+    @Autowired
+    TdTagService tagService;
 
     @RequestMapping(value = "/edit/parameter/{categoryId}", method = RequestMethod.POST)
     public String parameter(@PathVariable Long categoryId, ModelMap map,
@@ -611,6 +615,8 @@ public class TdManagerGoodsController {
         map.addAttribute("site_list", tdSiteService.findAll());
 
         map.addAttribute("provider_list", tdProviderService.findAll());
+        
+        map.addAttribute("tag_list", tagService.findByTypeId(1L));
 
         if (null != id) {
             TdGoods tdGoods = tdGoodsService.findOne(id);

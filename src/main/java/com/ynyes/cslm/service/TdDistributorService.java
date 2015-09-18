@@ -87,6 +87,14 @@ public class TdDistributorService {
         return repository.findByIdAndIsEnableTrue(id);
     }
     
+    public TdDistributor findById(Long id)
+    {
+    	if(null == id){
+    		return null;
+    	}
+    	return repository.findOne(id);
+    }
+    
     public List<TdDistributor> findBydisctrict(String disctrict){
     	return repository.findByDisctrictAndIsEnableTrue(disctrict);
     }

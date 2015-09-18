@@ -475,10 +475,12 @@ public class TdDistributorController {
 	{
 		tdCommonService.setHeader(map, req);
 		tdDistributor.setVirtualMoney(new Double(0));
+		tdDistributor.setIsEnable(false);
 		TdDistributorService.save(tdDistributor);
 		
 		return "redirect:/";
 	}
+	
 	
 	/**
 	 * 验证登录名和虚拟账号
@@ -529,6 +531,7 @@ public class TdDistributorController {
 			 }
 		 }
 		 res.put("info", "通过信息验证！");
+		 res.put("status", "y");
 		 return res;
 	}
 	

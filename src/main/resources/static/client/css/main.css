@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-/*主体css document*/
+/* 主体css document*/
 
 
 .main_top{width:100%;height: 29px;background: #eeeeee;border-bottom:1px solid #d5d3d3;line-height: 30px;}
@@ -11,7 +11,7 @@
 .main_top .top_menu{float: right;clear: none !important;clear:both;}
 .main_top .top_menu a{padding: 0;}
 
-/*logo 搜索框部分*/
+/* logo 搜索框部分*/
 .logo{display: block;width: 142px;height: 35px;float: left;padding-top: 30px;}
 .choose_mar{width: 150px;height: 25px;float: left;padding: 35px 30px 30px 30px;}
 .choose_mar .click_a{width: 128px;height: 23px;border:1px solid #8e8e8e;border-radius:3px;-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;-ms-border-radius:3px;line-height: 25px;color:#8e8e8e;font-size: 12px;background: url(../images/arrow01.png) no-repeat 128px center;display: block;padding: 0 10px;}
@@ -46,7 +46,7 @@
 .gu_car a span{display: block;width: 34px;height: 34px;background: url(../images/car01.png) no-repeat;position: absolute;top:0;right:0;color:#fff;text-align: center;line-height: 34px;font-size: 16px;}
 
 
-/*左边楼层浮动*/
+/* 左边楼层浮动*/
 .index_floor {display:none;z-index:80;position:fixed;_position:absolute;left:5px;top:30%;}
 .index_floor a {display:block;font-size:12px;width:100px;text-align: center;line-height:25px;height:26px;overflow:hidden;background: #39bee9;}
 .index_floor a span {display:block; width:100%;color:#fff;border-bottom:1px solid #fff;top:0;}
@@ -65,7 +65,7 @@
     transition: all 0.2s ease-in-out 0.01s;}
 
 
-/*右边楼层浮动*/
+/* 右边楼层浮动*/
 .float_box{width: 24px;background: #39bee9;z-index:80;position:fixed;_position:absolute;right:5px;top:20%;height:auto;padding: 0 3px;}
 .float_box .user{display: block;width: 17px;height: 21px;background: url(../images/user.png) no-repeat;margin: 30px 3px 0px 3px;border-bottom:1px solid #75d2f0;padding-bottom: 20px;}
 .float_box .car{display: block;width: 100%;height: 90px;background: url(../images/car02.png) no-repeat center top;margin-top: 30px;color:#fff;padding-top:21px;text-align: center;margin-bottom: 70px;}
@@ -79,7 +79,7 @@
 .float_box .go_top{display: block;font-size: 12px;color:#fff;padding-top: 15px;background: url(../images/top.png) no-repeat center top;margin: 20px 0 40px 0;}
 
 
-/*导航部分*/
+/* 导航部分*/
 .nav_box{width: 100%;height: 40px;background: #2f4047;margin-top: 10px;_height:40px;z-index: 20;}
 .nav_box .a1{color:#fff;line-height: 40px;display: inline-block;_display: inline-block;float: left;padding: 0 20px;margin: 0 10px;}
 .nav_box .a1:hover,.nav_box .a1.sel{background: #39bee9;}
@@ -113,7 +113,7 @@
 .right_kx .ewm p{float:right;text-align: center;color:#8e8e8e;width: 68px;}
 
 
-/*banner*/
+/* banner*/
 #banner_box{width: 100%;overflow: hidden;height: 400px;text-align: center;}
 #banner_sum{display: block;width: 100%;margin: 0 auto;height: 550px;}
 #banner_sum li{  position: absolute;left: 50%;top: 0;display:none;margin-left: -960px;}
@@ -131,7 +131,7 @@
 #n_banner_num a{float: left;width: 18px;height: 18px;margin: 0 5px;cursor: pointer;background: url(../images/print.png) no-repeat center center;text-indent: -9999px;}
 #n_banner_num a.sel{background: url(../images/print_sel.png) no-repeat center center;}
 
-/*首页内容*/
+/* 首页内容*/
 .index_tj{padding-top:50px;}
 .index_tj h3{font-size: 18px;color:#252525;font-weight: 400;padding-bottom: 10px;}
 .left_pic{float: left;border:1px solid #d5d3d3;  width: 402px;height: 399px;
@@ -233,7 +233,7 @@
 .left_eight .b_pic:hover{right:6px;}
 
 
-/*底部*/
+/* 底部*/
 .slogen{padding:26px 18px;border:1px solid #d5d3d3;margin-top: 40px;}
 .slogen span{display: inline-block;font-size: 18px;color:#252525;line-height: 50px;width: 220px;text-align: right;padding-right: 60px;}
 .slogen span.pr0{padding-right: 0;}
@@ -254,7 +254,7 @@
 .copyright{color:#8e8e8e;text-align: center;padding: 12px 0 30px 0;}
 
 
-/*商品列表页*/
+/* 商品列表页*/
 .nav_down.dis_none{display: none;}
 .bread_nav{padding: 14px 0;}
 .bread_nav p,.bread_nav p a{color:#8e8e8e;}
@@ -316,7 +316,7 @@
 .right_hot li .price span{color: #8e8e8e;text-decoration: line-through;font-size: 12px;position: absolute;top:15px;right:0;font-weight: normal;}
 
 
-/*商品详情页*/
+/* 商品详情页*/
 .pro_box{padding: 10px;}
 .proinfo_left{width: 500px;float: left;}
 .proinfo_left .propic_main{width: 498px;height: 498px;border:1px solid #e4e4e4;overflow: hidden;}
@@ -416,7 +416,7 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 
 
 
-/*商家入驻*/
+/* 商家入驻*/
 .apply{width: 690px;margin:0 auto;}
 .apply h3{color:#2f4047;font-size:24px;font-weight: 400;text-align: center;padding:30px 0;}
 .apply table{width: 100%;vertical-align: top;}
@@ -429,7 +429,7 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 .apply td .sub{width: 300px;height: 60px;background: #ff5b7d;font-size: 24px;height: 60px;text-align: center;color:white;}
 .apply td .sub:hover{background:#39bee9;}
 
-/*客户服务*/
+/* 客户服务*/
 .service{}
 .service h3{font-size: 18px;color:#2f4047;font-weight: 400;padding-bottom: 10px;border-bottom: 1px solid #d5d3d3;}
 .service .left_list{width: 122px;float: left;}

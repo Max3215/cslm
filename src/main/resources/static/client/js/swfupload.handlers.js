@@ -236,8 +236,6 @@ function uploadProgress(file, bytesLoaded) {
 //上传被终止或者没有成功完成时触发
 function uploadError(file, errorCode, message) {
     var progress;
-    console.debug(file)
-    console.debug(errorCode)
     try {
         switch (errorCode) {
             case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
@@ -286,6 +284,7 @@ function uploadSuccess(file, serverData) {
                 $(this.customSettings.upload_target).siblings(".upload-swfpath").val(jsonstr.swfpath);
                 $(this.customSettings.upload_target).siblings(".upload-size").val(jsonstr.size);
                 $(this.customSettings.upload_target).siblings(".upload-ext").val(jsonstr.ext);
+
                 //封面图片（缩略图） 赋值并显示                       
                 $(this.customSettings.upload_target).siblings(".thumb_ImgUrl_show").html("<ul><li><div class='img-box1'><img src='" + jsonstr.path + "' bigsrc='" + jsonstr.path + "' /></div></li></ul>");
                 $(this.customSettings.upload_target).siblings(".thumb_ImgUrl_show").show();

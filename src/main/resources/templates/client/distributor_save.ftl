@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -14,9 +14,9 @@
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 
 <script src="/client/js/jquery-1.9.1.min.js"></script>
+<script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
-<script src="/client/js/jquery.diysiteselect.js"></script>
 <!--<script src="/client/js/city.min.js"></script>-->
 
 <script type="text/javascript" src="/client/js/swfupload.js"></script>
@@ -67,22 +67,7 @@ $(document).ready(function(){
         $(".thumb_ImgUrl_show").show();
     }
 	
-	<!--
-	$(".upload-show360").each(function () {
-        $(this).InitSWFUpload_show360({ 
-            btntext: "上传营业执照", 
-            btnwidth: 90, 
-            single: false, 
-            water: true, 
-            thumbnail: true, 
-            filesize: "5120", 
-            sendurl: "/client/upload", 
-            flashurl: "/mag/js/swfupload.swf", 
-            filetypes: "*.jpg;*.jpge;*.png;*.gif;" 
-        });
-    });
-    -->
-	$("#pcd").citySelect({
+	$("#address").citySelect({
         nodata:"none",
         <#if diy_site?? && diy_site.province??>prov: "${diy_site.province!''}",</#if>
         <#if diy_site?? && diy_site.city??>city: "${diy_site.city!''}",</#if>
@@ -153,7 +138,7 @@ $(document).ready(function(){
 				<tr>
 					<th>所属地区：</th>
 					<td>
-					   <div id="pcd">
+					   <div id="address">
     					   <select name="province" class="prov" style="width: 100px;" datatype="*"></select>
                            <select name="city" class="city" style="width: 100px;" datatype="*"></select>
                            <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10"></select>
@@ -190,17 +175,18 @@ $(document).ready(function(){
 				<tr>
 					<th>超市介绍：</th>
 					<td>
-						<textarea></textarea>
+						<textarea name="info"></textarea>
 					</td>
 				</tr>
 				<tr>
 				    <th></th>
 				    <td>
+				        <input id="txtImgUrl" style="display:none" name="imageUri" type="text" datatype="*" value="<#if diy_site?? && diy_site.imageUri??>${diy_site.imageUri!""}</#if>" class="input normal upload-path">
                         <div class="upload-box upload-img"></div>
                         <div class="photo-list thumb_ImgUrl_show">
                             <ul>
                                 <li>
-                                    <div class="img-box1"></div>
+                                    <div class="img-box1" ></div>
                                 </li>
                             </ul>
                         </div>
@@ -234,7 +220,7 @@ $(document).ready(function(){
 				</tr>
 			</table>
 		</section>
-	</div
+	</div>
 	</form>
 
 
