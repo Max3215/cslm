@@ -84,7 +84,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <#if order.orderGoodsList??>
                                     <#list order.orderGoodsList as og>  
                                         <#if og_index < 1>
-                                            <a href="/goods/${og.goodsId}"><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" align="left" /></a>
+                                            <a href="/goods/${og.goodsId}"><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
                                         </#if>
                                     </#list>
                                 </#if>
@@ -105,8 +105,13 @@ DD_belatedPNG.fix('.,img,background');
                                        <p>待发货</p>
                                 <#elseif order.statusId?? &&  order.statusId==4>
                                        <p>待收货</p>
+                                <#elseif order.statusId?? &&  order.statusId==5>
+                                       <p>待评价</p>
                                 <#elseif order.statusId?? &&  order.statusId==6>
                                        <p>已完成</p>
+                                <#elseif order.statusId?? &&  order.statusId==7>
+                                       <p>待收货</p>
+                                       
                                 </#if>
                             </td>
                             <td class="td003">

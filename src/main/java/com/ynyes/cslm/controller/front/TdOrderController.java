@@ -825,8 +825,7 @@ public class TdOrderController extends AbstractPaytypeController{
             Long couponId, // 优惠券ID
             HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
-        Long tdDistributorId= (Long)req.getSession().getAttribute("distributorId");
-        
+       
         if (null == username) {
             return "redirect:/login";
         }
@@ -837,11 +836,8 @@ public class TdOrderController extends AbstractPaytypeController{
             return "/client/error_404";
         }
 
-        if(null == tdDistributorId)
-        {
-        	tdDistributorId = 1L;
-        }
-        TdDistributor distributor = TdDistributorService.findOne(tdDistributorId);
+        
+        
         
         double payTypeFee = 0.0;
         double deliveryTypeFee = 0.0;
@@ -1108,6 +1104,18 @@ public class TdOrderController extends AbstractPaytypeController{
         // 网站基本信息
         TdSetting setting = tdSettingService.findTopBy();
        
+        // 判断是否选择超市
+        if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
+        {
+    	   Long tdDistributorId=(Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+    	   TdDistributor dist = TdDistributorService.findOne(tdDistributorId);
+    	   
+    	   tdOrder.setShopId(dist.getId());// 添加订单超市信息
+    	   tdOrder.setShopTitle(dist.getTitle());
+        }
+        
+        TdDistributor distributor = TdDistributorService.findbyUsername(username);
+        
         //设置订单类型
 		if(1==user.getRoleId()){
 			tdOrder.setTypeId(1L);  //超市进货
@@ -1119,12 +1127,11 @@ public class TdOrderController extends AbstractPaytypeController{
 			setting.setVirtualMoney(tdOrder.getTotalPrice());
 			tdSettingService.save(setting);
 			
-			tdOrder.setSortId(3L);//待发货
+			tdOrder.setStatusId(3L);//待发货
 			
 		}else{
 			tdOrder.setTypeId(0L);
-			tdOrder.setShopId(distributor.getId());
-			tdOrder.setShopTitle(distributor.getTitle());
+			
 		}
         tdOrder = tdOrderService.save(tdOrder);
 

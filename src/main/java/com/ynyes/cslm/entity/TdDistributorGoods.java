@@ -20,34 +20,41 @@ public class TdDistributorGoods {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	//商品Id
+	// 商品Id
 	@Column
 	private Long goodsId;
 	
-	//商品标题
+	// 商品标题
 	@Column
 	private String goodsTitle;
 	
-	//商品价格
+	// 商品价格
 	@Column(scale=2)
 	private Double goodsPrice;
 	
-	//商品图片
+	// 商品图片
 	@Column
 	private String coverImageUri;
 	
-	//商品编码
+	// 商品编码
 	@Column 
 	private String code;
 	
-	//商品库存   
+	// 商品库存   
 	@Column
 	private Long number;
 	
-	//是否上架
+	// 是否上架
 	@Column
 	private Boolean isOnSale;
 	
+	//  1 待审核     2 已审核    3 审核未通过  
+	@Column
+	private Integer isAudit;
+	
+	// 是否分销
+	@Column
+	private Boolean isDistribution;
 	
 	public Long getId() {
 		return id;

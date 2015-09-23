@@ -18,7 +18,7 @@ public class SMSUtil {
         //*沙盒环境（用于应用开发调试）：restAPI.init("sandboxapp.cloopen.com", "8883");*
         //*生产环境（用户应用上线使用）：restAPI.init("app.cloopen.com", "8883");       *
         //*******************************************************************************
-        restAPI.init("sandboxapp.cloopen.com", "8883");
+//        restAPI.init("sandboxapp.cloopen.com", "8883");
 //        restAPI.init("app.cloopen.com", "8883");
         
         //******************************注释*********************************************

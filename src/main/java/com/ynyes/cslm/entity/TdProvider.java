@@ -1,14 +1,17 @@
 package com.ynyes.cslm.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 
 /**
- * 供应商
+ * 批发商
  * 
  * @author Sharon
  *
@@ -25,6 +28,26 @@ public class TdProvider {
     @Column(unique=true)
     private String title;
     
+    //登录名
+    @Column
+    private String username;
+    
+    //密码
+    @Column
+    private String password;
+    
+    //手机号
+    @Column
+    private String mobile;
+    
+    // 虚拟账户
+    @Column
+    private String virtualAccount;
+    
+    // 虚拟账号余额
+    @Column(scale=2)
+    private Double virtualMoney;
+    
     // 省
     @Column
     private String province;
@@ -40,7 +63,16 @@ public class TdProvider {
     // 排序号
     @Column
     private Long sortId;
-
+    
+    //是否启用
+    @Column
+    private Boolean isEnable;
+    
+    //超市商品
+    @Column
+    @JoinColumn(name = "providerId")
+    private List<TdProviderGoods> goodsList;
+    
     public Long getId() {
         return id;
     }
@@ -57,7 +89,23 @@ public class TdProvider {
         this.title = title;
     }
 
-    public String getProvince() {
+    public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getProvince() {
         return province;
     }
 
@@ -88,4 +136,33 @@ public class TdProvider {
     public void setSortId(Long sortId) {
         this.sortId = sortId;
     }
+
+	public List<TdProviderGoods> getGoodsList() {
+		return goodsList;
+	}
+
+	public void setGoodsList(List<TdProviderGoods> goodsList) {
+		this.goodsList = goodsList;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public Boolean getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(Boolean isEnable) {
+		this.isEnable = isEnable;
+	}
+    
+    
+    
+    
 }
+

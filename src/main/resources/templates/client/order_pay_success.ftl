@@ -48,6 +48,7 @@ $(document).ready(function(){
     <#if order??>
     <p class="fc fs30 lh40 pb10">您已成功付款 ${order.totalPrice?string('0.00')}元</p>
     <p>对方将立即收到您的付款。</p>
+    </#if>
     <#-->
     <p>如果您有未付款信息，<a class="blue" href="#">查看并继续付款</a></p>
     -->

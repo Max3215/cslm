@@ -96,7 +96,7 @@ public class TdGoods {
     @Column
     private String afterMarketService;
     
-    // 是否上架
+    // 审核/未审核
     @Column
     private Boolean isOnSale;
     
@@ -173,7 +173,7 @@ public class TdGoods {
     @Column(nullable=false, scale=2)
     private Double salePrice;
     
-    // 出厂价
+    // 批发价
     @Column(scale=2)
     private Double outFactoryPrice;
     
@@ -197,11 +197,11 @@ public class TdGoods {
     @Column
     private String warehouseTitle;
     
-    // 供应商ID
+    // 批发商ID
     @Column
     private Long providerId;
     
-    // 供应商名
+    // 批发商名
     @Column
     private String providerTitle;
 
@@ -406,7 +406,7 @@ public class TdGoods {
     @Column
     private Long totalCollects;
     
-    // 同盟店返利比例
+    // 加盟店佣金比例
     @Column(scale=2)
     private Double shopReturnRation;
     
