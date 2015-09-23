@@ -74,9 +74,9 @@ $(function () {
   <a href="/Verwalter/order/setting/diysite/list" class="back"><i></i><span>返回列表页</span></a>
   <a href="/Verwalter/center" class="home"><i></i><span>首页</span></a>
   <i class="arrow"></i>
-  <a href="/Verwalter/order/setting/diysite/list"><span>同盟店</span></a>
+  <a href="/Verwalter/order/setting/diysite/list"><span>超市</span></a>
   <i class="arrow"></i>
-  <span>编辑同盟店</span>
+  <span>编辑超市</span>
 </div>
 <div class="line10"></div>
 <!--/导航栏-->
@@ -94,7 +94,7 @@ $(function () {
 
 <div class="tab-content">
   <dl>
-    <dt>分销商名称</dt>
+    <dt>超市名称</dt>
     <dd>
         <input type="hidden" name="id"  value="<#if diy_site??>${diy_site.id?c}</#if>">
         <input name="title" type="text" value="<#if diy_site??>${diy_site.title!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
@@ -130,7 +130,7 @@ $(function () {
     </dd>
   </dl>
   <dl>
-    <dt>分销商虚拟账号</dt>
+    <dt>超市虚拟账号</dt>
     <dd>
         <input name="virtualAccount" type="text" value="<#if diy_site??>${diy_site.virtualAccount!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
         <span class="Validform_checktip">*虚拟账号</span>
@@ -190,22 +190,12 @@ $(function () {
            <select name="province" class="prov" style="width: 100px;" datatype="*"></select>
            <select name="city" class="city" style="width: 100px;" datatype="*"></select>
            <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10"></select>
-            <!--
-            <select name="city" datatype="*" sucmsg=" ">
-                <#if !diy_site?? || !diy_site.city??>
-                    <option value="">请选择城市...</option>
-                </#if>
-                <option value="重庆" <#if diy_site?? && diy_site.city?? && diy_site.city=="重庆">selected="selected"</#if>>重庆</option>
-                <option value="曲靖" <#if diy_site?? && diy_site.city?? && diy_site.city=="曲靖">selected="selected"</#if>>曲靖</option>
-                <option value="大理" <#if diy_site?? && diy_site.city?? && diy_site.city=="大理">selected="selected"</#if>>大理</option>
-            </select>
-            -->
         </div>
     </dd>
   </dl>
   
   <dl>
-    <dt>同盟店详细位置</dt>
+    <dt>超市详细位置</dt>
     <dd>
       <input name="address" type="text" value="<#if diy_site??>${diy_site.address!""}</#if>" class="input normal" datatype="*" errormsg="" sucmsg=" ">
       <span class="Validform_checktip">该信息可以帮助用户选择最合适的同盟店</span>

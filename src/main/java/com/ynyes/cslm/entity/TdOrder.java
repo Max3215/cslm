@@ -53,11 +53,11 @@ public class TdOrder {
     @Column
     private String postalCode;
     
-    // 线下超市
+    // 线下超市/批发商
     @Column
     private Long shopId;
     
-    // 超市名称
+    // 超市名称/批发商名称
     @Column
     private String shopTitle;
     

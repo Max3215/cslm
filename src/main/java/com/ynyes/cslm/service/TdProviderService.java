@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdProvider;
+import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.repository.TdProviderRepo;
 
 /**
@@ -144,4 +145,36 @@ public class TdProviderService {
         
         return (List<TdProvider>) repository.save(entities);
     }
+    
+    
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // ↓↓↓↓↓↓↓↓↓↓↓↓    新   增    方      法     ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+ 	// ↓↓↓↓↓↓↓↓↓↓↓↓        @author libiao        ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+ 	// ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+     
+     public TdProvider findByUsername(String username)
+ 	{
+ 		if(null == username)
+ 		{
+ 			return null;
+ 		}
+ 		return repository.findByUsernameAndIsEnableTrue(username);
+ 	}
+    
+     public Page<TdProviderGoods> findByProviderIdAndIsAudit(String username,Boolean isAudit,int page,int size)
+ 	{
+ 		PageRequest pageRequest = new PageRequest(page, size);
+ 		return repository.findByUsernameAndIsAudit(username, isAudit, pageRequest);
+ 	} 
+     
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

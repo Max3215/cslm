@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.cslm.entity.TdProduct;
+import com.ynyes.cslm.entity.TdProvider;
 
 /**
  * TdProduct 实体数据库操作接口
@@ -34,4 +35,6 @@ public interface TdProductRepo extends
     TdProduct findByTitleAndIdNot(String title, Long id);
     
     Page<TdProduct> findByTitleContainingOrderBySortIdAsc(String keywords, Pageable page);
+    
+    
 }

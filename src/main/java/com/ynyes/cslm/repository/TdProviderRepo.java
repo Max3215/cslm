@@ -3,9 +3,11 @@ package com.ynyes.cslm.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.cslm.entity.TdProvider;
+import com.ynyes.cslm.entity.TdProviderGoods;
 
 /**
  * TdProvider 实体数据库操作接口
@@ -21,4 +23,14 @@ public interface TdProviderRepo extends
     Page<TdProvider> findByTitleContainingOrProvinceContainingOrCityContainingOrAddressContainingOrderBySortIdAsc(String keywords1, String keywords2, String keywords3, String keywords4, Pageable page);
     TdProvider findByTitle(String title);
     TdProvider findByTitleAndIdNot(String title, Long id);
+    
+    
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    
+    TdProvider findByUsernameAndIsEnableTrue(String username);
+    
+    @Query("select g from TdProvider p join p.goodsList pg where p.username=?1 and pg.isAudit=?2")
+    Page<TdProviderGoods> findByUsernameAndIsAudit(String username,Boolean isAudit,Pageable page);
+    
 }

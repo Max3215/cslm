@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 
 /**
@@ -56,6 +57,10 @@ public class TdProvider {
     @Column
     private String city;
     
+    // 区
+    @Column
+    private String disctrict;
+    
 	// 详细地址
 	@Column
 	private String address;
@@ -69,7 +74,7 @@ public class TdProvider {
     private Boolean isEnable;
     
     //超市商品
-    @Column
+    @OneToMany
     @JoinColumn(name = "providerId")
     private List<TdProviderGoods> goodsList;
     
@@ -159,6 +164,30 @@ public class TdProvider {
 
 	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
+	}
+
+	public String getVirtualAccount() {
+		return virtualAccount;
+	}
+
+	public void setVirtualAccount(String virtualAccount) {
+		this.virtualAccount = virtualAccount;
+	}
+
+	public Double getVirtualMoney() {
+		return virtualMoney;
+	}
+
+	public void setVirtualMoney(Double virtualMoney) {
+		this.virtualMoney = virtualMoney;
+	}
+
+	public String getDisctrict() {
+		return disctrict;
+	}
+
+	public void setDisctrict(String disctrict) {
+		this.disctrict = disctrict;
 	}
     
     

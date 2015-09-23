@@ -36,9 +36,9 @@ var theForm = document.forms['form1'];
   <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
   <a href="/Verwalter/center" class="home"><i></i><span>首页</span></a>
   <i class="arrow"></i>
-  <span>供应商管理</span>
+  <span>批发商管理</span>
   <i class="arrow"></i>
-  <span>供应商列表</span>  
+  <span>批发商列表</span>  
 </div>
 <!--/导航栏-->
 
@@ -66,9 +66,13 @@ var theForm = document.forms['form1'];
   <tbody>
   <tr class="odd_bg">
     <th width="8%">选择</th>
-    <th align="center">供应商名称</th>
-    <th width="8%">排序</th>
-    <th width="6%">操作</th>
+    <th align="left">名称</th>
+    <th align="left">登录名</th>
+    <th align="left">地区</th>
+    <th align="left" width="37%">地理位置</th>
+    <th align="left" width="12%">排序</th>
+    <th width="8%">是否启用</th>
+    <th width="10%">操作</th>
   </tr>
 
     <#if provider_page??>
@@ -80,14 +84,16 @@ var theForm = document.forms['form1'];
                     </span>
                     <input type="hidden" name="listId" id="listId" value="${provider.id?c}">
                 </td>
-                <td align="center"><a href="/Verwalter/provider/edit?id=${provider.id?c}">${provider.title!""}</a></td>
-                <td align="center">
-                    <input name="listSortId" type="text" value="${provider.sortId!""}" class="sort" onkeydown="return checkNumber(event);">
-                </td>
+                <td><a href="/Verwalter/provider/edit?id=${provider.id?c}">${provider.title!""}</a></td>
+                <td>${provider.username!""}</td>
+                <td>${provider.city!""}</td>
+                <td>${provider.address!""}</td>
+                <td><input name="listSortId" type="text" value="${provider.sortId!""}" class="sort" onkeydown="return checkNumber(event);"></td>
+                <td align="center"><#if provider.isEnable?? && provider.isEnable>是<#else>否</#if></td>
                 <td align="center">
                     <a href="/Verwalter/provider/edit?id=${provider.id?c}">修改</a>
                 </td>
-            </tr>
+              </tr>
         </#list>
     </#if>
      

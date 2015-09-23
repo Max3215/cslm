@@ -138,11 +138,12 @@ function confirmCopy(id)
         </div>
         <div class="rule-single-select">
             <select name="property" onchange="javascript:setTimeout(__doPostBack('property',''), 0)">
-                <option value="">所有属性</option>
-                <option value="isOnSale" <#if property?? && property=="isOnSale">selected="selected"</#if>>已上架</option>
-                <option value="isNotOnSale" <#if property?? && property=="isNotOnSale">selected="selected"</#if>>已下架</option>
+                <option value="">审核状态</option>
+                <option value="isOnSale" <#if property?? && property=="isOnSale">selected="selected"</#if>>已展示</option>
+                <option value="isNotOnSale" <#if property?? && property=="isNotOnSale">selected="selected"</#if>>待审核</option>
             </select>
         </div>
+        <!--
         <div class="rule-single-select">
             <select name="saleType" onchange="javascript:setTimeout(__doPostBack('saleType',''), 0)">
                 <option value="">所有</option>
@@ -150,6 +151,7 @@ function confirmCopy(id)
                 <option value="groupSale" <#if saleType?? && saleType=="groupSale">selected="selected"</#if>>团购</option>
             </select>
         </div>
+        -->
       </div>
     </div>
     <div class="r-list">

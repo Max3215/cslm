@@ -48,14 +48,22 @@ public class TdDistributorGoods {
 	@Column
 	private Boolean isOnSale;
 	
-	//  1 待审核     2 已审核    3 审核未通过  
+	//  true审核中     flase审核未通过  
 	@Column
-	private Integer isAudit;
+	private Boolean isAudit;
 	
 	// 是否分销
 	@Column
 	private Boolean isDistribution;
 	
+	// 销量
+	@Column
+	private Long soldNumber;
+	
+	// 赠送积分
+	@Column
+	private Long returnPoints;
+
 	public Long getId() {
 		return id;
 	}
@@ -119,6 +127,39 @@ public class TdDistributorGoods {
 	public void setIsOnSale(Boolean isOnSale) {
 		this.isOnSale = isOnSale;
 	}
+
+	public Boolean getIsAudit() {
+		return isAudit;
+	}
+
+	public void setIsAudit(Boolean isAudit) {
+		this.isAudit = isAudit;
+	}
+
+	public Boolean getIsDistribution() {
+		return isDistribution;
+	}
+
+	public void setIsDistribution(Boolean isDistribution) {
+		this.isDistribution = isDistribution;
+	}
+
+	public Long getSoldNumber() {
+		return soldNumber;
+	}
+
+	public void setSoldNumber(Long soldNumber) {
+		this.soldNumber = soldNumber;
+	}
+
+	public Long getReturnPoints() {
+		return returnPoints;
+	}
+
+	public void setReturnPoints(Long returnPoints) {
+		this.returnPoints = returnPoints;
+	}
+	
 	
 	
 	

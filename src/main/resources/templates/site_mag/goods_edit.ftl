@@ -348,18 +348,19 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         <dl>
-            <dt>显示状态</dt>
+            <dt>审核状态</dt>
             <dd>
                 <div class="rule-multi-radio multi-radio">
                     <span>
                         <input type="radio" name="isOnSale" value="1" <#if goods??==false || goods.isOnSale==true>checked="checked"</#if>>
-                        <label>上架</label>
+                        <label>通过</label>
                         <input type="radio" name="isOnSale" value="0" <#if goods?? && goods.isOnSale?? && goods.isOnSale==false>checked="checked"</#if>>
-                        <label>下架</label>
+                        <label>不通过</label>
                     </span>
                 </div>
             </dd>
         </dl>
+        <!--
         <#if site_list??>
         <dl>
             <dt>所属站点</dt>
@@ -375,6 +376,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
+        -->
         <dl>
             <dt>推荐类型</dt>
             <dd>
@@ -524,6 +526,8 @@ function del_goods_comb(obj) {
     </div>
     
     <div class="tab-content" style="display: none;">
+       
+        <#--
         <#if provider_list??>
         <dl>
             <dt>供应商</dt>
@@ -539,7 +543,6 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
-        <#--
         <dl>
             <dt>成本价</dt>
             <dd>
@@ -548,6 +551,16 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         -->
+        <#if goods?? && goods.isOnSale>
+        <#else>
+        <dl>
+            <dt>批发商</dt>
+            <dd>
+                <input name="providerTitle" readonly="readonly"  type="text" value="<#if goods?? && goods.providerTitle??>${goods.providerTitle!''}</#if>" class="input normal" datatype="" sucmsg=" ">
+                <span class="Validform_checktip">市场价格</span>
+            </dd>
+        </dl>
+        </#if>
         <dl>
             <dt>市场价</dt>
             <dd>
@@ -568,10 +581,11 @@ function del_goods_comb(obj) {
         <dl>
             <dt>批发价</dt>
             <dd>
-                <input id="outFactoryPrice" name="outFactoryPrice" type="text" value="<#if goods?? && goods.outFactoryPrice??>${goods.outFactoryPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
+                <input id="outFactoryPrice" readonly="readonly"  name="outFactoryPrice" type="text" value="<#if goods?? && goods.outFactoryPrice??>${goods.outFactoryPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl>
+        <!--
         <dl>
             <dt>销售价</dt>
             <dd>
@@ -586,20 +600,22 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">购买该商品赠送的积分</span>
             </dd>
         </dl>
+        -->
         <dl>
-            <dt>加盟店返利比例</dt>
+            <dt>分销商返利比例</dt>
             <dd>
-                <input name="shopReturnRation" type="text" value="<#if goods?? && goods.shopReturnRation??>${goods.shopReturnRation?string("0.00")}<#else>0</#if>" class="input normal" sucmsg="">
-                <span class="Validform_checktip">加盟店返利 = 成本价 * 加盟店返利比例</span>
+                <input name="shopReturnRation" readonly="readonly"   type="text" value="<#if goods?? && goods.shopReturnRation??>${goods.shopReturnRation?string("0.00")}<#else>0</#if>" class="input normal" sucmsg="">
+                <span class="Validform_checktip">分销商返利 = 销售价 * 分销商返利比例</span>
             </dd>
         </dl>
         <dl>
             <dt>平台服务费比例</dt>
             <dd>
                 <input name="platformServiceReturnRation" type="text" value="<#if goods?? && goods.platformServiceReturnRation??>${goods.platformServiceReturnRation?string("0.00")}<#else>0.06</#if>" class="input normal" sucmsg="">
-                <span class="Validform_checktip">平台服务费 = 成本价  * 平台服务费比例</span>
+                <span class="Validform_checktip">平台服务费 = 销售价  * 平台服务费比例</span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>培训服务费比例</dt>
             <dd>
@@ -607,7 +623,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">培训服务费 = 成本价 * 培训服务费比例</span>
             </dd>
         </dl>
-        <#--
         <dl>
             <dt>返现额</dt>
             <dd>
@@ -623,6 +638,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">购买时可使用的粮草限额</span>
             </dd>
         </dl>
+        <#--
         <#if warehouse_list??>
         <dl>
             <dt>所在仓库</dt>
@@ -638,6 +654,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
+        -->
         <dl>
             <dt>库存余量</dt>
             <dd>
@@ -645,6 +662,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">库存为0时显示为缺货</span>
             </dd>
         </dl>
+        <!--
         <dl>
             <dt>销量</dt>
             <dd>
@@ -652,6 +670,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">商品已销售数量</span>
             </dd>
         </dl>
+        -->
     </div>
     <#--
     <div class="tab-content" style="display: none;">

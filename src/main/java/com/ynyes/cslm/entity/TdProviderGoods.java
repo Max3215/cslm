@@ -37,7 +37,7 @@ public class TdProviderGoods {
 	@Column(scale=2)
 	private Double shopReturnRation;
 	
-	// 审核/未审核
+	// 审核中/未审核通过
 	@Column
 	private Boolean isAudit;
 	
