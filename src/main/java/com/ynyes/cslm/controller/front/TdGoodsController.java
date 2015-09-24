@@ -101,6 +101,10 @@ public class TdGoodsController {
             Integer qiang, ModelMap map, HttpServletRequest req) {
 
         tdCommonService.setHeader(map, req);
+        
+        if (null == goodsId) {
+            return "error_404";
+        }
 
         String username = (String) req.getSession().getAttribute("username");
         if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
@@ -109,11 +113,20 @@ public class TdGoodsController {
         	
         	 //成交数
             map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, goodsId,0,5));
+            
+            map.addAttribute("dis_goods", tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,goodsId, true));
+            
+         // 热卖
+            map.addAttribute("dis_hot_list",
+                    tdDistributorGoodsService.findTop12ByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId));
         }else
         {
         	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,0,5));
         	 Page<TdOrder> page = tdOrderService.findByShopIdAndGoodId(null, goodsId,0, 5);
-        	 System.err.println(page.getContent().size());
+        	 
+        	// 热卖
+             map.addAttribute("hot_list",
+                     tdGoodsService.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc());
         }
 
         // 添加浏览记录
@@ -139,27 +152,15 @@ public class TdGoodsController {
                             ClientConstant.pageSize));
         }
 
-        if (null == goodsId) {
-            return "error_404";
-        }
-
         TdGoods goods = tdGoodsService.findOne(goodsId);
 
         if (null == goods) {
             return "error_404";
         }
 
-        Page<TdUserConsult> consultPage = tdUserConsultService
-                .findByGoodsIdAndIsShowable(goodsId, 0, ClientConstant.pageSize);
-
-        
         
         // 商品
         map.addAttribute("goods", goods);
-
-        // 商品组合
-        map.addAttribute("comb_list",
-                tdGoodsCombinationService.findByGoodsId(goodsId));
 
         // 全部评论
         map.addAttribute("comment_page",
@@ -182,16 +183,6 @@ public class TdGoodsController {
         map.addAttribute("one_star_comment_count", tdUserCommentService
                 .countByGoodsIdAndStarsAndIsShowable(goodsId, 1L));
         
-        // 咨询
-        map.addAttribute("consult_page", consultPage);
-
-        // 热卖
-        map.addAttribute("hot_list",
-                tdGoodsService.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc());
-
-        // 同盟店
-        map.addAttribute("diy_site_list", TdDistributorService.findByIsEnableTrue());
-
         // 收藏总数
         map.addAttribute("total_collects",
                 tdUserCollectService.countByGoodsId(goods.getId()));
@@ -597,7 +588,7 @@ public class TdGoodsController {
 	    		return res;
 	    	}
 	    	
-	    	if(quantity > distributorGoods.getNumber())
+	    	if(quantity > distributorGoods.getLeftNumber())
 	    	{
 	    		res.put("msg", "本超市库存不足！");
 	    		return res;

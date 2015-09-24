@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdCartGoods;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.repository.TdCartGoodsRepo;
 
@@ -30,6 +31,9 @@ public class TdCartGoodsService {
     
     @Autowired
     TdGoodsService tdGoodsService;
+    
+    @Autowired
+    TdDistributorService tdDistributorService;
     /**
      * 删除
      * 
@@ -140,13 +144,13 @@ public class TdCartGoodsService {
         {
             if (null != cartGoods)
             {
-                TdGoods goods = tdGoodsService.findOne(cartGoods.getGoodsId());
+                TdDistributorGoods goods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), cartGoods.getGoodsId());
                 
                 if (null != goods)
                 {
                     cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
-                    cartGoods.setGoodsTitle(goods.getTitle());
-                    cartGoods.setPrice(goods.getSalePrice());
+                    cartGoods.setGoodsTitle(goods.getGoodsTitle());
+                    cartGoods.setPrice(goods.getGoodsPrice());
                 }
             }
         }

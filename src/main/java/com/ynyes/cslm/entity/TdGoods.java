@@ -96,9 +96,11 @@ public class TdGoods {
     @Column
     private String afterMarketService;
     
-    // 审核结果
+    // 是否在售
     @Column
     private Boolean isOnSale;
+    
+    
     
     // 是否首页推荐
     @Column

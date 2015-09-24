@@ -37,6 +37,14 @@ public class TdCartGoods {
     // 商品数量
     private Long quantity;
     
+    //商品超市Id
+    @Column
+    private Long distributorId;
+    
+    //商品所在超市名称
+    @Column
+    private String distributorTitle;
+    
     // 成交价
     @Column
     private Double price;
@@ -120,4 +128,23 @@ public class TdCartGoods {
     public void setIsLoggedIn(Boolean isLoggedIn) {
         this.isLoggedIn = isLoggedIn;
     }
+
+	public Long getDistributorId() {
+		return distributorId;
+	}
+
+	public void setDistributorId(Long distributorId) {
+		this.distributorId = distributorId;
+	}
+
+	public String getDistributorTitle() {
+		return distributorTitle;
+	}
+
+	public void setDistributorTitle(String distributorTitle) {
+		this.distributorTitle = distributorTitle;
+	}
+    
+    
+    
 }

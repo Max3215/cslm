@@ -28,10 +28,11 @@ public interface TdDistributorGoodsRepo extends
 		@Query("select g from TdDistributor d join d.goodsList g where d.username=?1 and g.isOnSale=?2")
 		Page<TdDistributorGoods> findByUsernameAndIsOnSale(String username,Boolean onsale,Pageable page);
 	
-//		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and is_on_sale = ?2", nativeQuery = true)
-//		Page<TdDistributorGoods> findByDistributorIdAndIsOnSale(Long disId,Boolean onsale,Pageable page);
+		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and goods_id=?2 and is_on_sale = ?3", nativeQuery = true)
+		TdDistributorGoods findByDistributorIdAndGoodsIdAndIsOnSale(long disId,long goodsid, Boolean onsale);
 	
-	
+		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 ", nativeQuery = true)
+		List<TdDistributorGoods> findTop12ByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(long disId);
 	
 	
 

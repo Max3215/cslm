@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * 分销商—商品表
+ * 超市—商品表
  * 
  * @author libiao
  *
@@ -32,6 +32,10 @@ public class TdDistributorGoods {
 	@Column(scale=2)
 	private Double goodsPrice;
 	
+	// 商品原价
+	@Column(scale=2)
+	private Double goodsMarketPrice;
+	
 	// 商品图片
 	@Column
 	private String coverImageUri;
@@ -42,7 +46,7 @@ public class TdDistributorGoods {
 	
 	// 商品库存   
 	@Column
-	private Long number;
+	private Long leftNumber;
 	
 	// 是否上架
 	@Column
@@ -112,12 +116,12 @@ public class TdDistributorGoods {
 		this.code = code;
 	}
 
-	public Long getNumber() {
-		return number;
+	public Long getLeftNumber() {
+		return leftNumber;
 	}
 
-	public void setNumber(Long number) {
-		this.number = number;
+	public void setLeftNumber(Long leftNumber) {
+		this.leftNumber = leftNumber;
 	}
 
 	public Boolean getIsOnSale() {
@@ -158,6 +162,14 @@ public class TdDistributorGoods {
 
 	public void setReturnPoints(Long returnPoints) {
 		this.returnPoints = returnPoints;
+	}
+
+	public Double getGoodsMarketPrice() {
+		return goodsMarketPrice;
+	}
+
+	public void setGoodsMarketPrice(Double goodsMarketPrice) {
+		this.goodsMarketPrice = goodsMarketPrice;
 	}
 	
 	

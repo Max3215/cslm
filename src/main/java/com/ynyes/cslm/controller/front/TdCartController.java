@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ynyes.cslm.entity.TdCartGoods;
+import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdGoodsGift;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdUserService;
@@ -41,6 +44,9 @@ public class TdCartController {
     
     @Autowired
     private TdUserService tdUserService;
+    
+    @Autowired
+    private TdDistributorService tdDistributorService;
 
     /**
      * 加入购物车
@@ -58,7 +64,19 @@ public class TdCartController {
         boolean isLoggedIn = true;
 
         String username = (String) req.getSession().getAttribute("username");
-
+        
+        TdDistributor distributor = null;
+        if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+        {
+        	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        	distributor = tdDistributorService.findOne(distributorId);
+        	
+        }
+        if(null == distributor)
+        {
+        	return "error_404";
+        }
+        
         if (null == username) {
             isLoggedIn = false;
             username = req.getSession().getId();
@@ -75,11 +93,10 @@ public class TdCartController {
         }
         
         if (null != id) {
-            TdGoods goods = tdGoodsService.findOne(id);
+            TdDistributorGoods goods = tdDistributorService.findByIdAndGoodId(distributor.getId(), id);
 
             if (null != goods) {
                 
-                // 计算抢拍价
                 List<TdCartGoods> oldCartGoodsList = null;
                 
                 // 购物车是否已有该商品
@@ -101,7 +118,9 @@ public class TdCartController {
                     cartGoods.setUsername(username);
     
                     cartGoods.setIsSelected(true);
-                    cartGoods.setGoodsId(goods.getId());
+                    cartGoods.setGoodsId(goods.getGoodsId());
+                    cartGoods.setDistributorId(distributor.getId());
+                    cartGoods.setDistributorTitle(distributor.getTitle());
                     
                     // 商品信息在读取购物车时再获取
 //                    cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());

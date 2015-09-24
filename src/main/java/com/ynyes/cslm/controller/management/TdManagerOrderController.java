@@ -1119,11 +1119,11 @@ public class TdManagerOrderController {
         
         if (null == TdDistributor.getId())
         {
-            tdManagerLogService.addLog("add", "新增加盟店", req);
+            tdManagerLogService.addLog("add", "新增加盟超市", req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "修改加盟店", req);
+            tdManagerLogService.addLog("edit", "修改加盟超市", req);
         }
         
         TdDistributorService.save(TdDistributor);

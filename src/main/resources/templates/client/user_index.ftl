@@ -110,7 +110,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <#elseif order.statusId?? &&  order.statusId==6>
                                        <p>已完成</p>
                                 <#elseif order.statusId?? &&  order.statusId==7>
-                                       <p>待收货</p>
+                                       <p>已取消</p>
                                        
                                 </#if>
                             </td>

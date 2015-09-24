@@ -163,11 +163,22 @@ public class TdProviderService {
     
      public Page<TdProviderGoods> findByProviderIdAndIsAudit(String username,Boolean isAudit,int page,int size)
  	{
+    	if(null == username)
+    	{
+    		return null;
+    	}
  		PageRequest pageRequest = new PageRequest(page, size);
  		return repository.findByUsernameAndIsAudit(username, isAudit, pageRequest);
  	} 
      
-     
+   public TdProvider findByVirtualAccount(String virtualAccount)
+   {
+	   if(null == virtualAccount)
+	   {
+		   return null;
+	   }
+	   return repository.findByVirtualAccountAndIsEnableTrue(virtualAccount);
+   }  
     
     
     

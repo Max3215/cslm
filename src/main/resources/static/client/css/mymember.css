@@ -270,6 +270,11 @@ textarea { resize:none;}
 .mymember_info02 td.td003 p,.mymember_info02 td.td003 a{color:#989898;}
 .mymember_info02 td.td003 a:hover{color:#ff8800;}
 .mymember_info02 td h4 {color:#ff1000;}
+
+
+.mymember_info02 .car_list td{border:none;border-bottom: 1px solid #eee;}
+
+
 .mymember_infotab_show { background:url(../images/mymember/arrow05.gif) no-repeat right center;display:inline-block; padding-right:15px;}
 .mymember_info_show {
 	display:none;
@@ -777,3 +782,32 @@ textarea { resize:none;}
 	background:#ff5b7d;}
 .mymember_address input.mysub:hover {
 	background:#39bee9;}
+
+
+
+
+/*----------------------add-----------------------------------*/
+
+.mymember_fen.add_width a{width: 150px;}
+
+.mymember_hot .market_info{background: #fff;padding: 20px;min-height: 250px;}
+.mymember_hot .market_info .tit{font-size: 16px;padding-bottom: 4px;border-bottom: 1px solid #e7e7e7;}
+.mymember_hot .market_info li{padding: 2px 0}
+
+.mymember_hot .market_info .quit_btn{display: block;width: 100px;height: 30px;background: #16bddf;color:#fff;text-align: center;line-height: 30px;padding: 0;border-radius: 3px;-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;-ms-border-radius:3px;margin: 20px auto;}
+.mymember_hot .market_info .quit_btn:hover{color:#fff;background: #ff5b7d;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

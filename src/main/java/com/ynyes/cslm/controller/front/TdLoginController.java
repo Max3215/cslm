@@ -23,8 +23,12 @@ import com.qq.connect.api.qzone.UserInfo;
 import com.qq.connect.javabeans.AccessToken;
 import com.qq.connect.javabeans.qzone.UserInfoBean;
 import com.qq.connect.oauth.Oauth;
+import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDistributorService;
+import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.VerifServlet;
 
@@ -39,6 +43,12 @@ public class TdLoginController {
 
 	@Autowired
 	private TdCommonService tdCommonService;
+	
+	@Autowired
+	private TdProviderService tdProviderservice;
+	
+	@Autowired
+	private TdDistributorService tdDistributorService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(HttpServletRequest req, ModelMap map) {
@@ -89,105 +99,69 @@ public class TdLoginController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> login(String username, String password,String smsCode, String alipayuser_id,String type, String code,
-			Boolean isSave, HttpServletRequest request) {
+	public Map<String, Object> login(String username, String password,String type,  HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<String, Object>();
 //		String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
-
-		res.put("code", 1);
 
 		if (username.isEmpty() || password.isEmpty()) {
 			res.put("msg", "用户名及密码不能为空");
 		}
-//		if (!smsCodeSave.equalsIgnoreCase(smsCode)){
-//			res.put("msa", "短信验证码输入错误");
-//		}
-		
-		 //按账号查找登录验证 密码验证 修改最后登录时间
-		
-		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
-		if (null != user) {
-			if (!user.getPassword().equals(password)) {
-				res.put("msg", "密码错误");
+		// 普通会员登录
+		if(null == type || "user".equals(type)){
+			TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+			if (null != user) {
+				if (!user.getPassword().equals(password)) {
+					res.put("msg", "密码错误");
+					return res;
+				}
+				user.setLastLoginTime(new Date());
+				user = tdUserService.save(user);
+				res.put("code", 0);
+				request.getSession().setAttribute("username", user.getUsername());
 				return res;
 			}
-			user.setLastLoginTime(new Date());
-			//判断是首页直接登录还是绑定第三方账号
-			if(null !=type){
-				 // 判断绑定类型为绑定QQ
-				if("qq".equals(type)){
-					user.setQqUserId(alipayuser_id);
+		
+		} 
+		// 超市登录
+		if("distributor".equals(type))
+		{
+			TdDistributor distributor = tdDistributorService.findbyUsername(username);
+			if(null != distributor)
+			{
+				if(!distributor.getPassword().equals(password))
+				{
+					res.put("msg", "密码错误");
+					return res;
 				}
-				 // @注释：添加支付宝第三方登陆用户名
-				if("zfb".equals(type)){
-					user.setAlipayUserId(alipayuser_id);
-				}
+				request.getSession().setAttribute("distributor", distributor.getUsername());
+				request.getSession().setAttribute("disTitle", distributor.getTitle());
+				res.put("code", 1);
+				return res;
 			}
-			user = tdUserService.save(user);
-			
-
-			res.put("code", 0);
-
-//			// @注释：判断用户类型
-//			if(null != user.getRoleId() && user.getRoleId().equals(2L)){
-//				res.put("role", 2);
-//				request.getSession().setAttribute("diysiteUsername", user.getUsername());
-//				return res;
-//			}
-			request.getSession().setAttribute("username", user.getUsername());
-			request.getSession().setAttribute("usermobile", user.getMobile());
-			return res;
-//		}
-//		// 如果账号验证未通过，再进行手机登录验证 密码验证 修改最后登录时间
-//		user = tdUserService.findByMobileAndIsEnabled(username);
-//		if (null != user) {
-//			if (!user.getPassword().equals(password)) {
-//				res.put("msg", "密码错误");
-//				return res;
-//			}
-//			user.setLastLoginTime(new Date());
-//			/**
-//			 * @author libiao
-//			 * 判断是首页直接登录还是绑定第三方账号
-//			 */
-//			if(null !=type){
-//				/**
-//				 * @author libiao
-//				 * 判断绑定类型为绑定QQ
-//				 */
-//				if("qq".equals(type)){
-//					user.setQqUserId(alipayuser_id);
-//				}
-//				/**
-//				 * @author lc
-//				 * @注释：添加支付宝第三方登陆用户名
-//				 */
-//				if("zfb".equals(type)){
-//					user.setAlipayUserId(alipayuser_id);
-//				}
-//			}
-//			user = tdUserService.save(user);
-//			
-//
-//			res.put("code", 0);
-//
-//			/**
-//			 * @author lichong
-//			 * @注释：判断用户类型
-//			 */
-//			if (user.getRoleId() == 2L) {
-//				res.put("role", 2);
-//				request.getSession().setAttribute("diysiteUsername", user.getUsername());
-//				return res;
-//			}
-//			request.getSession().setAttribute("username", user.getUsername());
-//			request.getSession().setAttribute("usermobile", user.getMobile());
-//			return res;
-		} else { // 账号-手机都未通过验证，则用户不存在
+		}
+		// 批发商登录
+		if("provider".equals(type))
+		{
+			TdProvider provider = tdProviderservice.findByUsername(username);
+				if(null != provider)
+				{
+				if(!provider.equals(password))
+				{
+					res.put("msg", "密码错误");
+					return res;
+				}
+				request.getSession().setAttribute("provider", provider.getUsername());
+				request.getSession().setAttribute("proTitle", provider.getTitle());
+				res.put("code",2);
+				return res;
+			}
+		}
+		
+		// 账号-手机都未通过验证，则用户不存在
 			res.put("msg", "不存在该用户");
 			return res;
-		}
+		
 	}
 
 	/**

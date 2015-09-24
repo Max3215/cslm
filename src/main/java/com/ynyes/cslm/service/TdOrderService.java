@@ -360,6 +360,10 @@ public class TdOrderService {
     	return repository.findBytypeIdAndOrderTimeAfterOrderByIdDesc(typeId, time);
     }
     /**
+     * ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+     * ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+     * ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+     * 
      * 按交易状态查询
      * @author libiao
      */
@@ -380,6 +384,25 @@ public class TdOrderService {
     public Page<TdOrder> findByShopId(Long shopId,int page,int size){
     	PageRequest pageRequest = new PageRequest(page, size);
     	return repository.findByShopIdOrderByIdDesc(shopId, pageRequest);
-    	
     }
+    public Page<TdOrder> findByUsernameAndTypeIdOrderByIdDesc(String username,Long typeId,int page,int size)
+    {
+    	if(null == username)
+    	{
+    		return null;
+    	}
+    	PageRequest pageRequest =new PageRequest(page, size);
+    	return repository.findByUsernameAndTypeIdOrderByIdDesc(username, typeId, pageRequest);
+    }
+    
+    public Page<TdOrder> findByShopIdAndTypeId(Long shopId,Long typeId,int page,int size)
+    {
+    	if(null == shopId)
+    	{
+    		return null;
+    	}
+    	PageRequest pageRequest=new PageRequest(page, size);
+    	return repository.findByShopIdAndTypeIdOrderByOrderTimeDesc(shopId,typeId,pageRequest);
+    }
+    
 }

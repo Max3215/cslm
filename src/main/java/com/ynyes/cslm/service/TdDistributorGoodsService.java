@@ -104,4 +104,18 @@ public class TdDistributorGoodsService {
     	return repository.findOne(id);
     }
     
+    public TdDistributorGoods findByDistributorIdAndGoodsIdAndIsOnSale(Long distributorId,Long goodsId, Boolean isOnSale)
+    {
+    	return repository.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,goodsId, isOnSale);
+    }
+    
+    public List<TdDistributorGoods> findTop12ByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId)
+    {
+    	if(null == disId)
+    	{
+    		return null ;
+    	}
+    	return repository.findTop12ByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(disId);
+    }
+    
 }

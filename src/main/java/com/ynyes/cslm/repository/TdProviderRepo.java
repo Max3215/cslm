@@ -30,7 +30,9 @@ public interface TdProviderRepo extends
     
     TdProvider findByUsernameAndIsEnableTrue(String username);
     
-    @Query("select g from TdProvider p join p.goodsList pg where p.username=?1 and pg.isAudit=?2")
+    @Query("select g from TdProvider p join p.goodsList g where p.username=?1 and g.isAudit=?2")
     Page<TdProviderGoods> findByUsernameAndIsAudit(String username,Boolean isAudit,Pageable page);
+    
+    TdProvider findByVirtualAccountAndIsEnableTrue(String virtualAccount);
     
 }

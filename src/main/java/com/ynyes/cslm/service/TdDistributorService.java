@@ -162,27 +162,8 @@ public class TdDistributorService {
      */
     public TdDistributor save(TdDistributor e)
     {
-        if (null != e.getUsername())    
-        {
-            TdUser user = tdUserService.findByUsername(e.getUsername());
-            
-            if (null == user )
-            {
-                user = tdUserService.addNewUser(e.getUsername(), e.getPassword(), e.getMobile(), null, null);
-                
-                user.setRoleId(1L); // 加盟商用户
-            }
-            // 修改加盟店密码也需要修改用户密码 @author: Sharon
-            else
-            {
-                user.setPassword(e.getPassword());
-            }
-            
-            tdUserService.save(user);
-            
-            //保存分销商商品
-            tdDistributorGoodsService.save(e.getGoodsList());
-        }
+        //保存分销商商品
+        tdDistributorGoodsService.save(e.getGoodsList());
         
         return repository.save(e);
     }

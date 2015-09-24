@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+	
     // 点击tab
     $(".stab").click(function(){
         // tab特效切换

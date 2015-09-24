@@ -89,8 +89,14 @@ document.onkeydown = function(event){
 function login(){
      var username = $("#txt_loginId").val();
      var password = $("#txt_loginPwd").val();
-     var smsCode = $("#smsCode").val();
-        
+     var type ="";
+     var obj = document.getElementsByName("type");
+     for(var i=0; i<obj.length; i ++){
+        if(obj[i].checked){
+            type=obj[i].value;
+        }
+    }
+    
      if (username.length < 6 || password.length < 6)
      {
           alert("用户名或密码长度输入不足");
@@ -99,23 +105,26 @@ function login(){
      $.ajax({
           type: "post",
           url: "login",
-          data: { "username": username, "password": password ,"smsCode":smsCode},
+          data: { "username": username, "password": password ,"type":type},
           dataType: "json",
           success: function (data) { 
           <!-- 修改 -->
-          if (data.role == 2){
-              window.location.href="/user";
-          }    
-          else if (data.code == 0) {
+              if (data.code == 1){
+                  window.location.href="/distributor/index";
+              }
+              else if (data.code == 2){
+                    window.location.href="/provider/index"
+              }
+              else if (data.code == 0) {
                    var url = document.referrer;          
                    if(undefined==url || ""==url){
-                        window.location.href="/";
+                    window.location.href="/";
                     }else{
                         window.location.href = url; 
                     }
-                } else {
+               } else {
                     alert(data.msg);
-                }
+               }
           }
       });
 }
@@ -164,6 +173,11 @@ function tip()
     <input id="smsCodeBtn" onclick="javascript:;" readOnly="true" class="sub" style="text-align:center;width: 50%; border-radius: 3px;  float:left; margin-left:10px; background: #ff5b7d; color: #fff; height: 35px;" value="点击获取短信验证码" />
     -->
     <div class="clear h15"></div>
+    <p class="identity pb10">
+      <span><input type="radio" name="type" value="user" checked="checked">普通会员</span>
+      <span><input type="radio" name="type" value="distributor">超市</span>
+      <span><input type="radio" name="type" value="provider">批发商</span>
+    </p>
     <p class="pb10">
       <input type="checkbox" />
       <span>记住密码</span>

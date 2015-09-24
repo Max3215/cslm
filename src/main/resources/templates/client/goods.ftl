@@ -15,7 +15,7 @@
 
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
-<script type="text/javascript" src="/client/js/big_photo.js">
+<script type="text/javascript" src="/client/js/big_photo.js"></script>
 <script type="text/javascript" src="/client/js/goods.js"></script>
 <script type="text/javascript" src="/client/js/goods_comment_consult.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
@@ -43,8 +43,8 @@ $(document).ready(function(){
 
 function addNum(){
     var q = parseInt($("#quantity").val());
-    <#if goods.leftNumber??>
-        if (q < ${goods.leftNumber!'0'})
+    <#if dis_goods?? && dis_goods.leftNumber??>
+        if (q < ${dis_goods.leftNumber!'0'})
         {
             $("#quantity").val(q+1);
         }
@@ -173,7 +173,7 @@ function byNow(){
 				<p class="subtitle">${goods.subTitle!''}</p>
 				<p class="num"><#if goods.code??>商品编号：<span>${goods.code!''}</span></#if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#if goods.brandTitle??>商品品牌：<span>${goods.brandTitle!''}</span></#if></p>
 				<div class="price">
-					<p>特惠价：<span>￥${goods.salePrice?string("0.00")}</span></p>
+					<p>特惠价：<span>￥<#if dis_goods??>${dis_goods.goodsPrice?string('0.00')}<#else>${goods.salePrice?string("0.00")}</#if></span></p>
 					<p class="lth">市场价：￥${goods.marketPrice?string("0.00")}</p>
 				</div>
 				
@@ -235,17 +235,30 @@ function byNow(){
 				<!--  参数结束    -->
 				
 				<p class="digital">
+					<#if dis_goods??>
 					<span>数量：</span>
 					<a id="id-minus" href="javascript:minusNum();">-</a>
 					<input class="text" type="text" id="quantity" value="1">
 					<a id="id-plus" href="javascript:addNum();">+</a>
-					<label>平台总库存${goods.leftNumber!'0'}件</label>
+					<label>库存${dis_goods.leftNumber!'0'}件</lable>
+					<#else>
+					<lable sytle="color:red">*当前超市没有此商品，您可以选择其他超市继续购买</label>
+					</#if>
 					<div class="clear"></div>
 				</p>
 				<div class="buy_btn">
 					<div class="clear"></div>
-					<a href="javascript:byNow();" target="_blank" title="立即购买" class="buy">立即购买</a>
-					<a href="javascript:cartInit();" target="_blank"  title="加入购物车" class="car">加入购物车</a>
+					<#if dis_goods??>
+					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
+					       <a href="javascript:cartInit();" target="_blank"  title="预购商品" class="car">立即预购</a>
+					   <#else>
+        					<a href="javascript:byNow();" target="_blank" title="立即购买" class="buy">立即购买</a>
+        					<a href="javascript:cartInit();" target="_blank"  title="加入购物车" class="car">加入购物车</a>
+					   </#if>
+					<#else>
+    					<a href="javascript:;"  title="立即购买" class="buy">立即购买</a>
+                        <a href="javascript:;"  title="加入购物车" class="car">加入购物车</a>
+					</#if>
 					<div class="clear"></div>
 				</div>
 			</section>
@@ -302,7 +315,19 @@ function byNow(){
             					</li>
             			     </#if>
             			 </#list>
-            	    </#if>
+            	    <#elseif dis_hot_list?? && dis_hot_list?size gt 0> 
+                        <#list dis_hot_list as hot_good> 
+                            <#if hot_good_index lt 6>
+                                <li>
+                                    <a href="/goods/${hot_good.goodsId?c}" title="${hot_good.goodsTitle!''}" target="_blank">
+                                        <img src="${hot_good.goodsCoverImageUri!''}">
+                                        <p>${hot_good.goodsTitle!''}</p>
+                                    </a>
+                                    <p class="price">￥${hot_good.goodsPrice?string("0.00")}<span>原价：￥${hot_good.goodsMarketPrice?string("0.00")}</span></p>
+                                </li>
+                             </#if>
+                         </#list>
+                    </#if>
 				</ul>
 			</div>
 			<div class="clear"></div>

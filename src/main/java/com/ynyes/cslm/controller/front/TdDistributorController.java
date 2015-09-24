@@ -30,6 +30,7 @@ import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdUserService;
+import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.SiteMagConstant;
 
 
@@ -52,27 +53,30 @@ public class TdDistributorController {
 	@Autowired
 	private TdDistributorGoodsService tdDistributorGoodsService;
 	
-//	@RequestMapping(value="/index")
-//	public String distributroindex(HttpServletRequest req, ModelMap map)
-//	{
-//		String username = (String) req.getSession().getAttribute("diysiteUsername");
-//		if (null == username) {
-//            return "redirect:/login";
-//        }
-//        
-//        tdCommonService.setHeader(map, req);
-//        
-//        TdDistributor distributor = TdDistributorService.findbyUsername(username);
-//        
-//        if(null == distributor){
-//        	return "/client/error_404";
-//        }
-//        
-//        
-//		
-//        
-//		return "";
-//	}
+	@RequestMapping(value="/index")
+	public String distributroindex(HttpServletRequest req, ModelMap map)
+	{
+		String username = (String) req.getSession().getAttribute("distributor");
+		if (null == username) {
+            return "redirect:/login";
+        }
+        
+        tdCommonService.setHeader(map, req);
+        
+        TdDistributor distributor = TdDistributorService.findbyUsername(username);
+        
+        if(null == distributor){
+        	return "/client/error_404";
+        }
+        
+        map.addAttribute("distributor", distributor);
+        
+        map.addAttribute("dis_goodsIn_order_page",tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(distributor.getUsername(), 1L, 0, 5));
+		
+        map.addAttribute("dis_goodsOut_order_page", tdOrderService.findByShopIdAndTypeId(distributor.getId(), 0L, 0, ClientConstant.pageSize));
+        
+		return "/client/distributor_index";
+	}
 	
 	
 	@RequestMapping(value = "/order/rebateincome")

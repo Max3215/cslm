@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,9 +39,9 @@ public class TdManagerProviderController {
     TdManagerLogService tdManagerLogService;
     
     
-    @RequestMapping(value="/check", method = RequestMethod.POST)
+    @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, String> validateForm(String param, Long id) {
+    public Map<String, String> validateForm(@PathVariable String type,String param, Long id) {
         Map<String, String> res = new HashMap<String, String>();
         
         res.put("status", "n");
@@ -50,24 +51,30 @@ public class TdManagerProviderController {
             res.put("info", "该字段不能为空");
             return res;
         }
-        
-        if (null == id)
+        if(type.equalsIgnoreCase("title"))
         {
-            if (null != tdProviderService.findByTitle(param))
+        	if (null != tdProviderService.findByTitle(param))
             {
                 res.put("info", "已存在同名供应商");
                 return res;
             }
         }
-        else
+        if(type.equalsIgnoreCase("username"))
         {
-            if (null != tdProviderService.findByTitleAndIdNot(param, id))
-            {
-                res.put("info", "已存在同名供应商");
-                return res;
-            }
+        	if(null != tdProviderService.findByUsername(param))
+        	{
+        		res.put("info", "账号已存在");
+        		return res;
+        	}
         }
-        
+        if(type.equalsIgnoreCase("virtualAccount"))
+        {
+        	if(null != tdProviderService.findByVirtualAccount(param))
+        	{
+        		res.put("info","虚拟账号已被占用");
+        		return res;
+        	}
+        }
         res.put("status", "y");
         
         return res;

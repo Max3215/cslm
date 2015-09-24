@@ -1190,7 +1190,7 @@ public class TdUserController{
         		TdDistributorGoods disGoods = TdDistributorService.findByIdAndGoodId(distributor.getId(), goods.getId());
         		if(null!= disGoods)
         		{
-        			disGoods.setNumber(disGoods.getNumber()+quantity);
+        			disGoods.setLeftNumber(disGoods.getLeftNumber()+quantity);
         		}else{
         			//新建一条超市商品信息
         			disGoods = new TdDistributorGoods();
@@ -1199,7 +1199,7 @@ public class TdUserController{
         			disGoods.setGoodsPrice(goods.getSalePrice());
         			disGoods.setGoodsTitle(goods.getTitle());
         			disGoods.setIsOnSale(false);
-        			disGoods.setNumber(quantity);
+        			disGoods.setLeftNumber(quantity);
         			disGoods.setCode(goods.getCode());
         		}
         		distributor.getGoodsList().add(disGoods);//更新超市商品库
