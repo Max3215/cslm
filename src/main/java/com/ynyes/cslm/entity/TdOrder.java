@@ -178,7 +178,7 @@ public class TdOrder {
     @Column
     private Long statusId;
     
-    //订单类型  0：普通订单  1：分销商购货订单
+    //订单类型  0：普通订单  1：超市进货订单
     @Column
     private Long typeId;
     

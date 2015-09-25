@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>会员中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -49,64 +49,65 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_info mymember_info01">
       <table>
         <tr>
-          <th width="150" rowspan="2"><a class="mymember_header" href="#"><img src="${distributor.imageUri!''}" height="150px;" width="150px;"/></a></th>
-          <td><a href="#"><img src="/client/images/mymember/buy01.png" />待付款：<span>0</span></a></td>
-          <td><a href="#"><img src="/client/images/mymember/buy02.png" />待收货：<span>1</span></a></td>
+          <th width="150" rowspan="2"><a class="mymember_header" ><img src="${distributor.imageUri!''}" height="150px;" width="150px;"/></a></th>
+          <td><a ><img src="/client/images/mymember/buy02.png" />待发货：<span>${total_undelivered!'0'}</span></a></td>
+          <td><a ><img src="/client/images/mymember/buy03.png" />待收货：<span>${total_unreceived!'0'}</span></a></td>
           <th rowspan="2" class="mymember_fen add_width">
-            <a href="#"><img src="/client/images/mymember/buy05.png" /><p>虚拟账户余额：<span>${distributor.virtualMoney?string('0.00')}</span></p></a>
+            <a ><img src="/client/images/mymember/buy05.png" /><p>账户余额：<span>${distributor.virtualMoney?string('0.00')}</span></p></a>
           </th>
         </tr>
         <tr>
-          <td><a href="#"><img src="/client/images/mymember/buy03.png" />待发货：<span>0</span></a></td>
+          <td><a ><img src="/client/images/mymember/buy04.png" />已完成：<span>${total_finished!'0'}</span></a></td>
         </tr>
       </table>
     </div>
     
     <div class="mymember_info mymember_info02">
-      <h3>我的进货单<a href="#">查看全部进货单</a></h3>
-      <table width="100%">              
-        <#if dis_goodsIn_order_page?? && dis_goodsIn_order_page.coutent??>
-            <#list dis_goodsIn_order_page.coutent as order>
-               <#if order_index < 3 >
-                <tr>
-                    <th colspan="7">进货单编号：<a href="#">${order.orderNumber!''}</a></th>
-                </tr>
-                <td align="left"  colspan="2">
-                    <#if order.orderGoodsList??>
-                        <#list order.orderGoodsList as og>  
-                            <#if og_index < 1>
-                                <a href="/goods/${og.goodsId}"><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
+        <h3>我的进货单<a href="/distributor/inOrder/list/0">查看全部进货单</a></h3>
+        <table width="100%">    
+            <#if dis_goodsIn_order_page?? && dis_goodsIn_order_page.content??>
+            <#list dis_goodsIn_order_page.content as order>
+                <#if order_index < 3 >
+                    <tr>
+                        <th colspan="7">进货单编号：<a href="#">${order.orderNumber!''}</a></th>
+                    </tr>
+                    <tr>
+                        <td align="left"  colspan="2">
+                            <#if order.orderGoodsList??>
+                            <#list order.orderGoodsList as og>  
+                                <#if og_index < 1>
+                                    <a><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
+                                </#if>
+                            </#list>
                             </#if>
-                        </#list>
-                    </#if>
-                 </td>
-                 <td>
-                    ${order.shopTitle!''}
-                </td>
-                <td>
-                    <p>￥${order.totalPrice?string("0.00")}</p>
-                </td>
-                <td class="td003">
-                    <p>${order.orderTime?string('yyyy-MM-dd')}</p>
-                    <p>${order.orderTime?string('HH:mm:ss')}</p>
-                </td>
-                <td>
-                    <#if order.statusId?? && order.statusId==1>
-                           <p>待发货</p>
-                    <#elseif order.statusId?? &&  order.statusId==2>
-                           <p>待收货</p>
-                    <#elseif order.statusId?? &&  order.statusId==3>
-                           <p>已完成</p>
-                    </#if>
-                </td>
-                <td class="td003">
-                     <a href="">查看</a>          
-                </td>
-                </tr>
-               </#if>
+                        </td>
+                        <td>
+                            ${order.shopTitle!''}
+                        </td>
+                        <td>
+                            <p>￥${order.totalPrice?string("0.00")}</p>
+                        </td>
+                        <td class="td003">
+                            <p>${order.orderTime?string('yyyy-MM-dd')}</p>
+                            <p>${order.orderTime?string('HH:mm:ss')}</p>
+                        </td>
+                        <td>
+                            <#if order.statusId?? && order.statusId==1>
+                                   <p>待发货</p>
+                            <#elseif order.statusId?? &&  order.statusId==2>
+                                   <p>待收货</p>
+                            <#elseif order.statusId?? &&  order.statusId==3>
+                                   <p>已完成</p>
+                            </#if>
+                        </td>
+                        <td class="td003">
+                            <a href="">查看</a>          
+                        </td>
+                    </tr>
+                </#if>
             </#list>
-        </#if>
-      </table>
+            </#if>
+        </table>
     </div> 
 
 
@@ -117,14 +118,14 @@ DD_belatedPNG.fix('.,img,background');
                 <#list dis_goodsOut_order_page.content as order>
                     <#if order_index < 3 >         
                         <tr>
-                            <th colspan="7">订单编号：<a href="">${order.orderNumber!''}</a></th>
+                            <th colspan="7">订单编号：<a href="/distributor/order?id=${order.id?c}">${order.orderNumber!''}</a></th>
                         </tr>
                         <tr>
                             <td align="left"  colspan="2">
                                 <#if order.orderGoodsList??>
                                     <#list order.orderGoodsList as og>  
                                         <#if og_index < 1>
-                                            <a href=""><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
+                                            <a ><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
                                         </#if>
                                     </#list>
                                 </#if>
@@ -156,7 +157,7 @@ DD_belatedPNG.fix('.,img,background');
                                 </#if>
                             </td>
                             <td class="td003">
-                                 <a href="">查看</a>          
+                                 <a href="/distributor/order?id=${order.id?c}">查看</a>          
                             </td>
                          </tr>
                     </#if>
@@ -177,7 +178,7 @@ DD_belatedPNG.fix('.,img,background');
       <li>营业时间：${distributor.openTime!''}</li>
       <li>钱包账号：${distributor.virtualAccount!''}</li>
       <li>服务电话：${distributor.serviceTele!''}</li>
-      <a href="/logout" class="quit_btn">退出登陆</a>
+      <a href="/distributor/password" class="quit_btn" >修改密码</a><a href="/logout" class="quit_btn">退出登陆</a>
     </ul>
   </div>
 

@@ -42,7 +42,7 @@ public interface TdOrderRepo extends
     
     Page<TdOrder> findByUsernameAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(String username, Long statusId, Date time, String keywords, Pageable page);
   
-    Long countByUsernameAndStatusId(String username, Long statusId);
+    Long countByUsernameAndTypeIdAndStatusId(String username,Long typeId, Long statusId);
     
     TdOrder findByOrderNumber(String orderNumber);
     
@@ -121,5 +121,39 @@ public interface TdOrderRepo extends
     
     Page<TdOrder> findByUsernameAndTypeIdOrderByIdDesc(String username,long typeId,Pageable page);
     Page<TdOrder> findByShopIdAndTypeIdOrderByOrderTimeDesc(long shopId,long typeId,Pageable page);
+    
+    /**
+     *  超市进货订单
+     * @param username
+     * @param typeId
+     * @param time
+     * @param page
+     * @return
+     */
+    Page<TdOrder> findByUsernameAndTypeIdAndOrderTimeAfterOrderByIdDesc(String username,long typeId, Date time, Pageable page);
+    Page<TdOrder> findByUsernameAndTypeIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(String username,long typeId, Date time, String keywords, Pageable page);
+    Page<TdOrder> findByUsernameAndTypeIdAndOrderNumberContainingOrderByIdDesc(String username,long typeId, String keywords, Pageable page);
+    Page<TdOrder> findByUsernameAndTypeIdAndStatusIdOrderByIdDesc(String username,long typeId, Long statusId, Pageable page);
+    Page<TdOrder> findByUsernameAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(String username,long typeId, Long statusId, String keywords, Pageable page);
+    Page<TdOrder> findByUsernameAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(String username,long typeId, Long statusId, Date time, Pageable page);
+    Page<TdOrder> findByUsernameAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(String username,long typeId, Long statusId, Date time, String keywords, Pageable page);
+    
+    /**
+     * 超市销售订单
+     * @param ShopId
+     * @param typeId
+     * @param time
+     * @param page
+     * @return
+     */
+    Page<TdOrder> findByShopIdAndTypeIdAndOrderTimeAfterOrderByIdDesc(long ShopId,long typeId, Date time, Pageable page);
+    Page<TdOrder> findByShopIdAndTypeIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(long ShopId,long typeId, Date time, String keywords, Pageable page);
+    Page<TdOrder> findByShopIdAndTypeIdAndOrderNumberContainingOrderByIdDesc(long ShopId,long typeId, String keywords, Pageable page);
+    Page<TdOrder> findByShopIdAndTypeIdAndStatusIdOrderByIdDesc(long ShopId,long typeId, Long statusId, Pageable page);
+    Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(long ShopId,long typeId, Long statusId, String keywords, Pageable page);
+    Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(long ShopId,long typeId, Long statusId, Date time, Pageable page);
+    Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(long ShopId,long typeId, Long statusId, Date time, String keywords, Pageable page);
+    
+    Long countByShopIdAndTypeIdAndStatusId(long shopId,long typeId,long statusId);
     
 }

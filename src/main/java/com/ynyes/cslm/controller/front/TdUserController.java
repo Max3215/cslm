@@ -155,13 +155,13 @@ public class TdUserController{
                 .findByUsernameOrderByVisitTimeDesc(username, 0,
                         ClientConstant.pageSize));
         map.addAttribute("total_unpayed",
-                tdOrderService.countByUsernameAndStatusId(username, 2));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username,0, 2));
         map.addAttribute("total_undelivered",
-                tdOrderService.countByUsernameAndStatusId(username, 3));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username,0, 3));
         map.addAttribute("total_unreceived",
-                tdOrderService.countByUsernameAndStatusId(username, 4));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username,0, 4));
         map.addAttribute("total_finished",
-                tdOrderService.countByUsernameAndStatusId(username, 6));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,6));
         //热卖商品
         map.addAttribute("hot_goods_page",tdGoodsService.findByIsHotTrueAndIsOnSaleTrueOrderByIdDesc(0, ClientConstant.pageSize));
         //推荐商品
@@ -218,24 +218,165 @@ public class TdUserController{
 
         Page<TdOrder> orderPage = null;
 
+//        if (timeId.equals(0)) {
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService.findByUsernameAndSearch(
+//                            username, keywords, page, ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsername(username, page,
+//                            ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndSearch(username,
+//                                    statusId, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndStatusId(
+//                            username, statusId, page, ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(1)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -1);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTimeAfterAndSearch(username,
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+//                            username, time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+//                                    username, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfter(username,
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(3)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -3);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTimeAfterAndSearch(username,
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+//                            username, time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+//                                    username, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfter(username,
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(6)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -6);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTimeAfterAndSearch(username,
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+//                            username, time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+//                                    username, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfter(username,
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(12)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.YEAR, -1);// 减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTimeAfterAndSearch(username,
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+//                            username, time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+//                                    username, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndStatusIdAndTimeAfter(username,
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        }
         if (timeId.equals(0)) {
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService.findByUsernameAndSearch(
-                            username, keywords, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndSearch(
+                            username,0, keywords, page, ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsername(username, page,
+                    orderPage = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,0, page,
                             ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndSearch(username,
-                                    statusId, keywords, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
+                                    0,statusId, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndStatusId(
-                            username, statusId, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusId(
+                            username,0, statusId, page, ClientConstant.pageSize);
                 }
             }
         } else if (timeId.equals(1)) {
@@ -248,23 +389,23 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTimeAfterAndSearch(username,
-                                    time, keywords, page,
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                    0,time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-                            username, time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username, 0,time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-                                    username, statusId, time, keywords, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,0, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfter(username,
-                                    statusId, time, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                   0, statusId, time, page,
                                     ClientConstant.pageSize);
                 }
             }
@@ -278,23 +419,23 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTimeAfterAndSearch(username,
-                                    time, keywords, page,
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                   0, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-                            username, time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username,0, time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-                                    username, statusId, time, keywords, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,0, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfter(username,
-                                    statusId, time, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                    0,statusId, time, page,
                                     ClientConstant.pageSize);
                 }
             }
@@ -308,23 +449,23 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTimeAfterAndSearch(username,
-                                    time, keywords, page,
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                    0,time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-                            username, time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username,0, time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-                                    username, statusId, time, keywords, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,0, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfter(username,
-                                    statusId, time, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                   0, statusId, time, page,
                                     ClientConstant.pageSize);
                 }
             }
@@ -338,23 +479,23 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTimeAfterAndSearch(username,
-                                    time, keywords, page,
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                    0,time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-                            username, time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username,0, time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-                                    username, statusId, time, keywords, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,0, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndStatusIdAndTimeAfter(username,
-                                    statusId, time, page,
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                    statusId,0, time, page,
                                     ClientConstant.pageSize);
                 }
             }

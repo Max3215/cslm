@@ -146,11 +146,11 @@ public class TdLoginController {
 			TdProvider provider = tdProviderservice.findByUsername(username);
 				if(null != provider)
 				{
-				if(!provider.equals(password))
-				{
-					res.put("msg", "密码错误");
-					return res;
-				}
+					if(!provider.getPassword().equals(password))
+					{
+						res.put("msg", "密码错误");
+						return res;
+					}
 				request.getSession().setAttribute("provider", provider.getUsername());
 				request.getSession().setAttribute("proTitle", provider.getTitle());
 				res.put("code",2);

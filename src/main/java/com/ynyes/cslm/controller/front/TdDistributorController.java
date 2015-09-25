@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.mobile.device.site.SitePreference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,13 +20,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
+import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdUser;
+import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
+import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.SiteMagConstant;
@@ -51,7 +53,13 @@ public class TdDistributorController {
 	TdDistributorService TdDistributorService;
 	
 	@Autowired
-	private TdDistributorGoodsService tdDistributorGoodsService;
+	TdDistributorGoodsService tdDistributorGoodsService;
+	
+	@Autowired
+    TdGoodsService tdGoodsService;
+	
+	@Autowired
+	TdUserPointService tdUserPointService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -71,9 +79,16 @@ public class TdDistributorController {
         
         map.addAttribute("distributor", distributor);
         
-        map.addAttribute("dis_goodsIn_order_page",tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(distributor.getUsername(), 1L, 0, 5));
-		
-        map.addAttribute("dis_goodsOut_order_page", tdOrderService.findByShopIdAndTypeId(distributor.getId(), 0L, 0, ClientConstant.pageSize));
+        map.addAttribute("dis_goodsIn_order_page",
+        		tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(distributor.getUsername(), 1, 0, 5));
+        map.addAttribute("dis_goodsOut_order_page",
+        		tdOrderService.findByShopIdAndTypeId(distributor.getId(), 0, 0, ClientConstant.pageSize));
+        map.addAttribute("total_undelivered",
+        		tdOrderService.countByUsernameAndTypeIdAndStatusId(distributor.getUsername(), 1, 1));
+        map.addAttribute("total_unreceived",
+        		tdOrderService.countByUsernameAndTypeIdAndStatusId(distributor.getUsername(), 1, 2));
+        map.addAttribute("total_finished",
+        		tdOrderService.countByUsernameAndTypeIdAndStatusId(distributor.getUsername(), 1, 3));
         
 		return "/client/distributor_index";
 	}
@@ -362,70 +377,70 @@ public class TdDistributorController {
     	return sales;
     }
 	
-	@RequestMapping(value="/order/param/edit", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, Object> paramEdit(String orderNumber, String password,
-                        String type,
-                        String data,
-                        String name,
-                        String address,
-                        String postal,
-                        String mobile,
-                        String expressNumber,
-                        Long deliverTypeId,
-                        ModelMap map,
-                        HttpServletRequest req){
-        
-        Map<String, Object> res = new HashMap<String, Object>();
-        
-        res.put("code", 1);
-        
-        String username = (String) req.getSession().getAttribute("diysiteUsername");
-        if (null == username)
-        {
-            res.put("message", "请重新登录");
-            return res;
-        }
-        
-        if (null != orderNumber && !orderNumber.isEmpty() && null != type && !type.isEmpty() && null != password)
-        {
-            TdOrder order = tdOrderService.findByOrderNumber(orderNumber);
-            TdUser tdUser = tdUserService.findByUsername(order.getUsername());
-            // 修改备注
-            if (type.equalsIgnoreCase("editMark"))
-            {
-                order.setRemarkInfo(data);
-            }
-            // 确认已服务
-            else if (type.equalsIgnoreCase("orderService"))
-            {
-                if (order.getStatusId().equals(4L))
-                {
-                	if (null == tdUser.getUpperDiySiteId()) {
-						tdUser.setUpperDiySiteId(order.getShopId());
-						tdUserService.save(tdUser);
-					}
-                	if (order.getOrderNumber().substring(order.getOrderNumber().length() - 4).equals(password)) {
-                		order.setStatusId(5L);
-					}else{
-						res.put("message", "消费密码错误!");
-						return res;
-					}
-                    
-                }
-            }
-          
-            
-            tdOrderService.save(order);
-            
-            res.put("code", 0);
-            res.put("message", "修改成功!");
-            return res;
-        }
-        
-        res.put("message", "参数错误!");
-        return res;
-    }
+//	@RequestMapping(value="/order/param/edit", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Map<String, Object> paramEdit(String orderNumber, String password,
+//                        String type,
+//                        String data,
+//                        String name,
+//                        String address,
+//                        String postal,
+//                        String mobile,
+//                        String expressNumber,
+//                        Long deliverTypeId,
+//                        ModelMap map,
+//                        HttpServletRequest req){
+//        
+//        Map<String, Object> res = new HashMap<String, Object>();
+//        
+//        res.put("code", 1);
+//        
+//        String username = (String) req.getSession().getAttribute("diysiteUsername");
+//        if (null == username)
+//        {
+//            res.put("message", "请重新登录");
+//            return res;
+//        }
+//        
+//        if (null != orderNumber && !orderNumber.isEmpty() && null != type && !type.isEmpty() && null != password)
+//        {
+//            TdOrder order = tdOrderService.findByOrderNumber(orderNumber);
+//            TdUser tdUser = tdUserService.findByUsername(order.getUsername());
+//            // 修改备注
+//            if (type.equalsIgnoreCase("editMark"))
+//            {
+//                order.setRemarkInfo(data);
+//            }
+//            // 确认已服务
+//            else if (type.equalsIgnoreCase("orderService"))
+//            {
+//                if (order.getStatusId().equals(4L))
+//                {
+//                	if (null == tdUser.getUpperDiySiteId()) {
+//						tdUser.setUpperDiySiteId(order.getShopId());
+//						tdUserService.save(tdUser);
+//					}
+//                	if (order.getOrderNumber().substring(order.getOrderNumber().length() - 4).equals(password)) {
+//                		order.setStatusId(5L);
+//					}else{
+//						res.put("message", "消费密码错误!");
+//						return res;
+//					}
+//                    
+//                }
+//            }
+//          
+//            
+//            tdOrderService.save(order);
+//            
+//            res.put("code", 0);
+//            res.put("message", "修改成功!");
+//            return res;
+//        }
+//        
+//        res.put("message", "参数错误!");
+//        return res;
+//    }
 //========================================================================================================================================================================================
 //========================================================================================================================================================================================
 	/**
@@ -549,7 +564,7 @@ public class TdDistributorController {
 	@RequestMapping(value="/sale", method=RequestMethod.GET)
 	public String distributorSale(Integer page,HttpServletRequest req,ModelMap map)
 	{
-		String username=(String)req.getSession().getAttribute("username");
+		String username=(String)req.getSession().getAttribute("distributor");
 		
 		tdCommonService.setHeader(map, req);
 		
@@ -610,7 +625,7 @@ public class TdDistributorController {
 	@RequestMapping(value="/goods/sale/{isSale}", method= RequestMethod.GET)
 	public String disGoodsSale(@PathVariable Boolean isSale, Integer page,HttpServletRequest req,ModelMap map)
 	{
-		String username = (String)req.getSession().getAttribute("username");
+		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
 			return "redirect:/login";
@@ -643,7 +658,7 @@ public class TdDistributorController {
 	@RequestMapping(value="/goods/onsale/{disId}")
 	public String disGoodsIsOnSale(@PathVariable Long disId,Boolean type,Integer page,HttpServletRequest req,ModelMap map)
 	{
-		String username = (String)req.getSession().getAttribute("username");
+		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
 			return "redirect:/login";
@@ -651,7 +666,7 @@ public class TdDistributorController {
 		
 		if(null == disId)
 		{
-			return "error_404";
+			return "/client/error_404";
 		}
 		
 		if(null == page )
@@ -690,14 +705,14 @@ public class TdDistributorController {
 	@RequestMapping(value="/goods/delete/{disId}")
 	public String disGoodsDelete(@PathVariable Long disId,Boolean type,Integer page, HttpServletRequest req,ModelMap map)
 	{
-		String username = (String)req.getSession().getAttribute("username");
+		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
 			return "redirect:/login";
 		}
 		if(null == disId)
 		{
-			return "error_404";
+			return "/client/error_404";
 		}
 		if(null == page )
 		{
@@ -732,7 +747,7 @@ public class TdDistributorController {
 			Integer page,
 			HttpServletRequest req,
 			ModelMap map){
-		String username = (String)req.getSession().getAttribute("username");
+		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
 			return "redirect:/login";
@@ -750,6 +765,601 @@ public class TdDistributorController {
 		}
 		
 		return "redirect:/distributor/goods/sale/"+type+"?page="+page;
+	}
+	
+	/**
+	 * 超市销售订单查询
+	 * @author libiao
+	 * 
+	 * @param statusId
+	 * @param statusid
+	 * @param keywords
+	 * @param page
+	 * @param timeId
+	 * @param req
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value="/outOrder/list/{statusId}")
+	public String outOrderList(@PathVariable Integer statusId,
+			Integer statusid,
+			String keywords,
+			Integer page,
+			Integer timeId,
+			HttpServletRequest req,
+			ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page )
+		{
+			page = 0;
+		}
+		if(null == statusId)
+		{
+			statusId= 0;
+		}
+		if (null == timeId) {
+            timeId = 0;
+        }
+		if(null != statusid){
+        	statusId = statusid;
+        }
+		TdDistributor distributor = TdDistributorService.findbyUsername(username);
+		map.addAttribute("distributor", distributor);
+		map.addAttribute("status_id", statusId);
+		map.addAttribute("time_id", timeId);
+		
+		tdCommonService.setHeader(map, req);
+		
+		Page<TdOrder> orderPage=null;
+		if (timeId.equals(0)) {
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService.findByShopIdAndTypeIdAndSearch(
+                            distributor.getId(),0, keywords, page, ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByShopIdAndTypeId(distributor.getId(),0, page,
+                            ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndSearch(distributor.getId(),0,statusId, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByShopIdAndTypeIdAndStatusId(
+                            distributor.getId(),0,statusId, page, ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(1)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -1);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndTimeAfterAndSearch(distributor.getId(),
+                                    0,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByShopIdAndTypeIdAndTimeAfter(
+                            distributor.getId(),0,time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    distributor.getId(),0, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfter(distributor.getId(),
+                                   0, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(3)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -3);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndTimeAfterAndSearch(distributor.getId(),
+                                   0, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByShopIdAndTypeIdAndTimeAfter(
+                            distributor.getId(),0, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    distributor.getId(),0, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfter(distributor.getId(),
+                                    0,statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(6)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -6);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndTimeAfterAndSearch(distributor.getId(),
+                                    0,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByShopIdAndTypeIdAndTimeAfter(
+                            distributor.getId(),0, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    distributor.getId(),0, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfter(distributor.getId(),
+                                   0, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(12)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.YEAR, -1);// 减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndTimeAfterAndSearch(distributor.getId(),
+                                    0,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByShopIdAndTypeIdAndTimeAfter(
+                            distributor.getId(),0, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    distributor.getId(),0, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByShopIdAndTypeIdAndStatusIdAndTimeAfter(distributor.getId(),
+                                    0,statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        }
+
+        map.addAttribute("order_page", orderPage);
+		return "/client/distributor_saleOrder_list";
+	}
+	
+	
+	
+	/**
+	 * 超市进货订单
+	 * @author libiao
+	 * 
+	 * @param statusId
+	 * @param statusid
+	 * @param keywords
+	 * @param page
+	 * @param timeId
+	 * @param req
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value="/inOrder/list/{statusId}")
+	public String inOrderList(@PathVariable Integer statusId,
+			Integer statusid,
+			String keywords,
+			Integer page,
+			Integer timeId,
+			HttpServletRequest req,
+			ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page )
+		{
+			page = 0;
+		}
+		if(null == statusId)
+		{
+			statusId= 0;
+		}
+		if (null == timeId) {
+            timeId = 0;
+        }
+		if(null != statusid){
+        	statusId = statusid;
+        }
+		TdDistributor distributor = TdDistributorService.findbyUsername(username);
+		map.addAttribute("distributor", distributor);
+		map.addAttribute("status_id", statusId);
+		map.addAttribute("time_id", timeId);
+		
+		tdCommonService.setHeader(map, req);
+		
+		Page<TdOrder> orderPage=null;
+		if (timeId.equals(0)) {
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndSearch(
+                            username,1, keywords, page, ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,1, page,
+                            ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
+                                    1,statusId, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusId(
+                            username,1, statusId, page, ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(1)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -1);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                    1,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username, 1,time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,1, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                   1, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(3)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -3);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                   1, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username,1, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,1, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                    1,statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(6)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -6);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                    1,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username,1, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,1, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                   1, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(12)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.YEAR, -1);// 减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                    1,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                            username,1, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                    username,1, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                    statusId,1, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        }
+
+        map.addAttribute("order_page", orderPage);
+		
+		return "/client/distributor_inOrder_list";
+	}
+	
+	/**
+	 * 超市销售订单详细
+	 * @param onsale
+	 * @param ids
+	 * @param chkIds
+	 */
+	@RequestMapping(value="/order")
+	public String orderdetial(Long id,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == id)
+		{
+			return "/client/error_404";
+		}
+		tdCommonService.setHeader(map, req);
+		
+		map.addAttribute("distributor", TdDistributorService.findbyUsername(username));
+		
+		map.addAttribute("order",tdOrderService.findOne(id));
+		
+		return "/client/distributor_order_detail";
+	}
+	/**
+	 * 超市确认订单  确认发货   确认已收货  确认评价
+	 * @author libiao
+	 * @param orderNumber
+	 * @param type
+	 * @param map
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="/order/param/edit",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> paramEdit(String orderNumber,
+			String type,
+			ModelMap map,
+			HttpServletRequest req)
+	{
+		Map<String, Object> res =new HashMap<>();
+		res.put("code",1);
+		String username = (String)req.getSession().getAttribute("distributor");
+		
+		if (null == username)
+        {
+            res.put("message", "请重新登录");
+            return res;
+        }
+		
+		if (null != orderNumber && !orderNumber.isEmpty() && null != type && !type.isEmpty())
+        {
+			TdOrder order = tdOrderService.findByOrderNumber(orderNumber);
+			// 确认订单
+            if (type.equalsIgnoreCase("orderConfirm"))
+            {
+                if (order.getStatusId().equals(1L))
+                {
+                    order.setStatusId(2L);
+                    order.setCheckTime(new Date());
+                }
+            }
+            //确认付款
+            else if(type.equalsIgnoreCase("orderPay"))
+            {
+            	TdUser tdUser = tdUserService.findByUsername(order.getUsername());
+            	TdDistributor distributor = TdDistributorService.findOne(order.getShopId());
+            	
+            	List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
+            	
+            	 Long totalPoints = 0L;
+                 Double totalCash = 0.0;
+                 Double platformService = 0.0;
+                 Double trainService = 0.0;
+                
+                 // 返利总额
+                 if (null != tdOrderGoodsList) {
+                     for (TdOrderGoods tog : tdOrderGoodsList) {
+                         if (0 == tog.getGoodsSaleType()) // 正常销售
+                         {
+                             TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributor.getId(), tog.getGoodsId(), true);
+                        	 TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
+
+                             if (null != disGoods && null != disGoods.getReturnPoints()) {
+                                 totalPoints += disGoods.getReturnPoints(); // 赠送积分
+
+//                                 if (null != tdGoods.getShopReturnRation()) {
+//                                     totalCash += tdGoods.getCostPrice()
+//                                             * tdGoods.getShopReturnRation();
+//                                 }
+                             }
+                             if (null != disGoods && null != tdGoods.getPlatformServiceReturnRation()) {
+                             	platformService += disGoods.getGoodsPrice() * tdGoods.getPlatformServiceReturnRation();
+         					}
+                             if (null != disGoods && null != tdGoods.getTrainServiceReturnRation()) {
+                             	trainService += disGoods.getGoodsPrice() * tdGoods.getTrainServiceReturnRation(); 
+         					}
+                         }
+                     }
+                  // 用户返利
+                     if (null != tdUser) {
+                         TdUserPoint userPoint = new TdUserPoint();
+
+                         userPoint.setDetail("购买商品赠送积分");
+                         userPoint.setOrderNumber(order.getOrderNumber());
+                         userPoint.setPoint(totalPoints);
+                         userPoint.setPointTime(new Date());
+                         userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
+                         userPoint.setUsername(tdUser.getUsername());
+
+                         userPoint = tdUserPointService.save(userPoint);
+
+                         tdUser.setTotalPoints(userPoint.getTotalPoint());
+
+                         tdUserService.save(tdUser);
+                     }
+                     order.setRebate(order.getTotalGoodsPrice()-platformService);// 设置订单超市收益
+                     order.setPlatformService(platformService);// 设置订单平台服务费
+                     order.setTrainService(trainService);// 设置订单培训服务费
+                     order = tdOrderService.save(order);
+                  //超市入账
+                   if(null != distributor)
+                   {
+                	   distributor.setVirtualMoney(distributor.getVirtualMoney()+order.getTotalGoodsPrice()-platformService);
+                       TdDistributorService.save(distributor);
+                   }
+                 }
+                 order.setStatusId(3L);
+                 order.setPayTime(new Date());
+            }
+            // 确认发货
+            else if (type.equalsIgnoreCase("orderPayLeft"))
+            {
+            	if(order.getStatusId().equals(3L))
+            	{
+            		order.setStatusId(4L);
+            		order.setDeliveryTime(new Date());
+            	}
+            }
+            // 确认收货
+            else if(type.equalsIgnoreCase("orderService"))
+            {
+            	if(order.getStatusId().equals(4L))
+            	{
+            		order.setStatusId(5L);
+            		order.setReceiveTime(new Date());
+            	}
+            }
+            // 确认订单完成
+            else if(type.equalsIgnoreCase("orderFinish"))
+            {
+            	if(order.getStatusId().equals(5L))
+            	{
+            		order.setStatusId(6L);
+            		order.setFinishTime(new Date());
+            	}
+            }
+           tdOrderService.save(order);
+           res.put("code", 0);
+           res.put("message", "修改成功!");
+           return res;
+            
+        }
+		res.put("message", "参数错误!");
+		return res;
+	}
+	
+	@RequestMapping(value="/password")
+	public String distributorPassword(HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		tdCommonService.setHeader(map, req);
+		map.addAttribute("distributor",TdDistributorService.findbyUsername(username));
+		return "/client/distributor_change_password";
+	}
+	
+	@RequestMapping(value="/password", method = RequestMethod.POST)
+	public String distributorPassword(String oldPassword,String newPassword,
+			HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		tdCommonService.setHeader(map, req);
+		TdDistributor distributor = TdDistributorService.findbyUsername(username);
+		 if (distributor.getPassword().equals(oldPassword)) 
+		 {
+			 distributor.setPassword(newPassword);
+		 }
+		
+		map.addAttribute("distributor",TdDistributorService.save(distributor));
+		
+		return "redirect:/distributor/password";
 	}
 	
 	public void onSaleAll(Boolean onsale,Long[] ids,Integer[] chkIds)

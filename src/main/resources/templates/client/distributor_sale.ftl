@@ -46,14 +46,11 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
-<!--  顶部  -->
-    <#include "/client/common_header.ftl" />
-<!--mymember-->
 <div class="myclear"></div>
 <div class="mymember_out">
   <div class="mymember_main">
     <!-- 左侧菜单 -->
-     <#include "/client/common_user_menu.ftl" />
+     <#include "/client/common_distributor_menu.ftl" />
      
      
     <div class="mymember_mainbox">

@@ -73,7 +73,7 @@ public class TdProvider {
     @Column
     private Boolean isEnable;
     
-    //超市商品
+    // 批发商品
     @OneToMany
     @JoinColumn(name = "providerId")
     private List<TdProviderGoods> goodsList;

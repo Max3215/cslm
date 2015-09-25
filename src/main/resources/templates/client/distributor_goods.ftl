@@ -52,12 +52,11 @@ DD_belatedPNG.fix('.,img,background');
 </head>
 <body>
 
-    <#include "/client/common_header.ftl"> 
 <form action="/distributor/onsaleAll/${isOnSale?c}" method="post" id="form">
 <div class="myclear"></div>
 <div class="mymember_out">
     <div class="mymember_main">
-       <#include "/client/common_user_menu.ftl">
+       <#include "/client/common_distributor_menu.ftl">
     
         <div class="mymember_mainbox">
             <div class="mymember_info mymember_info02">
