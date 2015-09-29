@@ -1,10 +1,15 @@
 package com.ynyes.cslm.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+
 
 /**
  * 超市—商品表
@@ -35,6 +40,14 @@ public class TdDistributorGoods {
 	// 商品原价
 	@Column(scale=2)
 	private Double goodsMarketPrice;
+	
+	// 商品类型
+	@Column
+	private Long categoryId;
+	
+	// 商品所有类型
+    @Column
+    private String categoryIdTree;
 	
 	// 商品图片
 	@Column
@@ -67,6 +80,23 @@ public class TdDistributorGoods {
 	// 赠送积分
 	@Column
 	private Long returnPoints;
+	
+	// 商品参数
+    @OneToMany
+    @JoinColumn(name="disGoodsId")
+    private List<TdGoodsParameter> paramList;
+    
+    // 参数值，用于搜索
+    @Column
+    private String paramValueCollect;
+    
+    // 品牌
+    @Column
+    private String brandTitle;
+    
+    // 品牌ID
+    @Column
+    private Long brandId;
 
 	public Long getId() {
 		return id;
@@ -98,6 +128,30 @@ public class TdDistributorGoods {
 
 	public void setGoodsPrice(Double goodsPrice) {
 		this.goodsPrice = goodsPrice;
+	}
+
+	public Double getGoodsMarketPrice() {
+		return goodsMarketPrice;
+	}
+
+	public void setGoodsMarketPrice(Double goodsMarketPrice) {
+		this.goodsMarketPrice = goodsMarketPrice;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getCategoryIdTree() {
+		return categoryIdTree;
+	}
+
+	public void setCategoryIdTree(String categoryIdTree) {
+		this.categoryIdTree = categoryIdTree;
 	}
 
 	public String getCoverImageUri() {
@@ -164,15 +218,37 @@ public class TdDistributorGoods {
 		this.returnPoints = returnPoints;
 	}
 
-	public Double getGoodsMarketPrice() {
-		return goodsMarketPrice;
+	public List<TdGoodsParameter> getParamList() {
+		return paramList;
 	}
 
-	public void setGoodsMarketPrice(Double goodsMarketPrice) {
-		this.goodsMarketPrice = goodsMarketPrice;
+	public void setParamList(List<TdGoodsParameter> paramList) {
+		this.paramList = paramList;
 	}
-	
-	
-	
+
+	public String getParamValueCollect() {
+		return paramValueCollect;
+	}
+
+	public void setParamValueCollect(String paramValueCollect) {
+		this.paramValueCollect = paramValueCollect;
+	}
+
+	public String getBrandTitle() {
+		return brandTitle;
+	}
+
+	public void setBrandTitle(String brandTitle) {
+		this.brandTitle = brandTitle;
+	}
+
+	public Long getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(Long brandId) {
+		this.brandId = brandId;
+	}
+
 	
 }

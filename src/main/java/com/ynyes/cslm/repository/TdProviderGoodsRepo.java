@@ -19,7 +19,7 @@ public interface TdProviderGoodsRepo extends
 		JpaSpecificationExecutor<TdProviderGoods>
 {
 	
-	
-	
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.isAudit=?2")
+	Page<TdProviderGoods> findByIdAndIsAudit(long providerId,Boolean isAudit,Pageable page);
 	
 }

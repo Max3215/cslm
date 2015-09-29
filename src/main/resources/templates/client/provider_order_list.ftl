@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>批发中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -55,10 +55,10 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_main">
 
   <!-- 左侧 -->
-  <#include "/client/common_distributor_menu.ftl" />
+  <#include "/client/common_provider_menu.ftl" />
   
   <div class="mymember_mainbox">
-    <form name="form1" action="/distributor/outOrder/list/${status_id}" method="POST">
+    <form name="form1" action="/provider/order/list/${status_id}" method="POST">
         <script type="text/javascript">
             var theForm = document.forms['form1'];
             if (!theForm) {
@@ -72,7 +72,7 @@ DD_belatedPNG.fix('.,img,background');
         </script>
         <div class="mymember_info mymember_info02">
             <div class="mymember_order_search">
-                <a class="a001" >销售订单</a>
+                <a class="a001" >批发单</a>
             <#--
             <input class="mysub" type="submit" value="查询" />
             <input class="mytext" type="text" onFocus="if(value=='商品名称、订单编号') {value=''}" onBlur="if (value=='') {value='商品名称、订单编号'}"  value="商品名称、订单编号" />
@@ -82,7 +82,7 @@ DD_belatedPNG.fix('.,img,background');
             <table>
                 <tr class="mymember_infotab_tit01">
                     <th>订单信息</th>
-                    <th width="70">购买用户</th>
+                    <th width="70">批发超市</th>
                     <th width="80">订单金额</th>
                     <th width="80">
                         <select name="timeId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
@@ -96,14 +96,9 @@ DD_belatedPNG.fix('.,img,background');
                     <th width="80">
                         <select name="statusid" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
                             <option value="0" <#if !status_id?? || status_id==0>selected="selected"</#if>>所有订单</option>
-                            <option value="1" <#if status_id==1>selected="selected"</#if>>待确认</option>
-                            <option value="2" <#if status_id==2>selected="selected"</#if>>待付款</option>
-                            <option value="3" <#if status_id==3>selected="selected"</#if>>待发货</option>
-                            <option value="4" <#if status_id==4>selected="selected"</#if>>待收货</option>
-                            <option value="5" <#if status_id==5>selected="selected"</#if>>待评价</option>
-                            <option value="6" <#if status_id==6>selected="selected"</#if>>已完成</option>
-                            <option value="7" <#if status_id==7>selected="selected"</#if>>已取消</option>
-                            <option value="8" <#if status_id==8>selected="selected"</#if>>支付取消</option> 
+                            <option value="1" <#if status_id==1>selected="selected"</#if>>待发货</option>
+                            <option value="2" <#if status_id==2>selected="selected"</#if>>待收货</option>
+                            <option value="3" <#if status_id==3>selected="selected"</#if>>已完成</option>
                         </select>
                     </th>
                     <th width="60">操作</th>
@@ -111,7 +106,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#if order_page??>
                 <#list order_page.content as order>
                 <tr>
-                      <th colspan="7">订单编号：<a href="/distributor/order?id=${order.id?c}">${order.orderNumber!''}</a></th>
+                      <th colspan="7">订单编号：<a href="/provider/order?id=${order.id?c}">${order.orderNumber!''}</a></th>
                   </tr>
                   <tr>
                       <td class="td001">
@@ -127,23 +122,16 @@ DD_belatedPNG.fix('.,img,background');
                         <p>${order.orderTime!''}</p>
                       </td>
                       <td>
-                            <#if order.statusId?? && order.statusId==2>
-                                    <p>待付款</p>
-                            <#elseif order.statusId?? &&  order.statusId==3>
-                                   <p>待发货</p>
-                            <#elseif order.statusId?? &&  order.statusId==4>
+                            <#if order.statusId?? && order.statusId==1>
+                                    <p>待发货</p>
+                            <#elseif order.statusId?? &&  order.statusId==2>
                                    <p>待收货</p>
-                            <#elseif order.statusId?? &&  order.statusId==5>
-                                   <p>待评价</p>
-                            <#elseif order.statusId?? &&  order.statusId==6>
+                            <#elseif order.statusId?? &&  order.statusId==3>
                                    <p>已完成</p>
-                            <#elseif order.statusId?? &&  order.statusId==7>
-                                   <p>已取消</p>
-                                   
                             </#if>
                       </td>
                       <td class="td003"> 
-                            <p><a href="">查看</a></p>
+                            <p><a href="/provider/order?id=${order.id?c}">查看</a></p>
                       </td>
                   </tr>
                   </#list>
@@ -159,7 +147,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == order_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/disreibutor/outOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
+                                <a href="/provider/order/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

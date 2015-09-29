@@ -179,7 +179,7 @@ function byNow(goodsId){
 			<div class="tit">
 				<menu class="sort">
 					<span>排序：</span>
-					<a <#if orderId==0>class="sel"</#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-0-<#if orderId!=0 || soldId==1>0<#else>1</#if>-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><#if orderId==0><#if soldId==0>销量↓<#else>销量↑</#if><#else>销量</#if></a>
+    				<a <#if orderId==0>class="sel"</#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-0-<#if orderId!=0 || soldId==1>0<#else>1</#if>-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><#if orderId==0><#if soldId==0>销量↓<#else>销量↑</#if><#else>销量</#if></a>
                     <a <#if orderId==1>class="sel"</#if> href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-1-${soldId!'0'}-<#if orderId!=1 || priceId==1>0<#else>1</#if>-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><#if orderId==1><#if priceId==0>价格↓<#else>价格↑</#if><#else>价格</#if></a>
 				</menu>
 				<div class="price">
@@ -209,14 +209,14 @@ function byNow(goodsId){
 			    <#if goods_page?? && goods_page.content?size gt 0>
                     <#list goods_page.content as goods>
         				<li>
-        					<a href="/goods/${goods.id?c}" class="a1">
-        						<img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.title!''}"/>
-        						<p>${goods.subTitle!""}</p>
+        					<a href="/goods/${goods.goodsId?c}" class="a1">
+        						<img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.goodsTitle!''}"/>
+        						<p>${goods.goodsTitle!""}</p>
         					</a>
-        					<p class="price">￥${goods.salePrice?string("#.##")}<span>原价：￥${goods.marketPrice?string("#.##")}</span></p>
+        					<p class="price">￥${goods.goodsPrice?string("#.##")}<span>原价：￥${goods.goodsMarketPrice?string("#.##")}</span></p>
         					<menu class="btn">
         						<a href="javascript:cartInit(${goods.id?c});" class="car" title="加入购物车"></a>
-        						<a href="javascript:byNow(${goods.id?c});" class="buy">立即购买</a> 
+        						<#if goods.isDistribution><a href="javascript:byNow(${goods.id?c});" class="buy">立即预购</a></#if> 
         						<div class="clear"></div>
         					</menu>
         				</li>

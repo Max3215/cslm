@@ -266,13 +266,6 @@ public class TdOrderController extends AbstractPaytypeController{
             // 购买商品
             TdGoods goods = tdGoodsService.findOne(gid);
 
-            // 检查是否在十人团
-            if (null == goods || null == goods.getIsOnSale()
-                    || !goods.getIsOnSale()
-                    || !tdGoodsService.isGroupSaleHundredTrue(goods)) {
-                return "/client/error_404";
-            }
-
             TdGoodsDto buyGoods = new TdGoodsDto();
 
             buyGoods.setGoodsId(goods.getId());

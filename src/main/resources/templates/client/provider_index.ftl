@@ -44,7 +44,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_out">
 <div class="mymember_main">
     
-    <#include "/client/provider_common_menu.ftl">
+    <#include "/client/common_provider_menu.ftl">
   <div class="mymember_center add_width">
     <div class="mymember_info mymember_info01">
       <table>
@@ -64,13 +64,13 @@ DD_belatedPNG.fix('.,img,background');
     </div>
     
     <div class="mymember_info mymember_info02">
-      <h3>我的进货单<a href="#">查看全部进货单</a></h3>
+      <h3>我的进货单<a href="/provider/order/list/0">查看全部进货单</a></h3>
       <table width="100%"> 
             <#if provider_order_page??>
                 <#list provider_order_page.content as order>
                      <#if order_index < 3 >
                         <tr>
-                            <th colspan="7">进货单编号：<a href="#">${order.orderNumber!''}</a></th>
+                            <th colspan="7">进货单编号：<a href="/provider/order?id=${order.id?c}">${order.orderNumber!''}</a></th>
                         </tr>
                         <tr>
                             <td align="left"  colspan="2">

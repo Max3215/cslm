@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>批发中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -57,15 +57,15 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_out">
   <div class="mymember_main">
   
-   <#include "/client/common_distributor_menu.ftl">
+   <#include "/client/common_provider_menu.ftl">
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
         <h3>修改密码</h3>
         
-		<form id="form1" action="/distributor/password" method="post">
+		<form id="form1" action="/provider/password" method="post">
 		<div class="haoh pt15 geren_rig">
             <div class="h20"></div>
-            <input name="__STATE" type="hidden" value="${distributor.password}"/>
+            <input name="__STATE" type="hidden" value="${provider.password}"/>
             <table class="mymember_address">
                   <tr>
                        <th>旧密码：</th>

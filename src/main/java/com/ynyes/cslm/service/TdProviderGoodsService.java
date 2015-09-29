@@ -21,6 +21,10 @@ public class TdProviderGoodsService {
 	@Autowired
 	private TdProviderGoodsRepo repository;
 	
+	public void delete(Long id)
+	{
+		repository.delete(id);
+	}
 	
 	
 	/**
@@ -28,7 +32,15 @@ public class TdProviderGoodsService {
 	 * 各种查看
 	 * 
 	 */
-	
+	public Page<TdProviderGoods> findByProviderIdAndIsAudit(Long providerId,Boolean isAudit,int page ,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		if(null ==providerId)
+		{
+			return null;
+		}
+		return repository.findByIdAndIsAudit(providerId,isAudit,pageRequest );
+	}
 	
 	
 	

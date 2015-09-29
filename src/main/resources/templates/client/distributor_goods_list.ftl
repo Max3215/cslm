@@ -16,13 +16,13 @@
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <a href="/goods/${dg.goodsId?c}" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${dg.goodsTitle}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
                         <td class="tb02">￥${dg.goodsPrice?string('0.00')}</td>
-                        <td>4</td>
+                        <td>${dg.leftNumber!'0'}</td>
                         <td>
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page});">下架</a></p>
                             <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page});">删除</a></p></td>
@@ -40,7 +40,7 @@
                         </td>
                         <td class="tb01">${dg.code!''}</td>
                         <td class="tb02">￥${dg.goodsPrice?string('0.00')}</td>
-                        <td>4</td>
+                        <td>${dg.leftNumber!'0'}</td>
                         <td>
                             <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page});">上架</a></p>
                             <p><a href="javascript:deleteDisGoods(false,${dg.id?c},${page});">删除</a></p></td>

@@ -1372,8 +1372,6 @@ public class TdDistributorController {
         
         for (int chkId : chkIds)
         {
-        	System.err.println(chkId);
-        	System.err.println(ids.length);
             if (chkId >=0 && ids.length > chkId)
             {
                 Long id = ids[chkId];

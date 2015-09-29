@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>批发中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -42,36 +42,10 @@ $(document).ready(function(){
 </script>
 <script type="text/javascript">
     $(function () {
-        $("#btnConfirm").click(function () { OrderConfirm(); });   //确认订单
-        $("#btnPayment").click(function () { OrderPayment(); });   //确认付款
         $("#btnPaymentLeft").click(function () { OrderPaymentLeft(); });   //确认发货
         $("#btnService").click(function () { OrderService(); });   //确认收货
 
-        $("#btnOrderExpress").click(function () { OrderExpress(); });   //确认发货
-        $("#btnOrderComplete").click(function () { OrderComplete(); }); //完成订单
     });
-    
-    //确认订单
-    function OrderConfirm() {
-        var dialog = $.dialog.confirm('确认要继续吗？', function () {
-            var orderNumber = $.trim($("#spanOrderNumber").text());
-            var postData = { "orderNumber": orderNumber, "type": "orderConfirm" };
-            //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/distributor/order/param/edit");
-            return false;
-        });
-    }    
-     
-    //确认付款
-    function OrderPayment() {
-        var dialog = $.dialog.confirm('操作提示信息：<br />1、该订单使用在线支付方式，付款成功后自动确认；<br />2、如客户确实已打款而没有自动确认可使用该功能；<br />', function () {
-            var orderNumber = $.trim($("#spanOrderNumber").text());
-            var postData = { "orderNumber": orderNumber, "type": "orderPay" };
-            //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/distributor/order/param/edit");
-            return false;
-        });
-    }  
     
     //确认发货
     function OrderPaymentLeft() {
@@ -79,7 +53,7 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderPayLeft" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/distributor/order/param/edit");
+            sendAjaxUrl(dialog, postData, "/provider/order/param/edit");
             return false;
         });
     }
@@ -89,34 +63,10 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderService" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/distributor/order/param/edit");
+            sendAjaxUrl(dialog, postData, "/provider/order/param/edit");
             return false;
         });
     } 
-    //确认发货
-    function OrderExpress() {
-        var orderNumber = $.trim($("#spanOrderNumber").text());
-        var dialog = $.dialog({
-            title: '确认发货',
-            content: 'url:/distributor/order/dialog/delivery?orderNumber=' + orderNumber,
-            min: false,
-            max: false,
-            lock: true,
-            width: 450,
-            height:350
-        });
-    }
-    
-    //确认完成
-    function OrderComplete() {
-         var dialog = $.dialog.confirm('确认后用户将不能进行评价，是否继续？', function () {
-            var orderNumber = $.trim($("#spanOrderNumber").text());
-            var postData = { "orderNumber": orderNumber, "type": "orderFinish" };
-            //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/distributor/order/param/edit");
-            return false;
-        });
-    }
     
     //发送AJAX请求
         function sendAjaxUrl(winObj, postData, sendUrl) {
@@ -158,7 +108,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_main">
 
     <!-- 左侧 -->
-  <#include "/client/common_distributor_menu.ftl" />
+  <#include "/client/common_provider_menu.ftl" />
   
   <div class="mymember_mainbox">
     <div class="mymember_info mymember_info04">
@@ -167,48 +117,27 @@ DD_belatedPNG.fix('.,img,background');
         <dt>订单编号：<span id="spanOrderNumber">${order.orderNumber!''}</span>&nbsp;&nbsp;&nbsp;&nbsp; 当前进度：
             <#if order??>
                 <#if order.statusId==1>
-                    待确认
-                <#elseif order.statusId==2>
-                    待付款
-                <#elseif order.statusId==3>
                     待发货
-                <#elseif order.statusId==4>
+                <#elseif order.statusId==2>
                     待收货
-                <#elseif order.statusId==5>
-                    待评价
-                <#elseif order.statusId==6>
+                <#elseif order.statusId==3>
                     已完成
-                <#elseif order.statusId==8>
-                    支付失败
                 </#if>
             </#if>
             &nbsp;&nbsp;&nbsp;&nbsp; 支付总额：<span>￥<#if order??>${order.totalPrice?string("0.00")}</#if></span></dt>
       </dl>
       <div class="mymember_green">
          <#if order??>
-            <#if order.statusId==2>
-                <p><i></i>订单付款</p>
-                <p><i></i><b></b>发货</p>
+            <#if order.statusId==1>
+                <p class="mysel"><i></i>待发货 </p>
                 <p><i></i><b></b>确认收货</p>
                 <p><i></i><b></b>完成</p>
-            <#elseif order.statusId==3>
-                <p class="mysel"><i></i>订单付款</p>
-                <p><i></i><b></b>发货</p>
-                <p><i></i><b></b>确认收货</p>
-                <p><i></i><b></b>完成</p>
-            <#elseif order.statusId==4>
-                <p class="mysel"><i></i>订单付款</p>
-                <p class="mysel"><i></i><b></b>发货</p>
-                <p><i></i><b></b>确认收货</p>
-                <p><i></i><b></b>完成</p>
-            <#elseif order.statusId==5>
-                <p class="mysel"><i></i>订单付款</p>
-                <p class="mysel"><i></i><b></b>发货</p>
+            <#elseif order.statusId==2>
+                <p class="mysel"><i></i><b></b>待发货</p>
                 <p class="mysel"><i></i><b></b>确认收货</p>
                 <p><i></i><b></b>完成</p>
-            <#elseif order.statusId==6>
-                <p class="mysel"><i></i>订单付款</p>
-                <p class="mysel"><i></i><b></b>发货</p>
+            <#elseif order.statusId==3>
+                <p class="mysel"><i></i><b></b>待发货</p>
                 <p class="mysel"><i></i><b></b>确认收货</p>
                 <p class="mysel"><i></i><b></b>完成</p>
             </#if>
@@ -231,7 +160,7 @@ DD_belatedPNG.fix('.,img,background');
             </tr>
             <tr>
                 <th>联系方式</th>
-                <td>联系人：<#if order??>${order.shippingName!''}</#if> &nbsp;&nbsp; 联系电话：${order.shippingPhone!''}</td>
+                <td>批发超市：<#if order??>${order.shippingName!''}</#if> &nbsp;&nbsp; 联系电话：${order.shippingPhone!''}</td>
             </tr>
             <tr>
                 <th>收货地址</th>
@@ -273,28 +202,13 @@ DD_belatedPNG.fix('.,img,background');
                 </td>
                 <td>
                     <#if order.statusId?? && order.statusId == 1>     
-                         <p>待确认</p>
+                         <p>待发货</p>
                     </#if>
                     <#if order.statusId?? && order.statusId == 2>
-                        <p>待付款</p>
-                    </#if>
-                    <#if order.statusId?? && order.statusId == 3>
-                        <p>待发货</p>
-                     </#if>
-                    <#if order.statusId?? && order.statusId == 4>
                         <p>待收货</p>
                     </#if>
-                    <#if order.statusId?? && order.statusId == 5>
-                        <p>待评价</p>
-                    </#if>
-                    <#if order.statusId?? && order.statusId == 6>
+                    <#if order.statusId?? && order.statusId == 3>
                         <p>已完成</p>
-                    </#if>
-                    <#if order.statusId?? && order.statusId == 7>
-                        <p>已取消</p>
-                    </#if>
-                    <#if order.statusId?? && order.statusId == 8>
-                        <p>支付取消（失败）</p>
                     </#if>
                 </td>
             </tr>
@@ -303,15 +217,9 @@ DD_belatedPNG.fix('.,img,background');
             <tr>
                 <div class="btn-list">
                     <#if order.statusId==1>
-                        <input type="button" id="btnConfirm" value="确认订单" class="btn">
-                    <#elseif order.statusId==2>
-                        <input type="button" id="btnPayment" value="确认付款" class="btn">
-                    <#elseif order.statusId==3>
                         <input type="button" id="btnPaymentLeft" value="确认发货" class="btn">
-                    <#elseif order.statusId==4>
+                    <#elseif order.statusId==2>
                         <input type="button" id="btnService" value="确认收货" class="btn green">
-                    <#elseif order.statusId==5>
-                        <input type="button" id="btnOrderComplete" value="确认评价" class="btn">
                     </#if>
                 </div>
             </tr>

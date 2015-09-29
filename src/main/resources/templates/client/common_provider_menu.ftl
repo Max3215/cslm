@@ -14,8 +14,8 @@
     <div class="mymember_menu_part">
       <a class="mymember_menu_tit" ><img src="/client/images/mymember/menu01.png" />批发单中心</a>
       <div>
-        <a href="#">我的批发单</a>
-        <a href="#">所有批发商品</a>
+        <a href="/provider/order/list/0">我的批发单</a>
+        <a href="/provider/goods/list">所有批发商品</a>
         <a href="#">选择批发商品</a>
       </div>
     </div><!--mymember_menu_part END-->
