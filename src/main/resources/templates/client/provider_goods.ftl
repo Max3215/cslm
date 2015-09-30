@@ -40,10 +40,10 @@ function deleteCheck(){
     $("#form").submit();
 }  
 
-funtion deletegoods(goodsId,page){
+function deletegoods(id,page){
     $.ajax({
         url : "/provider/goods/delete",
-        data : {"goodsId":goodsId,"page":page},
+        data : {"id":id,"page":page},
         type : "post",
         success:function(res){
             $("#dis_goods_table").html(res);

@@ -47,7 +47,7 @@ a:hover {color:#ff7d43;}
 .ta-c { text-align:center;}
 .ta-r { text-align:right;}
 .fl { float:left;}
-.fr { float:right;}
+.fr { float:right; height:40px; overflow:hidden;}
 .va-m { vertical-align:middle;}
 .va-t { vertical-align:top;}
 .pr { position:relative;}

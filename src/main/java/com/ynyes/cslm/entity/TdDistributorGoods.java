@@ -84,7 +84,7 @@ public class TdDistributorGoods {
 	// 商品参数
     @OneToMany
     @JoinColumn(name="disGoodsId")
-    private List<TdGoodsParameter> paramList;
+    private List<TdGoodsParameter> goodsParamList;
     
     // 参数值，用于搜索
     @Column
@@ -218,12 +218,12 @@ public class TdDistributorGoods {
 		this.returnPoints = returnPoints;
 	}
 
-	public List<TdGoodsParameter> getParamList() {
-		return paramList;
+	public List<TdGoodsParameter> getGoodsParamList() {
+		return goodsParamList;
 	}
 
-	public void setParamList(List<TdGoodsParameter> paramList) {
-		this.paramList = paramList;
+	public void setGoodsParamList(List<TdGoodsParameter> goodsParamList) {
+		this.goodsParamList = goodsParamList;
 	}
 
 	public String getParamValueCollect() {

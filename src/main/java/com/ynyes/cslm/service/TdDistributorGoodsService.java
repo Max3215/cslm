@@ -118,16 +118,16 @@ public class TdDistributorGoodsService {
                  e.setBrandTitle(brand.getTitle());
              }
          }
-         if (null != e.getParamList() && e.getParamList().size() > 0) {
+         if (null != e.getGoodsParamList() && e.getGoodsParamList().size() > 0) {
              String valueCollect = "";
-             for (TdGoodsParameter gp : e.getParamList()) {
+             for (TdGoodsParameter gp : e.getGoodsParamList()) {
                  valueCollect += gp.getValue();
                  valueCollect += ",";
              }
              e.setParamValueCollect(valueCollect);
 
              // 保存参数
-             tdGoodsParameterService.save(e.getParamList());
+             tdGoodsParameterService.save(e.getGoodsParamList());
          } else {
              e.setParamValueCollect("");
          }
@@ -164,6 +164,11 @@ public class TdDistributorGoodsService {
     public TdDistributorGoods findByDistributorIdAndGoodsIdAndIsOnSale(Long distributorId,Long goodsId, Boolean isOnSale)
     {
     	return repository.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,goodsId, isOnSale);
+    }
+    
+    public TdDistributorGoods findByDistributorIdAndGoodsId(Long distributorId,Long goodsId)
+    {
+    	return repository.findByDistributorIdAndGoodsId(distributorId,goodsId);
     }
     
     public List<TdDistributorGoods> findTop12ByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId)

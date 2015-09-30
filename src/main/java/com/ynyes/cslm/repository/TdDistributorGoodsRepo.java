@@ -31,6 +31,9 @@ public interface TdDistributorGoodsRepo extends
 	
 		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and goods_id=?2 and is_on_sale = ?3", nativeQuery = true)
 		TdDistributorGoods findByDistributorIdAndGoodsIdAndIsOnSale(long disId,long goodsid, Boolean onsale);
+		
+		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and goods_id=?2", nativeQuery = true)
+		TdDistributorGoods findByDistributorIdAndGoodsId(long disId,long goodsid);
 	
 		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 ", nativeQuery = true)
 		List<TdDistributorGoods> findTop12ByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(long disId);
@@ -39,7 +42,6 @@ public interface TdDistributorGoodsRepo extends
 		 * 	列表页收索排序
 		 * 
 		 */
-		
 		Page<TdDistributorGoods> findByCategoryIdTreeContainingAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrue(String categoryId, Double priceLow, Double priceHigh, String paramStr, Pageable page);
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsPrice between ?3 and ?4  and g.paramValueCollect like ?5% and g.isOnSale=true order by g.soldNumber")
 		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(Long distributorId,String categoryId, Double priceLow, Double priceHigh, String paramStr, Pageable page);

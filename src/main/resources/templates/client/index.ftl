@@ -240,7 +240,7 @@ $(document).ready(function(){
 		<div class="index_tj">
 			<h3>今日推荐</h3>
 			<div class="left_pic">
-			    <#if new_goods_ad_list?? && new_goods_ad_list?size lt 0>
+			    <#if new_goods_ad_list??>
         			<a href="${new_goods_ad_list[0].linkUri!''}">
         			     <img src="${new_goods_ad_list[0].fileUri!''}" width="400px" height="400px">
         			</a>

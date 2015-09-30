@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdProvider;
+import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
@@ -380,7 +382,7 @@ public class TdProviderController {
 		map.addAttribute("provider", provider);
 		map.addAttribute("page", page);
 		map.addAttribute("provider_goods_page",
-				tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId(), true,page,ClientConstant.pageSize));
+				tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId(),page,ClientConstant.pageSize));
 		
 		return "/client/provider_goods";
 	}
@@ -407,7 +409,7 @@ public class TdProviderController {
 		map.addAttribute("provider", provider);
 		map.addAttribute("page", page);
 		map.addAttribute("provider_goods_page",
-				tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId(), true,page,ClientConstant.pageSize));
+				tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId(),page,ClientConstant.pageSize));
 		return "/client/provider_goods_list";
 	}
 	
@@ -428,7 +430,75 @@ public class TdProviderController {
 		}
 		deleteCheck(listId,listChkId);
 		
-		return "";
+		return "redirect:/provider/goods/list?page="+page;
+	}
+	
+	@RequestMapping(value="/goods/wholesaling")
+	public String wholesaling(Integer page,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("provider");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		tdCommonService.setHeader(map, req);
+		if(null == page)
+		{
+			page = 0;
+		}
+		map.addAttribute("goods_page",
+				tdGoodsService.findByIsOnSaleTrueOrderBySortIdAsc(page, 10));
+		return "/client/provider_goods_onsale";
+	}
+	
+	@RequestMapping(value="/wholesaling",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> wholesaling(Long goodsId,
+			String goodsTitle,
+			Double outFactoryPrice,
+			Long leftNumber,
+			HttpServletRequest req)
+	{
+		Map<String,Object> res =new HashMap<>();
+		String username =(String)req.getSession().getAttribute("provider");
+		if(null == username )
+		{
+			res.put("msg", "请先登录！");
+			return res;
+		}
+		if(null ==goodsId)
+		{
+			res.put("msg","选择的商品无效！");
+			return res;
+		}
+		TdProvider provider = tdProviderService.findByUsername(username);
+		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(provider.getId(), goodsId);
+		TdGoods goods = tdGoodsService.findOne(goodsId);
+		
+		if(null == proGoods)
+		{
+			proGoods=new TdProviderGoods();
+			proGoods.setGoodsId(goods.getId());
+			proGoods.setGoodsTitle(goodsTitle);
+			proGoods.setSubGoodsTitle(goods.getSubTitle());
+			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
+			proGoods.setOutFactoryPrice(outFactoryPrice);
+			proGoods.setLeftNumber(leftNumber);
+		}
+		else
+		{
+			
+			proGoods.setGoodsTitle(goodsTitle);
+			proGoods.setLeftNumber(proGoods.getLeftNumber()+leftNumber);
+			proGoods.setOutFactoryPrice(outFactoryPrice);
+		}
+		proGoods.setProviderTitle(provider.getTitle());
+		provider.getGoodsList().add(proGoods);
+		tdProviderService.save(provider);
+		
+		res.put("msg","设置批发成功");
+		
+		return res;
 	}
 	
 	public void deleteCheck(Long[] ids,Integer[] chkIds)

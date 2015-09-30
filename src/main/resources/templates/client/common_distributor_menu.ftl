@@ -23,8 +23,8 @@
         <div class="mymember_menu_part"> 
             <a class="mymember_menu_tit" title="商品管理"><img src="/client/images/mymember/menu06.png" />商品管理</a>
             <div> 
-                <a>商品进货</a>
-                <a href="/distributor/goods/sale/1">商品上架</a> 
+                <a href="/distributor/goods/list">商品进货</a>
+                <a href="/distributor/goods/onsale">商品上架</a> 
                 <a href="/distributor/goods/sale/1">出售中的商品</a> 
                 <a href="/distributor/goods/sale/0">仓库中的商品</a> 
                 <a href="/distributor/sale">已卖出的商品</a> 

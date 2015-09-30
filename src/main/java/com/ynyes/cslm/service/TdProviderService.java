@@ -28,6 +28,8 @@ public class TdProviderService {
     @Autowired
     TdProviderRepo repository;
     
+    @Autowired
+    TdProviderGoodsService tdProviderGoodsService;
     /**
      * 删除
      * 
@@ -136,6 +138,7 @@ public class TdProviderService {
      */
     public TdProvider save(TdProvider e)
     {
+    	tdProviderGoodsService.save(e.getGoodsList());
         
         return repository.save(e);
     }

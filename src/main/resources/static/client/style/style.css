@@ -227,6 +227,10 @@
 -ms-transform: skew(40deg);
 transform: skew(40deg);}
 .car_top p.sel,.car_top p.sel i { background:#ff5b7d;}
+
+
+
+
 .car_list { width:100%;}
 .car_list th,.car_list td { font-weight:400; text-align:center;}
 .car_list th { line-height:35px; background:#eee;}
@@ -236,6 +240,9 @@ transform: skew(40deg);}
 .car_list td.num a:hover { border:1px solid #999;}
 .car_list a.del { display:inline-block;_display:inline; width:130px; height:30px; background:#39bee9; color:#fff; line-height:30px; text-align:center;}
 .car_list a.del:hover { background:#ff5b7d;}
+
+
+
 .car_btn { width:100%; background:#eee; line-height:40px;height:40px;}
 .car_btn .sub { position:absolute;right:0;top:0;width:150px; height:40px; font-size:18px; color:#fff; background:#ff5b7d; line-height:40px;}
 .car_btn .sub:hover { background:#39bee9;}

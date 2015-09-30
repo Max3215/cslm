@@ -53,13 +53,21 @@ public class TdOrder {
     @Column
     private String postalCode;
     
-    // 线下超市/批发商
+    // 线下超市
     @Column
     private Long shopId;
     
-    // 超市名称/批发商名称
+    // 超市名称
     @Column
     private String shopTitle;
+    
+    // 批发商id
+    @Column
+    private Long providerId;
+    
+    // 批发商名称
+    @Column
+    private String providerTitle;
     
     // 同盟店所获返利
     private Double rebate;
@@ -658,4 +666,20 @@ public class TdOrder {
         this.totalLeftPrice = totalLeftPrice;
     }
 
+	public Long getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(Long providerId) {
+		this.providerId = providerId;
+	}
+
+	public String getProviderTitle() {
+		return providerTitle;
+	}
+
+	public void setProviderTitle(String providerTitle) {
+		this.providerTitle = providerTitle;
+	}
+    
 }

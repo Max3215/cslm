@@ -9,14 +9,13 @@
      </tr>
       <#if provider_goods_page?? && provider_goods_page.content?size gt 0>
            <#list provider_goods_page.content as dg>
-               <#if dg.isAudit>
                       <tr id="tr_1424195166">
                         <td width=10>
                             <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index}" class="check""/>
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.goodsCoverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${dg.goodsTitle}</p>
                              </a> 
                         </td>
@@ -26,7 +25,6 @@
                         <td>
                             <p><a href="javascript:deletegoods(${dg.id?c},${page})">取消批发</a></p>
                       </tr>
-                 </#if>
             </#list>
         </#if>
 </table>

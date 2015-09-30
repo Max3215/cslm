@@ -25,11 +25,14 @@ import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
+import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdProviderGoodsService;
+import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
@@ -60,6 +63,15 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdUserPointService tdUserPointService;
+	
+	@Autowired
+	TdProviderGoodsService tdProviderGoodsService;
+	
+	@Autowired
+	TdProviderService tdProviderService;
+	
+	@Autowired
+	TdCartGoodsService tdCartGoodsService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -1361,6 +1373,125 @@ public class TdDistributorController {
 		
 		return "redirect:/distributor/password";
 	}
+	
+	@RequestMapping(value="/goods/onsale")
+	public String saleGoods(Integer page,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		tdCommonService.setHeader(map, req);
+		
+		if(null == page)
+		{
+			page= 0;
+		}
+		map.addAttribute("goods_page",
+				tdGoodsService.findByIsOnSaleTrueOrderBySortIdAsc(page, 10));
+		return "/client/distributor_goods_onsale";
+	}
+	
+	/**
+	 * 从平台选择商品上架到超市
+	 * @author libiao
+	 * 
+	 * @param goodsId
+	 * @param goodsTitle
+	 * @param goodsPrice
+	 * @param leftNumber
+	 * @param req
+	 * @return
+	 */
+	
+	@RequestMapping(value="/goodsOnsale", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> goodsOnsale(Long goodsId,
+				String goodsTitle,
+				Double goodsPrice,
+				Long leftNumber,
+				HttpServletRequest req)
+	{
+		Map<String,Object> res =new HashMap<>();
+		String username =(String)req.getSession().getAttribute("distributor");
+		if(null ==username)
+		{
+			res.put("msg", "请先登录！");
+			return res;
+		}
+		if(null ==goodsId)
+		{
+			res.put("msg","选择的商品无效！");
+			return res;
+		}
+		TdDistributor distributor = TdDistributorService.findbyUsername(username);
+		TdGoods goods = tdGoodsService.findById(goodsId);
+		TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(),goodsId);
+		// 判断本超市是否已经存在该商品
+		if(null == disGoods)
+		{
+			TdDistributorGoods distributorGoods = new TdDistributorGoods();
+			distributorGoods.setGoodsId(goods.getId());
+			distributorGoods.setGoodsTitle(goodsTitle);
+			distributorGoods.setGoodsPrice(goodsPrice);
+			distributorGoods.setBrandId(goods.getBrandId());
+			distributorGoods.setBrandTitle(goods.getBrandTitle());
+			distributorGoods.setCategoryId(goods.getCategoryId());
+			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
+			distributorGoods.setCode(goods.getCode());
+			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
+			distributorGoods.setGoodsMarketPrice(goods.getMarketPrice());
+			distributorGoods.setIsDistribution(false);
+//			distributorGoods.setGoodsParamList(goods.getParamList());
+			distributorGoods.setReturnPoints(goods.getReturnPoints());
+			distributorGoods.setParamValueCollect(goods.getParamValueCollect());
+			distributorGoods.setIsOnSale(true);
+			distributorGoods.setLeftNumber(leftNumber);
+			
+			distributor.getGoodsList().add(distributorGoods);
+		}else{
+			disGoods.setGoodsTitle(goodsTitle);
+			disGoods.setLeftNumber(disGoods.getLeftNumber()+leftNumber);
+			disGoods.setGoodsPrice(goodsPrice);
+		}
+		List<TdDistributorGoods> list = tdDistributorGoodsService.findByGoodsId(goodsId);
+		// 判断是否有超市在售此商品
+		if(list.size()==0)
+		{
+			goods.setIsOnSale(true);
+			tdGoodsService.save(goods);
+		}
+
+		TdDistributorService.save(distributor);
+		res.put("msg", "上架成功");
+		return res;
+	}
+	
+	@RequestMapping(value="/goods/list")
+	public String inGoodslist(HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		tdCommonService.setHeader(map, req);
+		map.addAttribute("distributor", TdDistributorService.findbyUsername(username));
+		map.addAttribute("cart_goods_list", tdCartGoodsService.findByUsername(username));
+		map.addAttribute("proGoods_page",tdProviderGoodsService.findAll(0, 10));
+		
+		return "/client/distributor_ingoods";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void onSaleAll(Boolean onsale,Long[] ids,Integer[] chkIds)
 	{

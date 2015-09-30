@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>会员中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -80,7 +80,7 @@ DD_belatedPNG.fix('.,img,background');
                             <tr id="tr_1424195166">
                                 <td>${order.orderNumber!''}</td>
                                 <td>
-                                    <a href="/goods/${og.goodsId!''}" target="_blank" >
+                                    <a href="" target="_blank" >
                                         <strong><img width="80" height="80" src="${og.goodsCoverImageUri!''}"  /></strong>
                                         <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${og.goodsTitle!''}</p>
                                     </a>

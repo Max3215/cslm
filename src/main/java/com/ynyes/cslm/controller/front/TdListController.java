@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +17,6 @@ import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdBrand;
 import com.ynyes.cslm.entity.TdDistributorGoods;
-import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdParameter;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.service.TdAdService;

@@ -25,6 +25,10 @@ public class TdProviderGoods {
 	@Column
 	private String subGoodsTitle;
 	
+	// 批发名称
+	@Column
+	private String providerTitle;
+	
 	// 商品封面图片
 	@Column
 	private String goodsCoverImageUri;
@@ -117,6 +121,14 @@ public class TdProviderGoods {
 
 	public void setLeftNumber(Long leftNumber) {
 		this.leftNumber = leftNumber;
+	}
+
+	public String getProviderTitle() {
+		return providerTitle;
+	}
+
+	public void setProviderTitle(String providerTitle) {
+		this.providerTitle = providerTitle;
 	}
 	
 	
