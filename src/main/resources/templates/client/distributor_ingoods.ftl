@@ -12,8 +12,10 @@
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 <!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
+<script src="/client/js/distributor_goods.js"></script>
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript">
+
 $(document).ready(function(){
   $(".click_a").click(function(){
     if($(this).next().is(":visible")==false){
@@ -23,8 +25,6 @@ $(document).ready(function(){
     }
   });//选择超市下拉效果
 
- navDownList("nav_down","li",".nav_show");
-  menuDownList("mainnavdown","#nav_down",".a2","sel");
 
   $(".float_box .ewm").hover(function(){
     $(this).next().show();
@@ -32,6 +32,9 @@ $(document).ready(function(){
     $(this).next().hide();
   })
 })
+
+
+
 </script>
 <!--[if IE]>
    <script src="js/html5.js"></script>
@@ -53,7 +56,7 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
       
-          <div>
+          <div id="cart_goodslist">
             <#include "/client/distributor_ingoods_cartlist.ftl">
           </div>
 
@@ -61,9 +64,8 @@ DD_belatedPNG.fix('.,img,background');
            <div>
                 <#include "/client/distributor_ingoods_list.ftl">
           </div>
-        <div>
+        </div>
     </div>
- 
     <div class="myclear"></div>
   </div>
   <div class="myclear"></div>

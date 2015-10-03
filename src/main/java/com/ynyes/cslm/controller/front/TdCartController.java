@@ -307,12 +307,12 @@ public class TdCartController {
 
         if (null != id) {
             TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
-            TdGoods goods = tdGoodsService.findOne(id);
+            TdDistributorGoods distributorGoods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), id);
             
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
                 
-                if(quantity < goods.getLeftNumber()){
+                if(quantity < distributorGoods.getLeftNumber()){
                 	cartGoods.setQuantity(quantity + 1);
                 }
                 tdCartGoodsService.save(cartGoods);

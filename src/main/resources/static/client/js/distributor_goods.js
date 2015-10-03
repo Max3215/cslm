@@ -43,4 +43,16 @@ function deleteDisGoods(type,disId,page){
     })
 }
 
+//超市中心选择批发商品
+function addgoods(gid){
+    var page = $("#page").val();
+    $.ajax({
+        url : "/distributor/goods/addOne",
+        data : {"pgId":gid},
+        type :"post",
+        success:function(res){
+            $("#cart_goodslist").html(res);
+        }
+    })
+}
 

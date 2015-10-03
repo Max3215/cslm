@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCartGoodsService;
@@ -1482,6 +1484,53 @@ public class TdDistributorController {
 		map.addAttribute("proGoods_page",tdProviderGoodsService.findAll(0, 10));
 		
 		return "/client/distributor_ingoods";
+	}
+	
+	@RequestMapping(value="/goods/addOne")
+	public String addOne(Long pgId,Long quantity,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == pgId)
+		{
+			return "/client/error_404";
+		}
+		if (null == quantity || quantity.compareTo(1L) < 0)
+        {
+            quantity = 1L;
+        }
+		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+		if(null != providerGoods){
+			List<TdCartGoods> oldCartGoodsList = null;
+            
+            // 购物车是否已有该商品
+            oldCartGoodsList = tdCartGoodsService
+                            .findByGoodsIdAndUsername(pgId, username);
+            if(null !=oldCartGoodsList && oldCartGoodsList.size() >0){
+            	 long oldQuantity = oldCartGoodsList.get(0).getQuantity();
+            	 if(oldQuantity > providerGoods.getLeftNumber())
+            	 {
+            		 oldCartGoodsList.get(0).setQuantity(oldQuantity + quantity);
+            		 tdCartGoodsService.save(oldCartGoodsList.get(0));
+            	 }
+            }else{
+            	TdCartGoods cartGoods = new TdCartGoods();
+            	cartGoods.setIsLoggedIn(true);
+            	cartGoods.setUsername(username);
+            	cartGoods.setGoodsId(pgId);
+            	cartGoods.setGoodsCoverImageUri(providerGoods.getGoodsCoverImageUri());
+            	cartGoods.setGoodsTitle(providerGoods.getGoodsTitle());
+            	cartGoods.setIsSelected(true);
+            	cartGoods.setPrice(providerGoods.getOutFactoryPrice());
+            	cartGoods.setQuantity(quantity);
+            	tdCartGoodsService.save(cartGoods);
+            }
+		}
+		map.addAttribute("cart_goods_list", tdCartGoodsService.findByUsername(username));
+		return "/client/distributor_ingoods_cartlist";
 	}
 	
 	

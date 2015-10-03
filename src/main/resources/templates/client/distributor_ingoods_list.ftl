@@ -28,7 +28,7 @@
                         <td class="tb02">￥${goods.outFactoryPrice?string('0.00')}</td>
                         <td>${goods.leftNumber!'0'}</td>
                         <td>
-                            <p><a href="javascript:;">添加</a></p>
+                            <p><a href="javascript:addgoods(${goods.id?c});">添加</a></p>
                         </td>
                      </tr>
                 </#list>
@@ -36,7 +36,24 @@
         </table>
         <div class="myclear" style="height:10px;"></div>
             <div class="mymember_page"> 
-            <a href="#" class="fl">添加选中的商品</a>
-            <a class="mysel" href="#">1</a> 
-            <a href="#">2</a> 
+            <#if proGoods_page??>
+                <#assign continueEnter=false>
+                <#if proGoods_page.totalPages gt 0>
+                    <#list 1..proGoods_page.totalPages as page>
+                        <#if page <= 3 || (proGoods_page.totalPages-page) < 3 || (proGoods_page.number+1-page)?abs<3 >
+                            <#if page == proGoods_page.number+1>
+                                <a class="mysel" href="javascript:;">${page}</a>
+                            <#else>
+                                <a href="/distributor/goods/list?page=${page-1}">${page}</a>
+                            </#if>
+                            <#assign continueEnter=false>
+                        <#else>
+                            <#if !continueEnter>
+                                <b class="pn-break">&hellip;</b>
+                                <#assign continueEnter=true>
+                            </#if>
+                        </#if>
+                    </#list>
+                </#if>
+                </#if>
         </div>

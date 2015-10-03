@@ -37,13 +37,21 @@ public class TdCartGoods {
     // 商品数量
     private Long quantity;
     
-    //商品超市Id
+    // 商品超市Id
     @Column
     private Long distributorId;
     
-    //商品所在超市名称
+    // 商品所在超市名称
     @Column
     private String distributorTitle;
+    
+    // 批发商id
+    @Column
+    private Long providerId;
+    
+    // 批发商名
+    @Column
+    private String providerTite;
     
     // 成交价
     @Column
@@ -143,6 +151,22 @@ public class TdCartGoods {
 
 	public void setDistributorTitle(String distributorTitle) {
 		this.distributorTitle = distributorTitle;
+	}
+
+	public Long getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(Long providerId) {
+		this.providerId = providerId;
+	}
+
+	public String getProviderTite() {
+		return providerTite;
+	}
+
+	public void setProviderTite(String providerTite) {
+		this.providerTite = providerTite;
 	}
     
     

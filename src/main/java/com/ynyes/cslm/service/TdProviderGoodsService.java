@@ -66,6 +66,10 @@ public class TdProviderGoodsService {
 		return repository.findAll(pageRequest);
 	}
 	
+	public TdProviderGoods findOne(Long id)
+	{
+		return repository.findOne(id);
+	}
 	
 	
 }
