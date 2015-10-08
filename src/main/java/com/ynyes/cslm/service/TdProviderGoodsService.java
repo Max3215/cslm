@@ -45,7 +45,7 @@ public class TdProviderGoodsService {
 		return repository.findByIdAndIsAudit(providerId,pageRequest );
 	}
 	
-	public TdProviderGoods findByProviderIdAndGoodsId(Long providerId,Long goodsId)
+	public TdProviderGoods findByProviderTitleAndGoodsId(String providerId,Long goodsId)
 	{
 		return repository.findByProviderIdAndGoodsId(providerId, goodsId);
 	}
@@ -66,9 +66,20 @@ public class TdProviderGoodsService {
 		return repository.findAll(pageRequest);
 	}
 	
+	public Page<TdProviderGoods> findByGoodsTitleOrSubGoodsTitleOrProviderTitle(String keywords,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository.findByGoodsTitleContainingOrSubGoodsTitleContainingOrProviderTitleContaining(keywords, keywords, keywords,pageRequest);
+	}
+	
 	public TdProviderGoods findOne(Long id)
 	{
 		return repository.findOne(id);
+	}
+	
+	public Long findProviderId(Long id)
+	{
+		return repository.findById(id);
 	}
 	
 	

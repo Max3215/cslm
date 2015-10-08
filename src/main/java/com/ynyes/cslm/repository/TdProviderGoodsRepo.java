@@ -22,9 +22,14 @@ public interface TdProviderGoodsRepo extends
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1")
 	Page<TdProviderGoods> findByIdAndIsAudit(long providerId,Pageable page);
 	
-	@Query(value="select * from td_provider_goods where provider_id=?1 and goods_id=?2",nativeQuery =true)
-	TdProviderGoods findByProviderIdAndGoodsId(long providerId,long goodsId);
+	@Query(value="select * from td_provider_goods where provider_title=?1 and goods_id=?2",nativeQuery =true)
+	TdProviderGoods findByProviderIdAndGoodsId(String providertitle,long goodsId);
 	
 	Page<TdProviderGoods> findAll(Pageable page);
+	
+	@Query(value="select pg.provider_id from td_provider_goods pg where pg.id=?1",nativeQuery=true)
+	Long findById(Long id);
+	
+	Page<TdProviderGoods> findByGoodsTitleContainingOrSubGoodsTitleContainingOrProviderTitleContaining(String keywords1,String keywords2,String keywords3,Pageable page);
 	
 }

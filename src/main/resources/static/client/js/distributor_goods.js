@@ -56,3 +56,90 @@ function addgoods(gid){
     })
 }
 
+
+
+//点击复选框
+function toggleSelect(id)
+{
+    $.ajax({
+        type:"post",
+        url:"/distributor/goods/toggleSelect",
+        data:{"id":id},
+        success:function(data){
+            $("#cart_goodslist").html(data);
+        }
+    });
+}
+
+// 点击全选框
+function toggleAllSelect(sid)
+{
+    $.ajax({
+        type:"post",
+        url:"/distributor/goods/toggleAll",
+        data:{"sid":sid},
+        success:function(data){
+            $("#cart_goodslist").html(data);
+        }
+    });
+}
+
+// 商品数量加1
+function addNum(id)
+{
+    $.ajax({
+        type:"post",
+        url:"/distributor/goods/numberAdd",
+        data:{"id":id},
+        success:function(data){
+        	console.debug(id)
+            $("#cart_goodslist").html(data);
+        }
+    });
+}
+
+// 商品数量减1
+function minusNum(id)
+{
+    $.ajax({
+        type:"post",
+        url:"/distributor/goods/numberMinus",
+        data:{"id":id},
+        success:function(data){
+            $("#cart_goodslist").html(data);
+        }
+    });
+}
+
+function delCartItem(id)
+{
+    if (null == id)
+    {
+        return;
+    }
+    
+    $.ajax({
+        type:"post",
+        url:"/distributor/goods/del",
+        data:{"id": id},
+        success:function(data){
+            $("#cart_goodslist").html(data);
+        }
+    });
+}
+
+function goNext(goodsNum)
+{
+	
+    if (0==goodsNum)
+    {
+        alert("请至少选择一种商品!");
+        return false;
+    }
+    window.location.href="/distributor/order/info";
+}
+
+function searchGoods(page){
+	var keywords = $("#keywords").val();
+	window.location.href="/distributor/goods/list?keywords="+keywords+"&page="+page;
+}

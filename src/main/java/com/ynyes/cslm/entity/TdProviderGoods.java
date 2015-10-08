@@ -25,7 +25,7 @@ public class TdProviderGoods {
 	@Column
 	private String subGoodsTitle;
 	
-	// 批发名称
+	// 批发商名称
 	@Column
 	private String providerTitle;
 	
@@ -48,6 +48,10 @@ public class TdProviderGoods {
 	// 库存
 	@Column
 	private Long leftNumber;
+	
+	// 是否在批发
+	@Column
+	private Boolean isOnSale;
 
 	
 	
@@ -130,11 +134,14 @@ public class TdProviderGoods {
 	public void setProviderTitle(String providerTitle) {
 		this.providerTitle = providerTitle;
 	}
-	
-	
-	
-	
-	
+
+	public Boolean getIsOnSale() {
+		return isOnSale;
+	}
+
+	public void setIsOnSale(Boolean isOnSale) {
+		this.isOnSale = isOnSale;
+	}
 	
 	
 	

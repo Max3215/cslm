@@ -472,7 +472,7 @@ public class TdProviderController {
 			return res;
 		}
 		TdProvider provider = tdProviderService.findByUsername(username);
-		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(provider.getId(), goodsId);
+		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderTitleAndGoodsId(provider.getTitle(), goodsId);
 		TdGoods goods = tdGoodsService.findOne(goodsId);
 		
 		if(null == proGoods)
@@ -492,6 +492,7 @@ public class TdProviderController {
 			proGoods.setLeftNumber(proGoods.getLeftNumber()+leftNumber);
 			proGoods.setOutFactoryPrice(outFactoryPrice);
 		}
+		proGoods.setIsOnSale(true);
 		proGoods.setProviderTitle(provider.getTitle());
 		provider.getGoodsList().add(proGoods);
 		tdProviderService.save(provider);

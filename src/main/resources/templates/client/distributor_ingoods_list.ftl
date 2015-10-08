@@ -1,9 +1,11 @@
     <div class="mymember_order_search"> 
         <h3>批发商的商品</h3>
-        <input class="mysub" type="submit" value="查询" />
+        <input class="mysub" type="submit" onclick="searchGoods(${page!'0'})" value="查询" />
+        <#--
         <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
         <input class="mytext" type="text" onFocus="if(value=='批发商') {value=''}" onBlur="if (value=='') {value='批发商'}"  value="批发商" style="width:150px;" />
-        <input class="mytext" type="text" onFocus="if(value=='商品名称') {value=''}" onBlur="if (value=='') {value='商品名称'}"  value="商品名称" />
+        -->
+        <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
     
         <div class="clear"></div>
     </div>
@@ -44,7 +46,7 @@
                             <#if page == proGoods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/list?page=${page-1}">${page}</a>
+                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${page-1}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
