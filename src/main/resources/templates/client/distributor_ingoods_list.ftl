@@ -11,7 +11,7 @@
     </div>
     <table>
             <tr class="mymember_infotab_tit01">
-                <th width="50"><input id="yu_1424195166" name="r" type="checkbox" value="1424195166" class="check" onclick="cancelCheck(1424195166)"/>全选</th>
+                <th width="50"></th>
                 <th width="300">商品名称</th>
                 <th width="170">批发商</th>
                 <th>批发价</th>
@@ -19,18 +19,18 @@
                 <th>操作</th>
              </tr>
             <#if proGoods_page??>
-                <#list proGoods_page.content as goods>
+                <#list proGoods_page.content as pgoods>
                     <tr id="tr_1424195166">
-                        <td width=10><input id="yu_1424195166" name="r" type="checkbox" value="1424195166" class="check" onclick="cancelCheck(1424195166)"/></td>
-                        <td>
-                            <a target="_blank" ><strong><img width="80" height="80" src="${goods.goodsCoverImageUri!''}"  /></strong>
-                            <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${goods.goodsTitle!''}</p></a> 
+                        
+                        <td colspan="2">
+                            <a target="_blank" ><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
+                            <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${pgoods.goodsTitle!''}</p></a> 
                         </td>
-                        <td class="tb01">${goods.providerTitle!''}</td>
-                        <td class="tb02">￥${goods.outFactoryPrice?string('0.00')}</td>
-                        <td>${goods.leftNumber!'0'}</td>
+                        <td class="tb01">${pgoods.providerTitle!''}</td>
+                        <td class="tb02">￥${pgoods.outFactoryPrice?string('0.00')}</td>
+                        <td>${pgoods.leftNumber!'0'}</td>
                         <td>
-                            <p><a href="javascript:addgoods(${goods.id?c});">添加</a></p>
+                            <p><a href="javascript:addgoods(${pgoods.id?c});">添加</a></p>
                         </td>
                      </tr>
                 </#list>

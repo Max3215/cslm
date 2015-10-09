@@ -472,7 +472,7 @@ public class TdProviderController {
 			return res;
 		}
 		TdProvider provider = tdProviderService.findByUsername(username);
-		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderTitleAndGoodsId(provider.getTitle(), goodsId);
+		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(provider.getId(), goodsId);
 		TdGoods goods = tdGoodsService.findOne(goodsId);
 		
 		if(null == proGoods)

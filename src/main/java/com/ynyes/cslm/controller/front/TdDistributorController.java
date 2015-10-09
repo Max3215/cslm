@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +31,7 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
@@ -637,6 +641,7 @@ public class TdDistributorController {
 		 }
 		 
 		req.getSession().setAttribute("DISTRIBUTOR_ID", distributor.getId());
+		req.getSession().setAttribute("distributorTitle", distributor.getTitle());
 		return res;
 	}
 	
@@ -994,14 +999,6 @@ public class TdDistributorController {
 	 * 超市进货订单
 	 * @author libiao
 	 * 
-	 * @param statusId
-	 * @param statusid
-	 * @param keywords
-	 * @param page
-	 * @param timeId
-	 * @param req
-	 * @param map
-	 * @return
 	 */
 	@RequestMapping(value="/inOrder/list/{statusId}")
 	public String inOrderList(@PathVariable Integer statusId,
@@ -1188,12 +1185,11 @@ public class TdDistributorController {
 	
 	/**
 	 * 超市销售订单详细
-	 * @param onsale
-	 * @param ids
-	 * @param chkIds
+	 * @author libiao
+	 * 
 	 */
 	@RequestMapping(value="/order")
-	public String orderdetial(Long id,HttpServletRequest req,ModelMap map)
+	public String orderdetial(Long id, String type,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
@@ -1209,11 +1205,15 @@ public class TdDistributorController {
 		map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
 		
 		map.addAttribute("order",tdOrderService.findOne(id));
-		
+		if("inOrder".equals(type))
+		{
+			return "/client/distributor_inOrder_detail";
+		}
 		return "/client/distributor_order_detail";
 	}
+	
 	/**
-	 * 超市确认订单  确认发货   确认已收货  确认评价
+	 * 超市确认销售订单  确认发货   确认已收货  确认评价
 	 * @author libiao
 	 * @param orderNumber
 	 * @param type
@@ -1355,6 +1355,89 @@ public class TdDistributorController {
 		return res;
 	}
 	
+	@RequestMapping(value="/inOrder/param/edit")
+	@ResponseBody
+	public Map<String, Object> inparamEdit(String orderNumber,
+			String type,
+			ModelMap map,
+			HttpServletRequest req)
+	{
+		Map<String, Object> res =new HashMap<>();
+		res.put("code",1);
+		String username = (String)req.getSession().getAttribute("distributor");
+		
+		if (null == username)
+        {
+            res.put("message", "请重新登录");
+            return res;
+        }
+		
+		
+		if (null != orderNumber && !orderNumber.isEmpty() && null != type && !type.isEmpty())
+        {
+			TdOrder order = tdOrderService.findByOrderNumber(orderNumber);
+			if(type.equalsIgnoreCase("orderPayLeft"))
+			{
+				if(order.getStatusId().equals(1L))
+				{
+					order.setStatusId(2L);
+					order.setDeliveryTime(new Date());
+				}
+			}
+			else if(type.equalsIgnoreCase("orderService"))
+			{
+				if(order.getStatusId().equals(2L))
+				{
+					order.setStatusId(3L);
+					order.setFinishTime(new Date());
+					
+					TdDistributor distributor = tdDistributorService.findbyUsername(username);
+					List<TdOrderGoods> goodsList = order.getOrderGoodsList();
+					for (TdOrderGoods tdOrderGoods : goodsList) {
+						
+						TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(), tdOrderGoods.getGoodsId());
+						
+						if(null == distributorGoods)
+						{
+							TdGoods goods = tdGoodsService.findOne(tdOrderGoods.getGoodsId());
+							distributorGoods = new TdDistributorGoods();
+							
+							distributorGoods.setGoodsId(goods.getId());
+							distributorGoods.setGoodsTitle(goods.getTitle());
+							distributorGoods.setGoodsPrice(goods.getMarketPrice());
+							distributorGoods.setBrandId(goods.getBrandId());
+							distributorGoods.setBrandTitle(goods.getBrandTitle());
+							distributorGoods.setCategoryId(goods.getCategoryId());
+							distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
+							distributorGoods.setCode(goods.getCode());
+							distributorGoods.setCoverImageUri(goods.getCoverImageUri());
+							distributorGoods.setGoodsMarketPrice(goods.getMarketPrice());
+							distributorGoods.setIsDistribution(false);
+//						distributorGoods.setGoodsParamList(goods.getParamList());
+							distributorGoods.setReturnPoints(goods.getReturnPoints());
+							distributorGoods.setParamValueCollect(goods.getParamValueCollect());
+							distributorGoods.setIsOnSale(false);
+							distributorGoods.setLeftNumber(tdOrderGoods.getQuantity());
+						}else{
+							
+							distributorGoods.setLeftNumber(distributorGoods.getLeftNumber()+tdOrderGoods.getQuantity());
+						}
+						distributor.getGoodsList().add(distributorGoods);
+					}
+					distributor.setGoodsList(distributor.getGoodsList());
+					tdDistributorService.save(distributor);
+				}
+			}
+			 tdOrderService.save(order);
+	         res.put("code", 0);
+	         res.put("message", "修改成功!");
+	         
+	         return res;
+        }
+		res.put("message", "参数错误!");
+		return res;
+	}
+	
 	@RequestMapping(value="/password")
 	public String distributorPassword(HttpServletRequest req,ModelMap map)
 	{
@@ -1412,12 +1495,6 @@ public class TdDistributorController {
 	 * 从平台选择商品上架到超市
 	 * @author libiao
 	 * 
-	 * @param goodsId
-	 * @param goodsTitle
-	 * @param goodsPrice
-	 * @param leftNumber
-	 * @param req
-	 * @return
 	 */
 	
 	@RequestMapping(value="/goodsOnsale", method=RequestMethod.POST)
@@ -1529,16 +1606,21 @@ public class TdDistributorController {
         {
             quantity = 1L;
         }
+		
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		
 		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+		
 		if(null != providerGoods){
 			List<TdCartGoods> oldCartGoodsList = null;
-            
+           
             // 购物车是否已有该商品
             oldCartGoodsList = tdCartGoodsService
-                            .findByGoodsIdAndUsername(pgId, username);
+                            .findByGoodsIdAndUsername(providerGoods.getGoodsId(), username);
+            
             if(null !=oldCartGoodsList && oldCartGoodsList.size() >0){
             	 long oldQuantity = oldCartGoodsList.get(0).getQuantity();
-            	 if(oldQuantity > providerGoods.getLeftNumber())
+            	 if(oldQuantity < providerGoods.getLeftNumber())
             	 {
             		 oldCartGoodsList.get(0).setQuantity(oldQuantity + quantity);
             		 tdCartGoodsService.save(oldCartGoodsList.get(0));
@@ -1642,8 +1724,7 @@ public class TdDistributorController {
         if (null != id) {
             TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
             
-            TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderTitleAndGoodsId(cartGoods.getProviderTite(), cartGoods.getGoodsId());
-            
+            TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(cartGoods.getProviderId(), cartGoods.getGoodsId());
             
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
@@ -1713,6 +1794,7 @@ public class TdDistributorController {
     /**
      *  提交进货单
      *  	扣除超市相应余额
+     *  	增加相应批发账户
      * @param req
      * @param map
      * @return
@@ -1728,116 +1810,149 @@ public class TdDistributorController {
        TdDistributor distributor = tdDistributorService.findbyUsername(username);
         
         List<TdCartGoods> cartSelectedGoodsList = tdCartGoodsService.findByUsernameAndIsSelectedTrue(username);
-        Double totalPrice = 0.0; // 购物总额
 
-        List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
+//        List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
+       
+        // 储存批发商Id 和对应商品  为拆分订单做准备
+        Map<Long,List<TdCartGoods>> cartGoodsMap =new HashMap<>();
         if(null != cartSelectedGoodsList)
         {
         	for (TdCartGoods cartGoods: cartSelectedGoodsList) 
         	{
 				if(cartGoods.getIsSelected())
 				{
-					TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderTitleAndGoodsId(cartGoods.getProviderTite(),cartGoods.getGoodsId());
-					
-					if(null == providerGoods || providerGoods.getIsOnSale()==false){
-						continue;
+					if(cartGoodsMap.containsKey(cartGoods.getProviderId()))
+					{
+						cartGoodsMap.get(cartGoods.getProviderId()).add(cartGoods);
+					}else{
+						List<TdCartGoods> clist=new ArrayList<>();
+						clist.add(cartGoods);
+						cartGoodsMap.put(cartGoods.getProviderId(),clist);
 					}
-					TdOrderGoods orderGoods = new TdOrderGoods();
-					// 商品信息
-					orderGoods.setGoodsId(providerGoods.getGoodsId());
-					orderGoods.setGoodsCoverImageUri(providerGoods.getGoodsCoverImageUri());
-					orderGoods.setGoodsTitle(providerGoods.getGoodsTitle());
-					orderGoods.setGoodsSubTitle(providerGoods.getSubGoodsTitle());
-					
-					// 是否退货
-					orderGoods.setIsReturnApplied(false);
-					
-					// 销售方式
-//					orderGoods.setGoodsSaleType(goodsSaleType);
-					
-					// 批发价
-					orderGoods.setPrice(providerGoods.getOutFactoryPrice());
-					
-					// 数量
-					long quantity = 0;
-					quantity = Math.min(cartGoods.getQuantity(),providerGoods.getLeftNumber());
-					orderGoods.setQuantity(quantity);
-					
-					// 商品总价
-					totalPrice +=cartGoods.getPrice()*cartGoods.getQuantity();
-					
-					orderGoodsList.add(orderGoods);
-					
-					long leftNumber = providerGoods.getLeftNumber();
-					if(leftNumber >= quantity){
-						leftNumber= leftNumber-quantity;
-					}
-					providerGoods.setLeftNumber(leftNumber);
-					tdProviderGoodsService.save(providerGoods);
 					
 				}
 			}
         }
         
-       
-        if(null == orderGoodsList || orderGoodsList.size() <= 0){
+        if(null == cartGoodsMap || cartGoodsMap.size() <= 0){
         	return "/client/error_404";
         }
         
-        TdOrder tdOrder = new TdOrder();
+        // 订单拆分
+        Set<Entry<Long,List<TdCartGoods>>> set = cartGoodsMap.entrySet();
+        Iterator<Entry<Long, List<TdCartGoods>>> iterator = set.iterator();
+        while(iterator.hasNext())
+        {
+        	Map.Entry<Long,List<TdCartGoods> > m  = iterator.next();
         
-        Date current = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-        String curStr = sdf.format(current);
-        Random random = new Random();
+        	 List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
+        	 Double totalPrice = 0.0; // 购物总额
+        	 
+        	 for (int i = 0; i < m.getValue().size(); i++) {
+        		 TdCartGoods cartGoods= m.getValue().get(i);
+        		 TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(cartGoods.getProviderId(),cartGoods.getGoodsId());
+        		 
+        		 if(null == providerGoods || providerGoods.getIsOnSale()==false){
+        			 continue;
+        		 }
+        		 
+        		 TdOrderGoods orderGoods = new TdOrderGoods();
+        		 // 商品信息
+        		 orderGoods.setGoodsId(providerGoods.getGoodsId());
+        		 orderGoods.setGoodsCoverImageUri(providerGoods.getGoodsCoverImageUri());
+        		 orderGoods.setGoodsTitle(providerGoods.getGoodsTitle());
+        		 orderGoods.setGoodsSubTitle(providerGoods.getSubGoodsTitle());
+        		 
+        		 // 是否退货
+        		 orderGoods.setIsReturnApplied(false);
+        		 
+        		 // 销售方式
+//			orderGoods.setGoodsSaleType(goodsSaleType);
+        		 
+        		 // 批发价
+        		 orderGoods.setPrice(providerGoods.getOutFactoryPrice());
+        		 
+        		 // 数量
+        		 long quantity = 0;
+        		 quantity = Math.min(cartGoods.getQuantity(),providerGoods.getLeftNumber());
+        		 orderGoods.setQuantity(quantity);
+        		 
+        		 // 商品总价
+        		 totalPrice +=cartGoods.getPrice()*cartGoods.getQuantity();
+        		 
+        		 orderGoodsList.add(orderGoods);
+        		 
+        		 long leftNumber = providerGoods.getLeftNumber();
+        		 if(leftNumber >= quantity){
+        			 leftNumber= leftNumber-quantity;
+        		 }
+        		 providerGoods.setLeftNumber(leftNumber);
+        		 tdProviderGoodsService.save(providerGoods);
+			}
+        	 
+        	 TdOrder tdOrder = new TdOrder();
+        	 TdProvider provider = tdProviderService.findOne(m.getKey());
+        	 
+             Date current = new Date();
+             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+             String curStr = sdf.format(current);
+             Random random = new Random();
 
 
-        // 基本信息
-        tdOrder.setUsername(username);
-        tdOrder.setOrderTime(current);
+             // 基本信息
+             tdOrder.setUsername(username);
+             tdOrder.setOrderTime(current);
+             tdOrder.setShopId(provider.getId());
+             tdOrder.setShopTitle(provider.getTitle());
 
-        // 订单号
-        tdOrder.setOrderNumber("T" + curStr
-                + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
-        
-        // 发货信息
-        tdOrder.setShippingName(distributor.getTitle());
-        tdOrder.setShippingPhone(distributor.getServiceTele());
-        tdOrder.setShippingAddress(distributor.getProvince()
-        					+distributor.getCity()
-        					+distributor.getDisctrict()
-        					+distributor.getAddress());
-        // 待发货
-        tdOrder.setStatusId(1L);
-        // 总价
-        tdOrder.setTotalPrice(totalPrice);
-        
-        // 订单类型-批发订单
-        tdOrder.setTypeId(1L);
-        
-        // 订单商品
-        tdOrder.setOrderGoodsList(orderGoodsList);
-        tdOrder.setTotalGoodsPrice(totalPrice);
-        
-        // 保存商品信息
-        tdOrderGoodsService.save(orderGoodsList);
-        
-        // 网站基本信息
-        TdSetting setting = tdSettingService.findTopBy();
-        // 扣除超市虚拟账户
-        distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
-		tdDistributorService.save(distributor);
-		
-		//平台虚拟账户增加金额
-		setting.setVirtualMoney(tdOrder.getTotalPrice());
-		tdSettingService.save(setting);
-      
-		tdOrderService.save(tdOrder);
-		
+             // 订单号
+             tdOrder.setOrderNumber("T" + curStr
+                     + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+             
+             // 发货信息
+             tdOrder.setShippingName(distributor.getTitle());
+             tdOrder.setShippingPhone(distributor.getServiceTele());
+             tdOrder.setShippingAddress(distributor.getProvince()
+             					+distributor.getCity()
+             					+distributor.getDisctrict()
+             					+distributor.getAddress());
+             // 待发货
+             tdOrder.setStatusId(1L);
+             // 总价
+             tdOrder.setTotalPrice(totalPrice);
+             
+             // 订单类型-批发订单
+             tdOrder.setTypeId(1L);
+             
+             // 订单商品
+             tdOrder.setOrderGoodsList(orderGoodsList);
+             tdOrder.setTotalGoodsPrice(totalPrice);
+             
+             // 保存商品信息
+             tdOrderGoodsService.save(orderGoodsList);
+             
+             // 网站基本信息
+             TdSetting setting = tdSettingService.findTopBy();
+             // 扣除超市虚拟账户
+             distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
+     		tdDistributorService.save(distributor);
+     		
+     		
+     		provider.setVirtualMoney(provider.getVirtualMoney()+tdOrder.getTotalGoodsPrice());
+     		tdProviderService.save(provider);
+     		
+//     		//平台虚拟账户增加金额
+//     		setting.setVirtualMoney(tdOrder.getTotalPrice());
+//     		tdSettingService.save(setting);
+           
+     		tdOrderService.save(tdOrder);
+        	 
+        }
+        	
 		// 删除已生成订单的购物车项
         tdCartGoodsService.delete(cartSelectedGoodsList);
         
-    	return "redirect:/distributor/order?id="+tdOrder.getId();
+    	return "redirect:/distributor/inOrder/list/0";
     }
 	
 	

@@ -106,7 +106,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#if order_page??>
                 <#list order_page.content as order>
                 <tr>
-                      <th colspan="7">订单编号：<a href="">${order.orderNumber!''}</a></th>
+                      <th colspan="7">订单编号：<a href="/distributor/order?id=${order.id?c}&type=inOrder">${order.orderNumber!''}</a></th>
                   </tr>
                   <tr>
                       <td class="td001">
@@ -133,7 +133,7 @@ DD_belatedPNG.fix('.,img,background');
                              </#if>
                       </td>
                       <td class="td003"> 
-                            <p><a href="">查看</a></p>
+                            <p><a href="/distributor/order?id=${order.id?c}&type=inOrder">查看</a></p>
                       </td>
                   </tr>
                   </#list>

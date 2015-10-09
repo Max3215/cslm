@@ -34,7 +34,7 @@
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <a href="/goods/${dg.goodsId?c}" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${dg.goodsTitle}</p>
                              </a> 
                         </td>

@@ -22,7 +22,7 @@
     <section class="main">
         <a href="/" class="logo"><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
         <div class="choose_mar">
-            <a href="javascript:void(0);" class="click_a" onclick="$('#mar_box').fadeIn(300);">选择地区超市</a>
+            <a href="javascript:void(0);" class="click_a" onclick="$('#mar_box').fadeIn(300);"><#if distributorTitle??>${distributorTitle!''}<#else>请选择地区超市</#if></a>
         </div>
         <div class="m_box">
             <div class="search_box">

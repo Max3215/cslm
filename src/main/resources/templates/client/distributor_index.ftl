@@ -69,7 +69,7 @@ DD_belatedPNG.fix('.,img,background');
             <#list dis_goodsIn_order_page.content as order>
                 <#if order_index < 3 >
                     <tr>
-                        <th colspan="7">进货单编号：<a href="#">${order.orderNumber!''}</a></th>
+                        <th colspan="7">进货单编号：<a href="/distributor/order?id=${order.id?c}&type=inOrder">${order.orderNumber!''}</a></th>
                     </tr>
                     <tr>
                         <td align="left"  colspan="2">
@@ -101,7 +101,7 @@ DD_belatedPNG.fix('.,img,background');
                             </#if>
                         </td>
                         <td class="td003">
-                            <a href="">查看</a>          
+                            <a href="/distributor/order?id=${order.id?c}&type=inOrder">查看</a>          
                         </td>
                     </tr>
                 </#if>

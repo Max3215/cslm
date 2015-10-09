@@ -45,7 +45,7 @@ public class TdProviderGoodsService {
 		return repository.findByIdAndIsAudit(providerId,pageRequest );
 	}
 	
-	public TdProviderGoods findByProviderTitleAndGoodsId(String providerId,Long goodsId)
+	public TdProviderGoods findByProviderIdAndGoodsId(Long providerId,Long goodsId)
 	{
 		return repository.findByProviderIdAndGoodsId(providerId, goodsId);
 	}
