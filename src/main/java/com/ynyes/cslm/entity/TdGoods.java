@@ -172,7 +172,7 @@ public class TdGoods {
     private Double marketPrice;
     
     // 销售价
-    @Column(nullable=false, scale=2)
+    @Column(scale=2)
     private Double salePrice;
     
     // 批发价

@@ -2294,34 +2294,34 @@ public class TdGoodsService {
 
         e = repository.save(e);
 
-        // 添加改价记录
-        TdPriceChangeLog priceLog = tdPriceChangeLogService
-                .findTopByGoodsIdOrderByIdDesc(e.getId());
-
-        // 没有改过价，或改价后的记录与当前销售价不相等
-        if (null == priceLog || !priceLog.getPrice().equals(e.getSalePrice())) {
-            TdPriceChangeLog newPriceLog = new TdPriceChangeLog();
-
-            newPriceLog.setCreateTime(new Date());
-            newPriceLog.setGoodsId(e.getId());
-            newPriceLog.setGoodsTitle(e.getTitle()
-                    + (null == e.getSelectOneValue() ? "" : " "
-                            + e.getSelectOneValue())
-                    + (null == e.getSelectTwoValue() ? "" : " "
-                            + e.getSelectTwoValue())
-                    + (null == e.getSelectThreeValue() ? "" : " "
-                            + e.getSelectThreeValue()));
-            newPriceLog.setOperator(manager);
-
-            if (null != priceLog) {
-                newPriceLog.setOriginPrice(priceLog.getPrice());
-            }
-
-            newPriceLog.setPrice(e.getSalePrice());
-            newPriceLog.setSortId(99L);
-
-            tdPriceChangeLogService.save(newPriceLog);
-        }
+//        // 添加改价记录
+//        TdPriceChangeLog priceLog = tdPriceChangeLogService
+//                .findTopByGoodsIdOrderByIdDesc(e.getId());
+//
+//        // 没有改过价，或改价后的记录与当前销售价不相等
+//        if (null == priceLog || !priceLog.getPrice().equals(e.getSalePrice())) {
+//            TdPriceChangeLog newPriceLog = new TdPriceChangeLog();
+//
+//            newPriceLog.setCreateTime(new Date());
+//            newPriceLog.setGoodsId(e.getId());
+//            newPriceLog.setGoodsTitle(e.getTitle()
+//                    + (null == e.getSelectOneValue() ? "" : " "
+//                            + e.getSelectOneValue())
+//                    + (null == e.getSelectTwoValue() ? "" : " "
+//                            + e.getSelectTwoValue())
+//                    + (null == e.getSelectThreeValue() ? "" : " "
+//                            + e.getSelectThreeValue()));
+//            newPriceLog.setOperator(manager);
+//
+//            if (null != priceLog) {
+//                newPriceLog.setOriginPrice(priceLog.getPrice());
+//            }
+//
+//            newPriceLog.setPrice(e.getSalePrice());
+//            newPriceLog.setSortId(99L);
+//
+//            tdPriceChangeLogService.save(newPriceLog);
+//        }
 
         return e;
     }
