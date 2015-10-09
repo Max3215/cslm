@@ -2189,7 +2189,7 @@ public class TdGoodsService {
         }
 
         // 上架时间
-        if (null == e.getOnSaleTime() && e.getIsOnSale()) {
+        if (null == e.getOnSaleTime()) {
             e.setOnSaleTime(new Date());
         }
 

@@ -60,7 +60,7 @@ function subDisGoods(){
         alert("请输入商品销售价");
         return ;
     }
-    if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber)|| 0<leftNumber)
+    if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber)|| 0 >= leftNumber)
     {
         alert("请输入库存数量");
         return;
@@ -103,7 +103,7 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
-          <h3>仓库中的商品</h3>
+          <h3>平台中的商品</h3>
           <#--
               <input class="mysub" type="submit" value="查询" />
               <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
