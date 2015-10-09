@@ -71,7 +71,7 @@ function minusNum(){
 }
 
 <!--  加入购物车   -->
-function cartInit(){
+function cartInit(dId){
     var quantity = document.getElementById("quantity").value;
     if(quantity==0){
         return;
@@ -79,19 +79,19 @@ function cartInit(){
     $.ajax({
         type: "get",
         url: "/goods/incart",
-        data: {"id":${goods.id},"quantity":quantity},
+        data: {"id":dId,"quantity":quantity},
         success: function (data) { 
             if(data.msg){
                 alert(data.msg);
                 return;
             }
-            window.open("/cart/init?id=${goods.id}&quantity="+quantity);
+            window.open("/cart/init?id="+dId+"&quantity="+quantity);
         }
     });
 }
 
 <!--  立即购买   -->
-function byNow(){
+function byNow(dId){
     var quantity = document.getElementById("quantity").value;
     if(quantity==0){
         return;
@@ -99,13 +99,13 @@ function byNow(){
     $.ajax({
         type: "get",
         url: "/goods/incart",
-        data: {"id":${goods.id},"quantity":quantity},
+        data: {"id":dId,"quantity":quantity},
         success: function (data) { 
             if(data.msg){
                 alert(data.msg);
                 return;
             }
-            window.location.href = "/order/byNow/${goods.id}?quantity="+quantity;
+            window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
         }
     });
 }
@@ -252,8 +252,8 @@ function byNow(){
 					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
 					       <a href="javascript:cartInit();" target="_blank"  title="预购商品" class="car">立即预购</a>
 					   <#else>
-        					<a href="javascript:byNow();" target="_blank" title="立即购买" class="buy">立即购买</a>
-        					<a href="javascript:cartInit();" target="_blank"  title="加入购物车" class="car">加入购物车</a>
+        					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
+        					<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>
 					   </#if>
 					<#else>
     					<a href="javascript:;"  title="立即购买" class="buy">立即购买</a>

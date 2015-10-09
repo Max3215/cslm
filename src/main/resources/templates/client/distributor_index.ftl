@@ -76,7 +76,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if order.orderGoodsList??>
                             <#list order.orderGoodsList as og>  
                                 <#if og_index < 1>
-                                    <a><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
+                                    <a><img src="${og.goodsCoverImageUri!''}"   width="50" height="50px" align="left" /></a>
                                 </#if>
                             </#list>
                             </#if>
@@ -125,7 +125,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <#if order.orderGoodsList??>
                                     <#list order.orderGoodsList as og>  
                                         <#if og_index < 1>
-                                            <a ><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
+                                            <a ><img src="${og.goodsCoverImageUri!''}"   width="50" height="50px" align="left" /></a>
                                         </#if>
                                     </#list>
                                 </#if>

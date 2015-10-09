@@ -18,6 +18,7 @@ import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdGoodsGift;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
@@ -47,6 +48,9 @@ public class TdCartController {
     
     @Autowired
     private TdDistributorService tdDistributorService;
+    
+    @Autowired
+    private TdDistributorGoodsService tdDistributorGoodsServicer;
 
     /**
      * 加入购物车
@@ -74,7 +78,7 @@ public class TdCartController {
         }
         if(null == distributor)
         {
-        	return "error_404";
+        	return "/client/error_404";
         }
         
         if (null == username) {
@@ -93,15 +97,14 @@ public class TdCartController {
         }
         
         if (null != id) {
-            TdDistributorGoods goods = tdDistributorService.findByIdAndGoodId(distributor.getId(), id);
-
+        	TdDistributorGoods goods = tdDistributorGoodsServicer.findOne(id);
             if (null != goods) {
                 
                 List<TdCartGoods> oldCartGoodsList = null;
                 
                 // 购物车是否已有该商品
                 oldCartGoodsList = tdCartGoodsService
-                                .findByGoodsIdAndUsername(id, username);
+                                .findByGoodsIdAndUsername(goods.getGoodsId(), username);
                 
                 // 有多项，则在第一项上数量进行相加
                 if (null != oldCartGoodsList && oldCartGoodsList.size() > 0) {
@@ -197,34 +200,12 @@ public class TdCartController {
 
         List<TdCartGoods> resList = tdCartGoodsService.findByUsername(username);
         
-        /*  添加gift  mdj 2015-8-7 09:57:28*/
-//        List<TdGoods> tdGoodsList = new ArrayList<>();
-//        for (TdCartGoods tdCartGoods : resList) 
-//        { 
-//			TdGoods tdGoods = tdGoodService.findById(tdCartGoods.getGoodsId());
-//			List<TdGoodsGift> tdGoodGiftUserList = tdGoods.getGiftList();
-//			if (tdGoodGiftUserList != null && tdGoodGiftUserList.size()>=1)
-//			{
-//				tdGoodsList.add(tdGoods);
-//			}
-//		}
-//        
-//        if (tdGoodsList != null && tdGoodsList.size()>=1)
-//        {
-//        	map.addAttribute("goods_list",tdGoodsList);
-//		}
-        
         map.addAttribute("user",tdUserService.findByUsername(username));
         
         map.addAttribute("cart_goods_list",tdCartGoodsService.updateGoodsInfo(resList));
         
         
         tdCommonService.setHeader(map, req);
-
-//        if (null == resList || resList.size() == 0)
-//        {
-//            return "/client/cart_null";
-//        }
 
         return "/client/cart";
     }

@@ -477,18 +477,6 @@ public class TdGoodsController {
             map.addAttribute("comment_page", tdUserCommentService
                     .findByGoodsIdAndIsShowable(goodsId, page,
                             ClientConstant.pageSize));
-            // add mdj start
-            // Page<TdUserComment> comment_page = tdUserCommentService
-            // .findByGoodsIdAndIsShowable(goodsId, page,
-            // ClientConstant.pageSize);
-            // List<TdUserComment> tdcomment_list =comment_page.getContent();
-            // for(int i = 0;i<tdcomment_list.size();i++)
-            // {
-            // TdUserComment tdcomment = tdcomment_list.get(i);
-            // tdcomment.getUsername();
-            // System.out.println("---------------------"+tdcomment.getUsername()+"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-            // }
-            // add mdj end
         } else {
             map.addAttribute("comment_page", tdUserCommentService
                     .findByGoodsIdAndStarsAndIsShowable(goodsId, stars, page,
@@ -579,8 +567,8 @@ public class TdGoodsController {
 	    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
 	    	
 	//    	List<TdDistributorGoods> disGoods = tdDistributorGoodsService.findByGoodsId(id);
-	    	TdDistributorGoods distributorGoods = TdDistributorService.findByIdAndGoodId(disId, id);
-	    	
+//	    	TdDistributorGoods distributorGoods = TdDistributorService.findByIdAndGoodId(disId, id);
+	    	TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(id);
 	    	
 	    	if(null == distributorGoods)
 	    	{
@@ -594,12 +582,8 @@ public class TdGoodsController {
 	    		return res;
 	    	}
     	}else{
-    		TdGoods goods = tdGoodsService.findById(id);
-    		if(quantity > goods.getLeftNumber())
-	    	{
-	    		res.put("msg", "本超市库存不足！");
-	    		return res;
-	    	}
+    		res.put("msg", "请选选择超市！");
+    		return res;
     	}
     	return res;
     }
