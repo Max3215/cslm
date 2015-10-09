@@ -352,10 +352,10 @@ function del_goods_comb(obj) {
             <dd>
                 <div class="rule-multi-radio multi-radio">
                     <span>
-                        <input type="radio" name="isOnSale" value="1" <#if goods??==false || goods.isOnSale==true>checked="checked"</#if> disabled="disabled">
+                        <input type="radio" name="isOnSale" value="1" <#if goods??==false || goods.isOnSale==true>checked="checked"</#if> >
                         <label>在售中</label>
-                        <input type="radio" name="isOnSale" value="0" <#if goods?? && goods.isOnSale?? && goods.isOnSale==false>checked="checked"</#if> disabled="disabled">
-                        <label>无销售</label>
+                        <input type="radio" name="isOnSale" value="0" <#if goods?? && goods.isOnSale?? && goods.isOnSale==false>checked="checked"</#if> >
+                        <label>停售</label>
                     </span>
                 </div>
             </dd>

@@ -2152,7 +2152,7 @@ public class TdGoodsService {
 
         // 参数类型ID
         Long paramCategoryId = null;
-
+        
         // 保存分类名称
         if (null != e.getCategoryId()) {
             TdProductCategory cat = tdProductCategoryService.findOne(e
