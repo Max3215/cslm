@@ -112,7 +112,7 @@
 			_is.oMI = document.createElement('div');
 			_is.oMI.className ='MagnifierImg';
 			_is.oMI.style.cssText = 'width:' + _is.mW*2 + 'px;height:' + _is.mH*2 + 'px;';
-			_html1 = '<img style="width:100%;height:100%;" src="' + _is.mImgSrc + '.jpg">'
+			_html1 = '<img style="width:100%;height:100%;" src="' + _is.mImgSrc + '.jpg;">'
 			_is.oMI.innerHTML = _html1; 
 
 			_is.oMP.appendChild(_is.oMI)

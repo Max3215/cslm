@@ -173,7 +173,7 @@ function byNow(dId){
 				<p class="subtitle">${goods.subTitle!''}</p>
 				<p class="num"><#if goods.code??>商品编号：<span>${goods.code!''}</span></#if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#if goods.brandTitle??>商品品牌：<span>${goods.brandTitle!''}</span></#if></p>
 				<div class="price">
-					<p>特惠价：<span>￥<#if dis_goods??>${dis_goods.goodsPrice?string('0.00')}<#else>${goods.salePrice?string("0.00")}</#if></span></p>
+					<#if dis_goods??><p>特惠价：<span>￥${dis_goods.goodsPrice?string('0.00')}</span></p></#if>
 					<p class="lth">市场价：￥${goods.marketPrice?string("0.00")}</p>
 				</div>
 				
@@ -303,27 +303,15 @@ function byNow(dId){
 			<div class="right_hot">
 				<p class="tit">大家都在看</p>
 				<ul>
-				    <#if hot_list?? && hot_list?size gt 0> 
-                        <#list hot_list as hot_good> 
-                            <#if hot_good_index lt 6>
-            					<li>
-            						<a href="/goods/${hot_good.id?c}" title="${hot_good.title!''}" target="_blank">
-            							<img src="${hot_good.coverImageUri!''}">
-            							<p>${hot_good.title!''}</p>
-            						</a>
-            						<p class="price">￥${goods.salePrice?string("0.00")}<span>原价：￥${goods.marketPrice?string("0.00")}</span></p>
-            					</li>
-            			     </#if>
-            			 </#list>
-            	    <#elseif dis_hot_list?? && dis_hot_list?size gt 0> 
+            	    <#if dis_hot_list?? && dis_hot_list?size gt 0> 
                         <#list dis_hot_list as hot_good> 
                             <#if hot_good_index lt 6>
                                 <li>
                                     <a href="/goods/${hot_good.goodsId?c}" title="${hot_good.goodsTitle!''}" target="_blank">
-                                        <img src="${hot_good.goodsCoverImageUri!''}">
+                                        <img src="${hot_good.coverImageUri!''}">
                                         <p>${hot_good.goodsTitle!''}</p>
                                     </a>
-                                    <p class="price">￥${hot_good.goodsPrice?string("0.00")}<span>原价：￥${hot_good.goodsMarketPrice?string("0.00")}</span></p>
+                                    <p class="price">￥${hot_good.goodsMarketPrice?string("0.00")}</p>
                                 </li>
                              </#if>
                          </#list>

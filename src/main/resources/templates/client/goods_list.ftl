@@ -271,11 +271,11 @@ function byNow(goodsId){
                     <#list hot_sale_list as item>
                          <#if item_index < 6>
             				<li>
-            					<a href="/goods/${item.id?c}" title="${item.title!''}" target="_blank">
-            						<img src="${item.coverImageUri!''}" title="${item.title!''}"/>
-            						<p>${item.title!''}</p>
+            					<a href="/goods/${item.goodsId?c}" title="${item.goodsTitle!''}" target="_blank">
+            						<img src="${item.coverImageUri!''}" title="${item.goodsTitle!''}"/>
+            						<p>${item.goodsTitle!''}</p>
             					</a>
-            					<p class="price">￥<#if item.salePrice??>${item.salePrice?string("#.##")}</#if><span>原价：￥<#if item.marketPrice??>${item.marketPrice?string("#.##")}</#if></span></p>
+            					<p class="price"><#if item.goodsPrice??>￥${item.goodsPrice?string("#.##")}</#if><span>原价：￥<#if item.goodsMarketPrice??>${item.goodsMarketPrice?string("#.##")}</#if></span></p>
             				</li>
                          </#if>
                     </#list>

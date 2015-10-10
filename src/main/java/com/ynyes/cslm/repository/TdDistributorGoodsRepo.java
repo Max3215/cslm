@@ -33,10 +33,14 @@ public interface TdDistributorGoodsRepo extends
 		
 		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and goods_id=?2", nativeQuery = true)
 		TdDistributorGoods findByDistributorIdAndGoodsId(long disId,long goodsid);
-	
-		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 ", nativeQuery = true)
-		List<TdDistributorGoods> findTop12ByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(long disId);
 		
+		Page<TdDistributorGoods> findByIsOnSaleTrueOrderBySoldNumberDesc(Pageable page);
+		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 order by g.soldNumber desc")
+		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,Pageable page);
+		
+		Page<TdDistributorGoods> findByCategoryIdTreeContainingAndIsOnSaleTrueOrderBySoldNumberDesc(String catstr,Pageable page);
+		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=true")
+		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,String catstr,Pageable page);
 		/**
 		 * 	列表页收索排序
 		 * 

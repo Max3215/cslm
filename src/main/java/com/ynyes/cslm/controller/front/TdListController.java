@@ -347,8 +347,15 @@ public class TdListController {
             }
         }
         
-        // 分类热卖推荐
-          map.addAttribute("hot_sale_list", tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(categoryId, 0, 10).getContent());   
+        if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+        {
+          Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+          map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByDIstributorIdAndCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(distributorId,categoryId,0,10).getContent());
+        }else{
+        	map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(categoryId,0,10).getContent());
+        }
+//        	// 分类热卖推荐
+//          map.addAttribute("hot_sale_list", tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(categoryId, 0, 10).getContent());   
         
         // 销量排行
         map.addAttribute("most_sold_list", tdGoodsService.findByCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(categoryId, 0, 10).getContent());   

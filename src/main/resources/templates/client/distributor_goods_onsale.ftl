@@ -41,6 +41,11 @@ $(document).ready(function(){
 
 function editgoods(gid){
     $("#goodsId").attr("value",gid);
+    var goodsTitle = $("#title"+gid).html();
+    var goodsPrice = $("#price"+gid).html();
+    
+    $("#goodsTitle").attr("value",goodsTitle);
+    $("#goodsPrice").attr("value",goodsPrice);
     $('.sub_form').css('display','block');
 }
 
@@ -122,9 +127,9 @@ DD_belatedPNG.fix('.,img,background');
            <#if goods_page??>
                 <#list goods_page.content as goods>
                     <tr id="tr_1424195166">
-                        <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;">${goods.title!''}</p></a> </td>
+                        <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01">${goods.code!''}</td>
-                        <td class="tb02">￥${goods.marketPrice?string('0.00')}</td>
+                        <td class="tb02">￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span></td>
                         <td>
                           <p><a href="javascriput:void(0);"  onclick="editgoods(${goods.id?c});">编辑上架</a></p>
                          </td>
@@ -183,11 +188,11 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" datatype="*"></td>
+          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle"></td>
         </tr>
          <tr>
           <th>*商品售价：</th>
-          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " ></td>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
         </tr>
          <tr>
           <th>*库存：</th>

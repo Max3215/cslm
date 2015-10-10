@@ -118,15 +118,15 @@ public class TdGoodsController {
             
          // 热卖
             map.addAttribute("dis_hot_list",
-                    tdDistributorGoodsService.findTop12ByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId));
+                    tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId,0,12).getContent());
         }else
         {
         	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,0,5));
         	 Page<TdOrder> page = tdOrderService.findByShopIdAndGoodId(null, goodsId,0, 5);
         	 
         	// 热卖
-             map.addAttribute("hot_list",
-                     tdGoodsService.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc());
+        	 map.addAttribute("dis_hot_list",
+                     tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0,12).getContent());
         }
 
         // 添加浏览记录

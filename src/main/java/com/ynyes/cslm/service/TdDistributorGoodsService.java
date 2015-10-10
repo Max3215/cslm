@@ -171,13 +171,20 @@ public class TdDistributorGoodsService {
     	return repository.findByDistributorIdAndGoodsId(distributorId,goodsId);
     }
     
-    public List<TdDistributorGoods> findTop12ByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId)
+    public Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId,int page ,int size)
     {
     	if(null == disId)
     	{
     		return null ;
     	}
-    	return repository.findTop12ByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(disId);
+    	PageRequest pageRequest = new PageRequest(page,size);
+    	return repository.findByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(disId,pageRequest);
+    }
+    
+    public Page<TdDistributorGoods> findByIsOnSaleTrueBySoldNumberDesc(int page ,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page,size,new Sort(Direction.DESC, "soldNumber"));
+    	return repository.findByIsOnSaleTrueOrderBySoldNumberDesc(pageRequest);
     }
     
     /**
@@ -297,6 +304,28 @@ public class TdDistributorGoodsService {
 //                       distributorId, "[" + catId + "]", brandId, paramStr, pageRequest);
 //    }
     
+    
+    public Page<TdDistributorGoods> findByCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(Long catId, int page, int size)
+    {
+    	if (null == catId) {
+            return null;
+        }
+    	PageRequest pageRequest = new PageRequest(page,size,new Sort(Direction.DESC, "soldNumber"));
+    	String catStr = "[" + catId + "]";
+    	
+    	return repository.findByCategoryIdTreeContainingAndIsOnSaleTrueOrderBySoldNumberDesc(catStr, pageRequest);
+    }
+    
+    public Page<TdDistributorGoods> findByDIstributorIdAndCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(Long disId,Long catId, int page, int size)
+    {
+    	if (null == catId) {
+            return null;
+        }
+    	PageRequest pageRequest = new PageRequest(page,size,new Sort(Direction.DESC, "soldNumber"));
+    	String catStr = "[" + catId + "]";
+    	
+    	return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleTrueOrderBySoldNumberDesc(disId,catStr, pageRequest);
+    }
     
     /**
      * 	↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
