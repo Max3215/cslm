@@ -138,7 +138,10 @@ public class TdProviderService {
      */
     public TdProvider save(TdProvider e)
     {
-    	tdProviderGoodsService.save(e.getGoodsList());
+    	if(null != e.getGoodsList())
+    	{
+    		tdProviderGoodsService.save(e.getGoodsList());
+    	}
         
         return repository.save(e);
     }

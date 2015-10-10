@@ -163,9 +163,13 @@ public class TdDistributorService {
     public TdDistributor save(TdDistributor e)
     {
         //保存分销商商品
-    	for (TdDistributorGoods disGoods : e.getGoodsList()) {
-    		tdDistributorGoodsService.saveGoods(disGoods);
-		}
+    	if(null != e.getGoodsList())
+    	{
+    		for (TdDistributorGoods disGoods : e.getGoodsList()) 
+    		{
+    			tdDistributorGoodsService.saveGoods(disGoods);
+    		}
+    	}
         
         return repository.save(e);
     }

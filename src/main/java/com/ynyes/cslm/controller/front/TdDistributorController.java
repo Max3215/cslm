@@ -1547,13 +1547,15 @@ public class TdDistributorController {
 			disGoods.setLeftNumber(disGoods.getLeftNumber()+leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
 		}
-		List<TdDistributorGoods> list = tdDistributorGoodsService.findByGoodsId(goodsId);
-		// 判断是否有超市在售此商品
-		if(list.size()==0)
-		{
-			goods.setIsOnSale(true);
-			tdGoodsService.save(goods);
-		}
+		System.err.println(goodsId);
+//		List<TdDistributorGoods> list = tdDistributorGoodsService.findByGoodsId(goodsId);
+//		
+//		// 判断是否有超市在售此商品
+//		if(list.size()==0)
+//		{
+//			goods.setIsOnSale(true);
+//			tdGoodsService.save(goods);
+//		}
 
 		tdDistributorService.save(distributor);
 		res.put("msg", "上架成功");
