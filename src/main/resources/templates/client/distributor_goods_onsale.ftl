@@ -131,7 +131,7 @@ DD_belatedPNG.fix('.,img,background');
                         <td class="tb01">${goods.code!''}</td>
                         <td class="tb02">￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span></td>
                         <td>
-                          <p><a href="javascriput:void(0);"  onclick="editgoods(${goods.id?c});">编辑上架</a></p>
+                          <p><a   onclick="editgoods(${goods.id?c});">编辑上架</a></p>
                          </td>
                       </tr>
                 </#list>
@@ -178,7 +178,7 @@ DD_belatedPNG.fix('.,img,background');
 
   <!-- 点击商品上架后弹出层 -->
   <aside class="sub_form">
-    <p class="tit">商品上架<a href="javascriput:void(0);" onclick="$('.sub_form').css('display','none')">×</a>
+    <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a>
 </p>
     <div class="info_tab">
       <table>
