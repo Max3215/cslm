@@ -23,6 +23,7 @@
                         <td class="tb02">${dg.shopReturnRation!'0'}</td>
                         <td>${dg.leftNumber}</td>
                         <td>
+                            <#if dg.isAudit><#else><p><a>分销待审核</a></p><br></#if>
                             <p><a href="javascript:deletegoods(${dg.id?c},${page})">取消批发</a></p>
                       </tr>
             </#list>

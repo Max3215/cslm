@@ -1,5 +1,6 @@
 package com.ynyes.cslm.controller.management;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdProvider;
+import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.service.TdManagerLogService;
+import com.ynyes.cslm.service.TdProductCategoryService;
+import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.util.SiteMagConstant;
 
@@ -37,6 +42,13 @@ public class TdManagerProviderController {
     
     @Autowired
     TdManagerLogService tdManagerLogService;
+    
+    @Autowired
+    TdProviderGoodsService tdProviderGoodsService;
+    
+    @Autowired
+    TdProductCategoryService tdProductCategoryService;
+    
     
     
     @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
@@ -201,7 +213,326 @@ public class TdManagerProviderController {
         
         return "redirect:/Verwalter/provider/list";
     }
+    
+    @RequestMapping(value="/goods/list")
+    public String goodsList(Integer page,Integer size,
+            String distribution, String __EVENTTARGET,
+            String audit,Long providerId,
+            String __EVENTARGUMENT, String __VIEWSTATE, String keywords,
+            Long[] listId, Integer[] listChkId, Long[] listSortId,
+            ModelMap map, HttpServletRequest req){
+    	String username = (String) req.getSession().getAttribute("manager");
+    	if (null == username) {
+            return "redirect:/Verwalter/login";
+        }
 
+        if (null == page || page < 0) {
+            page = 0;
+        }
+
+        if (null == size || size <= 0) {
+            size = SiteMagConstant.pageSize;
+        }
+
+        if (null != keywords) {
+            keywords = keywords.trim();
+        }
+        if (null != __EVENTTARGET) {
+            switch (__EVENTTARGET) {
+            case "lbtnViewTxt":
+            case "lbtnViewImg":
+                __VIEWSTATE = __EVENTTARGET;
+                break;
+
+            case "btnSave":
+//                btnSave(listId, listSortId, username);
+                tdManagerLogService.addLog("edit", "用户修改商品", req);
+                break;
+
+            case "btnDelete":
+                btnDelete(listId, listChkId);
+                tdManagerLogService.addLog("delete", "用户删除商品", req);
+                break;
+
+            case "btnPage":
+                if (null != __EVENTARGUMENT) {
+                    page = Integer.parseInt(__EVENTARGUMENT);
+                }
+                break;
+
+//            case "btnOnSale":
+//                if (null != __EVENTARGUMENT) {
+//                    Long goodsId = Long.parseLong(__EVENTARGUMENT);
+//
+//                    if (null != goodsId) {
+//                        TdGoods goods = tdGoodsService.findOne(goodsId);
+//                        TdProviderGoods providerGoods = tdProviderGoodsService.findOne(goodsId);
+//
+//                        if (null != goods) {
+//                            if (null == goods.getIsOnSale()
+//                                    || !goods.getIsOnSale()) {
+//                                goods.setIsOnSale(true);
+//                                goods.setOnSaleTime(new Date());
+//                                tdManagerLogService.addLog("delete", "用户上架商品:"
+//                                        + goods.getTitle(), req);
+//                            } else {
+//                                goods.setIsOnSale(false);
+//                                tdManagerLogService.addLog("delete", "用户下架商品:"
+//                                        + goods.getTitle(), req);
+//                            }
+//                            tdGoodsService.save(goods, username);
+//                        }
+//                    }
+//                }
+//                break;
+            }
+        }
+        
+        map.addAttribute("provider_list", tdProviderService.findAll());
+        System.err.println(tdProviderService.findAll().size());
+       
+        Page<TdProviderGoods> goodsPage = null;
+        
+        if(null ==providerId)// 批发商Id
+        {
+    		if("isDistribution".equalsIgnoreCase(distribution)) // 分销
+    		{
+    			if("isAudit".equalsIgnoreCase(audit))	// 已审核
+    			{
+    				if(null == keywords ||"".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsDistributionTrueAndIsAuditTrue(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsDistributionTrueAndIsAuditTrue(keywords, page, size);
+    				}
+    			}
+    			else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsDistributionTrueAndIsAuditFalse(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsDistributionTrueAndIsAuditFalse(keywords, page, size);
+    				}
+    			}
+    			else
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsDistributionTrue(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsDistributionTrue(keywords, page, size);
+    				}
+    			}
+    		}
+    		else if("isNotDistribution".equalsIgnoreCase(distribution))	// 未分销
+    		{
+    			if("isAudit".equalsIgnoreCase(audit))	// 已审核
+    			{
+    				if(null == keywords ||"".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsDistributionFalseAndIsAuditTrue(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsDistributionFalseAndIsAuditTrue(keywords, page, size);
+    				}
+    			}
+    			else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsDistributionFalseAndIsAuditFalse(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsDistributionFalseAndIsAuditFalse(keywords, page, size);
+    				}
+    			}
+    			else
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsDistributionFalse(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsDistributionFalse(keywords, page, size);
+    				}
+    			}
+    		}
+    		else
+    		{
+    			if("isAudit".equalsIgnoreCase(audit))	// 已审核
+    			{
+    				if(null == keywords ||"".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsAuditTrue(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsAuditTrue(keywords, page, size);
+    				}
+    			}
+    			else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByIsAuditFalse(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndIsAuditFalse(keywords, page, size);
+    				}
+    			}
+    			else
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findAll(page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndKeywords(keywords, page, size);
+    				}
+    			}
+    		}
+        }
+        else
+        {
+        	if("isDistribution".equalsIgnoreCase(distribution)) // 分销
+    		{
+    			if("isAudit".equalsIgnoreCase(audit))	// 已审核
+    			{
+    				if(null == keywords ||"".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId, true, true, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, true, true, keywords, page, size);
+    				}
+    			}
+    			else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId, true, false, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, true, false, keywords, page, size);
+    				}
+    			}
+    			else
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsDistribution(providerId, true, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsDistribution(providerId, keywords, true, page, size);
+    				}
+    			}
+    		}
+    		else if("isNotDistribution".equalsIgnoreCase(distribution))	// 未分销
+    		{
+    			if("isAudit".equalsIgnoreCase(audit))	// 已审核
+    			{
+    				if(null == keywords ||"".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId, false, true, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, false, true, keywords, page, size);
+    				}
+    			}
+    			else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId, false, false, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, false, false, keywords, page, size);
+    				}
+    			}
+    			else
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsDistribution(providerId, false, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsDistribution(providerId, keywords, false, page, size);
+    				}
+    			}
+    		}
+    		else
+    		{
+    			if("isAudit".equalsIgnoreCase(audit))	// 已审核
+    			{
+    				if(null == keywords ||"".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsAudit(providerId, true, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsAudit(providerId, keywords, true, page, size);
+    				}
+    			}
+    			else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderIdAndIsAudit(providerId, false, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndIsAudit(providerId, keywords, false, page, size);
+    				}
+    			}
+    			else
+    			{
+    				if(null == keywords || "".equalsIgnoreCase(keywords))
+    				{
+    					goodsPage = tdProviderGoodsService.findByProviderId(providerId, page, size);
+    				}else{
+    					goodsPage = tdProviderGoodsService.searchAndProviderIdAndKeywords(providerId, keywords, page, size);
+    				}
+    			}
+    		}
+        }
+        
+        map.addAttribute("content_page", goodsPage);
+        
+        // 参数注回
+        map.addAttribute("page", page);
+        map.addAttribute("size", size);
+        map.addAttribute("keywords", keywords);
+        map.addAttribute("__EVENTTARGET", __EVENTTARGET);
+        map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
+        map.addAttribute("__VIEWSTATE", __VIEWSTATE);
+        map.addAttribute("providerId", providerId);
+        map.addAttribute("audit", audit);
+        map.addAttribute("distribution", distribution);
+        
+    	return "/site_mag/provider_goods_list";
+    }
+    
+    @RequestMapping(value="/goods/edit")
+    public String goodsEdit(Long id, String __EVENTTARGET,
+            String __EVENTARGUMENT, String __VIEWSTATE, ModelMap map,
+            HttpServletRequest req){
+    	 String username = (String) req.getSession().getAttribute("manager");
+         if (null == username) {
+             return "redirect:/Verwalter/login";
+         }
+         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
+         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
+         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
+         
+         
+    	if(null != id)
+    	{
+    		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(id);
+    		map.addAttribute("providerGoods",providerGoods);
+    		map.addAttribute("providerId", tdProviderGoodsService.findProviderId(id));
+    	}
+         
+    	return "/site_mag/provider_goods_edit";
+    }
+    
+    @RequestMapping(value="/goods/save")
+    public String save(TdProviderGoods providerGoods,
+    		String __EVENTTARGET, String __EVENTARGUMENT, String __VIEWSTATE,
+    		HttpServletRequest req,ModelMap map){
+    	String username = (String) req.getSession().getAttribute("manager");
+        if (null == username) {
+            return "redirect:/Verwalter/login";
+        }
+        tdProviderGoodsService.save(providerGoods);
+        return "redirect:/Verwalter/provider/goods/list?__EVENTTARGET=" + __EVENTTARGET
+                + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE="
+                + __VIEWSTATE;
+    }
+    
     @ModelAttribute
     public void getModel(@RequestParam(value = "id", required = false) Long id,
                         Model model) {

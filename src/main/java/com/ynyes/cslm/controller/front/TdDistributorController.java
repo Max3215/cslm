@@ -754,7 +754,6 @@ public class TdDistributorController {
 		tdDistributorGoodsService.delete(disId);
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		
 		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), type, page, 7));
 		map.addAttribute("page",page);
 		
@@ -992,8 +991,6 @@ public class TdDistributorController {
         map.addAttribute("order_page", orderPage);
 		return "/client/distributor_saleOrder_list";
 	}
-	
-	
 	
 	/**
 	 * 超市进货订单

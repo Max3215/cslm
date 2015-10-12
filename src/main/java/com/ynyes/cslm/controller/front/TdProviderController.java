@@ -382,7 +382,7 @@ public class TdProviderController {
 		map.addAttribute("provider", provider);
 		map.addAttribute("page", page);
 		map.addAttribute("provider_goods_page",
-				tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId(),page,ClientConstant.pageSize));
+				tdProviderGoodsService.findByProviderId(provider.getId(),page,ClientConstant.pageSize));
 		
 		return "/client/provider_goods";
 	}
@@ -409,7 +409,7 @@ public class TdProviderController {
 		map.addAttribute("provider", provider);
 		map.addAttribute("page", page);
 		map.addAttribute("provider_goods_page",
-				tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId(),page,ClientConstant.pageSize));
+				tdProviderGoodsService.findByProviderId(provider.getId(),page,ClientConstant.pageSize));
 		return "/client/provider_goods_list";
 	}
 	
@@ -457,6 +457,7 @@ public class TdProviderController {
 			String goodsTitle,
 			Double outFactoryPrice,
 			Long leftNumber,
+			Double shopReturnRation,
 			HttpServletRequest req)
 	{
 		Map<String,Object> res =new HashMap<>();
@@ -484,21 +485,33 @@ public class TdProviderController {
 			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 			proGoods.setOutFactoryPrice(outFactoryPrice);
 			proGoods.setLeftNumber(leftNumber);
+			proGoods.setOnSaleTime(new Date());
+			proGoods.setIsOnSale(true);
 		}
 		else
 		{
-			
 			proGoods.setGoodsTitle(goodsTitle);
 			proGoods.setLeftNumber(proGoods.getLeftNumber()+leftNumber);
 			proGoods.setOutFactoryPrice(outFactoryPrice);
+			proGoods.setOnSaleTime(new Date());
+			proGoods.setIsOnSale(true);
 		}
-		proGoods.setIsOnSale(true);
 		proGoods.setProviderTitle(provider.getTitle());
 		provider.getGoodsList().add(proGoods);
-		tdProviderService.save(provider);
 		
-		res.put("msg","设置批发成功");
-		
+		// 分销状态
+		if(null == shopReturnRation || 0 ==shopReturnRation)
+		{
+			proGoods.setIsDistribution(false);
+			proGoods.setIsAudit(true);
+			tdProviderService.save(provider);
+			res.put("msg","设置批发成功");
+		}else{
+			proGoods.setIsDistribution(true);
+			proGoods.setIsAudit(false);
+			tdProviderService.save(provider);
+			res.put("msg", "分销商品，等待平台审核~");
+		}
 		return res;
 	}
 	

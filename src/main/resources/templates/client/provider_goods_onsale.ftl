@@ -41,6 +41,9 @@ $(document).ready(function(){
 
 function editgoods(gid){
     $("#goodsId").attr("value",gid);
+    var goodsTitle = $("#title"+gid).html();
+    
+    $("#goodsTitle").attr("value",goodsTitle);
     $('.sub_form').css('display','block');
 }
 
@@ -126,7 +129,7 @@ DD_belatedPNG.fix('.,img,background');
            <#if goods_page??>
                 <#list goods_page.content as goods>
                     <tr id="tr_1424195166">
-                        <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;">${goods.title!''}</p></a> </td>
+                        <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01">${goods.code!''}</td>
                         <td class="tb02">￥${goods.marketPrice?string('0.00')}</td>
                         <td>
@@ -187,7 +190,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" datatype="*"></td>
+          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" ></td>
         </tr>
          <tr>
           <th>*商品批发价：</th>

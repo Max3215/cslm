@@ -1,10 +1,16 @@
 package com.ynyes.cslm.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class TdProviderGoods {
@@ -52,7 +58,16 @@ public class TdProviderGoods {
 	// 是否在批发
 	@Column
 	private Boolean isOnSale;
-
+	
+	// 是否分销
+	@Column
+	private Boolean isDistribution;
+	
+	// 时间
+	@Column
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+	private Date onSaleTime;
 	
 	
 	public Long getId() {
@@ -141,6 +156,22 @@ public class TdProviderGoods {
 
 	public void setIsOnSale(Boolean isOnSale) {
 		this.isOnSale = isOnSale;
+	}
+
+	public Boolean getIsDistribution() {
+		return isDistribution;
+	}
+
+	public void setIsDistribution(Boolean isDistribution) {
+		this.isDistribution = isDistribution;
+	}
+
+	public Date getOnSaleTime() {
+		return onSaleTime;
+	}
+
+	public void setOnSaleTime(Date onSaleTime) {
+		this.onSaleTime = onSaleTime;
 	}
 	
 	
