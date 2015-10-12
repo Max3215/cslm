@@ -250,7 +250,7 @@ public class TdManagerProviderController {
                 break;
 
             case "btnDelete":
-                btnDelete(listId, listChkId);
+                btnGoodsDelete(listId, listChkId);
                 tdManagerLogService.addLog("delete", "用户删除商品", req);
                 break;
 
@@ -289,7 +289,6 @@ public class TdManagerProviderController {
         }
         
         map.addAttribute("provider_list", tdProviderService.findAll());
-        System.err.println(tdProviderService.findAll().size());
        
         Page<TdProviderGoods> goodsPage = null;
         
@@ -562,6 +561,21 @@ public class TdManagerProviderController {
                     e.setSortId(sortIds[i]);
                     tdProviderService.save(e);
                 }
+            }
+        }
+    }
+    
+    private void btnGoodsDelete(Long[] ids, Integer[] chkIds) {
+        if (null == ids || null == chkIds || ids.length < 1
+                || chkIds.length < 1) {
+            return;
+        }
+
+        for (int chkId : chkIds) {
+            if (chkId >= 0 && ids.length > chkId) {
+                Long id = ids[chkId];
+
+                tdProviderGoodsService.delete(id);
             }
         }
     }
