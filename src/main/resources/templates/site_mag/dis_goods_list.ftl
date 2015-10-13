@@ -48,38 +48,11 @@
         }
     }
     
-    //创建改价窗口
-    function showDialogChangePrice(goodsId) {
-        $.dialog({
-            id: 'giftDialogId',
-            lock: true,
-            max: false,
-            min: false,
-            title: "改价",
-            content: 'url:/Verwalter/goods/price?goodsId=' + goodsId,
-            width: 600,
-            height: 200
-        });
-    }
-    
-    // 改价记录
-    function showDialogPriceLog(goodsId) {
-        $.dialog({
-            id: 'giftDialogId',
-            lock: true,
-            max: false,
-            min: false,
-            title: "改价记录",
-            content: 'url:/Verwalter/goods/price/log?goodsId=' + goodsId,
-            width: 800,
-            height: 500
-        });
-    }
 </script>
 </head>
 
 <body class="mainbody">
-<form name="form1" method="post" action="/Verwalter/goods/list" id="form1">
+<form name="form1" method="post" action="/Verwalter/distributor/goods/list" id="form1">
 <div>
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="${__EVENTTARGET!""}" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="${__EVENTARGUMENT!""}" />
@@ -97,13 +70,6 @@ function __doPostBack(eventTarget, eventArgument) {
         theForm.submit();
     }
 }
-
-function confirmCopy(id)
-{
-    $.dialog.confirm("确定复制该商品吗？", function () {
-        window.location.href = "/Verwalter/goods/copy?id=" + id;
-    });
-}
 </script>
 
 <!--导航栏-->
@@ -120,12 +86,22 @@ function confirmCopy(id)
   <div id="floatHead" class="toolbar">
     <div class="l-list">
       <ul class="icon-list">
-        <li><a class="add" href="/Verwalter/goods/edit?__VIEWSTATE=${__VIEWSTATE!""}"><i></i><span>新增</span></a></li>
-        <li><a id="btnSave" class="save" href="javascript:__doPostBack('btnSave','')"><i></i><span>保存</span></a></li>
+   <!--     <li><a class="add" href="/Verwalter/goods/edit?__VIEWSTATE=${__VIEWSTATE!""}"><i></i><span>新增</span></a></li>
+        <li><a id="btnSave" class="save" href="javascript:__doPostBack('btnSave','')"><i></i><span>保存</span></a></li>  -->
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>
       <div class="menu-list">
+        <div class="rule-single-select">
+            <select name="distributorId" onchange="javascript:setTimeout(__doPostBack('distributorId',''), 0)">
+                <option value="">加盟超市</option>
+                <#if dis_list?? && dis_list?size gt 0 >
+                    <#list dis_list as d>
+                        <option value="${d.id?c}" <#if distributorId?? && d.id==distributorId>selected="selected"</#if>>${d.title!''}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
         <div class="rule-single-select">
             <select name="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId', ''), 0)">
                 <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
@@ -136,13 +112,21 @@ function confirmCopy(id)
                 </#if>
             </select>
         </div>
-        <div class="rule-single-select">
-            <select name="property" onchange="javascript:setTimeout(__doPostBack('property',''), 0)">
-                <option value="">审核状态</option>
-                <option value="isOnSale" <#if property?? && property=="isOnSale">selected="selected"</#if>>已展示</option>
-                <option value="isNotOnSale" <#if property?? && property=="isNotOnSale">selected="selected"</#if>>待审核</option>
+         <div class="rule-single-select">
+            <select name="onsale" onchange="javascript:setTimeout(__doPostBack('onsale',''), 0)">
+                <option value="">销售状态</option>
+                <option value="isOnSale" <#if onsale?? && onsale=="isOnSale">selected="selected"</#if>>上架</option>
+                <option value="isNotOnSale" <#if onsale?? && onsale=="isNotOnSale">selected="selected"</#if>>下架</option>
             </select>
         </div>
+        <div class="rule-single-select">
+            <select name="audit" onchange="javascript:setTimeout(__doPostBack('audit',''), 0)">
+                <option value="">审核状态</option>
+                <option value="isAudit" <#if audit?? && audit=="isAudit">selected="selected"</#if>>销售中</option>
+                <option value="isNotAudit" <#if audit?? && audit=="isNotAudit">selected="selected"</#if>>待审核</option>
+            </select>
+        </div>
+       
         <!--
         <div class="rule-single-select">
             <select name="saleType" onchange="javascript:setTimeout(__doPostBack('saleType',''), 0)">
@@ -157,8 +141,8 @@ function confirmCopy(id)
     <div class="r-list">
       <input name="keywords" type="text" class="keyword" value="${keywords!''}">
       <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('lbtnSearch','')">查询</a>
-      <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="javascript:__doPostBack('lbtnViewImg','')"></a>
-      <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="javascript:__doPostBack('lbtnViewTxt','')"></a>
+  <!--    <a id="lbtnViewImg" title="图像列表视图" class="img-view" href="javascript:__doPostBack('lbtnViewImg','')"></a>
+      <a id="lbtnViewTxt" title="文字列表视图" class="txt-view" href="javascript:__doPostBack('lbtnViewTxt','')"></a>    -->
     </div>
   </div>
 </div>
@@ -189,16 +173,17 @@ function confirmCopy(id)
             </div>
             <i class="absbg"></i>
             </#if>
-            <h1><span><a href="/Verwalter/goods/edit?cid=${cid!""}&mid=${mid!""}&id=${content.id?c}&__VIEWSTATE=${__VIEWSTATE!""}">${content.title!""}</a></span></h1>
-            <div class="remark">${content.subTitle!""}</div>
+            <h1><span><a href="/Verwalter/distributor/goods/edit?cid=${cid!""}&mid=${mid!""}&id=${content.id?c}&__VIEWSTATE=${__VIEWSTATE!""}">${content.goodsTitle!""}</a></span></h1>
+            <div class="remark">${content.subGoodsTitle!""}</div>
             <div class="tools">
-                
+               <input type="text" value="${content.code!""}" readonly="readonly" >
+             
+              <#--
                 <a title="上架/下架" class="hot <#if content.isOnSale?? && content.isOnSale>selected</#if>" href="javascript:__doPostBack('btnOnSale','${content.id?c}')"></a>
                 <a title="改价" class="change" href="javascript:showDialogChangePrice('${content.id?c}')"></a>
                 <a title="改价记录" class="record" href="javascript:showDialogPriceLog('${content.id?c}')"></a>
                 <input name="listSortId" type="text" value="${content.sortId!""}" class="sort" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)));">
               
-              <#--
               <a title="设置评论" class="msg selected" href="javascript:__doPostBack('rptList2$ctl01$lbtnIsMsg','')"></a>
               <a title="设置置顶" class="top" href="javascript:__doPostBack('rptList2$ctl01$lbtnIsTop','')"></a>
               <a title="设置推荐" class="red" href="javascript:__doPostBack('rptList2$ctl01$lbtnIsRed','')"></a>
@@ -209,8 +194,8 @@ function confirmCopy(id)
             </div>
             <div class="foot">
                 <p class="time"><#if content.onSaleTime??>${content.onSaleTime?string("yyyy-MM-dd HH:mm:ss")}</#if></p>
-                <a href="/Verwalter/goods/edit?cid=${cid!""}&mid=${mid!""}&id=${content.id?c}&__VIEWSTATE=${__VIEWSTATE!""}" title="编辑" class="edit">编辑</a>
-                <a href="javascript:confirmCopy(${content.id?c});" title="复制商品" class="show">复制</a>
+              <!--  <a href="/Verwalter/goods/edit?cid=${cid!""}&mid=${mid!""}&id=${content.id?c}&__VIEWSTATE=${__VIEWSTATE!""}" title="编辑" class="edit">编辑</a>
+                <a href="javascript:confirmCopy(${content.id?c});" title="复制商品" class="show">复制</a>  -->
             </div>
         </div>
     </li>

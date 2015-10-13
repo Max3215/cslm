@@ -193,6 +193,7 @@ function __doPostBack(eventTarget, eventArgument) {
             <div class="remark">${content.subGoodsTitle!""}</div>
             <div class="tools">
                <input type="text" value="${content.providerTitle!""}" readonly="readonly" >
+             
               <#--
                 <a title="上架/下架" class="hot <#if content.isOnSale?? && content.isOnSale>selected</#if>" href="javascript:__doPostBack('btnOnSale','${content.id?c}')"></a>
                 <a title="改价" class="change" href="javascript:showDialogChangePrice('${content.id?c}')"></a>

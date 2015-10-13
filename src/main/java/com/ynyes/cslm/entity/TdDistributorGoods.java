@@ -1,5 +1,6 @@
 package com.ynyes.cslm.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -32,6 +37,9 @@ public class TdDistributorGoods {
 	// 商品标题
 	@Column
 	private String goodsTitle;
+	
+	@Column
+	private String subGoodsTitle;
 	
 	// 商品价格
 	@Column(scale=2)
@@ -97,6 +105,11 @@ public class TdDistributorGoods {
     // 品牌ID
     @Column
     private Long brandId;
+    
+    @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+	private Date onSaleTime;
 
 	public Long getId() {
 		return id;
@@ -120,6 +133,14 @@ public class TdDistributorGoods {
 
 	public void setGoodsTitle(String goodsTitle) {
 		this.goodsTitle = goodsTitle;
+	}
+
+	public String getSubGoodsTitle() {
+		return subGoodsTitle;
+	}
+
+	public void setSubGoodsTitle(String subGoodsTitle) {
+		this.subGoodsTitle = subGoodsTitle;
 	}
 
 	public Double getGoodsPrice() {
@@ -250,5 +271,14 @@ public class TdDistributorGoods {
 		this.brandId = brandId;
 	}
 
+	public Date getOnSaleTime() {
+		return onSaleTime;
+	}
+
+	public void setOnSaleTime(Date onSaleTime) {
+		this.onSaleTime = onSaleTime;
+	}
+
+	
 	
 }

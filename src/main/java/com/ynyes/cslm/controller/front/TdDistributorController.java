@@ -1536,15 +1536,17 @@ public class TdDistributorController {
 			distributorGoods.setReturnPoints(goods.getReturnPoints());
 			distributorGoods.setParamValueCollect(goods.getParamValueCollect());
 			distributorGoods.setIsOnSale(true);
+			distributorGoods.setIsAudit(true);
 			distributorGoods.setLeftNumber(leftNumber);
-			
+			distributorGoods.setOnSaleTime(new Date());
 			distributor.getGoodsList().add(distributorGoods);
 		}else{
+			disGoods.setIsAudit(true);
+			disGoods.setOnSaleTime(new Date());
 			disGoods.setGoodsTitle(goodsTitle);
 			disGoods.setLeftNumber(disGoods.getLeftNumber()+leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
 		}
-		System.err.println(goodsId);
 //		List<TdDistributorGoods> list = tdDistributorGoodsService.findByGoodsId(goodsId);
 //		
 //		// 判断是否有超市在售此商品

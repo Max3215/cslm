@@ -192,14 +192,18 @@ $(function () {
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="${__EVENTARGUMENT!""}" />
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}" />
 </div>
-<input name="id" type="text" value='<#if providerGoods??>${providerGoods.id?c}</#if>' style="display:none">
-<input name="providerId" type="text" value='<#if providerId??>${providerId}</#if>' style="display:none">
-<input name="goodsId" type="text" value='<#if providerGoods??>${providerGoods.goodsId?c}</#if>' style="display:none">
-<input name="isOnSale" type="text" value='<#if providerGoods??>${providerGoods.isOnSale?c}</#if>' style="display:none">
-<input name="isDistrition" type="text" value='<#if providerGoods??>${providerGoods.isDistribution?c}</#if>' style="display:none">
+<input name="id" type="text" value='<#if goods??>${goods.id?c}</#if>' style="display:none">
+<input name="distributorId" type="text" value='<#if distributorId??>${distributorId}</#if>' style="display:none">
+<input name="goodsId" type="text" value='<#if goods??>${goods.goodsId?c}</#if>' style="display:none">
+<input name="categoryIdTree" type="text" value='<#if goods??>${goods.categoryIdTree!''}</#if>' style="display:none">
+<input name="goodsParamList" type="text" value='<#if goods??>${goods.goodsParamList!''}</#if>' style="display:none">
+<input name="paramValueCollect" type="text" value='<#if goods??>${goods.paramValueCollect!''}</#if>' style="display:none">
+<input name="brandTitle" type="text" value='<#if goods??>${goods.brandTitle!''}</#if>' style="display:none">
+<input name="brandId" type="text" value='<#if goods??>${goods.brandId!''}</#if>' style="display:none">
+
 <!--导航栏-->
 <div class="location">
-    <a href="/Verwalter/provider/goods/list" class="back"><i></i><span>
+    <a href="/Verwalter/distributor/goods/list" class="back"><i></i><span>
         返回列表页</span></a> 
     <a href="/Verwalter/center" class="home">
     <i></i><span>首页</span></a>
@@ -230,57 +234,94 @@ $(function () {
     </div>
     <div id="id-first-tab" class="tab-content" style="display: block;">
         <dl>
+            <dt>所属类别</dt>
+            <dd>
+                <div class="rule-single-select">
+                    <select name="categoryId" id="categoryId" datatype="*" sucmsg=" ">
+                        <#if !goods??>
+                        <option value="">请选择类别...</option>
+                        </#if>
+                        <#if category_list?? >
+                            <#list category_list as c>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+            </dd>
+        </dl>
+        <dl>
             <dt>商品标题</dt>
             <dd>
-                <input name="goodsTitle" type="text" value="<#if providerGoods??>${providerGoods.goodsTitle!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" ">
+                <input name="goodsTitle" type="text" value="<#if goods??>${goods.goodsTitle!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" ">
                 <span class="Validform_checktip">*标题最多100个字符</span>
             </dd>
         </dl>
         <dl>
             <dt>商品副标题</dt>
             <dd>
-                <input name="subGoodsTitle" type="text" value="<#if providerGoods??>${providerGoods.subGoodsTitle!""}</#if>" class="input normal" datatype="*1-255" sucmsg=" ">
+                <input name="subGoodsTitle" type="text" value="<#if goods??>${goods.subGoodsTitle!""}</#if>" class="input normal" datatype="*1-255" sucmsg=" ">
                 <span class="Validform_checktip">*标题最多255个字符</span>
             </dd>
         </dl>
         <dl>
-            <dt>批发商</dt>
+            <dt>编码</dt>
             <dd>
-                <input id="providerTitle" readonly="readonly"  name="providerTitle" type="text" value="<#if providerGoods?? && providerGoods.providerTitle??>${providerGoods.providerTitle!''}</#if>" class="input normal" datatype="*" sucmsg=" ">
-                <span class="Validform_checktip">*商品供货商</span>
+                <input id="code"  name="code" type="text" value="<#if goods?? && goods.code??>${goods.code!''}</#if>" class="input normal" >
+                <span class="Validform_checktip">*商品编码</span>
             </dd>
         </dl>
         <dl>
-            <dt>批发价</dt>
+            <dt>市场价</dt>
             <dd>
-                <input id="outFactoryPrice" readonly="readonly"  name="outFactoryPrice" type="text" value="<#if providerGoods?? && providerGoods.outFactoryPrice??>${providerGoods.outFactoryPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
+                <input id="outFactoryPrice"   name="outFactoryPrice" type="text" value="<#if goods?? && goods.goodsMarketPrice??>${goods.goodsMarketPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
+                <span class="Validform_checktip">*商品市场价</span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>销售价</dt>
+            <dd>
+                <input id="outFactoryPrice"  name="goodsPrice" type="text" value="<#if goods?? && goods.goodsPrice??>${goods.goodsPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl>
-        <#if providerGoods.isAudit??>
+        <dl>
+            <dt>销售状态</dt>
+            <dd>
+                <div class="rule-multi-radio multi-radio">
+                    <span>
+                        <input type="radio" name="isOnSale" value="1" <#if goods??==false || goods.isOnSale==true>checked="checked"</#if> >
+                        <label>上架</label>
+                        <input type="radio" name="isOnSale" value="0" <#if goods?? && goods.isOnSale?? && goods.isOnSale==false>checked="checked"</#if> >
+                        <label>下架</label>
+                    </span>
+                </div>
+            </dd>
+        </dl>
+        <#if goods.isAudit??>
         <dl>
             <dt>审核状态</dt>
             <dd>
                 <div class="rule-multi-radio multi-radio">
                     <span>
-                        <input type="radio" name="isAudit" value="1" <#if providerGoods?? || providerGoods.isAudit==true>checked="checked"</#if> >
+                        <input type="radio" name="isAudit" value="1" <#if goods?? || goods.isAudit==true>checked="checked"</#if> >
                         <label>已审核</label>
-                        <input type="radio" name="isAudit" value="0" <#if providerGoods?? && providerGoods.isAudit?? && providerGoods.isAudit==false>checked="checked"</#if> >
+                        <input type="radio" name="isAudit" value="0" <#if goods?? && goods.isAudit?? && goods.isAudit==false>checked="checked"</#if> >
                         <label>待审核</label>
                     </span>
                 </div>
             </dd>
         </dl>
         </#if>
-        <#if providerGoods.isDistribution??>
+        <#if goods.isDistribution??>
         <dl>
             <dt>分销状态</dt>
             <dd>
                 <div class="rule-multi-radio multi-radio">
                     <span>
-                        <input type="radio" name="isDistribution" value="1" <#if providerGoods?? || providerGoods.isDistribution==true>checked="checked"</#if> >
+                        <input type="radio" name="isDistribution" value="1" <#if goods?? || goods.isDistribution==true>checked="checked"</#if> >
                         <label>分销</label>
-                        <input type="radio" name="isDistribution" value="0" <#if providerGoods?? && providerGoods.isAudit?? && providerGoods.isDistribution==false>checked="checked"</#if> >
+                        <input type="radio" name="isDistribution" value="0" <#if goods?? && goods.isAudit?? && goods.isDistribution==false>checked="checked"</#if> >
                         <label>未分销</label>
                     </span>
                 </div>
@@ -288,35 +329,43 @@ $(function () {
         </dl>
         </#if>
         <dl>
-            <dt>分销商返利比例</dt>
+            <dt>赠送积分</dt>
             <dd>
-                <input name="shopReturnRation"  type="text" value="<#if providerGoods?? && providerGoods.shopReturnRation??>${providerGoods.shopReturnRation?string("0.00")}<#else>0</#if>" class="input normal" sucmsg="">
-                <span class="Validform_checktip">分销商返利 = 销售价 * 分销商返利比例</span>
+                <input name="returnPoints"  type="text" value="<#if goods?? && goods.returnPoints??>${goods.returnPoints!'0'}<#else>0</#if>" class="input normal" sucmsg="">
+                <span class="Validform_checktip"></span>
             </dd>
         </dl>
         <dl>
             <dt>封面图片</dt>
             <dd>
-                <input id="txtImgUrl" name="goodsCoverImageUri" type="text" value="<#if providerGoods??>${providerGoods.goodsCoverImageUri!""}</#if>" class="input normal upload-path">
+                <input id="txtImgUrl" name="coverImageUri" type="text" value="<#if goods??>${goods.coverImageUri!""}</#if>" class="input normal upload-path">
                 <div class="upload-box upload-img"></div>
                 <div id="thumb_ImgUrl_show1" class="photo-list thumb_ImgUrl_show">
                 </div>
             </dd>
         </dl>
+        
         <dl>
-            <dt>批发时间</dt>
+            <dt>上架时间</dt>
             <dd>
                 <div class="input-date">
-                    <input name="onSaleTime" type="text" value="<#if providerGoods??>${providerGoods.onSaleTime!""}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',lang:'zh-cn'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" ">
+                    <input name="onSaleTime" type="text" value="<#if goods??>${goods.onSaleTime!""}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',lang:'zh-cn'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" ">
                     <i>日期</i>
                 </div>
                 <span class="Validform_checktip">不选择默认为当前时间</span>
             </dd>
         </dl>
         <dl>
+            <dt>销量</dt>
+            <dd>
+                <input name="leftNumber" type="text" value="<#if goods?? && goods.soldNumber??>${goods.soldNumber?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
+                <span class="Validform_checktip"></span>
+            </dd>
+        </dl>
+        <dl>
             <dt>库存余量</dt>
             <dd>
-                <input name="leftNumber" type="text" value="<#if providerGoods?? && providerGoods.leftNumber??>${providerGoods.leftNumber?c!"99"}<#else>99</#if>" class="input normal" datatype="n" sucmsg=" ">
+                <input name="leftNumber" type="text" value="<#if goods?? && goods.leftNumber??>${goods.leftNumber?c!"99"}<#else>99</#if>" class="input normal" datatype="n" sucmsg=" ">
                 <span class="Validform_checktip">库存为0时显示为缺货</span>
             </dd>
         </dl>
