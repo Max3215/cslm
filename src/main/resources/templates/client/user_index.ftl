@@ -145,10 +145,8 @@ DD_belatedPNG.fix('.,img,background');
     </div><!--mymember_info END-->
     
     <div class="mymember_info mymember_info02">
-	 <h3>我的收藏
-	  <#-- <a class="a001" href="#">降价商品 0</a><a class="a001" href="#">促销商品 0</a>   -->
-	 </h3>
-      <div id="mymember_gzbox">
+	   <h3>我的收藏</h3>
+       <div id="mymember_gzbox">
         <ul>
             <li>
                 <#if collect_page?? >
@@ -163,70 +161,68 @@ DD_belatedPNG.fix('.,img,background');
             </li>
         </ul>
         <div class="myclear"></div>
-        <a id="mymember_gznext" ><img src="/client/images/mymember/arrow02.jpg" /></a>
-      </div>
+            <a id="mymember_gznext" ><img src="/client/images/mymember/arrow02.jpg" /></a>
+        </div>
     </div><!--mymember_info END--><!--mymember_info END-->
-    
   </div><!--mymember_center END-->
   
   <div class="mymember_hot">
-    <div class="mymember_hot_part">
-      <h3>会员推荐</h3>
-      <h4 id="mymember_right_menu">
-        <a class="mysel" title="推荐">推荐 >> </a>
-        <a title="热卖">热卖 >> </a>
-      </h4>
-      <ul id="mymember_right_check">
-          <li>
-              <#if recommend_goods_page??>
-                  <#list recommend_goods_page.content as item>
-                      <#if item_index < 4 >
-                          <a class="mymember_hot_list" href="/goods/${item.id?c}">
-                              <img src="${item.coverImageUri!''}"  width="75" height="75"/>
-                              <p>${item.title!''}</p>
-                              <b>￥${item.salePrice?string('0.00')}</b>
-                          </a>
+      <div class="mymember_hot_part">
+            <h3>会员推荐</h3>
+            <h4 id="mymember_right_menu">
+                <a class="mysel" title="推荐">推荐 >> </a>
+                <a title="热卖">热卖 >> </a>
+            </h4>
+            <ul id="mymember_right_check">
+                  <li>
+                      <#if recommend_goods_page??>
+                          <#list recommend_goods_page.content as item>
+                              <#if item_index < 4 >
+                                  <a class="mymember_hot_list" href="/goods/${item.id?c}">
+                                      <img src="${item.coverImageUri!''}"  width="75" height="75"/>
+                                      <p>${item.title!''}</p>
+                                      <b>￥${item.marketPrice?string('0.00')}</b>
+                                  </a>
+                              </#if>
+                          </#list>
                       </#if>
-                  </#list>
-              </#if>
-         </li>
-         <li>
-              <#if hot_goods_page??>
-                   <#list hot_goods_page.content as item>
-                       <#if item_index < 4 >
-                           <a class="mymember_hot_list" href="/goods/${item.id?c}">
-                               <img src="${item.coverImageUri!''}"  width="75" height="75"/>
-                               <p>${item.title!''}</p>
-                               <b>￥${item.salePrice?string('0.00')}</b>
-                           </a>
+                 </li>
+                 <li>
+                      <#if hot_goods_page??>
+                           <#list hot_goods_page.content as item>
+                               <#if item_index < 4 >
+                                   <a class="mymember_hot_list" href="/goods/${item.goodsId?c}">
+                                       <img src="${item.coverImageUri!''}"  width="75" height="75"/>
+                                       <p>${item.goodsTitle!''}</p>
+                                       <b>￥${item.goodsPrice?string('0.00')}</b>
+                                   </a>
+                               </#if>
+                           </#list>
                        </#if>
-                   </#list>
-               </#if>
-          </li>
-      </ul>
-    </div><!--mymember_hot_part END-->
+                  </li>
+            </ul>
+      </div><!--mymember_hot_part END-->
     
-    <div class="mymember_hot_part">
-      <h3>浏览历史</h3>
-      <div id="mymember_storybox">
-        <ul>
-            <li>
-                <#if recent_page??>
-                    <#list recent_page.content as rgoods>
-                         <a class="mymember_hot_story" href="/goods/${rgoods.goodsId?c}">
-                            <img src="${rgoods.goodsCoverImageUri!''}"  width="65" height="65"/>
-                            <p>￥${rgoods.goodsSalePrice?string("0.00")}</p>
-                         </a>
-                    </#list>
-                 </#if>    
-            </li>
-        </ul>
-        <div class="myclear"></div>
-        <a id="mymember_story_next" href="#"><img src="/client/images/mymember/arrow02.jpg" /></a>
-      </div>
-      
-      <div class="myclear"></div>
-    </div><!--mymember_hot_part END-->
+      <div class="mymember_hot_part">
+            <h3>浏览历史</h3>
+            <div id="mymember_storybox">
+                <ul>
+                    <li>
+                        <#if recent_page??>
+                            <#list recent_page.content as rgoods>
+                                 <a class="mymember_hot_story" href="/goods/${rgoods.goodsId?c}">
+                                    <img src="${rgoods.goodsCoverImageUri!''}"  width="65" height="65"/>
+                                    <p>￥${rgoods.goodsSalePrice?string("0.00")}</p>
+                                 </a>
+                            </#list>
+                         </#if>    
+                    </li>
+                </ul>
+            <div class="myclear"></div>
+                <a id="mymember_story_next" href="#"><img src="/client/images/mymember/arrow02.jpg" /></a>
+            </div>
+            <div class="myclear"></div>
+       </div><!--mymember_hot_part END-->
   </div><!--mymember_hot END-->
 <div class="clear"></div>
 </div>

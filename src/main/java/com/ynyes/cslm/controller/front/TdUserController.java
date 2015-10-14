@@ -40,6 +40,7 @@ import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDemandService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
@@ -127,6 +128,9 @@ public class TdUserController{
     
     @Autowired
     private TdAdService tdAdService;
+    
+    @Autowired
+    private TdDistributorGoodsService tdDistributorGoodsService;
 
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, ModelMap map) {
@@ -163,7 +167,7 @@ public class TdUserController{
         map.addAttribute("total_finished",
                 tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,6));
         //热卖商品
-        map.addAttribute("hot_goods_page",tdGoodsService.findByIsHotTrueAndIsOnSaleTrueOrderByIdDesc(0, ClientConstant.pageSize));
+        map.addAttribute("hot_goods_page",tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0, ClientConstant.pageSize));
         //推荐商品
         map.addAttribute("recommend_goods_page",
 				tdGoodsService.findByIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(0, ClientConstant.pageSize));
