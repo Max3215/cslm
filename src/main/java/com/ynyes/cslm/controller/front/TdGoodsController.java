@@ -122,7 +122,6 @@ public class TdGoodsController {
         }else
         {
         	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,0,5));
-        	 Page<TdOrder> page = tdOrderService.findByShopIdAndGoodId(null, goodsId,0, 5);
         	 
         	// 热卖
         	 map.addAttribute("dis_hot_list",

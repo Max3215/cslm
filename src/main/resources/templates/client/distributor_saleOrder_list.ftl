@@ -143,7 +143,7 @@ DD_belatedPNG.fix('.,img,background');
                             </#if>
                       </td>
                       <td class="td003"> 
-                            <p><a href="">查看</a></p>
+                            <p><a href="/distributor/order?id=${order.id?c}">查看</a></p>
                       </td>
                   </tr>
                   </#list>

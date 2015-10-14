@@ -117,7 +117,7 @@ public class TdDistributorGoods {
     
     // 批发商名称
     @Column
-    private Long providerTitle;
+    private String providerTitle;
     
 	public Long getId() {
 		return id;
@@ -295,13 +295,15 @@ public class TdDistributorGoods {
 		this.providerId = providerId;
 	}
 
-	public Long getProviderTitle() {
+	public String getProviderTitle() {
 		return providerTitle;
 	}
 
-	public void setProviderTitle(Long providerTitle) {
+	public void setProviderTitle(String providerTitle) {
 		this.providerTitle = providerTitle;
 	}
+
+	
 
 	
 	

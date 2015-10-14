@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.ynyes.cslm.entity.TdBrand;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoodsParameter;
 import com.ynyes.cslm.entity.TdDistributorGoods;
@@ -41,6 +42,9 @@ public class TdDistributorGoodsService {
 	
 	@Autowired
 	TdGoodsParameterService tdGoodsParameterService;
+	
+	@Autowired
+	TdDistributorService tdDistributorService;
 	
 	/**
 	 * 删除
@@ -169,6 +173,11 @@ public class TdDistributorGoodsService {
     
     public TdDistributorGoods findByDistributorIdAndGoodsIdAndIsOnSale(Long distributorId,Long goodsId, Boolean isOnSale)
     {
+    	TdDistributor distributor = tdDistributorService.findOne(distributorId);
+    	if(null == distributor.getGoodsList())
+    	{
+    		return null;
+    	}
     	return repository.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,goodsId, isOnSale);
     }
     
@@ -327,7 +336,7 @@ public class TdDistributorGoodsService {
     	if (null == catId) {
             return null;
         }
-    	PageRequest pageRequest = new PageRequest(page,size,new Sort(Direction.DESC, "soldNumber"));
+    	PageRequest pageRequest = new PageRequest(page,size);
     	String catStr = "[" + catId + "]";
     	
     	return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleTrueOrderBySoldNumberDesc(disId,catStr, pageRequest);
