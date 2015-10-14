@@ -186,7 +186,7 @@ $(function () {
 </script>
 </head>
 <body class="mainbody">
-<form method="post" action="/Verwalter/provider/goods/save" id="form1">
+<form method="post" action="/Verwalter/distributor/goods/save" id="form1">
 <div>
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="${__EVENTTARGET!""}" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="${__EVENTARGUMENT!""}" />
@@ -196,7 +196,7 @@ $(function () {
 <input name="distributorId" type="text" value='<#if distributorId??>${distributorId}</#if>' style="display:none">
 <input name="goodsId" type="text" value='<#if goods??>${goods.goodsId?c}</#if>' style="display:none">
 <input name="categoryIdTree" type="text" value='<#if goods??>${goods.categoryIdTree!''}</#if>' style="display:none">
-<input name="goodsParamList" type="text" value='<#if goods??>${goods.goodsParamList!''}</#if>' style="display:none">
+
 <input name="paramValueCollect" type="text" value='<#if goods??>${goods.paramValueCollect!''}</#if>' style="display:none">
 <input name="brandTitle" type="text" value='<#if goods??>${goods.brandTitle!''}</#if>' style="display:none">
 <input name="brandId" type="text" value='<#if goods??>${goods.brandId!''}</#if>' style="display:none">

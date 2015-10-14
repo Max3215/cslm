@@ -72,5 +72,42 @@ DD_belatedPNG.fix('.,img,background');
 </div>
 <!--mymember END-->
 
+     <aside class="sub_form">
+        <p class="tit">商品分销<a  onclick="$('.sub_form').css('display','none')">×</a></p>
+        <div class="info_tab">
+          <table>
+            <tr>
+               <p> 编辑上架后的销售价格：</p>
+                <input type="hidden" id="goodsId" name="goodsId"/>
+            </tr>
+            <tr>
+              <th>*商品名称：</th>
+              <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle"></td>
+            </tr>
+             <tr>
+              <th>商品原价：</th>
+              <td><input type="text" name="goodsMarketPrice" readonly="readonly" id="outFactoryPrice" ></td>
+            </tr>
+             <tr>
+              <th>*商品销售价：</th>
+              <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
+            </tr>
+             <tr>
+              <th>供货商：</th>
+              <td><input type="text" name="providerTitle" readonly="readonly" id="providerTitle"></td>
+            </tr>
+            <tr>
+              <th>返利比：</th>
+              <td><input type="text" name="shopReturnRation" readonly="readonly" id="shopReturnRation"></td>
+            </tr>
+            <tr>
+              <th></th>
+              <td><input type="submit" class="sub" onclick="" value="确认提交"></td>
+            </tr>
+          </table>
+        </div>
+      </aside>
+
+
 </body>
 </html>

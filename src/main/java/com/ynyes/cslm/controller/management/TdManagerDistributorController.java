@@ -529,7 +529,7 @@ public class TdManagerDistributorController {
         }
         
         tdDistributorGoodsService.save(tdDistributorGoods);
-        return "redirect:/Verwalter/provider/goods/list?__EVENTTARGET=" + __EVENTTARGET
+        return "redirect:/Verwalter/distributor/goods/list?__EVENTTARGET=" + __EVENTTARGET
                 + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE="
                 + __VIEWSTATE;
     }

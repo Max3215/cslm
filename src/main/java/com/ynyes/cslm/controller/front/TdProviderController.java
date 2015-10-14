@@ -497,18 +497,22 @@ public class TdProviderController {
 			proGoods.setIsOnSale(true);
 		}
 		proGoods.setProviderTitle(provider.getTitle());
-		provider.getGoodsList().add(proGoods);
 		
 		// 分销状态
 		if(null == shopReturnRation || 0 ==shopReturnRation)
 		{
+			proGoods.setShopReturnRation(new Double(0));
 			proGoods.setIsDistribution(false);
 			proGoods.setIsAudit(true);
+			provider.getGoodsList().add(proGoods);
 			tdProviderService.save(provider);
 			res.put("msg","设置批发成功");
 		}else{
+			proGoods.setShopReturnRation(shopReturnRation);
 			proGoods.setIsDistribution(true);
 			proGoods.setIsAudit(false);
+			proGoods.setShopReturnRation(shopReturnRation);
+			provider.getGoodsList().add(proGoods);
 			tdProviderService.save(provider);
 			res.put("msg", "分销商品，等待平台审核~");
 		}

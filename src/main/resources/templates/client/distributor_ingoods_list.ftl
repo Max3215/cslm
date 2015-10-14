@@ -20,17 +20,22 @@
              </tr>
             <#if proGoods_page??>
                 <#list proGoods_page.content as pgoods>
+                    <input id="shopReturnRation${pgoods.id?c}" type="text" value="<#if pgoods.shopReturnRation??>${pgoods.shopReturnRation?string('0.00')}<#else>0</#if>" style="display:none">
                     <tr id="tr_1424195166">
-                        
                         <td colspan="2">
                             <a target="_blank" ><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
-                            <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${pgoods.goodsTitle!''}</p></a> 
+                            <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="goodsTitle${pgoods.id?c}">${pgoods.goodsTitle!''}</p></a> 
                         </td>
-                        <td class="tb01">${pgoods.providerTitle!''}</td>
-                        <td class="tb02">￥${pgoods.outFactoryPrice?string('0.00')}</td>
+                        <td class="tb01"><span id="providerTitle${pgoods.id?c}">${pgoods.providerTitle!''}</span></td>
+                        <td class="tb02">￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></td>
                         <td>${pgoods.leftNumber!'0'}</td>
                         <td>
+                           
+                           <#if pgoods.isDistribution?? && pgoods.isDistribution && pgoods.isAudit?? && pgoods.isAudit>
+                           <p><a onclick="addDistribution(${pgoods.id?c})">我要分销</a></p>
+                           <#else>
                             <p><a href="javascript:addgoods(${pgoods.id?c});">添加</a></p>
+                           </#if>
                         </td>
                      </tr>
                 </#list>
@@ -59,3 +64,22 @@
                 </#if>
                 </#if>
         </div>
+        
+<script type="text/javascript">
+    function addDistribution(pid)
+    {
+        var shopReturnRation = $("#shopReturnRation"+pid).val();
+        var goodsTitle = $("#goodsTitle"+pid).html();
+        var providerTitle = $("#providerTitle"+pid).html();
+        var outFactoryPrice = $("#outFactoryPrice"+pid).html();
+        
+        $("#goodsId").attr("value",pid);
+        $("#shopReturnRation").attr("value",shopReturnRation);
+        $("#goodsTitle").attr("value",goodsTitle);
+        $("#providerTitle").attr("value",providerTitle);
+        $("#outFactoryPrice").attr("value",outFactoryPrice);
+        
+        $('.sub_form').css('display','block');
+    }
+</script>
+        

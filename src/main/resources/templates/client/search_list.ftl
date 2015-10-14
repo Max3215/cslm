@@ -107,17 +107,17 @@ $(document).ready(function(){
 			    <#if goods_page?? && goods_page.content?size gt 0>
                     <#list goods_page.content as goods>
         				<li>
-        					<a href="/goods/${goods.id?c}" class="a1">
-        						<img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.title!''}"/>
-        						<p>${goods.subTitle!""}</p>
-        					</a>
-        					<p class="price">￥${goods.salePrice?string("0.00")}<span>原价：￥${goods.marketPrice?string("0.00")}</span></p>
-        					<menu class="btn">
-        						<a href="/cart/init?id=${goods.id?c}" class="car" title="加入购物车"></a>
-        						<a href="/order/byNow/${goods.id}" class="buy">立即购买</a> 
-        						<div class="clear"></div>
-        					</menu>
-        				</li>
+                            <a href="/goods/${goods.goodsId?c}" class="a1">
+                                <img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.goodsTitle!''}"/>
+                                <p>${goods.goodsTitle!""}</p>
+                            </a>
+                            <p class="price">￥${goods.goodsPrice?string("#.##")}<span>原价：￥${goods.goodsMarketPrice?string("#.##")}</span></p>
+                            <menu class="btn">
+                                <a href="javascript:cartInit(${goods.id?c});" class="car" title="加入购物车"></a>
+                                <#if goods.isDistribution><a href="javascript:byNow(${goods.id?c});" class="buy">立即预购</a></#if> 
+                                <div class="clear"></div>
+                            </menu>
+                        </li>
                     </#list>
                   <#else>
                   <div style="text-align: center; padding: 15px;">此类商品正在扩充中，敬请期待！</div>
@@ -165,16 +165,16 @@ $(document).ready(function(){
 		<div class="right_hot">
 			<p class="tit">热卖推荐</p>
 			<ul>
-			     <#if hot_sale_list??>
+			      <#if hot_sale_list??>
                     <#list hot_sale_list as item>
                          <#if item_index < 6>
-            				<li>
-            					<a href="/goods/${item.id?c}" title="${item.title!''}" target="_blank">
-            						<img src="${item.coverImageUri!''}" title="${item.title!''}"/>
-            						<p>${item.title!''}</p>
-            					</a>
-            					<p class="price">￥<#if item.salePrice??>${item.salePrice?string("0.00")}</#if><span>原价：￥<#if item.marketPrice??>${item.marketPrice?string("0.00")}</#if></span></p>
-            				</li>
+                            <li>
+                                <a href="/goods/${item.goodsId?c}" title="${item.goodsTitle!''}" target="_blank">
+                                    <img src="${item.coverImageUri!''}" title="${item.goodsTitle!''}"/>
+                                    <p>${item.goodsTitle!''}</p>
+                                </a>
+                                <p class="price"><#if item.goodsPrice??>￥${item.goodsPrice?string("#.##")}</#if><span>原价：￥<#if item.goodsMarketPrice??>${item.goodsMarketPrice?string("#.##")}</#if></span></p>
+                            </li>
                          </#if>
                     </#list>
                 </#if>

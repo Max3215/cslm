@@ -131,7 +131,7 @@ DD_belatedPNG.fix('.,img,background');
                         <td class="tb01">${goods.code!''}</td>
                         <td class="tb02">￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span></td>
                         <td>
-                          <p><a   onclick="editgoods(${goods.id?c});">编辑上架</a></p>
+                          <p><a onclick="editgoods(${goods.id?c});">编辑上架</a></p>
                          </td>
                       </tr>
                 </#list>

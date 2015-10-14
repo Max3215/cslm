@@ -19,6 +19,7 @@ import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdKeywordsService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -56,6 +57,9 @@ public class TdSearchController {
     @Autowired
     private TdAdService tdAdService;
     
+    @Autowired
+    private TdDistributorGoodsService tdDistributorGoodsService;
+    
  // 组成：[排序字段]-[销量排序标志]-[价格排序标志]-[上架时间排序标志]-[是否有货]-[页号]_[价格低值]-[价格高值]
     @RequestMapping(value="/search", method = RequestMethod.GET)
     public String list(String keywords, Integer page, HttpServletRequest req, ModelMap map){
@@ -86,8 +90,18 @@ public class TdSearchController {
                 
                 tdKeywordsService.save(key);
             }
-            
-            map.addAttribute("goods_page", tdGoodsService.searchGoods(keywords.trim(), page, ClientConstant.pageSize));
+            if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+            {
+              Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+              map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDistributorIdAndIsOnSale(distributorId, keywords, true, page, ClientConstant.pageSize));
+              
+              map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId,0,10).getContent());
+            }else{
+            	map.addAttribute("goods_page", tdDistributorGoodsService.searchAndIsOnSale(keywords, true, page, ClientConstant.pageSize));
+            	
+            	// 热卖
+            	map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0,10).getContent());
+            }
         }
         
         // 商城资讯
@@ -113,8 +127,8 @@ public class TdSearchController {
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
         
-        // 热卖推荐
-        map.addAttribute("hot_sale_list", tdGoodsService.findByIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(0, 10).getContent());   
+//        // 热卖推荐
+//        map.addAttribute("hot_sale_list", tdGoodsService.findByIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(0, 10).getContent());   
         
         // 销量排行
         map.addAttribute("most_sold_list", tdGoodsService.findByIsOnSaleTrueOrderBySoldNumberDesc(0, 10).getContent());   

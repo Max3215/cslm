@@ -111,6 +111,14 @@ public class TdDistributorGoods {
     @Temporal(TemporalType.TIMESTAMP)
 	private Date onSaleTime;
 
+    // 批发商Id
+    @Column
+    private Long providerId;
+    
+    // 批发商名称
+    @Column
+    private Long providerTitle;
+    
 	public Long getId() {
 		return id;
 	}
@@ -277,6 +285,22 @@ public class TdDistributorGoods {
 
 	public void setOnSaleTime(Date onSaleTime) {
 		this.onSaleTime = onSaleTime;
+	}
+
+	public Long getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(Long providerId) {
+		this.providerId = providerId;
+	}
+
+	public Long getProviderTitle() {
+		return providerTitle;
+	}
+
+	public void setProviderTitle(Long providerTitle) {
+		this.providerTitle = providerTitle;
 	}
 
 	
