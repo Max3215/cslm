@@ -83,14 +83,14 @@ public class TdUserCollectService {
      * @param ids
      * @return
      */
-    public TdUserCollect findByUsernameAndGoodsId(String username, Long goodsId)
+    public TdUserCollect findByUsernameAndDistributorId(String username, Long disId)
     {
-        if (null == username || null == goodsId)
+        if (null == username || null == disId)
         {
             return null;
         }
         
-        return repository.findByUsernameAndGoodsId(username, goodsId);
+        return repository.findByUsernameAndDistributorId(username, disId);
     }
     
     public List<TdUserCollect> findAll(Iterable<Long> ids)

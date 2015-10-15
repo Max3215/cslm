@@ -95,7 +95,7 @@ DD_belatedPNG.fix('.,img,background');
                 <td class="tb02">￥${cg.goodsSalePrice?string("#.##")}</td>
                 <td>
                     <p><a href="/cart/init?id=${cg.goodsId?c!''}" target="_blank">加入购物车</a></p>
-                    <p><a href="/user/collect/del?id=${cg.goodsId?c!''}">取消关注</a></p>
+                    <p><a href="/user/collect/del?id=${cg.distributorId?c!''}">取消关注</a></p>
                 </td>
             </tr>
             </#list>

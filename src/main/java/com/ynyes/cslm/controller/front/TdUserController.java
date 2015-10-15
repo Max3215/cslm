@@ -897,7 +897,7 @@ public class TdUserController{
 
         if (null != id) {
             TdUserCollect collect = tdUserCollectService
-                    .findByUsernameAndGoodsId(username, id);
+                    .findByUsernameAndDistributorId(username, id);
 
             // 删除收藏
             if (null != collect) {
@@ -919,13 +919,13 @@ public class TdUserController{
 
     @RequestMapping(value = "/user/collect/add", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> collectAdd(HttpServletRequest req, Long goodsId,
+    public Map<String, Object> collectAdd(HttpServletRequest req, Long disgId,
             ModelMap map) {
 
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
 
-        if (null == goodsId) {
+        if (null == disgId) {
             res.put("message", "参数错误");
             return res;
         }
@@ -940,14 +940,15 @@ public class TdUserController{
         res.put("code", 0);
 
         // 没有收藏
-        if (null == tdUserCollectService.findByUsernameAndGoodsId(username,
-                goodsId)) {
-            TdGoods goods = tdGoodsService.findOne(goodsId);
+        if (null == tdUserCollectService.findByUsernameAndDistributorId(username,
+                disgId)) {
+            TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
 
-            if (null == goods) {
+            if (null == distributorGoods) {
                 res.put("message", "商品不存在");
                 return res;
             }
+            TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
             
             if (null == goods.getTotalCollects())
             {
@@ -961,10 +962,11 @@ public class TdUserController{
             TdUserCollect collect = new TdUserCollect();
 
             collect.setUsername(username);
-            collect.setGoodsId(goods.getId());
-            collect.setGoodsCoverImageUri(goods.getCoverImageUri());
-            collect.setGoodsTitle(goods.getTitle());
-            collect.setGoodsSalePrice(goods.getSalePrice());
+            collect.setDistributorId(distributorGoods.getId());
+            collect.setGoodsId(distributorGoods.getGoodsId());
+            collect.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());
+            collect.setGoodsTitle(distributorGoods.getGoodsTitle());
+            collect.setGoodsSalePrice(distributorGoods.getGoodsPrice());
             collect.setCollectTime(new Date());
 
             tdUserCollectService.save(collect);

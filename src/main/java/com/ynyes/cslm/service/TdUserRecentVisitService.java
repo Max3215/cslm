@@ -153,7 +153,7 @@ public class TdUserRecentVisitService {
             recent.setUsername(username);
             recent.setGoodsId(goodsId);
             recent.setGoodsCoverImageUri(goods.getCoverImageUri());
-            recent.setGoodsSalePrice(goods.getSalePrice());
+            recent.setGoodsSalePrice(goods.getMarketPrice());
             recent.setGoodsTitle(goods.getTitle());
             recent.setVisitTime(new Date());
         }

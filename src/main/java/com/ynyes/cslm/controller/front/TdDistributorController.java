@@ -1399,6 +1399,7 @@ public class TdDistributorController {
 							TdGoods goods = tdGoodsService.findOne(tdOrderGoods.getGoodsId());
 							distributorGoods = new TdDistributorGoods();
 							
+							distributorGoods.setDistributorTitle(distributor.getTitle());
 							distributorGoods.setGoodsId(goods.getId());
 							distributorGoods.setGoodsTitle(goods.getTitle());
 							distributorGoods.setGoodsPrice(goods.getMarketPrice());
@@ -1521,6 +1522,7 @@ public class TdDistributorController {
 		if(null == disGoods)
 		{
 			TdDistributorGoods distributorGoods = new TdDistributorGoods();
+			distributorGoods.setDistributorTitle(distributor.getTitle());
 			distributorGoods.setGoodsId(goods.getId());
 			distributorGoods.setGoodsTitle(goodsTitle);
 			distributorGoods.setGoodsPrice(goodsPrice);

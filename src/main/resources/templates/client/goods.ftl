@@ -166,7 +166,7 @@ function byNow(dId){
 				<#--
 				<div class="share">点击分享：</div>
 				-->
-				<a href="javascript:addCollect(${goods.id})" class="love" title="收藏商品">收藏商品</a>
+				<#if dis_goods??><a href="javascript:addCollect(${dis_goods.id?c})" class="love" title="收藏商品">收藏商品</a></#if>
 			</section>
 			<section class="proinfo_right">
 				<h2>${goods.title!''}</h2>

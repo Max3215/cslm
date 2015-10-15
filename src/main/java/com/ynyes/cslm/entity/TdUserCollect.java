@@ -29,6 +29,10 @@ public class TdUserCollect {
 	@Column
 	private String username;
 	
+	// 超市商品库Id
+	@Column
+	private Long distributorId;
+	
 	// 商品Id
 	@Column
 	private Long goodsId;
@@ -78,7 +82,15 @@ public class TdUserCollect {
         this.collectTime = collectTime;
     }
 
-    public Long getGoodsId() {
+    public Long getDistributorId() {
+		return distributorId;
+	}
+
+	public void setDistributorId(Long distributorId) {
+		this.distributorId = distributorId;
+	}
+
+	public Long getGoodsId() {
         return goodsId;
     }
 

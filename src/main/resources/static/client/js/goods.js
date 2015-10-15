@@ -58,7 +58,7 @@ function addCollect(goodsId)
     $.ajax({
         type:"post",
         url:"/user/collect/add",
-        data:{"goodsId": goodsId},
+        data:{"disgId": goodsId},
         dataType: "json",
         success:function(res){
             

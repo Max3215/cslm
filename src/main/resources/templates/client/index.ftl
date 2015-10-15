@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-
+    $('#mar_box').fadeIn(300);
 	$(".click_a").click(function(){
 		if($(this).next().is(":visible")==false){
 			$(this).next().slideDown(300);
