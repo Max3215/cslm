@@ -110,6 +110,11 @@ function byNow(dId){
     });
 }
 
+function showMsg(){
+    alert("请选择其他超市");
+    $('#mar_box').fadeIn(300);
+}
+
 </script>
 
 </head>
@@ -124,12 +129,12 @@ function byNow(dId){
             <#if category_tree_list??> 
                 <#list category_tree_list as item> 
                     &nbsp;&nbsp;&gt;&nbsp;&nbsp; 
-                    <a href="/list/${item.id}" title="${item.title!''}" >${item.title!''}</a>
+                    <a href="/list/${item.id?c}" title="${item.title!''}" >${item.title!''}</a>
                 </#list> 
             </#if>
             <#if goods??> 
                 &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-                <a href="/goods/${goods.id}" title="${goods.title!''}">${goods.title!''}</a>
+                <a href="/goods/${goods.id?c}" title="${goods.title!''}">${goods.title!''}</a>
             </#if>
         </p>
 	</section>
@@ -152,6 +157,9 @@ function byNow(dId){
 					<span class="spe_rightBtn">&gt;</span>
 					<div class="propic_num"> 
 						<ul>
+						<#if goods.coverImageUri??>
+                            <li style="display:none"><img src="${goods.coverImageUri!''}"></li>
+                       </#if>
 						<#if goods.showPictures??> 
                             <#list goods.showPictures?split(",") as uri>
                                 <#if uri!="">
@@ -256,8 +264,8 @@ function byNow(dId){
         					<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>
 					   </#if>
 					<#else>
-    					<a href="javascript:;"  title="立即购买" class="buy">立即购买</a>
-                        <a href="javascript:;"  title="加入购物车" class="car">加入购物车</a>
+    					<a href="javascript:showMsg();"  title="立即购买" class="buy">立即购买</a>
+                        <a href="javascript:showMsg();"  title="加入购物车" class="car">加入购物车</a>
 					</#if>
 					<div class="clear"></div>
 				</div>

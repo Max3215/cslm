@@ -1525,6 +1525,7 @@ public class TdDistributorController {
 			distributorGoods.setDistributorTitle(distributor.getTitle());
 			distributorGoods.setGoodsId(goods.getId());
 			distributorGoods.setGoodsTitle(goodsTitle);
+			distributorGoods.setSubGoodsTitle(goods.getSubTitle());
 			distributorGoods.setGoodsPrice(goodsPrice);
 			distributorGoods.setBrandId(goods.getBrandId());
 			distributorGoods.setBrandTitle(goods.getBrandTitle());

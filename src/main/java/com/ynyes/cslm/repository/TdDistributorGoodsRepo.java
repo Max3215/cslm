@@ -244,14 +244,14 @@ public interface TdDistributorGoodsRepo extends
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=?2 ")
 		Page<TdDistributorGoods> findByDistributorIdAndIsOnSale(Long distributorId,Boolean isOnSale,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2% and g.isOnSale=?3 or "
-																	+ "d.id=?4 and g.subGoodsTitle like ?5% and g.isOnSale=?6 or "
-																	+ "d.id=?7 and g.code like ?8% and g.isOnSale=?9  ")
+		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2 and g.isOnSale=?3 or "
+																	+ "d.id=?4 and g.subGoodsTitle like ?5 and g.isOnSale=?6 or "
+																	+ "d.id=?7 and g.code like ?8 and g.isOnSale=?9  ")
 		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSale(
 																									Long disId1,String keywords1,
 																									Boolean isOnSale1,
-																									Long disId2,String keywords2
-																									,Boolean isOnSale2,
+																									Long disId2,String keywords2,
+																									Boolean isOnSale2,
 																									Long disId3,String keywords3,
 																									Boolean isOnSale3,Pageable page);
 		

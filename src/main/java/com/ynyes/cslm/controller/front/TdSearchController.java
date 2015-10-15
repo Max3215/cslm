@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdKeywords;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
@@ -90,6 +92,17 @@ public class TdSearchController {
                 
                 tdKeywordsService.save(key);
             }
+            else
+            {
+            	key =new TdKeywords();
+            	key.setTotalSearch(1L);
+            	key.setTitle(keywords);
+            	key.setLastSearchTime(new Date());
+            	key.setCreateTime(new Date());
+            	tdKeywordsService.save(key);
+            }
+            
+            
             if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
             {
               Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");

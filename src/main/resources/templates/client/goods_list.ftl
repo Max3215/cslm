@@ -106,7 +106,7 @@ function byNow(goodsId){
     		<#if category_tree_list??> 
                 <#list category_tree_list as item> 
                     &nbsp;&nbsp;&gt;&nbsp;&nbsp; 
-                    <a href="/list/${item.id}" title="${item.title!''}" >${item.title!''}</a>
+                    <a href="/list/${item.id?c}" title="${item.title!''}" >${item.title!''}</a>
                 </#list> 
             </#if>
         </p>

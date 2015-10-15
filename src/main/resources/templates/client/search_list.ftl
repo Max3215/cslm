@@ -113,6 +113,7 @@ $(document).ready(function(){
                                 <img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.goodsTitle!''}"/>
                                 <p>${goods.goodsTitle!""}</p>
                             </a>
+                            <p class="red">${goods.distributorTitle!''}</p>
                             <p class="price">￥${goods.goodsPrice?string("#.##")}<span>原价：￥${goods.goodsMarketPrice?string("#.##")}</span></p>
                             <menu class="btn">
                                 <a href="javascript:cartInit(${goods.id?c});" class="car" title="加入购物车"></a>

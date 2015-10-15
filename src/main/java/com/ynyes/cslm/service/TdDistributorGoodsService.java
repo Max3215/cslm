@@ -1346,9 +1346,9 @@ public class TdDistributorGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		return repository.findByDistributorIdAndGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCodeLikeAndIsOnSaleAndIsAudit(
-													distributorId,keywords,isOnSale,isAudit,
-													distributorId,keywords,isOnSale,isAudit,
-													distributorId,keywords,isOnSale,isAudit,pageRequest);
+													distributorId,"%"+keywords+"%",isOnSale,isAudit,
+													distributorId,"%"+keywords+"%",isOnSale,isAudit,
+													distributorId,"%"+keywords+"%",isOnSale,isAudit,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndIsOnSale(Long distributorId,Boolean isOnSale,int page,int size)
@@ -1361,9 +1361,9 @@ public class TdDistributorGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		return repository.findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSale(
-													distributorId,keywords,isOnSale,
-													distributorId,keywords,isOnSale,
-													distributorId,keywords,isOnSale,pageRequest);
+													distributorId,"%"+keywords+"%",isOnSale,
+													distributorId,"%"+keywords+"%",isOnSale,
+													distributorId,"%"+keywords+"%",isOnSale,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndIsAudit(Long distributorId,Boolean isAudit,int page,int size)
@@ -1376,9 +1376,9 @@ public class TdDistributorGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		return repository.findByDistributorIdAndGoodsTitleLikeAndIsAuditOrDistributorIdAndSubGoodsTitleLikeAndIsAuditOrDistributorIdAndCodeLikeAndIsAudit(
-													distributorId,keywords,isAudit,
-													distributorId,keywords,isAudit,
-													distributorId,keywords,isAudit,pageRequest);
+													distributorId,"%"+keywords+"%",isAudit,
+													distributorId,"%"+keywords+"%",isAudit,
+													distributorId,"%"+keywords+"%",isAudit,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorId(Long distributorId,int page,int size)
@@ -1391,9 +1391,9 @@ public class TdDistributorGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		return repository.findByDistributorIdAndGoodsTitleLikeOrDistributorIdAndSubGoodsTitleLikeOrDistributorIdAndCodeLike(
-													distributId, keywords,
-													distributId, keywords,
-													distributId, keywords, pageRequest);
+													distributId, "%"+keywords+"%",
+													distributId, "%"+keywords+"%",
+													distributId, "%"+keywords+"%", pageRequest);
 	}
 	
 	// -------------------  超市→分类 --------------------------
@@ -1410,9 +1410,9 @@ public class TdDistributorGoodsService {
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catIdStr = "[" + catId + "]";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleAndIsAudit(
-													distributorId,catIdStr,keywords,isOnSale,isAudit,
-													distributorId,catIdStr,keywords,isOnSale,isAudit,
-													distributorId,catIdStr,keywords,isOnSale,isAudit,pageRequest);
+													distributorId,catIdStr,"%"+keywords+"%",isOnSale,isAudit,
+													distributorId,catIdStr,"%"+keywords+"%",isOnSale,isAudit,
+													distributorId,catIdStr,"%"+keywords+"%",isOnSale,isAudit,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsOnSale(Long distributorId,Long catId,Boolean isOnSale,int page,int size)
@@ -1427,9 +1427,9 @@ public class TdDistributorGoodsService {
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catIdStr = "[" + catId + "]";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
-													distributorId,catIdStr,keywords,isOnSale,
-													distributorId,catIdStr,keywords,isOnSale,
-													distributorId,catIdStr,keywords,isOnSale,pageRequest);
+													distributorId,catIdStr,"%"+keywords+"%",isOnSale,
+													distributorId,catIdStr,"%"+keywords+"%",isOnSale,
+													distributorId,catIdStr,"%"+keywords+"%",isOnSale,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsAudit(Long distributorId,Long catId,Boolean isAudit,int page,int size)
@@ -1444,9 +1444,9 @@ public class TdDistributorGoodsService {
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catIdStr = "[" + catId + "]";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsAudit(
-													distributorId,catIdStr,keywords,isAudit,
-													distributorId,catIdStr,keywords,isAudit,
-													distributorId,catIdStr,keywords,isAudit,pageRequest);
+													distributorId,catIdStr,"%"+keywords+"%",isAudit,
+													distributorId,catIdStr,"%"+keywords+"%",isAudit,
+													distributorId,catIdStr,"%"+keywords+"%",isAudit,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryId(Long distributorId,Long catId,int page,int size)
@@ -1461,9 +1461,9 @@ public class TdDistributorGoodsService {
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catIdStr = "[" + catId + "]";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndCodeLike(
-													distributId,catIdStr, keywords,
-													distributId,catIdStr, keywords,
-													distributId,catIdStr, keywords, pageRequest);
+													distributId,catIdStr, "%"+keywords+"%",
+													distributId,catIdStr, "%"+keywords+"%",
+													distributId,catIdStr, "%"+keywords+"%", pageRequest);
 	}
 	
 	
