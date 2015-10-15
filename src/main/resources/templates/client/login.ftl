@@ -11,6 +11,7 @@
 <![endif]-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 
+<script type="text/javascript" src="/client/js/jquery.cookie.js"></script>
 
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />
@@ -18,11 +19,22 @@
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
+    
 var seed=60;    //60秒  
 var t1=null; 
 
 $(function(){
+       //记住密码
+    if ($.cookie("rmbUser") == "true") { 
+        $("#rmbUser").attr("checked", true); 
+        $("#txt_loginId").val($.cookie("userName")); 
+        $("#txt_loginPwd").val($.cookie("passWord")); 
+    } 
+    
+    chooseMoreShow();
+
     $("#btn_login").click(function(){
+        saveUserInfo();
             login();
      });
     
@@ -82,6 +94,7 @@ $(function(){
 
 document.onkeydown = function(event){
    if((event.keyCode || event.which) == 13){
+        saveUserInfo();
         login();
    }
 }
@@ -148,6 +161,31 @@ function tip()
         $("#smsCodeBtn").val(seed + "秒后重新获取");  
     }  
 } 
+ //保存用户信息 
+function saveUserInfo() { 
+    if (document.getElementById("rmbUser").checked==true) { 
+        var userName = $("#txt_loginId").val(); 
+        var passWord = $("#txt_loginPwd").val(); 
+        $.cookie("rmbUser", "true", { expires: 7 }); // 存储一个带7天期限的 cookie 
+        $.cookie("userName", userName, { expires: 7 }); // 存储一个带7天期限的 cookie 
+        $.cookie("passWord", passWord, { expires: 7 }); // 存储一个带7天期限的 cookie 
+    } 
+    else { 
+        $.cookie("rmbUser", "false", { expires: -1 }); 
+        $.cookie("userName", '', { expires: -1 }); 
+        $.cookie("passWord", '', { expires: -1 }); 
+    } 
+}  
+//选择类型计算 - 本效果由昆明天度网络IRIS原创制作
+function chooseMoreShow(){
+    var _arr = $(".choose_box menu");
+    var _length = _arr.length;
+    if(_length > 4){
+        for(var i=4;i<_length;i++){
+            _arr.eq(i).css("display","none");
+            }
+    }//if END
+}
 </script>
 
 </head>
@@ -179,7 +217,7 @@ function tip()
       <span><input type="radio" name="type" value="provider">批发商</span>
     </p>
     <p class="pb10">
-      <input type="checkbox" />
+      <input id="rmbUser" type="checkbox" />
       <span>记住密码</span>
       <span class="absolute-r"><a href="#">忘记密码</a> | <a href="/reg">免费注册</a></span>
     </p>
