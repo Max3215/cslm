@@ -76,6 +76,7 @@ function cartInit(dId){
     if(quantity==0){
         return;
     }
+    var newTab=window.open('about:blank');
     $.ajax({
         type: "get",
         url: "/goods/incart",
@@ -85,7 +86,11 @@ function cartInit(dId){
                 alert(data.msg);
                 return;
             }
+            <!--
             window.open("/cart/init?id="+dId+"&quantity="+quantity);
+            -->
+            newTab.location.href="/cart/init?id="+dId+"&quantity="+quantity;
+            console.debug(11);
         }
     });
 }
@@ -113,6 +118,10 @@ function byNow(dId){
 function showMsg(){
     alert("请选择其他超市");
     $('#mar_box').fadeIn(300);
+}
+
+function preGoods(){
+    alert("功能正在开发中。。。。敬请期待 ∨_∨");
 }
 
 </script>
@@ -258,7 +267,7 @@ function showMsg(){
 					<div class="clear"></div>
 					<#if dis_goods??>
 					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
-					       <a href="javascript:cartInit();" target="_blank"  title="预购商品" class="car">立即预购</a>
+					       <a href="javascript:preGoods();" target="_blank"  title="预购商品" class="car">立即预购</a>
 					   <#else>
         					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
         					<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>

@@ -66,20 +66,50 @@
         </div>
         
 <script type="text/javascript">
-    function addDistribution(pid)
+function addDistribution(pid)
+{
+    var shopReturnRation = $("#shopReturnRation"+pid).val();
+    var goodsTitle = $("#goodsTitle"+pid).html();
+    var providerTitle = $("#providerTitle"+pid).html();
+    var outFactoryPrice = $("#outFactoryPrice"+pid).html();
+    
+    $("#goodsId").attr("value",pid);
+    $("#shopReturnRation").attr("value",shopReturnRation);
+    $("#goodsTitle").attr("value",goodsTitle);
+    $("#providerTitle").attr("value",providerTitle);
+    $("#outFactoryPrice").attr("value",outFactoryPrice);
+    
+    $('.sub_form').css('display','block');
+}
+    
+function subDistribution(){
+    var goodsId = $("#goodsId").val();
+    var goodsTitle = $("#goodsTitle").val();
+    var goodsPrice = $("#goodsPrice").val();
+    
+    if(undefined == goodsTitle || ""==goodsTitle)
     {
-        var shopReturnRation = $("#shopReturnRation"+pid).val();
-        var goodsTitle = $("#goodsTitle"+pid).html();
-        var providerTitle = $("#providerTitle"+pid).html();
-        var outFactoryPrice = $("#outFactoryPrice"+pid).html();
-        
-        $("#goodsId").attr("value",pid);
-        $("#shopReturnRation").attr("value",shopReturnRation);
-        $("#goodsTitle").attr("value",goodsTitle);
-        $("#providerTitle").attr("value",providerTitle);
-        $("#outFactoryPrice").attr("value",outFactoryPrice);
-        
-        $('.sub_form').css('display','block');
+        alert("请输入商品标题");
+        return;
     }
+     var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+    if(undefined == goodsPrice || ""==goodsPrice || !reg.test(goodsPrice))
+    {
+        alert("请输入商品销售价");
+        return ;
+    }
+    
+    $.ajax({
+        type : "post",
+        url : "/distributor/isDisbution",
+        data : {"proGoodsId":goodsId,"goodsTitle":goodsTitle,"goodsPrice":goodsPrice,},
+        dataType : "json",
+        success:function(data){
+            $('.sub_form').css('display','none');
+            alert(data.msg);
+        }
+    })
+    
+}
 </script>
         

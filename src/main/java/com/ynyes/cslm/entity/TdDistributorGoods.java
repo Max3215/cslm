@@ -114,13 +114,13 @@ public class TdDistributorGoods {
     @Column
     private String distributorTitle;
     
-//    // 批发商Id
-//    @Column
-//    private Long providerId;
-//    
-//    // 批发商名称
-//    @Column
-//    private String providerTitle;
+    // 批发商Id
+    @Column
+    private Long providerId;
+    
+    // 批发商名称
+    @Column
+    private String providerTitle;
     
 	public Long getId() {
 		return id;
@@ -296,6 +296,22 @@ public class TdDistributorGoods {
 
 	public void setDistributorTitle(String distributorTitle) {
 		this.distributorTitle = distributorTitle;
+	}
+
+	public Long getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(Long providerId) {
+		this.providerId = providerId;
+	}
+
+	public String getProviderTitle() {
+		return providerTitle;
+	}
+
+	public void setProviderTitle(String providerTitle) {
+		this.providerTitle = providerTitle;
 	}
 
 	

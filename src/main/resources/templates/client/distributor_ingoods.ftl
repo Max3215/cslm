@@ -102,7 +102,7 @@ DD_belatedPNG.fix('.,img,background');
             </tr>
             <tr>
               <th></th>
-              <td><input type="submit" class="sub" onclick="" value="确认提交"></td>
+              <td><input type="submit" class="sub" onclick="subDistribution();" value="确认提交"></td>
             </tr>
           </table>
         </div>

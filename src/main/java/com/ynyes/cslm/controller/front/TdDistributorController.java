@@ -1564,6 +1564,67 @@ public class TdDistributorController {
 		return res;
 	}
 	
+	@RequestMapping(value="/isDisbution",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> distributionGoods(Long proGoodsId,String goodsTitle,
+    							Double goodsPrice,HttpServletRequest req){
+    	Map<String,Object> res=new HashMap<>();
+    	String username =(String)req.getSession().getAttribute("distributor");
+		if(null ==username)
+		{
+			res.put("msg", "请先登录！");
+			return res;
+		}
+		if(null ==proGoodsId)
+		{
+			res.put("msg","选择的商品无效！");
+			return res;
+		}
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	TdProviderGoods pGoods = tdProviderGoodsService.findOne(proGoodsId);
+    	TdGoods goods = tdGoodsService.findOne(pGoods.getGoodsId());
+    	TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(),pGoods.getGoodsId());
+    	
+    	if(null == distributorGoods)
+    	{
+    		distributorGoods=new TdDistributorGoods();
+    		distributorGoods.setDistributorTitle(distributor.getTitle());
+			distributorGoods.setGoodsId(pGoods.getGoodsId());
+			distributorGoods.setGoodsTitle(goodsTitle);
+			distributorGoods.setSubGoodsTitle(goods.getSubTitle());
+			distributorGoods.setGoodsPrice(goodsPrice);
+			distributorGoods.setBrandId(goods.getBrandId());
+			distributorGoods.setBrandTitle(goods.getBrandTitle());
+			distributorGoods.setCategoryId(goods.getCategoryId());
+			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
+			distributorGoods.setCode(goods.getCode());
+			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
+			distributorGoods.setGoodsMarketPrice(pGoods.getOutFactoryPrice());
+//			distributorGoods.setGoodsParamList(goods.getParamList());
+			distributorGoods.setReturnPoints(goods.getReturnPoints());
+			distributorGoods.setParamValueCollect(goods.getParamValueCollect());
+			distributorGoods.setProviderId(tdProviderGoodsService.findProviderId(pGoods.getId()));
+			distributorGoods.setProviderTitle(pGoods.getProviderTitle());
+			distributorGoods.setIsDistribution(true);
+			distributorGoods.setIsOnSale(true);
+			distributorGoods.setIsAudit(true);
+			distributorGoods.setOnSaleTime(new Date());
+			distributor.getGoodsList().add(distributorGoods);
+    	}else{
+    		
+    		distributorGoods.setGoodsPrice(goodsPrice);
+    		distributorGoods.setGoodsTitle(goodsTitle);
+    		distributorGoods.setIsDistribution(true);
+			distributorGoods.setIsOnSale(true);
+			distributorGoods.setIsAudit(true);
+			distributorGoods.setOnSaleTime(new Date());
+    	}
+    	tdDistributorService.save(distributor);
+    	res.put("msg", "已成功分销");
+		
+    	return res;
+    }
+	
 	@RequestMapping(value="/goods/list")
 	public String inGoodslist(String keywords,Integer page,
 			HttpServletRequest req,ModelMap map)
