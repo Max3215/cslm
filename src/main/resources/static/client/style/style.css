@@ -243,10 +243,14 @@ transform: skew(40deg);}
 
 
 
-.car_btn { width:100%; background:#eee; line-height:40px;height:40px;}
+.car_btn {overflow:hidden; width:100%; background:#eee; line-height:40px;height:40px;}
+.car_btn ul{float:left;width:83%;}
+.car_btn ul li{float:left;text-align:center;}
+.car_btn ul li.li3{position:absolute;right:0px;}
+.car_btn ul li.li3 span{display:inline-block;margin:0 10px;}
 .car_btn .sub { position:absolute;right:0;top:0;width:150px; height:40px; font-size:18px; color:#fff; background:#ff5b7d; line-height:40px;}
 .car_btn .sub:hover { background:#39bee9;}
-.car_btn span { position:absolute;top:0;right:170px;}
+/*.car_btn span { position:absolute;top:0;right:170px;}*/
 .car_tit { font-weight:400; font-size:18px; line-height:35px; border-bottom:1px dashed #eee;}
 .car_tit a { font-size:14px;position:absolute;right:0;}
 .car_address { display:block; padding:0 0 0 200px; width:1000px; line-height:35px; margin-bottom:10px;}

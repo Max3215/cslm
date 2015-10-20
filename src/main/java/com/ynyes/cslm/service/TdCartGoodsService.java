@@ -128,6 +128,16 @@ public class TdCartGoodsService {
         return repository.findByGoodsIdAndUsername(goodsId, username);
     }
     
+    public List<TdCartGoods> findByGoodsIdAndUsernameAndProviderId(Long goodsId, String username,Long providerId)
+    {
+        if (null == goodsId || null == username || null == providerId)
+        {
+            return null;
+        }
+        
+        return repository.findByGoodsIdAndUsernameAndProviderId(goodsId, username,providerId);
+    }
+    
     public List<TdCartGoods> findByUsername(String username)
     {
         return repository.findByUsernameOrderByIdDesc(username);

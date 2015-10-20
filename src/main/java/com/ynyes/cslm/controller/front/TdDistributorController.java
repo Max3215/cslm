@@ -725,6 +725,45 @@ public class TdDistributorController {
 		return "/client/distributor_goods_list";
 	}
 	
+	@RequestMapping(value="/goods/editOnSale/{disId}")
+	public String editOnSale(@PathVariable Long disId,String goodsTitle,Double goodsPrice,Integer page,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		
+		if(null == disId)
+		{
+			return "/client/error_404";
+		}
+		
+		if(null == page )
+		{
+			page = 0;
+		}
+		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disId);
+		
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		map.addAttribute("page",page);
+		if(null != goodsTitle)
+		{
+			distributorGoods.setGoodsTitle(goodsTitle);
+		}
+		
+		if(null != goodsPrice)
+		{
+			distributorGoods.setGoodsPrice(goodsPrice);
+		}
+		
+		distributorGoods.setIsOnSale(true);
+		tdDistributorGoodsService.save(distributorGoods);
+		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 7));
+		
+		return "/client/distributor_goods_list";
+	}
+	
 	/**
 	 * 超市中心删除商品
 	 * 
@@ -1397,19 +1436,20 @@ public class TdDistributorController {
 						if(null == distributorGoods)
 						{
 							TdGoods goods = tdGoodsService.findOne(tdOrderGoods.getGoodsId());
+//							tdProviderGoodsService.findByProviderIdAndGoodsId(, goodsId)
 							distributorGoods = new TdDistributorGoods();
 							
 							distributorGoods.setDistributorTitle(distributor.getTitle());
 							distributorGoods.setGoodsId(goods.getId());
 							distributorGoods.setGoodsTitle(goods.getTitle());
-							distributorGoods.setGoodsPrice(goods.getMarketPrice());
+//							distributorGoods.setGoodsPrice();
 							distributorGoods.setBrandId(goods.getBrandId());
 							distributorGoods.setBrandTitle(goods.getBrandTitle());
 							distributorGoods.setCategoryId(goods.getCategoryId());
 							distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
 							distributorGoods.setCode(goods.getCode());
 							distributorGoods.setCoverImageUri(goods.getCoverImageUri());
-							distributorGoods.setGoodsMarketPrice(goods.getMarketPrice());
+							distributorGoods.setGoodsMarketPrice(tdOrderGoods.getPrice());
 							distributorGoods.setIsDistribution(false);
 //						distributorGoods.setGoodsParamList(goods.getParamList());
 							distributorGoods.setReturnPoints(goods.getReturnPoints());
@@ -1680,8 +1720,10 @@ public class TdDistributorController {
 			List<TdCartGoods> oldCartGoodsList = null;
            
             // 购物车是否已有该商品
-            oldCartGoodsList = tdCartGoodsService
-                            .findByGoodsIdAndUsername(providerGoods.getGoodsId(), username);
+//            oldCartGoodsList = tdCartGoodsService
+//                            .findByGoodsIdAndUsername(providerGoods.getGoodsId(), username);
+			oldCartGoodsList = tdCartGoodsService.
+						findByGoodsIdAndUsernameAndProviderId(providerGoods.getGoodsId(), username,tdProviderGoodsService.findProviderId(pgId));
             
             if(null !=oldCartGoodsList && oldCartGoodsList.size() >0){
             	 long oldQuantity = oldCartGoodsList.get(0).getQuantity();

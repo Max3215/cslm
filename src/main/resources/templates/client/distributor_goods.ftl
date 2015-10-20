@@ -39,6 +39,47 @@ $(document).ready(function(){
 function onsaleAll(){
     $("#form").submit();
 }   
+
+function editPrice(dgId,page){
+    var goodsTitle = $("#title"+dgId).html();
+    var goodsPrice = $("#price"+dgId).html();
+    
+    $("#goodsId").attr("value",gid);
+    $("#page").attr("value",page);
+    $("#goodsTitle").attr("value",goodsTitle);
+    $("#goodsPrice").attr("value",goodsPrice);
+    $('.sub_form').css('display','block');
+}
+
+
+//超市中心商品上下架
+function editOnSale(){
+    var goodsId = $("#goodsId").val();
+    var page = $("#page").val();
+    var goodsTitle = $("#goodsTitle").val();
+    var goodsPrice = $("#goodsPrice").val();
+    
+    if(undefined == goodsTitle || ""==goodsTitle)
+    {
+        alert("请输入商品标题");
+        return;
+    }
+     var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+    if(undefined == goodsPrice || ""==goodsPrice || !reg.test(goodsPrice))
+    {
+        alert("请输入商品销售价");
+        return ;
+    }
+
+    $.ajax({
+        url : "/distributor/goods/editOnSale/"+disId,
+        data : {"goodsTitle":goodsTitle,"goodsPrice":goodsPrice,"page":page},
+        type : "post",
+       success:function(res){
+            $("#dis_goods_table").html(res);
+        }
+    })
+}
 </script>
 <!--[if IE]>
    <script src="js/html5.js"></script>
@@ -116,5 +157,31 @@ DD_belatedPNG.fix('.,img,background');
 <!--mymember END-->
 <div class="clear"></div>
     <#include "/client/common_footer.ftl">
+    
+    <!-- 点击商品上架后弹出层 -->
+  <aside class="sub_form">
+    <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a></p>
+    <div class="info_tab">
+      <table>
+        <tr>
+           <p> 编辑上架后的销售价格：</p>
+            <input type="hidden" id="goodsId" name="goodsId"/>
+            <input type="hidden" id="page" name="page"/>
+        </tr>
+        <tr>
+          <th>*商品名称：</th>
+          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle"></td>
+        </tr>
+         <tr>
+          <th>*商品售价：</th>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><input type="submit" class="sub" onclick="editOnSale();" value="确认提交"></td>
+        </tr>
+      </table>
+    </div>
+  </aside>
 </body>
 </html>

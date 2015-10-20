@@ -178,8 +178,7 @@ DD_belatedPNG.fix('.,img,background');
 
   <!-- 点击商品上架后弹出层 -->
   <aside class="sub_form">
-    <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a>
-</p>
+    <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a></p>
     <div class="info_tab">
       <table>
         <tr>

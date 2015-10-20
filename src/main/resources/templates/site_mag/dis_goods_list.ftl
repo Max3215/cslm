@@ -176,7 +176,7 @@ function __doPostBack(eventTarget, eventArgument) {
             <h1><span><a href="/Verwalter/distributor/goods/edit?cid=${cid!""}&mid=${mid!""}&id=${content.id?c}&__VIEWSTATE=${__VIEWSTATE!""}">${content.goodsTitle!""}</a></span></h1>
             <div class="remark">${content.subGoodsTitle!""}</div>
             <div class="tools">
-               <input type="text" value="${content.code!""}" readonly="readonly" >
+               <input type="text" style="border:none;color:skyblue;" value="${content.code!""}" readonly="readonly" >
              
               <#--
                 <a title="上架/下架" class="hot <#if content.isOnSale?? && content.isOnSale>selected</#if>" href="javascript:__doPostBack('btnOnSale','${content.id?c}')"></a>
