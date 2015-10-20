@@ -222,165 +222,24 @@ public class TdUserController{
 
         Page<TdOrder> orderPage = null;
 
-//        if (timeId.equals(0)) {
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService.findByUsernameAndSearch(
-//                            username, keywords, page, ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsername(username, page,
-//                            ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndSearch(username,
-//                                    statusId, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndStatusId(
-//                            username, statusId, page, ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(1)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -1);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTimeAfterAndSearch(username,
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-//                            username, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-//                                    username, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfter(username,
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(3)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -3);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTimeAfterAndSearch(username,
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-//                            username, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-//                                    username, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfter(username,
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(6)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -6);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTimeAfterAndSearch(username,
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-//                            username, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-//                                    username, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfter(username,
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(12)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.YEAR, -1);// 减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTimeAfterAndSearch(username,
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
-//                            username, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
-//                                    username, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndStatusIdAndTimeAfter(username,
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        }
         if (timeId.equals(0)) {
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService.findByUsernameAndTypeIdAndSearch(
-                            username,0, keywords, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndSearch(
+                            username, keywords, page, ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,0, page,
+                    orderPage = tdOrderService.findByUsername(username, page,
                             ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
-                                    0,statusId, keywords, page,
+                            .findByUsernameAndStatusIdAndSearch(username,
+                                    statusId, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusId(
-                            username,0, statusId, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndStatusId(
+                            username, statusId, page, ClientConstant.pageSize);
                 }
             }
         } else if (timeId.equals(1)) {
@@ -393,23 +252,23 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-                                    0,time, keywords, page,
+                            .findByUsernameAndTimeAfterAndSearch(username,
+                                    time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-                            username, 0,time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+                            username, time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-                                    username,0, statusId, time, keywords, page,
+                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+                                    username, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-                                   0, statusId, time, page,
+                            .findByUsernameAndStatusIdAndTimeAfter(username,
+                                    statusId, time, page,
                                     ClientConstant.pageSize);
                 }
             }
@@ -423,23 +282,23 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-                                   0, time, keywords, page,
+                            .findByUsernameAndTimeAfterAndSearch(username,
+                                    time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-                            username,0, time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+                            username, time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-                                    username,0, statusId, time, keywords, page,
+                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+                                    username, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-                                    0,statusId, time, page,
+                            .findByUsernameAndStatusIdAndTimeAfter(username,
+                                    statusId, time, page,
                                     ClientConstant.pageSize);
                 }
             }
@@ -453,23 +312,23 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-                                    0,time, keywords, page,
+                            .findByUsernameAndTimeAfterAndSearch(username,
+                                    time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-                            username,0, time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+                            username, time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-                                    username,0, statusId, time, keywords, page,
+                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+                                    username, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-                                   0, statusId, time, page,
+                            .findByUsernameAndStatusIdAndTimeAfter(username,
+                                    statusId, time, page,
                                     ClientConstant.pageSize);
                 }
             }
@@ -483,27 +342,168 @@ public class TdUserController{
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-                                    0,time, keywords, page,
+                            .findByUsernameAndTimeAfterAndSearch(username,
+                                    time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
-                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-                            username,0, time, page, ClientConstant.pageSize);
+                    orderPage = tdOrderService.findByUsernameAndTimeAfter(
+                            username, time, page, ClientConstant.pageSize);
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-                                    username,0, statusId, time, keywords, page,
+                            .findByUsernameAndStatusIdAndTimeAfterAndSearch(
+                                    username, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
                 } else {
                     orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-                                    statusId,0, time, page,
+                            .findByUsernameAndStatusIdAndTimeAfter(username,
+                                    statusId, time, page,
                                     ClientConstant.pageSize);
                 }
             }
         }
+//        if (timeId.equals(0)) {
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndSearch(
+//                            username,0, keywords, page, ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,0, page,
+//                            ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
+//                                    0,statusId, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusId(
+//                            username,0, statusId, page, ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(1)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -1);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+//                                    0,time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+//                            username, 0,time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+//                                    username,0, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+//                                   0, statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(3)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -3);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+//                                   0, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+//                            username,0, time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+//                                    username,0, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+//                                    0,statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(6)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -6);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+//                                    0,time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+//                            username,0, time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+//                                    username,0, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+//                                   0, statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(12)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.YEAR, -1);// 减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+//                                    0,time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+//                            username,0, time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+//                                    username,0, statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+//                                    statusId,0, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        }
 
         map.addAttribute("order_page", orderPage);
 

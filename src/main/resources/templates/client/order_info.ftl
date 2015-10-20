@@ -73,6 +73,7 @@ $(document).ready(function(){
     <div class="clear h30"></div>
     
     <form id="form1" action="/order/submit" method="post">
+        <input type="hidden" name="type" value="<#if type??>${type!''}</#if>">
         <table class="address_tab">
             <tr>
                 <th width="140">

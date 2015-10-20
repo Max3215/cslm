@@ -120,7 +120,7 @@ function showMsg(){
     $('#mar_box').fadeIn(300);
 }
 
-function preGoods(){
+function preGoods(did){
     alert("功能正在开发中。。。。敬请期待 ∨_∨");
 }
 
@@ -267,7 +267,7 @@ function preGoods(){
 					<div class="clear"></div>
 					<#if dis_goods??>
 					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
-					       <a href="javascript:preGoods();" target="_blank"  title="预购商品" class="car">立即预购</a>
+					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car">立即预购</a>
 					   <#else>
         					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
         					<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>

@@ -404,7 +404,7 @@ menu.leftpart a { display:inline-block; white-space:nowrap; font-size:12px; marg
 .pay_style span { display:block; width:148px; height:43px; border:1px solid #eee; text-align:center;}
 
 
-/*=====================以下部分是Validform必须的====================*/
+/* =====================以下部分是Validform必须的====================*/
 .Validform_checktip{ margin-left:8px; line-height:20px; height:20px; overflow:hidden; color:#999; font-size:12px; }
 .Validform_right{ color:#22A011; padding-left:20px; background:url(valid_icons.png) no-repeat -40px -20px; }
 .Validform_wrong{ color:#EA5D0E; padding-left:20px; white-space:nowrap; background:url(valid_icons.png) no-repeat -20px -40px; }
@@ -417,7 +417,7 @@ menu.leftpart a { display:inline-block; white-space:nowrap; font-size:12px; marg
 #Validform_msg a.Validform_close:link,#Validform_msg a.Validform_close:visited{ line-height:30px; position:absolute; right:10px; top:0px; color:#fff; text-decoration:none; }
 #Validform_msg a.Validform_close:hover{color:#ccc;}
 #Validform_msg .Validform_info{padding:10px;border:1px solid #bbb; border-top:none; text-align:left;}
-/*=====================以上部分是Validform必须的====================*/
+/* =====================以上部分是Validform必须的====================*/
 .hide {display: none;}
 
 .team_tit {
@@ -1094,7 +1094,7 @@ menu.leftpart a { display:inline-block; white-space:nowrap; font-size:12px; marg
 
 
 
-/*====== 添加地址弹出框 ========*/
+/* ====== 添加地址弹出框 ========*/
 .add_address{width: 460px; border: solid 5px #b7b7b7;background: #fff;padding: 20px;box-shadow: 0 0 20px #000;position: fixed;z-index: 10;top:20%;left:40%;display: none;}
 .add_address table{}
 .add_address th{font-weight: 400px;text-align: right;padding-bottom: 20px;}

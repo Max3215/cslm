@@ -446,7 +446,7 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 
 
 
-/*-------------------------- 点击商品上架后弹出层 ------------------*/
+/* -------------------------- 点击商品上架后弹出层 ------------------*/
 .sub_form{width: 500px;position: fixed;top:40%;left:40%;background: #fff;-moz-box-shadow: 0 0 6px #777;
   -webkit-box-shadow: 0 0 10px #777;
   box-shadow: 0 0 10px #777;z-index: 10;display:none;}

@@ -217,7 +217,7 @@ function byNow(goodsId){
         					<p class="price">￥${goods.goodsPrice?string("#.##")}<span>原价：￥${goods.goodsMarketPrice?string("#.##")}</span></p>
         					<menu class="btn">
         						<a href="javascript:cartInit(${goods.id?c});" class="car" title="加入购物车"></a>
-        						<#if goods.isDistribution><a href="javascript:byNow(${goods.id?c});" class="buy">立即预购</a></#if> 
+        						<#if goods.isDistribution><a href="/order/proGoods/${goods.id?c}" class="buy">立即预购</a></#if> 
         						<div class="clear"></div>
         					</menu>
         				</li>

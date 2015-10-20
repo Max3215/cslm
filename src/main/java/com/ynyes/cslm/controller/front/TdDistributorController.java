@@ -611,7 +611,7 @@ public class TdDistributorController {
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
-		map.addAttribute("dist_order_page", tdOrderService.findByShopId(distributor.getId(), page, 5));
+		map.addAttribute("dist_order_page", tdOrderService.findByShopId(distributor.getId(), page, 10));
 		
 		return "/client/distributor_sale";
 	}
@@ -670,7 +670,7 @@ public class TdDistributorController {
 		}
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
-		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), isSale, page, 7));
+		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), isSale, page, 10));
 
 		map.addAttribute("isOnSale", isSale);
 		map.addAttribute("page",page);
@@ -715,11 +715,11 @@ public class TdDistributorController {
 		{
 			distributorGoods.setIsOnSale(type);
 			tdDistributorGoodsService.save(distributorGoods);
-			map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 7));
+			map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
 		}else{
 			distributorGoods.setIsOnSale(type);
 			tdDistributorGoodsService.save(distributorGoods);
-			map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), true, page, 7));
+			map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), true, page,10));
 		}
 		
 		return "/client/distributor_goods_list";
@@ -759,7 +759,7 @@ public class TdDistributorController {
 		
 		distributorGoods.setIsOnSale(true);
 		tdDistributorGoodsService.save(distributorGoods);
-		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 7));
+		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
 		
 		return "/client/distributor_goods_list";
 	}
@@ -793,7 +793,7 @@ public class TdDistributorController {
 		tdDistributorGoodsService.delete(disId);
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), type, page, 7));
+		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), type, page, 10));
 		map.addAttribute("page",page);
 		
 		return "/client/distributor_goods_list";
@@ -2061,10 +2061,6 @@ public class TdDistributorController {
         
     	return "redirect:/distributor/inOrder/list/0";
     }
-	
-	
-	
-	
 	
 	
 	public void onSaleAll(Boolean onsale,Long[] ids,Integer[] chkIds)

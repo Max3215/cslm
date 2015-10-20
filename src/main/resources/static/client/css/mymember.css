@@ -191,6 +191,9 @@ textarea { resize:none;}
 	padding:20px 3%;
 	background:#fff;
 	margin-bottom:20px;}
+	
+.mymember_info .btn-list input{border:none;background:#f60;color:#fff;padding:5px;margin-bottom:5px;}
+
 .mymember_info01 table{width:100%;}
 .mymember_header {
 	display:block;
@@ -786,7 +789,7 @@ textarea { resize:none;}
 
 
 
-/*----------------------add-----------------------------------*/
+/* ----------------------add-----------------------------------*/
 
 .mymember_fen.add_width a{width: 150px;}
 

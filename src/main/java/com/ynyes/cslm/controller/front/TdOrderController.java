@@ -38,6 +38,7 @@ import com.ynyes.cslm.entity.TdGoodsDto;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayType;
+import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
@@ -56,6 +57,8 @@ import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdPayTypeService;
+import com.ynyes.cslm.service.TdProviderGoodsService;
+import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
@@ -123,6 +126,12 @@ public class TdOrderController extends AbstractPaytypeController{
     
     @Autowired
     private TdDistributorGoodsService tdDistributoGoodsService;
+    
+    @Autowired
+    private TdProviderGoodsService tdProviderGoodsService;
+    
+    @Autowired
+    private TdProviderService tdProviderService;
     
 //    @Autowired
 //    private PaymentChannelCEB payChannelCEB;
@@ -828,6 +837,7 @@ public class TdOrderController extends AbstractPaytypeController{
             String invoiceTitle, // 发票抬头
             String userMessage, // 用户留言
             Long couponId, // 优惠券ID
+            String type,
             HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
        
@@ -897,6 +907,7 @@ public class TdOrderController extends AbstractPaytypeController{
 			}
         }
         
+       
         if(null == cartGoodsMap || cartGoodsMap.size() <= 0){
         	return "/client/error_404";
         }
@@ -915,8 +926,13 @@ public class TdOrderController extends AbstractPaytypeController{
         	// 商品总价
             Double totalGoodsPrice = 0.0;
             
+            // 商品返利
+            Double returnPrice =0.0;
+            
             // 积分总额
             Long totalPointReturn = 0L;	
+            
+            tdOrder = new TdOrder();
             
             for (int i = 0; i < m.getValue().size(); i++) 
             {
@@ -951,8 +967,12 @@ public class TdOrderController extends AbstractPaytypeController{
                 
                 // 数量
                 long quantity=0;
-                quantity = Math.min(cartGoods.getQuantity(),
-                        distributorGoods.getLeftNumber());
+                if(distributorGoods.getIsDistribution()){
+                	quantity=1L;
+                }else{
+                	quantity = Math.min(cartGoods.getQuantity(),
+                			distributorGoods.getLeftNumber());
+                }
 
                 orderGoods.setQuantity(quantity);
                 
@@ -970,6 +990,17 @@ public class TdOrderController extends AbstractPaytypeController{
                 
                 orderGoodsList.add(orderGoods);
                 
+                // 分销商品添加发货商信息
+                if(distributorGoods.getIsDistribution()){
+                	tdOrder.setProviderId(distributorGoods.getProviderId());
+                	tdOrder.setProviderTitle(distributorGoods.getProviderTitle());
+                	
+                	TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(distributorGoods.getProviderId(), distributorGoods.getGoodsId());
+                	
+                	// 分销返利
+                	returnPrice +=cartGoods.getPrice()*providerGoods.getShopReturnRation()*cartGoods.getQuantity();
+                }
+                
                 // 更新销量
                 Long soldNumber = distributorGoods.getSoldNumber();
 
@@ -980,18 +1011,19 @@ public class TdOrderController extends AbstractPaytypeController{
                 soldNumber += quantity;
                 distributorGoods.setSoldNumber(soldNumber);
                 
-				// 更新库存
-                Long leftNumber = distributorGoods.getLeftNumber();
-                if (leftNumber >= quantity) {
-                	leftNumber = leftNumber - quantity;
-				}               
-                distributorGoods.setLeftNumber(leftNumber);
+                if(!distributorGoods.getIsDistribution()){
+                	// 更新库存
+                	Long leftNumber = distributorGoods.getLeftNumber();
+                	if (leftNumber >= quantity) {
+                		leftNumber = leftNumber - quantity;
+                	}               
+                	distributorGoods.setLeftNumber(leftNumber);
+                }
                 
                 tdDistributoGoodsService.save(distributorGoods);
 			}
             
             
-            tdOrder = new TdOrder();
             TdDistributor distributor = tdDistributorService.findOne(m.getKey());
             
             Date current = new Date();
@@ -1003,9 +1035,6 @@ public class TdOrderController extends AbstractPaytypeController{
             tdOrder.setUsername(user.getUsername());
             tdOrder.setOrderTime(current);
 
-            // 订单号
-            tdOrder.setOrderNumber("P" + curStr
-                    + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
 
             // 发货信息
             if (null != address) {
@@ -1081,11 +1110,32 @@ public class TdOrderController extends AbstractPaytypeController{
         	tdOrder.setShopId(distributor.getId());
         	tdOrder.setShopTitle(distributor.getTitle());
             
-        	// 设置订单类型
-        	tdOrder.setTypeId(0L);
         	
-        	// 相应超市虚拟账户金额增加
-        	distributor.setVirtualMoney(distributor.getVirtualMoney()+tdOrder.getTotalPrice());
+            if(null != type && type.equals("pro")){
+            	// 订单号
+            	tdOrder.setOrderNumber("Y" + curStr
+                        + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+            	
+            	// 设置订单类型 预定
+            	tdOrder.setTypeId(2L);
+            	
+            	// 分销商品向发货商品增加虚拟账户余额
+            	TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
+            	provider.setVirtualMoney(provider.getVirtualMoney()+totalGoodsPrice-returnPrice);
+            	tdProviderService.save(provider);
+            	// 分销超市分销获利
+            	distributor.setVirtualMoney(distributor.getVirtualMoney()+returnPrice);
+            	
+            }else{
+            	tdOrder.setOrderNumber("P" + curStr
+            			+ leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+            	
+            	// 设置订单类型
+            	tdOrder.setTypeId(0L);
+            	
+            	// 相应超市虚拟账户金额增加
+            	distributor.setVirtualMoney(distributor.getVirtualMoney()+tdOrder.getTotalPrice());
+            }
 			TdDistributorService.save(distributor);
             
             tdOrder = tdOrderService.save(tdOrder);
@@ -1723,8 +1773,8 @@ public class TdOrderController extends AbstractPaytypeController{
      * @param map
      * @return
      */
-    @RequestMapping(value="/byNow/{goodsId}")
-    public String ByNow(@PathVariable Long goodsId,Long quantity, HttpServletRequest req, ModelMap map){
+    @RequestMapping(value="/byNow/{dGoodsId}")
+    public String ByNow(@PathVariable Long dGoodsId,Long quantity, HttpServletRequest req, ModelMap map){
     	String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
@@ -1736,7 +1786,8 @@ public class TdOrderController extends AbstractPaytypeController{
 		
 		tdCommonService.setHeader(map, req);
 		
-		TdGoods goods = tdGoodsService.findOne(goodsId);
+//		TdGoods goods = tdGoodsService.findOne(dGoodsId);
+		TdDistributorGoods dgoods = tdDistributoGoodsService.findOne(dGoodsId);
 		
 		List<TdCartGoods> cartGoodsList = new ArrayList<>();
 		TdCartGoods cartGoods = new TdCartGoods();
@@ -1744,15 +1795,21 @@ public class TdOrderController extends AbstractPaytypeController{
 		Double totalPrice = new Double(0);
 		
 		cartGoods.setUsername(username);
-		cartGoods.setGoodsId(goods.getId());
-		cartGoods.setGoodsTitle(goods.getTitle());
-		cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
+		cartGoods.setGoodsId(dgoods.getGoodsId());
+		cartGoods.setGoodsTitle(dgoods.getGoodsTitle());
+		cartGoods.setGoodsCoverImageUri(dgoods.getCoverImageUri());
 		cartGoods.setQuantity(quantity);
-		cartGoods.setPrice(goods.getSalePrice());
+		cartGoods.setPrice(dgoods.getGoodsPrice());
+		cartGoods.setIsSelected(true);
+		cartGoods.setDistributorId(tdDistributoGoodsService.findDistributorId(dGoodsId));
+		cartGoods.setDistributorTitle(dgoods.getDistributorTitle());
+		cartGoods.setProviderId(dgoods.getProviderId());
+		cartGoods.setProviderTite(dgoods.getProviderTitle());
 		
+		tdCartGoodsService.save(cartGoods);
 		cartGoodsList.add(cartGoods);
 
-		map.addAttribute("totalPrice",goods.getSalePrice()*quantity);
+		map.addAttribute("totalPrice",dgoods.getGoodsPrice()*quantity);
 		
         map.addAttribute("selected_goods_list",cartGoodsList);
         
@@ -1762,5 +1819,61 @@ public class TdOrderController extends AbstractPaytypeController{
         
     	return "/client/order_info";
     }
+    
+    @RequestMapping(value="/proGoods/{dGoodsId}")
+    public String distributionGoods(@PathVariable Long dGoodsId,HttpServletRequest req,ModelMap map){
+    	String username = (String) req.getSession().getAttribute("username");
+
+		if (null == username) {
+			return "redirect:/login";
+		}
+		
+		if(null == dGoodsId){
+			return "/client/error_404";
+		}
+		
+		tdCommonService.setHeader(map, req);
+		
+		TdDistributorGoods dgoods = tdDistributoGoodsService.findOne(dGoodsId);
+		
+		List<TdCartGoods> cartGoodsList = new ArrayList<>();
+		TdCartGoods cartGoods = new TdCartGoods();
+		
+		Double totalPrice = new Double(0);
+		
+		cartGoods.setUsername(username);
+		cartGoods.setGoodsId(dgoods.getGoodsId());
+		cartGoods.setGoodsTitle(dgoods.getGoodsTitle());
+		cartGoods.setGoodsCoverImageUri(dgoods.getCoverImageUri());
+		cartGoods.setQuantity(1L);
+		cartGoods.setPrice(dgoods.getGoodsPrice());
+		cartGoods.setIsSelected(true);
+		cartGoods.setDistributorId(tdDistributoGoodsService.findDistributorId(dGoodsId));
+		cartGoods.setDistributorTitle(dgoods.getDistributorTitle());
+		cartGoods.setProviderId(dgoods.getProviderId());
+		cartGoods.setProviderTite(dgoods.getProviderTitle());
+		
+		tdCartGoodsService.save(cartGoods);
+		cartGoodsList.add(cartGoods);
+
+		map.addAttribute("totalPrice",dgoods.getGoodsPrice()*1);
+		
+        map.addAttribute("selected_goods_list",cartGoodsList);
+        
+        map.addAttribute("type","pro");
+        setPayTypes(map, true, false, req);
+		
+    	
+    	
+    	return "/client/order_info";
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
 }

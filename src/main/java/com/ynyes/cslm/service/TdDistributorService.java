@@ -162,7 +162,7 @@ public class TdDistributorService {
      */
     public TdDistributor save(TdDistributor e)
     {
-        //保存分销商商品
+        // 保存分销商商品
     	if(null != e.getGoodsList())
     	{
     		for (TdDistributorGoods disGoods : e.getGoodsList()) 

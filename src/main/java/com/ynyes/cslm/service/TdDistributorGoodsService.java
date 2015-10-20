@@ -136,6 +136,7 @@ public class TdDistributorGoodsService {
          } else {
              e.setParamValueCollect("");
          }
+         
         return repository.save(e);
     }
     
