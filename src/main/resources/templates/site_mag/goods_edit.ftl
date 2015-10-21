@@ -126,6 +126,7 @@ $(function () {
     
     // 根据类型载入参数
     $("#categoryId").change(function(){
+    console.debug($(this).val());
         $.ajax({
             url : '/Verwalter/goods/edit/parameter/'+$(this).val(),
             type : 'POST',
@@ -134,6 +135,7 @@ $(function () {
             }
         });
     });
+    
     
     // 添加赠品
     $("#addGift").click(function(){
@@ -334,7 +336,7 @@ function del_goods_comb(obj) {
             <dt>所属类别</dt>
             <dd>
                 <div class="rule-single-select">
-                    <select name="categoryId" id="categoryId" datatype="*" sucmsg=" ">
+                    <select  id="onecategoryId" name=""categoryId datatype="*" sucmsg=" ">
                         <#if !goods??>
                         <option value="">请选择类别...</option>
                         </#if>

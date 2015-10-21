@@ -21,6 +21,7 @@
             <a href="/user/order/list/0"  title="我的订单">我的订单</a>
             <a href="/user/comment/list"  title="评价结单">评价结单</a>
             <a href="/user/order/list/7" title="取消订单记录">取消订单记录</a>
+            <a href="/user/suggestion/list" title="投诉">投诉</a>
           </div>
     </div><!--mymember_menu_part END-->
     <div class="mymember_menu_part">

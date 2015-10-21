@@ -789,6 +789,29 @@ public class TdManagerGoodsController {
         return "redirect:/Verwalter/goods/list";
     }
 
+//    @RequestMapping(value="/category/changer/{categoryId}",method=RequestMethod.POST)
+//    public String changeCategory(@PathVariable Long categoryId,Long layer,HttpServletRequest req,ModelMap map){
+//    	String username = (String) req.getSession().getAttribute("manager");
+//        if (null == username) {
+//            return "redirect:/Verwalter/login";
+//        }
+//        
+//        if(null != categoryId)
+//        {
+//        	map.addAttribute("category_list"+layer, tdProductCategoryService.findByParentIdOrderBySortIdAsc(categoryId));
+//        }
+//    	   if(layer.equals(2L))
+//    	   {
+//    		   return "/site_mag/category2";
+//    	   }
+//    	   else
+//    	   {
+//    		   return "/site_mag/category3";
+//    	   }
+//    }
+    
+    
+    
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(TdGoods tdGoods, String[] hid_photo_name_show360,
             String __EVENTTARGET, String __EVENTARGUMENT, String __VIEWSTATE,

@@ -1192,24 +1192,23 @@ public class TdUserController{
      * @param map
      * @return
      */
-    // @RequestMapping(value="/user/suggestion/list")
-    // public String suggestionList(HttpServletRequest req,
-    // ModelMap map){
-    // String username = (String) req.getSession().getAttribute("username");
-    //
-    // if (null == username)
-    // {
-    // return "redirect:/login";
-    // }
-    //
-    // tdCommonService.setHeader(map, req);
-    //
-    //
-    // TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-    //
-    // map.addAttribute("user", tdUser);
-    // return "/client/user_suggestion_list";
-    // }
+     @RequestMapping(value="/user/suggestion/list")
+     public String suggestionList(HttpServletRequest req,ModelMap map){
+	     String username = (String) req.getSession().getAttribute("username");
+	    
+	     if (null == username)
+	     {
+	     return "redirect:/login";
+	     }
+	    
+	     tdCommonService.setHeader(map, req);
+	    
+	    
+	     TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
+	    
+	     map.addAttribute("user", tdUser);
+	     return "/client/user_suggestion_list";
+     }
 
     /**
      * 投诉

@@ -95,7 +95,7 @@ var theForm = document.forms['form1'];
                      <i>联系电话：${comment.mobile!""}</i>   <i>&nbsp;&nbsp;&nbsp;&nbsp;</i> 
                      <i>邮箱：  ${comment.mail!'' }  </i>    <i>&nbsp;&nbsp;&nbsp;&nbsp;</i> 
                      <i> ${comment.time!""}   </i>                 
-               <#-   <i class="reply">   
+               <#--   <i class="reply">   
                         <p><a href="/suggestion/delete?id=${comment.id?c}">删除</a></p> 
                      </i>           
               -->
