@@ -10,11 +10,13 @@
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
 
-<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
+<!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+<script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
+<script type="text/javascript" src="/mag/js/layout.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
      $(".click_a").click(function(){
@@ -34,13 +36,43 @@ $(document).ready(function(){
     },function(){
         $(this).next().hide();
     })
+    
 })
+
+//确认收货
+function OrderService(oid) {
+    var dialog = $.dialog.confirm('操作提示信息：<br />确认已经收到商品？', function () {
+        
+        //发送AJAX请求
+        $.ajax({
+            type : "post",
+            url : "/user/order/param",
+            data : {"orderId":oid}
+            dataType : "json",
+             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, dialog);
+             },
+             success: function (data) {
+            console.debug(data)
+                if (data.code == 0) {
+                    winObj.close();
+                    $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
+                } else {
+                    $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
+                }
+            }
+        });
+        return false;
+    });
+}
+
+
 </script>
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <!--[if IE 6]>
-<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script type="text/javascript" src="/client/js/DD_belatedPNG_0.0.8a.js" ></script>
 <script>
 DD_belatedPNG.fix('.,img,background');
 </script>
@@ -90,9 +122,9 @@ DD_belatedPNG.fix('.,img,background');
                 <#elseif order.statusId==3>
                     亲爱的客户，您以成功支付，我们将尽快为您发货。
                 <#elseif order.statusId==4>
-                    亲爱的客户，已经为您发货，请您注意收货。
+                    亲爱的客户，已经为您发货，请您&nbsp;<span><a style="color:#F00;" href="javascript:orderService(${order.id?c})">确认收货</a></span>。
                 <#elseif order.statusId==5>
-                    亲爱的客户，您已消费成功，您可以&nbsp;<span><a href="/user/comment/list">发表评论</a></span>。
+                    亲爱的客户，您已消费成功，您可以&nbsp;<span><a style="color:#F00;" href="/user/comment/list">发表评论</a></span>。
                 <#elseif order.statusId==6>
                     亲爱的客户，此订单已交易成功。
                 <#elseif order.statusId==8>
@@ -213,7 +245,7 @@ DD_belatedPNG.fix('.,img,background');
                     </#if>
                     <#if order.statusId?? && order.statusId == 2>
                         <p>待付款</p>
-                        <a href="/order/dopayleft/${order.id?c}">去支付</a>
+                        <a href="">去支付</a>
                     </#if>
                     <#if order.statusId?? && order.statusId == 3>
                         <p>待发货</p>

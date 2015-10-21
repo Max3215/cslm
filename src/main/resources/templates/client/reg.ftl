@@ -7,7 +7,7 @@
 <meta name="description" content="">
 <meta name="copyright" content="" />
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>

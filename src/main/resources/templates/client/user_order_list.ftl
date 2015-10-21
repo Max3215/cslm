@@ -11,7 +11,7 @@
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
 
-<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
+<!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
@@ -38,10 +38,10 @@ $(document).ready(function(){
 })
 </script>
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <!--[if IE 6]>
-<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script type="text/javascript" src="/client/js/DD_belatedPNG_0.0.8a.js" ></script>
 <script>
 DD_belatedPNG.fix('.,img,background');
 </script>
@@ -205,7 +205,7 @@ DD_belatedPNG.fix('.,img,background');
                       <a href="/goods/${goods.id?c}">
                         <img src="${goods.coverImageUri!''}" width="208px" height="208px;"/>
                         <p>${goods.title!''}</p>
-                        <p>￥<span>${goods.salePrice?string('0.00')}</span></p>
+                        <p>￥<span>${goods.marketPrice?string('0.00')}</span></p>
                         <i>已售 ${goods.soldNumber!'0'} 件</i>
                       </a>
                     </#if>

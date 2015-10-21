@@ -6,7 +6,7 @@
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <title><#if site??>${site.seoTitle!''}-</#if>商家入驻</title>
 
@@ -52,6 +52,7 @@ $(document).ready(function(){
      //初始化上传控件
     $(".upload-img").each(function () {
         $(this).InitSWFUpload({ 
+            btntext : "上传营业执照",
             sendurl: "/client/upload", 
             flashurl: "/mag/js/swfupload.swf"
         });

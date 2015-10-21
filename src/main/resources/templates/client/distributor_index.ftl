@@ -28,10 +28,10 @@ navDownList("nav_down","li",".nav_show");
 })
 </script>
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <!--[if IE 6]>
-<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script type="text/javascript" src="/client/js/DD_belatedPNG_0.0.8a.js" ></script>
 <script>
 DD_belatedPNG.fix('.,img,background');
 </script>

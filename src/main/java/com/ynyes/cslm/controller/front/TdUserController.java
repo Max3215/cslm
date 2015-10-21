@@ -1873,6 +1873,37 @@ public class TdUserController{
         return "redirect:/user/password";
     }
     
+    @RequestMapping(value="/user/order/param")
+    @ResponseBody
+    public Map<String,Object> orderOaram(Long id,HttpServletRequest req,ModelMap map){
+    	Map<String,Object> res =new HashMap<>();
+    	res.put("code", 1);
+    	
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		res.put("message","请重新登录");
+    		return res;
+    	}
+    	
+    	if(null != id)
+    	{
+    		TdOrder order = tdOrderService.findOne(id);
+    		if(order.getStatusId().equals(4L)){
+    			order.setStatusId(5L);
+    			order.setReceiveTime(new Date());
+    		}
+    		tdOrderService.save(order);
+    		res.put("code",1);
+    		res.put("message", "已确认收货！");
+    		
+    		return res;
+    	}
+    	res.put("message", "参数错误");
+    	return res;
+    }
+    
+    
     /**
      * @author mdj
      * @param rep

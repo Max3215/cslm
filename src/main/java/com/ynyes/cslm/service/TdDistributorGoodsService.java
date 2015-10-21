@@ -344,6 +344,19 @@ public class TdDistributorGoodsService {
     }
     
     /**
+     * search
+     */
+    public Page<TdDistributorGoods> searchGoodsAndIsOnSale(String keywords,Boolean isOnSale,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		return repository.findByGoodsTitleContainingAndIsOnSaleOrSubGoodsTitleContainingAndIsOnSaleOrCodeContainingAndIsOnSaleOrDistributorTitleContainingAndIsOnSale(
+								keywords, isOnSale, 
+								keywords, isOnSale, 
+								keywords, isOnSale,
+								keywords, isOnSale,pageRequest);
+	}
+    
+    /**
      * 	↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
      * 	↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
      */

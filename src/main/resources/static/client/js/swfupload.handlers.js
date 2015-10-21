@@ -8,7 +8,7 @@ $(function () {
         sendurl: null, //发送地址
         filetypes: "*.jpg;*.jpge;*.png;*.gif;", //文件类型
         filesize: "1024000", //文件大小
-        btntext: "上传营业执照", //上传按钮的文字
+        btntext: "", //上传按钮的文字
         btnwidth: 80, //上传按钮的宽度
         btnheight: 28, //上传按钮的高度
         flashurl: null //FLASH上传控件相对地址
@@ -294,6 +294,8 @@ function uploadSuccess(file, serverData) {
                 $(this.customSettings.upload_target).siblings(".thumb_Logo2ImgUrl_show").show();
                 $(this.customSettings.upload_target).siblings(".thumb_Logo3ImgUrl_show").html("<ul><li><div class='img-box1'><img src='" + jsonstr.path + "' bigsrc='" + jsonstr.path + "' /></div></li></ul>");
                 $(this.customSettings.upload_target).siblings(".thumb_Logo3ImgUrl_show").show();
+                
+                $(this.customSettings.upload_target).siblings(".test_img").html("<img src='" + jsonstr.path + "' width='120' height='120' name='imgUrl' id='imageURL'/><script>testImg();</script>");
                 testImg(jsonstr.path);
             } else {
                 addImage($(this.customSettings.upload_target), jsonstr.path, jsonstr.thumb);

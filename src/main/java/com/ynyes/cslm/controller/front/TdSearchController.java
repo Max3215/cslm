@@ -110,7 +110,7 @@ public class TdSearchController {
               
               map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId,0,10).getContent());
             }else{
-            	map.addAttribute("goods_page", tdDistributorGoodsService.searchAndIsOnSale(keywords, true, page, ClientConstant.pageSize));
+            	map.addAttribute("goods_page", tdDistributorGoodsService.searchGoodsAndIsOnSale(keywords, true, page, ClientConstant.pageSize));
             	
             	// 热卖
             	map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0,10).getContent());

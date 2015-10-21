@@ -10,7 +10,7 @@
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
 
-<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
+<!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
@@ -141,10 +141,10 @@ $(document).ready(function(){
         }
 </script>
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <!--[if IE 6]>
-<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script type="text/javascript" src="/client/js/DD_belatedPNG_0.0.8a.js" ></script>
 <script>
 DD_belatedPNG.fix('.,img,background');
 </script>

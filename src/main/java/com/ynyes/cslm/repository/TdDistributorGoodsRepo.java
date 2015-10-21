@@ -44,6 +44,14 @@ public interface TdDistributorGoodsRepo extends
 		Page<TdDistributorGoods> findByCategoryIdTreeContainingAndIsOnSaleTrueOrderBySoldNumberDesc(String catstr,Pageable page);
 		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=true order by g.soldNumber")
 		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,String catstr,Pageable page);
+		
+		// search 
+		Page<TdDistributorGoods> findByGoodsTitleContainingAndIsOnSaleOrSubGoodsTitleContainingAndIsOnSaleOrCodeContainingAndIsOnSaleOrDistributorTitleContainingAndIsOnSale(
+																								String keywords1,Boolean isOnSale1,
+																								String keywords2,Boolean isOnSale2,
+																								String keywords3,Boolean isOnSale3,
+																								String keywords4,Boolean isOnSale4,Pageable page);
+		
 		/**
 		 * 	列表页收索排序
 		 * 
