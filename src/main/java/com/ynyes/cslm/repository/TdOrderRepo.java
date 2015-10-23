@@ -121,6 +121,7 @@ public interface TdOrderRepo extends
     
     Page<TdOrder> findByUsernameAndTypeIdOrderByIdDesc(String username,long typeId,Pageable page);
     Page<TdOrder> findByShopIdAndTypeIdOrderByOrderTimeDesc(long shopId,long typeId,Pageable page);
+    Page<TdOrder> findByProviderIdAndTypeIdOrderByOrderTimeDesc(long provider,long typeId,Pageable page);
     
     /**
      *  超市进货订单
@@ -153,6 +154,14 @@ public interface TdOrderRepo extends
     Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(long ShopId,long typeId, Long statusId, String keywords, Pageable page);
     Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(long ShopId,long typeId, Long statusId, Date time, Pageable page);
     Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(long ShopId,long typeId, Long statusId, Date time, String keywords, Pageable page);
+    
+    Page<TdOrder> findByProviderIdAndTypeIdAndOrderTimeAfterOrderByIdDesc(long ProviderId,long typeId, Date time, Pageable page);
+    Page<TdOrder> findByProviderIdAndTypeIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(long ProviderId,long typeId, Date time, String keywords, Pageable page);
+    Page<TdOrder> findByProviderIdAndTypeIdAndOrderNumberContainingOrderByIdDesc(long ProviderId,long typeId, String keywords, Pageable page);
+    Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdOrderByIdDesc(long ProviderId,long typeId, Long statusId, Pageable page);
+    Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(long ProviderId,long typeId, Long statusId, String keywords, Pageable page);
+    Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(long ProviderId,long typeId, Long statusId, Date time, Pageable page);
+    Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(long ProviderId,long typeId, Long statusId, Date time, String keywords, Pageable page);
     
     Long countByShopIdAndTypeIdAndStatusId(long shopId,long typeId,long statusId);
     

@@ -1120,11 +1120,11 @@ public class TdOrderController extends AbstractPaytypeController{
             	tdOrder.setTypeId(2L);
             	
             	// 分销商品向发货商品增加虚拟账户余额
-            	TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
-            	provider.setVirtualMoney(provider.getVirtualMoney()+totalGoodsPrice-returnPrice);
-            	tdProviderService.save(provider);
-            	// 分销超市分销获利
-            	distributor.setVirtualMoney(distributor.getVirtualMoney()+returnPrice);
+//            	TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
+//            	provider.setVirtualMoney(provider.getVirtualMoney()+totalGoodsPrice-returnPrice);
+//            	tdProviderService.save(provider);
+//            	// 分销超市分销获利
+//            	distributor.setVirtualMoney(distributor.getVirtualMoney()+returnPrice);
             	
             }else{
             	tdOrder.setOrderNumber("P" + curStr
@@ -1134,7 +1134,7 @@ public class TdOrderController extends AbstractPaytypeController{
             	tdOrder.setTypeId(0L);
             	
             	// 相应超市虚拟账户金额增加
-            	distributor.setVirtualMoney(distributor.getVirtualMoney()+tdOrder.getTotalPrice());
+//            	distributor.setVirtualMoney(distributor.getVirtualMoney()+tdOrder.getTotalPrice());
             }
 			TdDistributorService.save(distributor);
             

@@ -79,7 +79,7 @@ DD_belatedPNG.fix('.,img,background');
           </tr>
           <tr>
             <th>昵称：</th>
-             <td><input class="mytext" name="nickname" type="text" /></td>
+             <td><input class="mytext" name="nickname" type="text" value="${user.nickname!''}"/></td>
           </tr>
           <tr>
             <th>性别：</th>

@@ -49,6 +49,10 @@ public class TdProvider {
     @Column(scale=2)
     private Double virtualMoney;
     
+    // imgURL
+    @Column 
+    private String imageUri;
+    
     // 省
     @Column
     private String province;
@@ -188,6 +192,14 @@ public class TdProvider {
 
 	public void setDisctrict(String disctrict) {
 		this.disctrict = disctrict;
+	}
+
+	public String getImageUri() {
+		return imageUri;
+	}
+
+	public void setImageUri(String imageUri) {
+		this.imageUri = imageUri;
 	}
     
     

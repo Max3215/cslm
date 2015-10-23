@@ -3,6 +3,7 @@ package com.ynyes.cslm.controller.front;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,15 +18,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
+import com.ynyes.cslm.entity.TdUser;
+import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
+import com.ynyes.cslm.service.TdUserPointService;
+import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 
 /**
@@ -52,6 +61,18 @@ public class TdProviderController {
 	
 	@Autowired
 	private TdOrderService tdOrderService;
+	
+	@Autowired
+	TdUserPointService tdUserPointService;
+	
+	@Autowired
+	TdDistributorService tdDistributorService;
+	
+	@Autowired
+	TdDistributorGoodsService tdDistributorGoodsService;
+	
+	@Autowired
+	TdUserService tdUserService;
 	
 	@RequestMapping(value="/index")
 	public String providerIndex(HttpServletRequest req,ModelMap map)
@@ -261,6 +282,186 @@ public class TdProviderController {
 		return "/client/provider_order_list";
 	}
 
+	@RequestMapping(value="/disOrder/list/{statusId}")
+	public String disOrder(@PathVariable Integer statusId,
+			Integer statusid,
+			String keywords,
+			Integer page,
+			Integer timeId,
+			HttpServletRequest req,
+			ModelMap map)
+	{
+		String username =(String)req.getSession().getAttribute("provider");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page)
+		{
+			page = 0;
+		}
+		if(null == statusId)
+		{
+			statusId= 0;
+		}
+		if (null == timeId) {
+            timeId = 0;
+        }
+		if(null != statusid){
+        	statusId = statusid;
+        }
+		TdProvider provider = tdProviderService.findByUsername(username);
+		map.addAttribute("provider",provider);
+		map.addAttribute("status_id", statusId);
+		map.addAttribute("time_id",timeId);
+		
+		tdCommonService.setHeader(map, req);
+		
+		Page<TdOrder> orderPage =null;
+		if (timeId.equals(0)) {
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndSearch(
+                    		provider.getId(),2, keywords, page, ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeId(provider.getId(),2, page,
+                            ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndSearch(provider.getId(),2,statusId, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusId(
+                    		provider.getId(),1,statusId, page, ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(1)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -1);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                    2,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2,time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                   2, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(3)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -3);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                   2, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                    2,statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(6)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -6);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                    2,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                   2, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(12)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.YEAR, -1);// 减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                    2,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                    2,statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        }
+		map.addAttribute("order_page",orderPage);
+		return "/client/provider_disOrder_list";
+	}
+	
 	@RequestMapping(value="/order")
 	public String orderDetail(Long id,HttpServletRequest req,ModelMap map)
 	{
@@ -278,6 +479,148 @@ public class TdProviderController {
 		map.addAttribute("order",tdOrderService.findOne(id));
 		return "/client/provider_order_detail";
 	}
+	
+	@RequestMapping(value="/disOrder")
+	public String disOrderDetail(Long id,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("provider");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == id)
+		{
+			return "/client/error_404";
+		}
+		tdCommonService.setHeader(map, req);
+		map.addAttribute("provider", tdProviderService.findByUsername(username));
+		map.addAttribute("order",tdOrderService.findOne(id));
+		return "/client/provider_disorder_detail";
+	}
+	
+	@RequestMapping(value="/disorder/param/edit")
+	@ResponseBody
+	public Map<String, Object> disparamEdit(String orderNumber,
+			String type,
+			ModelMap map,
+			HttpServletRequest req)
+	{
+		Map<String, Object> res =new HashMap<>();
+		res.put("code",1);
+		String username = (String)req.getSession().getAttribute("provider");
+		
+		if (null == username)
+        {
+            res.put("message", "请重新登录");
+            return res;
+        }
+		
+		if (null != orderNumber && !orderNumber.isEmpty() && null != type && !type.isEmpty())
+        {
+			TdOrder order = tdOrderService.findByOrderNumber(orderNumber);
+			if(type.equalsIgnoreCase("orderConfirm"))
+			{
+				if(order.getStatusId().equals(1L))
+				{
+					order.setStatusId(2L);
+					order.setDeliveryTime(new Date());
+				}
+			}
+			else if(type.equalsIgnoreCase("orderPay"))
+			{
+				if(order.getStatusId().equals(2L))
+				{
+					TdUser tdUser = tdUserService.findByUsername(order.getUsername());
+	            	TdDistributor distributor = tdDistributorService.findOne(order.getShopId());
+	            	TdProvider provider = tdProviderService.findOne(order.getProviderId());
+	            	
+	            	List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
+	            	
+	            	 Long totalPoints = 0L;
+	                 Double totalCash = 0.0;
+	                 Double platformService = 0.0; // 平台服务费
+	                 Double trainService = 0.0;	// 分销返利
+	                
+	                 // 返利总额
+	                 if (null != tdOrderGoodsList) {
+	                     for (TdOrderGoods tog : tdOrderGoodsList) {
+	                         if (0 == tog.getGoodsSaleType()) // 正常销售
+	                         {
+	                             TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(order.getProviderId(), tog.getGoodsId());
+	                        	 TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributor.getId(), tog.getGoodsId(), true);
+	                        	 TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
+
+	                             if (null != disGoods && null != disGoods.getReturnPoints()) {
+	                                 totalPoints += disGoods.getReturnPoints(); // 赠送积分
+
+//	                                 if (null != tdGoods.getShopReturnRation()) {
+//	                                     totalCash += tdGoods.getCostPrice()
+//	                                             * tdGoods.getShopReturnRation();
+//	                                 }
+	                             }
+	                             if (null != disGoods && null != tdGoods.getPlatformServiceReturnRation()) {
+	                             	platformService += tog.getPrice() * tdGoods.getPlatformServiceReturnRation();
+	         					}
+	                             if (null != providerGoods && null != providerGoods.getShopReturnRation()) {
+	                             	trainService += tog.getPrice() * providerGoods.getShopReturnRation(); 
+	         					}
+	                         }
+	                     }
+	                  // 用户返利
+	                     if (null != tdUser) {
+	                         TdUserPoint userPoint = new TdUserPoint();
+
+	                         userPoint.setDetail("购买商品赠送积分");
+	                         userPoint.setOrderNumber(order.getOrderNumber());
+	                         userPoint.setPoint(totalPoints);
+	                         userPoint.setPointTime(new Date());
+	                         userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
+	                         userPoint.setUsername(tdUser.getUsername());
+
+	                         userPoint = tdUserPointService.save(userPoint);
+
+	                         tdUser.setTotalPoints(userPoint.getTotalPoint());
+
+	                         tdUserService.save(tdUser);
+	                     }
+	                     order.setRebate(order.getTotalGoodsPrice()-platformService);// 设置订单超市收益
+	                     order.setPlatformService(platformService);// 设置订单平台服务费
+	                     order.setTrainService(trainService);// 设置订单培训服务费
+	                     order = tdOrderService.save(order);
+	                  //超市入账
+	                   if(null != distributor)
+	                   {
+	                	   distributor.setVirtualMoney(distributor.getVirtualMoney()+trainService);
+	                       tdDistributorService.save(distributor);
+	                   }
+	                   // 批发商入帐
+	                   if(null != provider){
+	                	   provider.setVirtualMoney(provider.getVirtualMoney()+order.getTotalGoodsPrice()-platformService-trainService);
+	                	   tdProviderService.save(provider);
+	                   }
+	                 }
+					order.setStatusId(3L);
+					order.setFinishTime(new Date());
+				}
+			}
+			// 确认发货
+            else if (type.equalsIgnoreCase("orderPayLeft"))
+            {
+            	if(order.getStatusId().equals(3L))
+            	{
+            		order.setStatusId(4L);
+            		order.setDeliveryTime(new Date());
+            	}
+            }
+			 tdOrderService.save(order);
+	         res.put("code", 0);
+	         res.put("message", "修改成功!");
+	         return res;
+        }
+		res.put("message", "参数错误!");
+		return res;
+	}
+	
 	
 	@RequestMapping(value="/order/param/edit")
 	@ResponseBody
@@ -518,6 +861,21 @@ public class TdProviderController {
 		}
 		return res;
 	}
+	
+	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)
+    @ResponseBody
+    public String saveHeadPortrait(String imgUrl,HttpServletRequest rep)
+    {
+    	String username = (String)rep.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+        TdProvider provider = tdProviderService.findByUsername(username);
+        provider.setImageUri(imgUrl);
+        tdProviderService.save(provider);
+    	return "client/provider_index";
+    }
+	
 	
 	public void deleteCheck(Long[] ids,Integer[] chkIds)
 	{

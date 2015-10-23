@@ -404,6 +404,16 @@ public class TdOrderService {
     	PageRequest pageRequest=new PageRequest(page, size);
     	return repository.findByShopIdAndTypeIdOrderByOrderTimeDesc(shopId,typeId,pageRequest);
     }
+    
+    public Page<TdOrder> findByProviderIdAndTypeId(Long shopId,int typeId,int page,int size)
+    {
+    	if(null == shopId)
+    	{
+    		return null;
+    	}
+    	PageRequest pageRequest=new PageRequest(page, size);
+    	return repository.findByProviderIdAndTypeIdOrderByOrderTimeDesc(shopId,typeId,pageRequest);
+    }
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓		进   货   单   查   询		↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓			 libiao					↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -513,5 +523,59 @@ public class TdOrderService {
     {
     	
         return repository.countByShopIdAndTypeIdAndStatusId(shopId,typeId ,statusId);
+    }
+    
+    
+ // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓		分   销   单   查   询		↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓			 libiao					↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    public Page<TdOrder> findByProviderIdAndTypeIdAndTimeAfter(long shopId, long typeId,Date time, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByProviderIdAndTypeIdAndOrderTimeAfterOrderByIdDesc(shopId, typeId,time, pageRequest);
+    }
+    
+    public Page<TdOrder> findByProviderIdAndTypeIdAndTimeAfterAndSearch(long ProviderId,long typeId, Date time, String keywords, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByProviderIdAndTypeIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(ProviderId,typeId, time, keywords, pageRequest);
+    }
+    
+    public Page<TdOrder> findByProviderIdAndTypeIdAndSearch(long ProviderId, long typeId,String keywords, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByProviderIdAndTypeIdAndOrderNumberContainingOrderByIdDesc(ProviderId,typeId, keywords, pageRequest);
+    }
+    
+    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusId(long ProviderId,long typeId, long statusId, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByProviderIdAndTypeIdAndStatusIdOrderByIdDesc(ProviderId,typeId,statusId, pageRequest);
+    }
+    
+    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndSearch(long ProviderId,long typeId, long statusId, String keywords, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByProviderIdAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(ProviderId, typeId,statusId, keywords, pageRequest);
+    }
+    
+    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(long ProviderId,long typeId, long statusId, Date time, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByProviderIdAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(ProviderId,typeId, statusId, time, pageRequest);
+    }
+    
+    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(long ProviderId,long typeId, long statusId, Date time, String keywords, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByProviderIdAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(ProviderId, typeId,statusId, time, keywords, pageRequest);
     }
 }

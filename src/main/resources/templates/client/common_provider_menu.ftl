@@ -21,6 +21,7 @@
             </a>
               <div>
                 <a href="/provider/order/list/0">我的批发单</a>
+                <a href="/provider/disOrder/list/0">我的分销单</a>
                 <a href="/provider/goods/list">所有批发商品</a>
                 <a href="/provider/goods/wholesaling">选择批发商品</a>
               </div>

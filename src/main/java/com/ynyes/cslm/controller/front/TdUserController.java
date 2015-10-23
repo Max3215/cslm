@@ -1823,9 +1823,15 @@ public class TdUserController{
 
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
+        
         if (null != email && null != mobile) {
-            user.setRealName(realName);
-            user.setNickname(nickname);
+        	if(null != realName && !"".equals(realName.trim())){
+        		user.setRealName(realName);
+        	}
+
+        	if(null != nickname && !"".equals(nickname.trim())){
+        		user.setNickname(nickname);
+        	}
             user.setSex(sex);
             user.setEmail(email);
             user.setMobile(mobile);

@@ -11,14 +11,19 @@
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
 <!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
+<!--
 <script type="text/javascript" src="/client/js/common.js"></script>
+-->
 <script src="/client/js/mymember.js"></script>
+
+<script type="text/javascript" src="/client/js/swfupload.js"></script>
+<script type="text/javascript" src="/client/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="/client/js/swfupload.handlers.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
   
-navDownList("nav_down","li",".nav_show");
-  menuDownList("mainnavdown","#nav_down",".a2","sel");
+
  
 
   $(".float_box .ewm").hover(function(){
@@ -27,6 +32,35 @@ navDownList("nav_down","li",".nav_show");
     $(this).next().hide();
   })
 })
+
+$(function () {
+
+    //初始化上传控件
+    $(".upload-img").each(function () {
+        $(this).InitSWFUpload({ 
+            btntext : "更改展示图",
+            sendurl: "/client/upload", 
+            flashurl: "/mag/js/swfupload.swf"
+        });
+    });
+});
+
+</script>
+
+<script type="text/javascript">
+   function testImg(imageUrl)
+   {
+       var element = document.getElementsByName("imgUrl");
+       var oneElement = element[0];
+       imageUrl=$("#imageURL").attr("src");
+       if (null == imageUrl)
+        {
+            return;
+        }
+    $.post("/provider/edit/ImgUrl",{"imgUrl": imageUrl},function(date){
+       console.debug(date);
+    })
+   }
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -49,7 +83,12 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_info mymember_info01">
       <table>
         <tr>
-          <th width="150" rowspan="2"><a class="mymember_header" href="#"><img src="images/mymember/img01.jpg" /></a></th>
+          <th width="150" rowspan="2">
+                <a class="mymember_header test_img" href="#">
+                    <img class="test_img1"src="${provider.imageUri!'/mag/style/user_avatar.png'}" width="120" height="120"/>
+                </a>
+                <div style="margin-left:25px;margin-top:10px;" class="upload-box upload-img"></div>
+           </th>
           <td><a ><img src="/client/images/mymember/buy01.png" />待发货：<span>${total_undelivered!'0'}</span></a></td>
           <td><a ><img src="/client/images/mymember/buy02.png" />待收货：<span>${total_unreceived!'0'}</span></a></td>
           <th rowspan="2" class="mymember_fen add_width">

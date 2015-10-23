@@ -21,6 +21,7 @@
             <div>
                 <a href="/distributor/outOrder/list/0">我的销售单</a>
                 <a href="/distributor/inOrder/list/0">我的进货单</a>
+                <a href="/distributor/outOrder/list/0?typeId=2">分销订单</a>
             </div>
         </div><!--mymember_menu_part END-->
         <div class="mymember_menu_part"> 
