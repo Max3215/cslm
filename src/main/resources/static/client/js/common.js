@@ -196,6 +196,12 @@ function changeDistributor(){
 				alter(data.msg)
 			}
 			$("#mar_box").hide();
+			var url = window.location.href;          
+            if(undefined==url || ""==url){
+            	window.location.href="/";
+             }else{
+                 window.location.href = url; 
+             }
 		}
 	})
 	

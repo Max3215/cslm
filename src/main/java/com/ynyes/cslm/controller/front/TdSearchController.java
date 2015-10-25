@@ -97,6 +97,7 @@ public class TdSearchController {
             	key =new TdKeywords();
             	key.setTotalSearch(1L);
             	key.setTitle(keywords);
+            	key.setIsEnable(true);
             	key.setLastSearchTime(new Date());
             	key.setCreateTime(new Date());
             	tdKeywordsService.save(key);
