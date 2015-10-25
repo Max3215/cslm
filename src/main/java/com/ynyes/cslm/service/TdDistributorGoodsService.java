@@ -739,7 +739,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId,  "[" + catId + "]", priceLow, priceHigh, paramStr,
+	            		 distributorId,  "%[" + catId + "]%", priceLow, priceHigh, paramStr,
 	                    pageRequest);
 	}
 	
@@ -760,7 +760,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId, "[" + catId + "]", priceLow, priceHigh, paramStr,
+	            		 distributorId, "%[" + catId + "]%", priceLow, priceHigh, paramStr,
 	                    pageRequest);
 	}
 	
@@ -783,7 +783,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
-	            		 distributorId,  "[" + catId + "]", priceLow, priceHigh, paramStr,
+	            		 distributorId,  "%[" + catId + "]%", priceLow, priceHigh, paramStr,
 	                    pageRequest);
 	}
 	
@@ -804,7 +804,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
-	            		 distributorId,  "[" + catId + "]", priceLow, priceHigh, paramStr,
+	            		 distributorId,  "%[" + catId + "]%", priceLow, priceHigh, paramStr,
 	                    pageRequest);
 	}
 	
@@ -827,7 +827,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId, "[" + catId + "]", brandId, priceLow, priceHigh,
+	            		 distributorId, "%[" + catId + "]%", brandId, priceLow, priceHigh,
 	                    paramStr, pageRequest);
 	}
 	
@@ -847,7 +847,7 @@ public class TdDistributorGoodsService {
 	    }
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId,  "[" + catId + "]", brandId, priceLow, priceHigh,
+	            		 distributorId,  "%[" + catId + "]%", brandId, priceLow, priceHigh,
 	                    paramStr, pageRequest);
 	}
 	
@@ -867,7 +867,7 @@ public class TdDistributorGoodsService {
 	    }
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
-	            		 distributorId, "[" + catId + "]", brandId, priceLow, priceHigh,
+	            		 distributorId, "%[" + catId + "]%", brandId, priceLow, priceHigh,
 	                    paramStr, pageRequest);
 	}
 	
@@ -887,7 +887,7 @@ public class TdDistributorGoodsService {
 	    }
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
-	            		 distributorId, "[" + catId + "]", brandId, priceLow, priceHigh,
+	            		 distributorId, "%[" + catId + "]%", brandId, priceLow, priceHigh,
 	                    paramStr, pageRequest);
 	}
 	
@@ -912,7 +912,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId, "[" + catId + "]", paramStr, pageRequest);
+	            		 distributorId, "%[" + catId + "]%", paramStr, pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
@@ -933,7 +933,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId, "[" + catId + "]", paramStr, pageRequest);
+	            		 distributorId, "%[" + catId + "]%", paramStr, pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
@@ -954,7 +954,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId, "[" + catId + "]", paramStr, pageRequest);
+	            		 distributorId, "%[" + catId + "]%", paramStr, pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
@@ -975,7 +975,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
-	            		 distributorId, "[" + catId + "]", paramStr, pageRequest);
+	            		 distributorId, "%[" + catId + "]%", paramStr, pageRequest);
 	}
 	
 	
@@ -997,7 +997,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId, "[" + catId + "]", brandId, paramStr, pageRequest);
+	            		 distributorId, "%[" + catId + "]%", brandId, paramStr, pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
@@ -1017,7 +1017,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
-	            		 distributorId, "[" + catId + "]", brandId, paramStr, pageRequest);
+	            		 distributorId, "%[" + catId + "]%", brandId, paramStr, pageRequest);
 	}
 
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
@@ -1037,7 +1037,7 @@ public class TdDistributorGoodsService {
 	
 	    return repository
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
-	            		 distributorId, "[" + catId + "]", brandId, paramStr, pageRequest);
+	            		 distributorId, "%[" + catId + "]%", brandId, paramStr, pageRequest);
 	}
 
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
@@ -1057,7 +1057,7 @@ public class TdDistributorGoodsService {
 
     return repository
             .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
-                  distributorId,  "[" + catId + "]", brandId, paramStr, pageRequest);
+                  distributorId,  "%[" + catId + "]%", brandId, paramStr, pageRequest);
 	} 
     
     
