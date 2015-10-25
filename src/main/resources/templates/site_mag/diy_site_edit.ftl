@@ -139,7 +139,7 @@ $(function () {
   <dl>
     <dt>虚拟账号余额</dt>
     <dd>
-        <input name="virtualMoney" type="text" value="<#if diy_site??>${diy_site.virtualMoney?string("0.00")}</#if>" class="input normal" sucmsg=" "> 
+        <input name="virtualMoney" type="text" value="<#if diy_site?? && diy_site.virtualMoney??>${diy_site.virtualMoney?string("0.00")}<#else>0</#if>" class="input normal" sucmsg=" "> 
         <span class="Validform_checktip">*账号余额</span>
     </dd>
   </dl>
