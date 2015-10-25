@@ -2057,8 +2057,10 @@ public class TdDistributorController {
              // 扣除超市虚拟账户
              distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
      		tdDistributorService.save(distributor);
-     		
-     		
+     		if(null == provider.getVirtualMoney()){
+     			provider.setVirtualMoney(new Double(0));
+     		}
+     		System.err.println("max----"+provider.getVirtualMoney());
      		provider.setVirtualMoney(provider.getVirtualMoney()+tdOrder.getTotalGoodsPrice());
      		tdProviderService.save(provider);
      		

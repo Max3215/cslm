@@ -18,7 +18,7 @@
                         <dt>${item.title!''}</dt>
                         <#if ("second_level_"+item_index+"_category_list")?eval??>
                             <#list ("second_level_"+item_index+"_category_list")?eval as second_item>
-                                <dd><a href="/info/content/${second_item.id?c}?mid=12">${second_item.title!''}</a></dd>
+                                <dd><a href="/info/content/${second_item.id?c}?mid=12" target="_blank">${second_item.title!''}</a></dd>
                             </#list>
                          </#if>
                     </dl>
@@ -34,11 +34,11 @@
                 友情链接：
                 <#if site_link_list??>
                 <#list site_link_list as item>
-                    <a href="${item.linkUri!''}">${item.title!''}<span>丨</span></a>
+                    <a href="${item.linkUri!''}" target="_blank">${item.title!''}<span>丨</span></a>
                 </#list>
                 </#if>
             </menu>
             <p class="copyright"> ${site.copyright!''}<br>
-            技术支持：<a href="http://www.ynyes.com">昆明天度网络信息技术有限公司</a></p>
+            技术支持：<a href="http://www.ynyes.com" target="_blank">昆明天度网络信息技术有限公司</a></p>
         </div>
     </footer>

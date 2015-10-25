@@ -55,14 +55,14 @@ $(function () {
     <dl>
         <dt>批发商名称</dt>
         <dd>
-            <input name="title" type="text" value="<#if provider??>${provider.title!""}</#if>" class="input normal" ajaxurl="/Verwalter/provider/check/title" datatype="s" sucmsg=" ">
+            <input name="title" type="text" value="<#if provider??>${provider.title!""}</#if>" class="input normal" <#if provider??><#else>ajaxurl="/Verwalter/provider/check/title"</#if> datatype="s" sucmsg=" ">
             <span class="Validform_checktip">*批发商名称</span>
         </dd>
     </dl>
     <dl>
         <dt>登录名</dt>
         <dd>
-            <input name="username" type="text" value="<#if provider??>${provider.username!""}</#if>" class="input normal" ajaxurl="/Verwalter/provider/check/username" datatype="s" sucmsg=" ">
+            <input name="username" type="text" value="<#if provider??>${provider.username!""}</#if>" class="input normal" <#if provider??><#else>ajaxurl="/Verwalter/provider/check/username"</#if> datatype="s" sucmsg=" ">
             <span class="Validform_checktip">*登录账号</span>
         </dd>
     </dl>
@@ -90,7 +90,7 @@ $(function () {
     <dl>
         <dt>虚拟账号</dt>
         <dd>
-            <input name="virtualAccount" type="text" value="<#if provider??>${provider.virtualAccount!""}</#if>" class="input normal" ajaxurl="/Verwalter/provider/check/virtualAccount"  datatype="*6-20" sucmsg=" ">
+            <input name="virtualAccount" type="text" value="<#if provider??>${provider.virtualAccount!""}</#if>" class="input normal" <#if provider??><#else>ajaxurl="/Verwalter/provider/check/virtualAccount"</#if>  datatype="*6-20" sucmsg=" ">
             <span class="Validform_checktip">*与平台进行交易结算</span>
         </dd>
     </dl>

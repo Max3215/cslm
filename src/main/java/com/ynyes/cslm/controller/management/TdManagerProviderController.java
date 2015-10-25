@@ -200,6 +200,10 @@ public class TdManagerProviderController {
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         
+        if(null == tdProvider.getVirtualMoney() || "".equals(tdProvider.getVirtualMoney())){
+        	tdProvider.setVirtualMoney(new Double(0));
+        }
+        
         if (null == tdProvider.getId())
         {
             tdManagerLogService.addLog("add", "用户修改供应商", req);
@@ -208,7 +212,7 @@ public class TdManagerProviderController {
         {
             tdManagerLogService.addLog("edit", "用户修改供应商", req);
         }
-        
+        System.err.println(tdProvider.getMobile());
         tdProviderService.save(tdProvider);
         
         return "redirect:/Verwalter/provider/list";
