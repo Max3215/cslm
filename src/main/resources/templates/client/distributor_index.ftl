@@ -90,7 +90,7 @@ DD_belatedPNG.fix('.,img,background');
           <td><a ><img src="/client/images/mymember/buy02.png" />待发货：<span>${total_undelivered!'0'}</span></a></td>
           <td><a ><img src="/client/images/mymember/buy03.png" />待收货：<span>${total_unreceived!'0'}</span></a></td>
           <th rowspan="2" class="mymember_fen add_width">
-            <a ><img src="/client/images/mymember/buy05.png" /><p>账户余额：<span>${distributor.virtualMoney?string('0.00')}</span></p></a>
+            <a ><img src="/client/images/mymember/buy05.png" /><p>账户余额：<span><#if distributor.virtualMoney??>${distributor.virtualMoney?string('0.00')}<#else>0</#if></span></p></a>
           </th>
         </tr>
         <tr>

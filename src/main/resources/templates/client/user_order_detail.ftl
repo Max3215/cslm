@@ -40,7 +40,7 @@ $(document).ready(function(){
 })
 
 //确认收货
-function OrderService(oid) {
+function orderService(oid) {
     var dialog = $.dialog.confirm('操作提示信息：<br />确认已经收到商品？', function () {
         
         //发送AJAX请求
