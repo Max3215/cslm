@@ -155,7 +155,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/onsale?page=${page-1}">${page}</a>
+                                <a href="/provider/goods/wholesaling?page=${page-1}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
