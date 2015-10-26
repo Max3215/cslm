@@ -396,14 +396,6 @@
                                 <p class="name">待付款</p>
                             </span>
                         </div>
-                        <#if order.totalLeftPrice?? && order.totalLeftPrice gt 0>
-                            <div class="order-flow-wait">
-                                <a class="order-flow-input"></a>
-                                <span>
-                                    <p class="name">待付尾款</p>
-                                </span>
-                            </div>
-                        </#if>
                         <div class="order-flow-wait">
                             <a class="order-flow-input"></a>
                             <span>
@@ -438,14 +430,6 @@
                                 <p>${order.payTime!""}</p>
                             </span>
                         </div>
-                        <#if order.totalLeftPrice?? && order.totalLeftPrice gt 0>
-                            <div class="order-flow-wait">
-                                <a class="order-flow-input"></a>
-                                <span>
-                                    <p class="name">待付尾款</p>
-                                </span>
-                            </div>
-                        </#if>
                         <div class="order-flow-wait">
                             <a class="order-flow-input"></a>
                             <span>
@@ -480,16 +464,7 @@
                                 <p>${order.payTime!""}</p>
                             </span>
                         </div>
-                        <#if order.totalLeftPrice?? && order.totalLeftPrice gt 0>
-                            <div class="order-flow-arrive">
-                                <a class="order-flow-input"></a>
-                                <span>
-                                    <p class="name">已付尾款</p>
-                                    <p>${order.payLeftTime!''}</p>
-                                </span>
-                            </div>
-                        </#if>
-                        <div class="order-flow-wait">
+                        <div class="order-flow-arrive">
                             <a class="order-flow-input"></a>
                             <span>
                                 <p class="name">待发货</p>
@@ -523,15 +498,6 @@
                                 <p>${order.payTime!""}</p>
                             </span>
                         </div>
-                        <#if order.totalLeftPrice?? && order.totalLeftPrice gt 0>
-                            <div class="order-flow-arrive">
-                                <a class="order-flow-input"></a>
-                                <span>
-                                    <p class="name">已付尾款</p>
-                                    <p>${order.payLeftTime!''}</p>
-                                </span>
-                            </div>
-                        </#if>
                         <div class="order-flow-arrive">
                             <a class="order-flow-input"></a>
                             <span>
@@ -539,7 +505,7 @@
                                 <p>${order.serviceTime!''}</p>
                             </span>
                         </div>
-                        <div class="order-flow-wait">
+                        <div class="order-flow-arrive">
                             <a class="order-flow-input"></a>
                             <span>
                                 <p class="name">待评价</p>
@@ -566,15 +532,6 @@
                                 <p>${order.payTime!""}</p>
                             </span>
                         </div>
-                        <#if order.totalLeftPrice?? && order.totalLeftPrice gt 0>
-                            <div class="order-flow-arrive">
-                                <a class="order-flow-input"></a>
-                                <span>
-                                    <p class="name">已付尾款</p>
-                                    <p>${order.payLeftTime!''}</p>
-                                </span>
-                            </div>
-                        </#if>
                         <div class="order-flow-arrive">
                             <a class="order-flow-input"></a>
                             <span>

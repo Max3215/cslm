@@ -15,10 +15,14 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+
+<link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
 <script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#orderService").click(function(){orderService();});
+
      $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){
             $(this).next().slideDown(300);
@@ -40,25 +44,26 @@ $(document).ready(function(){
 })
 
 //确认收货
-function orderService(oid) {
+function orderService() {
     var dialog = $.dialog.confirm('操作提示信息：<br />确认已经收到商品？', function () {
+    var oid = $("#orderId").val(); 
         
         //发送AJAX请求
         $.ajax({
             type : "post",
+            data : {"orderId":oid},
             url : "/user/order/param",
-            data : {"orderId":oid}
             dataType : "json",
              error: function (XMLHttpRequest, textStatus, errorThrown) {
                     $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, dialog);
              },
              success: function (data) {
-            console.debug(data)
+            
                 if (data.code == 0) {
-                    winObj.close();
+                    dialog.close();
                     $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
                 } else {
-                    $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
+                    $.dialog.alert('错误提示：' + data.message, function () { }, dialog);
                 }
             }
         });
@@ -94,16 +99,16 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_info mymember_info04">
       <h3>订单详细</h3>
       <dl>
-        <dt>订单编号：${order.orderNumber!''}&nbsp;&nbsp;&nbsp;&nbsp; 当前进度：
+        <dt>订单编号：${order.orderNumber!''}<input type="hidden" value="${order.id?c}" id="orderId">&nbsp;&nbsp;&nbsp;&nbsp; 当前进度：
             <#if order??>
                 <#if order.statusId==1>
                     待确认
                 <#elseif order.statusId==2>
                     待付款
                 <#elseif order.statusId==3>
-                    待付尾款
+                    待发货
                 <#elseif order.statusId==4>
-                    待服务
+                    待收货
                 <#elseif order.statusId==5>
                     待评价
                 <#elseif order.statusId==6>
@@ -122,7 +127,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#elseif order.statusId==3>
                     亲爱的客户，您以成功支付，我们将尽快为您发货。
                 <#elseif order.statusId==4>
-                    亲爱的客户，已经为您发货，请您&nbsp;<span><a style="color:#F00;" href="javascript:orderService(${order.id?c})">确认收货</a></span>。
+                    亲爱的客户，已经为您发货，请您&nbsp;<span><a style="color:#F00;" id="orderService">确认收货</a></span>。
                 <#elseif order.statusId==5>
                     亲爱的客户，您已消费成功，您可以&nbsp;<span><a style="color:#F00;" href="/user/comment/list">发表评论</a></span>。
                 <#elseif order.statusId==6>
@@ -135,20 +140,20 @@ DD_belatedPNG.fix('.,img,background');
       </dl>
       <div class="mymember_green">
          <#if order??>
-            <#if order.statusId==2>
-                <p><i></i>订单付款</p>
+            <#if order.statusId==3>
+                <p class="mysel"><i></i>订单付款</p>
                 <p><i></i><b></b>发货</p>
                 <p><i></i><b></b>确认收货</p>
                 <p><i></i><b></b>完成</p>
-            <#elseif order.statusId==3>
+            <#elseif order.statusId==4>
                 <p class="mysel"><i></i>订单付款</p>
-                <p><i></i><b></b>发货</p>
+                <p class="mysel"><i></i><b></b>发货</p>
                 <p><i></i><b></b>确认收货</p>
                 <p><i></i><b></b>完成</p>
             <#elseif order.statusId==5>
                 <p class="mysel"><i></i>订单付款</p>
                 <p class="mysel"><i></i><b></b>发货</p>
-                <p><i></i><b></b>确认收货</p>
+                <p class="mysel"><i></i><b></b>确认收货</p>
                 <p><i></i><b></b>完成</p>
             <#elseif order.statusId==6>
                 <p class="mysel"><i></i>订单付款</p>
