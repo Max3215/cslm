@@ -65,7 +65,7 @@ function subDisGoods(){
         alert("请输入商品批发价");
         return ;
     }
-    console.debug(leftNumber)
+    
     if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber))
     {
         alert("请输入库存数量");
