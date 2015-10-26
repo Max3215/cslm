@@ -503,6 +503,7 @@ public class TdManagerDistributorController {
          map.addAttribute("__EVENTTARGET", __EVENTTARGET);
          map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
          map.addAttribute("__VIEWSTATE", __VIEWSTATE);
+         map.addAttribute("category_list", tdProductCategoryService.findAll());
          
          if(null != id)
          {
