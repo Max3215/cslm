@@ -1,12 +1,27 @@
     <div class="mymember_order_search"> 
         <h3>批发商的商品</h3>
-        <input class="mysub" type="submit" onclick="searchGoods(${page!'0'})" value="查询" />
+        <form action="/distributor/goods/list" id="form">
+        <input type="hidden" value="${page!'0'}" name="page"/>
+        <input class="mysub" type="submit" value="查询" />
         <#--
         <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
         <input class="mytext" type="text" onFocus="if(value=='批发商') {value=''}" onBlur="if (value=='') {value='批发商'}"  value="批发商" style="width:150px;" />
         -->
         <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
-    
+        <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods()">
+            <option value="">选择批发商</option>
+            <#if provider_list??>
+                <#list provider_list as c>
+                    <option value="${c.id?c}" <#if providerId?? && providerId==c.id>selected="selected"</#if>>${c.title!""}</option>
+                </#list>
+            </#if>
+        </select>
+        <select  id="isDistribution" name="isDistribution" class="myselect" onchange="searchGoods()">
+           <option value="">是否分销</option>
+            <option value="isDistribution" <#if distribution?? && distribution=="isDistribution">selected="selected"</#if>>分销</option>
+            <option value="isNotDistribution" <#if distribution?? && distribution=="isNotDistribution">selected="selected"</#if>>未分销</option>
+        </select>
+        </form>
         <div class="clear"></div>
     </div>
     <table>
@@ -81,6 +96,10 @@ function addDistribution(pid)
     
     $('.sub_form').css('display','block');
 }
+ 
+function searchGoods(){
+    $("#form").submit();
+}  
     
 function subDistribution(){
     var goodsId = $("#goodsId").val();
@@ -109,7 +128,6 @@ function subDistribution(){
             alert(data.msg);
         }
     })
-    
 }
 </script>
         

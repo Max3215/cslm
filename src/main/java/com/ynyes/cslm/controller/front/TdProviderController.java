@@ -31,6 +31,7 @@ import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdUserPointService;
@@ -73,6 +74,9 @@ public class TdProviderController {
 	
 	@Autowired
 	TdUserService tdUserService;
+
+	@Autowired
+	TdProductCategoryService tdProductCategoryService;
 	
 	@RequestMapping(value="/index")
 	public String providerIndex(HttpServletRequest req,ModelMap map)
@@ -709,7 +713,11 @@ public class TdProviderController {
 	 * @return
 	 */
 	@RequestMapping(value="/goods/list")
-	public String goodsList(Integer page,HttpServletRequest req,ModelMap map)
+	public String goodsList(Integer page,
+			Long categoryId,
+			String isDistribution,
+			String keywords,
+			HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("provider");
 		if(null == username)
@@ -722,10 +730,82 @@ public class TdProviderController {
 		}
 		tdCommonService.setHeader(map, req);
 		TdProvider provider = tdProviderService.findByUsername(username);
+
+		// 参数注回
 		map.addAttribute("provider", provider);
 		map.addAttribute("page", page);
-		map.addAttribute("provider_goods_page",
-				tdProviderGoodsService.findByProviderId(provider.getId(),page,ClientConstant.pageSize));
+		map.addAttribute("keywords", keywords);
+		map.addAttribute("categoryId", categoryId);
+		map.addAttribute("distribution",isDistribution); 
+		
+		map.addAttribute("category_list",tdProductCategoryService.findAll());
+		
+		if(null ==categoryId)
+		{
+			if("isDistribution".equalsIgnoreCase(isDistribution))
+			{
+				if(null == keywords){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),true, page, ClientConstant.pageSize));
+				}else{
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, true, page, ClientConstant.pageSize));
+				}
+			}
+			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+			{
+				if(null == keywords){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),false, page, ClientConstant.pageSize));
+				}else{
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, false, page, ClientConstant.pageSize));
+				}
+			}
+			else
+			{
+				if(null == keywords){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderId(provider.getId(),page,ClientConstant.pageSize));
+				}else{
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndKeywords(provider.getId(), keywords, page, ClientConstant.pageSize));
+				}
+			}
+		}
+		else
+		{
+			if("isDistribution".equalsIgnoreCase(isDistribution))
+			{
+				if(null == keywords){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, true, page, ClientConstant.pageSize));
+				}else{
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, true, page, ClientConstant.pageSize));
+				}
+			}
+			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+			{
+				if(null == keywords){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, false, page, ClientConstant.pageSize));
+				}else{
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, false, page, ClientConstant.pageSize));
+				}
+			}
+			else
+			{
+				if(null == keywords){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndCategoryId(provider.getId(), categoryId, page, ClientConstant.pageSize));
+				}else{
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywords(provider.getId(), categoryId, keywords, page, ClientConstant.pageSize));
+				}
+			}
+		}
 		
 		return "/client/provider_goods";
 	}
@@ -777,7 +857,7 @@ public class TdProviderController {
 	}
 	
 	@RequestMapping(value="/goods/wholesaling")
-	public String wholesaling(Integer page,HttpServletRequest req,ModelMap map)
+	public String wholesaling(Integer page,Long categoryId,String keywords,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("provider");
 		if(null == username)
@@ -789,8 +869,38 @@ public class TdProviderController {
 		{
 			page = 0;
 		}
-		map.addAttribute("goods_page",
-				tdGoodsService.findByIsOnSaleTrueOrderBySortIdAsc(page, 10));
+		
+		map.addAttribute("page", page);
+		map.addAttribute("categoryId",categoryId);
+		map.addAttribute("keywords",keywords);
+		
+		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		if(null == categoryId){
+			if(null == keywords)
+			{
+				map.addAttribute("goods_page",
+						tdGoodsService.findByIsOnSaleTrueOrderBySortIdAsc(page, 10));
+			}
+			else
+			{
+				map.addAttribute("goods_page",
+						tdGoodsService.searchAndIsOnSaleTrueOrderBySortIdAsc(keywords, page, 10));
+			}
+		}
+		else
+		{
+			if(null == keywords)
+			{
+				map.addAttribute("goods_page", 
+						tdGoodsService.findByCategoryIdAndIsOnSaleTrue(categoryId, page, 10));
+			}
+			else
+			{
+				map.addAttribute("goods_page", 
+						tdGoodsService.searchAndFindByCategoryIdAndIsOnSaleTrueOrderBySortIdAsc(keywords, categoryId, page, 10));
+			}
+		}
+		
 		return "/client/provider_goods_onsale";
 	}
 	
@@ -830,6 +940,8 @@ public class TdProviderController {
 			proGoods.setLeftNumber(leftNumber);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setIsOnSale(true);
+			proGoods.setCategoryId(goods.getCategoryId());
+			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
 		}
 		else
 		{

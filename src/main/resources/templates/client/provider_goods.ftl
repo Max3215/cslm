@@ -40,6 +40,10 @@ function deleteCheck(){
     $("#form").submit();
 }  
 
+function searchGoods(){
+    $("#form1").submit();
+}
+
 function deletegoods(id,page){
     $.ajax({
         url : "/provider/goods/delete",
@@ -63,7 +67,6 @@ DD_belatedPNG.fix('.,img,background');
 </head>
 <body>
 
-<form action="/provider/goods/deleteCheck" method="post" id="form">
 <div class="myclear"></div>
 <div class="mymember_out">
     <div class="mymember_main">
@@ -73,18 +76,35 @@ DD_belatedPNG.fix('.,img,background');
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
                     <h3>批发中的商品</h3>
-                      <#--
-                      <input class="mysub" type="submit" value="查询" />
-                      <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
-                      <input class="mytext" type="text" onFocus="if(value=='商品编码') {value=''}" onBlur="if (value=='') {value='商品编码'}"  value="商品编码" style="width:150px;" />
-                      <input class="mytext" type="text" onFocus="if(value=='商品名称') {value=''}" onBlur="if (value=='') {value='商品名称'}"  value="商品名称" />
-                        -->
+                      <form action="/provider/goods/list" id="form1">
+                            <input type="hidden" value="${page!'0'}" name="page"/>
+                            <input class="mysub" type="submit" value="查询" />
+                            <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
+                            <select  id="categoryId" name="categoryId" class="myselect" onchange="searchGoods()">
+                                <option value="">请选择类别...</option>
+                                <#if category_list??>
+                                    <#list category_list as c>
+                                        <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                                    </#list>
+                                </#if>
+                            </select>
+                            <select  id="isDistribution" name="isDistribution" class="myselect" onchange="searchGoods()">
+                               <option value="">是否分销</option>
+                                <option value="isDistribution" <#if distribution?? && distribution=="isDistribution">selected="selected"</#if>>分销</option>
+                                <option value="isNotDistribution" <#if distribution?? && distribution=="isNotDistribution">selected="selected"</#if>>未分销</option>
+                            </select>
+                        </form>
                     <div class="clear"></div>
                 </div>
                 
+                <form action="/provider/goods/deleteCheck" method="post" id="form">
+                <input type="hidden" name="page" value="${page!'0'}"/>
+                <input type="hidden" name="categoryId" value="${categoryId!''}"/>
+                <input type="hidden" name="keywords" value="${keywords!''}"/>
                 <div id="dis_goods_list">
                     <#include "/client/provider_goods_list.ftl">
                 </div>
+                </form>
             <div class="myclear" style="height:10px;"></div>
 
             <div class="mymember_page">
@@ -118,7 +138,6 @@ DD_belatedPNG.fix('.,img,background');
   <!--mymember_main END-->
   <div class="myclear"></div>
 </div>
-</form>
 <!--mymember END-->
 <div class="clear"></div>
     <#include "/client/common_footer.ftl">

@@ -234,9 +234,41 @@ public class TdProviderGoodsService {
 		return repository.findByProviderIdAndGoodsTitleLikeOrProviderIdAndSubGoodsTitleLike(providerId, "%"+keywords+"%", providerId, "%"+keywords+"%", pageRequest);
 	}
 	
+	public Page<TdProviderGoods> findByProviderIdAndCategoryIdAndIsDistribution(Long providerId,Long catId,Boolean isDistribution,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndIsDistribution(providerId,catStr, isDistribution, pageRequest);
+	}
 	
+	public Page<TdProviderGoods> searchAndProviderIdAndCategoryIdAndIsDistribution(Long providerId,String keywords,Long catId,Boolean isDistribution,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsDistribution(
+																providerId,catStr, "%"+keywords+"%", isDistribution,
+																providerId,catStr, "%"+keywords+"%", isDistribution, pageRequest);
+	}
 	
+	public Page<TdProviderGoods> findByProviderIdAndCategoryId(Long providerId,Long catId,int page ,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		if(null ==providerId)
+		{
+			return null;
+		}
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLike(providerId, catStr, pageRequest);
+	}
 	
+	public Page<TdProviderGoods> searchAndProviderIdAndCategoryIdAndKeywords(Long providerId,Long catId,String keywords,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrProviderIdCategoryIdTreeLikeAndSubGoodsTitleLike(
+															providerId,catStr, "%"+keywords+"%", 
+															providerId,catStr, "%"+keywords+"%", pageRequest);
+	}
 	
 	
 	

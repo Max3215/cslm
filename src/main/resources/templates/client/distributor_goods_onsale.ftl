@@ -87,6 +87,11 @@ function subDisGoods(){
     
 }
 
+function search(){
+    $("#form1").submit();
+}
+
+
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -109,12 +114,25 @@ DD_belatedPNG.fix('.,img,background');
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
           <h3>平台中的商品</h3>
+            <form action="/distributor/goods/onsale" id="form1">
+              <input type="hidden" value="${page!'0'}" name="page">
+              <input class="mysub" type="submit" value="查询"/>
           <#--
-              <input class="mysub" type="submit" value="查询" />
               <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
               <input class="mytext" type="text" onFocus="if(value=='商品编码') {value=''}" onBlur="if (value=='') {value='商品编码'}"  value="商品编码" style="width:150px;" />
-              <input class="mytext" type="text" onFocus="if(value=='商品名称') {value=''}" onBlur="if (value=='') {value='商品名称'}"  value="商品名称" />
             -->
+              <input class="mytext" type="text"   value="${keywords!''}" name="keywords" id="keywords" />
+             <select  id="categoryId" name="categoryId" class="myselect" onchange="search()">
+                    <#if !categoryId??>
+                    <option value="">请选择类别...</option>
+                    </#if>
+                    <#if category_list??>
+                        <#list category_list as c>
+                            <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                        </#list>
+                    </#if>
+                </select>
+              </form>
           <div class="clear"></div>
         </div>
         <table>
@@ -148,7 +166,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/onsale?page=${page-1}">${page}</a>
+                                <a href="/distributor/goods/onsale?page=${page-1}&keywords=${keywords!''}&categoryId=${categoryId!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

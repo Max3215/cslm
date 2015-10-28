@@ -38,7 +38,11 @@ $(document).ready(function(){
 //上架/下架多个商品
 function onsaleAll(){
     $("#form").submit();
-}   
+}  
+
+function searchSale(){
+    $("#form1").submit();
+} 
 
 function editPrice(dgId,page){
     var goodsTitle = $("#title"+dgId).html();
@@ -93,7 +97,7 @@ DD_belatedPNG.fix('.,img,background');
 </head>
 <body>
 
-<form action="/distributor/onsaleAll/${isOnSale?c}" method="post" id="form">
+
 <div class="myclear"></div>
 <div class="mymember_out">
     <div class="mymember_main">
@@ -103,18 +107,36 @@ DD_belatedPNG.fix('.,img,background');
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
                     <h3><#if isOnSale>出售中的商品<#else>仓库中的商品</#if></h3>
-                      <#--
-                      <input class="mysub" type="submit" value="查询" />
-                      <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
-                      <input class="mytext" type="text" onFocus="if(value=='商品编码') {value=''}" onBlur="if (value=='') {value='商品编码'}"  value="商品编码" style="width:150px;" />
-                      <input class="mytext" type="text" onFocus="if(value=='商品名称') {value=''}" onBlur="if (value=='') {value='商品名称'}"  value="商品名称" />
-                        -->
+                         <form action="/distributor/goods/sale/${isOnSale?c}" id="form1"> 
+                          <input class="mysub" type="submit" value="查询" />
+                          <#--
+                          <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
+                          <input class="mytext" type="text" onFocus="if(value=='商品编码') {value=''}" onBlur="if (value=='') {value='商品编码'}"  value="商品编码" style="width:150px;" />
+                            -->
+                          <input class="mytext" type="text" name="keywords"  value="${keywords!''}" id="keywords" />
+                          <input type="hidden" name="page" value="${page!'0'}"/>
+                          <select  id="categoryId" name="categoryId" class="myselect" onchange="searchSale()">
+                                <#if !categoryId??>
+                                <option value="">请选择类别...</option>
+                                </#if>
+                                <#if category_list??>
+                                    <#list category_list as c>
+                                        <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                                    </#list>
+                                </#if>
+                            </select>
+                          </form>
                     <div class="clear"></div>
                 </div>
                 
+                <form action="/distributor/onsaleAll/${isOnSale?c}" method="post" id="form">
+                <input type="hidden" name="page" value="${page!'0'}"/>
+                <input type="hidden" name="categoryId" value="${categoryId!''}"/>
+                <input type="hidden" name="keywords" value="${keywords!''}"/>
                 <div id="dis_goods_list">
                     <#include "/client/distributor_goods_list.ftl">
                 </div>
+                </form>
             <div class="myclear" style="height:10px;"></div>
 
             <div class="mymember_page">
@@ -132,7 +154,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == dis_goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/sale/${isOnSale?c}?page=${page-1}">${page}</a>
+                                <a href="/distributor/goods/sale/${isOnSale?c}?page=${page-1}&keywords=${keywords!''}&categoryId=${categoryId!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -153,7 +175,6 @@ DD_belatedPNG.fix('.,img,background');
   <!--mymember_main END-->
   <div class="myclear"></div>
 </div>
-</form>
 <!--mymember END-->
 <div class="clear"></div>
     <#include "/client/common_footer.ftl">

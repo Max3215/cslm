@@ -113,6 +113,35 @@ public interface TdProviderGoodsRepo extends
 																						String keywords2,
 																						Pageable page);
 	
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.isDistribution=?3")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndIsDistribution(Long providerId,String catId,Boolean isDistribution,Pageable page);
+	
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.goodsTitle like ?3 and pg.isDistribution=?4 "
+															+ "or p.id=?5 and pg.categoryIdTree like ?6 and pg.subGoodsTitle like ?7 and pg.isDistribution=?8")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsDistribution(
+																						Long providerId,String catStr1,
+																						String keywords,
+																						Boolean isDistribution,
+																						Long providerId2,String catStr2,
+																						String keywords2,
+																						Boolean isDistribution2,
+																						Pageable page);
+	
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 order by pg.id DESC")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLike(long providerId,String catStr,Pageable page);
+	
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.goodsTitle like ?3 "
+															+ "or p.id=?4 and pg.categoryIdTree like ?5 and pg.subGoodsTitle like ?6")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrProviderIdCategoryIdTreeLikeAndSubGoodsTitleLike(
+																						Long providerId,String catStr1,
+																						String keywords,
+																						Long providerId2,String catStr2,
+																						String keywords2,
+																						Pageable page);
+	
+	
+	
+	
 	
 	
 	

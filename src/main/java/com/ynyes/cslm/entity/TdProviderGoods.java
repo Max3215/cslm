@@ -35,6 +35,14 @@ public class TdProviderGoods {
 	@Column
 	private String providerTitle;
 	
+	// 商品类型
+	@Column
+	private Long categoryId;
+	
+	// 商品所有类型
+    @Column
+    private String categoryIdTree;
+	
 	// 商品封面图片
 	@Column
 	private String goodsCoverImageUri;
@@ -96,6 +104,22 @@ public class TdProviderGoods {
 
 	public String getSubGoodsTitle() {
 		return subGoodsTitle;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getCategoryIdTree() {
+		return categoryIdTree;
+	}
+
+	public void setCategoryIdTree(String categoryIdTree) {
+		this.categoryIdTree = categoryIdTree;
 	}
 
 	public void setSubGoodsTitle(String subGoodsTitle) {

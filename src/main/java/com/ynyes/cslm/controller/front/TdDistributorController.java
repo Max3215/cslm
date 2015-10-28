@@ -43,6 +43,7 @@ import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
@@ -91,6 +92,9 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdSettingService tdSettingService;
+	
+	@Autowired
+	TdProductCategoryService tdProductCategoryService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -655,7 +659,7 @@ public class TdDistributorController {
 	 * @return
 	 */
 	@RequestMapping(value="/goods/sale/{isSale}", method= RequestMethod.GET)
-	public String disGoodsSale(@PathVariable Boolean isSale, Integer page,HttpServletRequest req,ModelMap map)
+	public String disGoodsSale(@PathVariable Boolean isSale,Long categoryId,String keywords, Integer page,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
@@ -669,11 +673,39 @@ public class TdDistributorController {
 			page = 0;
 		}
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		
-		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), isSale, page, 10));
 
 		map.addAttribute("isOnSale", isSale);
 		map.addAttribute("page",page);
+		map.addAttribute("keywords", keywords);
+		map.addAttribute("categoryId", categoryId);
+		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		
+		if(null == categoryId)
+		{
+			if(null == keywords || "".equals(keywords))
+			{
+				map.addAttribute("dis_goods_page",
+						tdDistributorService.findByIdAndIsOnSale(distributor.getId(), isSale, page, 10));
+			}
+			else
+			{
+				map.addAttribute("dis_goods_page",
+						tdDistributorGoodsService.searchAndIsOnSale(keywords, isSale, page, 10));
+			}
+		}
+		else
+		{
+			if(null == keywords)
+			{
+				map.addAttribute("dis_goods_page", 
+						tdDistributorGoodsService.findByCategoryIdAndIsOnSale(categoryId, isSale, page, 10));
+			}
+			else
+			{
+				map.addAttribute("dis_goods_page", 
+						tdDistributorGoodsService.searchAndCategoryIdAndIsOnSale(categoryId, keywords, isSale, page, 10));
+			}
+		}
 		
 		return "/client/distributor_goods";
 	}
@@ -688,7 +720,9 @@ public class TdDistributorController {
 	 * @return
 	 */
 	@RequestMapping(value="/goods/onsale/{disId}")
-	public String disGoodsIsOnSale(@PathVariable Long disId,Boolean type,Integer page,HttpServletRequest req,ModelMap map)
+	public String disGoodsIsOnSale(@PathVariable Long disId,
+						Boolean type,Integer page,
+						HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
@@ -708,8 +742,6 @@ public class TdDistributorController {
 		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disId);
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		map.addAttribute("page",page);
-		
 		
 		if(type)
 		{
@@ -815,6 +847,7 @@ public class TdDistributorController {
 			Long[] listId,
 			Integer[] listChkId,
 			Integer page,
+			Long categoryId,String keywords,
 			HttpServletRequest req,
 			ModelMap map){
 		String username = (String)req.getSession().getAttribute("distributor");
@@ -833,8 +866,11 @@ public class TdDistributorController {
 		}else{
 			onSaleAll(true, listId, listChkId);
 		}
-		
-		return "redirect:/distributor/goods/sale/"+type+"?page="+page;
+		if(null == categoryId){
+			return "redirect:/distributor/goods/sale/"+type+"?page="+page+"&keywords="+keywords;
+		}else{
+			return "redirect:/distributor/goods/sale/"+type+"?page="+page+"&categoryId="+categoryId+"&keywords="+keywords;
+		}
 	}
 	
 	/**
@@ -1525,7 +1561,7 @@ public class TdDistributorController {
 	}
 	
 	@RequestMapping(value="/goods/onsale")
-	public String saleGoods(Integer page,HttpServletRequest req,ModelMap map)
+	public String saleGoods(Integer page,String keywords,Long categoryId,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
@@ -1538,8 +1574,36 @@ public class TdDistributorController {
 		{
 			page= 0;
 		}
-		map.addAttribute("goods_page",
-				tdGoodsService.findByIsOnSaleTrueOrderBySortIdAsc(page, 10));
+		map.addAttribute("page", page);
+		map.addAttribute("keywords",keywords);
+		map.addAttribute("categoryId", categoryId);
+
+		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		if(null == categoryId){
+			if(null == keywords)
+			{
+				map.addAttribute("goods_page",
+						tdGoodsService.findByIsOnSaleTrueOrderBySortIdAsc(page, 10));
+			}
+			else
+			{
+				map.addAttribute("goods_page",
+						tdGoodsService.searchAndIsOnSaleTrueOrderBySortIdAsc(keywords, page, 10));
+			}
+		}
+		else
+		{
+			if(null == keywords)
+			{
+				map.addAttribute("goods_page", 
+						tdGoodsService.findByCategoryIdAndIsOnSaleTrue(categoryId, page, 10));
+			}
+			else
+			{
+				map.addAttribute("goods_page", 
+						tdGoodsService.searchAndFindByCategoryIdAndIsOnSaleTrueOrderBySortIdAsc(keywords, categoryId, page, 10));
+			}
+		}
 		return "/client/distributor_goods_onsale";
 	}
 	
@@ -1681,6 +1745,7 @@ public class TdDistributorController {
 	
 	@RequestMapping(value="/goods/list")
 	public String inGoodslist(String keywords,Integer page,
+			Long providerId,String isDistribution,
 			HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
@@ -1693,17 +1758,83 @@ public class TdDistributorController {
 		{
 			page=0;
 		}
-		
-		map.addAttribute("keywords", keywords);
-		map.addAttribute("page", page);
+		map.addAttribute("provider_list", tdProviderService.findAll());
 		map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
 		map.addAttribute("cart_goods_list", tdCartGoodsService.findByUsername(username));
 		
-		if(null == keywords)
+		// 参数注回
+		map.addAttribute("keywords", keywords);
+		map.addAttribute("page", page);
+		map.addAttribute("distribution", isDistribution);
+		map.addAttribute("providerId", providerId);
+		
+		if(null == providerId)
 		{
-			map.addAttribute("proGoods_page",tdProviderGoodsService.findAll(page, 10));
-		}else{
-			map.addAttribute("proGoods_page", tdProviderGoodsService.findByGoodsTitleOrSubGoodsTitleOrProviderTitle(keywords,page,10));
+			if("isDistribution".equalsIgnoreCase(isDistribution))
+			{
+				if(null == keywords)
+				{
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.findByIsDistributionTrueAndIsAuditTrue(page, 10));
+				}else{
+					map.addAttribute("proGoods_page", 
+							tdProviderGoodsService.searchAndIsDistributionTrueAndIsAuditTrue(keywords, page, 10));
+				}
+			}
+			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+			{	
+				if(null == keywords){
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.findByIsDistributionFalseAndIsAuditTrue(page, 10));
+				}else{
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.searchAndIsDistributionFalseAndIsAuditTrue(keywords, page, 10));
+				}
+			}
+			else
+			{
+				if(null == keywords)
+				{
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.findByIsAuditTrue(page, 10));
+				}else{
+					map.addAttribute("proGoods_page", 
+							tdProviderGoodsService.searchAndIsAuditTrue(keywords, page, 10));
+				}
+			}
+		}
+		else
+		{
+			if("isDistribution".equalsIgnoreCase(isDistribution))
+			{
+				if(null == keywords){
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,true, true, page, 10));
+				}else{
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, true, true, keywords, page, 10));
+				}
+			}
+			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+			{
+				if(null == keywords){
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,false, true, page, 10));
+				}else{
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, false, true, keywords, page, 10));
+				}
+			}
+			else
+			{
+				if(null == keywords){
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.findByProviderIdAndIsAudit(providerId,true, page, 10));
+				}else{
+					map.addAttribute("proGoods_page",
+							tdProviderGoodsService.searchAndProviderIdAndIsAudit(providerId, keywords, true, page, 10));
+				}
+			}
 		}
 		
 		return "/client/distributor_ingoods";
@@ -2053,9 +2184,10 @@ public class TdDistributorController {
              tdOrderGoodsService.save(orderGoodsList);
              
              // 网站基本信息
-             TdSetting setting = tdSettingService.findTopBy();
+//             TdSetting setting = tdSettingService.findTopBy();
+             
              // 扣除超市虚拟账户
-             distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
+            distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
      		tdDistributorService.save(distributor);
      		if(null == provider.getVirtualMoney()){
      			provider.setVirtualMoney(new Double(0));

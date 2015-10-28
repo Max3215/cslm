@@ -22,6 +22,7 @@
                 <a href="/distributor/outOrder/list/0">我的销售单</a>
                 <a href="/distributor/inOrder/list/0">我的进货单</a>
                 <a href="/distributor/outOrder/list/0?typeId=2">分销订单</a>
+                <a href="">申请退货</a>
             </div>
         </div><!--mymember_menu_part END-->
         <div class="mymember_menu_part"> 
@@ -32,6 +33,15 @@
                 <a href="/distributor/goods/sale/1">出售中的商品</a> 
                 <a href="/distributor/goods/sale/0">仓库中的商品</a> 
                 <a href="/distributor/sale">已卖出的商品</a> 
+             </div>
+        </div> <!--mymember_menu_part END-->
+        <div class="mymember_menu_part"> 
+            <a class="mymember_menu_tit" title="商品管理"><img src="/client/images/mymember/menu05.png" />超市管理</a>
+            <div> 
+                <a href="">商品收藏</a>
+                <a href="">账号管理</a> 
+                <a href="">商品供求</a> 
+                <a href="">平台服务</a> 
              </div>
         </div> <!--mymember_menu_part END-->
     </div><!--mymember_menu END-->

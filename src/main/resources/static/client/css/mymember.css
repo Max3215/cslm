@@ -438,6 +438,18 @@ textarea { resize:none;}
 .mymember_order_search .mysub:hover {
 	background:#eee;}
 .mymember_order_search select { float:right; line-height:30px;}
+
+.mymember_order_search .myselect {
+    width:200px;
+    border:1px solid #ddd;
+    height:28px;
+    line-height:28px;
+    text-indent:0.5em;
+    background:#fff;
+    float:right;margin-left: 5px;
+    font-family: "微软雅黑";
+}
+
 .mymember_page {
 	position:relative;
 	width:100%;

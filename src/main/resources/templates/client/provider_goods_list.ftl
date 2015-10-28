@@ -24,7 +24,11 @@
                         <td>${dg.leftNumber}</td>
                         <td>
                             <#if dg.isAudit><#else><p><a>分销待审核</a></p><br></#if>
-                            <p><a href="javascript:deletegoods(${dg.id?c},${page})">取消批发</a></p>
+                            <#if dg.isDistribution>
+                                <p><a href="javascript:deletegoods(${dg.id?c},${page})">取消分销</a></p>
+                            <#else>
+                                <p><a href="javascript:deletegoods(${dg.id?c},${page})">删除</a></p>
+                            </#if>
                       </tr>
             </#list>
         </#if>

@@ -186,7 +186,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingOrSubTitleContainingOrDetailContaining(
+                .findByTitleContainingOrSubTitleContainingOrCodeContaining(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -196,7 +196,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsFlashSaleTrueOrSubTitleContainingAndIsFlashSaleTrueOrDetailContainingAndIsFlashSaleTrue(
+                .findByTitleContainingAndIsFlashSaleTrueOrSubTitleContainingAndIsFlashSaleTrueOrCodeContainingAndIsFlashSaleTrue(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -206,7 +206,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsGroupSaleTrueOrSubTitleContainingAndIsGroupSaleTrueOrDetailContainingAndIsGroupSaleTrue(
+                .findByTitleContainingAndIsGroupSaleTrueOrSubTitleContainingAndIsGroupSaleTrueOrCodeContainingAndIsGroupSaleTrue(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -216,7 +216,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsOnSaleTrueOrSubTitleContainingAndIsOnSaleTrueOrDetailContainingAndIsOnSaleTrue(
+                .findByTitleContainingAndIsOnSaleTrueOrSubTitleContainingAndIsOnSaleTrueOrCodeContainingAndIsOnSaleTrue(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -226,7 +226,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrDetailContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
+                .findByTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCodeContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -236,7 +236,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrSubTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrDetailContainingAndIsOnSaleTrueAndIsFlashSaleTrue(
+                .findByTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrSubTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrCodeContainingAndIsOnSaleTrueAndIsFlashSaleTrue(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -246,7 +246,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsOnSaleFalseOrSubTitleContainingAndIsOnSaleFalseOrDetailContainingAndIsOnSaleFalse(
+                .findByTitleContainingAndIsOnSaleFalseOrSubTitleContainingAndIsOnSaleFalseOrCodeContainingAndIsOnSaleFalse(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -256,7 +256,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsOnSaleFalseAndIsFlashSaleTrueOrSubTitleContainingAndIsOnSaleFalseAndIsFlashSaleTrueOrDetailContainingAndIsOnSaleFalseAndIsFlashSaleTrue(
+                .findByTitleContainingAndIsOnSaleFalseAndIsFlashSaleTrueOrSubTitleContainingAndIsOnSaleFalseAndIsFlashSaleTrueOrCodeContainingAndIsOnSaleFalseAndIsFlashSaleTrue(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -266,7 +266,7 @@ public class TdGoodsService {
                 Direction.ASC, "sortId").and(new Sort(Direction.DESC, "id")));
 
         return repository
-                .findByTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrSubTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrDetailContainingAndIsOnSaleFalseAndIsGroupSaleTrue(
+                .findByTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrSubTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrCodeContainingAndIsOnSaleFalseAndIsGroupSaleTrue(
                         keywords, keywords, keywords, pageRequest);
     }
 
@@ -278,7 +278,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingOrCategoryIdTreeContainingAndSubTitleContainingOrCategoryIdTreeContainingAndDetailContaining(
+                .findByCategoryIdTreeContainingAndTitleContainingOrCategoryIdTreeContainingAndSubTitleContainingOrCategoryIdTreeContainingAndCodeContaining(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -291,7 +291,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsGroupSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsGroupSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsGroupSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsGroupSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -304,7 +304,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsFlashSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsFlashSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsFlashSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsFlashSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsFlashSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsFlashSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -317,7 +317,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsOnSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsOnSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -330,7 +330,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -343,7 +343,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsOnSaleTrueAndIsFlashSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsOnSaleTrueAndIsFlashSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -356,7 +356,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsOnSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsOnSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -369,7 +369,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseAndIsFlashSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsOnSaleTrueAndIsFlashSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseAndIsFlashSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsFlashSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsOnSaleTrueAndIsFlashSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -382,7 +382,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -395,7 +395,7 @@ public class TdGoodsService {
         String catIdStr = "[" + categoryId + "]";
 
         return repository
-                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndDetailContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
+                .findByCategoryIdTreeContainingAndTitleContainingAndIsOnSaleFalseAndIsGroupSaleTrueOrCategoryIdTreeContainingAndSubTitleContainingAndIsOnSaleTrueAndIsGroupSaleTrueOrCategoryIdTreeContainingAndCodeContainingAndIsOnSaleTrueAndIsGroupSaleTrue(
                         catIdStr, keywords, catIdStr, keywords, catIdStr,
                         keywords, pageRequest);
     }
@@ -1491,7 +1491,7 @@ public class TdGoodsService {
                 Direction.DESC, "id"));
 
         return repository
-                .findByTitleContainingIgnoreCaseAndIsOnSaleTrueOrSubTitleContainingAndIsOnSaleTrueOrParamValueCollectContainingAndIsOnSaleTrueOrDetailContainingAndIsOnSaleTrue(
+                .findByTitleContainingIgnoreCaseAndIsOnSaleTrueOrSubTitleContainingAndIsOnSaleTrueOrParamValueCollectContainingAndIsOnSaleTrueOrCodeContainingAndIsOnSaleTrue(
                         keywords, keywords, keywords, keywords, pageRequest);
     }
 
@@ -1520,7 +1520,7 @@ public class TdGoodsService {
                 sortName));
 
         return repository
-                .findByTitleContainingIgnoreCaseAndIsOnSaleTrueOrSubTitleContainingAndIsOnSaleTrueOrParamValueCollectContainingAndIsOnSaleTrueOrDetailContainingAndIsOnSaleTrue(
+                .findByTitleContainingIgnoreCaseAndIsOnSaleTrueOrSubTitleContainingAndIsOnSaleTrueOrParamValueCollectContainingAndIsOnSaleTrueOrCodeContainingAndIsOnSaleTrue(
                         keywords, keywords, keywords, keywords, pageRequest);
     }
 

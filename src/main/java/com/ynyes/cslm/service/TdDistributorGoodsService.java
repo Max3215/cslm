@@ -1415,14 +1415,14 @@ public class TdDistributorGoodsService {
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(Long distributorId,Long catId,Boolean isOnSale,Boolean isAudit,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleAndIsAudit(distributorId,catIdStr,isOnSale,isAudit,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> searchAndDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(Long distributorId,Long catId,String keywords,Boolean isOnSale,Boolean isAudit,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleAndIsAudit(
 													distributorId,catIdStr,"%"+keywords+"%",isOnSale,isAudit,
 													distributorId,catIdStr,"%"+keywords+"%",isOnSale,isAudit,
@@ -1432,14 +1432,14 @@ public class TdDistributorGoodsService {
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsOnSale(Long distributorId,Long catId,Boolean isOnSale,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsOnSale(distributorId,catIdStr, isOnSale, pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> searchAndDistributorIdAndCategoryIdAndIsOnSale(Long distributorId,Long catId,String keywords,Boolean isOnSale,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
 													distributorId,catIdStr,"%"+keywords+"%",isOnSale,
 													distributorId,catIdStr,"%"+keywords+"%",isOnSale,
@@ -1449,14 +1449,14 @@ public class TdDistributorGoodsService {
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsAudit(Long distributorId,Long catId,Boolean isAudit,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsAudit(distributorId,catIdStr,isAudit,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> searchAndDistributorIdAndCategoryIdAndIsAudit(Long distributorId,Long catId,String keywords,Boolean isAudit,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsAudit(
 													distributorId,catIdStr,"%"+keywords+"%",isAudit,
 													distributorId,catIdStr,"%"+keywords+"%",isAudit,
@@ -1466,14 +1466,14 @@ public class TdDistributorGoodsService {
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryId(Long distributorId,Long catId,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLike(distributorId,catIdStr,pageRequest);
 	}
 	
 	public Page<TdDistributorGoods> searchAndDistributorIdAndCategoryId(Long distributId,Long catId,String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		String catIdStr = "[" + catId + "]";
+		String catIdStr = "%[" + catId + "]%";
 		return repository.findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndCodeLike(
 													distributId,catIdStr, "%"+keywords+"%",
 													distributId,catIdStr, "%"+keywords+"%",
