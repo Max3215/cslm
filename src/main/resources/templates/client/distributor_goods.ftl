@@ -117,9 +117,7 @@ DD_belatedPNG.fix('.,img,background');
                           <input class="mytext" type="text" name="keywords"  value="${keywords!''}" id="keywords" />
                           <input type="hidden" name="page" value="${page!'0'}"/>
                           <select  id="categoryId" name="categoryId" class="myselect" onchange="searchSale()">
-                                <#if !categoryId??>
                                 <option value="">请选择类别...</option>
-                                </#if>
                                 <#if category_list??>
                                     <#list category_list as c>
                                         <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>

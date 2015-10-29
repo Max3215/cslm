@@ -742,6 +742,8 @@ public class TdDistributorController {
 		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disId);
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		map.addAttribute("page", page);
+		map.addAttribute("type", type);
 		
 		if(type)
 		{

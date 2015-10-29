@@ -7,7 +7,7 @@
         <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
         <input class="mytext" type="text" onFocus="if(value=='批发商') {value=''}" onBlur="if (value=='') {value='批发商'}"  value="批发商" style="width:150px;" />
         -->
-        <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
+        <input class="mytext" type="text" name="keywords" value="${keywords!''}" id="keywords"/>
         <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods()">
             <option value="">选择批发商</option>
             <#if provider_list??>

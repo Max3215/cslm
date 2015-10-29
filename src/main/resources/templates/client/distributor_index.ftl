@@ -211,8 +211,8 @@ DD_belatedPNG.fix('.,img,background');
       <div class="h10"></div>
       <li>超市名称：${distributor.title!''}</li>
       <li>地址：${distributor.address!''}</li>
-      <li>付款方式：${distributor.paytype!''}</li>
-      <li>营业时间：${distributor.openTime!''}</li>
+      <li>付款方式：${distributor.payType!''}</li>
+      <li>营业时间：${distributor.openTimeSpan!''}</li>
       <li>钱包账号：${distributor.virtualAccount!''}</li>
       <li>服务电话：${distributor.serviceTele!''}</li>
       <a href="/distributor/password" class="quit_btn" >修改密码</a><a href="/logout" class="quit_btn">退出登陆</a>
