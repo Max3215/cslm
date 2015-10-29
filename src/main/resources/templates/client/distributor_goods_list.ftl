@@ -35,11 +35,11 @@
                         </td>
                         <td>
                             <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="goodsTitle${dg.id?c}">${dg.goodsTitle}</p>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
-                        <td class="tb02"><#if dg.goodsPrice??>￥<span id="goodsPrice${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></td>
+                        <td class="tb02"><#if dg.goodsPrice??>￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></td>
                         <td>${dg.leftNumber!'0'}</td>
                         <td>
                             <#if dg.goodsPrice??>

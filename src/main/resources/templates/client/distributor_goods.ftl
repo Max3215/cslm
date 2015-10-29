@@ -48,7 +48,7 @@ function editPrice(dgId,page){
     var goodsTitle = $("#title"+dgId).html();
     var goodsPrice = $("#price"+dgId).html();
     
-    $("#goodsId").attr("value",gid);
+    $("#goodsId").attr("value",dgId);
     $("#page").attr("value",page);
     $("#goodsTitle").attr("value",goodsTitle);
     $("#goodsPrice").attr("value",goodsPrice);
@@ -58,7 +58,7 @@ function editPrice(dgId,page){
 
 //超市中心商品上下架
 function editOnSale(){
-    var goodsId = $("#goodsId").val();
+    var disId = $("#goodsId").val();
     var page = $("#page").val();
     var goodsTitle = $("#goodsTitle").val();
     var goodsPrice = $("#goodsPrice").val();
@@ -80,6 +80,7 @@ function editOnSale(){
         data : {"goodsTitle":goodsTitle,"goodsPrice":goodsPrice,"page":page},
         type : "post",
        success:function(res){
+            $('.sub_form').css('display','none');
             $("#dis_goods_table").html(res);
         }
     })

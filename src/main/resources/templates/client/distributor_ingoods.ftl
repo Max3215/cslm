@@ -55,11 +55,10 @@ DD_belatedPNG.fix('.,img,background');
     <#include "/client/common_distributor_menu.ftl">
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
-        <#if distribution?? && distribution!="isDistribution">
+      
           <div id="cart_goodslist">
             <#include "/client/distributor_ingoods_cartlist.ftl">
           </div>
-        </#if>
          <div class="h30"></div>
            <div>
                 <#include "/client/distributor_ingoods_list.ftl">
