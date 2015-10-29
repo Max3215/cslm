@@ -2033,14 +2033,21 @@ public class TdDistributorController {
         if (null == username) {
             username = req.getSession().getId();
         }
-
+        
+        if(null == quantity){
+        	quantity = 1L;
+        }
+        
         if (null != id) {
 //            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
         	TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
 
+        	TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(cartGoods.getProviderId(), cartGoods.getGoodsId());
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
-                cartGoods.setQuantity(quantity);
-                tdCartGoodsService.save(cartGoods);
+                if(quantity < providerGoods.getLeftNumber()){
+                	cartGoods.setQuantity(quantity);
+                	tdCartGoodsService.save(cartGoods);
+                }
             }
         }
 

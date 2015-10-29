@@ -129,7 +129,6 @@ $(document).ready(function(){
                     $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
                 },
                 success: function (data) {
-                console.debug(data)
                     if (data.code == 0) {
                         winObj.close();
                         $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面

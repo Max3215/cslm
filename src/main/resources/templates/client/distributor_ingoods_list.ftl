@@ -43,7 +43,7 @@
                         </td>
                         <td class="tb01"><span id="providerTitle${pgoods.id?c}">${pgoods.providerTitle!''}</span></td>
                         <td class="tb02">￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></td>
-                        <td>${pgoods.leftNumber!'0'}</td>
+                        <td><span id="number${pgoods.id?c}}">${pgoods.leftNumber!'0'}</span></td>
                         <td>
                            
                            <#if pgoods.isDistribution?? && pgoods.isDistribution && pgoods.isAudit?? && pgoods.isAudit>
