@@ -111,6 +111,27 @@ function minusNum(id)
     });
 }
 
+function changeNumber(id)
+{
+	var quantity = $("#number"+id).val();
+	console.debug(quantity);
+	var r = /^\+?[1-9][0-9]*$/;　
+	if( r.test(quantity)){
+		$.ajax({
+	        type:"post",
+	        url:"/distributor/goods/changQuantity",
+	        data:{"id":id,"quantity":quantity},
+	        success:function(data){
+	            $("#cart_goodslist").html(data);
+	        }
+	    });
+	}else{
+		alert("请正确输入数量！");
+		$("#submit").attr("disabled",true);
+	}
+	
+}
+
 function delCartItem(id)
 {
     if (null == id)

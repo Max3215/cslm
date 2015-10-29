@@ -21,9 +21,9 @@
                     <td width="230" style="text-align:left;"><a >${cg.goodsTitle!''}</a></td>
                           <td class="red" width="150">￥${cg.price?string("0.00")}</td>
                           <td width="170" class="num">
-                            <a href="javascript:minusNum(${cg.goodsId});"> - </a>
-                            <input class="text" type="text" value="${cg.quantity!''}" />
-                            <a href="javascript:addNum(${cg.goodsId});"> + </a>
+                            <a href="javascript:minusNum(${cg.goodsId?c});"> - </a>
+                            <input class="text" id="number${cg.goodsId?c}" type="text" value="${cg.quantity!''}" onblur="changeNumber(${cg.goodsId?c})"/>
+                            <a href="javascript:addNum(${cg.goodsId?c});"> + </a>
                           </td>
                           <td class="red" width="150">￥${(cg.price*cg.quantity)?string("0.00")}</td>
                           <td><a class="del" href="javascript:delCartItem(${cg.id?c});">删除</a></td>
@@ -33,7 +33,6 @@
                             </#if>
                     </tr>  
                    </#list>
-                   
             </tbody>
           </table>
         </div>
@@ -47,6 +46,6 @@
                    总价：<span class="fc fw-b">￥<#if cart_goods_list??>${totalPrice?string("0.00")}</#if></span>&nbsp;&nbsp;
                 </li>
             </ul>
-            <input class="sub" type="submit" onclick="goNext(${totalGoods!'0'})" value="提交订货单">
+            <input class="sub" type="submit" id="submit" onclick="goNext(${totalGoods!'0'})" value="提交订货单">
         </div>
 </#if>

@@ -117,7 +117,7 @@ public interface TdOrderRepo extends
     Page<TdOrder> findByShopIdAndGoodsId(Long shopId, Long gid,Pageable page);
     
 //    @Query("select o from TdOrder o join o.orderGoodsList g where o.shopId=?1")
-    Page<TdOrder> findByShopIdOrderByIdDesc(Long shopTitle, Pageable page);
+    Page<TdOrder> findByShopIdAndTypeIdOrderByIdDesc(Long shopTitle,Long typeId, Pageable page);
     
     Page<TdOrder> findByUsernameAndTypeIdOrderByIdDesc(String username,long typeId,Pageable page);
     Page<TdOrder> findByShopIdAndTypeIdOrderByOrderTimeDesc(long shopId,long typeId,Pageable page);

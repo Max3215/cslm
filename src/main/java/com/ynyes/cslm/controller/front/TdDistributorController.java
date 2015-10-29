@@ -615,7 +615,7 @@ public class TdDistributorController {
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
-		map.addAttribute("dist_order_page", tdOrderService.findByShopId(distributor.getId(), page, 10));
+		map.addAttribute("dist_order_page", tdOrderService.findByShopIdAndTypeId(distributor.getId(),0L, page, 10));
 		
 		return "/client/distributor_sale";
 	}
@@ -1350,7 +1350,6 @@ public class TdDistributorController {
                      for (TdOrderGoods tog : tdOrderGoodsList) {
                          if (0 == tog.getGoodsSaleType()) // 正常销售
                          {
-                        	 TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(order.getProviderId(), tog.getGoodsId());
                         	 TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributor.getId(), tog.getGoodsId(), true);
                         	 TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
 
@@ -1365,8 +1364,11 @@ public class TdDistributorController {
                              if (null != disGoods && null != tdGoods.getPlatformServiceReturnRation()) {
                             	 platformService += tog.getPrice() * tdGoods.getPlatformServiceReturnRation();
          					}
-                             if (null != providerGoods && null != providerGoods.getShopReturnRation()) {
-	                             	trainService += tog.getPrice() * providerGoods.getShopReturnRation(); 
+                             if(null != order.getProviderId()){
+                            	 TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(order.getProviderId(), tog.getGoodsId());
+                            	 if (null != providerGoods && null != providerGoods.getShopReturnRation()) {
+                            		 trainService += tog.getPrice() * providerGoods.getShopReturnRation(); 
+                            	 }
                              }
                          }
                      }
@@ -2022,6 +2024,31 @@ public class TdDistributorController {
 
         return "/client/distributor_ingoods_cartlist";
     }
+    
+    @RequestMapping(value = "/goods/changQuantity",method = RequestMethod.POST)
+    public String cartNumberChange(Long id,Long quantity, HttpServletRequest req, ModelMap map) {
+
+        String username = (String) req.getSession().getAttribute("distributor");
+
+        if (null == username) {
+            username = req.getSession().getId();
+        }
+
+        if (null != id) {
+//            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+        	TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
+
+            if (cartGoods.getUsername().equalsIgnoreCase(username)) {
+                cartGoods.setQuantity(quantity);
+                tdCartGoodsService.save(cartGoods);
+            }
+        }
+
+        map.addAttribute("cart_goods_list",tdCartGoodsService.findByUsername(username));
+
+        return "/client/distributor_ingoods_cartlist";
+    }
+    
 
     @RequestMapping(value = "/goods/del",method = RequestMethod.POST)
     public String cartDel(Long id, HttpServletRequest req, ModelMap map) {

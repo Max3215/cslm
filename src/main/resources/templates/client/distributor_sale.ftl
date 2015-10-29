@@ -80,7 +80,7 @@ DD_belatedPNG.fix('.,img,background');
                             <tr id="tr_1424195166">
                                 <td>${order.orderNumber!''}</td>
                                 <td>
-                                    <a href="" target="_blank" >
+                                    <a>
                                         <strong><img width="80" height="80" src="${og.goodsCoverImageUri!''}"  /></strong>
                                         <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${og.goodsTitle!''}</p>
                                     </a>
