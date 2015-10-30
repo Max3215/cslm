@@ -53,7 +53,7 @@ function setprice() {
     if (isNaN(p1) || p1=="") { p1 = 0 }
     if (isNaN(p2) || p2== "") { p2 = 0 }
     var price = p1 + '-' + p2;
-    var url = "/list/${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}";
+    var url = "/list/${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}";
     if (price != "0-0") { url += "_" + price; }
     location.href = url;
 }
