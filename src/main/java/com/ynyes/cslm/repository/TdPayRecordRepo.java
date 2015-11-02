@@ -2,6 +2,8 @@ package com.ynyes.cslm.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -12,4 +14,8 @@ public interface TdPayRecordRepo extends
         JpaSpecificationExecutor<TdPayRecord> 
 {
     List<TdPayRecord> findByOrderIdOrderByCreateTimeDesc(Long orderId);
+    
+    Page<TdPayRecord> findByDistributorIdOrderByCreateTimeDesc(Long disId,Pageable page);
+    
+    Page<TdPayRecord> findByProviderIdOrderByCreateTimeDesc(Long proId,Pageable page);
 }

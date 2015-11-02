@@ -31,6 +31,7 @@ import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
@@ -77,6 +78,9 @@ public class TdProviderController {
 
 	@Autowired
 	TdProductCategoryService tdProductCategoryService;
+	
+	@Autowired
+	TdPayRecordService tdPayRecordService;
 	
 	@RequestMapping(value="/index")
 	public String providerIndex(HttpServletRequest req,ModelMap map)
@@ -1029,6 +1033,28 @@ public class TdProviderController {
 //		}
 		return res;
 	}
+	
+	 /**
+     * 交易记录
+     * 
+     */
+    @RequestMapping(value="/pay/record")
+    public String payRecord(Integer page,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	if(null == page ){
+    		page = 0;
+    	}
+    	map.addAttribute("page", page);
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	map.addAttribute("pay_record_page",
+    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
+    	return "/client/provider_record";
+    }
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)
     @ResponseBody

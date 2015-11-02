@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,5 +71,17 @@ public class TdPayRecordService {
         } else {
             return payRecords.get(0);
         }
+    }
+    
+    public Page<TdPayRecord> findByDistributorId(Long disId,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort("createTime"));
+    	return repository.findByDistributorIdOrderByCreateTimeDesc(disId, pageRequest);
+    	
+    }
+    
+    public Page<TdPayRecord> findByProviderId(Long proId,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort("createTime"));
+    	return repository.findByProviderIdOrderByCreateTimeDesc(proId, pageRequest);
+    	
     }
 }

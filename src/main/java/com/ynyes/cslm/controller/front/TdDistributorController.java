@@ -26,12 +26,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdArticle;
+import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
@@ -39,6 +42,9 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.repository.TdUserCollectRepo;
+import com.ynyes.cslm.service.TdAdTypeService;
+import com.ynyes.cslm.service.TdArticleCategoryService;
+import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
@@ -46,6 +52,7 @@ import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
@@ -102,6 +109,15 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdUserCollectService tdUserCollectService;
+	
+	@Autowired
+	TdArticleCategoryService tdArticleCategoryService;
+	
+	@Autowired
+	TdArticleService tdArticleService;
+	
+	@Autowired
+	TdPayRecordService tdPayRecordService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -1893,7 +1909,7 @@ public class TdDistributorController {
             	TdCartGoods cartGoods = new TdCartGoods();
             	cartGoods.setIsLoggedIn(true);
             	cartGoods.setUsername(username);
-            	cartGoods.setGoodsId(providerGoods.getGoodsId());
+            	cartGoods.setGoodsId(providerGoods.getId());
             	cartGoods.setGoodsCoverImageUri(providerGoods.getGoodsCoverImageUri());
             	cartGoods.setGoodsTitle(providerGoods.getGoodsTitle());
             	cartGoods.setProviderTite(providerGoods.getProviderTitle());
@@ -1988,7 +2004,7 @@ public class TdDistributorController {
         if (null != id) {
             TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
             
-            TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(cartGoods.getProviderId(), cartGoods.getGoodsId());
+            TdProviderGoods providerGoods = tdProviderGoodsService.findOne(id);
             
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
@@ -2146,7 +2162,7 @@ public class TdDistributorController {
         	 
         	 for (int i = 0; i < m.getValue().size(); i++) {
         		 TdCartGoods cartGoods= m.getValue().get(i);
-        		 TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(cartGoods.getProviderId(),cartGoods.getGoodsId());
+        		 TdProviderGoods providerGoods = tdProviderGoodsService.findOne(cartGoods.getGoodsId());
         		 
         		 if(null == providerGoods || providerGoods.getIsOnSale()==false){
         			 continue;
@@ -2229,10 +2245,12 @@ public class TdDistributorController {
              
              // 网站基本信息
 //             TdSetting setting = tdSettingService.findTopBy();
+             tdOrder = tdOrderService.save(tdOrder);
              
              // 扣除超市虚拟账户
             distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
-     		tdDistributorService.save(distributor);
+            tdDistributorService.save(distributor);
+            
      		if(null == provider.getVirtualMoney()){
      			provider.setVirtualMoney(new Double(0));
      		}
@@ -2243,8 +2261,20 @@ public class TdDistributorController {
 //     		//平台虚拟账户增加金额
 //     		setting.setVirtualMoney(tdOrder.getTotalPrice());
 //     		tdSettingService.save(setting);
-           
-     		tdOrderService.save(tdOrder);
+     		
+     		// 保存交易记录
+     		TdPayRecord record = new TdPayRecord();
+            record.setCont("批发款");
+            record.setCreateTime(new Date());
+            record.setDistributorId(distributor.getId());
+            record.setDistributorTitle(distributor.getTitle());
+            record.setProviderId(provider.getId());
+            record.setProviderTitle(provider.getTitle());
+            record.setOrderId(tdOrder.getId());
+            record.setOrderNumber(tdOrder.getOrderNumber());
+            record.setStatusCode(1);
+            record.setProvice(tdOrder.getTotalGoodsPrice());
+            tdPayRecordService.save(record);
         	 
         }
         	
@@ -2524,11 +2554,62 @@ public class TdDistributorController {
     	
     }
     
+    /**
+     * 平台服务
+     * 
+     */
+    @RequestMapping(value="/info/{mid}")
+    public String info(@PathVariable Long mid,HttpServletRequest req,ModelMap map){
+    	
+    	List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(mid);
+ 	    map.addAttribute("td_art_list",catList);
+ 	    
+ 	   if (null != catList && catList.size() > 0) 
+ 	   {
+	   		for (TdArticleCategory tdCat : catList)
+	   		{
+	   			if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
+	   			{
+	   				map.addAttribute("news_page", tdArticleService
+	   						.findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(10L,
+	   								tdCat.getId(), 0, ClientConstant.pageSize));
+	   				break;
+	   			}
+   			}
+ 	   }
+ 	   
+ 	   return "/client/distributor_info";
+   }
+    
+    /**
+     * 交易记录
+     * 
+     */
+    @RequestMapping(value="/pay/record")
+    public String payRecord(Integer page,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	if(null == page ){
+    		page = 0;
+    	}
+    	map.addAttribute("page", page);
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	map.addAttribute("pay_record_page",
+    				tdPayRecordService.findByDistributorId(distributor.getId(), page, ClientConstant.pageSize));
+    	return "/client/distributor_record";
+    }
+    
+    
+    
     @RequestMapping(value = "/edit/ImageUrl", method = RequestMethod.POST)
     @ResponseBody
-    public String editimageUrl(String imgUrl,HttpServletRequest rep)
+    public String editimageUrl(String imgUrl,HttpServletRequest req)
     {
-    	String username = (String)rep.getSession().getAttribute("distributor");
+    	String username = (String)req.getSession().getAttribute("distributor");
     	if (null == username) {
             return "redirect:/login";
         }
@@ -2559,7 +2640,6 @@ public class TdDistributorController {
             }
         }
 	}
-	
 	
 	
 }

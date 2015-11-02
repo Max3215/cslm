@@ -47,7 +47,7 @@ function deleteDisGoods(type,disId,page){
 function addgoods(gid){
     var page = $("#page").val();
     var quantity = $("#number"+gid).html();
-    console.debug(quantity);
+    
     if(undefined == quantity || quantity == 0){
     	alert("该商品已无存货！")
     	return;
