@@ -103,6 +103,11 @@ public class TdAdService {
         return repository.findByTypeIdAndStartTimeBeforeAndEndTimeAfterAndIsEnableTrueOrderBySortIdAsc(typeId, new Date(), new Date());
     }
     
+    public List<TdAd> findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(Long typeId,Long disId)
+    {
+        return repository.findByTypeIdAndDistributorIdAndStartTimeBeforeAndEndTimeAfterAndIsEnableTrueOrderBySortIdAsc(typeId, disId,new Date(), new Date());
+    }
+    
     public Page<TdAd> findAllOrderBySortIdAsc(int page, int size)
     {
         PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.ASC, "sortId"));

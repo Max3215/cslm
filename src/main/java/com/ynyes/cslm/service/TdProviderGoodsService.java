@@ -164,10 +164,22 @@ public class TdProviderGoodsService {
 		return repository.findByIsAuditTrue(pageRequest);
 	}
 	
+	public Page<TdProviderGoods> findByIsOnSaleTrue(int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		return repository.findByIsOnSaleTrue(pageRequest);
+	}
+	
 	public Page<TdProviderGoods> searchAndIsAuditTrue(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		return repository.findByGoodsTitleContainingAndIsAuditTrueOrSubGoodsTitleContainingAndIsAuditTrue(keywords,keywords,pageRequest);
+	}
+	
+	public Page<TdProviderGoods> searchAndIsOnSaleTrue(String keywords,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		return repository.findByGoodsTitleContainingAndIsOnSaleTrueOrSubGoodsTitleContainingAndIsOnSaleTrue(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsAuditFalse(int page,int size)
@@ -228,6 +240,12 @@ public class TdProviderGoodsService {
 		return repository.findByProviderIdAndGoodsTitleLikeAndIsAuditOrProviderIdAndSubGoodsTitleLikeAndIsAudit(providerId, "%"+keywords+"%", isAudit, providerId, "%"+keywords+"%", isAudit, pageRequest);
 	}
 	
+	public Page<TdProviderGoods> searchAndProviderIdAndIsOnSale(Long providerId,String keywords,Boolean isOnSale,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		return repository.findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndSubGoodsTitleLikeAndIsOnSale(providerId, "%"+keywords+"%", isOnSale, providerId, "%"+keywords+"%", isOnSale, pageRequest);
+	}
+	
 	public Page<TdProviderGoods> searchAndProviderIdAndKeywords(Long providerId,String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
@@ -269,6 +287,52 @@ public class TdProviderGoodsService {
 															providerId,catStr, "%"+keywords+"%", 
 															providerId,catStr, "%"+keywords+"%", pageRequest);
 	}
+	
+	// 
+	public Page<TdProviderGoods> findByProviderIdAndIsOnSale(Long providerId,Boolean isOnSale,int page ,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		if(null ==providerId)
+		{
+			return null;
+		}
+		return repository.findByProviderIdAndIsOnSale(providerId,isOnSale,pageRequest );
+	}
+	
+	public Page<TdProviderGoods> searchAndProviderIdAndKeywordsAndIsOnSale(Long providerId,String keywords,Boolean isOnSale,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		return repository.findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndSubGoodsTitleLikeAndIsOnSaleOrCodeLikeAndIsOnSale(providerId, "%"+keywords+"%", isOnSale,
+																																		providerId, "%"+keywords+"%",isOnSale,
+																																		providerId,"%"+keywords+"%",isOnSale, pageRequest);
+	}
+	
+	public Page<TdProviderGoods> findByProviderIdAndCategoryIdAndIsOnSale(Long providerId,Long catId,Boolean isOnSale,int page ,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		if(null ==providerId)
+		{
+			return null;
+		}
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndIsOnSale(providerId, catStr,isOnSale, pageRequest);
+	}
+	
+	public Page<TdProviderGoods> searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(Long providerId,Long catId,String keywords,Boolean isOnSale,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
+															providerId,catStr, "%"+keywords+"%", isOnSale,
+															providerId,catStr, "%"+keywords+"%", isOnSale,
+															providerId,catStr, "%"+keywords+"%", isOnSale,pageRequest);
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

@@ -209,7 +209,7 @@ function byNow(goodsId){
 			    <#if goods_page?? && goods_page.content?size gt 0>
                     <#list goods_page.content as goods>
         				<li>
-        					<a href="/goods/${goods.goodsId?c}" class="a1">
+        					<a href="/goods/${goods.id?c}" class="a1">
         						<img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.goodsTitle!''}"/>
         						<p>${goods.goodsTitle!""}</p>
         					</a>

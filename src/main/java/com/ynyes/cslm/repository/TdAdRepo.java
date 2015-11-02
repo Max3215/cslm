@@ -23,4 +23,6 @@ public interface TdAdRepo extends
 {
     Page<TdAd> findByIsEnableTrueOrderBySortIdAsc(Pageable page);
     List<TdAd> findByTypeIdAndStartTimeBeforeAndEndTimeAfterAndIsEnableTrueOrderBySortIdAsc(Long typeId, Date current1, Date current2);
+    
+    List<TdAd> findByTypeIdAndDistributorIdAndStartTimeBeforeAndEndTimeAfterAndIsEnableTrueOrderBySortIdAsc(Long typeId,Long disId, Date current1, Date current2);
 }

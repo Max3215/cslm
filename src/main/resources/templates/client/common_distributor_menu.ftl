@@ -3,6 +3,9 @@
         <div class="mymember_head_part">
             <a class="a001" href="/distributor/index">超市中心</a>
         </div> 
+         <div class="mymember_head_part">
+            <a class="a001" href="/distributor/collect/list">收藏夹</a>
+        </div>
         <div id="mymember_nav01" class="mymember_head_part">
               <a class="a001 a002" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>
               <div id="mymember_navshow01">
@@ -10,6 +13,7 @@
                 <a href="/logout">退出登录</a>
               </div>
         </div>
+       
     <div class="myclear"></div>
     <a class="mymember_head_kf" href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>">在线客服 >> </a>
  </div><!--mymember_head END-->

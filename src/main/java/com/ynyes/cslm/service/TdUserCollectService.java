@@ -93,6 +93,16 @@ public class TdUserCollectService {
         return repository.findByUsernameAndDistributorId(username, disId);
     }
     
+    public TdUserCollect findByUsernameAndProviderId(String username, Long pId)
+    {
+        if (null == username || null == pId)
+        {
+            return null;
+        }
+        
+        return repository.findByUsernameAndProviderId(username, pId);
+    }
+    
     public List<TdUserCollect> findAll(Iterable<Long> ids)
     {
         return (List<TdUserCollect>) repository.findAll(ids);

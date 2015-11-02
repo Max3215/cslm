@@ -82,6 +82,21 @@ $(function () {
         </dd>
     </dl>
     <dl>
+        <dt>所属超市</dt>
+        <dd>
+            <div class="rule-single-select">
+                <select name="distributorId"  sucmsg=" " nullmsg="请选择！" class="Validform_error" style="display: none;">
+                    <option value="">请选择超市...</option>
+                    <#if dis_list??>
+                        <#list dis_list as d>
+                            <option value="${d.id?c!""}" <#if ad?? && ad.distributorId?? && ad.distributorId==d.id>selected="selected"</#if>>${d.title!""}</option>
+                        </#list>
+                    </#if>
+                </select>
+            </div>
+        </dd>
+    </dl>
+    <dl>
         <dt>状态</dt>
         <dd>
             <div class="rule-multi-radio multi-radio">

@@ -46,8 +46,8 @@ function deleteDisGoods(type,disId,page){
 //超市中心选择批发商品
 function addgoods(gid){
     var page = $("#page").val();
-    var quantity = $("#number"+gid).val();
-    
+    var quantity = $("#number"+gid).html();
+    console.debug(quantity);
     if(undefined == quantity || quantity == 0){
     	alert("该商品已无存货！")
     	return;
@@ -59,6 +59,7 @@ function addgoods(gid){
         type :"post",
         success:function(res){
             $("#cart_goodslist").html(res);
+            alert("添加成功")
         }
     })
 }

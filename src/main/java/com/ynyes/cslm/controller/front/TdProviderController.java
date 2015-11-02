@@ -712,10 +712,11 @@ public class TdProviderController {
 	 * @param map
 	 * @return
 	 */
-	@RequestMapping(value="/goods/list")
-	public String goodsList(Integer page,
+	@RequestMapping(value="/goods/list/{isSale}")
+	public String goodsList(@PathVariable Boolean isSale,
+			Integer page,
 			Long categoryId,
-			String isDistribution,
+//			String isDistribution,
 			String keywords,
 			HttpServletRequest req,ModelMap map)
 	{
@@ -732,86 +733,89 @@ public class TdProviderController {
 		TdProvider provider = tdProviderService.findByUsername(username);
 
 		// 参数注回
+		map.addAttribute("isOnSale", isSale);
 		map.addAttribute("provider", provider);
 		map.addAttribute("page", page);
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
-		map.addAttribute("distribution",isDistribution); 
+//		map.addAttribute("distribution",isDistribution); 
 		
 		map.addAttribute("category_list",tdProductCategoryService.findAll());
 		
 		if(null ==categoryId)
 		{
-			if("isDistribution".equalsIgnoreCase(isDistribution))
-			{
+//			if("isDistribution".equalsIgnoreCase(isDistribution))
+//			{
+//				if(null == keywords){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),true, page, ClientConstant.pageSize));
+//				}else{
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, true, page, ClientConstant.pageSize));
+//				}
+//			}
+//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+//			{
+//				if(null == keywords){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),false, page, ClientConstant.pageSize));
+//				}else{
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, false, page, ClientConstant.pageSize));
+//				}
+//			}
+//			else
+//			{
 				if(null == keywords){
 					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),isSale,page,ClientConstant.pageSize));
 				}else{
 					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSale(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
 				}
-			}
-			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-			{
-				if(null == keywords){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),false, page, ClientConstant.pageSize));
-				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, false, page, ClientConstant.pageSize));
-				}
-			}
-			else
-			{
-				if(null == keywords){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderId(provider.getId(),page,ClientConstant.pageSize));
-				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndKeywords(provider.getId(), keywords, page, ClientConstant.pageSize));
-				}
-			}
+//			}
 		}
 		else
 		{
-			if("isDistribution".equalsIgnoreCase(isDistribution))
-			{
+//			if("isDistribution".equalsIgnoreCase(isDistribution))
+//			{
+//				if(null == keywords){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, true, page, ClientConstant.pageSize));
+//				}else{
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, true, page, ClientConstant.pageSize));
+//				}
+//			}
+//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+//			{
+//				if(null == keywords){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, false, page, ClientConstant.pageSize));
+//				}else{
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, false, page, ClientConstant.pageSize));
+//				}
+//			}
+//			else
+//			{
 				if(null == keywords){
 					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSale(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
 				}else{
 					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
 				}
-			}
-			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-			{
-				if(null == keywords){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, false, page, ClientConstant.pageSize));
-				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, false, page, ClientConstant.pageSize));
-				}
-			}
-			else
-			{
-				if(null == keywords){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryId(provider.getId(), categoryId, page, ClientConstant.pageSize));
-				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywords(provider.getId(), categoryId, keywords, page, ClientConstant.pageSize));
-				}
-			}
+//			}
 		}
 		
 		return "/client/provider_goods";
 	}
 	
-	@RequestMapping(value="/goods/delete")
-	public String providerGoodsDelete(Long id,Integer page,
+	//      批发/取消批发
+	@RequestMapping(value="/goods/onsale/{pgId}")
+	public String providerGoodsDelete(@PathVariable Long pgId,
+			Boolean type,Integer page,
 			HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("provider");
@@ -819,7 +823,7 @@ public class TdProviderController {
 		{
 			return "redirect:/login";
 		}
-		if(null == id)
+		if(null == pgId)
 		{
 			return "/client/error_404";
 		}
@@ -827,19 +831,62 @@ public class TdProviderController {
 		{
 			page = 0;
 		}
-		tdProviderGoodsService.delete(id);
-		TdProvider provider = tdProviderService.findByUsername(username);
-		map.addAttribute("provider", provider);
 		map.addAttribute("page", page);
-		map.addAttribute("provider_goods_page",
-				tdProviderGoodsService.findByProviderId(provider.getId(),page,ClientConstant.pageSize));
+		map.addAttribute("type",type);
+		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
+		if(type)
+		{
+			providerGoods.setIsOnSale(type);
+			tdProviderGoodsService.save(providerGoods);
+			map.addAttribute("provider_goods_page",
+					tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(), false, page,ClientConstant.pageSize));
+		}else{
+			providerGoods.setIsOnSale(type);
+			tdProviderGoodsService.save(providerGoods);
+			map.addAttribute("provider_goods_page",
+					tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(), true, page,ClientConstant.pageSize));
+		}
+		
+		map.addAttribute("provider", provider);
 		return "/client/provider_goods_list";
 	}
 	
-	@RequestMapping(value="/goods/deleteCheck")
-	public String deleteCheck(Long[] listId,
+	// 删除
+	@RequestMapping(value="/goods/delete/{pgId}")
+	public String deleteGoods(@PathVariable Long pgId,
+			Boolean type,Integer page,
+			HttpServletRequest req,ModelMap map){
+		String username = (String)req.getSession().getAttribute("provider");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == pgId)
+		{
+			return "/client/error_404";
+		}
+		if(null == page)
+		{
+			page = 0;
+		}
+		
+		tdProviderGoodsService.delete(pgId);
+		TdProvider provider = tdProviderService.findByUsername(username);
+		map.addAttribute("provider_goods_page",
+				tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),type, page, ClientConstant.pageSize));
+		
+		
+		return "/client/provider_goods_list";
+	}
+	
+	@RequestMapping(value="/goods/checkAll/{type}")
+	public String deleteCheck(@PathVariable Boolean type,
+			Long[] listId,
 			Integer[] listChkId,
 			Integer page,
+			Long categoryId,String keywords,
 			HttpServletRequest req,
 			ModelMap map){
 		String username = (String)req.getSession().getAttribute("provider");
@@ -851,9 +898,18 @@ public class TdProviderController {
 		{
 			page = 0;
 		}
-		deleteCheck(listId,listChkId);
+		if(type){
 		
-		return "redirect:/provider/goods/list?page="+page;
+			ChangeAll(false,listId,listChkId);
+		}else{
+			ChangeAll(true,listId,listChkId);
+		}
+		
+		if(null == categoryId){
+			return "redirect:/provider/goods/list/"+type+"?page="+page+"&keywords="+keywords;
+		}else{
+			return "redirect:/provider/goods/list/"+type+"?page="+page+"&categoryId="+categoryId+"&keywords="+keywords;
+		}
 	}
 	
 	@RequestMapping(value="/goods/wholesaling")
@@ -910,7 +966,6 @@ public class TdProviderController {
 			String goodsTitle,
 			Double outFactoryPrice,
 			Long leftNumber,
-			Double shopReturnRation,
 			HttpServletRequest req)
 	{
 		Map<String,Object> res =new HashMap<>();
@@ -940,6 +995,7 @@ public class TdProviderController {
 			proGoods.setLeftNumber(leftNumber);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setIsOnSale(true);
+			proGoods.setCode(goods.getCode());
 			proGoods.setCategoryId(goods.getCategoryId());
 			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
 		}
@@ -954,23 +1010,23 @@ public class TdProviderController {
 		proGoods.setProviderTitle(provider.getTitle());
 		
 		// 分销状态
-		if(null == shopReturnRation || 0 ==shopReturnRation)
-		{
+//		if(null == shopReturnRation || 0 ==shopReturnRation)
+//		{
 			proGoods.setShopReturnRation(new Double(0));
-			proGoods.setIsDistribution(false);
+//			proGoods.setIsDistribution(false);
 			proGoods.setIsAudit(true);
 			provider.getGoodsList().add(proGoods);
 			tdProviderService.save(provider);
 			res.put("msg","设置批发成功");
-		}else{
-			proGoods.setShopReturnRation(shopReturnRation);
-			proGoods.setIsDistribution(true);
-			proGoods.setIsAudit(false);
-			proGoods.setShopReturnRation(shopReturnRation);
-			provider.getGoodsList().add(proGoods);
-			tdProviderService.save(provider);
-			res.put("msg", "分销商品，等待平台审核~");
-		}
+//		}else{
+//			proGoods.setShopReturnRation(shopReturnRation);
+//			proGoods.setIsDistribution(true);
+//			proGoods.setIsAudit(false);
+//			proGoods.setShopReturnRation(shopReturnRation);
+//			provider.getGoodsList().add(proGoods);
+//			tdProviderService.save(provider);
+//			res.put("msg", "分销商品，等待平台审核~");
+//		}
 		return res;
 	}
 	
@@ -989,7 +1045,7 @@ public class TdProviderController {
     }
 	
 	
-	public void deleteCheck(Long[] ids,Integer[] chkIds)
+	public void ChangeAll(Boolean isOnSale,Long[] ids,Integer[] chkIds)
 	{
 		if (null == ids || null == chkIds
                 || ids.length < 1 || chkIds.length < 1)
@@ -1000,7 +1056,11 @@ public class TdProviderController {
 			if(chkId >=0 && ids.length > chkId)
 			{
 				Long id = ids[chkId];
-				tdProviderGoodsService.delete(id);
+				TdProviderGoods providerGoods = tdProviderGoodsService.findOne(id);
+				if(null != providerGoods){
+					providerGoods.setIsOnSale(isOnSale);
+					tdProviderGoodsService.save(providerGoods);
+				}
 			}
 		}
 	}

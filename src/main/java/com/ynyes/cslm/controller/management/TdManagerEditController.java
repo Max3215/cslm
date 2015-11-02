@@ -13,6 +13,7 @@ import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdBrandService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdParameterCategoryService;
@@ -60,6 +61,9 @@ public class TdManagerEditController {
     
     @Autowired
     TdBrandService tdBrandService;
+    
+    @Autowired
+    TdDistributorService tdDistributorService;
     
     @RequestMapping(value="/category/edit")
     public String categoryEditDialog(Long cid, Long mid, Long id, Long sub, 
@@ -179,6 +183,8 @@ public class TdManagerEditController {
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
+        
+        map.addAttribute("dis_list", tdDistributorService.findByIsEnableTrue());
         
         if (null != mid)
         {

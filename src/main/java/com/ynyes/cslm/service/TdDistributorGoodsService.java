@@ -1481,7 +1481,11 @@ public class TdDistributorGoodsService {
 	}
 	
 	
-	
+	public Page<TdDistributorGoods> findByDistribuorIdOrderBySoldNumber(Long disId,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		return repository.findByDistributorIdOrderBySoldNumber(disId, pageRequest);
+	}
 	
 	
 	

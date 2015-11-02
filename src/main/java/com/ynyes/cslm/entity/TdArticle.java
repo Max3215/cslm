@@ -42,6 +42,10 @@ public class TdArticle {
     @Column
     private Long channelId;
     
+    // 所属超市Id
+    @Column
+    private Long distributorId;
+    
     // 显示状态
     @Column
     private Long statusId;
@@ -301,6 +305,15 @@ public class TdArticle {
     public void setParamIsSearchable(Boolean paramIsSearchable) {
         this.paramIsSearchable = paramIsSearchable;
     }
+
+	public Long getDistributorId() {
+		return distributorId;
+	}
+
+	public void setDistributorId(Long distributorId) {
+		this.distributorId = distributorId;
+	}
+    
     
     
 }

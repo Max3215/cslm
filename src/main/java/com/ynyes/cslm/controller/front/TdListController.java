@@ -83,16 +83,7 @@ public class TdListController {
             return "/client/error_404";
         }
         
-        // 列表页轮播广告
-        TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
-
-        if (null != adType) {
-            map.addAttribute("list_scroll_ad_list", tdAdService
-                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-        }
         
-        List<TdAd> list = tdAdService.findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId());
-       
         // 商城资讯
         List<TdArticleCategory> articleCatList = tdArticleCategoryService
                 .findByMenuId(10L);
@@ -530,8 +521,16 @@ public class TdListController {
                   }
               }
           }
+          
+       // 列表页轮播广告
+          TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
+
+          if (null != adType) {
+              map.addAttribute("list_scroll_ad_list", tdAdService
+                      .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+          }
        } 
-       else
+       else// 未选择超市
       {
         	// 按价格区间
             if (null != priceLow && null != priceHigh)
@@ -683,6 +682,15 @@ public class TdListController {
                         }
                     }
                 }
+            }
+            
+            
+         // 列表页轮播广告
+            TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
+
+            if (null != adType) {
+                map.addAttribute("list_scroll_ad_list", tdAdService
+                        .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
             }
         }
         

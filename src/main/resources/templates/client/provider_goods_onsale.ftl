@@ -52,7 +52,6 @@ function subDisGoods(){
     var goodsTitle = $("#goodsTitle").val();
     var outFactoryPrice = $("#outFactoryPrice").val();
     var leftNumber = $("#leftNumber").val();
-    var shopReturnRation = $("#shopReturnRation").val();
     
     if(undefined == goodsTitle || ""==goodsTitle)
     {
@@ -71,11 +70,6 @@ function subDisGoods(){
         alert("请输入库存数量");
         return;
     }
-    var ration = /(^[0]+(.[0-9]{2})?$)/;
-    if("" != shopReturnRation && !ration.test(shopReturnRation)){
-        alert("输入正确的分销比例，如0.01。。。");
-        return ;
-    }
     
     $.ajax({
         type : "post",
@@ -83,8 +77,7 @@ function subDisGoods(){
         data : {"goodsId":goodsId,
             "goodsTitle":goodsTitle,
             "outFactoryPrice":outFactoryPrice,
-            "leftNumber":leftNumber,
-            "shopReturnRation":shopReturnRation},
+            "leftNumber":leftNumber},
         dataType : "json",
         success:function(data){
             $('.sub_form').css('display','none');
@@ -205,7 +198,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" ></td>
+          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
         </tr>
          <tr>
           <th>*商品批发价：</th>
@@ -214,10 +207,6 @@ DD_belatedPNG.fix('.,img,background');
          <tr>
           <th>*库存：</th>
           <td><input type="text" name="leftNumber" id="leftNumber"></td>
-        </tr>
-         <tr>
-          <th>分销比例：</th>
-          <td><input type="text" name="shopReturnRation" id="shopReturnRation">&emsp;不填则为正常批发</td>
         </tr>
         <tr>
           <th></th>

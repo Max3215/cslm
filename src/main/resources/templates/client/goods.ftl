@@ -90,7 +90,6 @@ function cartInit(dId){
             window.open("/cart/init?id="+dId+"&quantity="+quantity);
             -->
             newTab.location.href="/cart/init?id="+dId+"&quantity="+quantity;
-            console.debug(11);
         }
     });
 }

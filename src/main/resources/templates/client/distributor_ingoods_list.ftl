@@ -16,11 +16,6 @@
                 </#list>
             </#if>
         </select>
-        <select  id="isDistribution" name="isDistribution" class="myselect" onchange="searchGoods()">
-           <option value="">是否分销</option>
-            <option value="isDistribution" <#if distribution?? && distribution=="isDistribution">selected="selected"</#if>>分销</option>
-            <option value="isNotDistribution" <#if distribution?? && distribution=="isNotDistribution">selected="selected"</#if>>未分销</option>
-        </select>
         </form>
         <div class="clear"></div>
     </div>
@@ -43,14 +38,10 @@
                         </td>
                         <td class="tb01"><span id="providerTitle${pgoods.id?c}">${pgoods.providerTitle!''}</span></td>
                         <td class="tb02">￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></td>
-                        <td><span id="number${pgoods.id?c}}">${pgoods.leftNumber!'0'}</span></td>
+                        <td><span id="number${pgoods.id?c}">${pgoods.leftNumber!'0'}</span></td>
                         <td>
-                           
-                           <#if pgoods.isDistribution?? && pgoods.isDistribution && pgoods.isAudit?? && pgoods.isAudit>
-                           <p><a onclick="addDistribution(${pgoods.id?c})">我要分销</a></p>
-                           <#else>
                             <p><a href="javascript:addgoods(${pgoods.id?c});">添加</a></p>
-                           </#if>
+                            <p><a href="javascript:collect(${pgoods.id?c});">收藏</a></p>
                         </td>
                      </tr>
                 </#list>
@@ -66,7 +57,7 @@
                             <#if page == proGoods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${page-1}">${page}</a>
+                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${page-1}&providerId=${providerId!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -81,6 +72,31 @@
         </div>
         
 <script type="text/javascript">
+
+function collect(pgId){
+    if (undefined == pgId)
+    {
+        return;
+    }
+    $.ajax({
+        type : "post",
+        url : "/distributor/collect/add",
+        data : {"pgId":pgId},
+        dataType : "json",
+        success:function(res){
+            alert(res.msg);
+            
+            if (res.code==1)
+            {
+                setTimeout(function(){
+                    window.location.href = "/login";
+                }, 1000); 
+            }
+        }
+    });
+    
+}
+
 function addDistribution(pid)
 {
     var shopReturnRation = $("#shopReturnRation"+pid).val();

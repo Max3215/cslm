@@ -253,8 +253,8 @@ $(document).ready(function(){
             				<li>
             					<a href="/goods/${item.id?c}" target="_blank">
             						<img src="${item.coverImageUri!''}" width="130px" height="130px">
-            						<p class="p1">￥${item.marketPrice?string('0.00')}</p>
-            						<p class="p2">${item.title!""}</p>
+            						<p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+            						<p class="p2">${item.goodsTitle!""}</p>
             					</a>
             				</li>
             		      </#if>
@@ -298,8 +298,8 @@ $(document).ready(function(){
             			<li>
             				<a href="/goods/${item.id?c!''}" target="_blank">
             					<img src="${item.coverImageUri!''}" width="130px" height="130px";>
-            					<p class="p1">￥${item.marketPrice?string('0.00')}</p>
-            					<p class="p2">${item.title!''}</p>
+            					<p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+            					<p class="p2">${item.goodsTitle!''}</p>
             				</a>
             			</li>
 				     </#if>
@@ -343,8 +343,8 @@ $(document).ready(function(){
                             <li>
                                 <a href="/goods/${item.id?c!''}" target="_blank">
                                     <img src="${item.coverImageUri!''}" width="130px" height="130px";>
-                                    <p class="p1">￥${item.marketPrice?string('0.00')}</p>
-                                    <p class="p2">${item.title!''}</p>
+                                    <p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+                                    <p class="p2">${item.goodsTitle!''}</p>
                                 </a>
                             </li>
                          </#if>
@@ -388,8 +388,8 @@ $(document).ready(function(){
                                 <li>
                                     <a href="/goods/${item.id?c!''}" target="_blank">
                                         <img src="${item.coverImageUri!''}" width="130px" height="130px";>
-                                        <p class="p1">￥${item.marketPrice?string('0.00')}</p>
-                                        <p class="p2">${item.title!''}</p>
+                                        <p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+                                        <p class="p2">${item.goodsTitle!''}</p>
                                     </a>
                                 </li>
                              </#if>
@@ -433,8 +433,8 @@ $(document).ready(function(){
                             <li>
                                 <a href="/goods/${item.id?c!''}" target="_blank">
                                     <img src="${item.coverImageUri!''}" width="130px" height="130px";>
-                                    <p class="p1">￥${item.marketPrice?string('0.00')}</p>
-                                    <p class="p2">${item.title!''}</p>
+                                    <p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+                                    <p class="p2">${item.goodsTitle!''}</p>
                                 </a>
                             </li>
                          </#if>
@@ -478,8 +478,8 @@ $(document).ready(function(){
                             <li>
                                 <a href="/goods/${item.id?c!''}" target="_blank">
                                     <img src="${item.coverImageUri!''}" width="130px" height="130px";>
-                                    <p class="p1">￥${item.marketPrice?string('0.00')}</p>
-                                    <p class="p2">${item.title!''}</p>
+                                    <p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+                                    <p class="p2">${item.goodsTitle!''}</p>
                                 </a>
                             </li>
                          </#if>
@@ -523,8 +523,8 @@ $(document).ready(function(){
                             <li>
                                 <a href="/goods/${item.id?c!''}" target="_blank">
                                     <img src="${item.coverImageUri!''}" width="130px" height="130px";>
-                                    <p class="p1">￥${item.marketPrice?string('0.00')}</p>
-                                    <p class="p2">${item.title!''}</p>
+                                    <p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+                                    <p class="p2">${item.goodsTitle!''}</p>
                                 </a>
                             </li>
                          </#if>
@@ -568,8 +568,8 @@ $(document).ready(function(){
                             <li>
                                 <a href="/goods/${item.id?c!''}" target="_blank">
                                     <img src="${item.coverImageUri!''}" width="130px" height="130px";>
-                                    <p class="p1">￥${item.marketPrice?string('0.00')}</p>
-                                    <p class="p2">${item.title!''}</p>
+                                    <p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+                                    <p class="p2">${item.goodsTitle!''}</p>
                                 </a>
                             </li>
                          </#if>
@@ -613,8 +613,8 @@ $(document).ready(function(){
                             <li>
                                 <a href="/goods/${item.id?c!''}" target="_blank">
                                     <img src="${item.coverImageUri!''}" width="130px" height="130px";>
-                                    <p class="p1">￥${item.marketPrice?string('0.00')}</p>
-                                    <p class="p2">${item.title!''}</p>
+                                    <p class="p1">￥${item.goodsPrice?string('0.00')}</p>
+                                    <p class="p2">${item.goodsTitle!''}</p>
                                 </a>
                             </li>
                          </#if>

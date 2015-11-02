@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ynyes.cslm.entity.TdAd;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.util.SiteMagConstant;
 
@@ -34,6 +35,9 @@ public class TdManagerAdController {
     
     @Autowired
     TdManagerLogService tdManagerLogService;
+    
+    @Autowired
+    TdDistributorService tdDistributorService;
     
     @RequestMapping(value="/list")
     public String setting(Integer page,
@@ -108,6 +112,8 @@ public class TdManagerAdController {
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
         map.addAttribute("ad_type_list", tdAdTypeService.findAllOrderBySortIdAsc());
+        
+        map.addAttribute("dis_list", tdDistributorService.findByIsEnableTrue());
         
         if (null != id)
         {

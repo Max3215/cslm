@@ -13,7 +13,7 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
-<script src="/client/js/distributor_goods.js"></script>
+<script src="/client/js/provider_goods.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".click_a").click(function(){
@@ -44,16 +44,6 @@ function searchGoods(){
     $("#form1").submit();
 }
 
-function deletegoods(id,page){
-    $.ajax({
-        url : "/provider/goods/delete",
-        data : {"id":id,"page":page},
-        type : "post",
-        success:function(res){
-            $("#dis_goods_table").html(res);
-        }
-    })
-} 
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -75,8 +65,8 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_mainbox">
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
-                    <h3>批发中的商品</h3>
-                      <form action="/provider/goods/list" id="form1">
+                    <h3><#if isOnSale?? && isOnSale>批发中的商品<#else>仓库中的商品</#if></h3>
+                      <form action="/provider/goods/list/${isOnSale?c}" id="form1">
                             <input type="hidden" value="${page!'0'}" name="page"/>
                             <input class="mysub" type="submit" value="查询" />
                             <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
@@ -88,16 +78,18 @@ DD_belatedPNG.fix('.,img,background');
                                     </#list>
                                 </#if>
                             </select>
+                            <#--
                             <select  id="isDistribution" name="isDistribution" class="myselect" onchange="searchGoods()">
                                <option value="">是否分销</option>
                                 <option value="isDistribution" <#if distribution?? && distribution=="isDistribution">selected="selected"</#if>>分销</option>
                                 <option value="isNotDistribution" <#if distribution?? && distribution=="isNotDistribution">selected="selected"</#if>>未分销</option>
                             </select>
+                            -->
                         </form>
                     <div class="clear"></div>
                 </div>
                 
-                <form action="/provider/goods/deleteCheck" method="post" id="form">
+                <form action="/provider/goods/checkAll/${isOnSale?c}" method="post" id="form">
                 <input type="hidden" name="page" value="${page!'0'}"/>
                 <input type="hidden" name="categoryId" value="${categoryId!''}"/>
                 <input type="hidden" name="keywords" value="${keywords!''}"/>
@@ -108,7 +100,11 @@ DD_belatedPNG.fix('.,img,background');
             <div class="myclear" style="height:10px;"></div>
 
             <div class="mymember_page">
+             <#if isOnSale>
                 <a href="javascript:deleteCheck();"  class="fl">取消批发选中的商品</a>
+            <#else>
+                <a href="javascript:deleteCheck();"  class="fl">批发选中的商品</a>
+            </#if>             
                 <#if provider_goods_page??>
                 <#assign continueEnter=false>
                 <#if provider_goods_page.totalPages gt 0>
@@ -117,7 +113,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == provider_goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/provider/goods/list?page=${page-1}">${page}</a>
+                                <a href="/provider/goods/list/${isOnSale?c}?page=${page-1}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

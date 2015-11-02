@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,7 +36,9 @@ import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
+import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserPoint;
+import com.ynyes.cslm.repository.TdUserCollectRepo;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
@@ -47,6 +50,7 @@ import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdUserCollectService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
@@ -95,6 +99,9 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdProductCategoryService tdProductCategoryService;
+	
+	@Autowired
+	TdUserCollectService tdUserCollectService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -1769,76 +1776,77 @@ public class TdDistributorController {
 		// 参数注回
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("page", page);
-		map.addAttribute("distribution", isDistribution);
+//		map.addAttribute("distribution", isDistribution);
 		map.addAttribute("providerId", providerId);
 		
 		if(null == providerId)
 		{
-			if("isDistribution".equalsIgnoreCase(isDistribution))
-			{
+//			if("isDistribution".equalsIgnoreCase(isDistribution))
+//			{
+//				if(null == keywords)
+//				{
+//					map.addAttribute("proGoods_page",
+//							tdProviderGoodsService.findByIsDistributionTrueAndIsAuditTrue(page, 10));
+//				}else{
+//					map.addAttribute("proGoods_page", 
+//							tdProviderGoodsService.searchAndIsDistributionTrueAndIsAuditTrue(keywords, page, 10));
+//				}
+//			}
+//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+//			{	
+//				if(null == keywords){
+//					map.addAttribute("proGoods_page",
+//							tdProviderGoodsService.findByIsDistributionFalseAndIsAuditTrue(page, 10));
+//				}else{
+//					map.addAttribute("proGoods_page",
+//							tdProviderGoodsService.searchAndIsDistributionFalseAndIsAuditTrue(keywords, page, 10));
+//				}
+//			}
+//			else
+//			{
 				if(null == keywords)
 				{
 					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByIsDistributionTrueAndIsAuditTrue(page, 10));
+							tdProviderGoodsService.findByIsOnSaleTrue(page, 10));
+					
 				}else{
 					map.addAttribute("proGoods_page", 
-							tdProviderGoodsService.searchAndIsDistributionTrueAndIsAuditTrue(keywords, page, 10));
+							tdProviderGoodsService.searchAndIsOnSaleTrue(keywords, page, 10));
 				}
-			}
-			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-			{	
-				if(null == keywords){
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByIsDistributionFalseAndIsAuditTrue(page, 10));
-				}else{
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.searchAndIsDistributionFalseAndIsAuditTrue(keywords, page, 10));
-				}
-			}
-			else
-			{
-				if(null == keywords)
-				{
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByIsAuditTrue(page, 10));
-				}else{
-					map.addAttribute("proGoods_page", 
-							tdProviderGoodsService.searchAndIsAuditTrue(keywords, page, 10));
-				}
-			}
+//			}
 		}
 		else
 		{
-			if("isDistribution".equalsIgnoreCase(isDistribution))
-			{
+//			if("isDistribution".equalsIgnoreCase(isDistribution))
+//			{
+//				if(null == keywords){
+//					map.addAttribute("proGoods_page",
+//							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,true, true, page, 10));
+//				}else{
+//					map.addAttribute("proGoods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, true, true, keywords, page, 10));
+//				}
+//			}
+//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
+//			{
+//				if(null == keywords){
+//					map.addAttribute("proGoods_page",
+//							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,false, true, page, 10));
+//				}else{
+//					map.addAttribute("proGoods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, false, true, keywords, page, 10));
+//				}
+//			}
+//			else
+//			{
 				if(null == keywords){
 					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,true, true, page, 10));
+							tdProviderGoodsService.findByProviderIdAndIsOnSale(providerId,true, page, 10));
 				}else{
 					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, true, true, keywords, page, 10));
+							tdProviderGoodsService.searchAndProviderIdAndIsOnSale(providerId, keywords, true, page, 10));
 				}
-			}
-			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-			{
-				if(null == keywords){
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,false, true, page, 10));
-				}else{
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, false, true, keywords, page, 10));
-				}
-			}
-			else
-			{
-				if(null == keywords){
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByProviderIdAndIsAudit(providerId,true, page, 10));
-				}else{
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.searchAndProviderIdAndIsAudit(providerId, keywords, true, page, 10));
-				}
-			}
+//			}
 		}
 		
 		return "/client/distributor_ingoods";
@@ -2428,6 +2436,94 @@ public class TdDistributorController {
 //		return "";
 //	}
 	
+    /**
+     *  添加收藏
+     */
+    @RequestMapping(value="/collect/add",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> collectAdd(Long pgId,HttpServletRequest req,ModelMap map){
+    	 Map<String, Object> res = new HashMap<String, Object>();
+         res.put("code", 1);
+    	
+         if(null == pgId){
+        	 res.put("msg","参数错误！");
+        	 return res;
+         }
+       
+         String username =(String)req.getSession().getAttribute("distributor");
+         if(null == username){
+        	 res.put("msg", "请重新登录");
+        	 return res;
+         }
+         res.put("code",0);
+         
+         TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+         if(null == providerGoods){
+        	 res.put("msg", "参数错误！");
+        	 return res;
+         }
+         
+         // 没有收藏
+         if(null == tdUserCollectService.findByUsernameAndProviderId(username, tdProviderGoodsService.findProviderId(pgId))){
+        	 TdUserCollect collect = new TdUserCollect();
+        	 
+        	 collect.setUsername(username);
+        	 collect.setProviderId(pgId);
+        	 collect.setGoodsId(providerGoods.getGoodsId());
+        	 collect.setGoodsCoverImageUri(providerGoods.getGoodsCoverImageUri());
+        	 collect.setGoodsSalePrice(providerGoods.getOutFactoryPrice());
+        	 collect.setGoodsTitle(providerGoods.getGoodsTitle());
+        	 collect.setCollectTime(new Date());
+        	 
+        	 tdUserCollectService.save(collect);
+        	 res.put("msg","收藏成功");
+        	 return res;
+         }
+         
+         res.put("msg","已经收藏该商品");
+         
+    	return res;
+    }
+    /**
+     * 收藏列表
+     * 
+     */
+    
+    @RequestMapping(value="/collect/list")
+    public String collect(HttpServletRequest req,Integer page,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	if(null == page){
+    		page=0;
+    	}
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("collect_page",
+    			tdUserCollectService.findByUsername(username, page,ClientConstant.pageSize));
+    	
+    	return "/client/distributor_collect";
+    }
+    
+    /**
+     * 	取消收藏
+     * 
+     */
+    @RequestMapping(value="/collect/del")
+    public String collectDle(HttpServletRequest req,ModelMap map,Long id){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	if(null != id){
+    		tdUserCollectService.delete(id);
+    	}
+    	return "redirect:/distributor/collect/list";
+    	
+    }
+    
     @RequestMapping(value = "/edit/ImageUrl", method = RequestMethod.POST)
     @ResponseBody
     public String editimageUrl(String imgUrl,HttpServletRequest rep)
@@ -2456,8 +2552,10 @@ public class TdDistributorController {
             {
                 Long id = ids[chkId];
                 TdDistributorGoods goods = tdDistributorGoodsService.findOne(id);
-               	goods.setIsOnSale(onsale);
-               	tdDistributorGoodsService.save(goods);
+               	if(null != goods){
+               		goods.setIsOnSale(onsale);
+               		tdDistributorGoodsService.save(goods);
+               	}
             }
         }
 	}

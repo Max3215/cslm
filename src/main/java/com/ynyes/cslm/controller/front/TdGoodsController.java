@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
@@ -96,36 +97,47 @@ public class TdGoodsController {
     @Autowired
     private TdDistributorGoodsService tdDistributorGoodsService;
 
-    @RequestMapping("/goods/{goodsId}")
-    public String product(@PathVariable Long goodsId, Long shareId,
+    @RequestMapping("/goods/{dgId}")
+    public String product(@PathVariable Long dgId, Long shareId,
             Integer qiang, ModelMap map, HttpServletRequest req) {
 
         tdCommonService.setHeader(map, req);
         
-        if (null == goodsId) {
+        if (null == dgId) {
             return "error_404";
         }
-
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(dgId);
+        Long goodsId = distributorGoods.getGoodsId();
+        
         String username = (String) req.getSession().getAttribute("username");
         if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
         {
         	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
         	
         	 //成交数
-            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, goodsId,0,5));
+            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, distributorGoods.getGoodsId(),0,5));
             
-            map.addAttribute("dis_goods", tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,goodsId, true));
+            map.addAttribute("dis_goods", tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,distributorGoods.getGoodsId(), true));
             
          // 热卖
             map.addAttribute("dis_hot_list",
                     tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId,0,12).getContent());
         }else
         {
-        	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,0,5));
-        	 
-        	// 热卖
-        	 map.addAttribute("dis_hot_list",
-                     tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0,12).getContent());
+        	// 如没有选择超市 则默认选择所选商品所在超市
+        	Long distributorId = tdDistributorGoodsService.findDistributorId(dgId);
+        	TdDistributor distributor = TdDistributorService.findOne(distributorId);
+    		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
+    		req.getSession().setAttribute("distributorTitle", distributor.getTitle()); 
+    		
+    		 //成交数
+            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, distributorGoods.getGoodsId(),0,5));
+            
+            map.addAttribute("dis_goods", tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,distributorGoods.getGoodsId(), true));
+            
+         // 热卖
+            map.addAttribute("dis_hot_list",
+                    tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId,0,12).getContent());
         }
 
         // 添加浏览记录
@@ -561,9 +573,9 @@ public class TdGoodsController {
 	    		quantity =1L;
 	    	}
 	    	
-	    	if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
-	    	{
-	    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+    	if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
+    	{
+    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
 	    	
 	//    	List<TdDistributorGoods> disGoods = tdDistributorGoodsService.findByGoodsId(id);
 //	    	TdDistributorGoods distributorGoods = TdDistributorService.findByIdAndGoodId(disId, id);
@@ -581,8 +593,10 @@ public class TdGoodsController {
 	    		return res;
 	    	}
     	}else{
-    		res.put("msg", "请选选择超市！");
-    		return res;
+    		Long distributorId = tdDistributorGoodsService.findDistributorId(id);
+    		TdDistributor distributor = TdDistributorService.findOne(distributorId);
+    		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
+    		req.getSession().setAttribute("distributorTitle", distributor.getTitle());
     	}
     	return res;
     }

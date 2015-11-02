@@ -31,6 +31,10 @@ public class TdProviderGoods {
 	@Column
 	private String subGoodsTitle;
 	
+	// 编码
+	@Column
+	private String code;
+	
 	// 批发商名称
 	@Column
 	private String providerTitle;
@@ -100,6 +104,14 @@ public class TdProviderGoods {
 
 	public void setGoodsTitle(String goodsTitle) {
 		this.goodsTitle = goodsTitle;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getSubGoodsTitle() {

@@ -33,6 +33,10 @@ public class TdAd {
     @Column
     private Long typeId;
     
+    // 超市Id
+    @Column
+    private Long distributorId;
+    
     // 该类型是否在新窗口显示
     @Column
     private Boolean typeIsNewWindow;
@@ -84,7 +88,15 @@ public class TdAd {
         return title;
     }
 
-    public void setTitle(String title) {
+	public Long getDistributorId() {
+		return distributorId;
+	}
+
+	public void setDistributorId(Long distributorId) {
+		this.distributorId = distributorId;
+	}
+
+	public void setTitle(String title) {
         this.title = title;
     }
 

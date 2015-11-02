@@ -33,6 +33,10 @@ public class TdUserCollect {
 	@Column
 	private Long distributorId;
 	
+	// 批发商id
+	@Column
+	private Long providerId;
+	
 	// 商品Id
 	@Column
 	private Long goodsId;
@@ -88,6 +92,14 @@ public class TdUserCollect {
 
 	public void setDistributorId(Long distributorId) {
 		this.distributorId = distributorId;
+	}
+
+	public Long getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(Long providerId) {
+		this.providerId = providerId;
 	}
 
 	public Long getGoodsId() {
