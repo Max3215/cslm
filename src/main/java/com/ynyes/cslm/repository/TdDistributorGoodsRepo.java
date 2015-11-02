@@ -342,10 +342,10 @@ public interface TdDistributorGoodsRepo extends
 																									Long disId2,String catId2,String keywords2,
 																									Long disId3,String catId3,String keywords3,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 order by g.soldNumber desc")
-		Page<TdDistributorGoods> findByDistributorIdOrderBySoldNumber(Long distributorId,Pageable page);
+		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=1 order by g.onSaleTime desc")
+		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(Long distributorId,Pageable page);
 		
-		
+		Page<TdDistributorGoods> findByIsOnSaleTrueOrderByOnSaleTimeDesc(Pageable page);
 		
 		
 		

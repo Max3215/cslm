@@ -1481,13 +1481,17 @@ public class TdDistributorGoodsService {
 	}
 	
 	
-	public Page<TdDistributorGoods> findByDistribuorIdOrderBySoldNumber(Long disId,int page,int size)
+	public Page<TdDistributorGoods> findByDistribuorIdOrderByOnSaleTime(Long disId,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByDistributorIdOrderBySoldNumber(disId, pageRequest);
+		return repository.findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(disId, pageRequest);
 	}
 	
-	
+	public Page<TdDistributorGoods> findAllOrderByOnSaleTime(int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "onSaleTime"));
+		return repository.findByIsOnSaleTrueOrderByOnSaleTimeDesc(pageRequest);
+	}
 	
 	
 	

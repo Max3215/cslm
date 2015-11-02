@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,13 +75,13 @@ public class TdPayRecordService {
     }
     
     public Page<TdPayRecord> findByDistributorId(Long disId,int page,int size){
-    	PageRequest pageRequest = new PageRequest(page, size,new Sort("createTime"));
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
     	return repository.findByDistributorIdOrderByCreateTimeDesc(disId, pageRequest);
     	
     }
     
     public Page<TdPayRecord> findByProviderId(Long proId,int page,int size){
-    	PageRequest pageRequest = new PageRequest(page, size,new Sort("createTime"));
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
     	return repository.findByProviderIdOrderByCreateTimeDesc(proId, pageRequest);
     	
     }

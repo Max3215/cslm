@@ -103,7 +103,7 @@ public class TdIndexController {
                 }
             }
         	
-        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByDistribuorIdOrderBySoldNumber(distributorId, 0, 10));
+        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByDistribuorIdOrderByOnSaleTime(distributorId, 0, 10));
         	// 一级分类
             List<TdProductCategory> topCatList = tdProductCategoryService
                     .findByParentIdIsNullOrderBySortIdAsc();
@@ -142,6 +142,23 @@ public class TdIndexController {
         			
         		}
         	}
+        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAllOrderByOnSaleTime(0, 10));
+        	
+        	// 一级分类
+            List<TdProductCategory> topCatList = tdProductCategoryService
+                    .findByParentIdIsNullOrderBySortIdAsc();
+            if (null != topCatList && topCatList.size() > 0) {
+                map.addAttribute("top_category_list", topCatList);
+
+                for (int i = 0; i < topCatList.size(); i++) {
+                    TdProductCategory topCat = topCatList.get(i);
+
+                    if (null != topCat) {
+                        map.addAttribute( "top_cat_goods_page" + i,
+                        		tdDistributorGoodsService.findByCategoryIdAndIsOnSale(topCat.getId(), true, 0, 10));
+                    }
+                }
+            }
         	
         	// 首页大图轮播广告
             adType = tdAdTypeService.findByTitle("首页轮播大图广告");
