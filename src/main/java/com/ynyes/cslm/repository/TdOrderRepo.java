@@ -165,4 +165,6 @@ public interface TdOrderRepo extends
     
     Long countByShopIdAndTypeIdAndStatusId(long shopId,long typeId,long statusId);
     
+    Long countByProviderIdAndTypeIdAndStatusId(long providerId,long typeId,long statusId);
+    
 }

@@ -104,9 +104,10 @@ public class TdGoodsController {
         tdCommonService.setHeader(map, req);
         
         if (null == dgId) {
-            return "error_404";
+            return "/client/error_404";
         }
         TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(dgId);
+        
         Long goodsId = distributorGoods.getGoodsId();
         
         String username = (String) req.getSession().getAttribute("username");
@@ -122,7 +123,8 @@ public class TdGoodsController {
          // 热卖
             map.addAttribute("dis_hot_list",
                     tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId,0,12).getContent());
-        }else
+        }
+        else
         {
         	// 如没有选择超市 则默认选择所选商品所在超市
         	Long distributorId = tdDistributorGoodsService.findDistributorId(dgId);
@@ -228,13 +230,13 @@ public class TdGoodsController {
         }
 
         // 获取商品的其他版本
-        if (null != goods.getProductId()) {
+        if (null != distributorGoods.getProductId()) {
             TdProduct product = tdProductService.findOne(goods.getProductId());
 
             if (null != product) {
-                List<TdGoods> productGoodsList = tdGoodsService
-                        .findByProductIdAndIsOnSaleTrue(goods.getProductId());
-
+                List<TdDistributorGoods> productGoodsList = tdDistributorGoodsService.
+                		findByDistributorIdAndProductIdAndIsOnSale(tdDistributorGoodsService.findDistributorId(dgId),product.getId());
+                
                 // 总的规格总类数量
                 int totalSelects = product.getTotalSelects();
 
@@ -242,9 +244,9 @@ public class TdGoodsController {
                 List<String> selectTwoList = new ArrayList<String>();
                 List<String> selectThreeList = new ArrayList<String>();
 
-                List<TdGoods> selectOneGoodsList = new ArrayList<TdGoods>();
-                List<TdGoods> selectTwoGoodsList = new ArrayList<TdGoods>();
-                List<TdGoods> selectThreeGoodsList = new ArrayList<TdGoods>();
+                List<TdDistributorGoods> selectOneGoodsList = new ArrayList<TdDistributorGoods>();
+                List<TdDistributorGoods> selectTwoGoodsList = new ArrayList<TdDistributorGoods>();
+                List<TdDistributorGoods> selectThreeGoodsList = new ArrayList<TdDistributorGoods>();
 
                 String sOne = null;
                 String sTwo = null;
@@ -262,7 +264,7 @@ public class TdGoodsController {
                         sOne = sOne.trim();
                     }
 
-                    for (TdGoods pdtGoods : productGoodsList) {
+                    for (TdDistributorGoods pdtGoods : productGoodsList) {
                         // 其他同类商品规格一的值
                         String s1 = pdtGoods.getSelectOneValue().trim();
 
@@ -296,7 +298,7 @@ public class TdGoodsController {
                         sTwo = sTwo.trim();
                     }
 
-                    for (TdGoods pdtGoods : productGoodsList) {
+                    for (TdDistributorGoods pdtGoods : productGoodsList) {
                         // 其他商品规格一、二的值
                         String s1 = pdtGoods.getSelectOneValue().trim();
                         String s2 = pdtGoods.getSelectTwoValue().trim();
@@ -350,7 +352,7 @@ public class TdGoodsController {
                         sThree = sThree.trim();
                     }
 
-                    for (TdGoods pdtGoods : productGoodsList) {
+                    for (TdDistributorGoods pdtGoods : productGoodsList) {
                         // 其他商品规格一、二、三的值
                         String s1 = pdtGoods.getSelectOneValue().trim();
                         String s2 = pdtGoods.getSelectTwoValue().trim();

@@ -8,10 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
 /**
- * 车友还想团购
+ * 商品供求
  * 
- * @author zhangji
+ * @author libiao
+ *
  */
 @Entity
 public class TdDemand {
@@ -45,6 +47,7 @@ public class TdDemand {
     @Column
     private Long statusId;
     	
+    
 	
 	public Long getId() {
 		return id;

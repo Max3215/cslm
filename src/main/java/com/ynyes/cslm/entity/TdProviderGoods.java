@@ -12,6 +12,12 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+/**
+ * 批发商商品库
+ * @author libiao
+ *
+ */
+
 @Entity
 public class TdProviderGoods {
 

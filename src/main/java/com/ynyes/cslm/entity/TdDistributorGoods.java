@@ -41,6 +41,10 @@ public class TdDistributorGoods {
 	@Column
 	private String subGoodsTitle;
 	
+	// 产品Id
+	@Column
+	private Long productId;
+	
 	// 商品价格
 	@Column(scale=2)
 	private Double goodsPrice;
@@ -97,6 +101,18 @@ public class TdDistributorGoods {
     // 参数值，用于搜索
     @Column
     private String paramValueCollect;
+    
+    // 筛选参数一值
+    @Column
+    private String selectOneValue;
+    
+    // 筛选参数二值
+    @Column
+    private String selectTwoValue;
+    
+    // 筛选参数三值
+    @Column
+    private String selectThreeValue;
     
     // 品牌
     @Column
@@ -312,6 +328,38 @@ public class TdDistributorGoods {
 
 	public void setProviderTitle(String providerTitle) {
 		this.providerTitle = providerTitle;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public String getSelectOneValue() {
+		return selectOneValue;
+	}
+
+	public void setSelectOneValue(String selectOneValue) {
+		this.selectOneValue = selectOneValue;
+	}
+
+	public String getSelectTwoValue() {
+		return selectTwoValue;
+	}
+
+	public void setSelectTwoValue(String selectTwoValue) {
+		this.selectTwoValue = selectTwoValue;
+	}
+
+	public String getSelectThreeValue() {
+		return selectThreeValue;
+	}
+
+	public void setSelectThreeValue(String selectThreeValue) {
+		this.selectThreeValue = selectThreeValue;
 	}
 
 	

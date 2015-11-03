@@ -70,6 +70,7 @@ var theForm = document.forms['form1'];
     <th align="left">登录名</th>
     <th align="left">地区</th>
     <th align="left" width="37%">地理位置</th>
+    <th align="left" width="8%">类型</th>
     <th align="left" width="12%">排序</th>
     <th width="8%">是否启用</th>
     <th width="10%">操作</th>
@@ -88,6 +89,7 @@ var theForm = document.forms['form1'];
                 <td>${provider.username!""}</td>
                 <td>${provider.city!""}</td>
                 <td>${provider.address!""}</td>
+                <td><#if provider.type?? && provider.type ==2>分销商<#else>批发商</#if></td>
                 <td><input name="listSortId" type="text" value="${provider.sortId!""}" class="sort" onkeydown="return checkNumber(event);"></td>
                 <td align="center"><#if provider.isEnable?? && provider.isEnable>是<#else>否</#if></td>
                 <td align="center">

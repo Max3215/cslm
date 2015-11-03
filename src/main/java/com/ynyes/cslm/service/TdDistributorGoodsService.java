@@ -203,6 +203,10 @@ public class TdDistributorGoodsService {
     	return repository.findByIsOnSaleTrueOrderBySoldNumberDesc(pageRequest);
     }
     
+    public List<TdDistributorGoods> findByDistributorIdAndProductIdAndIsOnSale(Long disId,Long productId){
+    	return repository.findByDistributorIdAndProductIdAndIsOnSaleTrue(disId, productId);
+    }
+    
     /**
      * 	列表页排序
      * 	

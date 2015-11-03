@@ -525,6 +525,12 @@ public class TdOrderService {
         return repository.countByShopIdAndTypeIdAndStatusId(shopId,typeId ,statusId);
     }
     
+    public Long countByProviderIdAndTypeIdAndStatusId(Long providerId,long typeId, long statusId)
+    {
+    	
+        return repository.countByProviderIdAndTypeIdAndStatusId(providerId,typeId ,statusId);
+    }
+    
     
  // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓		分   销   单   查   询		↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓

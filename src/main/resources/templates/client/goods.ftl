@@ -200,7 +200,7 @@ function preGoods(did){
         					<span>${select_one_name!''}：</span>
         					<#if select_one_goods_list??> 
                                  <#list select_one_goods_list as item> 
-                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id}">${item.selectOneValue}</a> 
+                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectOneValue}</a> 
                                  </#list>
                             </#if>
         				</menu>
@@ -209,7 +209,7 @@ function preGoods(did){
                             <span>${select_one_name!''}：</span>
                             <#if select_one_goods_list??> 
                                  <#list select_one_goods_list as item> 
-                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id}">${item.selectOneValue}</a> 
+                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectOneValue}</a> 
                                  </#list>
                             </#if>
                         </menu>
@@ -217,7 +217,7 @@ function preGoods(did){
                             <span>${select_two_name!''}：</span>
                             <#if select_two_goods_list??> 
                                  <#list select_two_goods_list as item> 
-                                     <a <#if item.selectTwoValue==two_selected>class="sel"</#if>href="/goods/${item.id}">${item.selectTwoValue}</a> 
+                                     <a <#if item.selectTwoValue==two_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectTwoValue}</a> 
                                  </#list>
                             </#if>
                         </menu>
@@ -226,7 +226,7 @@ function preGoods(did){
                             <span>${select_one_name!''}：</span>
                             <#if select_one_goods_list??> 
                                  <#list select_one_goods_list as item> 
-                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id}">${item.selectOneValue}</a> 
+                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectOneValue}</a> 
                                  </#list>
                             </#if>
                         </menu>
@@ -234,7 +234,7 @@ function preGoods(did){
                             <span>${select_two_name!''}：</span>
                             <#if select_two_goods_list??> 
                                  <#list select_two_goods_list as item> 
-                                     <a <#if item.selectTwoValue==two_selected>class="sel"</#if>href="/goods/${item.id}">${item.selectTwoValue}</a> 
+                                     <a <#if item.selectTwoValue==two_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectTwoValue}</a> 
                                  </#list>
                             </#if>
                         </menu>
@@ -242,7 +242,7 @@ function preGoods(did){
                             <span>${select_three_name!''}：</span>
                             <#if select_three_goods_list??> 
                                  <#list select_three_goods_list as item> 
-                                     <a <#if item.selectThreeValue==three_selected>class="sel"</#if>href="/goods/${item.id}">${item.selectThreeValue}</a> 
+                                     <a <#if item.selectThreeValue==three_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectThreeValue}</a> 
                                  </#list>
                             </#if>
                         </menu>

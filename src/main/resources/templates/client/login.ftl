@@ -126,9 +126,10 @@ function login(){
                   window.location.href="/distributor/index";
               }
               else if (data.code == 2){
-                    window.location.href="/provider/index"
-              }
-              else if (data.code == 0) {
+                    window.location.href="/provider/index";
+              }else if(data.code == 3){
+                    window.location.href="/supply/index";
+              }else if (data.code == 0) {
                    var url = document.referrer;          
                    if(undefined==url || ""==url){
                     window.location.href="/";
@@ -215,6 +216,7 @@ function chooseMoreShow(){
       <span><input type="radio" name="type" value="user" checked="checked">普通会员</span>
       <span><input type="radio" name="type" value="distributor">超市</span>
       <span><input type="radio" name="type" value="provider">批发商</span>
+      <span><input type="radio" name="type" value="supply">分销商</span>
     </p>
     <p class="pb10">
       <input id="rmbUser" type="checkbox" />

@@ -1016,9 +1016,9 @@ public class TdProviderController {
 		// 分销状态
 //		if(null == shopReturnRation || 0 ==shopReturnRation)
 //		{
-			proGoods.setShopReturnRation(new Double(0));
+//			proGoods.setShopReturnRation(new Double(0));
 //			proGoods.setIsDistribution(false);
-			proGoods.setIsAudit(true);
+//			proGoods.setIsAudit(true);
 			provider.getGoodsList().add(proGoods);
 			tdProviderService.save(provider);
 			res.put("msg","设置批发成功");

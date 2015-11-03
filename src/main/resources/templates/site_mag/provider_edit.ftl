@@ -16,9 +16,9 @@ $(function () {
     
      $("#address").citySelect({
         nodata:"none",
-        <#if diy_site?? && diy_site.province??>prov: "${diy_site.province!''}",</#if>
-        <#if diy_site?? && diy_site.city??>city: "${diy_site.city!''}",</#if>
-        <#if diy_site?? && diy_site.disctrict??>dist: "${diy_site.disctrict!''}",</#if>
+        <#if provider?? && provider.province??>prov: "${provider.province!''}",</#if>
+        <#if provider?? && provider.city??>city: "${provider.city!''}",</#if>
+        <#if provider?? && provider.disctrict??>dist: "${provider.disctrict!''}",</#if>
         required:false
     });
 });
@@ -81,6 +81,17 @@ $(function () {
         </dd>
     </dl>
     <dl>
+        <dt>账号类别</dt>
+        <dd>
+            <div class="rule-multi-radio multi-radio">
+                <span id="rblStatus" style="display: none;">
+                    <input type="radio" name="type" value="1" <#if !provider?? || provider?? && provider.type?? && provider.type==1>checked="checked"</#if> ><label>批发商</label>
+                    <input type="radio" name="type" value="2" <#if provider?? && provider.type?? && provider.type==2>checked="checked"</#if>><label>分销商</label>
+                </span>
+            </div>
+        </dd>
+    </dl>
+    <dl>
         <dt>批发商手机</dt>
         <dd>
             <input name="mobile" type="text" value="<#if provider??>${provider.mobile!""}</#if>" class="input normal"  datatype="m" sucmsg=" ">
@@ -97,7 +108,7 @@ $(function () {
     <dl>
         <dt>账号余额</dt>
         <dd>
-            <input name="mobile" type="text" value="<#if provider?? && provider.virtualMoney??>${provider.virtualMoney?string('0.00')}</#if>" class="input normal"   sucmsg=" ">
+            <input name="virtualMoney" type="text" value="<#if provider?? && provider.virtualMoney??>${provider.virtualMoney?string('0.00')}</#if>" class="input normal"   sucmsg=" ">
             <span class="Validform_checktip"></span>
         </dd>
     </dl>

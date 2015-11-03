@@ -73,6 +73,10 @@ public class TdProvider {
     @Column
     private Long sortId;
     
+    // 账号类型
+    @Column
+    private Long type;
+    
     //是否启用
     @Column
     private Boolean isEnable;
@@ -200,6 +204,14 @@ public class TdProvider {
 
 	public void setImageUri(String imageUri) {
 		this.imageUri = imageUri;
+	}
+
+	public Long getType() {
+		return type;
+	}
+
+	public void setType(Long type) {
+		this.type = type;
 	}
     
     

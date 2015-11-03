@@ -144,17 +144,40 @@ public class TdLoginController {
 		if("provider".equals(type))
 		{
 			TdProvider provider = tdProviderservice.findByUsername(username);
-				if(null != provider)
+			if(null != provider)
+			{
+				if(!provider.getPassword().equals(password))
 				{
-					if(!provider.getPassword().equals(password))
-					{
-						res.put("msg", "密码错误");
-						return res;
-					}
-				request.getSession().setAttribute("provider", provider.getUsername());
-				request.getSession().setAttribute("proTitle", provider.getTitle());
-				res.put("code",2);
-				return res;
+					res.put("msg", "密码错误");
+					return res;
+				}
+				if(provider.getType() ==1L)
+				{
+					request.getSession().setAttribute("provider", provider.getUsername());
+					request.getSession().setAttribute("proTitle", provider.getTitle());
+					res.put("code",2);
+					return res;
+				}
+			}
+		}
+		// 分销商登录
+		if("supply".equals(type))
+		{
+			TdProvider provider = tdProviderservice.findByUsername(username);
+			if(null != provider)
+			{
+				if(!provider.getPassword().equals(password))
+				{
+					res.put("msg", "密码错误");
+					return res;
+				}
+				if(provider.getType() ==2L)
+				{
+					request.getSession().setAttribute("supply", provider.getUsername());
+					request.getSession().setAttribute("supplyTitle", provider.getTitle());
+					res.put("code",3);
+					return res;
+				}
 			}
 		}
 		

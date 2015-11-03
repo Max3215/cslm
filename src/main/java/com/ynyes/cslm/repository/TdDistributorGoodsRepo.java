@@ -45,6 +45,9 @@ public interface TdDistributorGoodsRepo extends
 		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=true order by g.soldNumber")
 		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,String catstr,Pageable page);
 		
+		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 and g.productId=?2 and g.isOnSale=1")
+		List<TdDistributorGoods> findByDistributorIdAndProductIdAndIsOnSaleTrue(Long disId,Long productId);
+		
 		// search 
 		Page<TdDistributorGoods> findByGoodsTitleContainingAndIsOnSaleOrSubGoodsTitleContainingAndIsOnSaleOrCodeContainingAndIsOnSaleOrDistributorTitleContainingAndIsOnSale(
 																								String keywords1,Boolean isOnSale1,

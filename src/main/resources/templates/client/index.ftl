@@ -223,10 +223,12 @@ $(document).ready(function(){
 	<aside class="index_floor" id="indexfloor">
 	   <#if top_category_list?? && top_category_list?size gt 0 >
            <#list top_category_list as item>
+                <#if ("top_cat_goods_page"+item_index)?eval?? && ("top_cat_goods_page"+item_index)?eval.content?? && ("top_cat_goods_page"+item_index)?eval.content?size gt 0>
                 <#if item_index == 0 >
         	       <a class="sel" href="javascript:void(0);"><span>${item.title!""}</span><span>${item.title!""}</span></a>
         	    <#elseif item_index lt 8 >
         	       <a href="javascript:void(0);"><span>${item.title!""}</span><span>${item.title!""}</span></a>
+        	    </#if>
         	    </#if>
            </#list>
 	   </#if>
@@ -266,6 +268,7 @@ $(document).ready(function(){
 		</div>
         
         <!-- 一层  -->
+         <#if top_cat_goods_page0?? && top_cat_goods_page0.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_one">
@@ -292,7 +295,7 @@ $(document).ready(function(){
 				</#if>
 			</div>
 			<ul class="right_list">
-			 <#if top_cat_goods_page0?? && top_cat_goods_page0.content?size gt 0 >
+			
 			     <#list top_cat_goods_page0.content as item>
 			         <#if item_index < 10 >
             			<li>
@@ -304,13 +307,14 @@ $(document).ready(function(){
             			</li>
 				     </#if>
 				 </#list>
-			 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+        </#if>
         
         <!--  二层  -->
+    	<#if top_cat_goods_page1?? && top_cat_goods_page1.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_two">
@@ -337,7 +341,6 @@ $(document).ready(function(){
                 </#if>
 			</div>
 			<ul class="right_list">
-    			 <#if top_cat_goods_page1?? && top_cat_goods_page1.content?size gt 0 >
                      <#list top_cat_goods_page1.content as item>
                          <#if item_index < 10 >
                             <li>
@@ -349,13 +352,14 @@ $(document).ready(function(){
                             </li>
                          </#if>
                      </#list>
-                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+        </#if>
         
         <!--  三层  -->
+		<#if top_cat_goods_page2?? && top_cat_goods_page2.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_three">
@@ -382,7 +386,6 @@ $(document).ready(function(){
                 </#if>
 			</div>
 			<ul class="right_list">
-    			 <#if top_cat_goods_page2?? && top_cat_goods_page2.content?size gt 0 >
                       <#list top_cat_goods_page2.content as item>
                              <#if item_index < 10 >
                                 <li>
@@ -394,13 +397,14 @@ $(document).ready(function(){
                                 </li>
                              </#if>
                        </#list>
-                  </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+        </#if>
 
         <!-- 四层  -->
+	    <#if top_cat_goods_page3?? && top_cat_goods_page3.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_four">
@@ -427,7 +431,6 @@ $(document).ready(function(){
                 </#if>
 			</div>
 			<ul class="right_list">
-			     <#if top_cat_goods_page3?? && top_cat_goods_page3.content?size gt 0 >
                      <#list top_cat_goods_page3.content as item>
                          <#if item_index < 10 >
                             <li>
@@ -439,13 +442,14 @@ $(document).ready(function(){
                             </li>
                          </#if>
                      </#list>
-                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+        </#if>
 
         <!--  五层  -->
+	    <#if top_cat_goods_page4?? && top_cat_goods_page4.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_five">
@@ -472,7 +476,6 @@ $(document).ready(function(){
                 </#if>
 			</div>
 			<ul class="right_list"> 
-			   <#if top_cat_goods_page4?? && top_cat_goods_page4.content?size gt 0 >
                      <#list top_cat_goods_page4.content as item>
                          <#if item_index < 10 >
                             <li>
@@ -484,13 +487,14 @@ $(document).ready(function(){
                             </li>
                          </#if>
                      </#list>
-                 </#if>
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+        </#if>
 
         <!--  六层  -->
+        <#if top_cat_goods_page5?? && top_cat_goods_page5.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_six">
@@ -517,7 +521,7 @@ $(document).ready(function(){
                 </#if>
 			</div>
 			<ul class="right_list">
-			     <#if top_cat_goods_page5?? && top_cat_goods_page5.content?size gt 0 >
+			     
                      <#list top_cat_goods_page5.content as item>
                          <#if item_index < 10 >
                             <li>
@@ -529,13 +533,15 @@ $(document).ready(function(){
                             </li>
                          </#if>
                      </#list>
-                 </#if>
+                
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+		</#if>
 
         <!-- 七层  -->
+        <#if top_cat_goods_page6?? && top_cat_goods_page6.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_seven">
@@ -562,7 +568,7 @@ $(document).ready(function(){
                 </#if>
 			</div>
 			<ul class="right_list">
-			     <#if top_cat_goods_page6?? && top_cat_goods_page6.content?size gt 0 >
+			     
                      <#list top_cat_goods_page6.content as item>
                          <#if item_index < 10 >
                             <li>
@@ -574,13 +580,15 @@ $(document).ready(function(){
                             </li>
                          </#if>
                      </#list>
-                 </#if>
+                 
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+        </#if>
 
         <!--  八层    -->
+        <#if top_cat_goods_page7?? && top_cat_goods_page7.content?size gt 0 >
 		<div class="index_part">
 			<div class="clear"></div>
 			<div class="left_eight">
@@ -607,7 +615,7 @@ $(document).ready(function(){
                 </#if>
 			</div>
 			<ul class="right_list">
-			     <#if top_cat_goods_page7?? && top_cat_goods_page7.content?size gt 0 >
+			     
                      <#list top_cat_goods_page7.content as item>
                          <#if item_index < 10 >
                             <li>
@@ -619,11 +627,12 @@ $(document).ready(function(){
                             </li>
                          </#if>
                      </#list>
-                 </#if>
+                 
 				<div class="clear"></div>
 			</ul>
 			<div class="clear"></div>
 		</div>
+		</#if>
 	</section>
 
     <!--底部footer-->

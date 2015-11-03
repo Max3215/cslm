@@ -1677,6 +1677,10 @@ public class TdDistributorController {
 			distributorGoods.setCategoryId(goods.getCategoryId());
 			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
 			distributorGoods.setCode(goods.getCode());
+			distributorGoods.setProductId(goods.getProductId());
+			distributorGoods.setSelectOneValue(goods.getSelectOneValue());
+			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());
+			distributorGoods.setSelectThreeValue(goods.getSelectThreeValue());
 			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
 			distributorGoods.setGoodsMarketPrice(goods.getMarketPrice());
 			distributorGoods.setIsDistribution(false);
@@ -1743,6 +1747,10 @@ public class TdDistributorController {
 			distributorGoods.setCategoryId(goods.getCategoryId());
 			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
 			distributorGoods.setCode(goods.getCode());
+			distributorGoods.setProductId(goods.getProductId());
+			distributorGoods.setSelectOneValue(goods.getSelectOneValue());
+			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());
+			distributorGoods.setSelectThreeValue(goods.getSelectThreeValue());
 			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
 			distributorGoods.setGoodsMarketPrice(pGoods.getOutFactoryPrice());
 //			distributorGoods.setGoodsParamList(goods.getParamList());
@@ -2254,7 +2262,6 @@ public class TdDistributorController {
      		if(null == provider.getVirtualMoney()){
      			provider.setVirtualMoney(new Double(0));
      		}
-     		System.err.println("max----"+provider.getVirtualMoney());
      		provider.setVirtualMoney(provider.getVirtualMoney()+tdOrder.getTotalGoodsPrice());
      		tdProviderService.save(provider);
      		
