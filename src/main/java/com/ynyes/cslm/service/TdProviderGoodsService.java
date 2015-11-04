@@ -70,10 +70,10 @@ public class TdProviderGoodsService {
 		return repository.findAll(pageRequest);
 	}
 	
-	public Page<TdProviderGoods> findByGoodsTitleOrSubGoodsTitleOrProviderTitle(String keywords,int page,int size)
+	public Page<TdProviderGoods> findByGoodsTitleOrCodeOrProviderTitle(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size);
-		return repository.findByGoodsTitleContainingOrSubGoodsTitleContainingOrProviderTitleContaining(keywords, keywords, keywords,pageRequest);
+		return repository.findByGoodsTitleContainingOrCodeContainingOrProviderTitleContaining(keywords, keywords, keywords,pageRequest);
 	}
 	
 	public TdProviderGoods findOne(Long id)
@@ -95,7 +95,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsDistributionTrueAndIsAuditTrue(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditTrueOrSubGoodsTitleContainingAndIsDistributionTrueAndIsAuditTrue(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditTrueOrCodeContainingAndIsDistributionTrueAndIsAuditTrue(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsDistributionTrueAndIsAuditFalse(int page,int size)
@@ -107,7 +107,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsDistributionTrueAndIsAuditFalse(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditFalseOrSubGoodsTitleContainingAndIsDistributionTrueAndIsAuditFalse(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditFalseOrCodeContainingAndIsDistributionTrueAndIsAuditFalse(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsDistributionTrue(int page,int size)
@@ -119,7 +119,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsDistributionTrue(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsDistributionTrueOrSubGoodsTitleContainingAndIsDistributionTrue(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsDistributionTrueOrCodeContainingAndIsDistributionTrue(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsDistributionFalseAndIsAuditTrue(int page,int size)
@@ -131,7 +131,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsDistributionFalseAndIsAuditTrue(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditTrueOrSubGoodsTitleContainingAndIsDistributionFalseAndIsAuditTrue(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditTrueOrCodeContainingAndIsDistributionFalseAndIsAuditTrue(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsDistributionFalseAndIsAuditFalse(int page,int size)
@@ -143,7 +143,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsDistributionFalseAndIsAuditFalse(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditFalseOrSubGoodsTitleContainingAndIsDistributionFalseAndIsAuditFalse(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditFalseOrCodeContainingAndIsDistributionFalseAndIsAuditFalse(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsDistributionFalse(int page,int size)
@@ -155,7 +155,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsDistributionFalse(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsDistributionFalseOrSubGoodsTitleContainingAndIsDistributionFalse(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsDistributionFalseOrCodeContainingAndIsDistributionFalse(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsAuditTrue(int page,int size)
@@ -173,13 +173,13 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsAuditTrue(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsAuditTrueOrSubGoodsTitleContainingAndIsAuditTrue(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsAuditTrueOrCodeContainingAndIsAuditTrue(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> searchAndIsOnSaleTrue(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsOnSaleTrueOrSubGoodsTitleContainingAndIsOnSaleTrue(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsOnSaleTrueOrCodeContainingAndIsOnSaleTrue(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByIsAuditFalse(int page,int size)
@@ -191,13 +191,13 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndIsAuditFalse(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingAndIsAuditFalseOrSubGoodsTitleContainingAndIsAuditFalse(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingAndIsAuditFalseOrCodeContainingAndIsAuditFalse(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> searchAndKeywords(String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByGoodsTitleContainingOrSubGoodsTitleContaining(keywords,keywords,pageRequest);
+		return repository.findByGoodsTitleContainingOrCodeContaining(keywords,keywords,pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByProviderIdAndIsDistributionAndIsAudit(Long providerId,Boolean isDistribution,Boolean isAudit,int page,int size)
@@ -213,7 +213,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndProviderIdAndIsDistributionAndIsAudit(Long providerId,Boolean isDistribution,Boolean isAudit,String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndSubGoodsTitleLikeAndIsDistributionAndIsAudit(providerId, "%"+keywords+"%", isDistribution, isAudit, providerId, keywords, isDistribution, isAudit, pageRequest);
+		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCodeLikeAndIsDistributionAndIsAudit(providerId, "%"+keywords+"%", isDistribution, isAudit, providerId, keywords, isDistribution, isAudit, pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByProviderIdAndIsDistribution(Long providerId,Boolean isDistribution,int page,int size)
@@ -225,7 +225,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndProviderIdAndIsDistribution(Long providerId,String keywords,Boolean isDistribution,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionOrProviderIdAndSubGoodsTitleLikeAndIsDistribution(providerId, "%"+keywords+"%", isDistribution, providerId, "%"+keywords+"%", isDistribution, pageRequest);
+		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCodeLikeAndIsDistribution(providerId, "%"+keywords+"%", isDistribution, providerId, "%"+keywords+"%", isDistribution, pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByProviderIdAndIsAudit(Long providerId,Boolean isAudit, int page,int size)
@@ -237,19 +237,19 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndProviderIdAndIsAudit(Long providerId,String keywords,Boolean isAudit,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsAuditOrProviderIdAndSubGoodsTitleLikeAndIsAudit(providerId, "%"+keywords+"%", isAudit, providerId, "%"+keywords+"%", isAudit, pageRequest);
+		return repository.findByProviderIdAndGoodsTitleLikeAndIsAuditOrProviderIdAndCodeLikeAndIsAudit(providerId, "%"+keywords+"%", isAudit, providerId, "%"+keywords+"%", isAudit, pageRequest);
 	}
 	
 	public Page<TdProviderGoods> searchAndProviderIdAndIsOnSale(Long providerId,String keywords,Boolean isOnSale,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndSubGoodsTitleLikeAndIsOnSale(providerId, "%"+keywords+"%", isOnSale, providerId, "%"+keywords+"%", isOnSale, pageRequest);
+		return repository.findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCodeLikeAndIsOnSale(providerId, "%"+keywords+"%", isOnSale, providerId, "%"+keywords+"%", isOnSale, pageRequest);
 	}
 	
 	public Page<TdProviderGoods> searchAndProviderIdAndKeywords(Long providerId,String keywords,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeOrProviderIdAndSubGoodsTitleLike(providerId, "%"+keywords+"%", providerId, "%"+keywords+"%", pageRequest);
+		return repository.findByProviderIdAndGoodsTitleLikeOrProviderIdAndCodeLike(providerId, "%"+keywords+"%", providerId, "%"+keywords+"%", pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByProviderIdAndCategoryIdAndIsDistribution(Long providerId,Long catId,Boolean isDistribution,int page,int size)
@@ -270,7 +270,7 @@ public class TdProviderGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catStr = "%[" + catId + "]%";
-		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsDistribution(
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsDistribution(
 																providerId,catStr, "%"+keywords+"%", isDistribution,
 																providerId,catStr, "%"+keywords+"%", isDistribution, pageRequest);
 	}
@@ -299,7 +299,7 @@ public class TdProviderGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catStr = "%[" + catId + "]%";
-		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrProviderIdCategoryIdTreeLikeAndSubGoodsTitleLike(
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrProviderIdCategoryIdTreeLikeAndCodeLike(
 															providerId,catStr, "%"+keywords+"%", 
 															providerId,catStr, "%"+keywords+"%", pageRequest);
 	}
@@ -318,7 +318,7 @@ public class TdProviderGoodsService {
 	public Page<TdProviderGoods> searchAndProviderIdAndKeywordsAndIsOnSale(Long providerId,String keywords,Boolean isOnSale,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndSubGoodsTitleLikeAndIsOnSaleOrCodeLikeAndIsOnSale(providerId, "%"+keywords+"%", isOnSale,
+		return repository.findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCodeLikeAndIsOnSaleOrCodeLikeAndIsOnSale(providerId, "%"+keywords+"%", isOnSale,
 																																		providerId, "%"+keywords+"%",isOnSale,
 																																		providerId,"%"+keywords+"%",isOnSale, pageRequest);
 	}
@@ -338,14 +338,30 @@ public class TdProviderGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catStr = "%[" + catId + "]%";
-		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
-															providerId,catStr, "%"+keywords+"%", isOnSale,
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
 															providerId,catStr, "%"+keywords+"%", isOnSale,
 															providerId,catStr, "%"+keywords+"%", isOnSale,pageRequest);
 	}
 	
+	public Page<TdProviderGoods> findByProviderIdAndCategoryIdAndIsAudit(Long providerId,Long catId,Boolean isAudit,int page ,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		if(null ==providerId)
+		{
+			return null;
+		}
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndIsOnSale(providerId, catStr,isAudit, pageRequest);
+	}
 	
-	
+	public Page<TdProviderGoods> searchAndProviderIdAndCategoryIdAndKeywordsAndIsAudit(Long providerId,Long catId,String keywords,Boolean isAudit,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsAuditOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsAudit(
+															providerId,catStr, "%"+keywords+"%", isAudit,
+															providerId,catStr, "%"+keywords+"%", isAudit,pageRequest);
+	}
 	
 	
 	

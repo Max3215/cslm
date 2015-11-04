@@ -28,6 +28,7 @@
                  <a href="">退货处理</a> 
                 <a href="/supply/goods/list/1">分销中商品</a>
                 <a href="/supply/goods/list/0">仓库中商品</a>
+                <a href="/supply/goods/audit">待审核商品</a>
                 <a href="/supply/goods/distribution">选择分销商品</a>
               </div>
        </div><!--mymember_menu_part END-->

@@ -127,8 +127,10 @@ DD_belatedPNG.fix('.,img,background');
                         <p>${order.orderTime!''}</p>
                       </td>
                       <td>
-                            <#if order.statusId?? && order.statusId==2>
-                                    <p>待付款</p>
+                            <#if order.statusId?? && order.statusId==1>
+                                    <p>待确认</p>
+                            <#elseif order.statusId?? &&  order.statusId==2>
+                                   <p>待付款</p>
                             <#elseif order.statusId?? &&  order.statusId==3>
                                    <p>待发货</p>
                             <#elseif order.statusId?? &&  order.statusId==4>
@@ -159,7 +161,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == order_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/supply/outOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
+                                <a href="/supply/disOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

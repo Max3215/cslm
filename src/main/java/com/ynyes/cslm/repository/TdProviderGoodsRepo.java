@@ -30,51 +30,51 @@ public interface TdProviderGoodsRepo extends
 	@Query(value="select pg.provider_id from td_provider_goods pg where pg.id=?1",nativeQuery=true)
 	Long findById(Long id);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingOrSubGoodsTitleContainingOrProviderTitleContaining(String keywords1,String keywords2,String keywords3,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingOrCodeContainingOrProviderTitleContaining(String keywords1,String keywords2,String keywords3,Pageable page);
 	
 	Page<TdProviderGoods> findByIsDistributionTrueAndIsAuditTrue(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditTrueOrSubGoodsTitleContainingAndIsDistributionTrueAndIsAuditTrue(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditTrueOrCodeContainingAndIsDistributionTrueAndIsAuditTrue(String keywords1,String keywords2,Pageable page);
 	
 	Page<TdProviderGoods> findByIsDistributionTrueAndIsAuditFalse(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditFalseOrSubGoodsTitleContainingAndIsDistributionTrueAndIsAuditFalse(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionTrueAndIsAuditFalseOrCodeContainingAndIsDistributionTrueAndIsAuditFalse(String keywords1,String keywords2,Pageable page);
 
 	Page<TdProviderGoods> findByIsDistributionTrue(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionTrueOrSubGoodsTitleContainingAndIsDistributionTrue(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionTrueOrCodeContainingAndIsDistributionTrue(String keywords1,String keywords2,Pageable page);
 	
 	Page<TdProviderGoods> findByIsDistributionFalseAndIsAuditTrue(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditTrueOrSubGoodsTitleContainingAndIsDistributionFalseAndIsAuditTrue(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditTrueOrCodeContainingAndIsDistributionFalseAndIsAuditTrue(String keywords1,String keywords2,Pageable page);
 	
 	Page<TdProviderGoods> findByIsDistributionFalseAndIsAuditFalse(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditFalseOrSubGoodsTitleContainingAndIsDistributionFalseAndIsAuditFalse(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionFalseAndIsAuditFalseOrCodeContainingAndIsDistributionFalseAndIsAuditFalse(String keywords1,String keywords2,Pageable page);
 
 	Page<TdProviderGoods> findByIsDistributionFalse(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionFalseOrSubGoodsTitleContainingAndIsDistributionFalse(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsDistributionFalseOrCodeContainingAndIsDistributionFalse(String keywords1,String keywords2,Pageable page);
 	
 	Page<TdProviderGoods> findByIsAuditTrue(Pageable page);
 	
 	Page<TdProviderGoods> findByIsOnSaleTrue(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsAuditTrueOrSubGoodsTitleContainingAndIsAuditTrue(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsAuditTrueOrCodeContainingAndIsAuditTrue(String keywords1,String keywords2,Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsOnSaleTrueOrSubGoodsTitleContainingAndIsOnSaleTrue(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsOnSaleTrueOrCodeContainingAndIsOnSaleTrue(String keywords1,String keywords2,Pageable page);
 	
 	Page<TdProviderGoods> findByIsAuditFalse(Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingAndIsAuditFalseOrSubGoodsTitleContainingAndIsAuditFalse(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingAndIsAuditFalseOrCodeContainingAndIsAuditFalse(String keywords1,String keywords2,Pageable page);
 	
-	Page<TdProviderGoods> findByGoodsTitleContainingOrSubGoodsTitleContaining(String keywords1,String keywords2,Pageable page);
+	Page<TdProviderGoods> findByGoodsTitleContainingOrCodeContaining(String keywords1,String keywords2,Pageable page);
 
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.isDistribution=?2 and pg.isAudit=?3")
 	Page<TdProviderGoods> findByProviderIdAndIsDistributionAndIsAudit(Long providerId,Boolean isDistribution,Boolean isAudit,Pageable page);
 	
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 and pg.isAudit=?4 or p.id=?5 and pg.subGoodsTitle like ?6 and pg.isDistribution=?7 and pg.isAudit=?8")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndSubGoodsTitleLikeAndIsDistributionAndIsAudit(
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 and pg.isAudit=?4 or p.id=?5 and pg.code like ?6 and pg.isDistribution=?7 and pg.isAudit=?8")
+	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCodeLikeAndIsDistributionAndIsAudit(
 																						Long providerId,
 																						String keywords,
 																						Boolean isDistribution,
@@ -87,8 +87,8 @@ public interface TdProviderGoodsRepo extends
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.isDistribution=?2")
 	Page<TdProviderGoods> findByProviderIdAndIsDistribution(Long providerId,Boolean isDistribution,Pageable page);
 	
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 or p.id=?4 and pg.subGoodsTitle like ?5 and pg.isDistribution=?6")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionOrProviderIdAndSubGoodsTitleLikeAndIsDistribution(
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 or p.id=?4 and pg.code like ?5 and pg.isDistribution=?6")
+	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCodeLikeAndIsDistribution(
 			Long providerId,
 			String keywords,
 			Boolean isDistribution,
@@ -100,8 +100,8 @@ public interface TdProviderGoodsRepo extends
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1  and pg.isAudit=?2")
 	Page<TdProviderGoods> findByProviderIdAndIsAudit(Long providerId,Boolean isAudit,Pageable page);
 	
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isAudit=?3 or p.id=?4 and pg.subGoodsTitle like ?5 and pg.isAudit=?6")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsAuditOrProviderIdAndSubGoodsTitleLikeAndIsAudit(
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isAudit=?3 or p.id=?4 and pg.code like ?5 and pg.isAudit=?6")
+	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsAuditOrProviderIdAndCodeLikeAndIsAudit(
 																						Long providerId,
 																						String keywords,
 																						Boolean isAudit,
@@ -109,8 +109,8 @@ public interface TdProviderGoodsRepo extends
 																						String keywords2,
 																						Boolean isAudit2,Pageable page);
 	
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isOnSale=?3 or p.id=?4 and pg.subGoodsTitle like ?5 and pg.isOnSale=?6")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndSubGoodsTitleLikeAndIsOnSale(
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isOnSale=?3 or p.id=?4 and pg.code like ?5 and pg.isOnSale=?6")
+	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCodeLikeAndIsOnSale(
 																						Long providerId,
 																						String keywords,
 																						Boolean inOnSale,
@@ -118,8 +118,8 @@ public interface TdProviderGoodsRepo extends
 																						String keywords2,
 																						Boolean isOnSale2,Pageable page);
 	
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 or p.id=?3 and pg.subGoodsTitle like ?4")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeOrProviderIdAndSubGoodsTitleLike(
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 or p.id=?3 and pg.code like ?4")
+	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeOrProviderIdAndCodeLike(
 																						Long providerId,
 																						String keywords,
 																						Long providerId2,
@@ -133,8 +133,8 @@ public interface TdProviderGoodsRepo extends
 	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndIsDistributionAndIsAudit(Long providerId,String catId,Boolean isDistribution,Boolean isAudit,Pageable page);
 	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.goodsTitle like ?3 and pg.isDistribution=?4 "
-															+ "or p.id=?5 and pg.categoryIdTree like ?6 and pg.subGoodsTitle like ?7 and pg.isDistribution=?8")
-	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsDistribution(
+															+ "or p.id=?5 and pg.categoryIdTree like ?6 and pg.code like ?7 and pg.isDistribution=?8")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsDistribution(
 																						Long providerId,String catStr1,
 																						String keywords,
 																						Boolean isDistribution,
@@ -159,8 +159,8 @@ public interface TdProviderGoodsRepo extends
 	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLike(long providerId,String catStr,Pageable page);
 	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.goodsTitle like ?3 "
-															+ "or p.id=?4 and pg.categoryIdTree like ?5 and pg.subGoodsTitle like ?6")
-	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrProviderIdCategoryIdTreeLikeAndSubGoodsTitleLike(
+															+ "or p.id=?4 and pg.categoryIdTree like ?5 and pg.code like ?6")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrProviderIdCategoryIdTreeLikeAndCodeLike(
 																						Long providerId,String catStr1,
 																						String keywords,
 																						Long providerId2,String catStr2,
@@ -176,9 +176,9 @@ public interface TdProviderGoodsRepo extends
 	Page<TdProviderGoods> findByProviderIdAndIsOnSale(long providerId,Boolean isOnSale,Pageable page);
 	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isOnSale = ?3 or "
-																+ "p.id=?4 and pg.subGoodsTitle like ?5 and pg.isOnSale =?6 or "
+																+ "p.id=?4 and pg.code like ?5 and pg.isOnSale =?6 or "
 																+ "p.id=?7 and pg.code like ?8 and pg.isOnSale =?9 ")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndSubGoodsTitleLikeAndIsOnSaleOrCodeLikeAndIsOnSale(
+	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCodeLikeAndIsOnSaleOrCodeLikeAndIsOnSale(
 																						Long providerId,
 																						String keywords,Boolean isOnSale1,
 																						Long providerId2,
@@ -191,20 +191,25 @@ public interface TdProviderGoodsRepo extends
 	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndIsOnSale(long providerId,String catStr,Boolean isOnSale,Pageable page);
 	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.goodsTitle like ?3 and pg.isOnSale=?4 or "
-																+ " p.id=?5 and pg.categoryIdTree like ?6 and pg.subGoodsTitle like ?7 and pg.isOnSale=?8 or "
-																+ " p.id=?9 and pg.categoryIdTree like ?10 and pg.code like ?11 and pg.isOnSale=?12 ")
-	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
-										Long providerId,String catStr1,
-										String keywords,Boolean isOnSale1,
-										Long providerId2,String catStr2,
-										String keywords2,Boolean isOnSale2,
-										Long providerId3,String catStr3,
-										String keywords3,Boolean isOnSale3,
-										Pageable page);
+																+ " p.id=?5 and pg.categoryIdTree like ?6 and pg.code like ?7 and pg.isOnSale=?8 ")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
+																							Long providerId,String catStr1,
+																							String keywords,Boolean isOnSale1,
+																							Long providerId2,String catStr2,
+																							String keywords2,Boolean isOnSale2,
+																							Pageable page);
 	
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.isAudit=?3 order by pg.id DESC")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndIsAudit(long providerId,String catStr,Boolean isAudit,Pageable page);
 	
-	
-	
+	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.goodsTitle like ?3 and pg.isAudit=?4 or "
+			+ " p.id=?5 and pg.categoryIdTree like ?6 and pg.code like ?7 and pg.isAudit=?8 ")
+	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsAuditOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsAudit(
+																							Long providerId,String catStr1,
+																							String keywords,Boolean isOnSale1,
+																							Long providerId2,String catStr2,
+																							String keywords2,Boolean isOnSale2,
+																							Pageable page);
 	
 	
 	

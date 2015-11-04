@@ -159,7 +159,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == order_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/provider/outOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
+                                <a href="/provider/disOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

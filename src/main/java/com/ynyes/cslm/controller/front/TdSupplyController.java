@@ -82,6 +82,7 @@ public class TdSupplyController {
 	@Autowired
 	TdPayRecordService tdPayRecordService;
 	
+	
 	@RequestMapping(value="/index")
 	public String Index(HttpServletRequest req,ModelMap map)
 	{
@@ -172,7 +173,7 @@ public class TdSupplyController {
 		
 		map.addAttribute("category_list", tdProductCategoryService.findAll());
 		if(null == categoryId){
-			if(null == keywords)
+			if(null == keywords || "".equals(keywords.trim()))
 			{
 				map.addAttribute("goods_page",
 						tdGoodsService.findByIsOnSaleTrueOrderBySortIdAsc(page, 10));
@@ -185,7 +186,7 @@ public class TdSupplyController {
 		}
 		else
 		{
-			if(null == keywords)
+			if(null == keywords || "".equals(keywords.trim()))
 			{
 				map.addAttribute("goods_page", 
 						tdGoodsService.findByCategoryIdAndIsOnSaleTrue(categoryId, page, 10));
@@ -809,7 +810,53 @@ public class TdSupplyController {
 		return res;
 	}
 	
-	
+	/**
+	 *  审核中商品
+	 *  
+	 */
+	@RequestMapping(value="/goods/audit")
+	public String auditGoods(Integer page,String keywords,Long categoryId,HttpServletRequest req,ModelMap map){
+		String username = (String)req.getSession().getAttribute("supply");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	if(null == page){
+    		page=0;
+    	}
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("page", page);
+    	map.addAttribute("categoryId",categoryId);
+    	map.addAttribute("keywords",keywords);
+    	map.addAttribute("category_list",tdProductCategoryService.findAll());
+    	
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	
+    	if(null == categoryId)
+    	{
+    		if(null == keywords || "".equals(keywords.trim())){
+    			map.addAttribute("goods_page", 
+    					tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId(), false, page, ClientConstant.pageSize));
+    		}else{
+    			map.addAttribute("goods_page",
+    					tdProviderGoodsService.searchAndProviderIdAndIsAudit(provider.getId(), keywords, false, page, ClientConstant.pageSize));
+    		}
+    	}
+    	else
+    	{
+    		if(null == keywords || "".equals(keywords.trim())){
+    			map.addAttribute("goods_page", 
+    					tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsAudit(provider.getId(),categoryId, false, page, ClientConstant.pageSize));
+    		}else{
+    			map.addAttribute("goods_page",
+    					tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsAudit(provider.getId(),categoryId, keywords, false, page, ClientConstant.pageSize));
+    		}
+    	}
+		
+		
+		return "/client/supply_goods_audit";
+	}
 	
 	
 	
