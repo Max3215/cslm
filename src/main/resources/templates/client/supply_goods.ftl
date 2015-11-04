@@ -65,7 +65,7 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_mainbox">
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
-                    <h3><#if isDistribution?? && isDistribution>批发中的商品<#else>仓库中的商品</#if></h3>
+                    <h3><#if isDistribution?? && isDistribution>分销中的商品<#else>仓库中的商品</#if></h3>
                       <form action="/supply/goods/list/${isDistribution?c}" id="form1">
                             <input type="hidden" value="${page!'0'}" name="page"/>
                             <input class="mysub" type="submit" value="查询" />
@@ -90,7 +90,7 @@ DD_belatedPNG.fix('.,img,background');
                     <#include "/client/supply_goods_list.ftl">
                 </div>
                 </form>
-            <div class="myclear" style="height:10px;"></div>
+            <div class="myclear" style="height:10px;"></div> 
 
             <div class="mymember_page">
              <#if isDistribution>

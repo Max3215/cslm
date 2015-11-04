@@ -12,9 +12,9 @@ function selectAll(){
 
 
 //超市中心商品上下架
-function goodsOnSale(type,pgId,page){
+function goodsAudit(type,pgId,page){
     $.ajax({
-        url : "/provider/goods/onsale/"+pgId,
+        url : "/supply/goods/onsale/"+pgId,
         data : {"type":type,"page":page},
         type : "post",
        success:function(res){
@@ -26,7 +26,7 @@ function goodsOnSale(type,pgId,page){
 //超市中心删除商品
 function deleteGoods(type,pgId,page){
     $.ajax({
-        url : "/provider/goods/delete/"+pgId,
+        url : "/supply/goods/delete/"+pgId,
         data : {"type":type,"page":page},
         type :"post",
         success:function(res){

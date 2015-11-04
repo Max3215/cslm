@@ -259,6 +259,13 @@ public class TdProviderGoodsService {
 		return repository.findByProviderIdAndCategoryIdTreeLikeAndIsDistribution(providerId,catStr, isDistribution, pageRequest);
 	}
 	
+	public Page<TdProviderGoods> findByProviderIdAndCategoryIdAndIsDistributionAndIsAudit(Long providerId,Long catId,Boolean isDistribution,Boolean isAudit,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndIsDistributionAndIsAudit(providerId,catStr, isDistribution,isAudit, pageRequest);
+	}
+	
 	public Page<TdProviderGoods> searchAndProviderIdAndCategoryIdAndIsDistribution(Long providerId,String keywords,Long catId,Boolean isDistribution,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
@@ -266,6 +273,15 @@ public class TdProviderGoodsService {
 		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsDistribution(
 																providerId,catStr, "%"+keywords+"%", isDistribution,
 																providerId,catStr, "%"+keywords+"%", isDistribution, pageRequest);
+	}
+	
+	public Page<TdProviderGoods> searchAndProviderIdAndCategoryIdAndIsDistributionAndIsAudut(Long providerId,String keywords,Long catId,Boolean isDistribution,Boolean isAudit,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catStr = "%[" + catId + "]%";
+		return repository.findByProviderIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCategoryIdTreeLikeAndCodeLikeAndIsDistributionAndIsAudit(
+																providerId,catStr, "%"+keywords+"%", isDistribution,isAudit,
+																providerId,catStr, "%"+keywords+"%", isDistribution,isAudit, pageRequest);
 	}
 	
 	public Page<TdProviderGoods> findByProviderIdAndCategoryId(Long providerId,Long catId,int page ,int size)

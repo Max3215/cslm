@@ -55,10 +55,10 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_main">
 
   <!-- 左侧 -->
-  <#include "/client/common_provider_menu.ftl" />
+  <#include "/client/common_supply_menu.ftl" />
   
   <div class="mymember_mainbox">
-    <form name="form1" action="/provider/disOrder/list/${status_id}" method="POST">
+    <form name="form1" action="/supply/disOrder/list/${status_id}" method="POST">
         <script type="text/javascript">
             var theForm = document.forms['form1'];
             if (!theForm) {
@@ -111,7 +111,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#if order_page??>
                 <#list order_page.content as order>
                 <tr>
-                      <th colspan="7">订单编号：<a href="/provider/disOrder?id=${order.id?c}">${order.orderNumber!''}</a></th>
+                      <th colspan="7">订单编号：<a href="/supply/order?id=${order.id?c}">${order.orderNumber!''}</a></th>
                   </tr>
                   <tr>
                       <td class="td001">
@@ -143,7 +143,7 @@ DD_belatedPNG.fix('.,img,background');
                             </#if>
                       </td>
                       <td class="td003"> 
-                            <p><a href="/provider/disOrder?id=${order.id?c}">查看</a></p>
+                            <p><a href="/supply/order?id=${order.id?c}">查看</a></p>
                       </td>
                   </tr>
                   </#list>
@@ -159,7 +159,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == order_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/provider/outOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
+                                <a href="/supply/outOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

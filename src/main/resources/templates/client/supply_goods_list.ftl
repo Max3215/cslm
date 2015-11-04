@@ -24,7 +24,7 @@
                         <td class="tb02">${dg.shopReturnRation!'0'}</td>
                         <td>${dg.leftNumber}</td>
                         <td>
-                                <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page})">取消分销</a></p>
+                                <p><a href="javascript:goodsAudit(false,${dg.id?c},${page})">取消分销</a></p>
                       </tr>
                  <#else>
                        <tr id="tr_1424195166">

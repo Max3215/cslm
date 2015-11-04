@@ -1,5 +1,6 @@
 package com.ynyes.cslm.controller.front;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdGoods;
+import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.service.TdCommonService;
@@ -267,10 +270,10 @@ public class TdSupplyController {
 			{
 				if(null == keywords){
 					map.addAttribute("supply_goods_page",
-							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),true,true, page, ClientConstant.pageSize));
 				}else{
 					map.addAttribute("supply_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(provider.getId(),true,true,keywords,page, ClientConstant.pageSize));
 				}
 			}
 			else 
@@ -290,10 +293,10 @@ public class TdSupplyController {
 			{
 				if(null == keywords){
 					map.addAttribute("supply_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistributionAndIsAudit(provider.getId(), categoryId, true,true, page, ClientConstant.pageSize));
 				}else{
 					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, true, page, ClientConstant.pageSize));
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistributionAndIsAudut(provider.getId(), keywords, categoryId, true,true, page, ClientConstant.pageSize));
 				}
 			}
 			else
@@ -311,6 +314,315 @@ public class TdSupplyController {
 		return "/client/supply_goods";
 	}
 	
+	//  分销、取消
+	@RequestMapping(value="/goods/onsale/{pgId}")
+	public String providerGoodsDelete(@PathVariable Long pgId,
+			Boolean type,Integer page,
+			HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == pgId)
+		{
+			return "/client/error_404";
+		}
+		if(null == page)
+		{
+			page = 0;
+		}
+		map.addAttribute("page", page);
+		map.addAttribute("type",type);
+		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
+		if(type)
+		{
+			providerGoods.setIsDistribution(type);
+			tdProviderGoodsService.save(providerGoods);
+			map.addAttribute("supply_goods_page",
+					tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),false,true, page, ClientConstant.pageSize));
+		}else{
+			providerGoods.setIsDistribution(type);
+			tdProviderGoodsService.save(providerGoods);
+			map.addAttribute("supply_goods_page",
+					tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),true,true, page, ClientConstant.pageSize));
+		}
+		
+		map.addAttribute("provider", provider);
+		return "/client/supply_goods_list";
+	}
+	
+	// 删除
+	@RequestMapping(value="/goods/delete/{pgId}")
+	public String deleteGoods(@PathVariable Long pgId,
+			Boolean type,Integer page,
+			HttpServletRequest req,ModelMap map){
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == pgId)
+		{
+			return "/client/error_404";
+		}
+		if(null == page)
+		{
+			page = 0;
+		}
+		
+		tdProviderGoodsService.delete(pgId);
+		TdProvider provider = tdProviderService.findByUsername(username);
+		map.addAttribute("supply_goods_page",
+				tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),type,true, page, ClientConstant.pageSize));
+		
+		
+		return "/client/supply_goods_list";
+	}
+	
+	/**
+	 * 批量操作
+	 * 
+	 */
+	@RequestMapping(value="/goods/checkAll/{type}")
+	public String deleteCheck(@PathVariable Boolean type,
+			Long[] listId,
+			Integer[] listChkId,
+			Integer page,
+			Long categoryId,String keywords,
+			HttpServletRequest req,
+			ModelMap map){
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page)
+		{
+			page = 0;
+		}
+		if(type){
+		
+			ChangeAll(false,listId,listChkId);
+		}else{
+			ChangeAll(true,listId,listChkId);
+		}
+		
+		if(null == categoryId){
+			return "redirect:/supply/goods/list/"+type+"?page="+page+"&keywords="+keywords;
+		}else{
+			return "redirect:/supply/goods/list/"+type+"?page="+page+"&categoryId="+categoryId+"&keywords="+keywords;
+		}
+	}
+	
+	/**
+	 * 分销单
+	 * 
+	 */
+	@RequestMapping(value="/disOrder/list/{statusId}")
+	public String disOrder(@PathVariable Integer statusId,
+			Integer statusid,
+			String keywords,
+			Integer page,
+			Integer timeId,
+			HttpServletRequest req,
+			ModelMap map)
+	{
+		String username =(String)req.getSession().getAttribute("supply");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page)
+		{
+			page = 0;
+		}
+		if(null == statusId)
+		{
+			statusId= 0;
+		}
+		if (null == timeId) {
+            timeId = 0;
+        }
+		if(null != statusid){
+        	statusId = statusid;
+        }
+		TdProvider provider = tdProviderService.findByUsername(username);
+		map.addAttribute("provider",provider);
+		map.addAttribute("status_id", statusId);
+		map.addAttribute("time_id",timeId);
+		
+		tdCommonService.setHeader(map, req);
+		
+		Page<TdOrder> orderPage =null;
+		if (timeId.equals(0)) {
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndSearch(
+                    		provider.getId(),2, keywords, page, ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeId(provider.getId(),2, page,
+                            ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndSearch(provider.getId(),2,statusId, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusId(
+                    		provider.getId(),2,statusId, page, ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(1)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -1);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                    2,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2,time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                   2, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(3)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -3);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                   2, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                    2,statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(6)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.MONTH, -6);// 月份减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                    2,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                   2, statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        } else if (timeId.equals(12)) {
+            Date cur = new Date();
+            Calendar calendar = Calendar.getInstance();// 日历对象
+            calendar.setTime(cur);// 设置当前日期
+            calendar.add(Calendar.YEAR, -1);// 减一
+            Date time = calendar.getTime();
+
+            if (statusId.equals(0)) {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                    2,time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                    		provider.getId(),2, time, page, ClientConstant.pageSize);
+                }
+            } else {
+                if (null != keywords && !keywords.isEmpty()) {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                            		provider.getId(),2, statusId, time, keywords, page,
+                                    ClientConstant.pageSize);
+                } else {
+                    orderPage = tdOrderService
+                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                    2,statusId, time, page,
+                                    ClientConstant.pageSize);
+                }
+            }
+        }
+		map.addAttribute("order_page",orderPage);
+		return "/client/supply_order_list";
+	}
+	
+	/**
+	 * 分销单详情
+	 * 
+	 */
+	@RequestMapping(value="/order")
+	public String disOrderDetail(Long id,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == id)
+		{
+			return "/client/error_404";
+		}
+		tdCommonService.setHeader(map, req);
+		map.addAttribute("provider", tdProviderService.findByUsername(username));
+		map.addAttribute("order",tdOrderService.findOne(id));
+		return "/client/supply_order_detail";
+	}
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)
     @ResponseBody
@@ -325,4 +637,24 @@ public class TdSupplyController {
         tdProviderService.save(provider);
     	return "client/supply_index";
     }
+	
+	public void ChangeAll(Boolean isDistribution,Long[] ids,Integer[] chkIds)
+	{
+		if (null == ids || null == chkIds
+                || ids.length < 1 || chkIds.length < 1)
+        {
+            return;
+        }
+		for (int chkId : chkIds) {
+			if(chkId >=0 && ids.length > chkId)
+			{
+				Long id = ids[chkId];
+				TdProviderGoods providerGoods = tdProviderGoodsService.findOne(id);
+				if(null != providerGoods){
+					providerGoods.setIsDistribution(isDistribution);
+					tdProviderGoodsService.save(providerGoods);
+				}
+			}
+		}
+	}
 }

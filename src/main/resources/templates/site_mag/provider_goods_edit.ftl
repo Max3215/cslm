@@ -195,8 +195,10 @@ $(function () {
 <input name="id" type="text" value='<#if providerGoods??>${providerGoods.id?c}</#if>' style="display:none">
 <input name="providerId" type="text" value='<#if providerId??>${providerId}</#if>' style="display:none">
 <input name="goodsId" type="text" value='<#if providerGoods??>${providerGoods.goodsId?c}</#if>' style="display:none">
-<input name="isOnSale" type="text" value='<#if providerGoods??>${providerGoods.isOnSale?c}</#if>' style="display:none">
+<#--
+<input name="isOnSale" type="text" value='<#if providerGoods?? >${providerGoods.isOnSale?c}</#if>' style="display:none">
 <input name="isDistrition" type="text" value='<#if providerGoods??>${providerGoods.isDistribution?c}</#if>' style="display:none">
+-->
 <!--导航栏-->
 <div class="location">
     <a href="/Verwalter/provider/goods/list" class="back"><i></i><span>
@@ -256,7 +258,22 @@ $(function () {
                 <input id="outFactoryPrice" readonly="readonly"  name="outFactoryPrice" type="text" value="<#if providerGoods?? && providerGoods.outFactoryPrice??>${providerGoods.outFactoryPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
+        </dl> 
+        <#if providerGoods.isOnSale??>
+        <dl>
+            <dt>审核状态</dt>
+            <dd>
+                <div class="rule-multi-radio multi-radio">
+                    <span>
+                        <input type="radio" name="isOnSale" value="1" <#if providerGoods?? || providerGoods.inOnSale==true>checked="checked"</#if> >
+                        <label>批发中</label>
+                        <input type="radio" name="isOnSale" value="0" <#if providerGoods?? && providerGoods.inOnSale?? && providerGoods.isOnSale==false>checked="checked"</#if> >
+                        <label>未批发</label>
+                    </span>
+                </div>
+            </dd>
         </dl>
+        </#if>
         <#if providerGoods.isAudit??>
         <dl>
             <dt>审核状态</dt>
