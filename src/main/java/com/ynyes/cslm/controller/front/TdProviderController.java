@@ -309,146 +309,23 @@ public class TdProviderController {
 		return "/client/provider_order_detail";
 	}
 	
-	@RequestMapping(value="/disOrder")
-	public String disOrderDetail(Long id,HttpServletRequest req,ModelMap map)
-	{
-		String username = (String)req.getSession().getAttribute("provider");
-		if(null == username)
-		{
-			return "redirect:/login";
-		}
-		if(null == id)
-		{
-			return "/client/error_404";
-		}
-		tdCommonService.setHeader(map, req);
-		map.addAttribute("provider", tdProviderService.findByUsername(username));
-		map.addAttribute("order",tdOrderService.findOne(id));
-		return "/client/provider_disorder_detail";
-	}
-	
-	@RequestMapping(value="/disorder/param/edit")
-	@ResponseBody
-	public Map<String, Object> disparamEdit(String orderNumber,
-			String type,
-			ModelMap map,
-			HttpServletRequest req)
-	{
-		Map<String, Object> res =new HashMap<>();
-		res.put("code",1);
-		String username = (String)req.getSession().getAttribute("provider");
-		
-		if (null == username)
-        {
-            res.put("message", "请重新登录");
-            return res;
-        }
-		
-		if (null != orderNumber && !orderNumber.isEmpty() && null != type && !type.isEmpty())
-        {
-			TdOrder order = tdOrderService.findByOrderNumber(orderNumber);
-			if(type.equalsIgnoreCase("orderConfirm"))
-			{
-				if(order.getStatusId().equals(1L))
-				{
-					order.setStatusId(2L);
-					order.setDeliveryTime(new Date());
-				}
-			}
-			else if(type.equalsIgnoreCase("orderPay"))
-			{
-				if(order.getStatusId().equals(2L))
-				{
-					TdUser tdUser = tdUserService.findByUsername(order.getUsername());
-	            	TdDistributor distributor = tdDistributorService.findOne(order.getShopId());
-	            	TdProvider provider = tdProviderService.findOne(order.getProviderId());
-	            	
-	            	List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
-	            	
-	            	 Long totalPoints = 0L;
-	                 Double totalCash = 0.0;
-	                 Double platformService = 0.0; // 平台服务费
-	                 Double trainService = 0.0;	// 分销返利
-	                
-	                 // 返利总额
-	                 if (null != tdOrderGoodsList) {
-	                     for (TdOrderGoods tog : tdOrderGoodsList) {
-	                         if (0 == tog.getGoodsSaleType()) // 正常销售
-	                         {
-	                             TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(order.getProviderId(), tog.getGoodsId());
-	                        	 TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributor.getId(), tog.getGoodsId(), true);
-	                        	 TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
-
-	                             if (null != disGoods && null != disGoods.getReturnPoints()) {
-	                                 totalPoints += disGoods.getReturnPoints(); // 赠送积分
-
-//	                                 if (null != tdGoods.getShopReturnRation()) {
-//	                                     totalCash += tdGoods.getCostPrice()
-//	                                             * tdGoods.getShopReturnRation();
-//	                                 }
-	                             }
-	                             if (null != disGoods && null != tdGoods.getPlatformServiceReturnRation()) {
-	                             	platformService += tog.getPrice() * tdGoods.getPlatformServiceReturnRation();
-	         					}
-	                             if (null != providerGoods && null != providerGoods.getShopReturnRation()) {
-	                             	trainService += tog.getPrice() * providerGoods.getShopReturnRation(); 
-	         					}
-	                         }
-	                     }
-	                  // 用户返利
-	                     if (null != tdUser) {
-	                         TdUserPoint userPoint = new TdUserPoint();
-
-	                         userPoint.setDetail("购买商品赠送积分");
-	                         userPoint.setOrderNumber(order.getOrderNumber());
-	                         userPoint.setPoint(totalPoints);
-	                         userPoint.setPointTime(new Date());
-	                         userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
-	                         userPoint.setUsername(tdUser.getUsername());
-
-	                         userPoint = tdUserPointService.save(userPoint);
-
-	                         tdUser.setTotalPoints(userPoint.getTotalPoint());
-
-	                         tdUserService.save(tdUser);
-	                     }
-	                     order.setRebate(order.getTotalGoodsPrice()-platformService);// 设置订单超市收益
-	                     order.setPlatformService(platformService);// 设置订单平台服务费
-	                     order.setTrainService(trainService);// 设置订单培训服务费
-	                     order = tdOrderService.save(order);
-	                  //超市入账
-	                   if(null != distributor)
-	                   {
-	                	   distributor.setVirtualMoney(distributor.getVirtualMoney()+trainService);
-	                       tdDistributorService.save(distributor);
-	                   }
-	                   // 批发商入帐
-	                   if(null != provider){
-	                	   provider.setVirtualMoney(provider.getVirtualMoney()+order.getTotalGoodsPrice()-platformService-trainService);
-	                	   tdProviderService.save(provider);
-	                   }
-	                 }
-					order.setStatusId(3L);
-					order.setFinishTime(new Date());
-				}
-			}
-			// 确认发货
-            else if (type.equalsIgnoreCase("orderPayLeft"))
-            {
-            	if(order.getStatusId().equals(3L))
-            	{
-            		order.setStatusId(4L);
-            		order.setDeliveryTime(new Date());
-            	}
-            }
-			 tdOrderService.save(order);
-	         res.put("code", 0);
-	         res.put("message", "修改成功!");
-	         return res;
-        }
-		res.put("message", "参数错误!");
-		return res;
-	}
+//	@RequestMapping(value="/disOrder")
+//	public String disOrderDetail(Long id,HttpServletRequest req,ModelMap map)
+//	{
+//		String username = (String)req.getSession().getAttribute("provider");
+//		if(null == username)
+//		{
+//			return "redirect:/login";
+//		}
+//		if(null == id)
+//		{
+//			return "/client/error_404";
+//		}
+//		tdCommonService.setHeader(map, req);
+//		map.addAttribute("provider", tdProviderService.findByUsername(username));
+//		map.addAttribute("order",tdOrderService.findOne(id));
+//		return "/client/provider_disorder_detail";
+//	}
 	
 	
 	@RequestMapping(value="/order/param/edit")

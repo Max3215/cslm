@@ -350,7 +350,7 @@ public interface TdDistributorGoodsRepo extends
 		
 		Page<TdDistributorGoods> findByIsOnSaleTrueOrderByOnSaleTimeDesc(Pageable page);
 		
-		
+		List<TdDistributorGoods> findByProviderIdAndGoodsIdAndIsDistributionTrue(Long proId,Long goodsId);
 		
 		
 		

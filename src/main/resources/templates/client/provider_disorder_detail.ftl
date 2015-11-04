@@ -57,7 +57,7 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderConfirm" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/distributor/order/param/edit");
+            sendAjaxUrl(dialog, postData, "/provider/order/param/edit");
             return false;
         });
     }    

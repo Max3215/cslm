@@ -41,7 +41,7 @@
                         <td class="tb02">${dg.shopReturnRation!'0'}</td>
                         <td>${dg.leftNumber}</td>
                         <td>
-                                <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page})">上架分销</a></p>
+                                <p><a href="javascript:goodsAudit(true,${dg.id?c},${page})">上架分销</a></p>
                                 <p><a href="javascript:deleteGoods(false,${dg.id?c},${page})">删除</a></p>
                       </tr>
                  </#if>

@@ -57,7 +57,7 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderConfirm" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/distributor/order/param/edit");
+            sendAjaxUrl(dialog, postData, "/supply/order/param/edit");
             return false;
         });
     }    
@@ -68,7 +68,7 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderPay" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/provider/disorder/param/edit");
+            sendAjaxUrl(dialog, postData, "/supply/order/param/edit");
             return false;
         });
     }  
@@ -79,7 +79,7 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderPayLeft" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/provider/disorder/param/edit");
+            sendAjaxUrl(dialog, postData, "/supply/order/param/edit");
             return false;
         });
     }
@@ -89,7 +89,7 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderService" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/provider/disorder/param/edit");
+            sendAjaxUrl(dialog, postData, "/supply/order/param/edit");
             return false;
         });
     } 
@@ -98,7 +98,7 @@ $(document).ready(function(){
         var orderNumber = $.trim($("#spanOrderNumber").text());
         var dialog = $.dialog({
             title: '确认发货',
-            content: 'url:/provider/order/dialog/delivery?orderNumber=' + orderNumber,
+            content: 'url:/supply/order/dialog/delivery?orderNumber=' + orderNumber,
             min: false,
             max: false,
             lock: true,
@@ -113,7 +113,7 @@ $(document).ready(function(){
             var orderNumber = $.trim($("#spanOrderNumber").text());
             var postData = { "orderNumber": orderNumber, "type": "orderFinish" };
             //发送AJAX请求
-            sendAjaxUrl(dialog, postData, "/provider/disorder/param/edit");
+            sendAjaxUrl(dialog, postData, "/supply/order/param/edit");
             return false;
         });
     }
@@ -129,7 +129,6 @@ $(document).ready(function(){
                     $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
                 },
                 success: function (data) {
-                console.debug(data)
                     if (data.code == 0) {
                         winObj.close();
                         $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面

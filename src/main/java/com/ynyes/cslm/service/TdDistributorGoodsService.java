@@ -1497,6 +1497,8 @@ public class TdDistributorGoodsService {
 		return repository.findByIsOnSaleTrueOrderByOnSaleTimeDesc(pageRequest);
 	}
 	
-	
+	public List<TdDistributorGoods> findByProviderIdAndGoodsIdAndIsDistributionTrue(Long proId,Long goodsId){
+		return repository.findByProviderIdAndGoodsIdAndIsDistributionTrue(proId, goodsId);
+	}
 	
 }
