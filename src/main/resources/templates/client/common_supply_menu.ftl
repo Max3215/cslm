@@ -36,8 +36,7 @@
             <a class="mymember_menu_tit" title="商品管理"><img src="/client/images/mymember/menu05.png" />账号管理</a>
             <div> 
                 <a href="">账号管理</a> 
-                <a href="">商品供求</a> 
-                <a href="">平台服务</a> 
+                <a href="/supply/info/8">平台服务</a> 
              </div>
         </div> <!--mymember_menu_part END-->
   </div><!--mymember_menu END-->

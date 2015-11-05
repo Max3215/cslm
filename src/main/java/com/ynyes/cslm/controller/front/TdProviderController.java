@@ -17,16 +17,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdArticle;
+import com.ynyes.cslm.entity.TdArticleCategory;
+import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
+import com.ynyes.cslm.service.TdArticleCategoryService;
+import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
@@ -81,6 +88,15 @@ public class TdProviderController {
 	
 	@Autowired
 	TdPayRecordService tdPayRecordService;
+	
+	@Autowired
+	TdDemandService tdDemandService;
+	
+	@Autowired
+	TdArticleCategoryService tdArticleCategoryService;
+	
+	@Autowired
+	TdArticleService tdArticleService;
 	
 	@RequestMapping(value="/index")
 	public String providerIndex(HttpServletRequest req,ModelMap map)
@@ -752,6 +768,107 @@ public class TdProviderController {
     	map.addAttribute("pay_record_page",
     				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
     	return "/client/provider_record";
+    }
+    
+    /**
+     * 商品需求
+     * 
+     */
+    @RequestMapping(value="/goods/need")
+    public String noodGoods(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("category_list", tdProductCategoryService.findAll());
+    	return "/client/provider_goods_need";
+    }
+    
+    @RequestMapping(value="goods/need",method=RequestMethod.POST)
+    public String needGoods(TdDemand demand,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	tdCommonService.setHeader(map, req);
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	
+    	if(null == demand){
+    		return "/client/error_404";
+    	}
+    	if(null != demand.getCategoryId()){
+    		TdProductCategory category = tdProductCategoryService.findOne(demand.getCategoryId());
+    		demand.setCategory(category.getTitle());
+    	}
+    	demand.setName(provider.getTitle());
+    	demand.setMobile(provider.getMobile());
+    	demand.setTime(new Date());
+    	demand.setStatusId(0L);
+    	
+    	tdDemandService.save(demand);
+    	
+    	return "/client/provider_end_need";
+    }
+    
+    /**
+     * 平台服务
+     * 
+     */
+    @RequestMapping(value="/info/{mid}")
+    public String info(@PathVariable Long mid,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(mid);
+    	
+    	tdCommonService.setHeader(map, req);
+ 	    map.addAttribute("td_art_list",catList);
+ 	    map.addAttribute("mid", mid);
+ 	    
+ 	    map.addAttribute("new_list",tdArticleService.findByMenuId(mid));
+ 	   if (null != catList && catList.size() > 0) 
+ 	   {
+	   		for (int i = 0; i < catList.size(); i++) {
+				TdArticleCategory tdCat=catList.get(i);
+				map.addAttribute("news_page", tdArticleService
+   						.findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(mid,
+   								tdCat.getId(), 0, ClientConstant.pageSize).getContent());
+				
+			}
+ 	   }
+ 	   
+ 	   return "/client/provider_info_list";
+   }
+    @RequestMapping(value="/content/{newId}")
+    public String newContent(@PathVariable Long newId,Long mid,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	if(null == newId){
+    		return "/client/error_404";
+    	}
+    	map.addAttribute("mid",mid);
+
+    	TdArticle tdArticle = tdArticleService.findOne(newId);
+    	if(null != tdArticle){
+    		map.addAttribute("info",tdArticle);
+    	}
+    	TdArticle article = tdArticleService.findPrevOne(newId, tdArticle.getCategoryId(), tdArticle.getMenuId());
+    	
+    	if(null != article){
+    		map.addAttribute("prev_info",article);
+    	}
+    	TdArticle tdarticle =tdArticleService.findNextOne(newId, tdArticle.getCategoryId(), tdArticle.getMenuId());
+    	if(null != tdarticle){
+    		map.addAttribute("next_info",tdarticle);
+    	}
+    	return "/client/provider_info";
     }
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)
