@@ -29,12 +29,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCartGoods;
+import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
+import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
@@ -47,6 +49,7 @@ import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
@@ -118,6 +121,9 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdPayRecordService tdPayRecordService;
+	
+	@Autowired
+	TdDemandService tdDemandService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -2567,26 +2573,59 @@ public class TdDistributorController {
      */
     @RequestMapping(value="/info/{mid}")
     public String info(@PathVariable Long mid,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
     	
     	List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(mid);
+    	
+    	tdCommonService.setHeader(map, req);
  	    map.addAttribute("td_art_list",catList);
+ 	    map.addAttribute("mid", mid);
  	    
+ 	    map.addAttribute("new_list",tdArticleService.findByMenuId(mid));
  	   if (null != catList && catList.size() > 0) 
  	   {
-	   		for (TdArticleCategory tdCat : catList)
-	   		{
-	   			if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
-	   			{
-	   				map.addAttribute("news_page", tdArticleService
-	   						.findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(10L,
-	   								tdCat.getId(), 0, ClientConstant.pageSize));
-	   				break;
-	   			}
-   			}
+	   		for (int i = 0; i < catList.size(); i++) {
+				TdArticleCategory tdCat=catList.get(i);
+				map.addAttribute("news_page", tdArticleService
+   						.findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(mid,
+   								tdCat.getId(), 0, ClientConstant.pageSize).getContent());
+				
+			}
  	   }
  	   
- 	   return "/client/distributor_info";
+ 	   return "/client/distributor_info_list";
    }
+    @RequestMapping(value="/content/{newId}")
+    public String newContent(@PathVariable Long newId,Long mid,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	if(null == newId){
+    		return "/client/error_404";
+    	}
+    	map.addAttribute("mid",mid);
+
+    	TdArticle tdArticle = tdArticleService.findOne(newId);
+    	if(null != tdArticle){
+    		map.addAttribute("info",tdArticle);
+    	}
+    	TdArticle article = tdArticleService.findPrevOne(newId, tdArticle.getCategoryId(), tdArticle.getMenuId());
+    	
+    	if(null != article){
+    		map.addAttribute("prev_info",article);
+    	}
+    	TdArticle tdarticle =tdArticleService.findNextOne(newId, tdArticle.getCategoryId(), tdArticle.getMenuId());
+    	if(null != tdarticle){
+    		map.addAttribute("next_info",tdarticle);
+    	}
+    	return "/client/distributor_info";
+    }
     
     /**
      * 交易记录
@@ -2610,6 +2649,43 @@ public class TdDistributorController {
     	return "/client/distributor_record";
     }
     
+    
+    @RequestMapping(value="/goods/need")
+    public String noodGoods(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("category_list", tdProductCategoryService.findAll());
+    	return "/client/distributor_goods_need";
+    }
+    
+    @RequestMapping(value="goods/need",method=RequestMethod.POST)
+    public String needGoods(TdDemand demand,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	tdCommonService.setHeader(map, req);
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	
+    	if(null == demand){
+    		return "/client/error_404";
+    	}
+    	if(null != demand.getCategoryId()){
+    		TdProductCategory category = tdProductCategoryService.findOne(demand.getCategoryId());
+    		demand.setCategory(category.getTitle());
+    	}
+    	demand.setName(distributor.getTitle());
+    	demand.setMobile(distributor.getMobile());
+    	demand.setTime(new Date());
+    	demand.setStatusId(0L);
+    	
+    	tdDemandService.save(demand);
+    	
+    	return "/client/distributor_end_need";
+    }
     
     
     @RequestMapping(value = "/edit/ImageUrl", method = RequestMethod.POST)

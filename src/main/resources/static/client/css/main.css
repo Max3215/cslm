@@ -86,11 +86,11 @@
 .nav_list{width: 160px;height: 40px;background: #39bee9;float: left;margin-right: 20px;}
 .nav_list .a2{display: block;width: 100%;font-size: 18px;text-align: center;line-height: 40px;color:#fff;}
 .nav_down{display: block;z-index: 100;background: #fff;font-size: 12px;position: absolute;width: 158px;border:1px solid #eeeeee;box-shadow: 2px 2px 10px #737373;padding-bottom: 10px;}
-.nav_down li{display: block;width: 145px;height:31px;line-height: 31px;padding-top: 6px;padding-left: 14px;}
+.nav_down li{display: block;width: 145px;height:25px;line-height: 25px;padding-left: 14px;}
 .nav_down li a{color:#252525;}
-.nav_down li .list{display: block;width: 100px;height: 31px;overflow: hidden;}
-.nav_down li span{position: absolute;top:6px;right:21px;}
-.nav_down li:hover{background: url(../images/nav01.png) no-repeat 0 6px;color:#fff;}
+.nav_down li .list{display: block;width: 100px;height: 25px;overflow: hidden;}
+.nav_down li span{position: absolute;top:0px;right:21px;}
+.nav_down li:hover{background: url(../images/nav01.png) no-repeat 0 0px;color:#fff;}
 .nav_down li:hover .list{color:#fff;}
 
 .nav_show{width: 580px;position: absolute;top:10px;left:159px;background: #fff;border-left: 1px solid #eeeeee;padding:20px;box-shadow:3px 2px 10px #737373;display: none;}
@@ -98,7 +98,7 @@
 .nav_show.none{display: none;}
 .nav_show table{}
 .nav_show th{color: #000;font-size: 14px;line-height: 16px;padding-right: 20px;vertical-align: top;text-align: left;}
-.nav_show td{vertical-align: top;font-size: 12px;line-height: 16px;text-align: left;padding-bottom: 20px;}
+.nav_show td{vertical-align: top;font-size: 12px;line-height: 16px;text-align: left;padding-bottom: 12px;}
 .nav_show td a{display: inline-block;padding: 0 10px;margin: 0 0 7px 0;border-right:1px solid #CDCACA;_display:inline-block;color:#8e8e8e;}
 .nav_show td a:hover{text-decoration: underline;}
 
@@ -245,7 +245,7 @@
 .foot dl dd{color:#8e8e8e;line-height: 22px;}
 .b_contact{float: left;}
 .b_contact .qq{display: block;padding: 15px 0;border-bottom:1px solid #d1d1d1;}
-.b_contact span{display: block;font-size:16px;color:#16bddf;line-height: 40px;text-align:right;padding-top:30px;height: 40px;}
+.b_contact span{display: block;font-size:16px;color:#16bddf;line-height: 40px;text-align:right;padding-top:30px;height: 40px;    padding-left: 65px;}
 .b_contact span i{position: absolute;left:0;top:30px;}
 
 .bottom_nav{width: 100%;text-align: center;padding-top:20px;border-top:1px solid #d1d1d1;margin-top: 20px;}

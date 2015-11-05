@@ -85,11 +85,11 @@ var theForm = document.forms['form1'];
                 <td class="comment">
                   <div class="title">
                     <span class="note">
+                        <i>类型：<#if demand.type?? && demand.type==1>需要<#else>供应</#if></i>
+                        <i>&nbsp;</i>
                         <i>电话：${demand.mobile!''}</i>
                         <i>&nbsp;</i>
-                        <i>邮箱：${demand.mail!''}</i>
-                        <i>&nbsp;</i>
-                        <i>${demand.time!""}</i>
+                        <i>提交时间：${demand.time!""}</i>
                         <#-- 
                         <i class="reply">
                             <a href="/Verwalter/user/comment/edit?id=${comment.id}&statusId=${statusId!""}">回复</a>
@@ -109,10 +109,11 @@ var theForm = document.forms['form1'];
                   </div>                
                   <div class="ask">
                     <#if demand.statusId?? && demand.statusId==0>
-                        <b class="audit" title="待审核"></b>
+                        <b class="audit" title="待处理"></b>
                     </#if>
                     ${demand.content!""}
-                    <i>&nbsp;</i>
+                    <i>&nbsp;&emsp;&emsp;&emsp;&emsp;</i>
+                   ${demand.needTime!''}
                   </div>            
                   <div>&nbsp;</div>
                 </td>

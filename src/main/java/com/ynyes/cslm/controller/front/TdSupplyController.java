@@ -853,12 +853,30 @@ public class TdSupplyController {
     					tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsAudit(provider.getId(),categoryId, keywords, false, page, ClientConstant.pageSize));
     		}
     	}
-		
-		
 		return "/client/supply_goods_audit";
 	}
 	
-	
+	/**
+	 * 交易记录
+	 * 
+	 */
+	@RequestMapping(value="/pay/record")
+    public String payRecord(Integer page,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("supply");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	if(null == page ){
+    		page = 0;
+    	}
+    	map.addAttribute("page", page);
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	map.addAttribute("pay_record_page",
+    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
+    	return "/client/supply_record";
+    }
 	
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)

@@ -22,7 +22,7 @@ public class TdDemand {
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	//要求团购的内容
+	// 要求的内容
 	@Column
 	private String content;
 	
@@ -43,10 +43,31 @@ public class TdDemand {
 	@Column
 	private String mobile;
 	
-    // 显示状态
+    // 处理状态
     @Column
     private Long statusId;
+    
+    // 需求\供应
+    private Long type;
     	
+    // 需求商品类型Id
+    @Column
+    private Long categoryId;
+    
+    @Column
+    private String category;
+    
+    // 数量
+    @Column
+    private Long number;
+    
+    // 价格
+    @Column(scale=2)
+    private Double price;
+    
+    // 时间
+    @Column
+    private String needTime;
     
 	
 	public Long getId() {
@@ -104,5 +125,56 @@ public class TdDemand {
 	public void setStatusId(Long statusId) {
 		this.statusId = statusId;
 	}
+
+	public Long getType() {
+		return type;
+	}
+
+	public void setType(Long type) {
+		this.type = type;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Long getNumber() {
+		return number;
+	}
+
+	public void setNumber(Long number) {
+		this.number = number;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getNeedTime() {
+		return needTime;
+	}
+
+	public void setNeedTime(String needTime) {
+		this.needTime = needTime;
+	}
+
+	
     
+	
 }

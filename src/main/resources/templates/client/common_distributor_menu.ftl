@@ -44,7 +44,7 @@
             <div> 
                 <a href="/distributor/collect/list">商品收藏</a>
                 <a href="">账号管理</a> 
-                <a href="">商品供求</a> 
+                <a href="/distributor/goods/need">商品供求</a> 
                 <a href="/distributor/info/8">平台服务</a> 
              </div>
         </div> <!--mymember_menu_part END-->
