@@ -21,6 +21,7 @@
 <div>
 <input type="hidden" name="__VIEWSTATE" value="${statusId!""}">
 <input type="hidden" name="userReturnId" value="${userReturnId!""}">
+<input type="hidden" name="shopId" value="<#if user_return??>${user_return.shopId?c}</#if>">
 </div>
 <!--导航栏-->
 <div class="location">
@@ -59,6 +60,10 @@
   <dl>
     <dt>相关订单</dt>
     <dd><#if user_return??>${user_return.orderNumber!""}</#if></dd>
+  </dl>
+  <dl>
+    <dt>相关商家</dt>
+    <dd><#if user_return??>${user_return.shopTitle!""}</#if></dd>
   </dl>
   <dl>
     <dt>商品名称</dt>

@@ -345,6 +345,30 @@ public interface TdDistributorGoodsRepo extends
 																									Long disId2,String catId2,String keywords2,
 																									Long disId3,String catId3,String keywords3,Pageable page);
 		
+		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isDistribution=?2 and g.isAudit=?3")
+		Page<TdDistributorGoods> findByDistributorIdAndIsDistributionAndIsAudit(Long distributorId,Boolean isDistribution,Boolean isAudit,Pageable page);
+		
+		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2 and g.isDistribution =?3 and g.isAudit=?4 or "
+																	+ "d.id=?5 and g.code like ?6 and g.isDistribution =?7 and g.isAudit=?8")
+		Page<TdDistributorGoods> findByDistributorIdAndIsDistributionAndGoodsTitleLikeAndIsAuditOrDistributorIsAndIsDistributionAndCodeLikeAndIsAudit(
+																									Long distributorId,	String keywords,
+																									Boolean isDistribution,Boolean isAudit,
+																									Long distributorId1,String keywords1,
+																									Boolean isDistribution1,Boolean isAudit1,
+																									Pageable page);
+		
+		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isDistribution=?3 and g.isAudit=?4")
+		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeAndIsDistributionAndIsAudit(Long distributorId,String catId,Boolean isDistribution,Boolean isAudit,Pageable page);
+		
+		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2 and g.isDistribution =?3 and g.isAudit=?4 and g.goodsTitle like ?5 or "
+																	+ "d.id=?6 and g.categoryIdTree like ?7 and g.isDistribution =?8 and g.isAudit=?9 and g.code like ?10")
+		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsDistributionAndIsAuditAndGoodsTitleLikeOrDistributorIsAndCategoryIdTreeLikeAndIsDistributionAndIsAuditAndCodeLike(
+																				Long distributorId,String catId,
+																				Boolean isDistribution,Boolean isAudit,String keywords,
+																				Long distributorId1,String catId1,
+																				Boolean isDistribution1,Boolean isAudit1,String keywords1,Pageable page);
+		
+		
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=1 order by g.onSaleTime desc")
 		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(Long distributorId,Pageable page);
 		

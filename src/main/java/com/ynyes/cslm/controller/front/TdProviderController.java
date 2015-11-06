@@ -30,6 +30,7 @@ import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
+import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCommonService;
@@ -43,6 +44,7 @@ import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdUserPointService;
+import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 
@@ -97,6 +99,9 @@ public class TdProviderController {
 	
 	@Autowired
 	TdArticleService tdArticleService;
+	
+	@Autowired
+	TdUserReturnService tdUserReturnService;
 	
 	@RequestMapping(value="/index")
 	public String providerIndex(HttpServletRequest req,ModelMap map)
@@ -869,6 +874,54 @@ public class TdProviderController {
     		map.addAttribute("next_info",tdarticle);
     	}
     	return "/client/provider_info";
+    }
+    
+    @RequestMapping(value="/return/list")
+    public String returnList(Integer page,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	if(null == page){
+    		page = 0;
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	
+    	map.addAttribute("return_page",
+    			tdUserReturnService.findByShopIdAndType(provider.getId(), 2L, page, ClientConstant.pageSize));
+    	
+    	return "/client/provider_return_list";
+    }
+    
+    @RequestMapping(value="/return/param/edit")
+    @ResponseBody
+    public Map<String,Object> returnedit(Long id,HttpServletRequest req){
+    	Map<String,Object> res =new HashMap<>();
+    	res.put("code",1);
+		String username = (String)req.getSession().getAttribute("provider");
+		
+		if (null == username)
+        {
+            res.put("message", "请重新登录！");
+            return res;
+        }
+		if(null != id)
+		{
+			TdUserReturn tdReturn = tdUserReturnService.findOne(id);
+			if(null != tdReturn && tdReturn.getStatusId()==0)
+			{
+				tdReturn.setStatusId(1L);
+				tdUserReturnService.save(tdReturn);
+				res.put("message", "已处理此次退货！");
+				res.put("code", 0);
+				return res;
+			}
+		}
+		
+		res.put("message", "参数错误！");
+    	return res;
     }
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)

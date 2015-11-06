@@ -78,7 +78,7 @@ var theForm = document.forms['form1'];
     <th align="center">用户名</th>
     <th align="center" width="10%">联系电话</th>
     <th align="center" width="6%">订单号</th>
-    <th align="center" width="5%">商品ID</th>
+    <th align="center" width="5%">处理商</th>
     <th align="center" width="12%">退换商品</th>
     <th align="center" width="3%">退换数量</th>
     <th width="12%">商品成交价</th>
@@ -101,7 +101,7 @@ var theForm = document.forms['form1'];
                 <td align="center">${return.username!""}</td>
                 <td align="center">${return.telephone!""}</td>
                 <td align="center">${return.orderNumber!""}</td>
-                <td align="center">${return.goodsId!""}</td>
+                <td align="center">${return.shopTitle!""}</td>
                 <td align="center">${return.goodsTitle!""}</td>
                 <td align="center">${return.returnNumber!""}</td>
                 <td align="center">${return.goodsPrice?string("#.##")}</td>

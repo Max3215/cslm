@@ -259,8 +259,8 @@ DD_belatedPNG.fix('.,img,background');
                         <p>待收货</p>
                     </#if>
                     <#if order.statusId?? && order.statusId == 5>
-                        <p>待评价</p>
-                        <a href="/user/comment/list">去评价</a>
+                        <a href="/user/comment/list">去评价</a><br>
+                        <a href="/user/return/${order.id?c}?id="${og.id?c}">退货</a>
                     </#if>
                     <#if order.statusId?? && order.statusId == 6>
                         <p>已完成</p>

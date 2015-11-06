@@ -9,6 +9,8 @@
      </tr>
       <#if dis_goods_page?? && dis_goods_page.content?size gt 0>
            <#list dis_goods_page.content as dg>
+               <#if dg.isDistribution>
+               <#else>
                <#if dg.isOnSale>
                       <tr id="tr_1424195166">
                         <td width=10>
@@ -27,6 +29,7 @@
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page});">下架</a></p>
                             <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page});">删除</a></p></td>
                       </tr>
+                      
                  <#else>
                       <tr id="tr_1424195166">
                         <td width=10>
@@ -49,6 +52,7 @@
                             </#if>
                             <p><a href="javascript:deleteDisGoods(false,${dg.id?c},${page});">删除</a></p></td>
                       </tr>
+                 </#if>
                  </#if>
             </#list>
         </#if>

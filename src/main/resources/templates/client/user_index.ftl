@@ -234,7 +234,7 @@ DD_belatedPNG.fix('.,img,background');
                       <#if hot_goods_page??>
                            <#list hot_goods_page.content as item>
                                <#if item_index < 4 >
-                                   <a class="mymember_hot_list" href="/goods/${item.goodsId?c}">
+                                   <a class="mymember_hot_list" href="/goods/${item.id?c}">
                                        <img src="${item.coverImageUri!''}"  width="75" height="75"/>
                                        <p>${item.goodsTitle!''}</p>
                                        <b>￥${item.goodsPrice?string('0.00')}</b>

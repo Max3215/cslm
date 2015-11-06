@@ -55,7 +55,7 @@ public class TdLoginController {
 		String username = (String) req.getSession().getAttribute("username");
 
 		String referer = req.getHeader("referer");
-
+		
 		// 基本信息
 		tdCommonService.setHeader(map, req);
 

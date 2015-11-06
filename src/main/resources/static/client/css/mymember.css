@@ -816,7 +816,7 @@ textarea { resize:none;}
 
 
 .s_d_table{}
-.s_d_table th{font-weight: 400;padding-bottom: 30px;}
+.s_d_table th{font-weight: 400;padding-bottom: 30px;text-align: right;vertical-align: top;line-height: 30px;}
 .s_d_table td{padding-bottom: 30px;}
 .s_d_table td .text.big{width: 298px;height: 28px;border: 1px solid #c0bfbf;text-indent: 4px;}
 .s_d_table td select{width: 178px;height: 28px;border: 1px solid #c0bfbf;font-family: "微软雅黑";}
@@ -832,13 +832,31 @@ textarea { resize:none;}
     background: #ff5b7d;}
 .s_d_table td .sub:hover{background: #39bee9;}
 .s_d_table td span{padding-right: 50px;}
+.s_d_table td span.b_color{color:#39bee9;padding-left: 20px;}
+.s_d_table td textarea{width: 330px;height: 110px;border:1px solid #c0bfbf;padding: 4px;}
 
 .s_d_success .p1{height: 41px;background: url(../images/icon_bg.jpg) no-repeat center;}
 .s_d_success .p2{color:#333333;font-size: 16px;text-align: center;padding:40px 0 30px 0;}
 .s_d_success .p3{text-align: center;}
 .s_d_success .p3 a{font-size: 14px;color:#39bee9;}
 .s_d_success .p3 a:hover{text-decoration: underline;}
-
+.s_d_success .p4{height: 41px;background: url(../images/icon_bg.jpg) no-repeat left center;line-height: 41px;padding-left: 50px;font-size: 18px;width: 392px;margin: 0 auto;}
+.s_d_success .p5{padding-top: 20px;width: 340px;margin: 0 auto;}
+.s_d_success .finish{width: 180px;
+	margin: 0 auto;
+	margin-top: 40px;
+	display: block;
+	text-align: center;
+	line-height: 35px;
+    height: 35px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-family: "微软雅黑";
+    font-size: 16px;
+    border-radius: 3px;
+    background: #ff5b7d;}
+.s_d_success .finish:hover{background: #39bee9;}
 
 .pt_serve_list{}
 .pt_serve_list a{display: block;padding-bottom: 2px;border-bottom:1px dashed #c0bfbf;line-height: 30px;}

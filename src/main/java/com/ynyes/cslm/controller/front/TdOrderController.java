@@ -948,7 +948,7 @@ public class TdOrderController extends AbstractPaytypeController{
 	       		TdOrderGoods orderGoods = new TdOrderGoods();
 
                 // 商品信息
-                orderGoods.setGoodsId(distributorGoods.getGoodsId());
+                orderGoods.setGoodsId(distributorGoods.getId());
                 orderGoods.setGoodsTitle(distributorGoods.getGoodsTitle());
                 orderGoods.setGoodsSubTitle(goods.getSubTitle());
                 orderGoods.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());

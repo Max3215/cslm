@@ -133,6 +133,19 @@ public class TdUserReturnService {
         return repository.findByUsernameContainingOrGoodsTitleContainingOrOrderNumberContainingOrderBySortIdAsc(keywords, keywords, keywords, pageRequest);
     }
     
+    public Page<TdUserReturn> findByShopIdAndType(Long shopId,Long tyoeId,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size);
+    	
+    	return repository.findByShopIdAndTypeOrderByIdDesc(shopId, tyoeId, pageRequest);
+    }
+    
+    public Page<TdUserReturn> findByDistributorIdAndType(Long disId,Long type,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size);
+    	return repository.findByDistributorIdAndTypeOrderByIdDesc(disId, type, pageRequest);
+    }
+    
     /**
      * 保存
      * 

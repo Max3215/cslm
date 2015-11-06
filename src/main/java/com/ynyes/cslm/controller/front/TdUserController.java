@@ -963,7 +963,7 @@ public class TdUserController{
 
             collect.setUsername(username);
             collect.setDistributorId(distributorGoods.getId());
-            collect.setGoodsId(distributorGoods.getGoodsId());
+            collect.setGoodsId(distributorGoods.getId());
             collect.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());
             collect.setGoodsTitle(distributorGoods.getGoodsTitle());
             collect.setGoodsSalePrice(distributorGoods.getGoodsPrice());
@@ -1073,6 +1073,10 @@ public class TdUserController{
         if (null != orderId) {
             TdOrder tdOrder = tdOrderService.findOne(orderId);
             map.addAttribute("order", tdOrder);
+//            if(null !=tdOrder.getTypeId() && tdOrder.getTypeId() ==0)
+//            {
+            	map.addAttribute("shop", TdDistributorService.findOne(tdOrder.getShopId()));
+//            }
 
             if (null != tdOrder && null != id) {
                 for (TdOrderGoods tog : tdOrder.getOrderGoodsList()) {
@@ -1091,12 +1095,12 @@ public class TdUserController{
             }
         }
 
-        return "/client/user_return";
+        return "redirect:/user/goods/return";
     }
 
     @RequestMapping(value = "/user/return/save", method = RequestMethod.POST)
     public String returnSave(HttpServletRequest req, Long goodsId, Long id, // 订单ID
-            String reason, String telephone, ModelMap map) {
+            Long shopId,String shopTitle, String reason, String telephone, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 
         if (null == username) {
@@ -1113,12 +1117,14 @@ public class TdUserController{
                     if (goodsId.equals(tog.getGoodsId())) {
                         TdUserReturn tdReturn = new TdUserReturn();
 
-                        tdReturn.setIsReturn(false);
+                        tdReturn.setIsReturn(true);
 
                         // 用户
                         tdReturn.setUsername(username);
+                        
                         tdReturn.setTelephone(telephone);
-                        ;
+                        tdReturn.setShopId(shopId);
+                        tdReturn.setShopTitle(shopTitle);
 
                         // 退货订单商品
                         tdReturn.setOrderNumber(order.getOrderNumber());
@@ -1132,8 +1138,9 @@ public class TdUserController{
                         tdReturn.setReason(reason);
                         tdReturn.setReturnTime(new Date());
 
+                        tdReturn.setType(1L);
                         tdReturn.setStatusId(0L);
-                        tdReturn.setReturnNumber(1L);
+                        tdReturn.setReturnNumber(tog.getQuantity());
 
                         // 保存
                         tdUserReturnService.save(tdReturn);
@@ -1148,6 +1155,24 @@ public class TdUserController{
         }
 
         return "redirect:/user/return/list";
+    }
+    
+    @RequestMapping(value="/user/goods/return")
+    public String goodsReturn(Integer page,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username){
+    		return "redirect:/login";
+    	}
+    	TdUser user = tdUserService.findByUsername(username);
+    	if(null == page){
+    		page=0;
+    	}
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("user", user);
+    	map.addAttribute("order_page",
+    				tdOrderService.findByUsernameAndStatusId(username, 5, page, ClientConstant.pageSize));
+    	
+    	return "/client/user_return";
     }
 
     @RequestMapping(value = "/user/return/list")

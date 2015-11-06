@@ -1484,6 +1484,38 @@ public class TdDistributorGoodsService {
 													distributId,catIdStr, "%"+keywords+"%", pageRequest);
 	}
 	
+	public Page<TdDistributorGoods> findByDistributorIdAndIsDistributorAndIsAudit(Long distributorId,Boolean isDistribution,Boolean isAudit,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository.findByDistributorIdAndIsDistributionAndIsAudit(distributorId, isDistribution, isAudit, pageRequest);
+	}
+	
+	public Page<TdDistributorGoods> searchByDistributorIdAndIsDistributorAndIsAudit(Long distributorId,Boolean isDistribution,Boolean isAudit,String keywords,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository.findByDistributorIdAndIsDistributionAndGoodsTitleLikeAndIsAuditOrDistributorIsAndIsDistributionAndCodeLikeAndIsAudit(
+													distributorId, "%"+keywords+"%",isDistribution, isAudit,
+													distributorId, "%"+keywords+"%",isDistribution, isAudit, pageRequest);
+	}
+	
+	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsDistributorAndIsAudit(Long distributorId,Long catId,Boolean isDistribution,Boolean isAudit,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		String catIdStr = "%[" + catId + "]%";
+		return repository.findByDistributorIdAndCategoryIdTreeAndIsDistributionAndIsAudit(distributorId, catIdStr, isDistribution,isAudit, pageRequest);
+	}
+	
+	public Page<TdDistributorGoods> searchByDistributorIdAndCategoryIdAndIsDistributorAndIsAudit(Long distributorId,Long catId,Boolean isDistribution,Boolean isAudit,String keywords,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size);
+		String catIdStr = "%[" + catId + "]%";
+		return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsDistributionAndIsAuditAndGoodsTitleLikeOrDistributorIsAndCategoryIdTreeLikeAndIsDistributionAndIsAuditAndCodeLike(
+																		distributorId, catIdStr, isDistribution,isAudit, keywords,
+																		distributorId, catIdStr, isDistribution,isAudit, keywords, pageRequest);
+	}
+	
+	
+	//--------------------------------------
 	
 	public Page<TdDistributorGoods> findByDistribuorIdOrderByOnSaleTime(Long disId,int page,int size)
 	{

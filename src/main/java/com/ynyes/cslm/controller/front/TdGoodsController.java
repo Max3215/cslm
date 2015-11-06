@@ -113,7 +113,10 @@ public class TdGoodsController {
         String username = (String) req.getSession().getAttribute("username");
         if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
         {
-        	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        	Long distributorId = tdDistributorGoodsService.findDistributorId(dgId);
+        	TdDistributor distributor = TdDistributorService.findOne(distributorId);
+    		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
+    		req.getSession().setAttribute("distributorTitle", distributor.getTitle()); 
         	
         	 //成交数
             map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, distributorGoods.getGoodsId(),0,5));

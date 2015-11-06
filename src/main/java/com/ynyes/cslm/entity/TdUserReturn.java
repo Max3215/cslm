@@ -94,6 +94,20 @@ public class TdUserReturn {
     // 处理详情
     @Column
     private String handleDetail;
+    
+    // 超市Id
+    @Column
+    private Long shopId;
+    
+    @Column
+    private String shopTitle;
+    
+    @Column
+    private Long distributorId;
+    
+    // 退货类型 1为会员退货  2为超市退货
+    @Column
+    private Long type;
 
     public Long getId() {
         return id;
@@ -238,4 +252,39 @@ public class TdUserReturn {
     public void setGoodsCoverImageUri(String goodsCoverImageUri) {
         this.goodsCoverImageUri = goodsCoverImageUri;
     }
+
+	public Long getShopId() {
+		return shopId;
+	}
+
+	public void setShopId(Long shopId) {
+		this.shopId = shopId;
+	}
+
+	public String getShopTitle() {
+		return shopTitle;
+	}
+
+	public void setShopTitle(String shopTitle) {
+		this.shopTitle = shopTitle;
+	}
+
+	public Long getType() {
+		return type;
+	}
+
+	public void setType(Long type) {
+		this.type = type;
+	}
+
+	public Long getDistributorId() {
+		return distributorId;
+	}
+
+	public void setDistributorId(Long distributorId) {
+		this.distributorId = distributorId;
+	}
+    
+	
+    
 }

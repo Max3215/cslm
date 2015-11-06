@@ -186,7 +186,11 @@ public class TdProviderService {
 	   return repository.findByVirtualAccountAndIsEnableTrue(virtualAccount);
    }  
     
-    
+   
+   public List<TdProvider> findByType(Long type)
+   {
+	   return repository.findByType(type);
+   }
     
     
     
