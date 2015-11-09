@@ -6,9 +6,10 @@
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 
-<link href="/client/css/common.css" rel="stylesheet" type="text/css">
-<link href="/client/css/main.css" rel="stylesheet" type="text/css">
+<link href="/client/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/client/css/main.css" rel="stylesheet" type="text/css" />
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
+
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
 <script src="/client/js/mymember.js"></script>
@@ -86,12 +87,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_out">
   <div class="mymember_main">
     
-    <!--mymember_head END-->
-    <div class="myclear" style="height:20px;"></div>
-    
-    <#-- 左侧菜单 -->
     <#include "/client/common_distributor_menu.ftl" />
-    <#-- 左侧菜单结束 -->
     
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">

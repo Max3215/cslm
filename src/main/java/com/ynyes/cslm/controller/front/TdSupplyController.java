@@ -901,7 +901,7 @@ public class TdSupplyController {
     	List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(mid);
     	
     	tdCommonService.setHeader(map, req);
- 	    map.addAttribute("td_art_list",catList);
+// 	    map.addAttribute("td_art_list",catList);
  	    map.addAttribute("mid", mid);
  	    
  	    map.addAttribute("new_list",tdArticleService.findByMenuId(mid));

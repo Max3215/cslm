@@ -86,9 +86,6 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_out">
   <div class="mymember_main">
     
-    <!--mymember_head END-->
-    <div class="myclear" style="height:20px;"></div>
-    
     <#-- 左侧菜单 -->
     <#include "/client/common_provider_menu.ftl" />
     <#-- 左侧菜单结束 -->

@@ -23,6 +23,20 @@ $(document).ready(function(){
     $("#form1").Validform({
         tiptype: 3
     });
+    
+    $("#isCheck").change(function(){
+        var check = document.getElementById("isCheck");
+        if(check.checked){
+            $("#btn_reg").removeAttr("disabled");
+            $("#btn_reg").css("background","#ff5b7d");
+        }else{
+            $("#btn_reg").attr("disabled","true");
+            $("#btn_reg").css("background","#999999");
+        }
+     });
+    
+    
+    
 });
 
 <!--  验证码   -->
@@ -65,18 +79,24 @@ function changeYzm(){
                 <div>
                     <p>请输入验证码</p>
                     <div class="clear"></div>
-                    <input class="text fl" type="text" name="code" style="width:35%;" />
+                    <input class="text fl" type="text" name="code" style="width:35%;" datatype="*"/>
                     <a class="yzm01" href="javascript:changeYzm()"><img id="yzm_image" src="" width="100px;" height="37px;"/></a>
                     <a class="yzm02" href="javascript:changeYzm()">看不清楚？换一张</a>
-                    <span class="Validform_checktip Validform_wrong"></span>
+                    <span class="Validform_checktip Validform_wrong">
+                            <#if errCode??>
+                                <#if errCode==1>
+                                    验证码错误
+                                </#if>
+                            </#if>
+                    </span>
                 </div>
                 <div class="clear h15"></div>
                 <p class="pb10">
-                <input type="checkbox" checked="checked"/>
+                <input type="checkbox" checked="checked" id="isCheck" />
                 <span>我已阅读并同意<a href="#">《超市联盟用户协议》</a></span>
                 <span class="absolute-r">已有账号？<a href="/login">点击登录</a></span>
                 </p>
-                <input type="submit" class="sub" value="注册" />
+                <input type="submit" class="sub" id="btn_reg" value="注册" />
                 <div class="clear h15"></div>
              </section>
         </div>

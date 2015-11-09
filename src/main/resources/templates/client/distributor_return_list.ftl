@@ -6,8 +6,8 @@
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 
-<link href="/client/css/common.css" rel="stylesheet" type="text/css">
-<link href="/client/css/main.css" rel="stylesheet" type="text/css">
+<link href="/client/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/client/css/main.css" rel="stylesheet" type="text/css" />
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
 
 <!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
@@ -55,13 +55,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="myclear"></div>
 <div class="mymember_out">
   <div class="mymember_main">
-    
-    <!--mymember_head END-->
-    <div class="myclear" style="height:20px;"></div>
-    
-    <#-- 左侧菜单 -->
     <#include "/client/common_distributor_menu.ftl" />
-    <#-- 左侧菜单结束 -->
     
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">

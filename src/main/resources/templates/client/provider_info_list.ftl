@@ -52,14 +52,14 @@ DD_belatedPNG.fix('.,img,background');
 <div class="myclear"></div>
 <div class="mymember_out">
   <div class="mymember_main">
-      <#include "/client/common_providerr_menu.ftl">
+      <#include "/client/common_provider_menu.ftl">
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
         <h3>平台服务</h3>		
 	      <menu class="pt_serve_list">
 		     <#if new_list?? && new_list?size gt 0 >
 		          <#list new_list as new>
-		              <a href="/providerr/content/${new.id?c}?mid=${mid?c}">${new.title}</a>
+		              <a href="/provider/content/${new.id?c}?mid=${mid?c}">${new.title}</a>
 		          </#list>
 		     </#if>
           </menu>
