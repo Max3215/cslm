@@ -205,7 +205,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle"></td>
+          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
         </tr>
          <tr>
           <th>*商品售价：</th>

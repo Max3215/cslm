@@ -86,9 +86,9 @@ function submitAddress()
 {
     var receiverName = $("#receiverName").val();
   
-    var prov = $("#prov").val();
-    var city = $("#city").val();
-    var dist = $("#dist").val();
+    var prov = $("#province").val();
+    var city = $("#newcity").val();
+    var dist = $("#disctrict").val();
     var detail = $("#detailAddress").val();
     var postcode = $("#postcode").val();
     
@@ -117,6 +117,7 @@ function submitAddress()
         return;
     }
     **/
+    console.debug(prov+"--"+city+"--"+dist);
     
     if (undefined == detail || "" == detail)
     {

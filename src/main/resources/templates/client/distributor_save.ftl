@@ -101,6 +101,7 @@ $(document).ready(function(){
 		<section class="apply">
 			<h3>商家入驻申请</h3>
 			<table>
+			 <!--
 				<tr>
 					<th>登录账号：</th>
 					<td>
@@ -129,6 +130,7 @@ $(document).ready(function(){
     					<span class="Validform_checktip">*</span>
 					</td>
 				</tr>
+				-->
 				<tr>
 					<th>超市名称：</th>
 					<td>

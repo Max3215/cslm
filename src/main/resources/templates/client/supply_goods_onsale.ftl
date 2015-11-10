@@ -223,8 +223,8 @@ DD_belatedPNG.fix('.,img,background');
           <td><input type="text" name="leftNumber" id="leftNumber"></td>
         </tr>
          <tr>
-          <th>分销比例：</th>
-          <td><input type="text" name="shopReturnRation" id="shopReturnRation">&emsp;不填则为正常批发</td>
+          <th>*分销比例：</th>
+          <td><input type="text" name="shopReturnRation" id="shopReturnRation"></td>
         </tr>
         <tr>
           <th></th>

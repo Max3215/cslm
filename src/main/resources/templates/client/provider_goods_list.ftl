@@ -3,7 +3,7 @@
         <th width="50"><input id="checkAll" name="r" type="checkbox"  class="check" onclick="selectAll();"/>全选</th>
         <th width="300">商品名称</th>
         <th width="170">批发价</th>
-        <th>佣金比例</th>
+        <th>编码</th>
         <th>库存</th>
         <th>操作</th>
      </tr>
@@ -21,7 +21,7 @@
                              </a> 
                         </td>
                         <td class="tb01">￥${dg.outFactoryPrice?string('0.00')}</td>
-                        <td class="tb02">${dg.shopReturnRation!'0'}</td>
+                        <td class="tb02">${dg.cede!''}</td>
                         <td>${dg.leftNumber}</td>
                         <td>
                                 <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page})">取消批发</a></p>
@@ -38,7 +38,7 @@
                              </a> 
                         </td>
                         <td class="tb01">￥${dg.outFactoryPrice?string('0.00')}</td>
-                        <td class="tb02">${dg.shopReturnRation!'0'}</td>
+                        <td class="tb02">${dg.code!''}</td>
                         <td>${dg.leftNumber}</td>
                         <td>
                                 <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page})">选择批发</a></p>

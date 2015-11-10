@@ -9,7 +9,7 @@
         <div id="mymember_nav01" class="mymember_head_part">
               <a class="a001 a002" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>
               <div id="mymember_navshow01">
-                <a href="/">浏览网站</a>
+                <a href="/" target="_blank">浏览网站</a>
                 <a href="/logout">退出登录</a>
               </div>
         </div>

@@ -77,8 +77,8 @@ DD_belatedPNG.fix('.,img,background');
                 <input type="hidden" id="goodsId" name="goodsId"/>
             </tr>
             <tr>
-              <th>*商品名称：</th>
-              <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle"></td>
+              <th>商品名称：</th>
+              <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
             </tr>
              <tr>
               <th>商品原价：</th>

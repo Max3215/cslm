@@ -46,9 +46,6 @@ $(document).ready(function(){
   
   $("#pcd").citySelect({
         nodata:"none",
-        <#if address?? && address.province??>prov: "${address.province!''}",</#if>
-        <#if address?? && address.city??>city: "${address.city!''}",</#if>
-        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
         required:false
     }); 
   
@@ -105,9 +102,9 @@ $(document).ready(function(){
                   <th>地区：</th>
                   <td>
                     <div id="pcd">
-                        <select name="province" class="prov" style="width: 100px;" ></select>
-                        <select name="city" class="city" style="width: 100px;" ></select>
-                        <select name="disctrict" class="dist" style="width: 100px;" ></select>
+                        <select name="province" id="province" class="prov" style="width: 100px;" ></select>
+                        <select name="city" class="city" id="newcity" style="width: 100px;" ></select>
+                        <select name="disctrict" class="dist" id="disctrict" style="width: 100px;" ></select>
                      </div>
                   </td>
                 </tr>

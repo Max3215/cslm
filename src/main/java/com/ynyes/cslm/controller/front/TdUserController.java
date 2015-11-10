@@ -1622,7 +1622,7 @@ public class TdUserController{
             res.put("message", "该用户不存在");
             return res;
         }
-
+        
         TdShippingAddress address = new TdShippingAddress();
 
         address.setReceiverName(receiverName);
