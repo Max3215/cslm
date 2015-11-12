@@ -34,7 +34,7 @@
        <div class="mymember_menu_part"> 
             <a class="mymember_menu_tit" title="商品管理"><img src="/client/images/mymember/menu05.png" />账号管理</a>
             <div> 
-                <a href="">账号管理</a> 
+                <a href="/provider/account">账号管理</a> 
                 <a href="/provider/goods/need">商品供求</a> 
                 <a href="/provider/info/8">平台服务</a> 
              </div>

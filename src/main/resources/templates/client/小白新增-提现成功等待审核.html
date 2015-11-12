@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>会员中心</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="copyright" content="" />
+
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/main.css" rel="stylesheet" type="text/css">
+<link href="css/mymember.css" rel="stylesheet" type="text/css" />
+<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
+<script src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script src="js/mymember.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  
+navDownList("nav_down","li",".nav_show");
+  menuDownList("mainnavdown","#nav_down",".a2","sel");
+ 
+
+  $(".float_box .ewm").hover(function(){
+    $(this).next().show();
+  },function(){
+    $(this).next().hide();
+  })
+})
+</script>
+<!--[if IE]>
+   <script src="js/html5.js"></script>
+<![endif]-->
+<!--[if IE 6]>
+<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script>
+DD_belatedPNG.fix('.,img,background');
+</script>
+<![endif]-->
+</head>
+<body>
+<!--mymember-->
+<div class="myclear"></div>
+<div class="mymember_out">
+<div class="mymember_main">
+  <div class="mymember_head">
+    <h2><a href="#"><img src="images/logo.png" /></a></h2>
+    <div class="mymember_head_part">
+      <a class="a001" href="#">超市中心</a>
+    </div> 
+    <div id="mymember_nav01" class="mymember_head_part">
+      <a class="a001 a002" href="#" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>
+      <div id="mymember_navshow01">
+        <a href="#">个人信息</a>
+        <a href="#">收货地址</a>
+
+      </div>
+    </div>
+    <div class="myclear"></div>
+    <a class="mymember_head_kf" href="#">在线客服 >> </a>
+  </div><!--mymember_head END-->
+  <div class="myclear" style="height:20px;"></div>
+  <div class="mymember_menu">
+    <div class="mymember_menu_part">
+      <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu01.png" />进货单中心</a>
+      <div>
+        <a href="#">我的进货单</a>
+        <a href="#">评价结单</a>
+        <a href="#">取消进货单记录</a>
+      </div>
+    </div><!--mymember_menu_part END-->
+    <div class="mymember_menu_part">
+      <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu02.png" />我的收藏</a>
+      <div>
+        <a href="#">收藏的商品</a>
+        <a href="#">浏览历史</a>
+      
+      </div>
+    </div><!--mymember_menu_part END-->
+    <div class="mymember_menu_part">
+      <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu05.png" />设置</a>
+      <div>
+        <a href="#">个人信息</a>
+        <a href="#">收货地址</a>
+        <a href="#">修改密码</a>
+      </div>
+    </div><!--mymember_menu_part END-->
+  </div><!--mymember_menu END-->
+  
+  <div class="mymember_center add_width">
+    <div class="mymember_info">
+          <div class="s_d_success">
+              <p class="p4">提现申请已提交！</p>
+              <p class="p5">储蓄卡：招商银行 尾号1963</p>
+              <p class="p5">提现金额：¥500</p>
+              <a href="#" class="finish">完成</a>
+              <p class="h30"></p>
+          </div>
+       </div>
+    
+  </div>
+
+
+<div class="clear"></div>
+</div>
+</div>
+<section class="main">
+    <div class="slogen">
+      <span><i><img src="images/bottom01.png"></i>品质保证  服务精致</span>
+      <span><i><img src="images/bottom02.png"></i>品类齐全  一站购物</span>
+      <span><i><img src="images/bottom03.png"></i>中心直发  配送快捷</span>
+      <span class="pr0"><i><img src="images/bottom04.png"></i>退换随心  低价无忧</span>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="main">
+      <dl>
+        <dt>新手指南</dt>
+        <dd><a href="#">用户注册</a></dd>
+        <dd><a href="#">购物流程</a></dd>
+        <dd><a href="#">新手帮助</a></dd>
+        <dd><a href="#">隐私声明</a></dd>
+      </dl>
+      <dl>
+        <dt>支付方式</dt>
+        <dd><a href="#">在线支付</a></dd>
+        <dd><a href="#">支付宝支付</a></dd>
+        <dd><a href="#">网银支付</a></dd>
+        <dd><a href="#">公司转账</a></dd>
+      </dl>
+      <dl>
+        <dt>配送方式</dt>
+        <dd><a href="#">送货上门</a></dd>
+        <dd><a href="#">配货点自提</a></dd>
+        <dd><a href="#">配送标准</a></dd>
+        <dd><a href="#">配送查询</a></dd>
+      </dl>
+      <dl>
+        <dt>售后服务</dt>
+        <dd><a href="#">退货流程</a></dd>
+        <dd><a href="#">售后政策</a></dd>
+      </dl>
+      <dl>
+        <dt>帮助中心</dt>
+        <dd><a href="#">常见问题</a></dd>
+        <dd><a href="#">关于我们</a></dd>
+        <dd><a href="#">联系我们</a></dd>
+        <dd><a href="#">交易条款</a></dd>
+        <dd><a href="#">商家入住</a></dd>
+      </dl>
+      <div class="b_contact">
+        <a href="#" class="qq"><img src="images/qq01.png"></a>
+        <span><i><img src="images/phone01.png"></i>13888888888</span>
+      </div>
+      <div class="clear"></div>
+
+      <menu class="bottom_nav">
+        <a href="#">首页<span>丨</span></a>
+        <a href="#">本地特产<span>丨</span></a>
+        <a href="#">政企采购<span>丨</span></a>
+        <a href="#">生活服务<span>丨</span></a>
+        <a href="#">商家入驻</a>
+      </menu>
+      <p class="copyright">copyright©2015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司版权所有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技术支持：<a href="http://www.ynyes.com">昆明天度网络信息技术有限公司</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+

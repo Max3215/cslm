@@ -573,9 +573,6 @@ public class TdDistributorController {
 	/**
 	 * 验证登录名和虚拟账号
 	 * 
-	 * @param type
-	 * @param param
-	 * @return
 	 */
 	@RequestMapping(value="/check/{type}",method=RequestMethod.POST)
 	@ResponseBody
@@ -625,10 +622,7 @@ public class TdDistributorController {
 	
 	/**
 	 * 超市已卖出商品
-	 * @param page
-	 * @param req
-	 * @param map
-	 * @return
+	 * 
 	 */
 	@RequestMapping(value="/sale", method=RequestMethod.GET)
 	public String distributorSale(Integer page,HttpServletRequest req,ModelMap map)
@@ -656,9 +650,7 @@ public class TdDistributorController {
 	
 	/**
 	 *	选择超市，超市编号存入session以便后面调用
-	 * @param req
-	 * @param disId
-	 * @return
+	 *
 	 */
 	@RequestMapping(value="/change" , method=RequestMethod.GET)
 	@ResponseBody
@@ -686,11 +678,6 @@ public class TdDistributorController {
 	/**
 	 * 超市中心查看出售中/仓库中商品
 	 * 
-	 * @param isSale
-	 * @param page
-	 * @param req
-	 * @param map
-	 * @return
 	 */
 	@RequestMapping(value="/goods/sale/{isSale}", method= RequestMethod.GET)
 	public String disGoodsSale(@PathVariable Boolean isSale,Long categoryId,String keywords, Integer page,HttpServletRequest req,ModelMap map)
@@ -747,11 +734,6 @@ public class TdDistributorController {
 	/**
 	 * 超市中心商品上/下架
 	 * 
-	 * @param disId
-	 * @param type
-	 * @param req
-	 * @param map
-	 * @return
 	 */
 	@RequestMapping(value="/goods/onsale/{disId}")
 	public String disGoodsIsOnSale(@PathVariable Long disId,
@@ -865,13 +847,6 @@ public class TdDistributorController {
 	/**
 	 * 上架/下架多个商品
 	 * 
-	 * @param type
-	 * @param listId
-	 * @param listChkId
-	 * @param page
-	 * @param req
-	 * @param map
-	 * @return
 	 */
 	@RequestMapping(value="/onsaleAll/{type}")
 	public String onSaleAll(@PathVariable Boolean type,
@@ -1317,11 +1292,6 @@ public class TdDistributorController {
 	/**
 	 * 超市确认销售订单  确认发货   确认已收货  确认评价
 	 * @author libiao
-	 * @param orderNumber
-	 * @param type
-	 * @param map
-	 * @param req
-	 * @return
 	 */
 	@RequestMapping(value="/order/param/edit",method = RequestMethod.POST)
 	@ResponseBody
@@ -2113,9 +2083,6 @@ public class TdDistributorController {
      *  提交进货单
      *  	扣除超市相应余额
      *  	增加相应批发账户
-     * @param req
-     * @param map
-     * @return
      */
     @RequestMapping(value="/order/info")
     public String orderInfo(HttpServletRequest req,ModelMap map)
@@ -2590,6 +2557,7 @@ public class TdDistributorController {
  	   
  	   return "/client/distributor_info_list";
    }
+    
     @RequestMapping(value="/content/{newId}")
     public String newContent(@PathVariable Long newId,Long mid,HttpServletRequest req,ModelMap map){
     	String username = (String)req.getSession().getAttribute("distributor");
@@ -2793,7 +2761,10 @@ public class TdDistributorController {
     	return "/client/distributor_return_list";
     }
     
-    
+    /**
+     * 分销商品
+     * 
+     */
     @RequestMapping(value="/supply/list")
 	public String goodslist(String keywords,Integer page,
 			Long providerId,String isDistribution,
@@ -2952,6 +2923,84 @@ public class TdDistributorController {
 			return "redirect:/distributor/goods/supply?page="+page+"&categoryId="+categoryId+"&keywords="+keywords;
 		}
 	}
+    
+    /**
+     * 账号管理
+     * 
+     */
+    @RequestMapping(value="/account")
+    public String account(HttpServletRequest req,ModelMap map, Integer page){
+    	String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page){
+			page = 0;
+		}
+		
+		map.addAttribute("page", page);
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	
+    	map.addAttribute("distributor", distributor);
+    	map.addAttribute("pay_record_page",
+    				tdPayRecordService.findByDistributorId(distributor.getId(), page, 5));
+    	
+    	return "/client/distributor_account";
+    }
+    
+    /**
+     * 充值
+     * 
+     */
+    @RequestMapping(value="/topup1")
+    public String topupOne(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("distributor",
+    				tdDistributorService.findbyUsername(username));
+    	
+    	return "/client/distributor_top_one";
+    }
+    
+    @RequestMapping(value="/topup2",method=RequestMethod.POST)
+    public String topupTwo(HttpServletRequest req,ModelMap map,TdPayRecord record){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("distributor",
+    				tdDistributorService.findbyUsername(username));
+    	System.err.println(record.getProvice());
+    	map.addAttribute("record", record);
+    	
+    	return "/client/distributor_top_end";
+    }
+    
+    /**
+     * 提现
+     * 
+     */
+    @RequestMapping(value="/draw1")
+    public String withdraw(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
+    	
+    	return "/client/distributor_draw_one";
+    }
     
     @RequestMapping(value = "/edit/ImageUrl", method = RequestMethod.POST)
     @ResponseBody

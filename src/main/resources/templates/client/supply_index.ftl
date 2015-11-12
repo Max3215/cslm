@@ -79,7 +79,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_main">
     
     <#include "/client/common_supply_menu.ftl">
-  <div class="mymember_center add_width">
+  <div class="mymember_center">
     <div class="mymember_info mymember_info01">
       <table>
         <tr>

@@ -47,7 +47,7 @@
             <a class="mymember_menu_tit" title="商品管理"><img src="/client/images/mymember/menu05.png" />超市管理</a>
             <div> 
                 <a href="/distributor/collect/list">商品收藏</a>
-                <a href="">账号管理</a> 
+                <a href="/distributor/account">账号管理</a> 
                 <a href="/distributor/goods/need">商品供求</a> 
                 <a href="/distributor/info/8">平台服务</a> 
              </div>

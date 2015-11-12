@@ -25,6 +25,7 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
@@ -922,6 +923,84 @@ public class TdProviderController {
 		
 		res.put("message", "参数错误！");
     	return res;
+    }
+    
+    /**
+     * 账号管理
+     * 
+     */
+    @RequestMapping(value="/account")
+    public String account(HttpServletRequest req,ModelMap map, Integer page){
+    	String username = (String)req.getSession().getAttribute("provider");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page){
+			page = 0;
+		}
+		
+		map.addAttribute("page", page);
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	
+    	map.addAttribute("provider", provider);
+    	map.addAttribute("pay_record_page",
+    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
+    	
+    	return "/client/provider_account";
+    }
+    
+    /**
+     * 充值
+     * 
+     */
+    @RequestMapping(value="/topup1")
+    public String topupOne(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("provider",
+    				tdProviderService.findByUsername(username));
+    	
+    	return "/client/provider_top_one";
+    }
+    
+    /**
+     * 提现
+     * 
+     */
+    @RequestMapping(value="/draw1")
+    public String withdraw(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("provider", tdProviderService.findByUsername(username));
+    	
+    	return "/client/provider_draw_one";
+    }
+    
+    @RequestMapping(value="/topup2",method=RequestMethod.POST)
+    public String topupTwo(HttpServletRequest req,ModelMap map,TdPayRecord record){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("provider",
+    				tdProviderService.findByUsername(username));
+    	
+    	map.addAttribute("record", record);
+    	
+    	return "/client/distributor_top_end";
     }
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)

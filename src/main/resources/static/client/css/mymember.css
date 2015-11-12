@@ -191,7 +191,9 @@ textarea { resize:none;}
 	padding:20px 3%;
 	background:#fff;
 	margin-bottom:20px;}
-	
+.mymember_center.add_width{width: 82%;}
+
+
 .mymember_info .btn-list input{border:none;background:#f60;color:#fff;padding:5px;margin-bottom:5px;}
 
 .mymember_info01 table{width:100%;}
@@ -202,6 +204,7 @@ textarea { resize:none;}
 	height:120px;
 	overflow:hidden;
 	border-radius:50%;}
+.mymember_header.p_left{left:86px;}
 .mymember_fen {border-left:1px solid #eee;padding-left:30px;}
 .mymember_fen a {
 	display:block;
@@ -214,6 +217,7 @@ textarea { resize:none;}
 	font-size:14px;}
 .mymember_fen a p span {color:#ff8800;}
 .mymember_info01 td {width:140px;}
+/*.mymember_info01.no_width td{width:0;}*/
 .mymember_info01 td a {
 	display:block;
 	position:relative;
@@ -228,6 +232,10 @@ textarea { resize:none;}
 	top:-10px;}
 .mymember_info01 td a span {color:#ff8800;}
 .mymember_info01 td a:hover {color:#ff8800;}
+.mymember_info01 td a.btn{display:block;width: 78px;height: 22px;background: #f5f5f5;border:1px solid #c0bfbf;text-align: center;line-height: 22px;color:#565457;border-radius: 3px;-webkit-border-radius: 3px;-moz-border-radius: 3px;-o-border-radius: 3px;-ms-border-radius: 3px;padding: 0;}
+.mymember_info01 td a.btn:hover,.mymember_info01 td a.btn.sel{background: #ff5b7d;border-color:#ff5b7d;color:#fff;}
+
+
 .mymember_info02 h3 {
 	position:relative;
 	width:100%;
@@ -375,6 +383,25 @@ textarea { resize:none;}
 	float:right;
 	width:82%;
 	position:relative;}
+
+
+.buy_record{padding-bottom: 10px;}
+.buy_record a{padding:0 4px;}
+.buy_record a.sel{color:#0095c5;}
+.record_tab{}
+.record_tab th{text-align: center;font-weight: bold;}
+.record_tab td{border:none;border-bottom:1px solid #e7e7e7;height:40px;line-height: 40px;}
+
+
+
+
+
+
+
+
+
+
+
 	
 /* 其他页面 */
 .mymember_info03 h3{
@@ -843,8 +870,8 @@ textarea { resize:none;}
 .s_d_success .p4{height: 41px;background: url(../images/icon_bg.jpg) no-repeat left center;line-height: 41px;padding-left: 50px;font-size: 18px;width: 392px;margin: 0 auto;}
 .s_d_success .p5{padding-top: 20px;width: 340px;margin: 0 auto;}
 .s_d_success .finish{width: 180px;
-	margin: 0 auto;
 	margin-top: 40px;
+	    margin-left: 290px;
 	display: block;
 	text-align: center;
 	line-height: 35px;
@@ -862,37 +889,38 @@ textarea { resize:none;}
 .pt_serve_list a{display: block;padding-bottom: 2px;border-bottom:1px dashed #c0bfbf;line-height: 30px;}
 
 
+.member_recharge{padding:40px 0 0 100px;background: #fff;}
+.member_recharge .p1{font-size: 18px;color:#333333;padding-bottom: 14px;}
+.member_recharge .p2{font-size: 14px;color:#333333;padding-bottom: 12px;}
+.member_recharge .p2 .text{width: 118px;height: 28px;border:1px solid #c0bfbf;}
+.member_recharge .p3{font-size: 12px;color:#c0bfbf;}
+
+.member_recharge li{float: left;display: block;margin-right: 24px;margin-bottom: 10px;}
+.member_recharge li input{position: relative;top:-12px;}
+
+.member_recharge .recharge_btn{display: block;width: 200px;height: 42px;background: #ff5b7d;text-align: center;line-height: 42px;color:#fff;font-size: 16px;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;-o-border-radius: 5px;-ms-border-radius: 5px;margin: 10px 0 20px 0}
+
+.member_recharge .prompt{width: 600px;height: 140px;background: #eeeeee;border: 1px solid #c0bfbf;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;-o-border-radius: 5px;-ms-border-radius: 5px;color:#333;line-height: 24px;padding: 10px 0 0 10px;margin-top: 20px;}
+
+.member_recharge .prompt h3{font-size: 14px;}
 
 
+.recharge_success{background:url(../images/ture.png) no-repeat 350px 43px #fff;padding: 50px 0 40px 0;}
+.recharge_success .p1{font-size: 18px;color:#e8323d;padding-left: 390px;padding-bottom: 20px;}
+.recharge_success .p2{font-size: 14px;color:#333333;padding-left: 390px;padding-bottom: 6px;}
+.recharge_success a{font-size: 14px;color:#39bee9;padding-left: 390px;}
+.recharge_success a:hover{text-decoration: underline;}
 
+.with_money{background: #fff;color:#333;padding: 40px 0 0 100px;}
+.with_money .tit{font-size: 18px;padding-bottom: 20px;}
 
+.with_money th{font-weight: 400;text-align: right;padding-bottom: 20px;}
+.with_money td{padding-bottom: 20px;}
+.with_money td .text{height: 28px;border:1px solid #c0bfbf;text-indent: 4px;}
+.with_money td .text.long{width: 238px;}
+.with_money td .text.short{width: 118px;}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.with_money td .sub{width: 120px;height: 30px;background: #ff5b7d;color:#fff;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;-o-border-radius: 5px;-ms-border-radius: 5px;text-align: center;line-height: 20px;}
 
 
 

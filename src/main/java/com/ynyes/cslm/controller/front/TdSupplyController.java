@@ -946,6 +946,68 @@ public class TdSupplyController {
     	}
     	return "/client/supply_info";
     }
+    
+    /**
+     * 账号管理
+     * 
+     */
+    @RequestMapping(value="/account")
+    public String account(HttpServletRequest req,ModelMap map, Integer page){
+    	String username = (String)req.getSession().getAttribute("supply");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		if(null == page){
+			page = 0;
+		}
+		
+		map.addAttribute("page", page);
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	
+    	map.addAttribute("supply", provider);
+    	map.addAttribute("pay_record_page",
+    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
+    	
+    	return "/client/supply_account";
+    }
+    
+    /**
+     * 充值
+     * 
+     */
+    @RequestMapping(value="/topup1")
+    public String topupOne(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("supply");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("supply",
+    				tdProviderService.findByUsername(username));
+    	
+    	return "/client/supply_top_one";
+    }
+    
+    /**
+     * 提现
+     * 
+     */
+    @RequestMapping(value="/draw1")
+    public String withdraw(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("supply");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("supply", tdProviderService.findByUsername(username));
+    	
+    	return "/client/supply_draw_one";
+    }
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)
     @ResponseBody

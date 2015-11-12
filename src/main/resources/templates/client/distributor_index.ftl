@@ -77,7 +77,7 @@ DD_belatedPNG.fix('.,img,background');
 
   <#include "/client/common_distributor_menu.ftl">
   
-  <div class="mymember_center add_width">
+  <div class="mymember_center ">
     <div class="mymember_info mymember_info01">
       <table>
         <tr>
