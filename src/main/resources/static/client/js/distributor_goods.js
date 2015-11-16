@@ -44,18 +44,25 @@ function deleteDisGoods(type,disId,page){
 }
 
 //超市中心选择批发商品
-function addgoods(gid){
+function addGoods(){
     var page = $("#page").val();
-    var quantity = $("#number"+gid).html();
+    var quantity = $("#quantity").val();
+    var gid = $("#goodsId").val();
+    var leftNumber = $("#leftNumber").val();
     
     if(undefined == quantity || quantity == 0){
-    	alert("该商品已无存货！")
+    	alert("请输入进货数量！")
     	return;
+    }
+    
+    if(quantity > leftNumber){
+    	alert("库存不足！")
+    	return ;
     }
     
     $.ajax({
         url : "/distributor/goods/addOne",
-        data : {"pgId":gid},
+        data : {"pgId":gid,"quantity":quantity},
         type :"post",
         success:function(res){
             $("#cart_goodslist").html(res);

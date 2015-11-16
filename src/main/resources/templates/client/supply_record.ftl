@@ -51,6 +51,16 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_info mymember_info02">
         <div class="mymember_order_search">
                 交易记录  
+                <form action="/supply/pay/record" id="form">
+                    <input type="hidden" value="${page!'0'}" name="page"/>
+                    <select  id="cont" name="cont" class="myselect" onchange="subRecord()">
+                        <option value="">全部记录</option>
+                        <option value="充值" <#if cont?? && cont=="充值">selected="selected"</#if>>充值记录</option>
+                        <option value="提现" <#if cont?? && cont=="提现">selected="selected"</#if>>提现记录</option>
+                        <option value="销售" <#if cont?? && cont=="销售">selected="selected"</#if>>销售记录</option>
+                        <option value="分销" <#if cont?? && cont=="分销">selected="selected"</#if>>分销记录</option>
+                    </select>
+               </form>
             <div class="clear"></div>
         </div>
         <table style="table-layout: fixed;">

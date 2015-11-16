@@ -2592,7 +2592,7 @@ public class TdDistributorController {
      * 
      */
     @RequestMapping(value="/pay/record")
-    public String payRecord(Integer page,HttpServletRequest req,ModelMap map){
+    public String payRecord(Integer page,String cont,HttpServletRequest req,ModelMap map){
     	String username = (String)req.getSession().getAttribute("distributor");
     	if (null == username) {
             return "redirect:/login";
@@ -2601,11 +2601,18 @@ public class TdDistributorController {
     		page = 0;
     	}
     	map.addAttribute("page", page);
+    	map.addAttribute("cont", cont);
     	tdCommonService.setHeader(map, req);
     	
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
-    	map.addAttribute("pay_record_page",
+    	if(null == cont || "".equalsIgnoreCase(cont))
+    	{
+    		map.addAttribute("pay_record_page",
     				tdPayRecordService.findByDistributorId(distributor.getId(), page, ClientConstant.pageSize));
+    	}else{
+    		map.addAttribute("pay_record_page",
+    				tdPayRecordService.searchByDistributorId(distributor.getId(),cont, page, ClientConstant.pageSize));
+    	}
     	return "/client/distributor_record";
     }
     

@@ -38,9 +38,9 @@
                         </td>
                         <td class="tb01"><span id="providerTitle${pgoods.id?c}">${pgoods.providerTitle!''}</span></td>
                         <td class="tb02">￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></td>
-                        <td><span id="number${pgoods.id?c}">${pgoods.leftNumber!'0'}</span></td>
+                        <td><span id="number${pgoods.id?c}">${pgoods.leftNumber?c!'0'}</span></td>
                         <td>
-                            <p><a href="javascript:addgoods(${pgoods.id?c});">添加</a></p>
+                            <p><a href="javascript:showSub(${pgoods.id?c});">添加</a></p>
                             <p><a href="javascript:collect(${pgoods.id?c});">收藏</a></p>
                         </td>
                      </tr>
@@ -97,18 +97,22 @@ function collect(pgId){
     
 }
 
-function addDistribution(pid)
+function showSub(pid)
 {
-    var shopReturnRation = $("#shopReturnRation"+pid).val();
+    var leftNumber =$("#number"+pid).html();
+    if(undefined == leftNumber || leftNumber == 0){
+        alert("该商品已无存货！")
+        return;
+    }
     var goodsTitle = $("#goodsTitle"+pid).html();
     var providerTitle = $("#providerTitle"+pid).html();
     var outFactoryPrice = $("#outFactoryPrice"+pid).html();
     
     $("#goodsId").attr("value",pid);
-    $("#shopReturnRation").attr("value",shopReturnRation);
     $("#goodsTitle").attr("value",goodsTitle);
     $("#providerTitle").attr("value",providerTitle);
     $("#outFactoryPrice").attr("value",outFactoryPrice);
+    $("#leftNumber").attr("value",leftNumber);
     
     $('.sub_form').css('display','block');
 }

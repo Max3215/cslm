@@ -80,9 +80,22 @@ public class TdPayRecordService {
     	
     }
     
+    public Page<TdPayRecord> searchByDistributorId(Long disId,String cont,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
+    	return repository.findByDistributorIdAndContContainingOrderByCreateTimeDesc(disId, cont, pageRequest);
+    	
+    }
+    
+    
     public Page<TdPayRecord> findByProviderId(Long proId,int page,int size){
     	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
     	return repository.findByProviderIdOrderByCreateTimeDesc(proId, pageRequest);
-    	
     }
+    
+    public Page<TdPayRecord> searchByProviderId(Long proId,String cont,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
+    	return repository.findByProviderIdAndContContainingOrderByCreateTimeDesc(proId, cont, pageRequest);
+    }
+    
+    
 }

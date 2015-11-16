@@ -31,6 +31,11 @@ $(document).ready(function(){
     $(this).next().hide();
   })
 })
+
+function subRecord(){
+    $("#form").submit();
+}
+
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -51,6 +56,17 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_info mymember_info02">
         <div class="mymember_order_search">
                 交易记录  
+                <form action="/distributor/pay/record" id="form">
+                    <input type="hidden" value="${page!'0'}" name="page"/>
+                    <select  id="cont" name="cont" class="myselect" onchange="subRecord()">
+                        <option value="">全部记录</option>
+                        <option value="充值" <#if cont?? && cont=="充值">selected="selected"</#if>>充值记录</option>
+                        <option value="提现" <#if cont?? && cont=="提现">selected="selected"</#if>>提现记录</option>
+                        <option value="销售" <#if cont?? && cont=="销售">selected="selected"</#if>>销售记录</option>
+                        <option value="批发" <#if cont?? && cont=="批发">selected="selected"</#if>>进货记录</option>
+                        <option value="代售" <#if cont?? && cont=="代售">selected="selected"</#if>>代售记录</option>
+                    </select>
+                    </form>
             <div class="clear"></div>
         </div>
         <table style="table-layout: fixed;">

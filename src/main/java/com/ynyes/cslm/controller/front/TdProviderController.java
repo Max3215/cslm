@@ -759,7 +759,7 @@ public class TdProviderController {
      * 
      */
     @RequestMapping(value="/pay/record")
-    public String payRecord(Integer page,HttpServletRequest req,ModelMap map){
+    public String payRecord(Integer page,String cont, HttpServletRequest req,ModelMap map){
     	String username = (String)req.getSession().getAttribute("provider");
     	if (null == username) {
             return "redirect:/login";
@@ -768,11 +768,17 @@ public class TdProviderController {
     		page = 0;
     	}
     	map.addAttribute("page", page);
+    	
     	tdCommonService.setHeader(map, req);
     	
     	TdProvider provider = tdProviderService.findByUsername(username);
-    	map.addAttribute("pay_record_page",
+    	if(null == cont || "".equals(cont)){
+    		map.addAttribute("pay_record_page",
     				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
+    	}else{
+    		map.addAttribute("pay_record_page",
+    				tdPayRecordService.searchByProviderId(provider.getId(),cont, page, ClientConstant.pageSize));
+    	}
     	return "/client/provider_record";
     }
     
