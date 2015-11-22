@@ -67,6 +67,7 @@ function addGoods(){
         success:function(res){
             $("#cart_goodslist").html(res);
             alert("添加成功")
+            $('.sub_form').css('display','none');
         }
     })
 }

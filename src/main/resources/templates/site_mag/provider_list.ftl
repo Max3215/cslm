@@ -51,6 +51,15 @@ var theForm = document.forms['form1'];
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>
+      <div class="menu-list">
+      <div class="rule-single-select" >
+            <select name="type" onchange="javascript:setTimeout(__doPostBack('property',''), 0)">
+                <option value="">商家类型</option>
+                <option value="1" <#if type?? && type==1>selected="selected"</#if>>批发商</option>
+                <option value="2" <#if type?? && type==2>selected="selected"</#if>>分销商</option>
+            </select>
+        </div>
+      </div>
     </div>
     <div class="r-list">
       <input name="keywords" type="text" class="keyword" value="${keywords!""}">

@@ -96,6 +96,7 @@ public class TdManagerProviderController {
     public String setting(Integer page,
                           Integer size,
                           String keywords,
+                          Long type,
                           String __EVENTTARGET,
                           String __EVENTARGUMENT,
                           String __VIEWSTATE,
@@ -146,20 +147,34 @@ public class TdManagerProviderController {
         
         map.addAttribute("page", page);
         map.addAttribute("size", size);
+        map.addAttribute("type", type);
         map.addAttribute("keywords", keywords);
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
         Page<TdProvider> providerPage = null;
-        
-        if (null == keywords || "".equalsIgnoreCase(keywords))
+        if(null == type)
         {
-            providerPage = tdProviderService.findAllOrderBySortIdAsc(page, size);
+        	if (null == keywords || "".equalsIgnoreCase(keywords))
+        	{
+        		providerPage = tdProviderService.findAllOrderBySortIdAsc(page, size);
+        	}
+        	else
+        	{
+        		providerPage = tdProviderService.searchAndOrderBySortIdAsc(keywords, page, size);
+        	}
         }
         else
         {
-            providerPage = tdProviderService.searchAndOrderBySortIdAsc(keywords, page, size);
+        	if (null == keywords || "".equalsIgnoreCase(keywords))
+        	{
+        		providerPage = tdProviderService.findByTypeOrderBySortIdAsc(type,page,size);
+        	}
+        	else
+        	{
+        		providerPage = tdProviderService.searchAndTypeOrderBySortIdAsc(type,keywords, page, size);
+        	}
         }
         
         map.addAttribute("provider_page", providerPage);

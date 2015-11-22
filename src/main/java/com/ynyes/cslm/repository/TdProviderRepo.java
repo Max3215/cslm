@@ -39,4 +39,11 @@ public interface TdProviderRepo extends
     
     List<TdProvider> findByType(Long type);
     
+    Page<TdProvider> findByTypeOrderBySortIdAsc(Long type,Pageable page);
+    
+    Page<TdProvider> findByTypeAndTitleContainingOrTypeAndProvinceContainingOrTypeAndCityContainingOrTypeAndAddressContainingOrderBySortIdAsc(
+    											Long type1,String keywords1,
+    											Long type2,String keywords2,
+    											Long type3,String keywords3,
+    											Long type4,String keywords4,Pageable page);
 }

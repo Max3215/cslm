@@ -191,9 +191,20 @@ public class TdProviderService {
    {
 	   return repository.findByType(type);
    }
+   
+   public Page<TdProvider> findByTypeOrderBySortIdAsc(Long type,int page,int size)
+   {
+	   PageRequest pageRequest = new PageRequest(page, size);
+	   return repository.findByTypeOrderBySortIdAsc(type, pageRequest);
+   }
     
-    
-    
+   public Page<TdProvider> searchAndTypeOrderBySortIdAsc(Long type,String keywords, int page, int size)
+   {
+       PageRequest pageRequest = new PageRequest(page, size);
+       
+       return repository.findByTypeAndTitleContainingOrTypeAndProvinceContainingOrTypeAndCityContainingOrTypeAndAddressContainingOrderBySortIdAsc(
+    		   type,keywords, type,keywords, type, keywords,type, keywords, pageRequest);
+   } 
     
     
     
