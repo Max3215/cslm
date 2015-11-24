@@ -27,6 +27,7 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
@@ -45,6 +46,7 @@ import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
 import com.ynyes.cslm.service.TdUserCollectService;
@@ -131,6 +133,9 @@ public class TdUserController{
     
     @Autowired
     private TdDistributorGoodsService tdDistributorGoodsService;
+    
+    @Autowired
+    private TdPayRecordService tdPayRecordService;
 
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, ModelMap map) {
@@ -1026,6 +1031,9 @@ public class TdUserController{
         return "/client/user_recent_list";
     }
 
+    /**
+     * 积分记录
+     */
     @RequestMapping(value = "/user/point/list")
     public String pointList(HttpServletRequest req, Integer page, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
@@ -1053,6 +1061,7 @@ public class TdUserController{
 
         return "/client/user_point_list";
     }
+    
 
     @RequestMapping(value = "/user/return/{orderId}")
     public String userReturn(HttpServletRequest req,
@@ -1933,9 +1942,91 @@ public class TdUserController{
     	return res;
     }
     
+    /**
+     * 充值管理
+     * 
+     */
+    @RequestMapping(value="/user/account")
+    public String account(HttpServletRequest req,ModelMap map,Integer page)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null== username)
+    	{
+    		return "redirect:/login";
+    	}
+    	if(null == page)
+    	{
+    		page = 0;
+    	}
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("page",page);
+    	
+    	map.addAttribute("user",tdUserService.findByUsername(username));
+    	map.addAttribute("pay_record_page",
+    					tdPayRecordService.findByUsername(username, page, 5));
+    	
+    	return "/client/user_account";
+    }
     
     /**
-     * @author mdj
+     * 充值
+     * 
+     */
+    @RequestMapping(value="/user/topup1")
+    public String topupOne(HttpServletRequest req,ModelMap map)
+    {
+    	String username =(String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("user", tdUserService.findByUsername(username));
+    	return "/client/user_top_one";
+    }
+    
+    @RequestMapping(value="/user/topup2",method=RequestMethod.POST)
+    public String topupTwo(TdPayRecord record,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	if(null == record)
+    	{
+    		return "/client/error_404";
+    	}
+    	
+    	record.setStatusCode(2);
+    	record.setCont("充值");
+    	record.setCreateTime(new Date());
+    	record = tdPayRecordService.save(record);
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("user",tdUserService.findByUsername(username));
+    	map.addAttribute("record", record);
+    	
+    	return "/client/user_top_end";
+    }
+    
+    @RequestMapping(value="/user/draw1")
+    public String withdraw(HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("user", tdUserService.findByUsername(username));
+    	return "/client/user_draw_one";
+    	
+    }
+    
+    
+    /**
      * @param rep
      * @param imgUrl 头像图片地址
      * @return

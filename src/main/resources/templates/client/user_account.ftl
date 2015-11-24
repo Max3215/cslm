@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>会员中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 
+
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
-<!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
-
+<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
-
+<script type="text/javascript" src="/client/js/common.js"></script>>
+<script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  
+  $(".click_a").click(function(){
+    if($(this).next().is(":visible")==false){
+      $(this).next().slideDown(300);
+    }else{
+      $(this).next().slideUp(300);
+    }
+  });//选择超市下拉效果
+
+     navDownList("nav_down","li",".nav_show");
+  menuDownList("mainnavdown","#nav_down",".a2","sel");
+
   $(".float_box .ewm").hover(function(){
     $(this).next().show();
   },function(){
@@ -35,24 +46,25 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
+    <#include "/client/common_header.ftl">
 <!--mymember-->
 <div class="myclear"></div>
 <div class="mymember_out">
 <div class="mymember_main">
-    <#include "/client/common_distributor_menu.ftl">
+    <#include "/client/common_user_menu.ftl">
   <div class="mymember_center add_width">
     <div class="mymember_info mymember_info01 no_width">
       <p class="fs18 pb10">账号管理</p>
       <table>
         <tr>
-          <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${distributor.imageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
-          <td>账户名称：${distributor.title!''}</td>
+          <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${user.imageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
+          <td>账户名称：${user.username!''}</td>
           <td><a href="#" class="btn">修改</a></td>
         </tr>
         <tr>
-          <td>账户余额：¥${distributor.virtualMoney?string('0.00')}</td>
-          <td><a href="/distributor/topup1" class="btn">充值</a></td>
-          <td><a href="/distributor/draw1" class="btn">提现</a></td>
+          <td>账户余额：¥<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></td>
+          <td><a href="/user/topup1" class="btn">充值</a></td>
+          <td><a href="/user/draw1" class="btn">提现</a></td>
         </tr>
       </table>
     </div>
@@ -89,7 +101,7 @@ DD_belatedPNG.fix('.,img,background');
                         <#if page == pay_record_page.number+1>
                             <a class="mysel" href="javascript:;">${page}</a>
                         <#else>
-                            <a href="/distributor/account?page=${page-1}">${page}</a>
+                            <a href="/user/account?page=${page-1}">${page}</a>
                         </#if>
                         <#assign continueEnter=false>
                     <#else>

@@ -136,6 +136,7 @@ public class TdUserService {
         user.setTotalRecentVisited(0L);
         user.setTotalReturns(0L);
         user.setTotalSpendCash(0.0);
+        user.setVirtualMoney(new Double(0));
         
         TdSetting setting = tdSettingService.findTopBy();
         

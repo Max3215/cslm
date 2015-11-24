@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>会员中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 
+
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
-
-<!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
-
+<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
-<script src="/client/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="/client/js/common.js"></script>>
+<script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-   //初始化表单验证
-    $("#form1").Validform({
-        tiptype: 3
-    });
-  
+  $(".click_a").click(function(){
+    if($(this).next().is(":visible")==false){
+      $(this).next().slideDown(300);
+    }else{
+      $(this).next().slideUp(300);
+    }
+  });//选择超市下拉效果
+
+     navDownList("nav_down","li",".nav_show");
+  menuDownList("mainnavdown","#nav_down",".a2","sel");
+
   $(".float_box .ewm").hover(function(){
     $(this).next().show();
   },function(){
     $(this).next().hide();
-  });
-});
+  })
+})
 
 function topup(){
     var provice = $("#provice").val();
@@ -58,17 +64,19 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
+    <#include "/client/common_header.ftl">
+
 <!--mymember-->
 <div class="myclear"></div>
 <div class="mymember_out">
 <div class="mymember_main">
-  <#include "/client/common_distributor_menu.ftl">
-  <form action="/distributor/topup2" method="post" id="form1">
-  <input type="hidden" value="${distributor.id?c}" name="distributorId"/>
+  <#include "/client/common_user_menu.ftl">
+  <form action="/user/topup2" method="post" id="form1">
+  <input type="hidden" value="${user.username}" name="username"/>
   <div class="mymember_center add_width">
     <div class="member_recharge">
       <p class="p1">填写充值金额</p>
-      <p class="p2">充值账户： ${distributor.virtualAccount!''}</p>
+      <p class="p2">充值账户：<span> ${user.username!''}</span></p>
       <p class="p2">充值金额：<input type="text" id="provice" name="provice" class="text" />&nbsp;&nbsp;元&emsp;&emsp;</p>
       <div class="h10"></div>
       <p class="p1">选择支付银行</p>

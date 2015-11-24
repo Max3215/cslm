@@ -2983,10 +2983,21 @@ public class TdDistributorController {
             return "redirect:/login";
         }
     	
+    	if(null == record)
+    	{
+    		return "/client/error_404";
+    	}
+    	
+    	record.setStatusCode(2);
+    	record.setCont("充值");
+    	record.setCreateTime(new Date());
+    	record = tdPayRecordService.save(record);
+    	
     	tdCommonService.setHeader(map, req);
     	map.addAttribute("distributor",
     				tdDistributorService.findbyUsername(username));
-    	System.err.println(record.getProvice());
+    	
+    	
     	map.addAttribute("record", record);
     	
     	return "/client/distributor_top_end";

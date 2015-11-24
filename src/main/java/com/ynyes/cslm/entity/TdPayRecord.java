@@ -59,6 +59,10 @@ public class TdPayRecord {
     @Column
     private String providerTitle;
     
+    // 会员账号
+    @Column
+    private String username;
+    
     // 交易金额
     @Column(scale=2)
     private Double provice;
@@ -157,6 +161,14 @@ public class TdPayRecord {
 
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
     
 }

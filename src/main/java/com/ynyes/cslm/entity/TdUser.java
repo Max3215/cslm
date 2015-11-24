@@ -71,6 +71,14 @@ public class TdUser {
 	@Column
 	private String sex;
 	
+	// 账户余额
+    @Column(scale=2)
+    private Double virtualMoney;
+    
+    // 支付密码
+    @Column
+    private String payPassword;
+	
 	// 生日
 	@Column
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -569,6 +577,22 @@ public class TdUser {
     public void setCarCode(String carCode) {
         this.carCode = carCode;
     }
+
+	public Double getVirtualMoney() {
+		return virtualMoney;
+	}
+
+	public void setVirtualMoney(Double virtualMoney) {
+		this.virtualMoney = virtualMoney;
+	}
+
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
+	}
     
     
 }

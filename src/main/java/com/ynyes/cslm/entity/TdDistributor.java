@@ -106,6 +106,10 @@ public class TdDistributor {
     @Column(scale=2)
     private Double virtualMoney;
     
+    // 支付密码
+    @Column
+    private String payPassword;
+    
     // 返利
     @Column
     private Double totalCash;
@@ -305,6 +309,14 @@ public class TdDistributor {
 
 	public void setGoodsList(List<TdDistributorGoods> goodsList) {
 		this.goodsList = goodsList;
+	}
+	
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
 	}
 
 	@Override

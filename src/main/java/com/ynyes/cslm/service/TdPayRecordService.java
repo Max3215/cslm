@@ -97,5 +97,15 @@ public class TdPayRecordService {
     	return repository.findByProviderIdAndContContainingOrderByCreateTimeDesc(proId, cont, pageRequest);
     }
     
+    public Page<TdPayRecord> findByUsername(String username,int page,int size)
+    {
+    	if(null == username)
+    	{
+    		return null ;
+    	}
+    	PageRequest pageRequest = new PageRequest(page, size);
+    	return repository.findByUsernameOrderByCreateTimeDesc(username, pageRequest);
+    }
+    
     
 }

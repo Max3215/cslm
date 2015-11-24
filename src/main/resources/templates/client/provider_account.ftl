@@ -25,10 +25,10 @@ $(document).ready(function(){
 })
 </script>
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <!--[if IE 6]>
-<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script type="text/javascript" src="/client/js/DD_belatedPNG_0.0.8a.js" ></script>
 <script>
 DD_belatedPNG.fix('.,img,background');
 </script>
@@ -45,7 +45,7 @@ DD_belatedPNG.fix('.,img,background');
       <p class="fs18 pb10">账号管理</p>
       <table>
         <tr>
-          <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${provider.imageUri!'/client/user_img.png'}" height="120px;" width="120px;"/></a></th>
+          <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${provider.imageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
           <td>账户名称：${provider.title!''}</td>
           <td><a href="#" class="btn">修改</a></td>
         </tr>

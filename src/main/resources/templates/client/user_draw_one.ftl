@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>会员中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 
+
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
-
-<!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
-
+<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
-<script src="/client/js/mymember.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
-
+<script src="/client/js/mymember.js"></script>
+<script type="text/javascript" src="/client/js/common.js"></script>>
+<script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  
+     //初始化表单验证
+    $("#form1").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+        }
+    });
+
+  $(".click_a").click(function(){
+    if($(this).next().is(":visible")==false){
+      $(this).next().slideDown(300);
+    }else{
+      $(this).next().slideUp(300);
+    }
+  });//选择超市下拉效果
+
+     navDownList("nav_down","li",".nav_show");
+  menuDownList("mainnavdown","#nav_down",".a2","sel");
+
   $(".float_box .ewm").hover(function(){
     $(this).next().show();
   },function(){
@@ -37,11 +56,12 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
+    <#include "/client/common_header.ftl">
 <!--mymember-->
 <div class="myclear"></div>
 <div class="mymember_out">
 <div class="mymember_main">
-  <#include "/client/common_distributor_menu.ftl">
+  <#include "/client/common_user_menu.ftl">
   
   <div class="mymember_center add_width">
     <div class="with_money">
@@ -49,15 +69,15 @@ DD_belatedPNG.fix('.,img,background');
       <table>
         <tr>
           <th>输入银行卡号：</th>
-          <td><input type="text" class="text long" placeholder="请输入您的银行卡号" /></td>
+          <td><input type="text" class="text long" placeholder="请输入您的银行卡号" datatype="*"/></td>
         </tr>
         <tr>
           <th>提现金额：</th>
-          <td><input type="text" class="text short" />&nbsp;&nbsp;元</td>
+          <td><input type="text" class="text short" datatype="n"/>&nbsp;&nbsp;元</td>
         </tr>
         <tr>
           <th>输入支付密码：</th>
-          <td><input type="text" class="text long" /></td>
+          <td><input type="text" class="text long" datatype="*"/></td>
         </tr>
         <tr>
           <th></th>
