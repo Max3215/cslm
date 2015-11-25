@@ -57,7 +57,7 @@ DD_belatedPNG.fix('.,img,background');
       <p class="fs18 pb10">账号管理</p>
       <table>
         <tr>
-          <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${user.imageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
+          <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${user.headImageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
           <td>账户名称：${user.username!''}</td>
           <td><a href="#" class="btn">修改</a></td>
         </tr>

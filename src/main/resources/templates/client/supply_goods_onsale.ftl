@@ -62,7 +62,7 @@ function subDisGoods(){
      var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
     if(undefined == outFactoryPrice || ""==outFactoryPrice || !reg.test(outFactoryPrice))
     {
-        alert("请输入商品批发价");
+        alert("请输入商品分销价");
         return ;
     }
     
@@ -202,12 +202,12 @@ DD_belatedPNG.fix('.,img,background');
 
   <!-- 点击商品上架后弹出层 -->
   <aside class="sub_form">
-    <p class="tit">商品批发<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a>
+    <p class="tit">商品分销<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a>
 </p>
     <div class="info_tab">
       <table>
         <tr>
-           <p> 编辑批发价格和库存：</p>
+           <p> 编辑分销价格和库存：</p>
             <input type="hidden" id="goodsId" name="goodsId"/>
         </tr>
         <tr>

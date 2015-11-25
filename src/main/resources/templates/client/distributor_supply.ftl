@@ -33,7 +33,9 @@ $(document).ready(function(){
   })
 })
 
-
+function supplyAll(){
+    $("#form1").submit();
+}
 
 </script>
 <!--[if IE]>
@@ -57,9 +59,59 @@ DD_belatedPNG.fix('.,img,background');
       <div class="mymember_info mymember_info02">
       
          <div class="h30"></div>
-           <div>
+         <div class="mymember_order_search"> 
+            <h3>分销商的商品</h3>
+            <form action="/distributor/supply/list" id="form">
+                <input type="hidden" value="${page!'0'}" name="page"/>
+                <input class="mysub" type="submit" value="查询" />
+                <#--
+                <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
+                <input class="mytext" type="text" onFocus="if(value=='批发商') {value=''}" onBlur="if (value=='') {value='批发商'}"  value="批发商" style="width:150px;" />
+                -->
+                <input class="mytext" type="text" name="keywords" value="${keywords!''}" id="keywords"/>
+                <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods()">
+                    <option value="">选择分销商</option>
+                    <#if provider_list??>
+                        <#list provider_list as c>
+                            <option value="${c.id?c}" <#if providerId?? && providerId==c.id>selected="selected"</#if>>${c.title!""}</option>
+                        </#list>
+                    </#if>
+                </select>
+            </form>
+            <div class="clear"></div>
+        </div>
+        <form  action="/distributor/supplyAll" method="post" id="form1">
+           <#if providerId??><input type="hidden" value="${providerId?c}" name="providerId"/></#if>
+           <input type="hidden" value="${page!'0'}" name="page"/>
+           <input type="hidden" value="${keywords!''}" name="keywords"/>
+           <div >
                 <#include "/client/distributor_supply_goods.ftl">
           </div>
+         </form>
+          <div class="myclear" style="height:10px;"></div>
+            <div class="mymember_page"> 
+            <a href="javascript:supplyAll();" class="fl">代理选中的商品</a>
+            <#if proGoods_page??>
+                <#assign continueEnter=false>
+                <#if proGoods_page.totalPages gt 0>
+                    <#list 1..proGoods_page.totalPages as page>
+                        <#if page <= 3 || (proGoods_page.totalPages-page) < 3 || (proGoods_page.number+1-page)?abs<3 >
+                            <#if page == proGoods_page.number+1>
+                                <a class="mysel" href="javascript:;">${page}</a>
+                            <#else>
+                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${page-1}&providerId=${providerId!''}">${page}</a>
+                            </#if>
+                            <#assign continueEnter=false>
+                        <#else>
+                            <#if !continueEnter>
+                                <b class="pn-break">&hellip;</b>
+                                <#assign continueEnter=true>
+                            </#if>
+                        </#if>
+                    </#list>
+                </#if>
+                </#if>
+        </div>
         </div>
     </div>
     <div class="myclear"></div>
@@ -68,42 +120,6 @@ DD_belatedPNG.fix('.,img,background');
 </div>
 <!--mymember END-->
     <#include "/client/common_footer.ftl">
-     <aside class="sub_form">
-        <p class="tit">商品分销<a  onclick="$('.sub_form').css('display','none')">×</a></p>
-        <div class="info_tab">
-          <table>
-            <tr>
-               <p> 编辑上架后的销售价格：</p>
-                <input type="hidden" id="goodsId" name="goodsId"/>
-            </tr>
-            <tr>
-              <th>商品名称：</th>
-              <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
-            </tr>
-             <tr>
-              <th>商品原价：</th>
-              <td><input type="text" name="goodsMarketPrice" readonly="readonly" id="outFactoryPrice" ></td>
-            </tr>
-             <tr>
-              <th>*商品销售价：</th>
-              <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
-            </tr>
-             <tr>
-              <th>供货商：</th>
-              <td><input type="text" name="providerTitle" readonly="readonly" id="providerTitle"></td>
-            </tr>
-            <tr>
-              <th>返利比：</th>
-              <td><input type="text" name="shopReturnRation" readonly="readonly" id="shopReturnRation"></td>
-            </tr>
-            <tr>
-              <th></th>
-              <td><input type="submit" class="sub" onclick="subDistribution();" value="确认提交"></td>
-            </tr>
-          </table>
-        </div>
-      </aside>
-
-
+    
 </body>
 </html>
