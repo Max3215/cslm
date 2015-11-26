@@ -453,6 +453,10 @@ public class TdProviderController {
 		{
 			page = 0;
 		}
+		if(null == categoryId)
+		{
+			categoryId = 0L;
+		}
 		tdCommonService.setHeader(map, req);
 		TdProvider provider = tdProviderService.findByUsername(username);
 
@@ -466,7 +470,7 @@ public class TdProviderController {
 		
 		map.addAttribute("category_list",tdProductCategoryService.findAll());
 		
-		if(null ==categoryId)
+		if(null ==categoryId || categoryId==0)
 		{
 //			if("isDistribution".equalsIgnoreCase(isDistribution))
 //			{
@@ -575,6 +579,44 @@ public class TdProviderController {
 		
 		map.addAttribute("provider", provider);
 		return "/client/provider_goods_list";
+	}
+	
+	@RequestMapping(value="/goods/edit",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> edit(Long goodsId,Integer page,
+					Double outFactoryPrice,Long leftNumber,HttpServletRequest req,ModelMap map)
+	{
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
+		
+		String username =(String)req.getSession().getAttribute("provider");
+		if(null == username)
+		{
+			res.put("msg", "请重新登录");
+			return res;
+		}
+		if(null == goodsId)
+		{
+			res.put("msg", "参数错误");
+			return res;
+		}
+		if(null == leftNumber || leftNumber <=0)
+		{
+			res.put("msg", "库存输入错误");
+			return res;
+		}
+		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(goodsId);
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
+		providerGoods.setOutFactoryPrice(outFactoryPrice);
+		providerGoods.setLeftNumber(leftNumber);
+		providerGoods.setIsOnSale(true);
+		tdProviderGoodsService.save(providerGoods);
+		
+		res.put("msg", "设置批发成功");
+		res.put("code", 1);
+		
+		return res;
 	}
 	
 	// 删除

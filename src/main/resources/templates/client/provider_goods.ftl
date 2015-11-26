@@ -13,9 +13,24 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+<script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
 <script src="/client/js/provider_goods.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    //初始化表单验证
+    $("#sub_form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 $('.sub_form').css('display','none');
+                  window.location.href="/provider/goods/list/0?page=${page?c}&categoryId=${categoryId?c}"
+            }
+        }
+    });
+
     $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){
             $(this).next().slideDown(300);
@@ -43,7 +58,20 @@ function deleteCheck(){
 function searchGoods(){
     $("#form1").submit();
 }
-
+function IsNum(){
+    var num = $("#outFactoryPrice").val();
+    var reNum=/^\d*$/; 
+    if(reNum.test(num)){ 
+        return true; 
+    } else { 
+        if(num < 0) { 
+            alert("价格不能为负数！"); 
+         } else { 
+            alert("价格必须为数字！"); 
+         } 
+      return false;
+     }
+ }
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -137,5 +165,37 @@ DD_belatedPNG.fix('.,img,background');
 <!--mymember END-->
 <div class="clear"></div>
     <#include "/client/common_footer.ftl">
+    
+    <!-- 点击商品上架后弹出层 -->
+  <aside class="sub_form">
+        <p class="tit">商品批发<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a></p>
+        <form id="sub_form" action="/provider/goods/edit" method="post">
+        <div class="info_tab">
+          <table>
+            <tr>
+               <p> 编辑批发价格和库存：</p>
+                <input type="hidden" id="goodsId" name="goodsId"/>
+                <input type="hidden" id="page" name="page"/>
+            </tr>
+            <tr>
+              <th>*商品名称：</th>
+              <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+            </tr>
+             <tr>
+              <th>*商品批发价：</th>
+              <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=""></td>
+            </tr>
+             <tr>
+              <th>*库存：</th>
+              <td><input type="text" name="leftNumber" id="leftNumber" datatype="n"></td>
+            </tr>
+            <tr>
+              <th></th>
+              <td><input type="submit" class="sub"  value="确认提交"></td>
+            </tr>
+          </table>
+        </div>
+        </form>
+  </aside>
 </body>
 </html>
