@@ -27,6 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.xpath.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -967,17 +968,21 @@ public class TdDistributorController {
         
         cell = row.createCell((short) 3);  
         cell.setCellValue("收件地址");  
-        cell.setCellStyle(style); 
+        cell.setCellStyle(style);
         
         cell = row.createCell((short) 4);  
+        cell.setCellValue("收件人号码");  
+        cell.setCellStyle(style);
+        
+        cell = row.createCell((short) 5);  
         cell.setCellValue("订单总额");  
         cell.setCellStyle(style); 
         
-        cell = row.createCell((short) 5);  
+        cell = row.createCell((short) 6);  
         cell.setCellValue("下单时间");  
         cell.setCellStyle(style); 
         
-        cell = row.createCell((short) 6);  
+        cell = row.createCell((short) 7);  
         cell.setCellValue("订单状态");  
         cell.setCellStyle(style); 
         
@@ -1330,7 +1335,9 @@ public class TdDistributorController {
 			String keywords,
 			Integer page,
 			Integer timeId,
+			String eventTarget,
 			HttpServletRequest req,
+			HttpServletResponse resp,
 			ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
@@ -1353,6 +1360,55 @@ public class TdDistributorController {
 		if(null != statusid){
         	statusId = statusid;
         }
+		
+		String excelUrl=null;
+		if(null != eventTarget)
+		{
+			if("excel".equalsIgnoreCase(eventTarget))
+			{
+				excelUrl=SiteMagConstant.backupPath;
+			}
+		}
+		
+		/**
+		 * 导出表格
+		 */
+		// 创建一个webbook 对于一个Excel
+		HSSFWorkbook wb = new HSSFWorkbook();
+		// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+		HSSFSheet sheet = wb.createSheet("order"); 
+		// 设置每个单元格宽度根据字多少自适应
+		sheet.autoSizeColumn(1);
+		// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+        HSSFRow row = sheet.createRow((int) 0);
+        // 创建单元格，并设置值表头 设置表头居中 
+        HSSFCellStyle style = wb.createCellStyle();  
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+        
+        HSSFCell cell = row.createCell((short) 0);  
+        cell.setCellValue("订单编号");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 1);  
+        cell.setCellValue("超市");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 2);  
+        cell.setCellValue("批发商");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 3);  
+        cell.setCellValue("订单总额");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 4);  
+        cell.setCellValue("下单时间");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 5);  
+        cell.setCellValue("订单状态");  
+        cell.setCellStyle(style); 
+		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		map.addAttribute("distributor", distributor);
 		map.addAttribute("status_id", statusId);
@@ -1366,19 +1422,54 @@ public class TdDistributorController {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService.findByUsernameAndTypeIdAndSearch(
                             username,1, keywords, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndSearch(username, 1, keywords, page, ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,1, page,
                             ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,1, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
+                    orderPage = tdOrderService .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
                                     1,statusId, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
+                                1,statusId, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusId(
                             username,1, statusId, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndStatusId(
+                                username,1, statusId, page, ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(1)) {
@@ -1390,25 +1481,61 @@ public class TdDistributorController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                    orderPage = tdOrderService .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
                                     1,time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                1,time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
                             username, 1,time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                                username, 1,time, page, ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                                     username,1, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                username,1, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                    orderPage = tdOrderService .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
                                    1, statusId, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                1, statusId, time, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(3)) {
@@ -1420,25 +1547,61 @@ public class TdDistributorController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
                                    1, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                1, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
                             username,1, time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                                username,1, time, page, ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                                     username,1, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                username,1, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                    orderPage = tdOrderService .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
                                     1,statusId, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                1,statusId, time, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(6)) {
@@ -1450,25 +1613,61 @@ public class TdDistributorController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
                                     1,time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                1,time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
                             username,1, time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                                username,1, time, page, ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                                     username,1, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                username,1, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
                                    1, statusId, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                1, statusId, time, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(12)) {
@@ -1480,25 +1679,61 @@ public class TdDistributorController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
                                     1,time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
+                                1,time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
                             username,1, time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
+                                username,1, time, page, ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                                     username,1, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                                username,1, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
                                     statusId,1, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
+                                statusId,1, time, page,
+                                ClientConstant.pageSize);
+                    	if(InOrderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         }
@@ -2506,187 +2741,6 @@ public class TdDistributorController {
         return res;
     }
     
-    
-//	@RequestMapping(value="/disOrder/list/{statusId}")
-//	public String disOrder(@PathVariable Integer statusId,
-//			Integer statusid,
-//			String keywords,
-//			Integer page,
-//			Integer timeId,
-//			HttpServletRequest req,
-//			ModelMap map){
-//		String username = (String)req.getSession().getAttribute("distributor");
-//		if(null == username)
-//		{
-//			return "redirect:/login";
-//		}
-//		if(null == page )
-//		{
-//			page = 0;
-//		}
-//		if(null == statusId)
-//		{
-//			statusId= 0;
-//		}
-//		if (null == timeId) {
-//            timeId = 0;
-//        }
-//		if(null != statusid){
-//        	statusId = statusid;
-//        }
-//		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-//		map.addAttribute("distributor", distributor);
-//		map.addAttribute("status_id", statusId);
-//		map.addAttribute("time_id", timeId);
-//		
-//		tdCommonService.setHeader(map, req);
-//		
-//		Page<TdOrder> orderPage=null;
-//		if (timeId.equals(0)) {
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndSearch(
-//                            username,2, keywords, page, ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,2, page,
-//                            ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
-//                                    2,statusId, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusId(
-//                            username,2, statusId, page, ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(1)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -1);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                    2,time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username, 2,time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,2, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                   2, statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(3)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -3);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                   2, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username,2, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,2, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                    2,statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(6)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -6);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                    2,time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username,2, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,2, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                   2, statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(12)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.YEAR, -1);// 减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                    2,time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username,2, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,2, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                    statusId,2, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        }
-//		map.addAttribute("order_page", orderPage);
-//		
-//		return "";
-//	}
 	
     /**
      *  添加收藏
@@ -3393,6 +3447,7 @@ public class TdDistributorController {
     	tdDistributorService.save(distributor);
 	}
 	
+	// 销售单
 	@SuppressWarnings("deprecation")
 	public Boolean ImportData(Page<TdOrder> orderPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
 	{
@@ -3406,26 +3461,65 @@ public class TdDistributorController {
 			row.createCell((short) 1).setCellValue(order.getUsername());
 			row.createCell((short) 2).setCellValue(order.getShippingName());
 			row.createCell((short) 3).setCellValue(order.getShippingAddress());
-			row.createCell((short) 4).setCellValue(order.getTotalPrice());
-			row.createCell((short) 5).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
+			row.createCell((short) 4).setCellValue(order.getShippingPhone());
+			row.createCell((short) 5).setCellValue(order.getTotalPrice());
+			row.createCell((short) 6).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
 			if(order.getStatusId() ==2)
 			{
-				row.createCell((short) 6).setCellValue("待付款");
+				row.createCell((short) 7).setCellValue("待付款");
 			}else if(order.getStatusId() ==3)
 			{
-				row.createCell((short) 6).setCellValue("待发货");
+				row.createCell((short) 7).setCellValue("待发货");
 			}else if(order.getStatusId() ==4)
 			{
-				row.createCell((short) 6).setCellValue("待收货");
+				row.createCell((short) 7).setCellValue("待收货");
 			}else if(order.getStatusId() ==5)
 			{
-				row.createCell((short) 6).setCellValue("待评价");
+				row.createCell((short) 7).setCellValue("待评价");
 			}else if(order.getStatusId() ==6)
 			{
-				row.createCell((short) 6).setCellValue("已完成");
+				row.createCell((short) 7).setCellValue("已完成");
 			}else if(order.getStatusId() ==7)
 			{
-				row.createCell((short) 6).setCellValue("已取消");
+				row.createCell((short) 7).setCellValue("已取消");
+			}
+		}
+		return true;
+	}
+	
+	// 进货单
+	@SuppressWarnings("deprecation")
+	public Boolean InOrderImport(Page<TdOrder> orderPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+	{
+		for (int i = 0; i < orderPage.getContent().size(); i++) {
+			row = sheet.createRow((int)i+1);
+			TdOrder order = orderPage.getContent().get(i);
+			// 获取用户信息
+			TdUser user = tdUserService.findByUsername(order.getUsername());
+			
+			row.createCell((short) 0).setCellValue(order.getOrderNumber());
+			row.createCell((short) 1).setCellValue(order.getShippingName());
+			row.createCell((short) 2).setCellValue(order.getShopTitle());
+			row.createCell((short) 3).setCellValue(order.getTotalPrice());
+			row.createCell((short) 4).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
+			if(order.getStatusId() ==2)
+			{
+				row.createCell((short) 5).setCellValue("待付款");
+			}else if(order.getStatusId() ==3)
+			{
+				row.createCell((short) 5).setCellValue("待发货");
+			}else if(order.getStatusId() ==4)
+			{
+				row.createCell((short) 5).setCellValue("待收货");
+			}else if(order.getStatusId() ==5)
+			{
+				row.createCell((short) 5).setCellValue("待评价");
+			}else if(order.getStatusId() ==6)
+			{
+				row.createCell((short) 5).setCellValue("已完成");
+			}else if(order.getStatusId() ==7)
+			{
+				row.createCell((short) 5).setCellValue("已取消");
 			}
 		}
 		return true;

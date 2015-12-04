@@ -52,10 +52,8 @@
                         <tbody><tr>
                             <td align="left" style="background: #ccc;">商品名称</td>
                             <td width="12%" align="left" style="background: #ccc;">成交价</td>
-                            <td width="10%" align="left" style="background: #ccc;">粮草</td>
                             <td width="10%" align="left" style="background: #ccc;">数量</td>
                             <td width="12%" align="left" style="background: #ccc;">金额合计</td>
-                            <td width="12%" align="left" style="background: #ccc;">粮草合计</td>
                         </tr>
                     <#if order??>
                         <#list order.orderGoodsList as og>
@@ -64,10 +62,8 @@
                                     ${og.goodsTitle!''} ${og.goodsColor!''} ${og.goodsCapacity!''} ${og.goodsVersion!''}
                                 </td>
                                 <td>${og.price?string("0.00")}</td>
-                                <td>${og.points!'0'}</td>
                                 <td>${og.quantity!'0'}</td>
                                 <td>${(og.price*og.quantity)?string("0.00")}</td>
-                                <td><#if og.points??>${og.points*og.quantity}<#else>0</#if></td>
                             </tr>
                         </#list>
                     </#if>
@@ -89,25 +85,18 @@
                             <td width="56%">姓名：${order.shippingName!''}<br>                          
                             </td>
                         </tr>
-                        <#--
                         <tr>
                             <td valign="top">支付方式：${order.payTypeTitle!''}</td>
                             <td>送货地址：
                                 ${order.shippingAddress!''}<br>
                             </td>
                         </tr>
-                        -->
                         <tr>
                             <td valign="top">用户留言：${order.userRemarkInfo!''}</td>
                             <td valign="top">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：${order.shippingPhone!''}</td>
                         </tr>
                         <tr>
-                            <td>车型：${order.carType!''}</td>
-                            <td>车牌：${order.carCode!''}</td>
-                        </tr>
-                        <tr>
                             <td valign="top">订单备注：${order.remarkInfo!''}</td>
-                            <#if order.isNeedInvoice><td valign="top">发票抬头：${order.invoiceTitle!''}</td></#if>
                         </tr>
                     </tbody></table>
                     <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" style="border-top: 1px solid #000; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
