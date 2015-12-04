@@ -60,6 +60,7 @@ DD_belatedPNG.fix('.,img,background');
   <div class="mymember_mainbox">
     <form name="form1" action="/distributor/outOrder/list/${status_id}" method="POST">
         <input type="hidden" value="${typeId!'0'}">
+        <input type="hidden" name="eventTarget" value="" id="eventTarget">
         <script type="text/javascript">
             var theForm = document.forms['form1'];
             if (!theForm) {
@@ -67,6 +68,7 @@ DD_belatedPNG.fix('.,img,background');
             }
             function __doPostBack(eventTarget, eventArgument) {
                 if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                    theForm.eventTarget.value = eventTarget;
                     theForm.submit();
                 }
             }
@@ -74,8 +76,8 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_info mymember_info02">
             <div class="mymember_order_search">
                 <a class="a001" >销售订单</a>
+            <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
             <#--
-            <input class="mysub" type="submit" value="查询" />
             <input class="mytext" type="text" onFocus="if(value=='商品名称、订单编号') {value=''}" onBlur="if (value=='') {value='商品名称、订单编号'}"  value="商品名称、订单编号" />
             -->
                 <div class="clear"></div>
@@ -104,7 +106,6 @@ DD_belatedPNG.fix('.,img,background');
                             <option value="5" <#if status_id==5>selected="selected"</#if>>待评价</option>
                             <option value="6" <#if status_id==6>selected="selected"</#if>>已完成</option>
                             <option value="7" <#if status_id==7>selected="selected"</#if>>已取消</option>
-                            <option value="8" <#if status_id==8>selected="selected"</#if>>支付取消</option> 
                         </select>
                     </th>
                     <th width="60">操作</th>

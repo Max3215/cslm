@@ -173,7 +173,20 @@ function goNext(goodsNum)
         alert("请至少选择一种商品!");
         return false;
     }
-    window.location.href="/distributor/order/info";
+    $.ajax({
+    	type : "post",
+    	url : "/distributor/order/info",
+    	success:function(data){
+    		if(data.code==0)
+    		{
+    			alert(data.msg);
+    		}
+    		if(data.code==1)
+    		{
+    			window.location.href="/distributor/inOrder/list/0";
+    		}
+    	}
+    })
 }
 
 function searchGoods(page){
