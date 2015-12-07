@@ -74,7 +74,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <option value="">请选择类别...</option>
                                 <#if category_list??>
                                     <#list category_list as c>
-                                        <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                                        <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>>${c.title!""}</option>
                                     </#list>
                                 </#if>
                             </select>

@@ -16,14 +16,6 @@
                 </#list>
             </#if>
         </select>
-        <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods()">
-            <option value="">选择批发商</option>
-            <#if provider_list??>
-                <#list provider_list as c>
-                    <option value="${c.id?c}" <#if providerId?? && providerId==c.id>selected="selected"</#if>>${c.title!""}</option>
-                </#list>
-            </#if>
-        </select>
         </form>
         <div class="clear"></div>
     </div>

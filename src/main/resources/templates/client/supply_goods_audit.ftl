@@ -64,7 +64,7 @@ DD_belatedPNG.fix('.,img,background');
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
-          <h3>平台的商品</h3>
+          <h3>待审核的商品</h3>
           <form action="/supply/goods/audit" id="form1">
               <input type="hidden" value="${page!'0'}" name="page">
               <input class="mysub" type="submit" value="查询"/>
@@ -73,7 +73,7 @@ DD_belatedPNG.fix('.,img,background');
                     <option value="">请选择类别...</option>
                     <#if category_list??>
                         <#list category_list as c>
-                            <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>

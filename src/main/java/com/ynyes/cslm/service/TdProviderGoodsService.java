@@ -44,6 +44,11 @@ public class TdProviderGoodsService {
 		return repository.findByProviderIdAndGroupByCategoryId(providerId);
 	}
 	
+	public List<Long> findByProviderIdAndIsAudit(Long providerId)
+	{
+		return repository.findByProviderIdAndIsAuditAndGroupByCategoryId(providerId);
+	}
+	
 	public Page<TdProviderGoods> findByProviderId(Long providerId,int page ,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size);

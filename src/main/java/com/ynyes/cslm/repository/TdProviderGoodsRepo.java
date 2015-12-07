@@ -23,6 +23,9 @@ public interface TdProviderGoodsRepo extends
 	@Query(value="select category_id from td_provider_goods where provider_id=?1 group by category_id",nativeQuery=true)
 	List<Long> findByProviderIdAndGroupByCategoryId(Long providerId);
 	
+	@Query(value="select category_id from td_provider_goods where provider_id=?1 and is_audit=0 group by category_id",nativeQuery=true)
+	List<Long> findByProviderIdAndIsAuditAndGroupByCategoryId(Long providerId);
+	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 order by pg.id DESC")
 	Page<TdProviderGoods> findByProviderId(long providerId,Pageable page);
 	

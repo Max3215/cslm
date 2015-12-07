@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
+import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdUser;
@@ -312,7 +314,19 @@ public class TdSupplyController {
 		map.addAttribute("categoryId", categoryId);
 		map.addAttribute("isDistribution",isDistribution); 
 		
-		map.addAttribute("category_list",tdProductCategoryService.findAll());
+		// 所有分类Id
+		List<Long> list = tdProviderGoodsService.findByProviderId(provider.getId());
+		
+		List<TdProductCategory> category_list = new ArrayList<>();
+		
+		if(null != list)
+		{
+			for (int i = 0; i < list.size(); i++) {
+				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
+			}
+		}// 所有该批发商有的分类
+		map.addAttribute("category_list",category_list);
+//		map.addAttribute("category_list",tdProductCategoryService.findAll());
 		
 		if(null ==categoryId)
 		{
@@ -1082,13 +1096,27 @@ public class TdSupplyController {
     		page=0;
     	}
     	tdCommonService.setHeader(map, req);
+    	TdProvider provider = tdProviderService.findByUsername(username);
     	
     	map.addAttribute("page", page);
     	map.addAttribute("categoryId",categoryId);
     	map.addAttribute("keywords",keywords);
-    	map.addAttribute("category_list",tdProductCategoryService.findAll());
     	
-    	TdProvider provider = tdProviderService.findByUsername(username);
+    	// 所有分类Id
+		List<Long> list = tdProviderGoodsService.findByProviderIdAndIsAudit(provider.getId());
+		
+		List<TdProductCategory> category_list = new ArrayList<>();
+		
+		if(null != list)
+		{
+			for (int i = 0; i < list.size(); i++) {
+				System.err.println(list.get(i));
+				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
+			}
+		}// 所有该批发商有的分类
+		map.addAttribute("category_list",category_list);
+//    	map.addAttribute("category_list",tdProductCategoryService.findAll());
+    	
     	
     	if(null == categoryId)
     	{
