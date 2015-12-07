@@ -336,7 +336,7 @@ function del_goods_comb(obj) {
             <dt>所属类别</dt>
             <dd>
                 <div class="rule-single-select">
-                    <select  id="onecategoryId" name=""categoryId datatype="*" sucmsg=" ">
+                    <select  id="onecategoryId" name="categoryId" datatype="*" sucmsg=" ">
                         <#if !goods??>
                         <option value="">请选择类别...</option>
                         </#if>
@@ -552,7 +552,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">成本价，不在前台显示</span>
             </dd>
         </dl>
-        -->
         <#if goods?? && goods.isOnSale>
         <#else>
         <dl>
@@ -563,6 +562,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
+        -->
         <dl>
             <dt>市场价</dt>
             <dd>
@@ -578,7 +578,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">电话卡销售时包含的话费</span>
             </dd>
         </dl>
-        -->
         
         <dl>
             <dt>批发价</dt>
@@ -587,6 +586,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl>
+        -->
         <!--
         <dl>
             <dt>销售价</dt>
@@ -602,7 +602,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">购买该商品赠送的积分</span>
             </dd>
         </dl>
-        -->
         <dl>
             <dt>分销商返利比例</dt>
             <dd>
@@ -610,6 +609,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">分销商返利 = 销售价 * 分销商返利比例</span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>平台服务费比例</dt>
             <dd>
