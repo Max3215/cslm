@@ -236,6 +236,10 @@ DD_belatedPNG.fix('.,img,background');
                 <th>收货地址</th>
                 <td><#if order??>${order.shippingAddress!''}</#if></td>
             </tr>
+            <tr>
+                <th>代理商</th>
+                <td><#if order??>${order.shopTitle!''}</#if></td>
+            </tr>
         </table>
     </div><!--mymember_info END-->
     
@@ -308,6 +312,7 @@ DD_belatedPNG.fix('.,img,background');
                     <#elseif order.statusId==3>
                         <input type="button" id="btnPaymentLeft" value="确认发货" class="btn">
                     </#if>
+                    
                 </div>
             </tr>
         </table>

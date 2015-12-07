@@ -16,7 +16,7 @@
                         </td>
                         <td>
                             <a href="" target="_blank" ><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${pgoods.providerTitle!''}</p>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${pgoods.goodsTitle!''}</p>
                              </a> 
                         </td>
                         <td class="tb01">${pgoods.providerTitle!''}</td>

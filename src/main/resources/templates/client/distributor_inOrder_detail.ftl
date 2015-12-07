@@ -228,9 +228,9 @@ DD_belatedPNG.fix('.,img,background');
             </#if>
             <tr>
                 <div class="btn-list">
-                    <#if order.statusId==1>
+                    <#if order.statusId==3>
                         <input type="button" id="btnPaymentLeft" value="确认发货" class="btn">
-                    <#elseif order.statusId==2>
+                    <#elseif order.statusId==4>
                         <input type="button" id="btnService" value="确认收货" class="btn green">
                     </#if>
                     <input type="button" id="btnPrint" value="打印订单" class="btn green">

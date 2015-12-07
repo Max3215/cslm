@@ -1,5 +1,10 @@
 package com.ynyes.cslm.controller.front;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,7 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -43,6 +55,7 @@ import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
+import com.ynyes.cslm.util.SiteMagConstant;
 
 /**
  * 分销商控制器
@@ -472,7 +485,9 @@ public class TdSupplyController {
 			String keywords,
 			Integer page,
 			Integer timeId,
+			String eventTarget,
 			HttpServletRequest req,
+			HttpServletResponse resp,
 			ModelMap map)
 	{
 		String username =(String)req.getSession().getAttribute("supply");
@@ -494,6 +509,60 @@ public class TdSupplyController {
 		if(null != statusid){
         	statusId = statusid;
         }
+		
+		String excelUrl=null;
+		if(null != eventTarget)
+		{
+			if("excel".equalsIgnoreCase(eventTarget))
+			{
+				excelUrl=SiteMagConstant.backupPath;
+			}
+		}
+		
+		/**
+		 * 导出表格
+		 */
+		// 创建一个webbook 对于一个Excel
+		HSSFWorkbook wb = new HSSFWorkbook();
+		// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+		HSSFSheet sheet = wb.createSheet("order"); 
+		// 设置每个单元格宽度根据字多少自适应
+		sheet.autoSizeColumn(1);
+		// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+        HSSFRow row = sheet.createRow((int) 0);
+        // 创建单元格，并设置值表头 设置表头居中 
+        HSSFCellStyle style = wb.createCellStyle();  
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+        
+        HSSFCell cell = row.createCell((short) 0);  
+        cell.setCellValue("订单编号");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 1);  
+        cell.setCellValue("代理商");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 2);  
+        cell.setCellValue("预购会员");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 3);  
+        cell.setCellValue("收件地址");  
+        cell.setCellStyle(style);
+        
+        cell = row.createCell((short) 4);  
+        cell.setCellValue("订单总额");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 5);  
+        cell.setCellValue("下单时间");  
+        cell.setCellStyle(style); 
+        
+        cell = row.createCell((short) 6);  
+        cell.setCellValue("订单状态");  
+        cell.setCellStyle(style); 
+		
+		
 		TdProvider provider = tdProviderService.findByUsername(username);
 		map.addAttribute("provider",provider);
 		map.addAttribute("status_id", statusId);
@@ -507,18 +576,53 @@ public class TdSupplyController {
                 if (null != keywords && !keywords.isEmpty()) {
                     orderPage = tdOrderService.findByProviderIdAndTypeIdAndSearch(
                     		provider.getId(),2, keywords, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndSearch(
+                        		provider.getId(),2, keywords, page, ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByProviderIdAndTypeId(provider.getId(),2, page,
                             ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeId(provider.getId(),2, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndSearch(provider.getId(),2,statusId, keywords, page,
+                    orderPage = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndSearch(provider.getId(),2,statusId, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndSearch(provider.getId(),2,statusId, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusId(
                     		provider.getId(),2,statusId, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndStatusId(
+                        		provider.getId(),2,statusId, page, ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(1)) {
@@ -530,25 +634,61 @@ public class TdSupplyController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                    orderPage = tdOrderService .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
                                     2,time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                2,time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
                     		provider.getId(),2,time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                        		provider.getId(),2,time, page, ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                             		provider.getId(),2, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                        		provider.getId(),2, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
                                    2, statusId, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                2, statusId, time, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(3)) {
@@ -560,25 +700,61 @@ public class TdSupplyController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
                                    2, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                2, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
                     		provider.getId(),2, time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                        		provider.getId(),2, time, page, ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                             		provider.getId(),2, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                        		provider.getId(),2, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                    orderPage = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
                                     2,statusId, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                2,statusId, time, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(6)) {
@@ -590,25 +766,61 @@ public class TdSupplyController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                    orderPage = tdOrderService .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
                                     2,time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                2,time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
                     		provider.getId(),2, time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                        		provider.getId(),2, time, page, ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                             		provider.getId(),2, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                        		provider.getId(),2, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                    orderPage = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
                                    2, statusId, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                2, statusId, time, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         } else if (timeId.equals(12)) {
@@ -620,25 +832,61 @@ public class TdSupplyController {
 
             if (statusId.equals(0)) {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                    orderPage = tdOrderService .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
                                     2,time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByProviderIdAndTypeIdAndTimeAfterAndSearch(provider.getId(),
+                                2,time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
                     orderPage = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
                     		provider.getId(),2, time, page, ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndTimeAfter(
+                        		provider.getId(),2, time, page, ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             } else {
                 if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                    orderPage = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
                             		provider.getId(),2, statusId, time, keywords, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService.findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(
+                        		provider.getId(),2, statusId, time, keywords, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 } else {
-                    orderPage = tdOrderService
-                            .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                    orderPage = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
                                     2,statusId, time, page,
                                     ClientConstant.pageSize);
+                    if(null != excelUrl)
+                    {
+                    	Page<TdOrder> order_page = tdOrderService .findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(provider.getId(),
+                                2,statusId, time, page,
+                                ClientConstant.pageSize);
+                    	if(orderImport(order_page, row, cell, sheet))
+                    	{
+                    		download(wb, excelUrl, resp);
+                    	}
+                    }
                 }
             }
         }
@@ -1058,4 +1306,79 @@ public class TdSupplyController {
 			}
 		}
 	}
+	
+	@SuppressWarnings("deprecation")
+	public Boolean orderImport(Page<TdOrder> orderPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+	{
+		for (int i = 0; i < orderPage.getContent().size(); i++) {
+			row = sheet.createRow((int)i+1);
+			TdOrder order = orderPage.getContent().get(i);
+			
+			row.createCell((short) 0).setCellValue(order.getOrderNumber());
+			row.createCell((short) 1).setCellValue(order.getShopTitle());
+			row.createCell((short) 2).setCellValue(order.getShippingName());
+			row.createCell((short) 3).setCellValue(order.getShippingAddress());
+			row.createCell((short) 4).setCellValue(order.getTotalPrice());
+			row.createCell((short) 5).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
+			if(order.getStatusId() ==2)
+			{
+				row.createCell((short) 6).setCellValue("待付款");
+			}else if(order.getStatusId() ==3)
+			{
+				row.createCell((short) 6).setCellValue("待发货");
+			}else if(order.getStatusId() ==4)
+			{
+				row.createCell((short) 6).setCellValue("待收货");
+			}else if(order.getStatusId() ==5)
+			{
+				row.createCell((short) 6).setCellValue("待评价");
+			}else if(order.getStatusId() ==6)
+			{
+				row.createCell((short) 6).setCellValue("已完成");
+			}else if(order.getStatusId() ==7)
+			{
+				row.createCell((short) 6).setCellValue("已取消");
+			}
+		}
+		return true;
+	}
+	
+	public Boolean download(HSSFWorkbook wb, String exportUrl, HttpServletResponse resp){
+	   	 try  
+	        {  
+		          FileOutputStream fout = new FileOutputStream(exportUrl+"order.xls");  
+//		          OutputStreamWriter writer = new OutputStreamWriter(fout, "utf8");	                       	     
+		          wb.write(fout);  
+		          fout.close();
+	        }catch (Exception e)  
+	        {  
+	            e.printStackTrace();  
+	        } 
+	   	 OutputStream os;
+			 try {
+					os = resp.getOutputStream();
+					File file = new File(exportUrl + "order.xls");
+	                
+	            if (file.exists())
+	                {
+	                  try {
+	                        resp.reset();
+	                        resp.setHeader("Content-Disposition", "attachment; filename="
+	                                + "order.xls");
+	                        resp.setContentType("application/octet-stream; charset=utf-8");
+	                        os.write(FileUtils.readFileToByteArray(file));
+	                        os.flush();
+	                    } finally {
+	                        if (os != null) {
+	                            os.close();
+	                        }
+	                    }
+	            }
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+			 }
+			 return true;	
+	   }
+	
 }

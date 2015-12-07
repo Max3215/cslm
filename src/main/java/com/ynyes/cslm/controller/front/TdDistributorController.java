@@ -1962,17 +1962,17 @@ public class TdDistributorController {
 			TdOrder order = tdOrderService.findByOrderNumber(orderNumber);
 			if(type.equalsIgnoreCase("orderPayLeft"))
 			{
-				if(order.getStatusId().equals(1L))
+				if(order.getStatusId().equals(3L))
 				{
-					order.setStatusId(2L);
+					order.setStatusId(4L);
 					order.setDeliveryTime(new Date());
 				}
 			}
 			else if(type.equalsIgnoreCase("orderService"))
 			{
-				if(order.getStatusId().equals(2L))
+				if(order.getStatusId().equals(4L))
 				{
-					order.setStatusId(3L);
+					order.setStatusId(6L);
 					order.setFinishTime(new Date());
 					
 					TdDistributor distributor = tdDistributorService.findbyUsername(username);
@@ -2700,7 +2700,7 @@ public class TdDistributorController {
              					+distributor.getDisctrict()
              					+distributor.getAddress());
              // 待发货
-             tdOrder.setStatusId(1L);
+             tdOrder.setStatusId(3L);
              // 总价
              tdOrder.setTotalPrice(totalPrice);
              

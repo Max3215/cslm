@@ -59,6 +59,7 @@ DD_belatedPNG.fix('.,img,background');
   
   <div class="mymember_mainbox">
     <form name="form1" action="/provider/order/list/${status_id}" method="POST">
+        <input type="hidden" name="eventTarget" value="" id="eventTarget">
         <script type="text/javascript">
             var theForm = document.forms['form1'];
             if (!theForm) {
@@ -66,6 +67,7 @@ DD_belatedPNG.fix('.,img,background');
             }
             function __doPostBack(eventTarget, eventArgument) {
                 if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                    theForm.eventTarget.value = eventTarget;
                     theForm.submit();
                 }
             }
@@ -73,6 +75,7 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_info mymember_info02">
             <div class="mymember_order_search">
                 <a class="a001" >批发单</a>
+                <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
             <#--
             <input class="mysub" type="submit" value="查询" />
             <input class="mytext" type="text" onFocus="if(value=='商品名称、订单编号') {value=''}" onBlur="if (value=='') {value='商品名称、订单编号'}"  value="商品名称、订单编号" />
