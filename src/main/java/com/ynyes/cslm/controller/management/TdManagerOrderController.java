@@ -1264,110 +1264,7 @@ public class TdManagerOrderController {
             {
                 if (order.getStatusId().equals(2L))
                 {
-                    // 需付尾款
-                    if (null != order.getTotalLeftPrice() && order.getTotalLeftPrice() > 0)
-                    {
-                    }
-                    // 不需付尾款，直接跳到可到店服务
-                    else
-                    {
-                        order.setStatusId(3L);
-                        /**
-    					 * @author lc
-    					 * @注释：添加同盟店所获返利
-    					 */
-                        // 用户
-                        TdUser tdUser = tdUserService.findByUsername(order.getUsername());
-                        
-                        // 同盟店
-                        TdDistributor tdShop = null;
-                        if (null != tdUser.getUpperDiySiteId()) {
-                        	// 同盟店
-                            tdShop = TdDistributorService.findOne(tdUser.getUpperDiySiteId());
-                		}else{
-                			// 同盟店
-                	        tdShop = TdDistributorService.findOne(order.getShopId());
-                		}
-                        List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
-                        
-//                        //手机短信发送
-//                        SMSUtil.send(
-//                        		order.getShippingPhone(),
-//                                "29040",
-//                                new String[] {
-//                                        tdUser.getUsername(),
-//                                        order.getOrderGoodsList().get(0).getGoodsTitle(),
-//                                        order.getOrderNumber().substring(order.getOrderNumber().length() - 4)});
-//                        
-//                        SMSUtil.send(tdShop.getMobile(), 
-//                                "29039",
-//                                new String[] { tdShop.getTitle(), tdUser.getUsername(),
-//                                		order.getOrderGoodsList().get(0).getGoodsTitle(),
-//                                		order.getAppointmentTime().toString() });
-//                        System.out.println("---Sharon---: 向同盟店"+tdShop.getMobile()+"发送短信");
-                        
-                        Long totalPoints = 0L;
-                        Double totalCash = 0.0;
-                        Double platformService = 0.0;
-                        Double trainService = 0.0;
-                        // 返利总额
-                        if (null != tdOrderGoodsList) {
-                            for (TdOrderGoods tog : tdOrderGoodsList) {
-                                if (0 == tog.getGoodsSaleType()) // 正常销售
-                                {
-                                    TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
-
-                                    if (null != tdGoods && null != tdGoods.getReturnPoints()) {
-                                        totalPoints += tdGoods.getReturnPoints();
-
-                                        if (null != tdGoods.getShopReturnRation()) {
-                                            totalCash += tdGoods.getCostPrice()
-                                                    * tdGoods.getShopReturnRation();
-                                        }
-                                    }
-                                    if (null != tdGoods && null != tdGoods.getPlatformServiceReturnRation()) {
-                                    	platformService += tdGoods.getCostPrice() * tdGoods.getPlatformServiceReturnRation();
-                					}
-                                    if (null != tdGoods && null != tdGoods.getTrainServiceReturnRation()) {
-                                    	trainService += tdGoods.getCostPrice() * tdGoods.getTrainServiceReturnRation(); 
-                					}
-                                }
-                            }
-
-                            // 用户返利
-                            if (null != tdUser) {
-                                TdUserPoint userPoint = new TdUserPoint();
-
-                                userPoint.setDetail("购买商品赠送粮草");
-                                userPoint.setOrderNumber(order.getOrderNumber());
-                                userPoint.setPoint(totalPoints);
-                                userPoint.setPointTime(new Date());
-                                userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
-                                userPoint.setUsername(tdUser.getUsername());
-
-                                userPoint = tdUserPointService.save(userPoint);
-
-                                tdUser.setTotalPoints(userPoint.getTotalPoint());
-
-                                tdUserService.save(tdUser);
-                            }
-                        }
-
-                        // 同盟店返利
-                        if (null != tdShop) {
-                            if (null == tdShop.getTotalCash()) {
-                                tdShop.setTotalCash(totalCash);
-                            } else {
-                                tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
-                            }
-                            order.setRebate(totalCash);//设置订单同盟店所获返利
-                            order.setPlatformService(platformService);//设置订单平台服务费
-                            order.setTrainService(trainService);//设置订单培训服务费
-                            order = tdOrderService.save(order);
-                            TdDistributorService.save(tdShop);
-                        }
-                    }
-
+                	order.setStatusId(3L);
                     order.setPayTime(new Date());
                 }
             }
@@ -1377,99 +1274,6 @@ public class TdManagerOrderController {
                 if (order.getStatusId().equals(3L))
                 {
                     order.setStatusId(4L);
-                    /**
-					 * @author lc
-					 * @注释：添加同盟店所获返利
-					 */
-                    // 用户
-                    TdUser tdUser = tdUserService.findByUsername(order.getUsername());
-
-                    // 同盟店
-                    TdDistributor tdShop = null;
-                    if (null != tdUser.getUpperDiySiteId()) {
-                    	// 同盟店
-                        tdShop = TdDistributorService.findOne(tdUser.getUpperDiySiteId());
-            		}else{
-            			// 同盟店
-            	        tdShop = TdDistributorService.findOne(order.getShopId());
-            		}
-
-                    List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
-
-                    Long totalPoints = 0L;
-                    Double totalCash = 0.0;
-                    Double platformService = 0.0;
-                    Double trainService = 0.0;
-                    // 返利总额
-                    if (null != tdOrderGoodsList) {
-                        for (TdOrderGoods tog : tdOrderGoodsList) {
-                            if (0 == tog.getGoodsSaleType()) // 正常销售
-                            {
-                                TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
-
-                                if (null != tdGoods && null != tdGoods.getReturnPoints()) {
-                                    totalPoints += tdGoods.getReturnPoints();
-
-                                    if (null != tdGoods.getShopReturnRation()) {
-                                        totalCash = tdGoods.getCostPrice()
-                                                * tdGoods.getShopReturnRation();
-                                    }
-                                }
-                                if (null != tdGoods && null != tdGoods.getPlatformServiceReturnRation()) {
-                                	platformService += tdGoods.getCostPrice() * tdGoods.getPlatformServiceReturnRation();
-            					}
-                                if (null != tdGoods && null != tdGoods.getTrainServiceReturnRation()) {
-                                	trainService += tdGoods.getCostPrice() * tdGoods.getTrainServiceReturnRation(); 
-            					}
-                            }
-                        }
-
-                        // 用户返利
-                        if (null != tdUser) {
-                            TdUserPoint userPoint = new TdUserPoint();
-
-                            userPoint.setDetail("购买商品赠送粮草");
-                            userPoint.setOrderNumber(order.getOrderNumber());
-                            userPoint.setPoint(totalPoints);
-                            userPoint.setPointTime(new Date());
-                            userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
-                            userPoint.setUsername(tdUser.getUsername());
-
-                            userPoint = tdUserPointService.save(userPoint);
-
-                            tdUser.setTotalPoints(userPoint.getTotalPoint());
-
-                            tdUserService.save(tdUser);
-                        }
-                    }
-                    //手机短信发送
-//                    SMSUtil.send(
-//                    		order.getShippingPhone(),
-//                            "29040",
-//                            new String[] {
-//                                    tdUser.getUsername(),
-//                                    order.getOrderGoodsList().get(0).getGoodsTitle(),
-//                                    order.getOrderNumber().substring(order.getOrderNumber().length() - 4)});
-//                    
-//                    SMSUtil.send(tdShop.getMobile(), 
-//                            "29039",
-//                            new String[] { tdShop.getTitle(), tdUser.getUsername(),
-//                            		order.getOrderGoodsList().get(0).getGoodsTitle(),
-//                            		order.getAppointmentTime().toString() });
-//                    System.out.println("---Sharon---: 向同盟店"+tdShop.getMobile()+"发送短信");
-                    // 同盟店返利
-                    if (null != tdShop) {
-                        if (null == tdShop.getTotalCash()) {
-                            tdShop.setTotalCash(totalCash);
-                        } else {
-                            tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
-                        }
-                        order.setRebate(totalCash);//设置订单同盟店所获返利
-                        order.setPlatformService(platformService);//设置订单平台服务费
-                        order.setTrainService(trainService);//设置订单培训服务费
-                        order = tdOrderService.save(order);
-                        TdDistributorService.save(tdShop);
-                    }
                 }
             }
             // 确认已服务
@@ -1477,7 +1281,13 @@ public class TdManagerOrderController {
             {
                 if (order.getStatusId().equals(4L))
                 {
-                    order.setStatusId(5L);
+                    if(order.getTypeId()==1)
+                    {
+                    	order.setStatusId(6L);
+                    	order.setFinishTime(new Date());
+                    }else{
+                    	order.setStatusId(5L);
+                    }
                 }
             }
             // 货到付款确认付款
@@ -1502,12 +1312,6 @@ public class TdManagerOrderController {
                     
                     TdUser tdUser = tdUserService.findByUsername(order.getUsername());
                     
-                    if (null != tdUser)
-                    {
-                        SMSUtil.send(tdUser.getMobile(), "28744",
-                                new String[] { order.getUsername(),
-                                        order.getOrderNumber()});
-                    }
                 }
             }
             // 确认收货

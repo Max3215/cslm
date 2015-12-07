@@ -76,7 +76,7 @@
             });
         }
         
-        //确认付尾款
+        // 确认发货
         function OrderPaymentLeft() {
             var dialog = $.dialog.confirm('操作提示信息：<br />1、该订单使用在线支付方式，付尾款成功后自动确认；<br />2、如客户确实已打款而没有自动确认可使用该功能；<br />3、确认付款后无法修改金额，确认要继续吗？', function () {
                 var orderNumber = $.trim($("#spanOrderNumber").text());
