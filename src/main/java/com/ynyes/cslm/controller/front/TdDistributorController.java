@@ -711,7 +711,19 @@ public class TdDistributorController {
 		map.addAttribute("page",page);
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
-		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		
+		List<Long> list = tdDistributorGoodsService.findByDistributorId(distributor.getId());
+		List<TdProductCategory> category_list = new ArrayList<>();
+		
+		if(null != list)
+		{
+			for (int i = 0; i < list.size(); i++) {
+				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
+			}
+		}// 所有该批发商有的分类
+		map.addAttribute("category_list",category_list);
+		
+//		map.addAttribute("category_list", tdProductCategoryService.findAll());
 		
 		if(null == categoryId)
 		{
@@ -787,43 +799,51 @@ public class TdDistributorController {
 		return "/client/distributor_goods_list";
 	}
 	
-	@RequestMapping(value="/goods/editOnSale/{disId}")
-	public String editOnSale(@PathVariable Long disId,String goodsTitle,Double goodsPrice,Integer page,HttpServletRequest req,ModelMap map)
+	@RequestMapping(value="/goods/editOnSale",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> editOnSale(Long goodsId,Double goodsPrice,
+							Long leftNumber,	
+							Integer page,HttpServletRequest req)
 	{
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg", "请重新登录!");
+			return res;
 		}
 		
-		if(null == disId)
+		if(null == goodsId)
 		{
-			return "/client/error_404";
+			res.put("msg", "参数错误!");
+			return res;
+		}
+		if(null == leftNumber || leftNumber <=0)
+		{
+			res.put("msg", "库存输入错误");
+			return res;
 		}
 		
 		if(null == page )
 		{
 			page = 0;
 		}
-		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disId);
+		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(goodsId);
 		
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		map.addAttribute("page",page);
-		if(null != goodsTitle)
-		{
-			distributorGoods.setGoodsTitle(goodsTitle);
-		}
+//		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
 		if(null != goodsPrice)
 		{
 			distributorGoods.setGoodsPrice(goodsPrice);
 		}
-		
+		distributorGoods.setLeftNumber(leftNumber);
 		distributorGoods.setIsOnSale(true);
 		tdDistributorGoodsService.save(distributorGoods);
-		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
-		
-		return "/client/distributor_goods_list";
+//		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
+		res.put("msg", "修改成功！");
+		res.put("code", 1);
+		return res;
 	}
 	
 	/**
@@ -3145,7 +3165,19 @@ public class TdDistributorController {
 		map.addAttribute("page",page);
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
-		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		
+		List<Long> list = tdDistributorGoodsService.findByDistributorIdAndIsAudit(distributor.getId());
+		
+		List<TdProductCategory> category_list = new ArrayList<>();
+		
+		if(null != list)
+		{
+			for (int i = 0; i < list.size(); i++) {
+				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
+			}
+		}// 所有该批发商有的分类
+		map.addAttribute("category_list",category_list);
+//		map.addAttribute("category_list", tdProductCategoryService.findAll());
 		
 		if(null == categoryId)
 		{

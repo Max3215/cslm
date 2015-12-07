@@ -1166,10 +1166,10 @@ public class TdManagerOrderController {
     @RequestMapping(value="/dialog/print")
     public String printDialog(String orderNumber, ModelMap map,
             HttpServletRequest req){
-        String username = (String) req.getSession().getAttribute("manager");
-        if (null == username) {
-            return "redirect:/Verwalter/login";
-        }
+//        String username = (String) req.getSession().getAttribute("manager");
+//        if (null == username) {
+//            return "redirect:/Verwalter/login";
+//        }
         
         if (null != orderNumber && !orderNumber.isEmpty())
         {

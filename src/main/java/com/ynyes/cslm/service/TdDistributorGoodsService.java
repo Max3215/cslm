@@ -80,6 +80,15 @@ public class TdDistributorGoodsService {
      * 
      */
     
+    public List<Long> findByDistributorId(Long distributorId)
+    {
+    	return repository.findByDistributorIdAndGroupCategoryId(distributorId);
+    }
+    public List<Long> findByDistributorIdAndIsAudit(Long distributorId)
+    {
+    	return repository.findByDistributorIdAndIsAuditAndGroupCategoryId(distributorId);
+    }
+    
     public List<TdDistributorGoods> findByGoodsId(Long goodsId)
     {
     	if(null == goodsId){

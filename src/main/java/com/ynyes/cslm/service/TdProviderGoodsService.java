@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProviderGoods;
@@ -38,6 +39,11 @@ public class TdProviderGoodsService {
 	 * 各种查看
 	 * 
 	 */
+	public List<Long> findByProviderId(Long providerId)
+	{
+		return repository.findByProviderIdAndGroupByCategoryId(providerId);
+	}
+	
 	public Page<TdProviderGoods> findByProviderId(Long providerId,int page ,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size);

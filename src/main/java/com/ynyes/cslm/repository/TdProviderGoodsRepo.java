@@ -1,5 +1,7 @@
 package com.ynyes.cslm.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -18,6 +20,8 @@ public interface TdProviderGoodsRepo extends
 		PagingAndSortingRepository<TdProviderGoods, Long> ,
 		JpaSpecificationExecutor<TdProviderGoods>
 {
+	@Query(value="select category_id from td_provider_goods where provider_id=?1 group by category_id",nativeQuery=true)
+	List<Long> findByProviderIdAndGroupByCategoryId(Long providerId);
 	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 order by pg.id DESC")
 	Page<TdProviderGoods> findByProviderId(long providerId,Pageable page);

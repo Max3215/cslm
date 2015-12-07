@@ -22,6 +22,11 @@ public interface TdDistributorGoodsRepo extends
 		JpaSpecificationExecutor<TdDistributorGoods>
 {
 //	Page<TdDistGoods> findByDistId(Pageable page);
+		@Query(value="select category_id from td_distributor_goods where distributor_id=?1 group by category_id",nativeQuery=true)
+		List<Long> findByDistributorIdAndGroupCategoryId(Long distributorId);
+		
+		@Query(value="select category_id from td_distributor_goods where distributor_id=?1 and is_audit=1 group by category_id",nativeQuery=true)
+		List<Long> findByDistributorIdAndIsAuditAndGroupCategoryId(Long distributorId);
 	
 		List<TdDistributorGoods> findByGoodsIdAndIsOnSaleTrue(Long goodsId);
 	

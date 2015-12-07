@@ -1,5 +1,6 @@
 package com.ynyes.cslm.controller.front;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -467,8 +468,18 @@ public class TdProviderController {
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
 //		map.addAttribute("distribution",isDistribution); 
+		// 所有分类Id
+		List<Long> list = tdProviderGoodsService.findByProviderId(provider.getId());
 		
-		map.addAttribute("category_list",tdProductCategoryService.findAll());
+		List<TdProductCategory> category_list = new ArrayList<>();
+		
+		if(null != list)
+		{
+			for (int i = 0; i < list.size(); i++) {
+				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
+			}
+		}// 所有该批发商有的分类
+		map.addAttribute("category_list",category_list);
 		
 		if(null ==categoryId || categoryId==0)
 		{

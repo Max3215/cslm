@@ -19,15 +19,19 @@
                         </td>
                         <td>
                             <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${dg.goodsTitle}</p>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
-                        <td class="tb02">￥${dg.goodsPrice?string('0.00')}</td>
-                        <td>${dg.leftNumber!'0'}</td>
+                        <td class="tb02">￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page});">下架</a></p>
-                            <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page});">删除</a></p></td>
+                            <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
+                            <#--
+                            <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page});">删除</a></p>
+                            -->
+                       </td>
                       </tr>
                       
                  <#else>
@@ -43,13 +47,15 @@
                         </td>
                         <td class="tb01">${dg.code!''}</td>
                         <td class="tb02"><#if dg.goodsPrice??>￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></td>
-                        <td>${dg.leftNumber!'0'}</td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
-                            <#if dg.goodsPrice??>
                             <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page});">上架</a></p>
+                           <#--
+                            <#if dg.goodsPrice??>
                             <#else>
                             <p><a href="javascript:editPrice(${dg.id?c},${page});">设价上架</a></p>
                             </#if>
+                            -->
                             <p><a href="javascript:deleteDisGoods(false,${dg.id?c},${page});">删除</a></p></td>
                       </tr>
                  </#if>

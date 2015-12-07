@@ -14,8 +14,23 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script src="/client/js/distributor_goods.js"></script>
+<script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#sub_form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 $('.sub_form').css('display','none');
+                  window.location.href="/distributor/goods/sale/1"
+            }
+        }
+    });
+
+
     $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){
             $(this).next().slideDown(300);
@@ -47,11 +62,13 @@ function searchSale(){
 function editPrice(dgId,page){
     var goodsTitle = $("#title"+dgId).html();
     var goodsPrice = $("#price"+dgId).html();
+    var leftNumber = $("#number"+dgId).html();
     
     $("#goodsId").attr("value",dgId);
     $("#page").attr("value",page);
     $("#goodsTitle").attr("value",goodsTitle);
     $("#goodsPrice").attr("value",goodsPrice);
+    $("#leftNumber").attr("value",leftNumber);
     $('.sub_form').css('display','block');
 }
 
@@ -120,7 +137,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <option value="">请选择类别...</option>
                                 <#if category_list??>
                                     <#list category_list as c>
-                                        <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                                        <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>>${c.title!""}</option>
                                     </#list>
                                 </#if>
                             </select>
@@ -181,6 +198,7 @@ DD_belatedPNG.fix('.,img,background');
     <!-- 点击商品上架后弹出层 -->
   <aside class="sub_form">
     <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a></p>
+    <form id="sub_form" action="/distributor/goods/editOnSale" method="post">
     <div class="info_tab">
       <table>
         <tr>
@@ -194,14 +212,19 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
          <tr>
           <th>*商品售价：</th>
-          <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg="" ></td>
+        </tr>
+        <tr>
+          <th>*库存：</th>
+          <td><input type="text" name="leftNumber" id="leftNumber" datatype="n"></td>
         </tr>
         <tr>
           <th></th>
-          <td><input type="submit" class="sub" onclick="editOnSale();" value="确认提交"></td>
+          <td><input type="submit" class="sub" value="确认提交"></td>
         </tr>
       </table>
     </div>
+    </form>
   </aside>
 </body>
 </html>
