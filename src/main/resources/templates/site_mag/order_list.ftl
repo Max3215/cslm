@@ -69,22 +69,19 @@ function __doPostBack(eventTarget, eventArgument) {
                     <li>
                         <a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a>
                     </li>
-                    <#if statusId?? && 1==statusId>
                     <li>
                         <a onclick="return ExePostBack('btnConfirm','确认后将进入待发货状态，是否继续？');" class="save" href="javascript:__doPostBack('btnConfirm','')"><i></i><span>确认订单</span></a>
                     </li>
-                    <#elseif statusId?? && 7==statusId>
                     <li>
                         <a onclick="return ExePostBack('btnDelete','删除后订单将无法恢复，是否继续？');" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除订单</span></a>
                     </li>
-                    </#if>
+                    <!--
                     <li>
                         <a class="all"><span>订单总额：￥${price!0.00}</span></a>
                     </li>
                     <li>
                         <a class="all"><span>销售额：￥${sales!0.00}</span></a>
                     </li>
-                    <!--
                     <li>
                     	<a class="all" href="/Verwalter/order/list/${statusId!''}/1"><span>普通订单</span></a>
                     </li>                  
@@ -117,6 +114,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     
                     </li>
                 </ul>
+                <div class="menu-list">
                     <div class="rule-single-select">
                         <select name="timeId" onchange="javascript:setTimeout(__doPostBack('btnTime',''), 0)">
                             <option value="0" <#if !time_id?? || time_id==0>selected="selected"</#if>>所有订单</option>
@@ -128,9 +126,10 @@ function __doPostBack(eventTarget, eventArgument) {
                             <option value="12" <#if time_id==12>selected="selected"</#if>>最近一年</option> 
                         </select>
                     </div>
+                </div>
             </div>
             <div class="r-list">
-                <input name="keywords" type="text" class="keyword">
+                <input name="keywords" type="text" class="keyword" value="${keywords!''}">
                 <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('btnSearch','')">查询</a>
             </div>
         </div>

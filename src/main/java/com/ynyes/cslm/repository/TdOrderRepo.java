@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.cslm.entity.TdOrder;
-import com.ynyes.cslm.entity.TdOrderGoods;
-import com.ynyes.cslm.entity.TdUser;
 
 /**
  * TdOrder 实体数据库操作接口
@@ -166,5 +164,54 @@ public interface TdOrderRepo extends
     Long countByShopIdAndTypeIdAndStatusId(long shopId,long typeId,long statusId);
     
     Long countByProviderIdAndTypeIdAndStatusId(long providerId,long typeId,long statusId);
+    
+    /**
+     * 关键字
+     */
+    Page<TdOrder> findByOrderNumberContainingOrShippingNameContainingOrShopTitleContainingOrProviderTitleContaining(String keywords1,String keywords2,String keywords3,String keywords4,Pageable page);
+    
+    Page<TdOrder> findByOrderNumberContainingAndTypeIdOrShippingNameContainingAndTypeIdOrShopTitleContainingAndTypeIdOrProviderTitleContainingAndTypeId(
+    																				String keywords1,Long typeId1,
+    																				String keywords2,Long typeId2,
+    																				String keywords3,Long typeId3,
+    																				String keywords4,Long typeId4,Pageable page);
+    Page<TdOrder> findByOrderNumberContainingAndStatusIdOrShippingNameContainingAndStatusIdOrShopTitleContainingAndStatusIdOrProviderTitleContainingAndStatusId(
+    																				String keywords1,Long statusId1,
+    																				String keywords2,Long statusId2,
+    																				String keywords3,Long statusId3,
+    																				String keywords4,Long statusId4,Pageable page);
+    Page<TdOrder> findByOrderNumberContainingAndStatusIdAndTypeIdOrShippingNameContainingAndStatusIdAndTypeIdOrShopTitleContainingAndStatusIdAndTypeIdOrProviderTitleContainingAndStatusIdAndTypeId(
+																					String keywords1,Long statusId1,Long typeId1,
+																					String keywords2,Long statusId2,Long typeId2,
+																					String keywords3,Long statusId3,Long typeId3,
+																					String keywords4,Long statusId4,Long typeId4,Pageable page);
+    
+    Page<TdOrder> findByOrderNumberContainingAndOrderTimeAfterOrShippingNameContainingAndOrderTimeAfterOrShopTitleContainingAndOrderTimeAfterOrProviderTitleContainingAndOrderTimeAfter(
+    																				String keywords1,Date time1,
+    																				String keywords2,Date time2,
+    																				String keywords3,Date time3,
+    																				String keywords4,Date time4,Pageable page);
+    Page<TdOrder> findByOrderNumberContainingAndTypeIdAndOrderTimeAfterOrShippingNameContainingAndTypeIdAndOrderTimeAfterOrShopTitleContainingAndTypeIdAndOrderTimeAfterOrProviderTitleContainingAndTypeIdAndOrderTimeAfter(
+																					String keywords1,Long typeId1,Date time1,
+																					String keywords2,Long typeId2,Date time2,
+																					String keywords3,Long typeId3,Date time3,
+																					String keywords4,Long typeId4,Date time4,Pageable page);
+    Page<TdOrder> findByOrderNumberContainingAndStatusIdAndOrderTimeAfterOrShippingNameContainingAndStatusIdAndOrderTimeAfterOrShopTitleContainingAndStatusIdAndOrderTimeAfterOrProviderTitleContainingAndStatusIdAndOrderTimeAfter(
+																					String keywords1,Long statusId1,Date time1,
+																					String keywords2,Long statusId2,Date time2,
+																					String keywords3,Long statusId3,Date time3,
+																					String keywords4,Long statusId4,Date time4,Pageable page);
+    Page<TdOrder> findByOrderNumberContainingAndStatusIdAndTypeIdAndOrderTimeAfterOrShippingNameContainingAndStatusIdAndTypeIdAndOrderTimeAfterOrShopTitleContainingAndStatusIdAndTypeIdAndOrderTimeAfterOrProviderTitleContainingAndStatusIdAndTypeIdAndOrderTimeAfter(
+																					String keywords1,Long statusId1,Long typeId1,Date time1,
+																					String keywords2,Long statusId2,Long typeId2,Date time2,
+																					String keywords3,Long statusId3,Long typeId3,Date time3,
+																					String keywords4,Long statusId4,Long typeId4,Date time4,Pageable page);
+    
+    
+    
+    
+    
+    
+    
     
 }

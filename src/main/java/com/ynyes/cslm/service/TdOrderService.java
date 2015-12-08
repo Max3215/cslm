@@ -12,11 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdOrder;
-import com.ynyes.cslm.entity.TdOrderGoods;
-import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.repository.TdOrderRepo;
-
-import scala.xml.dtd.PublicID;
 
 /**
  * TdOrder 服务类
@@ -584,4 +580,86 @@ public class TdOrderService {
         
         return repository.findByProviderIdAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(ProviderId, typeId,statusId, time, keywords, pageRequest);
     }
+    
+    // 关键字筛选
+    public Page<TdOrder> searchAll(String keywords,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+    	return repository.findByOrderNumberContainingOrShippingNameContainingOrShopTitleContainingOrProviderTitleContaining(keywords, keywords, keywords, keywords, pageRequest);
+    }
+    
+    public Page<TdOrder> searchAndtypeIdOrderByIdDesc(String keywords,long typeId, int page, int size){
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+    	return repository.findByOrderNumberContainingAndTypeIdOrShippingNameContainingAndTypeIdOrShopTitleContainingAndTypeIdOrProviderTitleContainingAndTypeId(keywords, typeId, keywords, typeId, keywords, typeId, keywords, typeId, pageRequest);
+    }
+    
+    public Page<TdOrder> searchAndStatusId(String keywords,Long statusId,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+    	return repository.findByOrderNumberContainingAndStatusIdOrShippingNameContainingAndStatusIdOrShopTitleContainingAndStatusIdOrProviderTitleContainingAndStatusId(keywords, statusId, keywords, statusId, keywords, statusId, keywords, statusId, pageRequest);
+    }
+    
+    public Page<TdOrder> searchAndStatusIdAndTypeId(String keywords,Long statusId,Long typeId,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+    	return repository.findByOrderNumberContainingAndStatusIdAndTypeIdOrShippingNameContainingAndStatusIdAndTypeIdOrShopTitleContainingAndStatusIdAndTypeIdOrProviderTitleContainingAndStatusIdAndTypeId(
+    																						keywords, statusId, typeId, 
+    																						keywords, statusId, typeId, 
+    																						keywords, statusId, typeId, 
+    																						keywords, statusId, typeId, pageRequest);
+    }
+    
+    public Page<TdOrder> searchAndTimeAfter(String keywords,Date time, int page, int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+        return repository.findByOrderNumberContainingAndOrderTimeAfterOrShippingNameContainingAndOrderTimeAfterOrShopTitleContainingAndOrderTimeAfterOrProviderTitleContainingAndOrderTimeAfter(keywords, time, keywords, time, keywords, time, keywords, time, pageRequest);
+    }
+    
+    public Page<TdOrder> searchAndTypeIdAndOrderTimeAfter(String keywords,Long typeId,Date time,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+    	return repository.findByOrderNumberContainingAndTypeIdAndOrderTimeAfterOrShippingNameContainingAndTypeIdAndOrderTimeAfterOrShopTitleContainingAndTypeIdAndOrderTimeAfterOrProviderTitleContainingAndTypeIdAndOrderTimeAfter(
+    																						keywords, typeId, time, 
+    																						keywords, typeId, time, 
+    																						keywords, typeId, time, 
+    																						keywords, typeId, time, pageRequest);
+    }
+    
+    public Page<TdOrder> searchAndStatusIdAndOrderTimeAfter(String keywords,Long statusId,Date time,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+    	return repository.findByOrderNumberContainingAndStatusIdAndOrderTimeAfterOrShippingNameContainingAndStatusIdAndOrderTimeAfterOrShopTitleContainingAndStatusIdAndOrderTimeAfterOrProviderTitleContainingAndStatusIdAndOrderTimeAfter(
+    																						keywords, statusId, time, 
+    																						keywords, statusId, time, 
+    																						keywords, statusId, time, 
+    																						keywords, statusId, time, pageRequest);
+    }
+    
+    public Page<TdOrder> searchAndStatusIdAndTypeIdAndOrderTimeAfter(String keywords,Long statusId,Long typeId,Date time,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "id"));
+    	return repository.findByOrderNumberContainingAndStatusIdAndTypeIdAndOrderTimeAfterOrShippingNameContainingAndStatusIdAndTypeIdAndOrderTimeAfterOrShopTitleContainingAndStatusIdAndTypeIdAndOrderTimeAfterOrProviderTitleContainingAndStatusIdAndTypeIdAndOrderTimeAfter(
+    																						keywords, statusId, typeId, time, 
+    																						keywords, statusId, typeId, time, 
+    																						keywords, statusId, typeId, time, 
+    																						keywords, statusId, typeId, time, pageRequest);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

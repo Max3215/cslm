@@ -27,13 +27,11 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.xpath.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,13 +49,10 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
-import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
-import com.ynyes.cslm.repository.TdUserCollectRepo;
-import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCartGoodsService;
@@ -2169,6 +2164,8 @@ public class TdDistributorController {
 			disGoods.setGoodsTitle(goodsTitle);
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
+			distributor.getGoodsList().add(disGoods);
+			
 		}
 //		List<TdDistributorGoods> list = tdDistributorGoodsService.findByGoodsId(goodsId);
 //		

@@ -336,7 +336,7 @@ function del_goods_comb(obj) {
             <dt>所属类别</dt>
             <dd>
                 <div class="rule-single-select">
-                    <select  id="onecategoryId" name="categoryId" datatype="*" sucmsg=" ">
+                    <select  id="categoryId" name="categoryId" datatype="*" sucmsg=" ">
                         <#if !goods??>
                         <option value="">请选择类别...</option>
                         </#if>

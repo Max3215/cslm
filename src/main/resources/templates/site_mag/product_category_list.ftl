@@ -61,7 +61,6 @@ function __doPostBack(eventTarget, eventArgument) {
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
     <tbody><tr class="odd_bg">
         <th width="6%">选择</th>
-        <th align="left" width="6%">编号</th>
         <th align="left">类别名称</th>
         <th align="left" width="12%">调用别名</th>
         <th align="left" width="12%">排序</th>
@@ -77,7 +76,6 @@ function __doPostBack(eventTarget, eventArgument) {
                 </span>
                 <input type="hidden" name="listId" id="listId" value="${cat.id?c}">
             </td>
-            <td>${cat.id?c}</td>
             <td>
                 <#if cat?? && cat.layerCount gt 1>
                     <span style="display:inline-block;width:${(cat.layerCount-2)*24}px;"></span>

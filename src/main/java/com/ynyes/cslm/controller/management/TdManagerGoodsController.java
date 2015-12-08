@@ -670,7 +670,7 @@ public class TdManagerGoodsController {
             
             newGoods.setAfterMarketService(tdGoods.getAfterMarketService());
             newGoods.setAveragePoints(tdGoods.getAveragePoints());
- //           newGoods.setBrandId(tdGoods.getBrandId());
+            newGoods.setBrandId(tdGoods.getBrandId());
             newGoods.setBrandTitle(tdGoods.getBrandTitle());
             newGoods.setCategoryId(tdGoods.getCategoryId());
             newGoods.setCategoryIdTree(tdGoods.getCategoryIdTree());
