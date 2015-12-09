@@ -99,9 +99,9 @@ DD_belatedPNG.fix('.,img,background');
                     <th width="80">
                         <select name="statusid" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
                             <option value="0" <#if !status_id?? || status_id==0>selected="selected"</#if>>所有订单</option>
-                            <option value="1" <#if status_id==1>selected="selected"</#if>>待发货</option>
-                            <option value="2" <#if status_id==2>selected="selected"</#if>>待收货</option>
-                            <option value="3" <#if status_id==3>selected="selected"</#if>>已完成</option>
+                            <option value="3" <#if status_id==1>selected="selected"</#if>>待发货</option>
+                            <option value="4" <#if status_id==2>selected="selected"</#if>>待收货</option>
+                            <option value="6" <#if status_id==3>selected="selected"</#if>>已完成</option>
                         </select>
                     </th>
                     <th width="60">操作</th>
@@ -125,11 +125,11 @@ DD_belatedPNG.fix('.,img,background');
                         <p>${order.orderTime!''}</p>
                       </td>
                       <td>
-                            <#if order.statusId?? && order.statusId==1>
+                            <#if order.statusId?? && order.statusId==3>
                                     <p>待发货</p>
-                            <#elseif order.statusId?? &&  order.statusId==2>
+                            <#elseif order.statusId?? &&  order.statusId==4>
                                    <p>待收货</p>
-                            <#elseif order.statusId?? &&  order.statusId==3>
+                            <#elseif order.statusId?? &&  order.statusId==6>
                                    <p>已完成</p>
                             </#if>
                       </td>

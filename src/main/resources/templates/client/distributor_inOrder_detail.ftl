@@ -128,11 +128,11 @@ DD_belatedPNG.fix('.,img,background');
       <dl>
         <dt>订单编号：<span id="spanOrderNumber">${order.orderNumber!''}</span>&nbsp;&nbsp;&nbsp;&nbsp; 当前进度：
             <#if order??>
-                <#if order.statusId==1>
+                <#if order.statusId==3>
                     待发货
-                <#elseif order.statusId==2>
+                <#elseif order.statusId==4>
                     待收货
-                <#elseif order.statusId==3>
+                <#elseif order.statusId==6>
                     已完成
                 </#if>
             </#if>
@@ -140,15 +140,15 @@ DD_belatedPNG.fix('.,img,background');
       </dl>
       <div class="mymember_green">
          <#if order??>
-            <#if order.statusId==1>
+            <#if order.statusId==3>
                 <p class="mysel"><i></i>待发货 </p>
                 <p><i></i><b></b>确认收货</p>
                 <p><i></i><b></b>完成</p>
-            <#elseif order.statusId==2>
+            <#elseif order.statusId==4>
                 <p class="mysel"><i></i><b></b>待发货</p>
                 <p class="mysel"><i></i><b></b>确认收货</p>
                 <p><i></i><b></b>完成</p>
-            <#elseif order.statusId==3>
+            <#elseif order.statusId==6>
                 <p class="mysel"><i></i><b></b>待发货</p>
                 <p class="mysel"><i></i><b></b>确认收货</p>
                 <p class="mysel"><i></i><b></b>完成</p>
@@ -213,13 +213,13 @@ DD_belatedPNG.fix('.,img,background');
                     <p>${order.orderTime!''}</p>
                 </td>
                 <td>
-                    <#if order.statusId?? && order.statusId == 1>     
+                    <#if order.statusId?? && order.statusId == 3>     
                          <p>待发货</p>
                     </#if>
-                    <#if order.statusId?? && order.statusId == 2>
+                    <#if order.statusId?? && order.statusId == 4>
                         <p>待收货</p>
                     </#if>
-                    <#if order.statusId?? && order.statusId == 3>
+                    <#if order.statusId?? && order.statusId == 6>
                         <p>已完成</p>
                     </#if>
                 </td>
