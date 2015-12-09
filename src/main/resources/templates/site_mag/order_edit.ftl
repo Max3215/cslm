@@ -682,12 +682,10 @@
                     </tr>
                     <tr>
                         <th>
-                            可获取积分总计
+                            平台服务费
                         </th>
                         <td>
-                            <div class="position">
-                                ${order.points!"0"}分
-                            </div>
+                                ${order.trainService!"0"}元
                         </td>
                     </tr>
                     <tr>
@@ -744,7 +742,6 @@
             </dd>
         </dl>
         
-        <#--
         <dl>
             <dt>收货信息</dt>
             <dd>
@@ -772,18 +769,21 @@
                             <span id="spanAddress">${order.shippingAddress!""}</span>
                         </td>
                     </tr>
+                    <#--
                     <tr>
                         <th>
                             邮政编码
                         </th>
                         <td><span id="spanPostCode">${order.postalCode!""}</span></td>
                     </tr>
+                    -->
                     <tr>
                         <th>
                             电话
                         </th>
                         <td><span id="spanMobile">${order.shippingPhone!""}</span></td>
                     </tr>
+                    <#--
                     <tr>
                         <th>
                             是否索要发票
@@ -800,10 +800,10 @@
                         </td>
                         
                     </tr>
+                    -->
                 </tbody></table>
             </dd>
         </dl>
-        -->
         
         <dl>
             <dt>备注</dt>

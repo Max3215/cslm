@@ -320,8 +320,8 @@ function del_goods_comb(obj) {
                     <li><a href="javascript:;" onclick="tabs(this);" class="selected">基本信息</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">扩展选项</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">详细描述</a></li>
-                    <li><a href="javascript:;" onclick="tabs(this);" class="">价格与库存</a></li>
                     <#--
+                    <li><a href="javascript:;" onclick="tabs(this);" class="">价格与库存</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">促销</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">赠品</a></li>
                     <li><a href="javascript:;" onclick="tabs(this);" class="">组合商品</a></li>
@@ -454,6 +454,20 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">*编码最多255个字符</span>
             </dd>
         </dl>
+        <dl>
+            <dt>市场价</dt>
+            <dd>
+                <input name="marketPrice" type="text" value="<#if goods?? && goods.marketPrice??>${goods.marketPrice?string("0.00")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
+                <span class="Validform_checktip">*市场价格</span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>平台服务费比例</dt>
+            <dd>
+                <input name="platformServiceReturnRation" type="text" value="<#if goods?? && goods.platformServiceReturnRation??>${goods.platformServiceReturnRation?string("0.00")}<#else>0.06</#if>" class="input normal" sucmsg="">
+                <span class="Validform_checktip">平台服务费 = 销售价  * 平台服务费比例</span>
+            </dd>
+        </dl>
         <#--
         <dl>
             <dt>服务</dt>
@@ -478,7 +492,7 @@ function del_goods_comb(obj) {
         </dl>
         -->
         <dl>
-            <dt>上架时间</dt>
+            <dt>添加时间</dt>
             <dd>
                 <div class="input-date">
                     <input name="onSaleTime" type="text" value="<#if goods??>${goods.onSaleTime!""}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',lang:'zh-cn'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" ">
@@ -527,9 +541,9 @@ function del_goods_comb(obj) {
         </dl>
     </div>
     
+        <#--
     <div class="tab-content" style="display: none;">
        
-        <#--
         <#if provider_list??>
         <dl>
             <dt>供应商</dt>
@@ -562,7 +576,6 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
-        -->
         <dl>
             <dt>市场价</dt>
             <dd>
@@ -570,7 +583,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">市场价格</span>
             </dd>
         </dl>
-        <#--
         <dl>
             <dt>包含费用</dt>
             <dd>
@@ -586,9 +598,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl>
-        -->
-        <!--
-        <dl>
             <dt>销售价</dt>
             <dd>
                 <input id="idComputeSalePrice" name="salePrice" type="text" value="<#if goods?? && goods.salePrice??>${goods.salePrice?string("0.00")}<#else>0</#if>" class="input normal" sucmsg="" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/">
@@ -609,7 +618,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">分销商返利 = 销售价 * 分销商返利比例</span>
             </dd>
         </dl>
-        -->
         <dl>
             <dt>平台服务费比例</dt>
             <dd>
@@ -617,7 +625,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">平台服务费 = 销售价  * 平台服务费比例</span>
             </dd>
         </dl>
-        <#--
         <dl>
             <dt>培训服务费比例</dt>
             <dd>
@@ -632,7 +639,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">*返还同盟店的金额，不填时为0</span>
             </dd>
         </dl>
-        -->
         <dl>
             <dt>积分购买限额</dt>
             <dd>
@@ -640,7 +646,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">购买时可使用的粮草限额</span>
             </dd>
         </dl>
-        <#--
         <#if warehouse_list??>
         <dl>
             <dt>所在仓库</dt>
@@ -656,7 +661,6 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
-        -->
         <dl>
             <dt>库存余量</dt>
             <dd>
@@ -664,7 +668,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">库存为0时显示为缺货</span>
             </dd>
         </dl>
-        <!--
         <dl>
             <dt>销量</dt>
             <dd>
@@ -672,8 +675,8 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">商品已销售数量</span>
             </dd>
         </dl>
-        -->
     </div>
+        -->
     <#--
     <div class="tab-content" style="display: none;">
         <dl>

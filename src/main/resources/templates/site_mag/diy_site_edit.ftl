@@ -158,7 +158,7 @@ $(function () {
         <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  <#--
   <dl id="div_show360_container">
     <dt>店面展示图片</dt>
     <dd>
@@ -182,7 +182,7 @@ $(function () {
         </div>
     </dd>
   </dl>
-  
+  -->
   <dl>
     <dt>城市</dt>
     <dd>
@@ -251,7 +251,13 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  <dl>
+    <dt>平台服务比例</dt>
+    <dd>
+        <input name="serviceRation" type="text" value="<#if diy_site?? && diy_site.serviceRation??>${diy_site.serviceRation?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
+        <span class="Validform_checktip">*商家每次交易时平台抽取的比例</span>
+    </dd>
+  </dl>
   <dl>
     <dt>是否启用</dt>
     <dd>

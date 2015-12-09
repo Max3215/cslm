@@ -86,6 +86,10 @@ public class TdProvider {
     @JoinColumn(name = "providerId")
     private List<TdProviderGoods> goodsList;
     
+    // 平台服务费比例
+    @Column(scale=2)
+    private Double serviceRation;
+    
     public Long getId() {
         return id;
     }
@@ -212,6 +216,14 @@ public class TdProvider {
 
 	public void setType(Long type) {
 		this.type = type;
+	}
+
+	public Double getServiceRation() {
+		return serviceRation;
+	}
+
+	public void setServiceRation(Double serviceRation) {
+		this.serviceRation = serviceRation;
 	}
     
     

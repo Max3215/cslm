@@ -119,6 +119,10 @@ public class TdDistributor {
     @JoinColumn(name = "distributorId")
     private List<TdDistributorGoods> goodsList;
     
+    // 平台服务收取服务比例
+    @Column(scale=2)
+    private Double serviceRation;
+    
     public Long getId() {
         return id;
     }
@@ -319,10 +323,14 @@ public class TdDistributor {
 		this.payPassword = payPassword;
 	}
 
-	@Override
-	public String toString() {
-		return "TdDistributor [id=" + id + ", title=" + title + ", city=" + city + ", disctrict=" + disctrict
-				+ ", isEnable=" + isEnable + ", username=" + username + "]";
+	public Double getServiceRation() {
+		return serviceRation;
 	}
+
+	public void setServiceRation(Double serviceRation) {
+		this.serviceRation = serviceRation;
+	}
+
+	
 
 }

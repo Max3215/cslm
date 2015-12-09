@@ -92,7 +92,7 @@ $(function () {
         </dd>
     </dl>
     <dl>
-        <dt>批发商手机</dt>
+        <dt>手机号</dt>
         <dd>
             <input name="mobile" type="text" value="<#if provider??>${provider.mobile!""}</#if>" class="input normal"  datatype="m" sucmsg=" ">
             <span class="Validform_checktip">*</span>
@@ -110,6 +110,13 @@ $(function () {
         <dd>
             <input name="virtualMoney" type="text" value="<#if provider?? && provider.virtualMoney??>${provider.virtualMoney?string('0.00')}</#if>" class="input normal"   sucmsg=" ">
             <span class="Validform_checktip"></span>
+        </dd>
+    </dl>
+    <dl>
+    <dt>平台服务比例</dt>
+        <dd>
+            <input name="serviceRation" type="text" value="<#if provider?? && provider.serviceRation??>${provider.serviceRation?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
+            <span class="Validform_checktip">*商家每次交易时平台抽取的比例</span>
         </dd>
     </dl>
     <dl>

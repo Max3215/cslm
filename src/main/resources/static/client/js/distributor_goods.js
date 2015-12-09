@@ -46,15 +46,15 @@ function deleteDisGoods(type,disId,page){
 //超市中心选择批发商品
 function addGoods(){
     var page = $("#page").val();
-    var quantity = $("#quantity").val();
+    var quantity = parseInt($("#quantity").val());
     var gid = $("#goodsId").val();
-    var leftNumber = $("#leftNumber").val();
+    var leftNumber = parseInt($("#leftNumber").val());
     
     if(undefined == quantity || quantity == 0){
     	alert("请输入进货数量！")
     	return;
     }
-    
+    console.debug(quantity>leftNumber);
     if(quantity > leftNumber){
     	alert("库存不足！")
     	return ;

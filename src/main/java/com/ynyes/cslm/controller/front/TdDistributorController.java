@@ -49,6 +49,7 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
+import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserPoint;
@@ -2627,6 +2628,8 @@ public class TdDistributorController {
         
         	 List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
         	 Double totalPrice = 0.0; // 购物总额
+        	 Double serviceRation = 0.0; // 平台返利
+        	 
         	 
         	 for (int i = 0; i < m.getValue().size(); i++) {
         		 TdCartGoods cartGoods= m.getValue().get(i);
@@ -2701,6 +2704,12 @@ public class TdDistributorController {
              // 总价
              tdOrder.setTotalPrice(totalPrice);
              
+             if(null != provider.getServiceRation())
+      		 {
+      			serviceRation =totalPrice*provider.getServiceRation(); // 计算平台获利
+      		 }
+             tdOrder.setTrainService(serviceRation); // 平台服务费
+             
              // 订单类型-批发订单
              tdOrder.setTypeId(1L);
              
@@ -2708,26 +2717,27 @@ public class TdDistributorController {
              tdOrder.setOrderGoodsList(orderGoodsList);
              tdOrder.setTotalGoodsPrice(totalPrice);
              
-             // 保存商品信息
-             tdOrderGoodsService.save(orderGoodsList);
-             
              // 网站基本信息
-//             TdSetting setting = tdSettingService.findTopBy();
-             tdOrder = tdOrderService.save(tdOrder);
-             
-             // 扣除超市虚拟账户
+             TdSetting setting = tdSettingService.findTopBy();
+            
              if(distributor.getVirtualMoney()<tdOrder.getTotalPrice())
              {
             	 res.put("msg", "账户余额不足，请先充值！");
             	 return res;
              }
+             
+             // 保存商品信息
+             tdOrderGoodsService.save(orderGoodsList);
+             
+             // 扣除超市虚拟账户
+             tdOrder = tdOrderService.save(tdOrder);
             distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
             tdDistributorService.save(distributor);
             
      		if(null == provider.getVirtualMoney()){
      			provider.setVirtualMoney(new Double(0));
      		}
-     		provider.setVirtualMoney(provider.getVirtualMoney()+tdOrder.getTotalGoodsPrice());
+     		provider.setVirtualMoney(provider.getVirtualMoney()+tdOrder.getTotalGoodsPrice() - serviceRation);
      		tdProviderService.save(provider);
      		
 //     		//平台虚拟账户增加金额
