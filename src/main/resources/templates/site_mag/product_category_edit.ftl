@@ -112,6 +112,7 @@
         <span class="Validform_checktip">*类别中文名称，100字符内</span>
     </dd>
   </dl>
+  <#--
   <dl>
     <dt>调用别名</dt>
     <dd>
@@ -136,6 +137,7 @@
         </div>
     </dd>  
   </dl>
+  -->
   <dl>
     <dt>关联参数</dt>
     <dd>

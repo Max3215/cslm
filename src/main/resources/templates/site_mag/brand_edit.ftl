@@ -156,6 +156,7 @@ $(function () {
                 <span class="Validform_checktip">*数字，越小越向前</span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>浏览次数</dt>
             <dd>
@@ -187,6 +188,7 @@ $(function () {
                 <span class="Validform_checktip">填写后直接跳转到该网址</span>
             </dd>
         </dl>
+        -->
     </div>
     <div class="tab-content" style="display: none;">
         <dl>

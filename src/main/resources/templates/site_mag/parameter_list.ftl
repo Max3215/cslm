@@ -117,10 +117,10 @@ function __doPostBack(eventTarget, eventArgument) {
 <tbody>
     <tr class="odd_bg">
         <th width="6%">选择</th>
-        <th align="left">名称</th>
-        <th align="left" width="12%">类别</th>
+        <th align="left" >名称</th>
+        <th align="left" width="15%">类别</th>
         <th align="left" width="65">排序</th>
-        <th width="8%">操作</th>
+        <th width="10%">操作</th>
     </tr>
     
     <#if parameter_page??>

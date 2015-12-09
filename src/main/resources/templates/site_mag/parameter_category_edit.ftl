@@ -113,6 +113,7 @@ function change2cn(en, cninput) {
         <span class="Validform_checktip">*类别中文名称，100字符内</span>
     </dd>
   </dl>
+  <#--
   <dl>
     <dt>调用别名</dt>
     <dd>
@@ -120,6 +121,7 @@ function change2cn(en, cninput) {
       <span class="Validform_checktip">类别的调用别名，只允许字母、数字、下划线</span>
     </dd>
   </dl>
+  -->
   <dl>
     <dt>SEO标题</dt>
     <dd>

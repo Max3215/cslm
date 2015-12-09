@@ -176,6 +176,7 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>调用别名</dt>
             <dd>
@@ -183,6 +184,7 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>排序数字</dt>
             <dd>

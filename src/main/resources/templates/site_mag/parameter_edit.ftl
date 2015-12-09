@@ -180,6 +180,7 @@ $(function () {
                 <span class="Validform_checktip">*数字，越小越向前</span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>调用别名</dt>
             <dd>
@@ -187,6 +188,7 @@ $(function () {
                 <span class="Validform_checktip">*别名访问，非必填，不可重复</span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>参数值列表</dt>
             <dd>

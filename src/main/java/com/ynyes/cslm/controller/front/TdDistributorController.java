@@ -2718,7 +2718,7 @@ public class TdDistributorController {
              tdOrder.setTotalGoodsPrice(totalPrice);
              
              // 网站基本信息
-             TdSetting setting = tdSettingService.findTopBy();
+//             TdSetting setting = tdSettingService.findTopBy();
             
              if(distributor.getVirtualMoney()<tdOrder.getTotalPrice())
              {
