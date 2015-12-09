@@ -310,7 +310,7 @@ $(function () {
                 <span class="Validform_checktip">支持HTML</span>
             </dd>
         </dl>
-        <!--add 2015-7-28 17:46:12 mdj-->
+        <#--add 2015-7-28 17:46:12 mdj
         <dl>
             <dt>底部图标1</dt>
             <dd>
@@ -359,7 +359,7 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
-        <!--add 2015-7-28 17:46:12 mdj-->
+        --add 2015-7-28 17:46:12 mdj-->
     </div>
     <div class="tab-content" style="display: none;">
         <dl>
