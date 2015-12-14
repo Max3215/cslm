@@ -9,6 +9,7 @@
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
+<!--<link href="/client/css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
 <script src="/client/js/mymember.js"></script>

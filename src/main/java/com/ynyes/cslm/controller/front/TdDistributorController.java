@@ -2000,6 +2000,7 @@ public class TdDistributorController {
 							distributorGoods.setParamValueCollect(goods.getParamValueCollect());
 							distributorGoods.setIsOnSale(false);
 							distributorGoods.setLeftNumber(tdOrderGoods.getQuantity());
+							distributorGoods.setUnit(goods.getSaleType());
 						}else{
 							
 							distributorGoods.setLeftNumber(distributorGoods.getLeftNumber()+tdOrderGoods.getQuantity());
@@ -2158,6 +2159,7 @@ public class TdDistributorController {
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setLeftNumber(leftNumber);
 			distributorGoods.setOnSaleTime(new Date());
+			distributorGoods.setUnit(goods.getSaleType());
 			distributor.getGoodsList().add(distributorGoods);
 		}else{
 			disGoods.setIsAudit(true);
@@ -2165,6 +2167,7 @@ public class TdDistributorController {
 			disGoods.setGoodsTitle(goodsTitle);
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
+			disGoods.setUnit(goods.getSaleType());
 			distributor.getGoodsList().add(disGoods);
 			
 		}
@@ -2361,14 +2364,21 @@ public class TdDistributorController {
             // 购物车是否已有该商品
 //            oldCartGoodsList = tdCartGoodsService
 //                            .findByGoodsIdAndUsername(providerGoods.getGoodsId(), username);
+			System.err.println(providerGoods.getId()+"---"+username+"---"+tdProviderGoodsService.findProviderId(pgId));
+			
 			oldCartGoodsList = tdCartGoodsService.
-						findByGoodsIdAndUsernameAndProviderId(providerGoods.getGoodsId(), username,tdProviderGoodsService.findProviderId(pgId));
-            
+						findByGoodsIdAndUsernameAndProviderId(providerGoods.getId(), username,tdProviderGoodsService.findProviderId(pgId));
+           
             if(null !=oldCartGoodsList && oldCartGoodsList.size() >0){
             	 long oldQuantity = oldCartGoodsList.get(0).getQuantity();
             	 if(oldQuantity < providerGoods.getLeftNumber())
             	 {
-            		 oldCartGoodsList.get(0).setQuantity(oldQuantity + quantity);
+            		 if(oldQuantity+quantity > providerGoods.getLeftNumber())
+            		 {
+            			 oldCartGoodsList.get(0).setQuantity(providerGoods.getLeftNumber());
+            		 }else{
+            			 oldCartGoodsList.get(0).setQuantity(oldQuantity + quantity);
+            		 }
             		 tdCartGoodsService.save(oldCartGoodsList.get(0));
             	 }
             }else{
@@ -2382,7 +2392,12 @@ public class TdDistributorController {
             	cartGoods.setProviderId(tdProviderGoodsService.findProviderId(providerGoods.getId()));
             	cartGoods.setIsSelected(true);
             	cartGoods.setPrice(providerGoods.getOutFactoryPrice());
-            	cartGoods.setQuantity(quantity);
+            	if(quantity>providerGoods.getLeftNumber())
+            	{
+            		cartGoods.setQuantity(providerGoods.getLeftNumber());
+            	}else {
+            		cartGoods.setQuantity(quantity);
+				}
             	tdCartGoodsService.save(cartGoods);
             }
 		}

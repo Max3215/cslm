@@ -23,7 +23,7 @@
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
-                        <td class="tb02">￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}</span></td>
+                        <td class="tb02">￥<span id="price${dg.id?c}"><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></td>
                         <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page});">下架</a></p>

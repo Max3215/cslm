@@ -1022,12 +1022,14 @@ public class TdProviderController {
 			proGoods.setCode(goods.getCode());
 			proGoods.setCategoryId(goods.getCategoryId());
 			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
+			proGoods.setUnit(goods.getSaleType());
 		}
 		else
 		{
 			proGoods.setGoodsTitle(goodsTitle);
 			proGoods.setLeftNumber(proGoods.getLeftNumber()+leftNumber);
 			proGoods.setOutFactoryPrice(outFactoryPrice);
+			proGoods.setUnit(goods.getSaleType());
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setIsOnSale(true);
 		}

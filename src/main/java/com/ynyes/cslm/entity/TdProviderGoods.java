@@ -87,6 +87,9 @@ public class TdProviderGoods {
     @Temporal(TemporalType.TIMESTAMP)
 	private Date onSaleTime;
 	
+	// 商品单位
+	@Column
+	private String unit;
 	
 	public Long getId() {
 		return id;
@@ -214,6 +217,14 @@ public class TdProviderGoods {
 
 	public void setOnSaleTime(Date onSaleTime) {
 		this.onSaleTime = onSaleTime;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	

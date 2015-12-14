@@ -99,7 +99,7 @@ function collect(pgId){
 
 function showSub(pid)
 {
-    var leftNumber =$("#number"+pid).html();
+    var leftNumber =parseInt($("#number"+pid).html());
     if(undefined == leftNumber || leftNumber == 0){
         alert("该商品已无存货！")
         return;

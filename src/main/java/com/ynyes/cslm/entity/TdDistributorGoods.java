@@ -138,6 +138,10 @@ public class TdDistributorGoods {
     @Column
     private String providerTitle;
     
+    // 商品单位
+    @Column
+    private String unit;
+    
 	public Long getId() {
 		return id;
 	}
@@ -360,6 +364,14 @@ public class TdDistributorGoods {
 
 	public void setSelectThreeValue(String selectThreeValue) {
 		this.selectThreeValue = selectThreeValue;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	

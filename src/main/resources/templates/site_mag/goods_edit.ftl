@@ -378,7 +378,6 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         </#if>
-        -->
         <dl>
             <dt>推荐类型</dt>
             <dd>
@@ -398,14 +397,7 @@ function del_goods_comb(obj) {
                 </div>
             </dd>
         </dl>
-        
-        <dl>
-            <dt>排序数字</dt>
-            <dd>
-                <input name="sortId" type="text" value="<#if goods??>${goods.sortId!""}<#else>99</#if>" id="txtSortId" class="input txt100" datatype="n" sucmsg=" ">
-                <span class="Validform_checktip">*数字，越小越向前</span>
-            </dd>
-        </dl>
+        -->
         
         <dl>
             <dt>封面图片</dt>
@@ -416,7 +408,13 @@ function del_goods_comb(obj) {
                 </div>
             </dd>
         </dl>
-        
+        <dl>
+            <dt>排序数字</dt>
+            <dd>
+                <input name="sortId" type="text" value="<#if goods??>${goods.sortId!""}<#else>99</#if>" id="txtSortId" class="input txt100" datatype="n" sucmsg=" ">
+                <span class="Validform_checktip">*数字，越小越向前</span>
+            </dd>
+        </dl>
         <div id="id-param-sec">
             <#if goods??>
                 <#include "/site_mag/goods_category_param_list.ftl" />
@@ -459,6 +457,13 @@ function del_goods_comb(obj) {
             <dd>
                 <input name="marketPrice" type="text" value="<#if goods?? && goods.marketPrice??>${goods.marketPrice?string("0.00")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
                 <span class="Validform_checktip">*市场价格</span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>单位</dt>
+            <dd>
+                <input name="saleType" type="text" value="<#if goods?? && goods.saleType??>${goods.saleType!''}</#if>" class="input normal" >
+                <span class="Validform_checktip">如千克/瓶/件，选填</span>
             </dd>
         </dl>
         <dl>

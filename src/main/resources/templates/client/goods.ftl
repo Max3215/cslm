@@ -256,7 +256,7 @@ function preGoods(did){
 					<a id="id-minus" href="javascript:minusNum();">-</a>
 					<input class="text" type="text" id="quantity" value="1">
 					<a id="id-plus" href="javascript:addNum();">+</a>
-					<label>库存${dis_goods.leftNumber!'0'}件</lable>
+					<label>库存${dis_goods.leftNumber!'0'}${dis_goods.unit!''}</lable>
 					<#else>
 					<lable sytle="color:red">*当前超市没有此商品，您可以选择其他超市继续购买</label>
 					</#if>
