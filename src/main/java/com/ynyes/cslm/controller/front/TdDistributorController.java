@@ -834,7 +834,7 @@ public class TdDistributorController {
 			distributorGoods.setGoodsPrice(goodsPrice);
 		}
 		distributorGoods.setLeftNumber(leftNumber);
-		distributorGoods.setIsOnSale(true);
+		distributorGoods.setIsOnSale(false);
 		tdDistributorGoodsService.save(distributorGoods);
 //		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
 		res.put("msg", "修改成功！");

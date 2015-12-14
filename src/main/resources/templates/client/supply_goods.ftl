@@ -14,8 +14,22 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script src="/client/js/supply_goods.js"></script>
+<script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#sub_form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 $('.sub_form').css('display','none');
+                  window.location.href="/supply/goods/list/0"
+            }
+        }
+    });
+
     $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){
             $(this).next().slideDown(300);
@@ -42,6 +56,21 @@ function deleteCheck(){
 
 function searchGoods(){
     $("#form1").submit();
+}
+
+function editPrice(dgId,page){
+    var goodsTitle = $("#title"+dgId).html();
+    var outFactoryPrice = $("#price"+dgId).html();
+    var shopReturnRation = $("#ration"+dgId).html();
+    var leftNumber = $("#number"+dgId).html();
+    
+    $("#goodsId").attr("value",dgId);
+    $("#page").attr("value",page);
+    $("#goodsTitle").attr("value",goodsTitle);
+    $("#outFactoryPrice").attr("value",outFactoryPrice);
+    $("#shopReturnRation").attr("value",shopReturnRation);
+    $("#leftNumber").attr("value",leftNumber);
+    $('.sub_form').css('display','block');
 }
 
 </script>
@@ -130,5 +159,40 @@ DD_belatedPNG.fix('.,img,background');
 <!--mymember END-->
 <div class="clear"></div>
     <#include "/client/common_footer.ftl">
+    
+    <aside class="sub_form">
+    <p class="tit">商品修改<a  onclick="$('.sub_form').css('display','none')">×</a></p>
+    <form id="sub_form" action="/supply/goods/editOnSale" method="post">
+    <div class="info_tab">
+      <table>
+        <tr>
+           <p> 编辑商品信息：</p>
+            <input type="hidden" id="goodsId" name="goodsId"/>
+            <input type="hidden" id="page" name="page"/>
+        </tr>
+        <tr>
+          <th>*商品名称：</th>
+          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+        </tr>
+         <tr>
+          <th>*商品售价：</th>
+          <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg="" ></td>
+        </tr>
+        <tr>
+          <th>*返利比：</th>
+          <td><input type="text" name="shopReturnRation" id="shopReturnRation" datatype="/(^[0]+(.[0-9]{2})?$)/" sucmsg="" ></td>
+        </tr>
+        <tr>
+          <th>*库存：</th>
+          <td><input type="text" name="leftNumber" id="leftNumber" datatype="n"></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><input type="submit" class="sub" value="确认提交"></td>
+        </tr>
+      </table>
+    </div>
+    </form>
+  </aside>
 </body>
 </html>

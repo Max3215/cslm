@@ -34,14 +34,15 @@
                         </td>
                         <td>
                             <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.goodsCoverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${dg.goodsTitle}</p>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;"><span id="title${dg.id?c}">${dg.goodsTitle}</span></p>
                              </a> 
                         </td>
-                        <td class="tb01">￥${dg.outFactoryPrice?string('0.00')}</td>
-                        <td class="tb02">${dg.shopReturnRation!'0'}</td>
-                        <td>${dg.leftNumber}</td>
+                        <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
+                        <td class="tb02"><span id="ration${dg.id?c}">${dg.shopReturnRation!'0'}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber}</span></td>
                         <td>
                                 <p><a href="javascript:goodsAudit(true,${dg.id?c},${page})">上架分销</a></p>
+                                <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
                                 <p><a href="javascript:deleteGoods(false,${dg.id?c},${page})">删除</a></p>
                       </tr>
                  </#if>

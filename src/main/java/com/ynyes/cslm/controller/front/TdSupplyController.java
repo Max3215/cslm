@@ -270,7 +270,7 @@ public class TdSupplyController {
 		else
 		{
 			proGoods.setGoodsTitle(goodsTitle);
-			proGoods.setLeftNumber(proGoods.getLeftNumber()+leftNumber);
+			proGoods.setLeftNumber(leftNumber);
 			proGoods.setOutFactoryPrice(outFactoryPrice);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setShopReturnRation(shopReturnRation);
@@ -454,6 +454,54 @@ public class TdSupplyController {
 		
 		return "/client/supply_goods_list";
 	}
+	
+	@RequestMapping(value="/goods/editOnSale",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> editOnSale(Long goodsId,Double outFactoryPrice,
+							Long leftNumber,Double shopReturnRation,
+							Integer page,HttpServletRequest req)
+	{
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username)
+		{
+			res.put("msg", "请重新登录!");
+			return res;
+		}
+		
+		if(null == goodsId)
+		{
+			res.put("msg", "参数错误!");
+			return res;
+		}
+		if(null == leftNumber || leftNumber <=0)
+		{
+			res.put("msg", "库存输入错误");
+			return res;
+		}
+		
+		if(null == page )
+		{
+			page = 0;
+		}
+		TdProviderGoods proGoods = tdProviderGoodsService.findOne(goodsId);
+		
+//		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		proGoods.setLeftNumber(leftNumber);
+		proGoods.setShopReturnRation(shopReturnRation);
+		if(null != outFactoryPrice)
+		{
+			proGoods.setOutFactoryPrice(outFactoryPrice);
+		}
+		tdProviderGoodsService.save(proGoods);
+		
+//		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
+		res.put("msg", "修改成功！");
+		res.put("code", 1);
+		return res;
+	}
+	
 	
 	/**
 	 * 批量操作

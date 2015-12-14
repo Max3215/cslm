@@ -25,7 +25,7 @@ $(document).ready(function(){
             if(data.code==1)
             {
                  $('.sub_form').css('display','none');
-                  window.location.href="/distributor/goods/sale/1"
+                  window.location.href="/distributor/goods/sale/0"
             }
         }
     });
@@ -202,7 +202,7 @@ DD_belatedPNG.fix('.,img,background');
     <div class="info_tab">
       <table>
         <tr>
-           <p> 编辑上架后的销售价格：</p>
+           <p> 编辑商品信息：</p>
             <input type="hidden" id="goodsId" name="goodsId"/>
             <input type="hidden" id="page" name="page"/>
         </tr>
