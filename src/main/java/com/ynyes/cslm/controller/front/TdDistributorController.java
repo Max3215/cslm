@@ -2114,6 +2114,7 @@ public class TdDistributorController {
 				String goodsTitle,
 				Double goodsPrice,
 				Long leftNumber,
+				String unit,
 				HttpServletRequest req)
 	{
 		Map<String,Object> res =new HashMap<>();
@@ -2159,7 +2160,12 @@ public class TdDistributorController {
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setLeftNumber(leftNumber);
 			distributorGoods.setOnSaleTime(new Date());
-			distributorGoods.setUnit(goods.getPromotion());
+			if(null != unit || !"".equals(unit))
+			{
+				distributorGoods.setUnit(unit);
+			}else{
+				distributorGoods.setUnit(goods.getPromotion());
+			}
 			distributor.getGoodsList().add(distributorGoods);
 		}else{
 			disGoods.setIsAudit(true);
@@ -2167,7 +2173,12 @@ public class TdDistributorController {
 			disGoods.setGoodsTitle(goodsTitle);
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
-			disGoods.setUnit(goods.getPromotion());
+			if(null != unit || !"".equals(unit))
+			{
+				disGoods.setUnit(unit);
+			}else{
+				disGoods.setUnit(goods.getPromotion());
+			}
 			distributor.getGoodsList().add(disGoods);
 			
 		}

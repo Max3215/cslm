@@ -54,6 +54,8 @@ function subDisGoods(){
     var goodsTitle = $("#goodsTitle").val();
     var goodsPrice = $("#goodsPrice").val();
     var leftNumber = $("#leftNumber").val();
+    var unit = $("#unit").val();
+    
     if(undefined == goodsTitle || ""==goodsTitle)
     {
         alert("请输入商品标题");
@@ -65,6 +67,7 @@ function subDisGoods(){
         alert("请输入商品销售价");
         return ;
     }
+    
     if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber)|| 0 >= leftNumber)
     {
         alert("请输入库存数量");
@@ -77,7 +80,8 @@ function subDisGoods(){
         data : {"goodsId":goodsId,
             "goodsTitle":goodsTitle,
             "goodsPrice":goodsPrice,
-            "leftNumber":leftNumber,},
+            "leftNumber":leftNumber,
+            "unit":unit},
         dataType : "json",
         success:function(data){
             $('.sub_form').css('display','none');
@@ -147,7 +151,7 @@ DD_belatedPNG.fix('.,img,background');
                     <tr id="tr_1424195166">
                         <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01">${goods.code!''}</td>
-                        <td class="tb02">￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span></td>
+                        <td class="tb02">￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span>/${goods.promotion!''}</td>
                         <td>
                           <p><a onclick="editgoods(${goods.id?c});">编辑上架</a></p>
                          </td>
@@ -210,6 +214,10 @@ DD_belatedPNG.fix('.,img,background');
          <tr>
           <th>*商品售价：</th>
           <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
+        </tr>
+        <tr>
+          <th>*商品单位：</th>
+          <td><input type="text" name="unit" id="unit" >不填则默认为平台设定单位</td>
         </tr>
          <tr>
           <th>*库存：</th>
