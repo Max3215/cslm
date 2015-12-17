@@ -13,6 +13,7 @@
 <script type="text/javascript" src="/mag/js/swfupload.handlers.js"></script>
 <script type="text/javascript" charset="utf-8" src="/mag/js/kindeditor-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/mag/js/zh_CN.js"></script>
+<script type="text/javascript" charset="utf-8" src="/mag/js/mag_goods.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <link href="/mag/style/WdatePicker.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
@@ -334,18 +335,22 @@ function del_goods_comb(obj) {
     <div id="id-first-tab" class="tab-content" style="display: block;">
         <dl>
             <dt>所属类别</dt>
-            <dd>
-                <div class="rule-single-select">
-                    <select  id="categoryId" name="categoryId" datatype="*" sucmsg=" ">
+            <dd >
+                <div style="float:left;">
+                    <select id="oneCat" datatype="*" sucmsg=" " onchange="cateChange();">
                         <#if !goods??>
                         <option value="">请选择类别...</option>
                         </#if>
                         <#if category_list??>
                             <#list category_list as c>
-                                <option value="${c.id?c}" <#if goods?? && goods.categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryId==c.id>selected="selected"</#if>>${c.title!""}</option>
                             </#list>
                         </#if>
                     </select>
+                </div>
+                <div id="twoCatDiv" style="float:left;">
+                </div>
+                <div id="threeCatDiv" style="float:left;">
                 </div>
             </dd>
         </dl>
@@ -362,43 +367,6 @@ function del_goods_comb(obj) {
                 </div>
             </dd>
         </dl>
-        <!--
-        <#if site_list??>
-        <dl>
-            <dt>所属站点</dt>
-            <dd>
-                <div class="rule-single-select">
-                    <select name="siteId" datatype="*0-100" sucmsg=" ">
-                        <option value="" <#if !site_list??>selected="selected"</#if>>请选择...</option>
-                        <#list site_list as w>
-                            <option value="${w.id?c!""}" <#if goods?? && goods.siteId?? && goods.siteId==w.id>selected="selected"</#if>>${w.title!""}</option>
-                        </#list>
-                    </select>
-                </div>
-            </dd>
-        </dl>
-        </#if>
-        <dl>
-            <dt>推荐类型</dt>
-            <dd>
-                <div class="rule-multi-checkbox multi-checkbox">
-                    <span>
-                        <input id="cblItem_0" type="checkbox" name="isRecommendIndex" <#if goods?? && goods.isRecommendIndex?? && goods.isRecommendIndex==true>checked="checked"</#if>>
-                        <label for="cblItem_0">首页推荐</label>
-                        <input id="cblItem_1" type="checkbox" name="isRecommendType" <#if goods?? && goods.isRecommendType?? && goods.isRecommendType==true>checked="checked"</#if>>
-                        <label for="cblItem_1">分类推荐</label>
-                        <input id="cblItem_2" type="checkbox" name="isHot" <#if goods?? && goods.isHot?? && goods.isHot==true>checked="checked"</#if>>
-                        <label for="cblItem_2">热销</label>
-                        <input id="cblItem_3" type="checkbox" name="isNew" <#if goods?? && goods.isNew?? && goods.isNew==true>checked="checked"</#if>>
-                        <label for="cblItem_3">新品</label>
-                        <input id="cblItem_4" type="checkbox" name="isSpecialPrice" <#if goods?? && goods.isSpecialPrice?? && goods.isSpecialPrice==true>checked="checked"</#if>>
-                        <label for="cblItem_4">特价</label>
-                    </span>
-                </div>
-            </dd>
-        </dl>
-        -->
-        
         <dl>
             <dt>封面图片</dt>
             <dd>
@@ -422,14 +390,6 @@ function del_goods_comb(obj) {
         </div>
     </div>
     <div class="tab-content" style="display: none;">
-        <#--
-        <dl>
-            <dt>商品名称</dt>
-            <dd>
-                <input name="name" type="text" value="<#if goods??>${goods.name!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" ">
-                <span class="Validform_checktip">*标题最多100个字符</span>
-            </dd>
-        </dl>
         -->
         <dl>
             <dt>商品标题</dt>
@@ -462,7 +422,7 @@ function del_goods_comb(obj) {
         <dl>
             <dt>单位</dt>
             <dd>
-                <input name="saleType" type="text" value="<#if goods?? && goods.saleType??>${goods.saleType!''}</#if>" class="input normal" >
+                <input name="promotion" type="text" value="<#if goods?? && goods.saleType??>${goods.saleType!''}</#if>" class="input normal" >
                 <span class="Validform_checktip">如千克/瓶/件，选填</span>
             </dd>
         </dl>
@@ -473,29 +433,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">平台服务费 = 销售价  * 平台服务费比例</span>
             </dd>
         </dl>
-        <#--
-        <dl>
-            <dt>服务</dt>
-            <dd>
-                <textarea name="service" rows="2" cols="20" class="input" datatype="*0-255" sucmsg=" "><#if goods??>${goods.service!""}</#if></textarea>
-                <span class="Validform_checktip">255个字符以内</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt>促销</dt>
-            <dd>
-                <textarea name="promotion" rows="2" cols="20" class="input" datatype="*0-255" sucmsg=" "><#if goods??>${goods.promotion!""}</#if></textarea>
-                <span class="Validform_checktip">255个字符以内</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt>配置</dt>
-            <dd>
-                <textarea name="configuration" rows="2" cols="20" class="input" datatype="*0-255" sucmsg=" "><#if goods??>${goods.configuration!""}</#if></textarea>
-                <span class="Validform_checktip">255个字符以内</span>
-            </dd>
-        </dl>
-        -->
         <dl>
             <dt>添加时间</dt>
             <dd>

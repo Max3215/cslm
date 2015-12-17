@@ -608,7 +608,7 @@ public class TdManagerGoodsController {
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
-        map.addAttribute("category_list", tdProductCategoryService.findAll());
+        map.addAttribute("category_list", tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc());
 
         map.addAttribute("warehouse_list", tdWarehouseService.findAll());
         
@@ -870,6 +870,25 @@ public class TdManagerGoodsController {
         return "redirect:/Verwalter/goods/list?__EVENTTARGET=" + __EVENTTARGET
                 + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE="
                 + __VIEWSTATE;
+    }
+    
+    @RequestMapping(value="/category",method=RequestMethod.POST)
+    public String category(Long categoryId,String type,HttpServletRequest req,ModelMap map)
+    {
+    	if(null != categoryId)
+    	{
+    		if("two".equals(type))
+    		{
+    			map.addAttribute("cateList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(categoryId));
+    			return "/site_mag/two_cat";
+    		}
+    		else if("three".equals(type))
+    		{
+    			map.addAttribute("categoeyList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(categoryId));
+    			return "/site_mag/three_cat";
+    		}
+    	}
+    	return "/site_mag/two_cat";
     }
 
     @ModelAttribute

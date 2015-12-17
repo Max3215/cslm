@@ -2159,7 +2159,7 @@ public class TdDistributorController {
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setLeftNumber(leftNumber);
 			distributorGoods.setOnSaleTime(new Date());
-			distributorGoods.setUnit(goods.getSaleType());
+			distributorGoods.setUnit(goods.getPromotion());
 			distributor.getGoodsList().add(distributorGoods);
 		}else{
 			disGoods.setIsAudit(true);
@@ -2167,7 +2167,7 @@ public class TdDistributorController {
 			disGoods.setGoodsTitle(goodsTitle);
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
-			disGoods.setUnit(goods.getSaleType());
+			disGoods.setUnit(goods.getPromotion());
 			distributor.getGoodsList().add(disGoods);
 			
 		}
