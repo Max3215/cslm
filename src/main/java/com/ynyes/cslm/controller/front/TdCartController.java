@@ -124,12 +124,12 @@ public class TdCartController {
                     cartGoods.setGoodsId(goods.getGoodsId());
                     cartGoods.setDistributorId(distributor.getId());
                     cartGoods.setDistributorTitle(distributor.getTitle());
-                    
+                    cartGoods.setDistributorGoodsId(goods.getId());
                     // 商品信息在读取购物车时再获取
 //                    cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 //                    cartGoods.setGoodsTitle(goods.getTitle());
 //                    cartGoods.setPrice(goods.getSalePrice());
-    
+                    System.err.println(quantity);
                     cartGoods.setQuantity(quantity);
                     
                     tdCartGoodsService.save(cartGoods);

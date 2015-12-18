@@ -885,7 +885,7 @@ public class TdOrderController extends AbstractPaytypeController{
         List<TdCartGoods> cartSelectedGoodsList = tdCartGoodsService
                 .findByUsernameAndIsSelectedTrue(username);
 
-        // 储存批发商Id 和对应商品  为拆分订单做准备
+        // 储存超市Id 和对应商品  为拆分订单做准备
         Map<Long,List<TdCartGoods>> cartGoodsMap =new HashMap<>();
         
         if(null != cartSelectedGoodsList)
@@ -894,7 +894,7 @@ public class TdOrderController extends AbstractPaytypeController{
         	{
 				if(cartGoods.getIsSelected())
 				{
-					if(cartGoodsMap.containsKey(cartGoods.getProviderId()))
+					if(cartGoodsMap.containsKey(cartGoods.getDistributorId()))
 					{
 						cartGoodsMap.get(cartGoods.getDistributorId()).add(cartGoods);
 					}else{
@@ -912,8 +912,7 @@ public class TdOrderController extends AbstractPaytypeController{
         	return "/client/error_404";
         }
         
-        TdOrder tdOrder = null;
-        
+        TdOrder order = new TdOrder();
         // 订单拆分
         Set<Entry<Long,List<TdCartGoods>>> set = cartGoodsMap.entrySet();
         Iterator<Entry<Long, List<TdCartGoods>>> iterator = set.iterator();
@@ -921,6 +920,8 @@ public class TdOrderController extends AbstractPaytypeController{
         while(iterator.hasNext())
         {
         	Map.Entry<Long,List<TdCartGoods> > m  = iterator.next();
+        	
+        	TdOrder tdOrder = new TdOrder();
         	List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
         	
         	// 商品总价
@@ -932,17 +933,18 @@ public class TdOrderController extends AbstractPaytypeController{
             // 积分总额
             Long totalPointReturn = 0L;	
             
-            tdOrder = new TdOrder();
-            
+            System.err.println(m.getValue().size());
             for (int i = 0; i < m.getValue().size(); i++) 
             {
             	TdCartGoods cartGoods= m.getValue().get(i);
-	       		TdDistributorGoods distributorGoods = tdDistributoGoodsService.findByDistributorIdAndGoodsId(cartGoods.getDistributorId(), cartGoods.getGoodsId());
+	       		TdDistributorGoods distributorGoods = tdDistributoGoodsService.findOne(cartGoods.getDistributorGoodsId());
 	       		 
+	       		System.err.println(distributorGoods.getIsOnSale());
 	       		if(null == distributorGoods || distributorGoods.getIsOnSale()==false)
 	       		{
 	       			continue;
 	       		}
+	       		
 	       		TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
 	       		 
 	       		TdOrderGoods orderGoods = new TdOrderGoods();
@@ -1138,38 +1140,38 @@ public class TdOrderController extends AbstractPaytypeController{
             }
 			TdDistributorService.save(distributor);
             
-            tdOrder = tdOrderService.save(tdOrder);
+            order = tdOrderService.save(tdOrder);
 
-            // 添加积分使用记录
-            if (null != user) {
-                if (null == user.getTotalPoints())
-                {
-                    user.setTotalPoints(0L);
-                    
-                    user = tdUserService.save(user);
-                }
-                
-                if (pointUse.compareTo(0L) >= 0 && null != user.getTotalPoints()
-                        && user.getTotalPoints().compareTo(pointUse) >= 0) {
-                    TdUserPoint userPoint = new TdUserPoint();
-                    userPoint.setDetail("购买商品使用积分抵扣");
-                    userPoint.setOrderNumber(tdOrder.getOrderNumber());
-                    userPoint.setPoint(0 - pointUse);
-                    userPoint.setPointTime(new Date());
-                    userPoint.setUsername(username);
-                    userPoint.setTotalPoint(user.getTotalPoints() - pointUse);
-                    tdUserPointService.save(userPoint);
-
-                    user.setTotalPoints(user.getTotalPoints() - pointUse);
-                    tdUserService.save(user);
-                }
-            }
+//            // 添加积分使用记录
+//            if (null != user) {
+//                if (null == user.getTotalPoints())
+//                {
+//                    user.setTotalPoints(0L);
+//                    
+//                    user = tdUserService.save(user);
+//                }
+//                
+//                if (pointUse.compareTo(0L) >= 0 && null != user.getTotalPoints()
+//                        && user.getTotalPoints().compareTo(pointUse) >= 0) {
+//                    TdUserPoint userPoint = new TdUserPoint();
+//                    userPoint.setDetail("购买商品使用积分抵扣");
+//                    userPoint.setOrderNumber(tdOrder.getOrderNumber());
+//                    userPoint.setPoint(0 - pointUse);
+//                    userPoint.setPointTime(new Date());
+//                    userPoint.setUsername(username);
+//                    userPoint.setTotalPoint(user.getTotalPoints() - pointUse);
+//                    tdUserPointService.save(userPoint);
+//
+//                    user.setTotalPoints(user.getTotalPoints() - pointUse);
+//                    tdUserService.save(user);
+//                }
+//            }
         }
 
         // 删除已生成订单的购物车项
         tdCartGoodsService.delete(cartSelectedGoodsList);
          
-         return "redirect:/order/pay?orderId=" + tdOrder.getId();
+         return "redirect:/order/pay?orderId=" + order.getId();
         // return "redirect:/order/success?orderId=" + tdOrder.getId();
     }
 

@@ -1,4 +1,4 @@
-<select  datatype="*" sucmsg=" " name="categoryId">
+<select  datatype="*" sucmsg=" " id="categoryId" name="categoryId">
     <#if !goods??>
     <option value="">请选择类别...</option>
     </#if>

@@ -102,22 +102,21 @@ function submitAddress()
         $("#receiverName").focus();
         return;
     }
-   /** 
-    if (undefined == prov || "" == prov)
+    
+    if (undefined == prov || "" == prov || prov == null)
     {
         alert("省市不能为空");
-        $("#prov").focus();
+        $("#province").focus();
         return;
     }
     
-    if (undefined == city || "" == city)
+    if (undefined == city || "" == city || city==null)
     {
         alert("省市不能为空");
-        $("#city").focus();
+        $("#newcity").focus();
         return;
     }
-    **/
-    console.debug(prov+"--"+city+"--"+dist);
+   
     
     if (undefined == detail || "" == detail)
     {
@@ -125,11 +124,20 @@ function submitAddress()
         $("#detailAddress").focus();
         return;
     }
+    
     if (undefined == mobile || "" == mobile)
     {
         alert("手机号码不能为空");
         $("#mobile").focus();
         return;
+    }
+    
+    var phone = /^1([38]\d|4[57]|5[0-35-9]|7[06-8]|8[89])\d{8}$/;
+    if(!phone.test(mobile)){
+    	alert("手机号码输入错误");
+        $("#mobile").focus();
+        return ;
+
     }
     
     $.ajax({

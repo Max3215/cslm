@@ -41,6 +41,9 @@ public class TdCartGoods {
     @Column
     private Long distributorId;
     
+    @Column
+    private Long distributorGoodsId;
+    
     // 商品所在超市名称
     @Column
     private String distributorTitle;
@@ -168,7 +171,16 @@ public class TdCartGoods {
 	public void setProviderTite(String providerTite) {
 		this.providerTite = providerTite;
 	}
+
+	public Long getDistributorGoodsId() {
+		return distributorGoodsId;
+	}
+
+	public void setDistributorGoodsId(Long distributorGoodsId) {
+		this.distributorGoodsId = distributorGoodsId;
+	}
     
+	
     
     
 }

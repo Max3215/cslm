@@ -59,7 +59,7 @@ DD_belatedPNG.fix('.,img,background');
   
   <div class="mymember_mainbox">
     <form name="form1" action="/distributor/outOrder/list/${status_id}" method="POST">
-        <input type="hidden" value="${typeId!'0'}">
+        <input type="hidden" value="${typeId!'0'}" name="typeId">
         <input type="hidden" name="eventTarget" value="" id="eventTarget">
         <script type="text/javascript">
             var theForm = document.forms['form1'];
@@ -75,7 +75,11 @@ DD_belatedPNG.fix('.,img,background');
         </script>
         <div class="mymember_info mymember_info02">
             <div class="mymember_order_search">
-                <a class="a001" >销售订单</a>
+                <#if typeId?? && typeId==2>
+                    <a class="a001" >分销订单</a>
+                <#else>
+                    <a class="a001" >销售订单</a>
+                </#if>
             <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
             <#--
             <input class="mytext" type="text" onFocus="if(value=='商品名称、订单编号') {value=''}" onBlur="if (value=='') {value='商品名称、订单编号'}"  value="商品名称、订单编号" />

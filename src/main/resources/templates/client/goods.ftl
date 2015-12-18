@@ -76,7 +76,7 @@ function cartInit(dId){
     if(quantity==0){
         return;
     }
-    var newTab=window.open('about:blank');
+ <!--   var newTab=window.open('about:blank');-->
     $.ajax({
         type: "get",
         url: "/goods/incart",
@@ -89,7 +89,7 @@ function cartInit(dId){
             <!--
             window.open("/cart/init?id="+dId+"&quantity="+quantity);
             -->
-            newTab.location.href="/cart/init?id="+dId+"&quantity="+quantity;
+            window.location.href="/cart/init?id="+dId+"&quantity="+quantity;
         }
     });
 }

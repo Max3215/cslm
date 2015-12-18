@@ -1,6 +1,6 @@
 <header class="main_top">
         <div class="main">
-            <h1>您好！欢迎光临王明辉超市！</h1>
+            <h1>您好！欢迎光临<#if distributorTitle??>${distributorTitle!''}<#else>超市联盟</#if>！</h1>
             <#if username??>
                 <a href="/user">${username}</a>
                 <a href="/logout">退出</a>
