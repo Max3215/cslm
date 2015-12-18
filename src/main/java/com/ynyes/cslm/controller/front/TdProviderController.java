@@ -135,11 +135,11 @@ public class TdProviderController {
 		tdCommonService.setHeader(map, req);
 		
 		map.addAttribute("total_undelivered", 
-				tdOrderService.countByShopIdAndTypeIdAndStatusId(provider.getId(), 1, 1));
-		map.addAttribute("total_unreceived",
-				tdOrderService.countByShopIdAndTypeIdAndStatusId(provider.getId(), 1, 2));
-		map.addAttribute("total_finished",
 				tdOrderService.countByShopIdAndTypeIdAndStatusId(provider.getId(), 1, 3));
+		map.addAttribute("total_unreceived",
+				tdOrderService.countByShopIdAndTypeIdAndStatusId(provider.getId(), 1, 4));
+		map.addAttribute("total_finished",
+				tdOrderService.countByShopIdAndTypeIdAndStatusId(provider.getId(), 1, 6));
 		map.addAttribute("provider_order_page",
 				tdOrderService.findByShopIdAndTypeId(provider.getId(),1, 0,ClientConstant.pageSize ));
 		
