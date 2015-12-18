@@ -390,7 +390,6 @@ function del_goods_comb(obj) {
         </div>
     </div>
     <div class="tab-content" style="display: none;">
-        -->
         <dl>
             <dt>商品标题</dt>
             <dd>
