@@ -157,15 +157,18 @@ public class TdDistributorController {
         map.addAttribute("distributor", distributor);
         
         map.addAttribute("dis_goodsIn_order_page",
-        		tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(distributor.getUsername(), 1, 0, 5));
+        		tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(distributor.getUsername(), 0, 0, 5));
         map.addAttribute("dis_goodsOut_order_page",
         		tdOrderService.findByShopIdAndTypeId(distributor.getId(), 0, 0, ClientConstant.pageSize));
+        map.addAttribute("total_unpayed",
+        		tdOrderService.countByShopIdAndTypeIdAndStatusId(distributor.getId(), 0, 2));
         map.addAttribute("total_undelivered",
-        		tdOrderService.countByUsernameAndTypeIdAndStatusId(distributor.getUsername(), 1, 1));
+        		tdOrderService.countByShopIdAndTypeIdAndStatusId(distributor.getId(), 0, 3));
         map.addAttribute("total_unreceived",
-        		tdOrderService.countByUsernameAndTypeIdAndStatusId(distributor.getUsername(), 1, 2));
+        		tdOrderService.countByShopIdAndTypeIdAndStatusId(distributor.getId(), 0, 4));
         map.addAttribute("total_finished",
-        		tdOrderService.countByUsernameAndTypeIdAndStatusId(distributor.getUsername(), 1, 3));
+        		tdOrderService.countByShopIdAndTypeIdAndStatusId(distributor.getId(), 0, 6));
+        	
         
 		return "/client/distributor_index";
 	}

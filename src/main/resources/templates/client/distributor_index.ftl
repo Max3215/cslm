@@ -87,6 +87,17 @@ DD_belatedPNG.fix('.,img,background');
                 </a>
                 <div style="margin-left:25px;margin-top:10px;" class="upload-box upload-img"></div>
            </th>
+            <td><a href="/distributor/outOrder/list/2"><img src="/client/images/mymember/buy01.png" />待付款：<span>${total_unpayed!'0'}</span></a></td>
+              <td><a href="/distributor/outOrder/list/3"><img src="/client/images/mymember/buy02.png" />待发货：<span>${total_undelivered!'0'}</span></a></td>
+              <th rowspan="2" class="mymember_fen add_width">
+                <a href="/distributor/pay/record"><img src="/client/images/mymember/buy05.png" /><p>账户余额：<span><#if distributor.virtualMoney??>${distributor.virtualMoney?string('0.00')}<#else>0</#if></span></p></a>
+              </th>
+            </tr>
+            <tr>
+              <td><a href="/distributor/outOrder/list/4"><img src="/client/images/mymember/buy03.png" />待收货：<span>${total_unreceived!'0'}</span></a></td>
+              <td><a href="/distributor/outOrder/list/6"><img src="/client/images/mymember/buy04.png" />已完成：<span>${total_finished!'0'}</span></a></td>
+            </tr>
+         <#--
           <td><a href="/distributor/inOrder/list/1"><img src="/client/images/mymember/buy02.png" />待发货：<span>${total_undelivered!'0'}</span></a></td>
           <td><a href="/distributor/inOrder/list/2"><img src="/client/images/mymember/buy03.png" />待收货：<span>${total_unreceived!'0'}</span></a></td>
           <th rowspan="2" class="mymember_fen add_width">
@@ -96,6 +107,7 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <td><a href="/distributor/inOrder/list/3"><img src="/client/images/mymember/buy04.png" />已完成：<span>${total_finished!'0'}</span></a></td>
         </tr>
+        -->
       </table>
     </div>
     
