@@ -119,9 +119,6 @@ function showMsg(){
     $('#mar_box').fadeIn(300);
 }
 
-function preGoods(did){
-    alert("功能正在开发中。。。。敬请期待 ∨_∨");
-}
 
 </script>
 
@@ -189,7 +186,7 @@ function preGoods(did){
 				<p class="subtitle">${goods.subTitle!''}</p>
 				<p class="num"><#if goods.code??>商品编号：<span>${goods.code!''}</span></#if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#if goods.brandTitle??>商品品牌：<span>${goods.brandTitle!''}</span></#if></p>
 				<div class="price">
-					<#if dis_goods??><p>特惠价：<span>￥${dis_goods.goodsPrice?string('0.00')}</span></p></#if>
+					<#if dis_goods??><p>特惠价：<span>￥${dis_goods.goodsPrice?string('0.00')}<#if dis_goods.unit??>/${dis_goods.unit!''}<#if>/></span></p></#if>
 					<p class="lth">市场价：￥${goods.marketPrice?string("0.00")}</p>
 				</div>
 				
@@ -256,7 +253,7 @@ function preGoods(did){
 					<a id="id-minus" href="javascript:minusNum();">-</a>
 					<input class="text" type="text" id="quantity" value="1">
 					<a id="id-plus" href="javascript:addNum();">+</a>
-					<label>库存${dis_goods.leftNumber!'0'}${dis_goods.unit!''}</lable>
+					<label>库存${dis_goods.leftNumber!'0'}</lable>
 					<#else>
 					<lable sytle="color:red">*当前超市没有此商品，您可以选择其他超市继续购买</label>
 					</#if>
