@@ -186,7 +186,7 @@ function showMsg(){
 				<p class="subtitle">${goods.subTitle!''}</p>
 				<p class="num"><#if goods.code??>商品编号：<span>${goods.code!''}</span></#if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#if goods.brandTitle??>商品品牌：<span>${goods.brandTitle!''}</span></#if></p>
 				<div class="price">
-					<#if dis_goods??><p>特惠价：<span>￥${dis_goods.goodsPrice?string('0.00')}<#if dis_goods.unit??>/${dis_goods.unit!''}<#if>/></span></p></#if>
+					<#if dis_goods??><p>特惠价：<span>￥${dis_goods.goodsPrice?string('0.00')}</span><#if dis_goods.unit??>/${dis_goods.unit!''}</#if></p></#if>
 					<p class="lth">市场价：￥${goods.marketPrice?string("0.00")}</p>
 				</div>
 				

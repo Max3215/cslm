@@ -1,6 +1,5 @@
 function cateChange(){
 	var categoryId = $("#oneCat").val();
-	console.debug(categoryId);
 	$.ajax({
 		type : "post",
 		url : "/Verwalter/goods/category",
@@ -15,7 +14,6 @@ function cateChange(){
 
 function twoChange(){
 	var categoryId = $("#twoCat").val();
-	console.debug(categoryId);
 	$.ajax({
 		type : "post",
 		url : "/Verwalter/goods/category",
@@ -25,5 +23,15 @@ function twoChange(){
 			$("#threeCatDiv").html(data);
 		}
 	})
-	
+}
+
+function parameter(){
+	var categoryId = $("#categoryId").val();
+    $.ajax({
+        url : '/Verwalter/goods/edit/parameter/'+categoryId,
+        type : 'POST',
+        success : function(res) {
+            $("#id-param-sec").html(res);
+        }
+    });
 }

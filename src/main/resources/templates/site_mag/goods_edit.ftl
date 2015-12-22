@@ -126,16 +126,17 @@ $(function () {
     });
     
     // 根据类型载入参数
-    $("#categoryId").change(function(){
-    console.debug($(this).val());
-        $.ajax({
-            url : '/Verwalter/goods/edit/parameter/'+$(this).val(),
-            type : 'POST',
-            success : function(res) {
-                $("#id-param-sec").html(res);
-            }
-        });
-    });
+   // $("#categoryId").change(function(){
+   // console.debug($(this).val());
+   //     $.ajax({
+   //         url : '/Verwalter/goods/edit/parameter/'+$(this).val(),
+   //         type : 'POST',
+  //          success : function(res) {
+   //             $("#id-param-sec").html(res);
+   //         }
+   //     });
+ //   });
+    
     
     
     // 添加赠品
@@ -147,6 +148,7 @@ $(function () {
     $("#addCombination").click(function(){
         showDialogCombination();
     });
+    
     
     //创建促销赠品窗口
     function showDialogGift(obj) {

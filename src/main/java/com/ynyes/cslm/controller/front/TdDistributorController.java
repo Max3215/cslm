@@ -2637,7 +2637,6 @@ public class TdDistributorController {
 						clist.add(cartGoods);
 						cartGoodsMap.put(cartGoods.getProviderId(),clist);
 					}
-					
 				}
 			}
         }
