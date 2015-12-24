@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdAd;
 import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCartGoods;
@@ -54,6 +55,7 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
+import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCartGoodsService;
@@ -137,6 +139,9 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdUserReturnService tdUserReturnService;
+	
+	@Autowired
+	TdAdService tdAdService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -2116,6 +2121,7 @@ public class TdDistributorController {
 	public Map<String,Object> goodsOnsale(Long goodsId,
 				String goodsTitle,
 				Double goodsPrice,
+				Double goodsMarketPrice,
 				Long leftNumber,
 				String unit,
 				HttpServletRequest req)
@@ -2154,7 +2160,7 @@ public class TdDistributorController {
 			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());
 			distributorGoods.setSelectThreeValue(goods.getSelectThreeValue());
 			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
-			distributorGoods.setGoodsMarketPrice(goods.getMarketPrice());
+			distributorGoods.setGoodsMarketPrice(goodsMarketPrice);
 			distributorGoods.setIsDistribution(false);
 //			distributorGoods.setGoodsParamList(goods.getParamList());
 			distributorGoods.setReturnPoints(goods.getReturnPoints());
@@ -2176,6 +2182,7 @@ public class TdDistributorController {
 			disGoods.setGoodsTitle(goodsTitle);
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
+			disGoods.setGoodsMarketPrice(goodsMarketPrice);
 			if(null != unit || !"".equals(unit))
 			{
 				disGoods.setUnit(unit);
@@ -3404,6 +3411,30 @@ public class TdDistributorController {
     	tdDistributorService.save(distributor);
     	return "client/distributor_index";
     }
+    
+    @RequestMapping(value="/ad/list")
+    public String adList(HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	
+    	map.addAttribute("ad_list", tdAdService.findByDistributorId(distributor.getId()));
+    	
+    	return "/client/distributor_ad";
+    }
+    
+    
+    
+    
+    
+    
+    
     
     // 批量上下架
 	public void onSaleAll(Boolean onsale,Long[] ids,Integer[] chkIds)

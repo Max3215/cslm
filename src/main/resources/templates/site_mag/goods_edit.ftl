@@ -338,6 +338,44 @@ function del_goods_comb(obj) {
         <dl>
             <dt>所属类别</dt>
             <dd >
+                <#if goods??>
+                    <div style="float:left;">
+                    <select id="oneCat" datatype="*" sucmsg=" " onchange="cateChange();">
+                        <#if !goods??>
+                        <option value="">请选择类别...</option>
+                        </#if>
+                        <#if category_list??>
+                            <#list category_list as c>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+                <div style="float:left;"  id="twoCatDiv">
+                    <select id="oneCat" datatype="*" sucmsg=" " id="twoCat" onchange="twoChange();">
+                        <#if !goods??>
+                        <option value="">请选择类别...</option>
+                        </#if>
+                        <#if cateList??>
+                            <#list cateList as c>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+                <div style="float:left;" id="threeCatDiv">
+                    <select id="oneCat" datatype="*" sucmsg=" "id="categoryId" onchange="parameter();" name="categoryId">
+                        <#if !goods??>
+                        <option value="">请选择类别...</option>
+                        </#if>
+                        <#if categoryList??>
+                            <#list categoryList as c>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+                <#else>
                 <div style="float:left;">
                     <select id="oneCat" datatype="*" sucmsg=" " onchange="cateChange();">
                         <#if !goods??>
@@ -354,6 +392,7 @@ function del_goods_comb(obj) {
                 </div>
                 <div id="threeCatDiv" style="float:left;">
                 </div>
+                </#if>
             </dd>
         </dl>
         <dl>

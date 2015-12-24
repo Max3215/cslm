@@ -294,7 +294,8 @@ public class TdManagerGoodsController {
             __VIEWSTATE = __EVENTTARGET;
         }
 
-        map.addAttribute("category_list", tdProductCategoryService.findAll());
+//        map.addAttribute("category_list", tdProductCategoryService.findAll());
+        map.addAttribute("category_list", tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc());
 
         Page<TdGoods> goodsPage = null;
 
@@ -608,7 +609,9 @@ public class TdManagerGoodsController {
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
-        map.addAttribute("category_list", tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc());
+        
+        List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categortList);
 
         map.addAttribute("warehouse_list", tdWarehouseService.findAll());
         
@@ -620,7 +623,7 @@ public class TdManagerGoodsController {
 
         if (null != id) {
             TdGoods tdGoods = tdGoodsService.findOne(id);
-
+            
             if (null != tdGoods) {
                 // 参数列表
                 TdProductCategory tpc = tdProductCategoryService
@@ -648,6 +651,22 @@ public class TdManagerGoodsController {
                 }
 
                 map.addAttribute("goods", tdGoods);
+                
+                for (TdProductCategory tdProductCategory : categortList) {
+					if(tdGoods.getCategoryIdTree().contains("["+tdProductCategory.getId()+"]"))
+					{
+						List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+						map.addAttribute("cateList", cateList);
+						
+						for (TdProductCategory productCategory : cateList) {
+							if(tdGoods.getCategoryIdTree().contains("["+productCategory.getId()+"]"))
+							{
+								map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+							}
+						}
+						
+					}
+				}
             }
         }
 

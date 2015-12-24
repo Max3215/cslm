@@ -120,6 +120,11 @@ public class TdAdService {
         return (List<TdAd>) repository.findAll(new Sort(Direction.ASC, "sortId"));
     }
     
+    public List<TdAd> findByDistributorId(Long disId)
+    {
+    	return repository.findByDistributorId(disId);
+    }
+    
     /**
      * 保存
      * 

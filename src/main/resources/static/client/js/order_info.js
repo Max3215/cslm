@@ -86,9 +86,9 @@ function submitAddress()
 {
     var receiverName = $("#receiverName").val();
   
-    var prov = $("#province").val();
-    var city = $("#newcity").val();
-    var dist = $("#disctrict").val();
+    var prov = $("#prov").val();
+    var city = $("#city").val();
+    var dist = $("#dist").val();
     var detail = $("#detailAddress").val();
     var postcode = $("#postcode").val();
     
@@ -102,21 +102,21 @@ function submitAddress()
         $("#receiverName").focus();
         return;
     }
-    
-    if (undefined == prov || "" == prov || prov == null)
+   /** 
+    if (undefined == prov || "" == prov)
     {
         alert("省市不能为空");
-        $("#province").focus();
+        $("#prov").focus();
         return;
     }
     
-    if (undefined == city || "" == city || city==null)
+    if (undefined == city || "" == city)
     {
         alert("省市不能为空");
-        $("#newcity").focus();
+        $("#city").focus();
         return;
     }
-   
+    **/
     
     if (undefined == detail || "" == detail)
     {
@@ -124,20 +124,11 @@ function submitAddress()
         $("#detailAddress").focus();
         return;
     }
-    
     if (undefined == mobile || "" == mobile)
     {
         alert("手机号码不能为空");
         $("#mobile").focus();
         return;
-    }
-    
-    var phone = /^1([38]\d|4[57]|5[0-35-9]|7[06-8]|8[89])\d{8}$/;
-    if(!phone.test(mobile)){
-    	alert("手机号码输入错误");
-        $("#mobile").focus();
-        return ;
-
     }
     
     $.ajax({

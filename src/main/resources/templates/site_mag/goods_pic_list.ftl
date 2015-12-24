@@ -127,6 +127,7 @@ function confirmCopy(id)
       </ul>
       <div class="menu-list">
         <div class="rule-single-select">
+            <#--
             <select name="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId', ''), 0)">
                 <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
                 <#if category_list??>
@@ -135,12 +136,21 @@ function confirmCopy(id)
                     </#list>
                 </#if>
             </select>
+            -->
+             <select id="oneCat" name="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId',''), 0)>
+                <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
+                <#if category_list??>
+                    <#list category_list as c>
+                        <option value="${c.id?c}" <#if categoryId?? && categoryId.categoryTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
         </div>
         <div class="rule-single-select">
             <select name="property" onchange="javascript:setTimeout(__doPostBack('property',''), 0)">
-                <option value="">审核状态</option>
+                <option value="">销售状态</option>
                 <option value="isOnSale" <#if property?? && property=="isOnSale">selected="selected"</#if>>已展示</option>
-                <option value="isNotOnSale" <#if property?? && property=="isNotOnSale">selected="selected"</#if>>待审核</option>
+                <option value="isNotOnSale" <#if property?? && property=="isNotOnSale">selected="selected"</#if>>未开售</option>
             </select>
         </div>
         <!--

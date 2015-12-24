@@ -989,6 +989,7 @@ public class TdProviderController {
 	public Map<String,Object> wholesaling(Long goodsId,
 			String goodsTitle,
 			Double outFactoryPrice,
+			Double marketPrice,
 			Long leftNumber,
 			HttpServletRequest req)
 	{
@@ -1016,6 +1017,7 @@ public class TdProviderController {
 			proGoods.setSubGoodsTitle(goods.getSubTitle());
 			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 			proGoods.setOutFactoryPrice(outFactoryPrice);
+			proGoods.setGoodsMarketPrice(marketPrice);
 			proGoods.setLeftNumber(leftNumber);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setIsOnSale(true);
@@ -1027,7 +1029,8 @@ public class TdProviderController {
 		else
 		{
 			proGoods.setGoodsTitle(goodsTitle);
-			proGoods.setLeftNumber(proGoods.getLeftNumber()+leftNumber);
+			proGoods.setLeftNumber(leftNumber);
+			proGoods.setGoodsMarketPrice(marketPrice);
 			proGoods.setOutFactoryPrice(outFactoryPrice);
 			proGoods.setUnit(goods.getSaleType());
 			proGoods.setOnSaleTime(new Date());

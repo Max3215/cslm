@@ -42,7 +42,11 @@ $(document).ready(function(){
 function editgoods(gid){
     $("#goodsId").attr("value",gid);
     var goodsTitle = $("#title"+gid).html();
+    var code = $("#code"+gid).html();
+    var marketPrice = $("#marketPrice"+gid).html();
     
+    $("#code").attr("value",code);
+    $("#marketPrice").attr("value",marketPrice);
     $("#goodsTitle").attr("value",goodsTitle);
     $('.sub_form').css('display','block');
 }
@@ -51,6 +55,7 @@ function subDisGoods(){
     var goodsId = $("#goodsId").val();
     var goodsTitle = $("#goodsTitle").val();
     var outFactoryPrice = $("#outFactoryPrice").val();
+    var marketPrice = $("#marketPrice").val();
     var leftNumber = $("#leftNumber").val();
     var shopReturnRation = $("#shopReturnRation").val();
     
@@ -60,6 +65,12 @@ function subDisGoods(){
         return;
     }
      var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+    if(undefined == marketPrice || ""==marketPrice || !reg.test(marketPrice))
+    {
+        alert("请输入商品市场价");
+        return ;
+    }
+    
     if(undefined == outFactoryPrice || ""==outFactoryPrice || !reg.test(outFactoryPrice))
     {
         alert("请输入商品分销价");
@@ -90,6 +101,7 @@ function subDisGoods(){
         data : {"goodsId":goodsId,
             "goodsTitle":goodsTitle,
             "outFactoryPrice":outFactoryPrice,
+            "marketPrice":marketPrice,
             "leftNumber":leftNumber,
             "shopReturnRation":shopReturnRation},
         dataType : "json",
@@ -152,8 +164,8 @@ DD_belatedPNG.fix('.,img,background');
                 <#list goods_page.content as goods>
                     <tr id="tr_1424195166">
                         <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
-                        <td class="tb01">${goods.code!''}</td>
-                        <td class="tb02">￥${goods.marketPrice?string('0.00')}</td>
+                        <td class="tb01"><span id="code${goods.id?c}">${goods.code!''}</span></td>
+                        <td class="tb02">￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></td>
                         <td>
                           <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">我要分销</a></p>
                          </td>
@@ -213,6 +225,14 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th>*商品名称：</th>
           <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+        </tr>
+        <tr>
+          <th>商品编码：</th>
+          <td><input type="text" class="add_width" name="code" id="code" readonly="readonly"></td>
+        </tr>
+        <tr>
+          <th>商品市场价：</th>
+          <td><input type="text" name="marketPrice" id="marketPrice" ></td>
         </tr>
          <tr>
           <th>*商品售价：</th>

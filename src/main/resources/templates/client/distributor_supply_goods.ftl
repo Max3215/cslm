@@ -4,6 +4,7 @@
                 <th width="300">商品名称</th>
                 <th width="170">分销商</th>
                 <th>分销价</th>
+                <th>返利比</th>
                 <th>库存</th>
                 <th>操作</th>
              </tr>
@@ -21,6 +22,7 @@
                         </td>
                         <td class="tb01">${pgoods.providerTitle!''}</td>
                         <td class="tb02">￥${pgoods.outFactoryPrice?string('0.00')}</td>
+                        <td>${pgoods.shopReturnRation?string('0.00')}%</td>
                         <td>${pgoods.leftNumber!'0'}</td>
                         <td>
                             <p><a href="javascript:supply(${pgoods.id?c});">我要代理</a></p>

@@ -61,6 +61,10 @@ public class TdProviderGoods {
 	@Column(scale=2)
 	private Double outFactoryPrice;
 	
+	// 市场价
+	@Column(scale=2)
+	private Double goodsMarketPrice;
+	
 	// 佣金比例
 	@Column(scale=2)
 	private Double shopReturnRation;
@@ -225,6 +229,14 @@ public class TdProviderGoods {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public Double getGoodsMarketPrice() {
+		return goodsMarketPrice;
+	}
+
+	public void setGoodsMarketPrice(Double goodsMarketPrice) {
+		this.goodsMarketPrice = goodsMarketPrice;
 	}
 	
 	

@@ -534,7 +534,7 @@ textarea { resize:none;}
 #mymember_likelist a img { width:100%; margin-bottom:5px;}
 #mymember_likelist a p {
 	width:90%;
-	height:25px;
+	height:20px;
 	overflow:hidden;
 	font-size:12px;
 	margin:0 auto;}
@@ -921,6 +921,48 @@ textarea { resize:none;}
 .with_money td .text.short{width: 118px;}
 
 .with_money td .sub{width: 120px;height: 30px;background: #ff5b7d;color:#fff;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;-o-border-radius: 5px;-ms-border-radius: 5px;text-align: center;line-height: 20px;}
+
+
+
+.banner_manage{}
+.banner_manage .menu{}
+.banner_manage .menu a{display: block;float:left;width: 36px;height: 30px;padding-left: 30px;color:#fff;line-height: 30px;margin-right: 12px;}
+.banner_manage .menu a.a1{background: url(../images/menu01.png) 6px center #ff5b7d no-repeat;}
+
+.banner_manage .menu a.a2{background: url(../images/menu02.png) 6px center #39bee9 no-repeat;}
+.banner_manage .menu a.a3{background: url(../images/menu03.png) 6px center #39bee9 no-repeat;}
+.banner_manage .menu a.a4{background: url(../images/menu04.png) 6px center #39bee9 no-repeat;/*background-size:30px;*/}
+
+.banner_manage table{border:1px solid #e1e2e1;border-bottom: none;}
+.banner_manage th{height: 35px;background: #f3f3f3;line-height: 35px;color:#000;font-weight: 400;text-align: center;}
+.banner_manage td{border:none; border-bottom:1px solid #e1e2e1;}
+
+
+.edit_banner th{color:#000;font-weight: 400;background: none;width: 60px;padding: 0;padding-right: 15px;text-align: right;padding-bottom: 20px;}
+.edit_banner td{border:none;text-align: left;padding: 0;padding-bottom: 20px;}
+
+.edit_banner td select{width: 102px;height: 32px;border:1px solid #e1e2e1;}
+
+.edit_banner td a.a1{width: 58px;height: 28px;background: #f3f3f3;border:1px solid #e1e2e1;float:left;text-align: center;line-height: 28px;color:#000;}
+.edit_banner td a.a1.sel{background: #39bee9;color:#fff;border-color:#39bee9;}
+
+.edit_banner td .text{width: 298px;height: 28px;border:1px solid #e1e2e1;text-indent: 4px;}
+
+.edit_banner td a.a2{display: block;width: 100px;height: 30px;text-align: center;line-height: 30px;color:#fff;background: #ff5b7d;font-size: 14px;}
+
+.edit_banner td .pic_box{width: 290px;height: 90px;border:1px solid #e1e2e1;padding: 4px;overflow: hidden;}
+.edit_banner td .pic_box img{width: 290px;height: 90px;}
+
+.edit_banner td .sub{width: 200px;height: 35px;line-height: 35px;background: #39bee9;text-align: center;color:#fff;font-size: 14px;}
+
+
+
+
+
+
+
+
+
 
 
 

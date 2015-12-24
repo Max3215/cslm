@@ -230,6 +230,7 @@ public class TdSupplyController {
 	public Map<String,Object> wholesaling(Long goodsId,
 			String goodsTitle,
 			Double outFactoryPrice,
+			Double marketPrice,
 			Double shopReturnRation,
 			Long leftNumber,
 			HttpServletRequest req)
@@ -258,11 +259,13 @@ public class TdSupplyController {
 			proGoods.setSubGoodsTitle(goods.getSubTitle());
 			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 			proGoods.setOutFactoryPrice(outFactoryPrice);
+			proGoods.setGoodsMarketPrice(marketPrice);
 			proGoods.setLeftNumber(leftNumber);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setCode(goods.getCode());
 			proGoods.setCategoryId(goods.getCategoryId());
 			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
+			proGoods.setUnit(goods.getSaleType());
 			proGoods.setShopReturnRation(shopReturnRation);
 			proGoods.setIsDistribution(true);
 			proGoods.setIsAudit(false);
@@ -272,8 +275,10 @@ public class TdSupplyController {
 			proGoods.setGoodsTitle(goodsTitle);
 			proGoods.setLeftNumber(leftNumber);
 			proGoods.setOutFactoryPrice(outFactoryPrice);
+			proGoods.setGoodsMarketPrice(marketPrice);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setShopReturnRation(shopReturnRation);
+			proGoods.setUnit(goods.getSaleType());
 			proGoods.setIsDistribution(true);
 			proGoods.setIsAudit(false);
 		}

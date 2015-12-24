@@ -43,9 +43,13 @@ function editgoods(gid){
     $("#goodsId").attr("value",gid);
     var goodsTitle = $("#title"+gid).html();
     var goodsPrice = $("#price"+gid).html();
+    var subTitle = $("#subTitle"+gid).val();
+    var code = $("#code"+gid).val();
     
     $("#goodsTitle").attr("value",goodsTitle);
     $("#goodsPrice").attr("value",goodsPrice);
+    $("#subTitle").attr("value",subTitle);
+    $("#code").attr("value",code);
     $('.sub_form').css('display','block');
 }
 
@@ -54,6 +58,7 @@ function subDisGoods(){
     var goodsTitle = $("#goodsTitle").val();
     var goodsPrice = $("#goodsPrice").val();
     var leftNumber = $("#leftNumber").val();
+    var goodsMarketPrice ${"#goodsMarketPrice"}.val();
     var unit = $("#unit").val();
     
     if(undefined == goodsTitle || ""==goodsTitle)
@@ -62,11 +67,18 @@ function subDisGoods(){
         return;
     }
      var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+    if(undefined == goodsMarketPrice || ""==goodsMarketPrice || !reg.test(goodsMarketPrice))
+    {
+        alert("请输入商品市场价");
+        return ;
+    }
+    
     if(undefined == goodsPrice || ""==goodsPrice || !reg.test(goodsPrice))
     {
         alert("请输入商品销售价");
         return ;
     }
+    
     
     if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber)|| 0 >= leftNumber)
     {
@@ -81,6 +93,7 @@ function subDisGoods(){
             "goodsTitle":goodsTitle,
             "goodsPrice":goodsPrice,
             "leftNumber":leftNumber,
+            "goodsMarketPrice":goodsMarketPrice,
             "unit":unit},
         dataType : "json",
         success:function(data){
@@ -148,6 +161,8 @@ DD_belatedPNG.fix('.,img,background');
           </tr>
            <#if goods_page??>
                 <#list goods_page.content as goods>
+                    <input type="hidden" value="${goods.code!''}" id="code${goods.id?c}">
+                    <input type="hidden" value="${goods.subTitle!''}" id="subTitle${goods.id?c}">
                     <tr id="tr_1424195166">
                         <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01">${goods.code!''}</td>
@@ -211,12 +226,24 @@ DD_belatedPNG.fix('.,img,background');
           <th>*商品名称：</th>
           <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
         </tr>
+        <tr>
+          <th>商品副标题：</th>
+          <td><input type="text" class="add_width" name="subGoodsTitle" id="subTitle" readonly="readonly"></td>
+        </tr>
+        <tr>
+          <th>商品编码：</th>
+          <td><input type="text" class="add_width" name="code" id="code" readonly="readonly"></td>
+        </tr>
          <tr>
           <th>*商品售价：</th>
           <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
         </tr>
         <tr>
-          <th>*商品单位：</th>
+          <th>实体店价：</th>
+          <td><input type="text" name="goodsMarketPrice" id="goodsMarketPrice" ></td>
+        </tr>
+        <tr>
+          <th>商品单位：</th>
           <td><input type="text" name="unit" id="unit" >不填则默认为平台设定单位</td>
         </tr>
          <tr>

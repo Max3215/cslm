@@ -132,7 +132,7 @@ $(document).ready(function(){
 				</tr>
 				-->
 				<tr>
-					<th>超市名称：</th>
+					<th>商家名称：</th>
 					<td>
 					   <input class="text" type="text" name="title" datatype="*2-100" sucmsg=" ">
 					   <span class="Validform_checktip">*</span>
@@ -176,7 +176,7 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				<tr>
-					<th>超市介绍：</th>
+					<th>商家介绍：</th>
 					<td>
 						<textarea name="info"></textarea>
 					</td>

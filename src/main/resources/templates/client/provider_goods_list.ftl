@@ -21,7 +21,7 @@
                              </a> 
                         </td>
                         <td class="tb01">￥${dg.outFactoryPrice?string('0.00')}</td>
-                        <td class="tb02">${dg.cede!''}</td>
+                        <td class="tb02">${dg.code!''}</td>
                         <td>${dg.leftNumber}</td>
                         <td>
                                 <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page})">取消批发</a></p>

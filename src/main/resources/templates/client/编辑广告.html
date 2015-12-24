@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>会员中心</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="copyright" content="" />
+<link href="css/common.css" rel="stylesheet" type="text/css">
+<link href="css/main.css" rel="stylesheet" type="text/css">
+<link href="css/mymember.css" rel="stylesheet" type="text/css" />
+<!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/mymember.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".click_a").click(function(){
+    if($(this).next().is(":visible")==false){
+      $(this).next().slideDown(300);
+    }else{
+      $(this).next().slideUp(300);
+    }
+  });//选择超市下拉效果
+
+ navDownList("nav_down","li",".nav_show");
+  menuDownList("mainnavdown","#nav_down",".a2","sel");
+
+  $(".float_box .ewm").hover(function(){
+    $(this).next().show();
+  },function(){
+    $(this).next().hide();
+  })
+})
+</script>
+<!--[if IE]>
+   <script src="js/html5.js"></script>
+<![endif]-->
+<!--[if IE 6]>
+<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script>
+DD_belatedPNG.fix('.,img,background');
+</script>
+<![endif]-->
+</head>
+<body>
+<header class="main_top">
+    <div class="main">
+      <h1>您好！欢迎光临王明辉超市！</h1>
+      <a href="#">请登陆</a>
+      <a href="#">注册</a>
+      <menu class="top_menu">
+        <a href="#">我的订单<span>丨</span></a>
+        <a href="#">我的购物车<span>丨</span></a>
+        <a href="#">超市会员<span>丨</span></a>
+        <a href="#">客户服务<span>丨</span></a>
+        <a href="#">我的收藏</a>
+      </menu>
+      <div class="clear"></div>
+    </div>
+  </header>
+  <!--logo 搜索框部分-->
+  <section class="main">
+    <a href="#" class="logo"><img src="images/logo.png"></a>
+    <div class="choose_mar">
+      <a href="#" class="click_a">选择超市</a>
+      <menu id="show_menu">
+        <a href="#">联盟超市名字</a>
+        <a href="#">联盟超市名字</a>
+        <a href="#">联盟超市名字</a>
+        <a href="#">联盟超市名字</a>
+      </menu>
+    </div>
+    <div class="m_box">
+      <div class="search_box">
+        <input class="text" type="text">
+        <a href="#">搜索</a>
+      </div>
+      <menu class="hot_search">
+        <a href="#">洗发水<span>丨</span></a>
+        <a href="#">牙膏<span>丨</span></a>
+        <a href="#">纸巾<span>丨</span></a>
+        <a href="#">垃圾袋<span>丨</span></a>
+        <a href="#">桶<span>丨</span></a>
+        <a href="#">零食<span>丨</span></a>
+      </menu>
+    </div>
+    <div class="gu_car">
+      <a href="#">去购物车结算<span>5</span></a>
+    </div>
+    <div class="clear"></div>
+  </section>
+
+  <!--导航部分-->
+  <nav class="nav_box">
+    <div class="main">
+      <section class="nav_list" id="mainnavdown">
+        <a href="#" class="a2">全部商品分类</a>
+        <ul id="nav_down" class="nav_down dis_none">
+          <li>
+            <a href="#" class="list">食品、酒水、茗茶 </a>
+            <span>></span>
+            <div class="nav_show">
+              <table>
+                <tr>
+                  <th width="60">进口牛奶</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th width="60">酒水</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th width="60">茗茶</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <a href="#" class="list">粮油副食 </a>
+            <span>></span>
+            <div class="nav_show">
+              <table>
+                <tr>
+                  <th width="60">进口牛奶</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th width="60">酒水</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th width="60">茗茶</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <a href="#" class="list">美容洗护 </a>
+            <span>></span>
+            <div class="nav_show">
+              <table>
+                <tr>
+                  <th width="60">进口牛奶</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th width="60">酒水</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+                <tr>
+                  <th width="60">茗茶</th>
+                  <td>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                    <a href="#">牛奶</a>
+                    <a href="#">牛奶奶</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+        </ul>
+      </section>
+      <a href="#" class="a1 sel">首页</a>
+      <a href="#" class="a1">商品推荐</a>
+      <a href="#" class="a1">本地特产</a>
+      <a href="#" class="a1">商品预定</a>
+      <a href="#" class="a1">进口商品</a>
+      <a href="#" class="a1">政企采购</a>
+      <a href="#" class="a1">生活服务</a>
+      <a href="#" class="a1">商家入驻</a>
+    </div>
+  </nav>
+<!--mymember-->
+<div class="myclear"></div>
+<div class="mymember_out">
+  <div class="mymember_main">
+    <div class="mymember_head">
+      <h2><a href="#">超市联盟</a></h2>
+      <div class="mymember_head_part"> <a class="a001" href="#">个人主页</a> </div>
+      <div id="mymember_nav01" class="mymember_head_part"> <a class="a001 a002" href="#" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>
+        <div id="mymember_navshow01"> <a href="#">个人信息</a> <a href="#">收货地址</a> </div>
+      </div>
+      <div class="myclear"></div>
+      <a class="mymember_head_kf" href="#">在线客服 >> </a> </div>
+    <!--mymember_head END-->
+    <div class="myclear" style="height:20px;"></div>
+    <div class="mymember_menu">
+      <div class="mymember_menu_part"> <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu06.png" />商品管理</a>
+        <div> <a href="#">发布商品</a> <a href="#">出售中的商品</a> <a href="#">仓库中的商品</a> </div>
+      </div>
+      <div class="mymember_menu_part"> <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu07.png" />交易管理</a>
+        <div> <a href="#">已卖出的商品</a> <a href="#">评价管理</a> </div>
+      </div>
+      <div class="mymember_menu_part"> <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu01.png" />订单中心</a>
+        <div> <a href="#">我的订单</a> <a href="#">评价结单</a> <a href="#">取消订单记录</a> </div>
+      </div>
+      <!--mymember_menu_part END-->
+      <div class="mymember_menu_part"> <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu02.png" />我的收藏</a>
+        <div> <a href="#">收藏的商品</a> <a href="#">浏览历史</a> </div>
+
+      </div>
+      <!--mymember_menu_part END-->
+      <div class="mymember_menu_part"> <a class="mymember_menu_tit" href="#"><img src="images/mymember/menu05.png" />设置</a>
+        <div> <a href="#">个人信息</a> <a href="#">收货地址</a><a href="#">修改密码</a> </div>
+      </div>
+      <!--mymember_menu_part END-->
+    </div>
+    <!--mymember_menu END-->
+    <div class="mymember_mainbox">
+      <div class="mymember_info mymember_info02">
+        <div class="mymember_order_search"> 
+          <h3>编辑广告</h3>
+        </div>
+        
+        <div class="edit_banner">
+          <table>
+            <tr>
+              <th>所属广告位</th>
+              <td>
+                <select>
+                  <option>请选择</option>
+                  <option>请选择</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>状态</th>
+              <td>
+                <a href="#" class="a1 sel">正常</a>
+                <a href="#" class="a1">下架</a>
+                <div class="clear"></div>
+              </td>
+            </tr>
+            <tr>
+              <th>广告名称</th>
+              <td><input type="text" class="text" /></td>
+            </tr>
+            <tr>
+              <th>开始时间</th>
+              <td><input type="text" class="text" /></td>
+            </tr>
+            <tr>
+              <th>广告图</th>
+              <td>
+                <div class="pic_box"><img src="images/banner01.jpg"></div>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td><a href="#" class="a2">浏览</a></td>
+            </tr>
+            <tr>
+              <th></th>
+              <td><input type="submit" class="sub" value="保存"></td>
+            </tr>
+          </table>
+        </div>
+        
+      </div>
+      <!--mymember_info END-->
+
+    </div>
+    <!--mymember_center END-->
+ 
+    <div class="myclear"></div>
+  </div>
+  <!--mymember_main END-->
+  <div class="myclear"></div>
+</div>
+<!--mymember END-->
+<div class="clear"></div>
+<section class="main">
+    <div class="slogen">
+      <span><i><img src="images/bottom01.png"></i>品质保证  服务精致</span>
+      <span><i><img src="images/bottom02.png"></i>品类齐全  一站购物</span>
+      <span><i><img src="images/bottom03.png"></i>中心直发  配送快捷</span>
+      <span class="pr0"><i><img src="images/bottom04.png"></i>退换随心  低价无忧</span>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="main">
+      <dl>
+        <dt>新手指南</dt>
+        <dd><a href="#">用户注册</a></dd>
+        <dd><a href="#">购物流程</a></dd>
+        <dd><a href="#">新手帮助</a></dd>
+        <dd><a href="#">隐私声明</a></dd>
+      </dl>
+      <dl>
+        <dt>支付方式</dt>
+        <dd><a href="#">在线支付</a></dd>
+        <dd><a href="#">支付宝支付</a></dd>
+        <dd><a href="#">网银支付</a></dd>
+        <dd><a href="#">公司转账</a></dd>
+      </dl>
+      <dl>
+        <dt>配送方式</dt>
+        <dd><a href="#">送货上门</a></dd>
+        <dd><a href="#">配货点自提</a></dd>
+        <dd><a href="#">配送标准</a></dd>
+        <dd><a href="#">配送查询</a></dd>
+      </dl>
+      <dl>
+        <dt>售后服务</dt>
+        <dd><a href="#">退货流程</a></dd>
+        <dd><a href="#">售后政策</a></dd>
+      </dl>
+      <dl>
+        <dt>帮助中心</dt>
+        <dd><a href="#">常见问题</a></dd>
+        <dd><a href="#">关于我们</a></dd>
+        <dd><a href="#">联系我们</a></dd>
+        <dd><a href="#">交易条款</a></dd>
+        <dd><a href="#">商家入住</a></dd>
+      </dl>
+      <div class="b_contact">
+        <a href="#" class="qq"><img src="images/qq01.png"></a>
+        <span><i><img src="images/phone01.png"></i>13888888888</span>
+      </div>
+      <div class="clear"></div>
+
+      <menu class="bottom_nav">
+        <a href="#">首页<span>丨</span></a>
+        <a href="#">本地特产<span>丨</span></a>
+        <a href="#">政企采购<span>丨</span></a>
+        <a href="#">生活服务<span>丨</span></a>
+        <a href="#">商家入驻</a>
+      </menu>
+      <p class="copyright">copyright©2015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;公司版权所有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;技术支持：<a href="http://www.ynyes.com" title="云南网站建设" target="_blank">昆明天度网络信息技术有限公司</a></p>
+    </div>
+  </footer>
+
+ 
+</body>
+</html>
