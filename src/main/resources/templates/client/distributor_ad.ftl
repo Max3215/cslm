@@ -13,6 +13,16 @@
 
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
+<script src="/client/js/distributor_goods.js"></script>
+<script type="text/javascript">
+    
+function deleteAd()
+{
+    $("#form").submit();
+} 
+
+</script>
+
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
 <![endif]-->
@@ -38,14 +48,14 @@ DD_belatedPNG.fix('.,img,background');
         
         <div class="banner_manage">
           <div class="menu">
-            <a href="#" class="a1">新增</a>
-            <a href="#" class="a3">全选</a>
-            <a href="#" class="a4">删除</a>
+            <a href="/distributor/ad/edit" class="a1">新增</a>
+            <a href="javascript:deleteAd();"  class="a4">批量删除</a>
             <div class="clear h10"></div>
           </div>
+          <form  id="form" action = "/distributor/ad/delete" method="post">
           <table>
             <tr>
-              <th>选择</th>
+              <th ><input id="checkAll" name="r" type="checkbox"  class="check" onclick="selectAll();"/>全选</th>
               <th>广告名称</th>
               <th>开始时间</th>
               <th>到期时间</th>
@@ -54,37 +64,28 @@ DD_belatedPNG.fix('.,img,background');
               <th>发布时间</th>
               <th>操作</th>
             </tr>
-            <tr>
-              <td><input type="checkbox" /></td>
-              <td>列表页广告</td>
-              <td>2015-01-05  17:09:15</td>
-              <td>2015-01-05  17:09:15</td>
-              <td>广告链接</td>
-              <td>正常</td>
-              <td>2015-01-05  17:09:15</td>
-              <td><a href="#">修改</a></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" /></td>
-              <td>列表页广告</td>
-              <td>2015-01-05  17:09:15</td>
-              <td>2015-01-05  17:09:15</td>
-              <td>广告链接</td>
-              <td>正常</td>
-              <td>2015-01-05  17:09:15</td>
-              <td><a href="#">修改</a></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" /></td>
-              <td>列表页广告</td>
-              <td>2015-01-05  17:09:15</td>
-              <td>2015-01-05  17:09:15</td>
-              <td>广告链接</td>
-              <td>正常</td>
-              <td>2015-01-05  17:09:15</td>
-              <td><a href="#">修改</a></td>
-            </tr>
+            <#if ad_list??>
+            <#list ad_list as ad>
+                <tr>
+                  <td>
+                        <input id="yu_1424195166" name="listChkId" type="checkbox" value="${ad_index}" class="check""/>
+                        <input type="hidden" name="listId" id="listId" value="${ad.id?c}">
+                    </td>
+                  <td><a href="/distributor/ad/edit?id=${ad.id?c}">${ad.title!''}</a></td>
+                  <td>${ad.startTime?string('yyyy-MM-dd HH:mm:ss')}</td>
+                  <td><#if ad.endTime??>${ad.endTime?string('yyyy-MM-dd HH:mm:ss')}</#if></td>
+                  <td><a target="_blank" href="${ad.linkUri!""}">广告链接</a></td>
+                  <td><#if ad.isEnable?? && ad.isEnable><#if ad.endTime?? && ad.endTime gt .now><font color="#009900">正常</font><#else><font color="#990000">过期</font></#if><#else>待审核</#if></td>
+                  <td>${ad.createTime?string('yyyy-MM-dd HH:mm:ss')}</td>
+                  <td>
+                        <a href="/distributor/ad/edit?id=${ad.id?c}">修改</a>&nbsp;/&nbsp;
+                        <a href ="/distributor/ad/delete?id=${ad.id?c}">删除</a>
+                  </td>
+                </tr>
+            </#list>
+            </#if>
           </table>
+          </form>
         </div>
         
       </div>

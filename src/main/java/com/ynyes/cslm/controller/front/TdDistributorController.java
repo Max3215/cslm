@@ -56,6 +56,7 @@ import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdAdService;
+import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCartGoodsService;
@@ -139,6 +140,9 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdUserReturnService tdUserReturnService;
+	
+	@Autowired
+	TdAdTypeService tdAdTypeService;
 	
 	@Autowired
 	TdAdService tdAdService;
@@ -3412,6 +3416,7 @@ public class TdDistributorController {
     	return "client/distributor_index";
     }
     
+    // 广告列表
     @RequestMapping(value="/ad/list")
     public String adList(HttpServletRequest req,ModelMap map)
     {
@@ -3429,10 +3434,86 @@ public class TdDistributorController {
     	return "/client/distributor_ad";
     }
     
+    @RequestMapping(value="/ad/edit")
+    public String adEdit(Long id,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("ad_type_list", tdAdTypeService.findAll());
+    	
+    	if(null != id)
+    	{
+    		map.addAttribute("ad",tdAdService.findOne(id));
+    	}
+    	
+    	return "/client/distributor_ad_edit";
+    }
     
+    // 添加广告
+    @RequestMapping(value="/ad/save",method=RequestMethod.POST)
+    public String adSave(TdAd ad,HttpServletRequest req,ModelMap map)
+    {
+    	String username =(String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	
+    	if(null != ad)
+    	{
+    		ad.setDistributorId(distributor.getId());
+    		ad.setCreateTime(new Date());
+    		tdAdService.save(ad);
+    	}
+    	return "redirect:/distributor/ad/list";
+    }
     
+    // 批量删除广告
+    @RequestMapping(value="/ad/delete")
+    public String delete(
+    			Long[] listId,
+    			Integer[] listChkId,
+    			HttpServletRequest req,
+    			ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	adDelete(listId, listChkId);
+    	
+    	return "redirect:/distributor/ad/list";
+    }
     
-    
+    // 批量删除广告
+    public void adDelete(Long[] ids,Integer[] chkIds)
+    {
+    	
+    	if(null == ids || null == chkIds
+                || ids.length < 1 || chkIds.length < 1)
+    	{
+    		return ;
+    	}
+    	
+    	for(int chkid : chkIds)
+    	{
+    		if(chkid >=0 && ids.length > chkid)
+    		{
+    			Long id = ids[chkid];
+    			
+    			tdAdService.delete(id);
+    		}
+    	}
+    }
     
     
     
