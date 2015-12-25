@@ -464,7 +464,10 @@ textarea { resize:none;}
 	margin-left:5px;}
 .mymember_order_search .mysub:hover {
 	background:#eee;}
-.mymember_order_search select { float:right; line-height:30px;}
+.mymember_order_search select { 
+	height:30px;
+    background:#fff;
+	line-height:40px;}
 
 .mymember_order_search .myselect {
     width:200px;

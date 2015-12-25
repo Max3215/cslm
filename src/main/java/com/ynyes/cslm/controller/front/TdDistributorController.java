@@ -2084,8 +2084,10 @@ public class TdDistributorController {
 		map.addAttribute("page", page);
 		map.addAttribute("keywords",keywords);
 		map.addAttribute("categoryId", categoryId);
-
-		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
+		
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categortList);
 		if(null == categoryId){
 			if(null == keywords)
 			{
@@ -2110,6 +2112,24 @@ public class TdDistributorController {
 				map.addAttribute("goods_page", 
 						tdGoodsService.searchAndFindByCategoryIdAndIsOnSaleTrueOrderBySortIdAsc(keywords, categoryId, page, 10));
 			}
+			
+			TdProductCategory category = tdProductCategoryService.findOne(categoryId);
+            for (TdProductCategory tdProductCategory : categortList) {
+            	
+            	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
+            	{
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		map.addAttribute("cateList", cateList);
+            		
+            		for (TdProductCategory productCategory : cateList) {
+            			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
+            			{
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            			}
+            		}
+            		
+            	}
+            }
 		}
 		return "/client/distributor_goods_onsale";
 	}

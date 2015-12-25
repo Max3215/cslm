@@ -112,7 +112,17 @@ function subDisGoods(){
     })
     
 }
-function search(){
+function search(type){
+    if(null != type && type=="oneCat")
+    {
+        $("#categoryId").attr("value",$("#oneCat").val());
+    }else if(null != type && type=="twoCat")
+    {
+       $("#categoryId").attr("value",$("#twoCat").val());
+    }else if(null != type && type=="categoryId")
+    {
+        $("#categoryId").attr("value",$("#category").val());
+    }
     $("#form1").submit();
 }
 
@@ -140,13 +150,30 @@ DD_belatedPNG.fix('.,img,background');
           <h3>平台的商品</h3>
           <form action="/supply/goods/distribution" id="form1">
               <input type="hidden" value="${page!'0'}" name="page">
+              <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
               <input class="mysub" type="submit" value="查询"/>
               <input class="mytext" type="text"   value="${keywords!''}" name="keywords" id="keywords" />
-              <select  id="categoryId" name="categoryId" class="myselect" onchange="search()">
-                    <option value="">请选择类别...</option>
+              <select id="oneCat" onchange="javascript:search('oneCat')">
+                    <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if category_list??>
                         <#list category_list as c>
-                            <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                        </#list>
+                    </#if>
+                </select>
+                 <select id="twoCat" onchange="javascript:search('twoCat')">
+                    <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
+                    <#if cateList??>
+                        <#list cateList as c>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                        </#list>
+                    </#if>
+                </select>
+                 <select id="category" onchange="javascript:search('categoryId')">
+                    <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
+                    <#if categoryList??>
+                        <#list categoryList as c>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>
