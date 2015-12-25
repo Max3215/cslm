@@ -295,7 +295,8 @@ public class TdManagerGoodsController {
         }
 
 //        map.addAttribute("category_list", tdProductCategoryService.findAll());
-        map.addAttribute("category_list", tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc());
+        List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categortList);
 
         Page<TdGoods> goodsPage = null;
 
@@ -497,6 +498,24 @@ public class TdManagerGoodsController {
                     }
                 }
             }
+            
+            TdProductCategory category = tdProductCategoryService.findOne(categoryId);
+            for (TdProductCategory tdProductCategory : categortList) {
+            	
+            	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
+            	{
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		map.addAttribute("cateList", cateList);
+            		
+            		for (TdProductCategory productCategory : cateList) {
+            			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
+            			{
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            			}
+            		}
+            		
+            	}
+            }
         }
 
         map.addAttribute("content_page", goodsPage);
@@ -508,7 +527,7 @@ public class TdManagerGoodsController {
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
-        map.addAttribute("categoryId", categoryId);
+        map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
         map.addAttribute("property", property);
         map.addAttribute("saleType", saleType);
 

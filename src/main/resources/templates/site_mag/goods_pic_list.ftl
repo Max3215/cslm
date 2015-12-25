@@ -84,6 +84,7 @@
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="${__EVENTTARGET!""}" />
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="${__EVENTARGUMENT!""}" />
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}" />
+<input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
 </div>
 <script type="text/javascript">
 var theForm = document.forms['form1'];
@@ -94,6 +95,20 @@ function __doPostBack(eventTarget, eventArgument) {
     if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
         theForm.__EVENTTARGET.value = eventTarget;
         theForm.__EVENTARGUMENT.value = eventArgument;
+        
+        if(null != eventTarget && eventTarget=="oneCat")
+        {
+            // theForm.categoryId.value = $("#oneCat").val(); 
+            $("#categoryId").val($("#oneCat").val());
+        }else if(null != eventTarget && eventTarget=="twoCat")
+        {
+           // theForm.categoryId.value =  $("#twoCat").val();
+           $("#categoryId").val($("#twoCat").val());
+        }else if(null != eventTarget && eventTarget=="categoryId")
+        {
+             // theForm.categoryId.value = $("#categoryId").val();
+            $("#categoryId").val($("#twoCat").val());
+        }
         theForm.submit();
     }
 }
@@ -127,21 +142,31 @@ function confirmCopy(id)
       </ul>
       <div class="menu-list">
         <div class="rule-single-select">
-            <#--
-            <select name="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId', ''), 0)">
-                <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
+             <select id="oneCat" onchange="javascript:setTimeout(__doPostBack('oneCat',''), 0)">
+                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                 <#if category_list??>
                     <#list category_list as c>
-                        <option value="${c.id?c}" <#if categoryId?? && c.id==categoryId>selected="selected"</#if> ><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
                     </#list>
                 </#if>
             </select>
-            -->
-             <select id="oneCat" name="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId',''), 0)>
+        </div>
+        <div class="rule-single-select">
+             <select id="twoCat" onchange="javascript:setTimeout(__doPostBack('twoCat',''), 0)">
+                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
+                <#if cateList??>
+                    <#list cateList as c>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
+        <div class="rule-single-select">
+             <select id="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId',''), 0)">
                 <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
-                <#if category_list??>
-                    <#list category_list as c>
-                        <option value="${c.id?c}" <#if categoryId?? && categoryId.categoryTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                <#if categoryList??>
+                    <#list categoryList as c>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
                     </#list>
                 </#if>
             </select>
