@@ -25,7 +25,12 @@ $(document).ready(function(){
             if(data.code==1)
             {
                  $('.sub_form').css('display','none');
-                  window.location.href="/distributor/goods/sale/0"
+                 window.location.href="/distributor/goods/sale/1"
+            }
+            else if(data.code=2)
+            {
+                $('.sub_form').css('display','none');
+                window.location.href="/distributor/goods/sale/0"
             }
         }
     });
@@ -216,6 +221,7 @@ DD_belatedPNG.fix('.,img,background');
     <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a></p>
     <form id="sub_form" action="/distributor/goods/editOnSale" method="post">
     <div class="info_tab">
+        <input type="hidden" name="type" value="${isOnSale?c}">
       <table>
         <tr>
            <p> 编辑商品信息：</p>

@@ -246,7 +246,12 @@ function showMsg(){
                     </#if>
                 </#if>
 				<!--  参数结束    -->
-				
+				<p class="num"><#if dis_goods.postPrice??>邮费：<span>${dis_goods.postPrice?string('0.00')}</span></#if>
+				             <#if dis_goods.maxPostPrice??>
+				             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				             <span>满${dis_goods.maxPostPrice?string('0.00')}免邮</span>
+				             </#if>
+				</p>
 				<p class="digital">
 					<#if dis_goods??>
 					<span>数量：</span>
@@ -289,7 +294,7 @@ function showMsg(){
 				<!-- 商品详情  -->
 				<div class="text_pic php_z" id="tab0">
 					<ul class="pic_ul">
-						<p class="pro_cs">商品参数</p>
+						<p class="pro_cs"></p>
 						<#if goods.paramList??>
                             <#list goods.paramList as param>
     						     <li>${param.paramName!''}：${param.value!''}</li>

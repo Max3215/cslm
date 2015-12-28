@@ -813,7 +813,7 @@ public class TdDistributorController {
 					Double goodsPrice,
 					Double postPrice,
 					Double maxPostPrice,
-					Long leftNumber,	
+					Long leftNumber,Boolean type,
 					Integer page,HttpServletRequest req)
 	{
 		Map<String,Object> res = new HashMap<>();
@@ -842,7 +842,6 @@ public class TdDistributorController {
 		}
 		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(goodsId);
 		
-//		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
 		if(null != goodsPrice)
 		{
@@ -856,9 +855,16 @@ public class TdDistributorController {
 		
 		distributorGoods.setIsOnSale(true);
 		tdDistributorGoodsService.save(distributorGoods);
-//		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
+//		
 		res.put("msg", "修改成功！");
-		res.put("code", 1);
+		if(type)
+		{
+			res.put("code", 1);
+		}
+		else
+		{
+			res.put("code", 2);
+		}
 		return res;
 	}
 	
