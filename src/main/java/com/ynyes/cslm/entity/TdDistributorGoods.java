@@ -142,6 +142,14 @@ public class TdDistributorGoods {
     @Column
     private String unit;
     
+    // 商品邮费
+    @Column
+    private Double postPrice;
+    
+    // 满额免
+    @Column
+    private Double maxPostPrice;
+    
 	public Long getId() {
 		return id;
 	}
@@ -373,6 +381,23 @@ public class TdDistributorGoods {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+
+	public Double getPostPrice() {
+		return postPrice;
+	}
+
+	public void setPostPrice(Double postPrice) {
+		this.postPrice = postPrice;
+	}
+
+	public Double getMaxPostPrice() {
+		return maxPostPrice;
+	}
+
+	public void setMaxPostPrice(Double maxPostPrice) {
+		this.maxPostPrice = maxPostPrice;
+	}
+
 
 	
 	

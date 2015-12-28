@@ -17,7 +17,7 @@ public class AlipayConfig {
     public static String SELLER_ID = PARTNER;
 
     // 商户的私钥
-    public static String KEY = "1sfhrsrza6k9hwy0y07c902lc9ayhpvs";
+    public static String KEY = "705nmp52l3kmumpn18jws3mcjuzuox9n";
 
     // 签名方式
     public static String SIGN_TYPE = "MD5";

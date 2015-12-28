@@ -79,6 +79,8 @@ function editOnSale(){
     var page = $("#page").val();
     var goodsTitle = $("#goodsTitle").val();
     var goodsPrice = $("#goodsPrice").val();
+    var maxPostPrice = $("#maxPostPrice").val();
+    var postPrice = $("#postPrice").val();
     
     if(undefined == goodsTitle || ""==goodsTitle)
     {
@@ -91,10 +93,24 @@ function editOnSale(){
         alert("请输入商品销售价");
         return ;
     }
+    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(postPrice))
+    {
+        alert("请输入正确的邮费");
+        return ;
+    }
+    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(maxPostPrice))
+    {
+        alert("请输入正确的邮费");
+        return ;
+    }
 
     $.ajax({
         url : "/distributor/goods/editOnSale/"+disId,
-        data : {"goodsTitle":goodsTitle,"goodsPrice":goodsPrice,"page":page},
+        data : {"goodsTitle":goodsTitle,
+                "goodsPrice":goodsPrice,
+                "postPrice":postPrice,
+                "maxPostPrice":maxPostPrice,
+                "page":page},
         type : "post",
        success:function(res){
             $('.sub_form').css('display','none');
@@ -213,6 +229,14 @@ DD_belatedPNG.fix('.,img,background');
          <tr>
           <th>*商品售价：</th>
           <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg="" ></td>
+        </tr>
+        <tr>
+          <th>邮费：</th>
+          <td><input type="text" name="postPrice" id="postPrice" ></td>
+        </tr>
+        <tr>
+          <th>满额免邮：</th>
+          <td><input type="text" name="maxPostPrice" id="maxPostPrice" ></td>
         </tr>
         <tr>
           <th>*库存：</th>

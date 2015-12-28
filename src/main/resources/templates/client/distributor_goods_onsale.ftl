@@ -60,6 +60,8 @@ function subDisGoods(){
     var leftNumber = $("#leftNumber").val();
     var goodsMarketPrice = $("#goodsMarketPrice").val();
     var unit = $("#unit").val();
+    var maxPostPrice = $("#maxPostPrice").val();
+    var postPrice = $("#postPrice").val();
     
     if(undefined == goodsTitle || ""==goodsTitle)
     {
@@ -79,6 +81,16 @@ function subDisGoods(){
         return ;
     }
     
+    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(postPrice))
+    {
+        alert("请输入正确的邮费");
+        return ;
+    }
+    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(maxPostPrice))
+    {
+        alert("请输入正确的邮费");
+        return ;
+    }
     
     if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber)|| 0 >= leftNumber)
     {
@@ -94,6 +106,8 @@ function subDisGoods(){
             "goodsPrice":goodsPrice,
             "leftNumber":leftNumber,
             "goodsMarketPrice":goodsMarketPrice,
+            "postPrice":postPrice,
+            "maxPostPrice":maxPostPrice,
             "unit":unit},
         dataType : "json",
         success:function(data){
@@ -262,6 +276,14 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th>实体店价：</th>
           <td><input type="text" name="goodsMarketPrice" id="goodsMarketPrice" ></td>
+        </tr>
+        <tr>
+          <th>邮费：</th>
+          <td><input type="text" name="postPrice" id="postPrice" ></td>
+        </tr>
+        <tr>
+          <th>满额免邮：</th>
+          <td><input type="text" name="maxPostPrice" id="maxPostPrice" ></td>
         </tr>
         <tr>
           <th>商品单位：</th>

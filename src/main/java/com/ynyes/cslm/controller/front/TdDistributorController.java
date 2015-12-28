@@ -809,9 +809,12 @@ public class TdDistributorController {
 	
 	@RequestMapping(value="/goods/editOnSale",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> editOnSale(Long goodsId,Double goodsPrice,
-							Long leftNumber,	
-							Integer page,HttpServletRequest req)
+	public Map<String,Object> editOnSale(Long goodsId,
+					Double goodsPrice,
+					Double postPrice,
+					Double maxPostPrice,
+					Long leftNumber,	
+					Integer page,HttpServletRequest req)
 	{
 		Map<String,Object> res = new HashMap<>();
 		res.put("code", 0);
@@ -846,6 +849,11 @@ public class TdDistributorController {
 			distributorGoods.setGoodsPrice(goodsPrice);
 		}
 		distributorGoods.setLeftNumber(leftNumber);
+		
+		// 设置邮费
+		distributorGoods.setPostPrice(postPrice);
+		distributorGoods.setMaxPostPrice(maxPostPrice);
+		
 		distributorGoods.setIsOnSale(true);
 		tdDistributorGoodsService.save(distributorGoods);
 //		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
@@ -2147,6 +2155,8 @@ public class TdDistributorController {
 				Double goodsPrice,
 				Double goodsMarketPrice,
 				Long leftNumber,
+				Double postPrice,
+				Double maxPostPrice,
 				String unit,
 				HttpServletRequest req)
 	{
@@ -2193,6 +2203,8 @@ public class TdDistributorController {
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setLeftNumber(leftNumber);
 			distributorGoods.setOnSaleTime(new Date());
+			distributorGoods.setPostPrice(postPrice);
+			distributorGoods.setMaxPostPrice(maxPostPrice);
 			if(null != unit || !"".equals(unit))
 			{
 				distributorGoods.setUnit(unit);
@@ -2207,6 +2219,8 @@ public class TdDistributorController {
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
 			disGoods.setGoodsMarketPrice(goodsMarketPrice);
+			disGoods.setPostPrice(postPrice);
+			disGoods.setMaxPostPrice(maxPostPrice);
 			if(null != unit || !"".equals(unit))
 			{
 				disGoods.setUnit(unit);
@@ -2214,16 +2228,7 @@ public class TdDistributorController {
 				disGoods.setUnit(goods.getPromotion());
 			}
 			distributor.getGoodsList().add(disGoods);
-			
 		}
-//		List<TdDistributorGoods> list = tdDistributorGoodsService.findByGoodsId(goodsId);
-//		
-//		// 判断是否有超市在售此商品
-//		if(list.size()==0)
-//		{
-//			goods.setIsOnSale(true);
-//			tdGoodsService.save(goods);
-//		}
 
 		tdDistributorService.save(distributor);
 		res.put("msg", "上架成功");
