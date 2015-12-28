@@ -77,7 +77,10 @@ public class TdPayRecordService {
     public Page<TdPayRecord> findByDistributorId(Long disId,int page,int size){
     	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
     	return repository.findByDistributorIdOrderByCreateTimeDesc(disId, pageRequest);
-    	
+    }
+    
+    public List<TdPayRecord> findByDistributorId(Long disId){
+    	return repository.findByDistributorIdOrderByCreateTimeDesc(disId);
     }
     
     public Page<TdPayRecord> searchByDistributorId(Long disId,String cont,int page,int size){
@@ -90,6 +93,10 @@ public class TdPayRecordService {
     public Page<TdPayRecord> findByProviderId(Long proId,int page,int size){
     	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
     	return repository.findByProviderIdOrderByCreateTimeDesc(proId, pageRequest);
+    }
+    
+    public List<TdPayRecord> findByProviderId(Long proId){
+    	return repository.findByProviderIdOrderByCreateTimeDesc(proId);
     }
     
     public Page<TdPayRecord> searchByProviderId(Long proId,String cont,int page,int size){

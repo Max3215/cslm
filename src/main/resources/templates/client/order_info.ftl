@@ -133,11 +133,11 @@ $(document).ready(function(){
     <div class="clear h20"></div>
     
     <section class="paybox">
-        <h3>选择支付银行</h3>
-        <#if pay_type_list_bank??>
-           <#list pay_type_list_bank as pay_type>
+        <h3>选择支付方式</h3>
+        <#if pay_type_list_third??>
+           <#list pay_type_list_third as pay_type>
                <div class="pay_style">
-                    <input type="radio" name="payTypeId" value="${pay_type.id?c}"/>
+                    <input type="radio" name="payTypeId" value="${pay_type.id?c}" datatype="n"/>
                      <span><img src="${pay_type.coverImageUri}" width="148" /></span>
                </div>
             </#list>

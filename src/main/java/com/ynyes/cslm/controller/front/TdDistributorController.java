@@ -846,7 +846,7 @@ public class TdDistributorController {
 			distributorGoods.setGoodsPrice(goodsPrice);
 		}
 		distributorGoods.setLeftNumber(leftNumber);
-		distributorGoods.setIsOnSale(false);
+		distributorGoods.setIsOnSale(true);
 		tdDistributorGoodsService.save(distributorGoods);
 //		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
 		res.put("msg", "修改成功！");
@@ -2247,6 +2247,15 @@ public class TdDistributorController {
 		if(null ==proGoodsId)
 		{
 			res.put("msg","选择的商品无效！");
+			return res;
+		}
+		
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	TdProviderGoods pGoods = tdProviderGoodsService.findOne(proGoodsId);
+		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(),pGoods.getGoodsId());
+		if(null != distributorGoods)
+		{
+			res.put("msg", "店铺已存在该商品");
 			return res;
 		}
 		supply(username, proGoodsId);

@@ -10,6 +10,7 @@ function cateChange(){
 		}
 	})
 	
+	parameter(categoryId);
 }
 
 function twoChange(){
@@ -23,10 +24,11 @@ function twoChange(){
 			$("#threeCatDiv").html(data);
 		}
 	})
+	parameter(categoryId);
 }
 
-function parameter(){
-	var categoryId = $("#categoryId").val();
+function parameter(categoryId){
+//	var categoryId = $("#categoryId").val();
     $.ajax({
         url : '/Verwalter/goods/edit/parameter/'+categoryId,
         type : 'POST',

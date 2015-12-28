@@ -38,6 +38,7 @@ import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdPayTypeService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdUserPointService;
@@ -90,6 +91,9 @@ public class TdManagerOrderController {
     
     @Autowired
     TdManagerLogService tdManagerLogService;
+    
+    @Autowired
+    TdPayRecordService tdPayRecordService;
     
     // 订单设置
     @RequestMapping(value="/setting/{type}/list")
@@ -263,7 +267,10 @@ public class TdManagerOrderController {
             {
                 if (null != id)
                 {
-                    map.addAttribute("diy_site", TdDistributorService.findById(id));
+                	TdDistributor distributor = TdDistributorService.findById(id);
+                    map.addAttribute("diy_site", distributor);
+                    map.addAttribute("pay_tecord_list", tdPayRecordService.findByDistributorId(distributor.getId()));
+                    
                 }
                 
                 return "/site_mag/diy_site_edit";

@@ -196,6 +196,11 @@ public class TdDistributorGoodsService {
     	return repository.findByDistributorIdAndGoodsId(distributorId,goodsId);
     }
     
+//    public TdDistributorGoods findByDistributorIdAndGoodsIdAndIsAudit(Long distributorId,Long goodsId)
+//    {
+//    	return repository.findByDistributorIdAndGoodsIdAndIsAudit(distributorId,goodsId,true);
+//    }
+    
     public Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId,int page ,int size)
     {
     	if(null == disId)

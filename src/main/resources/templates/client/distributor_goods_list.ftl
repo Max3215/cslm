@@ -27,6 +27,7 @@
                         <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page});">下架</a></p>
+                            <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
                             <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page});">删除</a></p>
                        </td>
                       </tr>

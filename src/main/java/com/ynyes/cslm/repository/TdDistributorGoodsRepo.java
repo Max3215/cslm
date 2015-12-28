@@ -36,6 +36,9 @@ public interface TdDistributorGoodsRepo extends
 		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and goods_id=?2 and is_on_sale = ?3", nativeQuery = true)
 		TdDistributorGoods findByDistributorIdAndGoodsIdAndIsOnSale(long disId,long goodsid, Boolean onsale);
 		
+//		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and goods_id=?2 and is_audit=?3", nativeQuery = true)
+//		TdDistributorGoods findByDistributorIdAndGoodsIdAndIsAudit(long disId,long goodsid,Boolean isAudit);
+		
 		@Query(value = "select * from td_distributor_goods where distributor_id = ?1 and goods_id=?2", nativeQuery = true)
 		TdDistributorGoods findByDistributorIdAndGoodsId(long disId,long goodsid);
 		

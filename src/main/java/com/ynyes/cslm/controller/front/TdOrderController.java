@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.csii.payment.client.core.CebMerchantSignVerify;
+import com.cslm.payment.alipay.AlipayConfig;
+import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
@@ -37,10 +39,9 @@ import com.ynyes.cslm.entity.TdGoodsCombination;
 import com.ynyes.cslm.entity.TdGoodsDto;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdPayType;
-import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
-import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
@@ -62,7 +63,6 @@ import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
-import com.ynyes.cslm.util.SMSUtil;
 
 import net.sf.json.JSONObject;
 
@@ -1250,6 +1250,15 @@ public class TdOrderController extends AbstractPaytypeController{
         if (null == order) {
             return "/client/error_404";
         }
+        
+        // 	判断订单是否过时 订单提交后24小时内
+        Date cur = new Date();
+        long temp = cur.getTime() - order.getOrderTime().getTime();
+        if (temp > 1000 * 3600 * 24) {
+        	order.setSortId(7L);
+        	tdOrderService.save(order);
+            return "/client/overtime";
+        }
 
         // 待付款
         if (!order.getStatusId().equals(2L)) {
@@ -1262,43 +1271,39 @@ public class TdOrderController extends AbstractPaytypeController{
         String payForm = "";
 
         Long payId = order.getPayTypeId();
-//        TdPayType payType = tdPayTypeService.findOne(payId);
-//        if (payType != null) {
-//            TdPayRecord record = new TdPayRecord();
-//            record.setCreateTime(new Date());
-//            record.setOrderId(order.getId());
-//            record.setPayTypeId(payType.getId());
-//            record.setStatusCode(1);
-//            record.setCreateTime(new Date());
-//            record = payRecordService.save(record);
-//
-//            String payRecordId = record.getId().toString();
-//            int recordLength = payRecordId.length();
-//            if (recordLength > 6) {
-//                payRecordId = payRecordId.substring(recordLength - 6);
-//            } else {
-//                payRecordId = leftPad(payRecordId, 6, "0");
-//            }
-//            req.setAttribute("payRecordId", payRecordId);
-//
-//            req.setAttribute("orderNumber", order.getOrderNumber());
-//
-//            String payCode = payType.getCode();
-//            if (PAYMENT_ALI.equals(payCode)) {
+        TdPayType payType = tdPayTypeService.findOne(payId);
+        if (payType != null) {
+            TdPayRecord record = new TdPayRecord();
+            record.setCreateTime(new Date());
+            record.setOrderId(order.getId());
+            record.setPayTypeId(payType.getId());
+            record.setStatusCode(1);
+            record.setCreateTime(new Date());
+            record = payRecordService.save(record);
+
+            String payRecordId = record.getId().toString();
+            int recordLength = payRecordId.length();
+            if (recordLength > 6) {
+                payRecordId = payRecordId.substring(recordLength - 6);
+            } else {
+                payRecordId = leftPad(payRecordId, 6, "0");
+            }
+            req.setAttribute("payRecordId", payRecordId);
+
+            req.setAttribute("orderNumber", order.getOrderNumber());
+
+            String payCode = payType.getCode();
+            if (PAYMENT_ALI.equals(payCode)) {
 //                payForm = payChannelAlipay.getPayFormData(req);
 //                map.addAttribute("charset", AlipayConfig.CHARSET);
-//            } else if (CEBPayConfig.INTER_B2C_BANK_CONFIG.keySet().contains(
-//                    payCode)) {
-//                req.setAttribute("payMethod", payCode);
-//                payForm = payChannelCEB.getPayFormData(req);
-//                map.addAttribute("charset", "GBK");
-//            } else {
-//                // 其他目前未实现的支付方式
-//                return "/client/error_404";
-//            }
-//        } else {
-//            return "/client/error_404";
-//        }
+            }
+            else {
+                // 其他目前未实现的支付方式
+                return "/client/error_404";
+            }
+        } else {
+            return "/client/error_404";
+        }
 
         order.setPayTime(new Date());
 

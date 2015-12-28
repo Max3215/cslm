@@ -87,6 +87,7 @@ $(function () {
     <div class="content-tab-ul-wrap">
       <ul>
         <li><a href="javascript:;" onclick="tabs(this);" class="selected">编辑信息</a></li>
+        <li><a href="javascript:;" onclick="tabs(this);" class="">交易记录</a></li>
       </ul>
     </div>
   </div>
@@ -287,6 +288,44 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
+</div>
+<div class="tab-content" style="display: none;">
+    <dl>
+        <dt>交易记录</dt>
+        <dd>
+            <table border="0" cellspacing="0" cellpadding="0" class="border-table" width="98%">
+                <thead>
+                    <tr>
+                        <th width="12%">
+                            记录时间
+                        </th>
+                        <th>
+                            涉及单号
+                        </th>
+                        <th width="10%">
+                            金额
+                        </th>
+                        <th width="12%">
+                            事项
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#if pay_tecord_list??>
+                        <#list pay_tecord_list as re>
+                            <tr class="td_c">
+                                 <td >${re.createTime?string('yyyy-MM-dd')}</td>
+                                  <td class="td003">${re.orderNumber!''}</td>
+                                  <td>￥${re.provice?string('0.00')}</td>
+                                  <td>${re.cont}</td>  
+                            </tr>
+                        </#list>
+                    </#if>
+                </tbody> 
+            </table> 
+        </dd> 
+    </dl>
+
 </div>
 <!--/内容-->
 

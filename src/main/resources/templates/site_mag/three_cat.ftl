@@ -1,4 +1,4 @@
-<select  datatype="*" sucmsg=" " id="categoryId" onchange="parameter();" name="categoryId">
+<select  datatype="*" sucmsg=" " id="categoryId" onchange="parameter(this.value);" name="categoryId">
     <#if !goods??>
     <option value="">请选择类别...</option>
     </#if>

@@ -22,6 +22,7 @@ import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.service.TdManagerLogService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
@@ -49,6 +50,9 @@ public class TdManagerProviderController {
     @Autowired
     TdProductCategoryService tdProductCategoryService;
     
+    @Autowired
+    TdPayRecordService tdPayRecordService;
+    
     
     
     @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
@@ -67,7 +71,7 @@ public class TdManagerProviderController {
         {
         	if (null != tdProviderService.findByTitle(param))
             {
-                res.put("info", "已存在同名供应商");
+                res.put("info", "已存在同名商商家");
                 return res;
             }
         }
@@ -197,7 +201,9 @@ public class TdManagerProviderController {
 
         if (null != id)
         {
-            map.addAttribute("provider", tdProviderService.findOne(id));
+        	TdProvider provider = tdProviderService.findOne(id);
+            map.addAttribute("provider", provider);
+            map.addAttribute("pay_tecord_list", tdPayRecordService.findByProviderId(provider.getId()));
         }
         return "/site_mag/provider_edit";
     }
