@@ -285,6 +285,7 @@ public class TdSupplyController {
 			proGoods.setLeftNumber(leftNumber);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setCode(goods.getCode());
+			
 			proGoods.setCategoryId(goods.getCategoryId());
 			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
 			proGoods.setUnit(goods.getSaleType());
@@ -300,6 +301,8 @@ public class TdSupplyController {
 			proGoods.setGoodsMarketPrice(marketPrice);
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setShopReturnRation(shopReturnRation);
+			proGoods.setCategoryId(goods.getCategoryId());
+			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
 			proGoods.setUnit(goods.getSaleType());
 			proGoods.setIsDistribution(true);
 			proGoods.setIsAudit(false);

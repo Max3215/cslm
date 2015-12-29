@@ -138,7 +138,7 @@ DD_belatedPNG.fix('.,img,background');
                             </#if>
                             <#if order.statusId?? && order.statusId == 2>
                                 <p>待付款</p>
-                                <a href="">去支付</a>
+                                <a href="/order/dopay/${order.id?c}">去支付</a>
                             </#if>
                             <#if order.statusId?? && order.statusId == 3>
                                 <p>待发货</p>

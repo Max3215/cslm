@@ -3654,8 +3654,11 @@ public class TdDistributorController {
 			distributorGoods.setIsOnSale(true);
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setOnSaleTime(new Date());
+			
 			distributor.getGoodsList().add(distributorGoods);
     	}else{
+    		distributorGoods.setCategoryId(goods.getCategoryId());
+			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
     		distributorGoods.setGoodsPrice(pGoods.getOutFactoryPrice());
     		distributorGoods.setGoodsTitle(pGoods.getGoodsTitle());
     		distributorGoods.setIsDistribution(true);

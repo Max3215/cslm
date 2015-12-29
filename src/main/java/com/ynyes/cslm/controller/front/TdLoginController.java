@@ -480,6 +480,12 @@ public class TdLoginController {
 		request.getSession().invalidate();
 		return "redirect:/";
 	}
+	
+	@RequestMapping("/disout")
+	public String distributorOut(HttpServletRequest request) {
+		request.getSession().invalidate();
+		return "redirect:/";
+	}
 
 	@RequestMapping(value = "/verify", method = RequestMethod.GET)
 	public void verify(HttpServletResponse response, HttpServletRequest request) {

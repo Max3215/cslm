@@ -123,7 +123,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#if order.statusId==1>
                     请稍等，我们将尽快确认您的订单。
                 <#elseif order.statusId==2>
-                    亲爱的客户，此订单还未支付，您可以<a href="" style="color: #F00;">去支付</a>
+                    亲爱的客户，此订单还未支付，您可以<a href="/order/dopay/${order.id?c}" style="color: #F00;">去支付</a>
                 <#elseif order.statusId==3>
                     亲爱的客户，您以成功支付，我们将尽快为您发货。
                 <#elseif order.statusId==4>
@@ -250,7 +250,7 @@ DD_belatedPNG.fix('.,img,background');
                     </#if>
                     <#if order.statusId?? && order.statusId == 2>
                         <p>待付款</p>
-                        <a href="">去支付</a>
+                        <a href="/order/dopay/${order.id?c}">去支付</a>
                     </#if>
                     <#if order.statusId?? && order.statusId == 3>
                         <p>待发货</p>

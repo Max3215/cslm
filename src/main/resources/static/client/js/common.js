@@ -7,17 +7,17 @@ function navDownList(boxid, _sumname, _showname) {
     var _hover = _box.find(_showname);
     _arr.hover(function () {
         if (_hover.is(":animated")) { _hover.stop(true, true); }
-        var _height = $(this).height() + 5;
+        var _height = $(this).height() + 0;
         $(this).find(".bg").height(_height);
         $(this).find(_showname).css("display","block");
 
         var _index = $(this).index();
         var _top = 0;
         for (var i = 0; i < _index; i++) {
-            _top = _top - _arr.eq(i).height() + 30;
+            _top = _top - _arr.eq(i).height() + 25;
         }
         $(this).find(_showname).css("top", _top + "px");
-        _top = -_top - 8;
+        _top = -_top - 20;
 
 
     }, function () {

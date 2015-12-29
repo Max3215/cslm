@@ -195,6 +195,8 @@ $(function () {
 <input name="id" type="text" value='<#if providerGoods??>${providerGoods.id?c}</#if>' style="display:none">
 <input name="providerId" type="text" value='<#if providerId??>${providerId}</#if>' style="display:none">
 <input name="goodsId" type="text" value='<#if providerGoods??>${providerGoods.goodsId?c}</#if>' style="display:none">
+<input name="categoryId" type="text" value='<#if providerGoods??>${providerGoods.categoryId?c}</#if>' style="display:none">
+<input name="categoryIdTree" type="text" value='<#if providerGoods??>${providerGoods.categoryIdTree!''}</#if>' style="display:none">
 <#--
 <input name="isOnSale" type="text" value='<#if providerGoods?? >${providerGoods.isOnSale?c}</#if>' style="display:none">
 <input name="isDistrition" type="text" value='<#if providerGoods??>${providerGoods.isDistribution?c}</#if>' style="display:none">
@@ -246,12 +248,26 @@ $(function () {
             </dd>
         </dl>
         <dl>
+            <dt>商品编码</dt>
+            <dd>
+                <input name="code" type="text" value="<#if providerGoods??>${providerGoods.code!""}</#if>" class="input normal" readonly="readonly">
+                <span class="Validform_checktip">*标题最多255个字符</span>
+            </dd>
+        </dl>
+        <dl>
             <dt>批发商</dt>
             <dd>
                 <input id="providerTitle" readonly="readonly"  name="providerTitle" type="text" value="<#if providerGoods?? && providerGoods.providerTitle??>${providerGoods.providerTitle!''}</#if>" class="input normal" datatype="*" sucmsg=" ">
                 <span class="Validform_checktip">*商品供货商</span>
             </dd>
         </dl>
+        <dl>
+            <dt>市场价</dt>
+            <dd>
+                <input id="goodsMarketPrice" readonly="readonly"  name="goodsMarketPrice" type="text" value="<#if providerGoods?? && providerGoods.goodsMarketPrice??>${providerGoods.goodsMarketPrice?string("0.##")}<#else>0</#if>" class="input normal" >
+                <span class="Validform_checktip">*商品供货价</span>
+            </dd>
+        </dl> 
         <dl>
             <dt>批发价</dt>
             <dd>

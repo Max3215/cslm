@@ -464,10 +464,7 @@ textarea { resize:none;}
 	margin-left:5px;}
 .mymember_order_search .mysub:hover {
 	background:#eee;}
-.mymember_order_search select { 
-	height:30px;
-    background:#fff;
-	line-height:40px;}
+.mymember_order_search select { float:right; line-height:30px;}
 
 .mymember_order_search .myselect {
     width:200px;
@@ -929,7 +926,7 @@ textarea { resize:none;}
 
 .banner_manage{}
 .banner_manage .menu{}
-.banner_manage .menu a{display: block;float:left;width: 65px;height: 30px;padding-left: 30px;color:#fff;line-height: 30px;margin-right: 12px;}
+.banner_manage .menu a{display: block;float:left;width: 36px;height: 30px;padding-left: 30px;color:#fff;line-height: 30px;margin-right: 12px;}
 .banner_manage .menu a.a1{background: url(../images/menu01.png) 6px center #ff5b7d no-repeat;}
 
 .banner_manage .menu a.a2{background: url(../images/menu02.png) 6px center #39bee9 no-repeat;}
@@ -944,7 +941,7 @@ textarea { resize:none;}
 .edit_banner th{color:#000;font-weight: 400;background: none;width: 60px;padding: 0;padding-right: 15px;text-align: right;padding-bottom: 20px;}
 .edit_banner td{border:none;text-align: left;padding: 0;padding-bottom: 20px;}
 
-.edit_banner td select{width: 135px;height: 32px;border:1px solid #e1e2e1;}
+.edit_banner td select{width: 102px;height: 32px;border:1px solid #e1e2e1;}
 
 .edit_banner td a.a1{width: 58px;height: 28px;background: #f3f3f3;border:1px solid #e1e2e1;float:left;text-align: center;line-height: 28px;color:#000;}
 .edit_banner td a.a1.sel{background: #39bee9;color:#fff;border-color:#39bee9;}

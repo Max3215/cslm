@@ -1812,7 +1812,7 @@ public class TdOrderController extends AbstractPaytypeController{
 		cartGoods.setDistributorTitle(dgoods.getDistributorTitle());
 		cartGoods.setProviderId(dgoods.getProviderId());
 		cartGoods.setProviderTite(dgoods.getProviderTitle());
-		
+		cartGoods.setDistributorGoodsId(dgoods.getId());
 		tdCartGoodsService.save(cartGoods);
 		cartGoodsList.add(cartGoods);
 
@@ -1859,6 +1859,7 @@ public class TdOrderController extends AbstractPaytypeController{
 		cartGoods.setDistributorTitle(dgoods.getDistributorTitle());
 		cartGoods.setProviderId(dgoods.getProviderId());
 		cartGoods.setProviderTite(dgoods.getProviderTitle());
+		cartGoods.setDistributorGoodsId(dgoods.getId());
 		
 		tdCartGoodsService.save(cartGoods);
 		cartGoodsList.add(cartGoods);
