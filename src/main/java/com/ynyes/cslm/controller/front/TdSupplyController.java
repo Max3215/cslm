@@ -139,7 +139,7 @@ public class TdSupplyController {
 		return "/client/supply_index";
 	}
 	
-	@RequestMapping(value="/password")
+	@RequestMapping(value="edit")
 	public String distributorPassword(HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("supply");
@@ -152,25 +152,48 @@ public class TdSupplyController {
 		return "/client/supply_change_password";
 	}
 
-	@RequestMapping(value="/password", method = RequestMethod.POST)
-	public String distributorPassword(String oldPassword,String newPassword,
+	@RequestMapping(value="/edit", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> distributorPassword(String title,String province,
+			String city,String disctrict,
+			String address,String mobile,
+			String password,Double postPrice,
+			Long id,
 			HttpServletRequest req,ModelMap map)
 	{
+		
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
+		
 		String username = (String)req.getSession().getAttribute("supply");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg", "请重新登录！");
+			return res;
 		}
-		tdCommonService.setHeader(map, req);
-		TdProvider supply = tdProviderService.findByUsername(username);
-		 if (supply.getPassword().equals(oldPassword)) 
-		 {
-			 supply.setPassword(newPassword);
-		 }
 		
-		map.addAttribute("supply",tdProviderService.save(supply));
+		if(null == id)
+		{
+			res.put("msg", "参数错误！");
+			return res;
+		}
 		
-		return "redirect:/supply/password";
+		TdProvider supply = tdProviderService.findOne(id);
+		
+		supply.setTitle(title);
+		supply.setProvince(province);
+		supply.setCity(city);
+		supply.setDisctrict(disctrict);
+		supply.setAddress(address);
+		supply.setMobile(mobile);
+		supply.setPassword(password);
+		supply.setPostPrice(postPrice);
+		
+		tdProviderService.save(supply);
+		
+		res.put("msg", "修改成功！");
+		res.put("code", 1);
+		return res;
 	}
 	
 	/**

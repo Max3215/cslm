@@ -159,7 +159,7 @@ DD_belatedPNG.fix('.,img,background');
               <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
               <input class="mysub" type="submit" value="查询"/>
               <input class="mytext" type="text"   value="${keywords!''}" name="keywords" id="keywords" />
-                 <select id="oneCat" onchange="javascript:search('oneCat')">
+                 <select id="oneCat" onchange="javascript:search('oneCat')" >
                     <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if category_list??>
                         <#list category_list as c>

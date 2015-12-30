@@ -19,8 +19,24 @@
 <script type="text/javascript">
 $(document).ready(function(){
      //初始化表单验证
-    $("#form1").Validform({
-        tiptype: 3
+     $("#form1").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 window.location.href="/provider/edit"
+            }
+        }
+    });
+    
+    $("#address").citySelect({
+        nodata:"none",
+        <#if provider?? && provider.province??>prov: "${provider.province!''}",</#if>
+        <#if provider?? && provider.city??>city: "${provider.city!''}",</#if>
+        <#if provider?? && provider.disctrict??>dist: "${provider.disctrict!''}",</#if>
+        required:false
     });
 
     $(".click_a").click(function(){
@@ -31,9 +47,6 @@ $(document).ready(function(){
         }
     });//选择超市下拉效果
 
-    navDownList("nav_down","li",".nav_show");
-    menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -43,10 +56,10 @@ $(document).ready(function(){
 })
 </script>
 <!--[if IE]>
-   <script src="js/html5.js"></script>
+   <script src="/client/js/html5.js"></script>
 <![endif]-->
 <!--[if IE 6]>
-<script type="text/javascript" src="js/DD_belatedPNG_0.0.8a.js" ></script>
+<script type="text/javascript" src="/client/js/DD_belatedPNG_0.0.8a.js" ></script>
 <script>
 DD_belatedPNG.fix('.,img,background');
 </script>
@@ -62,32 +75,79 @@ DD_belatedPNG.fix('.,img,background');
       <div class="mymember_info mymember_info02">
         <h3>修改密码</h3>
         
-		<form id="form1" action="/provider/password" method="post">
+		<form id="form1" action="/provider/edit" method="post">
 		<div class="haoh pt15 geren_rig">
             <div class="h20"></div>
+            <input type="hidden" value="${provider.id?c}" name="id" />
             <input name="__STATE" type="hidden" value="${provider.password}"/>
             <table class="mymember_address">
                   <tr>
+                       <th>商家名称：</th>
+                       <td>
+                            <input class="text" type="text" name="title" value="${provider.title!''}" datatype="*2-100" sucmsg=" " errormsg="请输入名称"/>
+                            <span class="Validform_checktip"></span>
+                       </td>
+                  </tr>
+                  <tr>
+                    <th>所属地区：</th>
+                    <td>
+                       <div id="address">
+                           <select name="province" class="prov" style="width: 100px;" datatype="*"></select>
+                           <select name="city" class="city" style="width: 100px;" datatype="*"></select>
+                           <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10"></select>
+                           <span style="float:none;" class="Validform_checktip">*</span>
+                       </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>详细地址：</th>
+                    <td>
+                       <input type="text" class="text" name="address" value="${provider.address!''}" datatype="*" sucmsg=" " errormsg="请输入详细地址"/ >
+                       <span class="Validform_checktip">*</span>
+                    </td>
+                 </tr>
+                 <tr>
+                    <th>手机号：</th>
+                    <td>
+                       <input class="text" type="text" name="mobile" value="${provider.mobile!''}" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" sucmsg=" ">
+                       <span style="float:none;" class="Validform_checktip"></span>
+                    </td>
+                </tr>
+                  <tr>
                        <th>旧密码：</th>
                        <td>
-                            <input class="mytext" type="password" name="oldPassword" datatype="*" errormsg="原始密码不正确" recheck="__STATE"/>
+                            <input class="text" type="password" value="${provider.password!''}" name="password" datatype="*" errormsg="请输入密码！" sucmsg=" " />
                             <span class="Validform_checktip"></span>
                        </td>
                   </tr>
                   <tr>
-                       <th>新密码：</th>
+                       <th>重复密码：</th>
                        <td>
-                            <input class="mytext" type="password" name="newPassword" datatype="*6-18"/>
-                            <span class="Validform_checktip"></span>
-                       </td>
-                  </tr>
-                       <th>确认新密码：</th>
-                       <td>
-                            <input class="mytext" type="password" datatype="*" recheck="newPassword"/>
+                            <input class="text" type="password" datatype="*" value="${provider.password!''}" recheck="password"  errormsg="请再次输入密码！" sucmsg=" "/>
                             <span class="Validform_checktip"></span>
                        </td>
                   </tr>
                   <tr>
+                        <th>平台服务比例</th>
+                        <td>
+                            <input name="serviceRation" readonly="readonly" type="text" value="<#if provider?? && provider.serviceRation??>${provider.serviceRation?string("0.00")}<#else>0.01</#if>" class="text" sucmsg=" "> 
+                            <span class="Validform_checktip" style="color:red">*不可更改</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>支付宝使用费比例</th>
+                        <td>
+                            <input name="aliRation" readonly="readonly" type="text" value="<#if provider?? && provider.aliRation??>${provider.aliRation?string("0.00")}<#else>0.00</#if>" class="text" sucmsg=" "> 
+                            <span class="Validform_checktip" style="color:red">*不可更改</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>商家邮费收取比例</th>
+                        <td>
+                            <input name="postPrice"  type="text" value="<#if provider?? && provider.postPrice??>${provider.postPrice?string("0.00")}<#else>0.00</#if>" class="text" sucmsg=" "> 
+                            <span class="Validform_checktip">*商家每次交易时根据商品总额按比例计算邮费（如：0.01）</span>
+                        </td>
+                      </tr>
                   <tr>
                         <th></th>
                         <td><input class="mysub" type="submit" value="确定" /></td>

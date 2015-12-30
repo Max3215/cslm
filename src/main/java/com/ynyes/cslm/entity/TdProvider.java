@@ -94,6 +94,11 @@ public class TdProvider {
     @Column
     private Double postPrice;
     
+    // 支付宝费率
+    @Column(scale=2)
+    private Double aliRation;
+    
+    
     public Long getId() {
         return id;
     }
@@ -236,6 +241,14 @@ public class TdProvider {
 
 	public void setPostPrice(Double postPrice) {
 		this.postPrice = postPrice;
+	}
+
+	public Double getAliRation() {
+		return aliRation;
+	}
+
+	public void setAliRation(Double aliRation) {
+		this.aliRation = aliRation;
 	}
 
     

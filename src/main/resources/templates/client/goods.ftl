@@ -155,7 +155,7 @@ function showMsg(){
 				<div id="proinfo_left">
 					<div class="propic_main">
 					   <#if goods.coverImageUri??>
-						    <img src="${goods.coverImageUri!''}">
+						    <img src="${goods.coverImageUri!''}" width="498px" height="498px">
 					   </#if>
 					</div>
 					<span class="spe_leftBtn">&lt;</span>
@@ -246,12 +246,6 @@ function showMsg(){
                     </#if>
                 </#if>
 				<!--  参数结束    -->
-				<p class="num"><#if dis_goods.postPrice??>邮费：<span>${dis_goods.postPrice?string('0.00')}</span></#if>
-				             <#if dis_goods.maxPostPrice??>
-				             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				             <span>满${dis_goods.maxPostPrice?string('0.00')}免邮</span>
-				             </#if>
-				</p>
 				<p class="digital">
 					<#if dis_goods??>
 					<span>数量：</span>
@@ -264,6 +258,8 @@ function showMsg(){
 					</#if>
 					<div class="clear"></div>
 				</p>
+                <p></p>
+				<#if maxPostPrice??><p class="num">本店满<span style="color:red">￥${maxPostPrice?string('0.00')}</span>&nbsp;包邮</p></#if>
 				<div class="buy_btn">
 					<div class="clear"></div>
 					<#if dis_goods??>
@@ -273,9 +269,6 @@ function showMsg(){
         					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
         					<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>
 					   </#if>
-					<#else>
-    					<a href="javascript:showMsg();"  title="立即购买" class="buy">立即购买</a>
-                        <a href="javascript:showMsg();"  title="加入购物车" class="car">加入购物车</a>
 					</#if>
 					<div class="clear"></div>
 				</div>

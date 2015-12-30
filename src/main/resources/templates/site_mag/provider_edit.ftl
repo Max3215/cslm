@@ -121,12 +121,19 @@ $(function () {
         </dd>
     </dl>
     <dl>
-    <dt>商家邮费收取比例</dt>
-    <dd>
-        <input name="postPrice" type="text" value="<#if provider?? && provider.postPrice??>${provider.postPrice?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
-        <span class="Validform_checktip">*商家每次交易时根据商品总额按比例计算邮费</span>
-    </dd>
-  </dl>
+        <dt>支付宝使用费比例</dt>
+        <dd>
+            <input name="aliRation" type="text" value="<#if provider?? && provider.aliRation??>${provider.aliRation?string("0.00")}<#else>0</#if>" class="input normal" sucmsg=" "> 
+            <span class="Validform_checktip">*</span>
+        </dd>
+      </dl>
+    <dl>
+        <dt>商家邮费收取比例</dt>
+        <dd>
+            <input name="postPrice" type="text" value="<#if provider?? && provider.postPrice??>${provider.postPrice?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
+            <span class="Validform_checktip">*商家每次交易时根据商品总额按比例计算邮费</span>
+        </dd>
+      </dl>
     <dl>
         <dt>城市</dt>
         <dd>

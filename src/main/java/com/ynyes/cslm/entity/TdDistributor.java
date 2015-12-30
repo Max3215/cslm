@@ -11,7 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 /**
- * 分销商
+ * 超市
  * 
  * @author libiao
  *
@@ -122,6 +122,11 @@ public class TdDistributor {
     // 平台服务收取服务比例
     @Column(scale=2)
     private Double serviceRation;
+    
+    // 支付宝使用费
+    @Column(scale=2)
+    private Double aliRation;
+    
     
     // 邮费比例
     @Column
@@ -337,6 +342,14 @@ public class TdDistributor {
 
 	public void setServiceRation(Double serviceRation) {
 		this.serviceRation = serviceRation;
+	}
+
+	public Double getAliRation() {
+		return aliRation;
+	}
+
+	public void setAliRation(Double aliRation) {
+		this.aliRation = aliRation;
 	}
 
 	public Double getPostPrice() {

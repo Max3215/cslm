@@ -227,7 +227,7 @@ DD_belatedPNG.fix('.,img,background');
       <li>营业时间：${distributor.openTimeSpan!''}</li>
       <li>钱包账号：${distributor.virtualAccount!''}</li>
       <li>服务电话：${distributor.serviceTele!''}</li>
-      <a href="/distributor/password" class="quit_btn" >修改密码</a><a href="/logout" class="quit_btn">退出登陆</a>
+      <a href="/distributor/edit" class="quit_btn" >修改信息</a><a href="/logout" class="quit_btn">退出登陆</a>
     </ul>
   </div>
 

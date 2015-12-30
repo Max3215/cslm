@@ -2042,7 +2042,7 @@ public class TdDistributorController {
 		return res;
 	}
 	
-	@RequestMapping(value="/password")
+	@RequestMapping(value="/edit")
 	public String distributorPassword(HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
@@ -2055,25 +2055,48 @@ public class TdDistributorController {
 		return "/client/distributor_change_password";
 	}
 	
-	@RequestMapping(value="/password", method = RequestMethod.POST)
-	public String distributorPassword(String oldPassword,String newPassword,
+	@RequestMapping(value="/edit", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> distributorPassword(String title,String province,
+			String city,String disctrict,
+			String address,String mobile,
+			String password,Double postPrice,
+			Double maxPostPrice,Long id,
 			HttpServletRequest req,ModelMap map)
 	{
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
+		
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg", "请重新登录！");
+			return res;
 		}
-		tdCommonService.setHeader(map, req);
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		 if (distributor.getPassword().equals(oldPassword)) 
-		 {
-			 distributor.setPassword(newPassword);
-		 }
 		
-		map.addAttribute("distributor",tdDistributorService.save(distributor));
+		if(null == id)
+		{
+			res.put("msg", "参数错误！");
+			return res;
+		}
 		
-		return "redirect:/distributor/password";
+		TdDistributor distributor = tdDistributorService.findOne(id);
+		
+		distributor.setTitle(title);
+		distributor.setProvince(province);
+		distributor.setCity(city);
+		distributor.setDisctrict(disctrict);
+		distributor.setAddress(address);
+		distributor.setMobile(mobile);
+		distributor.setPassword(password);
+		distributor.setPostPrice(postPrice);
+		distributor.setMaxPostPrice(maxPostPrice);
+		
+		tdDistributorService.save(distributor);
+		res.put("msg", "修改成功！");
+		res.put("code", 1);
+		
+		return res;
 	}
 	
 	@RequestMapping(value="/goods/onsale")

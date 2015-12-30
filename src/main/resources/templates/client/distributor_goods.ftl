@@ -98,16 +98,6 @@ function editOnSale(){
         alert("请输入商品销售价");
         return ;
     }
-    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(postPrice))
-    {
-        alert("请输入正确的邮费");
-        return ;
-    }
-    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(maxPostPrice))
-    {
-        alert("请输入正确的邮费");
-        return ;
-    }
 
     $.ajax({
         url : "/distributor/goods/editOnSale/"+disId,

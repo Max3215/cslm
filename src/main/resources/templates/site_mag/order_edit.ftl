@@ -662,7 +662,7 @@
                     </tr>
                     <tr>
                         <th>
-                            支付手续费
+                            平台服务费
                         </th>
                         <td>
                             <div class="position">

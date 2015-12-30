@@ -857,9 +857,6 @@ public class TdOrderController extends AbstractPaytypeController{
         }
 
         double payTypeFee = 0.0;
-        double deliveryTypeFee = 0.0;
-        double pointFee = 0.0;
-        double couponFee = 0.0;
 
         // 收货地址
         TdShippingAddress address = null;
@@ -929,31 +926,21 @@ public class TdOrderController extends AbstractPaytypeController{
         	TdOrder tdOrder = new TdOrder();
         	List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
         	
-        	// 商品总价
-            Double totalGoodsPrice = 0.0;
+        	
+            Double totalGoodsPrice = 0.0;// 商品总价
+            Double totalPrice= 0.0;// 订单总价
+            Double returnPrice =0.0;// 商品返利
+            Double postPrice = 0.0;// 配送费
+            Long totalPointReturn = 0L;	// 积分总额
+            Double servicePrice=0.0;// 平台服务费
+            Double totalRation =0.0;// 平台收费总比例
             
-            // 订单总价
-            Double totalPrice= 0.0;
-            
-            // 商品返利
-            Double returnPrice =0.0;
-            
-            // 配送费
-            Double postPrice = 0.0;
-            
-            // 积分总额
-            Long totalPointReturn = 0L;	
-            
-            // 平台服务费
-            Double servicePrice=0.0;
-            
-            System.err.println(m.getValue().size());
             for (int i = 0; i < m.getValue().size(); i++) 
             {
             	TdCartGoods cartGoods= m.getValue().get(i);
 	       		TdDistributorGoods distributorGoods = tdDistributoGoodsService.findOne(cartGoods.getDistributorGoodsId());
 	       		 
-	       		System.err.println(distributorGoods.getIsOnSale());
+	       		
 	       		if(null == distributorGoods || distributorGoods.getIsOnSale()==false)
 	       		{
 	       			continue;
@@ -1081,21 +1068,21 @@ public class TdOrderController extends AbstractPaytypeController{
             // 用户留言
             tdOrder.setUserRemarkInfo(userMessage);
 
-            // 优惠券
-            if (null != couponId) {
-                TdCoupon coupon = tdCouponService.findOne(couponId);
-
-                if (null != coupon) {
-                    TdCouponType couponType = tdCouponTypeService.findOne(coupon
-                            .getId());
-
-                    couponFee = couponType.getPrice();
-                    coupon.setIsUsed(true);
-                    tdCouponService.save(coupon);
-                }
-            }
-
-            pointFee = pointUse / 1;
+//            // 优惠券
+//            if (null != couponId) {
+//                TdCoupon coupon = tdCouponService.findOne(couponId);
+//
+//                if (null != coupon) {
+//                    TdCouponType couponType = tdCouponTypeService.findOne(coupon
+//                            .getId());
+//
+//                    couponFee = couponType.getPrice();
+//                    coupon.setIsUsed(true);
+//                    tdCouponService.save(coupon);
+//                }
+//            }
+//
+//            pointFee = pointUse / 1;
 
             // 待付款
             tdOrder.setStatusId(2L);
@@ -1151,37 +1138,44 @@ public class TdOrderController extends AbstractPaytypeController{
             	tdOrder.setTypeId(2L);
             	
             	tdOrder.setTotalLeftPrice(returnPrice);
-            	// 分销商品向发货商品增加虚拟账户余额
+            	
             	TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
             	 if(null != provider.getServiceRation())
                 {
-                	servicePrice += totalGoodsPrice*provider.getServiceRation();
+                	if(null != provider.getAliRation()) // 计算平台收费总比例
+                	{
+                		totalRation += provider.getServiceRation()+provider.getAliRation(); 
+                	}else{
+                		totalRation += provider.getServiceRation();
+                	}
                 }
             	
             }else{
             	tdOrder.setOrderNumber("P" + curStr
             			+ leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
             	
-            	// 设置订单类型
-            	tdOrder.setTypeId(0L);
+            	 // 设置订单类型
+            	 tdOrder.setTypeId(0L);
+            	 
 	        	 if(null != distributor.getServiceRation())
 	             {
-	             	servicePrice += totalGoodsPrice*distributor.getServiceRation();
+	        		 if(null != distributor.getAliRation()) // 计算平台收费总比例
+	              	{
+	              		totalRation += distributor.getServiceRation()+distributor.getAliRation();
+	              	}else{
+	              		totalRation += distributor.getServiceRation();
+	              	}
+	             	
 	             }
             	
             }
+            servicePrice += totalGoodsPrice*totalRation;
             
-            // 商品总价
-            tdOrder.setTotalGoodsPrice(totalGoodsPrice);
-            // 订单总价
-            tdOrder.setTotalPrice(totalPrice);
-            // 邮费
-            tdOrder.setPostPrice(postPrice);
-            // 平台服务费
-            tdOrder.setTrainService(servicePrice);
             
-            System.err.println("平台服务费="+servicePrice);
-            System.err.println("商品总价："+totalGoodsPrice+"+运费："+postPrice+"="+"订单价格："+totalPrice);
+            tdOrder.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
+            tdOrder.setTotalPrice(totalPrice); // 订单总价
+            tdOrder.setPostPrice(postPrice); // 邮费
+            tdOrder.setTrainService(servicePrice); // 平台服务费
             
 			tdDistributorService.save(distributor);
             
