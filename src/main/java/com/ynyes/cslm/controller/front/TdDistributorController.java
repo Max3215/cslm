@@ -28,6 +28,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedWebappClassLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -811,8 +812,6 @@ public class TdDistributorController {
 	@ResponseBody
 	public Map<String,Object> editOnSale(Long goodsId,
 					Double goodsPrice,
-					Double postPrice,
-					Double maxPostPrice,
 					Long leftNumber,Boolean type,
 					Integer page,HttpServletRequest req)
 	{
@@ -848,10 +847,6 @@ public class TdDistributorController {
 			distributorGoods.setGoodsPrice(goodsPrice);
 		}
 		distributorGoods.setLeftNumber(leftNumber);
-		
-		// 设置邮费
-		distributorGoods.setPostPrice(postPrice);
-		distributorGoods.setMaxPostPrice(maxPostPrice);
 		
 		distributorGoods.setIsOnSale(true);
 		tdDistributorGoodsService.save(distributorGoods);
@@ -2161,12 +2156,12 @@ public class TdDistributorController {
 				Double goodsPrice,
 				Double goodsMarketPrice,
 				Long leftNumber,
-				Double postPrice,
-				Double maxPostPrice,
 				String unit,
 				HttpServletRequest req)
 	{
 		Map<String,Object> res =new HashMap<>();
+		res.put("code", 0);
+		
 		String username =(String)req.getSession().getAttribute("distributor");
 		if(null ==username)
 		{
@@ -2209,8 +2204,6 @@ public class TdDistributorController {
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setLeftNumber(leftNumber);
 			distributorGoods.setOnSaleTime(new Date());
-			distributorGoods.setPostPrice(postPrice);
-			distributorGoods.setMaxPostPrice(maxPostPrice);
 			if(null != unit || !"".equals(unit))
 			{
 				distributorGoods.setUnit(unit);
@@ -2225,8 +2218,6 @@ public class TdDistributorController {
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);
 			disGoods.setGoodsMarketPrice(goodsMarketPrice);
-			disGoods.setPostPrice(postPrice);
-			disGoods.setMaxPostPrice(maxPostPrice);
 			if(null != unit || !"".equals(unit))
 			{
 				disGoods.setUnit(unit);
@@ -2237,7 +2228,9 @@ public class TdDistributorController {
 		}
 
 		tdDistributorService.save(distributor);
+		
 		res.put("msg", "上架成功");
+		res.put("code", 1);
 		return res;
 	}
 	
@@ -2429,7 +2422,6 @@ public class TdDistributorController {
             // 购物车是否已有该商品
 //            oldCartGoodsList = tdCartGoodsService
 //                            .findByGoodsIdAndUsername(providerGoods.getGoodsId(), username);
-			System.err.println(providerGoods.getId()+"---"+username+"---"+tdProviderGoodsService.findProviderId(pgId));
 			
 			oldCartGoodsList = tdCartGoodsService.
 						findByGoodsIdAndUsernameAndProviderId(providerGoods.getId(), username,tdProviderGoodsService.findProviderId(pgId));
@@ -2611,9 +2603,9 @@ public class TdDistributorController {
         if (null != id) {
 //            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
         	TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
-
-        	TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(cartGoods.getProviderId(), cartGoods.getGoodsId());
-            if (cartGoods.getUsername().equalsIgnoreCase(username)) {
+        	TdProviderGoods providerGoods = tdProviderGoodsService.findOne(cartGoods.getGoodsId());
+            
+        	if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 if(quantity < providerGoods.getLeftNumber()){
                 	cartGoods.setQuantity(quantity);
                 	tdCartGoodsService.save(cartGoods);
@@ -2654,7 +2646,7 @@ public class TdDistributorController {
      *  	扣除超市相应余额
      *  	增加相应批发账户
      */
-    @RequestMapping(value="/order/info",method=RequestMethod.POST)
+    @RequestMapping(value="/order/info")
     @ResponseBody
     public Map<String,Object> orderInfo(HttpServletRequest req)
     {
@@ -2706,8 +2698,11 @@ public class TdDistributorController {
         	Map.Entry<Long,List<TdCartGoods> > m  = iterator.next();
         
         	 List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
+        	 
         	 Double totalPrice = 0.0; // 购物总额
         	 Double serviceRation = 0.0; // 平台返利
+        	 Double totalGoodsPrice = 0.0; // 商品总额 
+        	 Double postPrice = 0.0;
         	 
         	 
         	 for (int i = 0; i < m.getValue().size(); i++) {
@@ -2740,7 +2735,7 @@ public class TdDistributorController {
         		 orderGoods.setQuantity(quantity);
         		 
         		 // 商品总价
-        		 totalPrice +=cartGoods.getPrice()*cartGoods.getQuantity();
+        		 totalGoodsPrice +=cartGoods.getPrice()*cartGoods.getQuantity();
         		 
         		 orderGoodsList.add(orderGoods);
         		 
@@ -2780,25 +2775,34 @@ public class TdDistributorController {
              					+distributor.getAddress());
              // 待发货
              tdOrder.setStatusId(3L);
-             // 总价
-             tdOrder.setTotalPrice(totalPrice);
              
              if(null != provider.getServiceRation())
       		 {
-      			serviceRation =totalPrice*provider.getServiceRation(); // 计算平台获利
+      			serviceRation =totalGoodsPrice*provider.getServiceRation(); // 计算平台获利
       		 }
-             tdOrder.setTrainService(serviceRation); // 平台服务费
              
              // 订单类型-批发订单
              tdOrder.setTypeId(1L);
              
              // 订单商品
              tdOrder.setOrderGoodsList(orderGoodsList);
-             tdOrder.setTotalGoodsPrice(totalPrice);
              
-             // 网站基本信息
-//             TdSetting setting = tdSettingService.findTopBy();
-            
+             if(null != provider.getPostPrice())
+             {
+            	postPrice += totalGoodsPrice*provider.getPostPrice();
+            	totalPrice += totalGoodsPrice+postPrice;
+             }else{
+            	 totalPrice += totalGoodsPrice;
+             }
+             
+             tdOrder.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
+             tdOrder.setTrainService(serviceRation); // 平台服务费
+             tdOrder.setTotalPrice(totalPrice); // 订单总价
+             tdOrder.setPostPrice(postPrice); // 运费
+             
+             System.err.println("服务费："+serviceRation);
+             System.err.println("商品价："+totalGoodsPrice+"运费："+postPrice+"=订单总额："+totalPrice);
+             
              if(distributor.getVirtualMoney()<tdOrder.getTotalPrice())
              {
             	 res.put("msg", "账户余额不足，请先充值！");
@@ -2829,12 +2833,23 @@ public class TdDistributorController {
             record.setCreateTime(new Date());
             record.setDistributorId(distributor.getId());
             record.setDistributorTitle(distributor.getTitle());
+            record.setProviderTitle(provider.getTitle());
+            record.setOrderId(tdOrder.getId());
+            record.setOrderNumber(tdOrder.getOrderNumber());
+            record.setStatusCode(1);
+            record.setProvice(tdOrder.getTotalPrice());
+            tdPayRecordService.save(record);
+            
+            record = new TdPayRecord();
+            record.setCont("批发款");
+            record.setCreateTime(new Date());
+            record.setDistributorTitle(distributor.getTitle());
             record.setProviderId(provider.getId());
             record.setProviderTitle(provider.getTitle());
             record.setOrderId(tdOrder.getId());
             record.setOrderNumber(tdOrder.getOrderNumber());
             record.setStatusCode(1);
-            record.setProvice(tdOrder.getTotalGoodsPrice());
+            record.setProvice(tdOrder.getTotalPrice()-serviceRation);
             tdPayRecordService.save(record);
         	 
         }
@@ -2843,6 +2858,7 @@ public class TdDistributorController {
         tdCartGoodsService.delete(cartSelectedGoodsList);
         
 //    	return "redirect:/distributor/inOrder/list/0";
+        res.put("msg", "提交成功！");
         res.put("code", 1);
         return res;
     }

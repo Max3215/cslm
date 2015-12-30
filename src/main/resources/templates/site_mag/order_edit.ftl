@@ -650,42 +650,24 @@
                             </div>
                         </td>
                     </tr>
-                    <#--
                     <tr>
                         <th>
                             配送费用
                         </th>
                         <td>
                             <div class="position">
-                                <span id="spanExpressFeeValue"><#if order.deliverTypeFee??>${order.deliverTypeFee?string("0.00")}</#if></span> 元
-                                <#if order.statusId==1 || order.statusId==2 && order.isOnlinePay>
-                                <input type="button" id="btnEditExpressFee" class="ibtn" value="调价">
-                                </#if>
+                                <span id="spanExpressFeeValue"><#if order.postPrice??>${order.postPrice?string("0.00")}</#if></span> 元
                             </div>
                         </td>
                     </tr>
-                    -->
                     <tr>
                         <th>
                             支付手续费
                         </th>
                         <td>
                             <div class="position">
-                                <span id="spanPaymentFeeValue"><#if order.payTypeFee??>${order.payTypeFee?string("0.00")}<#else>0</#if></span> 元
-                                <#--
-                                <#if order.statusId==1 || order.statusId==2 && order.isOnlinePay>
-                                <input type="button" id="btnEditPaymentFee" class="ibtn" value="调价">
-                                </#if>
-                                -->
+                                <span id="spanPaymentFeeValue"><#if order.trainService??>${order.trainService?string("0.00")}<#else>0</#if></span> 元
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            平台服务费
-                        </th>
-                        <td>
-                                ${order.trainService!"0"}元
                         </td>
                     </tr>
                     <tr>

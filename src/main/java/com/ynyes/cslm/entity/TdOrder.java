@@ -223,7 +223,7 @@ public class TdOrder {
     @Column(scale=2)
     private Double totalPrice;
     
-    // 订单尾款总金额，有些订单需付尾款
+    // 分销订单返利
     @Column(scale=2)
     private Double totalLeftPrice;
     
@@ -248,6 +248,10 @@ public class TdOrder {
     
     @Column
     private Double trainService;
+    
+    // 配送费
+    @Column(scale=2)
+    private Double postPrice;
     
     
     public Double getPlatformService() {
@@ -681,5 +685,15 @@ public class TdOrder {
 	public void setProviderTitle(String providerTitle) {
 		this.providerTitle = providerTitle;
 	}
+
+	public Double getPostPrice() {
+		return postPrice;
+	}
+
+	public void setPostPrice(Double postPrice) {
+		this.postPrice = postPrice;
+	}
+	
+	
     
 }

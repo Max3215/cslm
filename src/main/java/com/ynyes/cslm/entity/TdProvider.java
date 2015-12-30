@@ -90,6 +90,10 @@ public class TdProvider {
     @Column(scale=2)
     private Double serviceRation;
     
+    // 邮费比例
+    @Column
+    private Double postPrice;
+    
     public Long getId() {
         return id;
     }
@@ -225,8 +229,15 @@ public class TdProvider {
 	public void setServiceRation(Double serviceRation) {
 		this.serviceRation = serviceRation;
 	}
-    
-    
+
+	public Double getPostPrice() {
+		return postPrice;
+	}
+
+	public void setPostPrice(Double postPrice) {
+		this.postPrice = postPrice;
+	}
+
     
     
 }

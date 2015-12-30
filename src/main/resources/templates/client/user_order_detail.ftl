@@ -204,7 +204,11 @@ DD_belatedPNG.fix('.,img,background');
             </tr>
             <tr>
                 <th>支付明细</th>
-                <td>支付总额：<font color="#ff1000">￥<#if order??>${order.totalPrice?string("0.00")}</#if></font></td>
+                <td>
+                    支付总额：<font color="#ff1000">￥<#if order??>${order.totalPrice?string("0.00")}</#if></font>
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                    运费：<font color="#ff1000">￥<#if order.postPrice??>${order.postPrice?string("0.00")}<#else>0</#if></font>
+                </td>
             </tr>
             <tr>
                 <th>联系方式</th>
@@ -218,7 +222,7 @@ DD_belatedPNG.fix('.,img,background');
             <tr class="mymember_infotab_tit01">
                   <th colspan="2">订单信息</th>
                   <th width="70">收货人</th>
-                  <th width="80">订单金额</th>
+                  <th width="80">商品金额</th>
                   <th>数量</th>
                   <th width="80">时间</th>
                   <th width="80">状态</th>

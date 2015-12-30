@@ -233,7 +233,7 @@ public class TdManagerProviderController {
         {
             tdManagerLogService.addLog("edit", "用户修改供应商", req);
         }
-        System.err.println(tdProvider.getMobile());
+        System.err.println(tdProvider.getGoodsList());;
         tdProviderService.save(tdProvider);
         
         return "redirect:/Verwalter/provider/list";

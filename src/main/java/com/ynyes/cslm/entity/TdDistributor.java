@@ -123,6 +123,14 @@ public class TdDistributor {
     @Column(scale=2)
     private Double serviceRation;
     
+    // 邮费比例
+    @Column
+    private Double postPrice;
+    
+    // 满额免邮
+    @Column
+    private Double maxPostPrice;
+    
     public Long getId() {
         return id;
     }
@@ -329,6 +337,22 @@ public class TdDistributor {
 
 	public void setServiceRation(Double serviceRation) {
 		this.serviceRation = serviceRation;
+	}
+
+	public Double getPostPrice() {
+		return postPrice;
+	}
+
+	public void setPostPrice(Double postPrice) {
+		this.postPrice = postPrice;
+	}
+
+	public Double getMaxPostPrice() {
+		return maxPostPrice;
+	}
+
+	public void setMaxPostPrice(Double maxPostPrice) {
+		this.maxPostPrice = maxPostPrice;
 	}
 
 	

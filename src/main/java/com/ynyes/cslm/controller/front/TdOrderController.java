@@ -2,6 +2,7 @@ package com.ynyes.cslm.controller.front;
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.midi.SysexMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.csii.payment.client.core.CebMerchantSignVerify;
 import com.cslm.payment.alipay.AlipayConfig;
+import com.cslm.payment.alipay.Constants;
 import com.cslm.payment.alipay.PaymentChannelAlipay;
+import com.cslm.payment.alipay.core.AlipayNotify;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
@@ -41,6 +45,7 @@ import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdPayType;
+import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
@@ -107,9 +112,6 @@ public class TdOrderController extends AbstractPaytypeController{
     private TdCouponTypeService tdCouponTypeService;
 
     @Autowired
-    private TdDistributorService TdDistributorService;
-
-    @Autowired
     private TdPayRecordService payRecordService;
 
     @Autowired
@@ -132,6 +134,9 @@ public class TdOrderController extends AbstractPaytypeController{
     
     @Autowired
     private TdProviderService tdProviderService;
+    
+    @Autowired
+    private TdPayRecordService tdPayRecordService;
     
 //    @Autowired
 //    private PaymentChannelCEB payChannelCEB;
@@ -308,7 +313,7 @@ public class TdOrderController extends AbstractPaytypeController{
         req.getSession().setAttribute("buyType", type);
 
         // 线下加盟店
-        map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
+        map.addAttribute("shop_list", tdDistributorService.findByIsEnableTrue());
 
         // 支付方式列表
 //        setPayTypes(map, true, false, req);
@@ -560,7 +565,7 @@ public class TdOrderController extends AbstractPaytypeController{
 
         // 线下加盟超市
         if (null != shopId) {
-            TdDistributor shop = TdDistributorService.findOne(shopId);
+            TdDistributor shop = tdDistributorService.findOne(shopId);
 
             if (null != shop) {
                 tdOrder.setShopId(shop.getId());
@@ -642,7 +647,7 @@ public class TdOrderController extends AbstractPaytypeController{
         tdOrder.setStatusId(2L);
 
         // 需付尾款额
-        tdOrder.setTotalLeftPrice(totalLeftPrice);
+//        tdOrder.setTotalLeftPrice(totalLeftPrice);
 
         // 发票
         if (null != isNeedInvoice) {
@@ -741,7 +746,7 @@ public class TdOrderController extends AbstractPaytypeController{
         map.addAttribute("total_point_limit", totalPointLimited);
 
         // 线下加盟超市
-        map.addAttribute("shop_list", TdDistributorService.findByIsEnableTrue());
+        map.addAttribute("shop_list", tdDistributorService.findByIsEnableTrue());
 
         // 支付方式列表
         setPayTypes(map, true, false, req);
@@ -927,11 +932,20 @@ public class TdOrderController extends AbstractPaytypeController{
         	// 商品总价
             Double totalGoodsPrice = 0.0;
             
+            // 订单总价
+            Double totalPrice= 0.0;
+            
             // 商品返利
             Double returnPrice =0.0;
             
+            // 配送费
+            Double postPrice = 0.0;
+            
             // 积分总额
             Long totalPointReturn = 0L;	
+            
+            // 平台服务费
+            Double servicePrice=0.0;
             
             System.err.println(m.getValue().size());
             for (int i = 0; i < m.getValue().size(); i++) 
@@ -1086,10 +1100,25 @@ public class TdOrderController extends AbstractPaytypeController{
             // 待付款
             tdOrder.setStatusId(2L);
 
-            // 总价
-            tdOrder.setTotalPrice(totalGoodsPrice + payTypeFee + deliveryTypeFee
-                    - pointFee - couponFee);
-
+            if(null != distributor.getPostPrice())
+            {
+            	// 计算邮费
+            	postPrice +=totalGoodsPrice*distributor.getPostPrice();
+            	
+            	// 判断是否满额免
+            	if(totalGoodsPrice > distributor.getMaxPostPrice())
+            	{
+            		totalPrice += totalGoodsPrice;
+            	}else{
+            		totalPrice += totalGoodsPrice+postPrice;
+            	}
+            	
+            }
+            else
+            {
+            	totalPrice += totalGoodsPrice;
+            }
+            
             // 发票
             if (null != isNeedInvoice) {
                 tdOrder.setIsNeedInvoice(isNeedInvoice);
@@ -1121,12 +1150,13 @@ public class TdOrderController extends AbstractPaytypeController{
             	// 设置订单类型 预定
             	tdOrder.setTypeId(2L);
             	
+            	tdOrder.setTotalLeftPrice(returnPrice);
             	// 分销商品向发货商品增加虚拟账户余额
-//            	TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
-//            	provider.setVirtualMoney(provider.getVirtualMoney()+totalGoodsPrice-returnPrice);
-//            	tdProviderService.save(provider);
-//            	// 分销超市分销获利
-//            	distributor.setVirtualMoney(distributor.getVirtualMoney()+returnPrice);
+            	TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
+            	 if(null != provider.getServiceRation())
+                {
+                	servicePrice += totalGoodsPrice*provider.getServiceRation();
+                }
             	
             }else{
             	tdOrder.setOrderNumber("P" + curStr
@@ -1134,11 +1164,26 @@ public class TdOrderController extends AbstractPaytypeController{
             	
             	// 设置订单类型
             	tdOrder.setTypeId(0L);
+	        	 if(null != distributor.getServiceRation())
+	             {
+	             	servicePrice += totalGoodsPrice*distributor.getServiceRation();
+	             }
             	
-            	// 相应超市虚拟账户金额增加
-//            	distributor.setVirtualMoney(distributor.getVirtualMoney()+tdOrder.getTotalPrice());
             }
-			TdDistributorService.save(distributor);
+            
+            // 商品总价
+            tdOrder.setTotalGoodsPrice(totalGoodsPrice);
+            // 订单总价
+            tdOrder.setTotalPrice(totalPrice);
+            // 邮费
+            tdOrder.setPostPrice(postPrice);
+            // 平台服务费
+            tdOrder.setTrainService(servicePrice);
+            
+            System.err.println("平台服务费="+servicePrice);
+            System.err.println("商品总价："+totalGoodsPrice+"+运费："+postPrice+"="+"订单价格："+totalPrice);
+            
+			tdDistributorService.save(distributor);
             
             order = tdOrderService.save(tdOrder);
 
@@ -1294,8 +1339,9 @@ public class TdOrderController extends AbstractPaytypeController{
 
             String payCode = payType.getCode();
             if (PAYMENT_ALI.equals(payCode)) {
-//                payForm = payChannelAlipay.getPayFormData(req);
-//                map.addAttribute("charset", AlipayConfig.CHARSET);
+            	PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
+                payForm = paymentChannelAlipay.getPayFormData(req);
+                map.addAttribute("charset", AlipayConfig.CHARSET);
             }
             else {
                 // 其他目前未实现的支付方式
@@ -1308,7 +1354,7 @@ public class TdOrderController extends AbstractPaytypeController{
         order.setPayTime(new Date());
 
         tdOrderService.save(order);
-
+       
         map.addAttribute("payForm", payForm);
 
         return "/client/order_pay_form";
@@ -1348,8 +1394,8 @@ public class TdOrderController extends AbstractPaytypeController{
             return "/client/error_404";
         }
 
-        String amount = order.getTotalLeftPrice().toString();
-        req.setAttribute("totalPrice", amount);
+//        String amount = order.getTotalLeftPrice().toString();
+//        req.setAttribute("totalPrice", amount);
 
         String payForm = "";
 
@@ -1430,11 +1476,12 @@ public class TdOrderController extends AbstractPaytypeController{
     /*
      * 
      */
-//    @RequestMapping(value = "/pay/notify_alipay")
-//    public void payNotifyAlipay(ModelMap map, HttpServletRequest req,
-//            HttpServletResponse resp) {
-//        payChannelAlipay.doResponse(req, resp);
-//    }
+    @RequestMapping(value = "/pay/notify_alipay")
+    public void payNotifyAlipay(ModelMap map, HttpServletRequest req,
+            HttpServletResponse resp) {
+    	PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
+        paymentChannelAlipay.doResponse(req, resp);
+    }
 
     /*
      * 
@@ -1448,69 +1495,69 @@ public class TdOrderController extends AbstractPaytypeController{
     /*
      * 
      */
-//    @RequestMapping(value = "/pay/result_alipay")
-//    public String payResultAlipay(ModelMap map, HttpServletRequest req,
-//            HttpServletResponse resp) {
-//        Map<String, String> params = new HashMap<String, String>();
-//        Map<String, String[]> requestParams = req.getParameterMap();
-//        for (Iterator<String> iter = requestParams.keySet().iterator(); iter
-//                .hasNext();) {
-//            String name = iter.next();
-//            String[] values = requestParams.get(name);
-//            String valueStr = "";
-//            for (int i = 0; i < values.length; i++) {
-//                valueStr = (i == values.length - 1) ? valueStr + values[i]
-//                        : valueStr + values[i] + ",";
-//            }
-//            // 乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
-////            try {
-////                valueStr = new String(valueStr.getBytes("ISO-8859-1"),
-////                        AlipayConfig.CHARSET);
-////            } catch (UnsupportedEncodingException e) {
-////                e.printStackTrace();
-////            }
-//            params.put(name, valueStr);
-//        }
-//
-//        // 获取支付宝的返回参数
-//        String orderNo = "";
-//        String trade_status = "";
-////        try {
-////            // 商户订单号
-////            orderNo = new String(req.getParameter(Constants.KEY_OUT_TRADE_NO)
-////                    .getBytes("ISO-8859-1"), AlipayConfig.CHARSET);
-////            // 交易状态
-////            trade_status = new String(req.getParameter("trade_status")
-////                    .getBytes("ISO-8859-1"), AlipayConfig.CHARSET);
-////        } catch (UnsupportedEncodingException e) {
-////            e.printStackTrace();
-////        }
-//
-//        // 计算得出通知验证结果
-////        boolean verify_result = AlipayNotify.verify(params);
-//
-//        tdCommonService.setHeader(map, req);
-//        orderNo = (orderNo == null) ? "" : (orderNo.length() < 6) ? orderNo
-//                : orderNo.substring(0, orderNo.length() - 6);
-//        TdOrder order = tdOrderService.findByOrderNumber(orderNo);
-//        if (order == null) {
-//            // 订单不存在
-//            return "/client/order_pay_failed";
-//        }
-//        map.put("order", order);
-//        if (verify_result) {// 验证成功
-//            if ("WAIT_SELLER_SEND_GOODS".equals(trade_status)) {
-//
-//                // 订单支付成功
-//                afterPaySuccess(order);
-//
-//                return "/client/order_pay_success";
-//            }
-//        }
-//
-//        // 验证失败或者支付失败
-//        return "/client/order_pay_failed";
-//    }
+    @RequestMapping(value = "/pay/result_alipay")
+    public String payResultAlipay(ModelMap map, HttpServletRequest req,
+            HttpServletResponse resp) {
+        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String[]> requestParams = req.getParameterMap();
+        for (Iterator<String> iter = requestParams.keySet().iterator(); iter
+                .hasNext();) {
+            String name = iter.next();
+            String[] values = requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            // 乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+            try {
+                valueStr = new String(valueStr.getBytes("ISO-8859-1"),
+                        AlipayConfig.CHARSET);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            params.put(name, valueStr);
+        }
+
+        // 获取支付宝的返回参数
+        String orderNo = "";
+        String trade_status = "";
+        try {
+            // 商户订单号
+            orderNo = new String(req.getParameter(Constants.KEY_OUT_TRADE_NO)
+                    .getBytes("ISO-8859-1"), AlipayConfig.CHARSET);
+            // 交易状态
+            trade_status = new String(req.getParameter("trade_status")
+                    .getBytes("ISO-8859-1"), AlipayConfig.CHARSET);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        // 计算得出通知验证结果
+        boolean verify_result = AlipayNotify.verify(params);
+
+        tdCommonService.setHeader(map, req);
+        orderNo = (orderNo == null) ? "" : (orderNo.length() < 6) ? orderNo
+                : orderNo.substring(0, orderNo.length() - 6);
+        TdOrder order = tdOrderService.findByOrderNumber(orderNo);
+        if (order == null) {
+            // 订单不存在
+            return "/client/order_pay_failed";
+        }
+        map.put("order", order);
+        if (verify_result) {// 验证成功
+            if ("WAIT_SELLER_SEND_GOODS".equals(trade_status)) {
+
+                // 订单支付成功
+                afterPaySuccess(order);
+
+                return "/client/order_pay_success";
+            }
+        }
+
+        // 验证失败或者支付失败
+        return "/client/order_pay_failed";
+    }
 
     /*
      * 
@@ -1657,120 +1704,80 @@ public class TdOrderController extends AbstractPaytypeController{
         }
 
         // 用户
-        TdUser tdUser = tdUserService.findByUsername(tdOrder.getUsername());
+//        TdUser tdUser = tdUserService.findByUsername(tdOrder.getUsername());
         
-        /**
-		 * @author lc
-		 * @注释：根据用户所属加盟超市id查询加盟超市
-		 */
-        TdDistributor tdShop = null;
-        if (null != tdUser.getUpperDiySiteId()) {
-        	// 加盟超市
-            tdShop = TdDistributorService.findOne(tdUser.getUpperDiySiteId());
-		}else{
-			// 加盟超市
-	        tdShop = TdDistributorService.findOne(tdOrder.getShopId());
-		}
-        
-
-        if (tdOrder.getStatusId().equals(2L) && !tdOrder.getTotalLeftPrice().equals(0))
+        if (tdOrder.getStatusId().equals(2L))
         {
             // 待付尾款
             tdOrder.setStatusId(3L);
             tdOrder = tdOrderService.save(tdOrder);
             return;
         }
-        else
-        {
-            // 待服务
-            tdOrder.setStatusId(4L);
-            tdOrder = tdOrderService.save(tdOrder);
-        }
-
-//        // 给用户发送短信
-//        if (null != tdUser) {
-//            SMSUtil.send(
-//                    tdOrder.getShippingPhone(),
-//                    "29040",
-//                    new String[] {
-//                            tdUser.getUsername(),
-//                            tdOrder.getOrderGoodsList().get(0).getGoodsTitle(),
-//                            tdOrder.getOrderNumber().substring(tdOrder.getOrderNumber().length() - 4)});
-//            System.out.println("---Sharon---: 向用户"+tdOrder.getShippingPhone()+"发送短信");
-//        }
-
-        // 给商户发短信
-//        if (null != tdShop && null != tdUser && null != tdShop.getMobile()) {
-//            SMSUtil.send(tdShop.getMobile(), 
-//                    "29039",
-//                    new String[] { tdShop.getTitle(), tdUser.getUsername(),
-//                            tdOrder.getOrderGoodsList().get(0).getGoodsTitle(),
-//                            tdOrder.getAppointmentTime().toString() });
-//            System.out.println("---Sharon---: 向加盟超市"+tdShop.getMobile()+"发送短信");
-//        }
         
-        List<TdOrderGoods> tdOrderGoodsList = tdOrder.getOrderGoodsList();
-
-        Long totalPoints = 0L;
-        Double totalCash = 0.0;
-        Double platformService = 0.0;
-        Double trainService = 0.0;
-        // 返利总额
-        if (null != tdOrderGoodsList) {
-            for (TdOrderGoods tog : tdOrderGoodsList) {
-                if (0 == tog.getGoodsSaleType()) // 正常销售
-                {
-                    TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
-
-                    if (null != tdGoods && null != tdGoods.getReturnPoints()) {
-                        totalPoints += tdGoods.getReturnPoints();
-
-                        if (null != tdGoods.getShopReturnRation()) {
-                            totalCash += tdGoods.getCostPrice()
-                                    * tdGoods.getShopReturnRation();
-                        }
-                    }
-                    if (null != tdGoods && null != tdGoods.getPlatformServiceReturnRation()) {
-                    	platformService += tdGoods.getCostPrice() * tdGoods.getPlatformServiceReturnRation();
-					}
-                    if (null != tdGoods && null != tdGoods.getTrainServiceReturnRation()) {
-                    	trainService += tdGoods.getCostPrice() * tdGoods.getTrainServiceReturnRation(); 
-					}
-                }
-            }
-
-            // 用户返利
-            if (null != tdUser) {
-                TdUserPoint userPoint = new TdUserPoint();
-
-                userPoint.setDetail("购买商品赠送粮草");
-                userPoint.setOrderNumber(tdOrder.getOrderNumber());
-                userPoint.setPoint(totalPoints);
-                userPoint.setPointTime(new Date());
-                userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
-                userPoint.setUsername(tdUser.getUsername());
-
-                userPoint = tdUserPointService.save(userPoint);
-
-                tdUser.setTotalPoints(userPoint.getTotalPoint());
-
-                tdUserService.save(tdUser);
-            }
+        // 添加商家余额及交易记录
+        if(0==tdOrder.getTypeId())
+        {
+        	TdDistributor distributor = tdDistributorService.findOne(tdOrder.getId());
+        	if(null != distributor)
+        	{
+        		distributor.setVirtualMoney(distributor.getVirtualMoney()+tdOrder.getTotalPrice()-tdOrder.getTrainService());
+        		tdDistributorService.save(distributor);
+        		
+        		TdPayRecord record = new TdPayRecord();
+        		record.setCont("订单销售款(扣除服务费)");
+        		record.setCreateTime(new Date());
+        		record.setDistributorId(distributor.getId());
+        		record.setDistributorTitle(distributor.getTitle());
+        		record.setOrderId(tdOrder.getId());
+        		record.setOrderNumber(tdOrder.getOrderNumber());
+        		record.setStatusCode(1);
+        		record.setProvice(tdOrder.getTotalPrice()-tdOrder.getTrainService());
+        		tdPayRecordService.save(record);
+        	}
         }
+        else if(2 == tdOrder.getTypeId())
+        {
+        	TdDistributor distributor = tdDistributorService.findOne(tdOrder.getId());
+        	TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
+        	
+        	if(null != distributor)
+        	{
+        		
+        		distributor.setVirtualMoney(distributor.getVirtualMoney()+tdOrder.getTotalLeftPrice());
+        		tdDistributorService.save(distributor);
+        		
+        		TdPayRecord record = new TdPayRecord();
+        		record.setCont("代理销售款");
+        		record.setCreateTime(new Date());
+        		record.setDistributorId(distributor.getId());
+        		record.setDistributorTitle(distributor.getTitle());
+        		record.setOrderId(tdOrder.getId());
+        		record.setOrderNumber(tdOrder.getOrderNumber());
+        		record.setStatusCode(1);
+        		record.setProvice(tdOrder.getTotalLeftPrice());
+        		tdPayRecordService.save(record);
+        	}
+        	if(null != provider)
+        	{
+        		provider.setVirtualMoney(provider.getVirtualMoney()+tdOrder.getTotalPrice()-tdOrder.getTotalLeftPrice()-tdOrder.getTrainService());
+        		
+        		TdPayRecord record = new TdPayRecord();
+                record.setCont("分销收款");
+                record.setCreateTime(new Date());
+                record.setDistributorId(distributor.getId());
+                record.setDistributorTitle(distributor.getTitle());
+                record.setProviderId(provider.getId());
+                record.setProviderTitle(provider.getTitle());
+                record.setOrderId(tdOrder.getId());
+                record.setOrderNumber(tdOrder.getOrderNumber());
+                record.setStatusCode(1);
+                record.setProvice(tdOrder.getTotalPrice()-tdOrder.getTotalLeftPrice()-tdOrder.getTrainService());
+                tdPayRecordService.save(record);
+        	}
+        }
+
+        
              
-        // 加盟超市返利
-        if (null != tdShop) {
-            if (null == tdShop.getTotalCash()) {
-                tdShop.setTotalCash(totalCash);
-            } else {
-                tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
-            }
-            tdOrder.setRebate(totalCash);//设置订单加盟超市所获返利
-            tdOrder.setPlatformService(platformService);//设置订单平台服务费
-            tdOrder.setTrainService(trainService);//设置订单培训服务费
-            tdOrder = tdOrderService.save(tdOrder);
-            TdDistributorService.save(tdShop);
-        }
     }
     
     /**

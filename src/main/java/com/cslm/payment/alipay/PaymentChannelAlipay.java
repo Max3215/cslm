@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.cslm.payment.PaymentChannel;
 import com.cslm.payment.alipay.core.AlipayConfirmGoods;
@@ -29,7 +30,7 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdPayRecordService;
 
-@org.springframework.stereotype.Service
+@Service
 public class PaymentChannelAlipay implements PaymentChannel {
     private static final String OUT_TRADE_NO_PARA = "out_trade_no";
     private static final String ORDER_NO_TB_PARA = "trade_no";
@@ -83,11 +84,11 @@ public class PaymentChannelAlipay implements PaymentChannel {
         requestParameters.put(Constants.KEY_SELLER_ACCOUNT_NAME, AlipayConfig.SELLER_EMAIL);
         
         // 此字段要修改
-        //requestParameters.put(Constants.KEY_BODY, "支付测试");
-        requestParameters.put(Constants.KEY_TOTAL_FEE, orderAmount);
-//                 requestParameters.put(Constants.KEY_TBREC_POST,
-//                 AlipayConfig.RECORD_POST);
-//                 requestParameters.put(Constants.KEY_ITB_PAY, AlipayConfig.PAY_POST);
+        requestParameters.put(Constants.KEY_BODY, "支付测试");
+//        requestParameters.put(Constants.KEY_TOTAL_FEE, orderAmount);
+                 requestParameters.put(Constants.KEY_TBREC_POST,
+                 AlipayConfig.RECORD_POST);
+                 requestParameters.put(Constants.KEY_ITB_PAY, AlipayConfig.PAY_POST);
         return AlipaySubmit.buildRequestForm(requestParameters,
                 Constants.METHOD_POST, Constants.PAY_BUTTON_NAME);
     }

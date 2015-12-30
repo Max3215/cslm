@@ -1445,7 +1445,7 @@ public class TdManagerOrderController {
         {
             return "redirect:/Verwalter/login";
         }
-        
+        System.err.println(TdDistributor.getGoodsList());
         String uris = parsePicUris(hid_photo_name_show360);
         
         TdDistributor.setShowPictures(uris);
@@ -1725,7 +1725,7 @@ public class TdManagerOrderController {
         }
         
         if (null != diySiteId) {
-            model.addAttribute("TdDistributor", TdDistributorService.findOne(diySiteId));
+            model.addAttribute("tdDistributor", TdDistributorService.findOne(diySiteId));
         }
     }
     

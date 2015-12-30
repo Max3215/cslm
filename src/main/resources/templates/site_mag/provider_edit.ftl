@@ -114,12 +114,19 @@ $(function () {
         </dd>
     </dl>
     <dl>
-    <dt>平台服务比例</dt>
+    <dt>平台服务费比例</dt>
         <dd>
             <input name="serviceRation" type="text" value="<#if provider?? && provider.serviceRation??>${provider.serviceRation?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
             <span class="Validform_checktip">*商家每次交易时平台抽取的比例</span>
         </dd>
     </dl>
+    <dl>
+    <dt>商家邮费收取比例</dt>
+    <dd>
+        <input name="postPrice" type="text" value="<#if provider?? && provider.postPrice??>${provider.postPrice?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
+        <span class="Validform_checktip">*商家每次交易时根据商品总额按比例计算邮费</span>
+    </dd>
+  </dl>
     <dl>
         <dt>城市</dt>
         <dd>

@@ -21,6 +21,19 @@ $(document).ready(function(){
     $("#form1").Validform({
         tiptype: 3
     })
+    
+     $("#form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 $('.sub_form').css('display','none');
+                 window.location.href="/distributor/goods/onsale"
+            }
+        }
+    });
 
   $(".click_a").click(function(){
     if($(this).next().is(":visible")==false){
@@ -60,8 +73,6 @@ function subDisGoods(){
     var leftNumber = $("#leftNumber").val();
     var goodsMarketPrice = $("#goodsMarketPrice").val();
     var unit = $("#unit").val();
-    var maxPostPrice = $("#maxPostPrice").val();
-    var postPrice = $("#postPrice").val();
     
     if(undefined == goodsTitle || ""==goodsTitle)
     {
@@ -81,16 +92,6 @@ function subDisGoods(){
         return ;
     }
     
-    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(postPrice))
-    {
-        alert("请输入正确的邮费");
-        return ;
-    }
-    if(undefined != goodsPrice && ""==goodsPrice && !reg.test(maxPostPrice))
-    {
-        alert("请输入正确的邮费");
-        return ;
-    }
     
     if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber)|| 0 >= leftNumber)
     {
@@ -106,8 +107,6 @@ function subDisGoods(){
             "goodsPrice":goodsPrice,
             "leftNumber":leftNumber,
             "goodsMarketPrice":goodsMarketPrice,
-            "postPrice":postPrice,
-            "maxPostPrice":maxPostPrice,
             "unit":unit},
         dataType : "json",
         success:function(data){
@@ -252,6 +251,7 @@ DD_belatedPNG.fix('.,img,background');
   <aside class="sub_form">
     <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a></p>
     <div class="info_tab">
+    <form id ="form" action="/distributor/goodsOnsale" method="post">
       <table>
         <tr>
            <p> 编辑上架后的销售价格和库存：</p>
@@ -271,33 +271,26 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
          <tr>
           <th>*商品售价：</th>
-          <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
         </tr>
         <tr>
-          <th>实体店价：</th>
-          <td><input type="text" name="goodsMarketPrice" id="goodsMarketPrice" ></td>
-        </tr>
-        <tr>
-          <th>邮费：</th>
-          <td><input type="text" name="postPrice" id="postPrice" ></td>
-        </tr>
-        <tr>
-          <th>满额免邮：</th>
-          <td><input type="text" name="maxPostPrice" id="maxPostPrice" ></td>
+          <th>*实体店价：</th>
+          <td><input type="text" name="goodsMarketPrice" id="goodsMarketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
         </tr>
         <tr>
           <th>商品单位：</th>
-          <td><input type="text" name="unit" id="unit" >不填则默认为平台设定单位</td>
+          <td><input type="text" name="unit" id="unit">不填则默认为平台设定单位</td>
         </tr>
          <tr>
           <th>*库存：</th>
-          <td><input type="text" name="leftNumber" datatype="n" id="leftNumber"></td>
+          <td><input type="text" name="leftNumber" datatype="n" id="leftNumber" datatype="n" sucmsg=" " nullmsg="请输入库存" errormsg="请输入正确的库存"></td>
         </tr>
         <tr>
           <th></th>
           <td><input type="submit" class="sub" onclick="subDisGoods();" value="确认提交"></td>
         </tr>
       </table>
+      </form>
     </div>
   </aside>
 </body>

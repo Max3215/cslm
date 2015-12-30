@@ -53,7 +53,7 @@ $(document).ready(function(){
     <p>如果您有未付款信息，<a class="blue" href="#">查看并继续付款</a></p>
     -->
     <p class="pt20"><a class="c9" href="/">继续购物</a></p>
-    <img class="img" src="/client/images/ewm.jpg" height="150" />
+    <img class="img" src="<#if site??>${site.wxQrCode!''}</#if>" height="150" />
   </div>
 
     <div class="clear h40"></div>

@@ -42,7 +42,7 @@
                     商品订单</td>
                 <td width="216">订单号：${order.orderNumber!''}<br>
                     日&nbsp;&nbsp; 期：${order.orderTime?string("yyyy-MM-dd")}</td>
-                <td width="220">操&nbsp;作&nbsp;人：${manager!''}<br>
+                <td width="220">操&nbsp;作&nbsp;人：管理员<br>
                     打印时间：${now?string("yyyy-MM-dd HH:mm:ss")}</td>
             </tr>
             <tr>
@@ -102,10 +102,10 @@
                     <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" style="border-top: 1px solid #000; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
                         <tbody><tr>
                             <td align="right">商品金额：￥${order.totalGoodsPrice?string("0.00")}
-                       <#--         + 配送费：￥${order.deliverTypeFee?string("0.00")}
-                                + 支付手续费：￥${order.payTypeFee?string("0.00")}
-                                = 订单总额：${order.totalPrice?string("0.00")}
+                          <#if order.postPrice??>  + 配送费：￥${order.postPrice?string("0.00")}</#if>
+                              <#--      + 支付手续费：￥${order.payTypeFee?string("0.00")}
                           -->      
+                                = 订单总额：${order.totalPrice?string("0.00")}
                                 </td>
                         </tr>
                     </tbody></table>

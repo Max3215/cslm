@@ -44,22 +44,25 @@ function deleteDisGoods(type,disId,page){
 }
 
 //超市中心选择批发商品
-function addgoods(gid){
+function addGoods(){
+	var goodsId = $("#goodsId").val();
     var page = $("#page").val();
-    var quantity = $("#number"+gid).html();
+    var leftNumber = parseInt($("#number"+goodsId).html());
+    var quantity = parseInt($("#quantity").val());
     
-    if(undefined == quantity || quantity == 0){
-    	alert("该商品已无存货！")
+    if(undefined == leftNumber || leftNumber == 0 || leftNumber < quantity){
+    	alert("该商品存货不足！")
     	return;
     }
     
     $.ajax({
         url : "/distributor/goods/addOne",
-        data : {"pgId":gid},
+        data : {"pgId":goodsId,"quantity":quantity},
         type :"post",
         success:function(res){
             $("#cart_goodslist").html(res);
             alert("添加成功")
+            $('.sub_form').css('display','none'); 
         }
     })
 }
@@ -165,7 +168,16 @@ function goNext(goodsNum)
         alert("请至少选择一种商品!");
         return false;
     }
-    window.location.href="/distributor/order/info";
+    $.ajax({
+    	type :"post",
+    	url : "/distributor/order/info",
+    	success:function(data){
+    		alert(data.msg);
+    		if(data.code==1){
+    			window.location.href="/distributor/inOrder/list/0";
+    		}
+    	}
+    })
 }
 
 function searchGoods(page){

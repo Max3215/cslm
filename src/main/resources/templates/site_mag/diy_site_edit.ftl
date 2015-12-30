@@ -127,7 +127,7 @@ $(function () {
     <dt>手机号</dt>
     <dd>
         <input name="mobile" type="text" value="<#if diy_site??>${diy_site.mobile!""}</#if>" class="input normal" datatype="m" sucmsg=" "> 
-        <span class="Validform_checktip">*用于接收通知短信</span>
+        <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <dl>
@@ -159,31 +159,6 @@ $(function () {
         <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  <#--
-  <dl id="div_show360_container">
-    <dt>店面展示图片</dt>
-    <dd>
-        <div class="upload-box upload-show360"></div>
-        <div class="photo-list_show360">
-            <ul>
-                <#if diy_site?? && diy_site.showPictures??>
-                    <#list diy_site.showPictures?split(",") as uri>
-                        <#if uri != "">
-                        <li>
-                            <input type="hidden" name="hid_photo_name_show360" value="0|${uri!""}|${uri!""}">
-                            <div class="img-box">
-                                <img src="${uri!""}" bigsrc="${uri!""}">
-                            </div>
-                            <a href="javascript:;" onclick="delImg(this);">删除</a>
-                        </li>
-                        </#if>
-                    </#list>
-                </#if>
-            </ul>
-        </div>
-    </dd>
-  </dl>
-  -->
   <dl>
     <dt>城市</dt>
     <dd>
@@ -257,6 +232,20 @@ $(function () {
     <dd>
         <input name="serviceRation" type="text" value="<#if diy_site?? && diy_site.serviceRation??>${diy_site.serviceRation?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
         <span class="Validform_checktip">*商家每次交易时平台抽取的比例</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>商家邮费收取比例</dt>
+    <dd>
+        <input name="postPrice" type="text" value="<#if diy_site?? && diy_site.postPrice??>${diy_site.postPrice?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
+        <span class="Validform_checktip">*商家每次交易时根据商品总额按比例计算邮费</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>商家满额免邮</dt>
+    <dd>
+        <input name="maxPostPrice" type="text" value="<#if diy_site?? && diy_site.maxPostPrice??>${diy_site.maxPostPrice?string("0.00")}</#if>" class="input normal" sucmsg=" "> 
+        <span class="Validform_checktip">*商品总额满额包邮</span>
     </dd>
   </dl>
   <dl>

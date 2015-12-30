@@ -234,19 +234,11 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
          <tr>
           <th>*商品售价：</th>
-          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg="" ></td>
-        </tr>
-        <tr>
-          <th>邮费：</th>
-          <td><input type="text" name="postPrice" id="postPrice" ></td>
-        </tr>
-        <tr>
-          <th>满额免邮：</th>
-          <td><input type="text" name="maxPostPrice" id="maxPostPrice" ></td>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
         </tr>
         <tr>
           <th>*库存：</th>
-          <td><input type="text" name="leftNumber" id="leftNumber" datatype="n"></td>
+          <td><input type="text" name="leftNumber" id="leftNumber" datatype="n" sucmsg=" " nullmsg="请输入库存" errormsg="请输入正确的库存"></td>
         </tr>
         <tr>
           <th></th>
