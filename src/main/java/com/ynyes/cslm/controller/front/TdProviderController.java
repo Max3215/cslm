@@ -676,7 +676,7 @@ public class TdProviderController {
 			res.put("msg", "请重新登录！");
 			return res;
 		}
-		System.err.println(id);
+		
 		if(null == id)
 		{
 			res.put("msg", "参数错误！");

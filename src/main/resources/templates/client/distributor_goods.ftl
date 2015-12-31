@@ -113,6 +113,20 @@ function editOnSale(){
         }
     })
 }
+
+function search(type){
+    if(null != type && type=="oneCat")
+    {
+        $("#categoryId").attr("value",$("#oneCat").val());
+    }else if(null != type && type=="twoCat")
+    {
+       $("#categoryId").attr("value",$("#twoCat").val());
+    }else if(null != type && type=="categoryId")
+    {
+        $("#categoryId").attr("value",$("#category").val());
+    }
+    $("#form1").submit();
+}
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -138,12 +152,34 @@ DD_belatedPNG.fix('.,img,background');
                     <h3><#if isOnSale>出售中的商品<#else>仓库中的商品</#if></h3>
                          <form action="/distributor/goods/sale/${isOnSale?c}" id="form1"> 
                           <input class="mysub" type="submit" value="查询" />
-                          <#--
-                          <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
-                          <input class="mytext" type="text" onFocus="if(value=='商品编码') {value=''}" onBlur="if (value=='') {value='商品编码'}"  value="商品编码" style="width:150px;" />
-                            -->
+                          <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
                           <input class="mytext" type="text" name="keywords"  value="${keywords!''}" id="keywords" />
                           <input type="hidden" name="page" value="${page!'0'}"/>
+                          <select id="oneCat" onchange="javascript:search('oneCat')" >
+                                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
+                                <#if category_list??>
+                                    <#list category_list as c>
+                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                    </#list>
+                                </#if>
+                            </select>
+                             <select id="twoCat" onchange="javascript:search('twoCat')">
+                                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
+                                <#if cateList??>
+                                    <#list cateList as c>
+                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                    </#list>
+                                </#if>
+                            </select>
+                             <select id="category" onchange="javascript:search('categoryId')">
+                                <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
+                                <#if categoryList??>
+                                    <#list categoryList as c>
+                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                    </#list>
+                                </#if>
+                            </select>
+                          <#--
                           <select  id="categoryId" name="categoryId" class="myselect" onchange="searchSale()">
                                 <option value="">请选择类别...</option>
                                 <#if category_list??>
@@ -152,6 +188,7 @@ DD_belatedPNG.fix('.,img,background');
                                     </#list>
                                 </#if>
                             </select>
+                            -->
                           </form>
                     <div class="clear"></div>
                 </div>

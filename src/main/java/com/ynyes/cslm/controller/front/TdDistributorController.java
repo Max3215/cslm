@@ -720,19 +720,23 @@ public class TdDistributorController {
 		map.addAttribute("page",page);
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
+		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
 		
-		List<Long> list = tdDistributorGoodsService.findByDistributorId(distributor.getId());
-		List<TdProductCategory> category_list = new ArrayList<>();
-		
-		if(null != list)
-		{
-			for (int i = 0; i < list.size(); i++) {
-				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
-			}
-		}// 所有该批发商有的分类
-		map.addAttribute("category_list",category_list);
+//		List<Long> list = tdDistributorGoodsService.findByDistributorId(distributor.getId());
+//		List<TdProductCategory> category_list = new ArrayList<>();
+//		
+//		if(null != list)
+//		{
+//			for (int i = 0; i < list.size(); i++) {
+//				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
+//			}
+//		}// 所有该批发商有的分类
+//		map.addAttribute("category_list",category_list);
 		
 //		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categortList);
 		
 		if(null == categoryId)
 		{
@@ -759,6 +763,24 @@ public class TdDistributorController {
 				map.addAttribute("dis_goods_page", 
 						tdDistributorGoodsService.searchAndCategoryIdAndIsOnSale(categoryId, keywords, isSale, page, 10));
 			}
+			
+			TdProductCategory category = tdProductCategoryService.findOne(categoryId);
+            for (TdProductCategory tdProductCategory : categortList) {
+            	
+            	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
+            	{
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		map.addAttribute("cateList", cateList);
+            		
+            		for (TdProductCategory productCategory : cateList) {
+            			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
+            			{
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            			}
+            		}
+            		
+            	}
+            }
 		}
 		
 		return "/client/distributor_goods";
@@ -3290,19 +3312,22 @@ public class TdDistributorController {
 		map.addAttribute("page",page);
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
+		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
 		
-		List<Long> list = tdDistributorGoodsService.findByDistributorIdAndIsAudit(distributor.getId());
-		
-		List<TdProductCategory> category_list = new ArrayList<>();
-		
-		if(null != list)
-		{
-			for (int i = 0; i < list.size(); i++) {
-				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
-			}
-		}// 所有该批发商有的分类
-		map.addAttribute("category_list",category_list);
+//		List<Long> list = tdDistributorGoodsService.findByDistributorIdAndIsAudit(distributor.getId());
+//		
+//		List<TdProductCategory> category_list = new ArrayList<>();
+//		
+//		if(null != list)
+//		{
+//			for (int i = 0; i < list.size(); i++) {
+//				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
+//			}
+//		}// 所有该批发商有的分类
+//		map.addAttribute("category_list",category_list);
 //		map.addAttribute("category_list", tdProductCategoryService.findAll());
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categortList);
 		
 		if(null == categoryId)
 		{
@@ -3329,6 +3354,24 @@ public class TdDistributorController {
 				map.addAttribute("dis_goods_page", 
 						tdDistributorGoodsService.searchByDistributorIdAndCategoryIdAndIsDistributorAndIsAudit(distributor.getId(), categoryId, true, true, keywords, page,ClientConstant.pageSize));
 			}
+			
+			TdProductCategory category = tdProductCategoryService.findOne(categoryId);
+            for (TdProductCategory tdProductCategory : categortList) {
+            	
+            	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
+            	{
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		map.addAttribute("cateList", cateList);
+            		
+            		for (TdProductCategory productCategory : cateList) {
+            			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
+            			{
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            			}
+            		}
+            		
+            	}
+            }
 		}
 		
 		return "/client/distributor_supply_list";
