@@ -1,6 +1,7 @@
 package com.ynyes.cslm.controller.management;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdBrand;
+import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.service.TdBrandService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -185,13 +187,31 @@ public class TdManagerBrandController {
             return "redirect:/Verwalter/login";
         }
         
-        map.addAttribute("category_list", tdProductCategoryService.findAll());
+//        map.addAttribute("category_list", tdProductCategoryService.findAll());
+        List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categortList);
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
         if (null != id)
         {
-            map.addAttribute("brand", tdBrandService.findOne(id));
+        	TdBrand brand = tdBrandService.findOne(id);
+            map.addAttribute("brand",brand);
+            for (TdProductCategory tdProductCategory : categortList) {
+				if(brand.getProductCategoryTree().contains("["+tdProductCategory.getId()+"]"))
+				{
+					List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+					map.addAttribute("cateList", cateList);
+					
+					for (TdProductCategory productCategory : cateList) {
+						if(brand.getProductCategoryTree().contains("["+productCategory.getId()+"]"))
+						{
+							map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+						}
+					}
+					
+				}
+			}
         }
         return "/site_mag/brand_edit";
     }
@@ -221,6 +241,25 @@ public class TdManagerBrandController {
         tdBrandService.save(tdBrand);
         
         return "redirect:/Verwalter/brand/list";
+    }
+    
+    @RequestMapping(value="/category",method=RequestMethod.POST)
+    public String category(Long categoryId,String type,HttpServletRequest req,ModelMap map)
+    {
+    	if(null != categoryId)
+    	{
+    		if("two".equals(type))
+    		{
+    			map.addAttribute("cateList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(categoryId));
+    			return "/site_mag/brand_two_cat";
+    		}
+    		else if("three".equals(type))
+    		{
+    			map.addAttribute("categoeyList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(categoryId));
+    			return "/site_mag/brand_three_cat";
+    		}
+    	}
+    	return "/site_mag/brand_two_cat";
     }
 
     @ModelAttribute

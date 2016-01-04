@@ -16,6 +16,8 @@
 <link href="/mag/style/WdatePicker.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/default.css" rel="stylesheet">
+
+<script type="text/javascript" src="/mag/js/brand_category.js"></script>
 <script type="text/javascript">
 $(function () {
     //初始化表单验证
@@ -58,10 +60,10 @@ $(function () {
     });
     
     // 选择类型后修改ajaxurl
-    $("#proCatId").change(function(){
-        var url = "/Verwalter/brand/check?catId=" + $(this).val() + "<#if brand??>&id=${brand.id?c}</#if>";
-        $("#idBrandTitle").attr("ajaxurl", url);
-    });
+ //   $("#proCatId").change(function(){
+  //      var url = "/Verwalter/brand/check?catId=" + $(this).val() + "<#if brand??>&id=${brand.id?c}</#if>";
+  //      $("#idBrandTitle").attr("ajaxurl", url);
+  //  });
 });
 </script>
 </head>
@@ -102,18 +104,61 @@ $(function () {
         <dl>
             <dt>所属商品类别</dt>
             <dd>
-                <div class="rule-single-select">
-                    <select id="proCatId" name="productCategoryId" datatype="*" sucmsg=" " nullmsg="请选择！">
-                    	<#if !brand?? || !brand.productCategoryId??>
-                    	<option value="">请选择类别...</option>
-                    	</#if>
+                <#if brand??>
+                    <div style="float:left;">
+                    <select id="oneCat" datatype="*" sucmsg=" " onchange="cateChange();">
+                        <#if !brand??>
+                        <option value="">请选择类别...</option>
+                        </#if>
                         <#if category_list??>
                             <#list category_list as c>
-                                <option value="${c.id?c!""}" <#if brand?? && brand.productCategoryId?? && brand.productCategoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                                <option value="${c.id?c}" <#if brand?? && brand.productCategoryTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
                             </#list>
                         </#if>
                     </select>
                 </div>
+                <div style="float:left;"  id="twoCatDiv">
+                    <select id="oneCat" datatype="*" sucmsg=" " id="twoCat" onchange="twoChange();">
+                        <#if !brand??>
+                        <option value="">请选择类别...</option>
+                        </#if>
+                        <#if cateList??>
+                            <#list cateList as c>
+                                <option value="${c.id?c}" <#if brand?? && brand.productCategoryTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+                <div style="float:left;" id="threeCatDiv">
+                    <select id="oneCat" datatype="*" sucmsg=" "id="categoryId" onchange="parameter();" name="categoryId">
+                        <#if !brand??>
+                        <option value="">请选择类别...</option>
+                        </#if>
+                        <#if categoryList??>
+                            <#list categoryList as c>
+                                <option value="${c.id?c}" <#if brand?? && brand.productCategoryTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+                <#else>
+                <div style="float:left;">
+                    <select id="oneCat" datatype="*" sucmsg=" " onchange="cateChange();">
+                        <#if !goods??>
+                        <option value="">请选择类别...</option>
+                        </#if>
+                        <#if category_list??>
+                            <#list category_list as c>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryId==c.id>selected="selected"</#if>>${c.title!""}</option>
+                            </#list>
+                        </#if>
+                    </select>
+                </div>
+                <div id="twoCatDiv" style="float:left;">
+                </div>
+                <div id="threeCatDiv" style="float:left;">
+                </div>
+                </#if>
             </dd>
         </dl>
         <dl>
