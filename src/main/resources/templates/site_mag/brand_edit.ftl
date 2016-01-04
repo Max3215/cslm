@@ -130,7 +130,7 @@ $(function () {
                     </select>
                 </div>
                 <div style="float:left;" id="threeCatDiv">
-                    <select id="oneCat" datatype="*" sucmsg=" "id="categoryId" onchange="parameter();" name="categoryId">
+                    <select id="oneCat" datatype="*" sucmsg=" "id="categoryId" onchange="parameter();" name="productCategoryId">
                         <#if !brand??>
                         <option value="">请选择类别...</option>
                         </#if>
