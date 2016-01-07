@@ -352,7 +352,7 @@ function del_goods_comb(obj) {
                     </select>
                 </div>
                 <div style="float:left;"  id="twoCatDiv">
-                    <select id="oneCat" datatype="*" sucmsg=" " id="twoCat" onchange="twoChange();">
+                    <select  datatype="*" sucmsg=" " id="twoCat" onchange="twoChange();">
                         <#if !goods??>
                         <option value="">请选择类别...</option>
                         </#if>
@@ -364,7 +364,7 @@ function del_goods_comb(obj) {
                     </select>
                 </div>
                 <div style="float:left;" id="threeCatDiv">
-                    <select id="oneCat" datatype="*" sucmsg=" "id="categoryId" onchange="parameter();" name="categoryId">
+                    <select  datatype="*" sucmsg=" "id="categoryId" onchange="parameter();" name="categoryId">
                         <#if !goods??>
                         <option value="">请选择类别...</option>
                         </#if>

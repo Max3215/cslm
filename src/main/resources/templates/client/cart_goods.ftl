@@ -15,8 +15,8 @@
         <#list cart_goods_list as cg>
         <tr>
               <td width="20"><input type="checkbox" onclick="javascript:toggleSelect(${cg.id?c});" <#if cg.isSelected?? && cg.isSelected>checked="checked"<#else><#assign allChecked=false></#if>/></td>
-              <td width="110"><a href="/goods/${cg.goodsId!''}"><img src="${cg.goodsCoverImageUri!''}" width="100" /></a></td>
-              <td width="400" style="text-align:left;"><a href="/goods/${cg.goodsId!''}">${cg.goodsTitle!''}</a></td>
+              <td width="110"><a href="/goods/${cg.distributorGoodsId!''}"><img src="${cg.goodsCoverImageUri!''}" width="100" /></a></td>
+              <td width="400" style="text-align:left;"><a href="/goods/${cg.distributorGoodsId!''}">${cg.goodsTitle!''}</a></td>
               <td class="red">￥${cg.price?string("0.00")}</td>
               <td width="150" class="num">
                 <a href="javascript:minusNum(${cg.goodsId});"> - </a>

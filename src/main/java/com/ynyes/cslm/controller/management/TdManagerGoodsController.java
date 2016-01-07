@@ -99,6 +99,17 @@ public class TdManagerGoodsController {
 
         if (null != tpc) {
             Long pcId = tpc.getParamCategoryId();
+//            TdParameterCategory category = tdParameterCategoryService.findOne(pcId);
+//            
+//            if (null != pcId) {
+//            	if(null != category.getParentId())
+//            	{
+//            		map.addAttribute("param_list",
+//            				tdParameterService.findByCategoryTreeContaining(category.getParentId()));
+//            	}else{
+//            		map.addAttribute("param_list",
+//            				tdParameterService.findByCategoryTreeContaining(pcId));
+//            	}
 
             if (null != pcId) {
                 map.addAttribute("param_list",
