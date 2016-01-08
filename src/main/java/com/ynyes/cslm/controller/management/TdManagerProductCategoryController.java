@@ -130,13 +130,14 @@ public class TdManagerProductCategoryController {
             	  map.addAttribute("par", parameterCategory);
               	  if(null != parameList && null != parameterCategory)
               	  {
-              		  for (TdParameterCategory tdParameterCategory : parameList) {
+              		  for (TdParameterCategory tdParameterCategory : parameList) 
+              		  {
               			  
-  						if(parameterCategory.getParentTree().contains("["+tdParameterCategory.getId()+"],"))
-  						{
-  							map.addAttribute("subParamList", tdParameterCategoryService.findByParentIdOyderBySortIdAsc(tdParameterCategory.getId()));
-  						}
-  					}
+	  						if(parameterCategory.getParentTree().contains("["+tdParameterCategory.getId()+"],"))
+	  						{
+	  							map.addAttribute("subParamList", tdParameterCategoryService.findByParentIdOyderBySortIdAsc(tdParameterCategory.getId()));
+	  						}
+              		  }
               	  }
                 } 
             }
