@@ -158,6 +158,16 @@ public class TdParameterCategoryService {
         return resList;
     }
     
+    public List<TdParameterCategory> findByParentIdIsNullOrderBySortIdAsc()
+    {
+    	return  repository.findByParentIdIsNullOrderBySortIdAsc();
+    }
+    
+    public List<TdParameterCategory> findByParentIdOyderBySortIdAsc(Long parentId)
+    {
+    	return repository.findByParentIdOrderBySortIdAsc(parentId);
+    }
+    
     /**
      * 保存
      * 

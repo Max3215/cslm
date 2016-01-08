@@ -141,19 +141,60 @@
   <dl>
     <dt>关联参数</dt>
     <dd>
-      <div class="rule-single-select">
-        <select id="categoryParamType" name="paramCategoryId" datatype="n0-100">
-            <option value="0">无关联参数</option>
-            <#if param_category_list??>
-                <#list param_category_list as c>
-                    <option value="${c.id?c!""}" <#if cat?? && cat.paramCategoryId?? && cat.paramCategoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
-                </#list>
-            </#if>
-        </select>
-      </div>
+       <#if cat??>
+          <div style="float:left;">
+            <select id="categoryParamType" name="paramCategoryId" onchange="findCh();" datatype="n0-100">
+                <option value="0">无关联参数</option>
+                <#if param_category_list??>
+                    <#list param_category_list as c>
+                        <option value="${c.id?c!""}" <#if par?? && par.parentTree?? && par.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+          </div>
+          <div style="float:left;"  id="paramDiv">
+            <select name="paramCategory" datatype="n0-100">
+                <option value="0">无关联参数</option>
+                 <#if subParamList??>
+                    <#list subParamList as c>
+                        <option value="${c.id?c!""}" <#if par?? && par.parentTree?? && par.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                  </#if>
+            </select>
+          </div>
+      <#else>
+        <div style="float:left;">
+            <select id="categoryParamType" name="paramCategoryId" onchange="findCh();" datatype="n0-100">
+                <option value="0">无关联参数</option>
+                <#if param_category_list??>
+                    <#list param_category_list as c>
+                        <option value="${c.id?c!""}" >${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+          </div>
+         <div style="folat:left;" id="paramDiv" style="display:none">
+         </div>
+      </#if>
     </dd>
   </dl>
 </div>
+
+<script type="text/javascript">
+function findCh(){
+    var paramId = $("#categoryParamType").val();
+    
+    $.ajax({
+        type : "post",
+        url : "/Verwalter/product/category/paramCheck",
+        data : {"paramId":paramId},
+        success : function(res){
+            $("#paramDiv").html(res);
+        }
+    })
+}
+
+</script>
 
 <div class="tab-content" style="display:none">
   <dl>

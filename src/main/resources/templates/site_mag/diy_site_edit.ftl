@@ -105,7 +105,7 @@ $(function () {
   <dl>
     <dt>登录名</dt>
     <dd>
-        <input name="username" type="text" value="<#if diy_site??>${diy_site.username!""}</#if>" class="input normal" <#if !diy_site??>ajaxurl="/Verwalter/order/setting/diysite/check?id=${diy_site.id?c}"</#if> datatype="*6-100" sucmsg=" "> 
+        <input name="username" type="text" value="<#if diy_site??>${diy_site.username!""}</#if>" class="input normal" <#if !diy_site??>ajaxurl="/Verwalter/order/setting/diysite/check"</#if> datatype="*6-100" sucmsg=" "> 
         <span class="Validform_checktip">*登录账号</span>
     </dd>
   </dl>
