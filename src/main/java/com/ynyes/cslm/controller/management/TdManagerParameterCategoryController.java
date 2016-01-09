@@ -96,7 +96,7 @@ public class TdManagerParameterCategoryController {
     public String setting(String __EVENTTARGET,
                           String __EVENTARGUMENT,
                           String __VIEWSTATE,
-                          Long[] listId,
+                          Long[] listId,Long id,
                           Integer[] listChkId,
                           Long[] listSortId,
                           ModelMap map,
@@ -124,6 +124,7 @@ public class TdManagerParameterCategoryController {
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
+        map.addAttribute("id", id);
         
         map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
         
@@ -184,11 +185,11 @@ public class TdManagerParameterCategoryController {
             type = "edit";
         }
         
-        tdParameterCategoryService.save(tdParameterCategory);
+        tdParameterCategory = tdParameterCategoryService.save(tdParameterCategory);
         
         tdManagerLogService.addLog(type, "用户修改参数类型", req);
         
-        return "redirect:/Verwalter/parameter/category/list";
+        return "redirect:/Verwalter/parameter/category/list?id="+tdParameterCategory.getId();
     }
 
     @ModelAttribute

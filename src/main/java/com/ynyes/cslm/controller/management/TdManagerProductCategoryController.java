@@ -44,7 +44,7 @@ public class TdManagerProductCategoryController {
 
     @RequestMapping(value = "/list")
     public String categoryList(String __EVENTTARGET, String __EVENTARGUMENT,
-            String __VIEWSTATE, Long[] listId, Integer[] listChkId,
+            String __VIEWSTATE, Long[] listId, Integer[] listChkId,Long id,
             Long[] listSortId, ModelMap map, HttpServletRequest req) {
         String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
@@ -71,7 +71,8 @@ public class TdManagerProductCategoryController {
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
-
+        map.addAttribute("id", id);
+        
         return "/site_mag/product_category_list";
     }
 
@@ -184,9 +185,9 @@ public class TdManagerProductCategoryController {
         	cat.setParamCategoryId(paramCategory);
         }
         
-        tdProductCategoryService.save(cat);
+        cat = tdProductCategoryService.save(cat);
 
-        return "redirect:/Verwalter/product/category/list";
+        return "redirect:/Verwalter/product/category/list?id="+cat.getId();
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)

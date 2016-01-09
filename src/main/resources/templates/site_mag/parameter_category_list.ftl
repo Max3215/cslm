@@ -31,6 +31,12 @@ function __doPostBack(eventTarget, eventArgument) {
         theForm.submit();
     }
 }
+
+<#if id??>
+ $(function () {
+    $("html,body").animate({scrollTop:$("#${id?c}").offset().top-130},5);
+})
+</#if>
 </script>
 
 <!--导航栏-->
@@ -70,7 +76,7 @@ function __doPostBack(eventTarget, eventArgument) {
 
     <#if parameter_category_list??>
     <#list parameter_category_list as cat>
-        <tr>
+        <tr id="${cat.id?c}">
             <td align="center">
                 <span class="checkall" style="vertical-align:middle;">
                     <input id="rptList_ctl01_chkId" type="checkbox" name="listChkId" value="${cat_index}">

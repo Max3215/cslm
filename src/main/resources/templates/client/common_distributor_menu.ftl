@@ -44,7 +44,7 @@
              </div>
         </div> <!--mymember_menu_part END-->
         <div class="mymember_menu_part"> 
-            <a class="mymember_menu_tit" title="商品管理"><img src="/client/images/mymember/menu05.png" />超市管理</a>
+            <a class="mymember_menu_tit" title="超市管理"><img src="/client/images/mymember/menu05.png" />超市管理</a>
             <div> 
                 <a href="/distributor/collect/list">商品收藏</a>
                 <a href="/distributor/account">账号管理</a> 
