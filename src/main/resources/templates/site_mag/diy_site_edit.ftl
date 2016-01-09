@@ -16,6 +16,8 @@
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 $(function () {
+      $("#btnEditRemark").click(function () { EditOrderRemark(); }); 
+
     //初始化表单验证
     $("#form1").initValidform();
     
@@ -59,6 +61,51 @@ $(function () {
         });
     });
 });
+
+// 充值
+    function EditOrderRemark() {
+        var dialog = $.dialog({
+            title: '输入充值记录：',
+            content: '<input id="orderRemark" name="txtOrderRemark"  class="input"></input>',
+            min: false,
+            max: false,
+            lock: true,
+            ok: function () {
+                var mon = $("#orderRemark", parent.document).val();
+                var num = /^\d+(\.\d{2})?$/;
+                if (mon == "" || !num.test(mon)) {
+                    $.dialog.alert('对不起，输入的金额有误！', function () { }, dialog);
+                    return false;
+                }
+                var diysiteId = $.trim($("#diysiteId").val());
+                var postData = { "diysiteId": diysiteId,  "data": mon };
+                //发送AJAX请求
+                sendAjaxUrl(dialog, postData, "/Verwalter/order/diy_site/edit");
+                return false;
+            },
+            cancel: true
+        });
+    }
+   //发送AJAX请求
+    function sendAjaxUrl(winObj, postData, sendUrl) {
+        $.ajax({
+            type: "post",
+            url: sendUrl,
+            data: postData,
+            dataType: "json",
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    winObj.close();
+                    $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
+                } else {
+                    $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
+                }
+            }
+        });
+    }
 </script>
 </head>
 
@@ -66,7 +113,7 @@ $(function () {
 <form name="form1" method="post" action="/Verwalter/order/setting/diysite/save" id="form1">
 <div>
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}">
-<input name="diySiteId" type="text" value='<#if diy_site??>${diy_site.id?c}</#if>' style="display:none">
+<input name="diySiteId" type="text" value='<#if diy_site??>${diy_site.id?c}</#if>' style="display:none" id="diysiteId">
 </div>
 
 <!--导航栏-->
@@ -140,8 +187,8 @@ $(function () {
   <dl>
     <dt>虚拟账号余额</dt>
     <dd>
-        <input name="virtualMoney" type="text" value="<#if diy_site?? && diy_site.virtualMoney??>${diy_site.virtualMoney?string("0.00")}<#else>0</#if>" class="input normal" sucmsg=" "> 
-        <span class="Validform_checktip">*账号余额</span>
+        <input name="virtualMoney" type="text" value="<#if diy_site?? && diy_site.virtualMoney??>${diy_site.virtualMoney?string("0.00")}<#else>0</#if>" <#if diy_site?? && diy_site.virtualMoney??>readonly="readonly"</#if> class="input normal" sucmsg=" "> 
+        <span class="Validform_checktip">*账号余额</span><#if diy_site??>&emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a></#if>
     </dd>
   </dl>
   <dl>

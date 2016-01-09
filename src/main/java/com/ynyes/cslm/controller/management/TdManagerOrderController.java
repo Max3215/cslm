@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdDeliveryType;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdPayType;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.service.TdArticleService;
@@ -1518,6 +1519,52 @@ public class TdManagerOrderController {
         }
         
         return "/site_mag/dialog_order_print";
+    }
+    
+    // 平台给超市充值
+    @RequestMapping(value="/diy_site/edit",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> diySiteEdit(Long diysiteId,
+    		Double data,HttpServletRequest req)
+    {
+    	Map<String,Object> res = new HashMap<>();
+    	res.put("code", 1);
+    	
+    	String username = (String) req.getSession().getAttribute("manager");
+        if (null == username)
+        {
+            res.put("message", "请重新登录");
+            return res;
+        }
+    	
+    	if(null == diysiteId)
+    	{
+    		res.put("message", "参数错误！");
+    		return res;
+    	}
+    	
+    	TdDistributor distributor = TdDistributorService.findOne(diysiteId);
+    	if(null != distributor.getVirtualMoney())
+    	{
+    		distributor.setVirtualMoney(distributor.getVirtualMoney()+data);
+    	}else{
+    		distributor.setVirtualMoney(data);
+    	}
+    	
+    	TdDistributorService.save(distributor);
+        
+    	TdPayRecord record = new TdPayRecord();
+        record.setCont("平台充值");
+        record.setCreateTime(new Date());
+        record.setDistributorId(distributor.getId());
+        record.setDistributorTitle(distributor.getTitle());
+        record.setStatusCode(1);
+        record.setProvice(data);
+        tdPayRecordService.save(record);
+    	
+        res.put("code", 0);
+        res.put("message", "充值成功！");
+    	return res;
     }
     
     @RequestMapping(value="/param/edit", method = RequestMethod.POST)

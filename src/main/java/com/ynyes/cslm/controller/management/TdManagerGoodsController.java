@@ -110,7 +110,7 @@ public class TdManagerGoodsController {
 //            		map.addAttribute("param_list",
 //            				tdParameterService.findByCategoryTreeContaining(pcId));
 //            	}
-
+            System.err.println(pcId);
             if (null != pcId) {
                 map.addAttribute("param_list",
                         tdParameterService.findByCategoryTreeContaining(pcId));

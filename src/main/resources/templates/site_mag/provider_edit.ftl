@@ -5,12 +5,14 @@
 <title>编辑供应商</title>
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/default.css" rel="stylesheet">
 <script src="/mag/js/jquery.cityselect.js"></script>
 <script type="text/javascript">
 $(function () {
+    $("#btnEditRemark").click(function () { EditOrderRemark(); }); 
     //初始化表单验证
     $("#form1").initValidform();
     
@@ -22,13 +24,58 @@ $(function () {
         required:false
     });
 });
+
+// 充值
+    function EditOrderRemark() {
+        var dialog = $.dialog({
+            title: '输入充值记录：',
+            content: '<input id="orderRemark" name="txtOrderRemark"  class="input"></input>',
+            min: false,
+            max: false,
+            lock: true,
+            ok: function () {
+                var mon = $("#orderRemark", parent.document).val();
+                var num = /^\d+(\.\d{2})?$/;
+                if (mon == "" || !num.test(mon)) {
+                    $.dialog.alert('对不起，输入的金额有误！', function () { }, dialog);
+                    return false;
+                }
+                var id = $.trim($("#id").val());
+                var postData = { "id": id,  "data": mon };
+                //发送AJAX请求
+                sendAjaxUrl(dialog, postData, "/Verwalter/provider/virtualMoney/edit");
+                return false;
+            },
+            cancel: true
+        });
+    }
+   //发送AJAX请求
+    function sendAjaxUrl(winObj, postData, sendUrl) {
+        $.ajax({
+            type: "post",
+            url: sendUrl,
+            data: postData,
+            dataType: "json",
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    winObj.close();
+                    $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
+                } else {
+                    $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
+                }
+            }
+        });
+    }
 </script>
 </head>
 <body class="mainbody">
 <form method="post" action="/Verwalter/provider/save" id="form1">
 <div>
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}" >
-<input type="hidden" name="id" value="<#if provider??>${provider.id?c!""}</#if>" >
+<input type="hidden" name="id" value="<#if provider??>${provider.id?c!""}</#if>" id="id">
 </div>
 <!--导航栏-->
 <div class="location" style="position: static; top: 0px;">
@@ -109,8 +156,8 @@ $(function () {
     <dl>
         <dt>账号余额</dt>
         <dd>
-            <input name="virtualMoney" type="text" value="<#if provider?? && provider.virtualMoney??>${provider.virtualMoney?string('0.00')}</#if>" class="input normal"   sucmsg=" ">
-            <span class="Validform_checktip"></span>
+            <input name="virtualMoney" type="text" value="<#if provider?? && provider.virtualMoney??>${provider.virtualMoney?string('0.00')}<#else>0</#if>" <#if provider?? && provider.virtualMoney??>readonly="readonly"</#if> class="input normal"   sucmsg=" ">
+            <span class="Validform_checktip"></span><#if provider??>&emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a></#if>
         </dd>
     </dl>
     <dl>
