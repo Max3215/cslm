@@ -303,6 +303,19 @@ $(function () {
     </dd>
   </dl>
   <dl>
+    <dt>开启权限</dt>
+    <dd>
+        <div class="rule-multi-checkbox multi-checkbox">
+            <span>
+                <input id="cblItem_0" type="checkbox" name="isSupply" <#if diy_site?? && diy_site.isSupply?? && diy_site.isSupply==true>checked="checked"</#if>>
+                <label for="cblItem_0">代理权</label>
+                <input id="cblItem_1" type="checkbox" name="isStock" <#if diy_site?? && diy_site.isStock?? && diy_site.isStock==true>checked="checked"</#if>>
+                <label for="cblItem_1">进货权</label>
+            </span>
+        </div>
+    </dd>
+</dl>
+  <dl>
     <dt>是否启用</dt>
     <dd>
       <div class="rule-multi-radio multi-radio">
@@ -319,7 +332,7 @@ $(function () {
   <dl>
     <dt>排序数字</dt>
     <dd>
-      <input name="sortId" type="text" value="<#if diy_site??>${diy_site.sortId!""}<#else>99</#if>" class="input small" datatype="n" sucmsg=" ">
+      <input name="sortId" type="text" value="<#if diy_site?? && diy_site.sortId??>${diy_site.sortId!""}<#else>99</#if>" class="input small" datatype="n" sucmsg=" ">
       <span class="Validform_checktip">*数字，越小越向前</span>
     </dd>
   </dl>

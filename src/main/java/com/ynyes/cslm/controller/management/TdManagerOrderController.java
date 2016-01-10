@@ -1439,20 +1439,35 @@ public class TdManagerOrderController {
     @RequestMapping(value="/setting/diysite/save", method = RequestMethod.POST)
     public String save(TdDistributor TdDistributor,
                         String[] hid_photo_name_show360,
-                        ModelMap map,
+                        ModelMap map,Boolean isSupply,Boolean isStock,
                         HttpServletRequest req){
         String username = (String) req.getSession().getAttribute("manager");
         if (null == username)
         {
             return "redirect:/Verwalter/login";
         }
-        System.err.println(TdDistributor.getGoodsList());
+        
         String uris = parsePicUris(hid_photo_name_show360);
         
         TdDistributor.setShowPictures(uris);
         if(null == TdDistributor.getVirtualMoney() || "".equals(TdDistributor.getVirtualMoney())){
         	TdDistributor.setVirtualMoney(new Double(0));
         }
+        // 修改代理、进货权
+        if(null != isSupply && isSupply)
+        {
+        	TdDistributor.setIsSupply(true);
+        }else{
+        	TdDistributor.setIsSupply(false);
+        }
+        
+        if(null != isStock && isStock)
+        {
+        	TdDistributor.setIsStock(true);
+        }else{
+        	TdDistributor.setIsStock(false);
+        }
+        
         
         if (null == TdDistributor.getId())
         {

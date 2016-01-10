@@ -136,6 +136,14 @@ public class TdDistributor {
     @Column
     private Double maxPostPrice;
     
+    // 是否开启代理权
+    @Column
+    private Boolean isSupply;
+    
+    // 是否开启进货权
+    @Column
+    private Boolean isStock;
+    
     public Long getId() {
         return id;
     }
@@ -366,6 +374,22 @@ public class TdDistributor {
 
 	public void setMaxPostPrice(Double maxPostPrice) {
 		this.maxPostPrice = maxPostPrice;
+	}
+
+	public Boolean getIsSupply() {
+		return isSupply;
+	}
+
+	public void setIsSupply(Boolean isSupply) {
+		this.isSupply = isSupply;
+	}
+
+	public Boolean getIsStock() {
+		return isStock;
+	}
+
+	public void setIsStock(Boolean isStock) {
+		this.isStock = isStock;
 	}
 
 	
