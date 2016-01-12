@@ -73,7 +73,7 @@ DD_belatedPNG.fix('.,img,background');
    <#include "/client/common_distributor_menu.ftl">
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
-        <h3>修改密码</h3>
+        <h3>修改信息</h3>
         
 		<form id="form1" action="/distributor/edit" method="post">
 		<div class="haoh pt15 geren_rig">
@@ -142,10 +142,10 @@ DD_belatedPNG.fix('.,img,background');
                     </td>
                   </tr>
                   <tr>
-                    <th>商家邮费收取比例</th>
+                    <th>商家邮费收取</th>
                     <td>
-                        <input name="postPrice"  type="text" value="<#if distributor?? && distributor.postPrice??>${distributor.postPrice?string("0.00")}<#else>0.01</#if>" class="text" sucmsg=" "> 
-                        <span class="Validform_checktip">*商家每次交易时根据商品总额按比例计算邮费（如：0.01）</span>
+                        <input name="postPrice"  type="text" value="<#if distributor?? && distributor.postPrice??>${distributor.postPrice?string("0.00")}</#if>" datatype="/^[+-]?\d+(\.\d+)?$/" class="text" sucmsg=" "> 
+                        <span class="Validform_checktip">*</span>
                     </td>
                   </tr>
                   <tr>

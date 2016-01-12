@@ -38,6 +38,9 @@ public class TdNavigationMenuService {
         return repository.findByParentIdAndIsEnableTrueOrderBySortIdAsc(parentId);
     }
     
+    public List<TdNavigationMenu> findAllIsEnableTrue(){
+    	return  repository.findByIsEnableTrueOrderBySortIdAsc();
+    }
     /**
 	 * @author lc
 	 * @注释：

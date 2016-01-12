@@ -22,7 +22,7 @@
                         </td>
                         <td class="tb01">${pgoods.providerTitle!''}</td>
                         <td class="tb02">￥${pgoods.outFactoryPrice?string('0.00')}</td>
-                        <td>${pgoods.shopReturnRation?string('0.00')}%</td>
+                        <td>${pgoods.shopReturnRation?string('0.00')}</td>
                         <td>${pgoods.leftNumber!'0'}</td>
                         <td>
                             <p><a href="javascript:supply(${pgoods.id?c});">我要代理</a></p>

@@ -664,6 +664,7 @@ public class TdDistributorController {
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
+		map.addAttribute("distributor", distributor);
 		map.addAttribute("dist_order_page", tdOrderService.findByShopIdAndTypeId(distributor.getId(),0L, page, 10));
 		
 		return "/client/distributor_sale";
@@ -715,7 +716,8 @@ public class TdDistributorController {
 			page = 0;
 		}
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-
+		
+		map.addAttribute("distributor", distributor);
 		map.addAttribute("isOnSale", isSale);
 		map.addAttribute("page",page);
 		map.addAttribute("keywords", keywords);
@@ -815,6 +817,7 @@ public class TdDistributorController {
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		map.addAttribute("page", page);
 		map.addAttribute("type", type);
+		map.addAttribute("distributor", distributor);
 		
 		if(type)
 		{
@@ -911,7 +914,7 @@ public class TdDistributorController {
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), type, page, 10));
 		map.addAttribute("page",page);
-		
+		map.addAttribute("distributor",distributor);
 		return "/client/distributor_goods_list";
 	}
 	
@@ -1404,6 +1407,8 @@ public class TdDistributorController {
 		{
 			return "redirect:/login";
 		}
+		
+		
 		if(null == page )
 		{
 			page = 0;
@@ -2129,6 +2134,8 @@ public class TdDistributorController {
 		{
 			return "redirect:/login";
 		}
+		
+		map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
 		tdCommonService.setHeader(map, req);
 		
 		if(null == page)
@@ -2352,6 +2359,8 @@ public class TdDistributorController {
 		{
 			return "redirect:/login";
 		}
+		
+		map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
 		tdCommonService.setHeader(map, req);
 		if(null == page)
 		{
@@ -2457,7 +2466,7 @@ public class TdDistributorController {
             quantity = 1L;
         }
 		
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
 		
 		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
 		
@@ -2535,7 +2544,7 @@ public class TdDistributorController {
                 }
             }
         }
-
+        map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
         map.addAttribute("cart_goods_list", tdCartGoodsService.findByUsername(username));
 
         return "/client/distributor_ingoods_cartlist";
@@ -2569,7 +2578,7 @@ public class TdDistributorController {
             }
             tdCartGoodsService.save(cartGoodsList);
         }
-
+        map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
         map.addAttribute("cart_goods_list", tdCartGoodsService.findByUsername(username));
 
         return "/client/distributor_ingoods_cartlist";
@@ -2598,7 +2607,7 @@ public class TdDistributorController {
                 tdCartGoodsService.save(cartGoods);
             }
         }
-
+        map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
         map.addAttribute("cart_goods_list",tdCartGoodsService.findByUsername(username));
 
         return "/client/distributor_ingoods_cartlist";
@@ -2626,7 +2635,7 @@ public class TdDistributorController {
                 tdCartGoodsService.save(cartGoods);
             }
         }
-
+        map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
         map.addAttribute("cart_goods_list",tdCartGoodsService.findByUsername(username));
 
         return "/client/distributor_ingoods_cartlist";
@@ -2657,7 +2666,7 @@ public class TdDistributorController {
                 }
             }
         }
-
+        map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
         map.addAttribute("cart_goods_list",tdCartGoodsService.findByUsername(username));
 
         return "/client/distributor_ingoods_cartlist";
@@ -2681,6 +2690,7 @@ public class TdDistributorController {
             }
         }
 
+        map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
         map.addAttribute("cart_goods_list",tdCartGoodsService.findByUsername(username));
 
         return "/client/distributor_ingoods_cartlist";
@@ -2971,6 +2981,8 @@ public class TdDistributorController {
     	if(null == page){
     		page=0;
     	}
+    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
     	tdCommonService.setHeader(map, req);
     	
     	map.addAttribute("collect_page",
@@ -3007,7 +3019,7 @@ public class TdDistributorController {
     	if (null == username) {
             return "redirect:/login";
         }
-    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
     	List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(mid);
     	
     	tdCommonService.setHeader(map, req);
@@ -3035,7 +3047,7 @@ public class TdDistributorController {
     	if (null == username) {
             return "redirect:/login";
         }
-    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
     	tdCommonService.setHeader(map, req);
     	if(null == newId){
     		return "/client/error_404";
@@ -3076,6 +3088,7 @@ public class TdDistributorController {
     	tdCommonService.setHeader(map, req);
     	
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	map.addAttribute("distributor", distributor);
     	if(null == cont || "".equalsIgnoreCase(cont))
     	{
     		map.addAttribute("pay_record_page",
@@ -3098,6 +3111,7 @@ public class TdDistributorController {
             return "redirect:/login";
         }
     	tdCommonService.setHeader(map, req);
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
     	map.addAttribute("category_list", tdProductCategoryService.findAll());
     	return "/client/distributor_goods_need";
     }
@@ -3110,6 +3124,7 @@ public class TdDistributorController {
         }
     	tdCommonService.setHeader(map, req);
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	map.addAttribute("distributor", distributor);
     	
     	if(null == demand){
     		return "/client/error_404";
@@ -3143,6 +3158,7 @@ public class TdDistributorController {
     	}
     	tdCommonService.setHeader(map, req);
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	map.addAttribute("distributor", distributor);
     	map.addAttribute("return_page", 
     			tdUserReturnService.findByShopIdAndType(distributor.getId(), 1L, page,ClientConstant.pageSize));
     	
@@ -3185,9 +3201,12 @@ public class TdDistributorController {
             return "redirect:/login";
         }
     	
+    	
     	tdCommonService.setHeader(map, req);
     	map.addAttribute("pro_list", 
     			tdProviderService.findByType(1L));
+    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
     	
     	return "/client/distributor_order_return";
     }
@@ -3217,6 +3236,7 @@ public class TdDistributorController {
     	tdReturn.setStatusId(0L);
     	
     	tdUserReturnService.save(tdReturn);
+    	map.addAttribute("distributor", distributor);
     	
     	return "/client/distributor_return_end";
     }
@@ -3233,6 +3253,7 @@ public class TdDistributorController {
     	tdCommonService.setHeader(map, req);
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
     	
+    	map.addAttribute("distributor", distributor);
     	map.addAttribute("return_page", 
     			tdUserReturnService.findByDistributorIdAndType(distributor.getId(), 2L, page, ClientConstant.pageSize));
     	
@@ -3267,6 +3288,7 @@ public class TdDistributorController {
 		map.addAttribute("page", page);
 //		map.addAttribute("distribution", isDistribution);
 		map.addAttribute("providerId", providerId);
+		map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
 		
 		if(null == providerId)
 		{
@@ -3309,6 +3331,7 @@ public class TdDistributorController {
 		}
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 
+		map.addAttribute("distributor", distributor);
 		map.addAttribute("page",page);
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
@@ -3404,6 +3427,7 @@ public class TdDistributorController {
 		map.addAttribute("dis_goods_page",
 				tdDistributorGoodsService.findByDistributorIdAndIsDistributorAndIsAudit(distributor.getId(), true, true, page, ClientConstant.pageSize));
 		map.addAttribute("page",page);
+		map.addAttribute("distributor", distributor);
 		
 		return "/client/distributor_goods_supply";
 	}
@@ -3551,6 +3575,7 @@ public class TdDistributorController {
     	tdCommonService.setHeader(map, req);
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
     	
+    	map.addAttribute("distributor", distributor);
     	map.addAttribute("ad_list", tdAdService.findByDistributorId(distributor.getId()));
     	
     	return "/client/distributor_ad";
@@ -3565,6 +3590,7 @@ public class TdDistributorController {
     		return "redirect:/login";
     	}
     	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
     	tdCommonService.setHeader(map, req);
     	map.addAttribute("ad_type_list", tdAdTypeService.findAll());
     	
@@ -3587,6 +3613,7 @@ public class TdDistributorController {
     	}
     	
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	map.addAttribute("distributor", distributor);
     	
     	if(null != ad)
     	{

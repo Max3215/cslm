@@ -80,21 +80,61 @@
     </div>
   </div>
 </div>
-
+<script type="text/javascript">
+function categoryChange(e)
+{
+    var categoryId = $("#oneCat").val();
+    $.ajax({
+        type : "post",
+        url : "/Verwalter/product/category/cateCheck",
+        data : {"categoryId":categoryId},
+        success : function(res){
+            $("#twoCatDiv").html(res);
+        }
+    
+    })
+    
+}
+</script>
 <div class="tab-content">
   <dl>
     <dt>所属父类别</dt>
     <dd>
-      <div class="rule-single-select single-select">
-        <select name="parentId">
-            <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
-        	<#if category_list??>
-        	   <#list category_list as c>
-        	       <option value="${c.id?c!""}" <#if cat?? && cat.parentId?? && cat.parentId==c.id || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
-        	   </#list>
-        	</#if>
-        </select>
-      </div>
+      <#if cat??>
+          <div style="float:left;" >
+            <select name="parentId" id="oneCat" onchange="categoryChange(this);">
+                <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
+            	<#if category_list??>
+            	   <#list category_list as c>
+            	       <option value="${c.id?c!""}" <#if cat?? && cat.parentTree?? && cat.parentTree?contains("["+c.id?c+"]") || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>>${c.title!""}</option>
+            	   </#list>
+            	</#if>
+            </select>
+          </div>
+            <#if categoryList??>
+              <div style="float:left;" id="twoCatDiv" name="twoparentId">
+                <select name="" id="twoCat">
+                    <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
+                       <#list categoryList as c>
+                           <option value="${c.id?c!""}" <#if cat?? && cat.parentTree?? && cat.parentTree?contains("["+c.id?c+"]") || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>>${c.title!""}</option>
+                       </#list>
+                </select>
+              </div>
+            </#if>
+         <#else>
+         <div style="float:left;" >
+            <select name="parentId" id="oneCat" onchange="categoryChange(this);">
+                <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
+                <#if category_list??>
+                   <#list category_list as c>
+                       <option value="${c.id?c!""}" <#if cat?? && cat.parentTree?? && cat.parentTree?contains("["+c.id?c+"]") || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>>${c.title!""}</option>
+                   </#list>
+                </#if>
+            </select>
+          </div>
+          <div style="float:left;" id="twoCatDiv">
+          </div>
+         </#if>
     </dd>
   </dl>
   <dl>
@@ -112,32 +152,6 @@
         <span class="Validform_checktip">*类别中文名称，100字符内</span>
     </dd>
   </dl>
-  <#--
-  <dl>
-    <dt>调用别名</dt>
-    <dd>
-      <input name="callIndex" type="text" id="txtCallIndex" value="<#if cat??>${cat.callIndex!""}</#if>" class="input normal" datatype="/^\s*$|^[a-zA-Z0-9\-\_]{2,50}$/" errormsg="请填写正确的别名" sucmsg=" ">
-      <span class="Validform_checktip">类别的调用别名，只允许字母、数字、下划线</span>
-    </dd>
-  </dl>
-  <dl>
-    <dt>标签</dt>
-    <dd>
-        <div class="rule-multi-checkbox">
-            <span>
-                <#if tag_list??>
-                    <#list tag_list as item>
-                        <#if item.title!="">
-                        <input type="checkbox" name="tagList" value="${item.title}" datatype="*0-255" <#if cat?? && cat.tagValueCollect?? && cat.tagValueCollect?contains("["+item.title+"]")>checked="checked"</#if>> 
-                        <label>${item.title}</label>
-                        </#if>
-                    </#list>
-                </#if>
-            </span>
-        </div>
-    </dd>  
-  </dl>
-  -->
   <dl>
     <dt>关联参数</dt>
     <dd>
@@ -183,7 +197,6 @@
 <script type="text/javascript">
 function findCh(){
     var paramId = $("#categoryParamType").val();
-    
     $.ajax({
         type : "post",
         url : "/Verwalter/product/category/paramCheck",

@@ -73,7 +73,7 @@ DD_belatedPNG.fix('.,img,background');
    <#include "/client/common_provider_menu.ftl">
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
-        <h3>修改密码</h3>
+        <h3>修改信息</h3>
         
 		<form id="form1" action="/provider/edit" method="post">
 		<div class="haoh pt15 geren_rig">

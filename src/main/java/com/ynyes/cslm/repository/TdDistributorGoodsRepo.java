@@ -29,6 +29,8 @@ public interface TdDistributorGoodsRepo extends
 		List<Long> findByDistributorIdAndIsAuditAndGroupCategoryId(Long distributorId);
 	
 		List<TdDistributorGoods> findByGoodsIdAndIsOnSaleTrue(Long goodsId);
+		
+		List<TdDistributorGoods> findByGoodsId(Long goodsId);
 	
 		@Query("select g from TdDistributor d join d.goodsList g where d.username=?1 and g.isOnSale=?2")
 		Page<TdDistributorGoods> findByUsernameAndIsOnSale(String username,Boolean onsale,Pageable page);

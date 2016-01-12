@@ -289,10 +289,10 @@ $(function () {
     </dd>
   </dl>
   <dl>
-    <dt>商家邮费收取比例</dt>
+    <dt>商家邮费收取</dt>
     <dd>
-        <input name="postPrice" type="text" value="<#if diy_site?? && diy_site.postPrice??>${diy_site.postPrice?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
-        <span class="Validform_checktip">*商家每次交易时根据商品总额按比例计算邮费</span>
+        <input name="postPrice" type="text" value="<#if diy_site?? && diy_site.postPrice??>${diy_site.postPrice?string("0.00")}</#if>" datatype="/^[+-]?\d+(\.\d+)?$/"  class="input normal" sucmsg=" "> 
+        <span class="Validform_checktip">*商家每次交易时收取邮费</span>
     </dd>
   </dl>
   <dl>

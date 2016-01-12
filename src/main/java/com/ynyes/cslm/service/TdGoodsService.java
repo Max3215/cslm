@@ -70,6 +70,11 @@ public class TdGoodsService {
     @Autowired
     TdSiteService tdSiteService;
 
+    @Autowired
+    TdDistributorGoodsService tdDistributorGoodsService;
+    
+    @Autowired
+    TdProviderGoodsService tdProviderGoodsService;
     
     /**
      * 热销
@@ -2020,6 +2025,9 @@ public class TdGoodsService {
     public void delete(Long id) {
         if (null != id) {
             repository.delete(id);
+            
+            tdDistributorGoodsService.delete(tdDistributorGoodsService.findByGoodsId(id));
+            tdProviderGoodsService.delete(tdProviderGoodsService.findByGoodsId(id));
         }
     }
 

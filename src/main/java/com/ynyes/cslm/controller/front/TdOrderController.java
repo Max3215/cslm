@@ -1068,29 +1068,13 @@ public class TdOrderController extends AbstractPaytypeController{
             // 用户留言
             tdOrder.setUserRemarkInfo(userMessage);
 
-//            // 优惠券
-//            if (null != couponId) {
-//                TdCoupon coupon = tdCouponService.findOne(couponId);
-//
-//                if (null != coupon) {
-//                    TdCouponType couponType = tdCouponTypeService.findOne(coupon
-//                            .getId());
-//
-//                    couponFee = couponType.getPrice();
-//                    coupon.setIsUsed(true);
-//                    tdCouponService.save(coupon);
-//                }
-//            }
-//
-//            pointFee = pointUse / 1;
-
             // 待付款
             tdOrder.setStatusId(2L);
 
             if(null != distributor.getPostPrice())
             {
             	// 计算邮费
-            	postPrice +=totalGoodsPrice*distributor.getPostPrice();
+            	postPrice += distributor.getPostPrice();
             	
             	// 判断是否满额免
             	if(totalGoodsPrice > distributor.getMaxPostPrice())

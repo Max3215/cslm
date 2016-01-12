@@ -89,9 +89,9 @@ public class TdManagerProductCategoryController {
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
-//        List<TdProductCategory> categoryList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
-//        map.addAttribute("category_list", categoryList);
-        map.addAttribute("category_list", tdProductCategoryService.findAll());
+        List<TdProductCategory> categoryList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categoryList);
+//        map.addAttribute("category_list", tdProductCategoryService.findAll());
         
         map.addAttribute("tag_list",tdTagService.findByTypeId(1L));
 
@@ -127,29 +127,45 @@ public class TdManagerProductCategoryController {
                 map.addAttribute("cat",category);
                 if(null != category.getParamCategoryId())
                 {
-            	  TdParameterCategory parameterCategory = tdParameterCategoryService.findOne(category.getParamCategoryId());
-            	  map.addAttribute("par", parameterCategory);
-              	  if(null != parameList && null != parameterCategory)
-              	  {
-              		  for (TdParameterCategory tdParameterCategory : parameList) 
-              		  {
-              			  
-	  						if(parameterCategory.getParentTree().contains("["+tdParameterCategory.getId()+"],"))
-	  						{
-	  							map.addAttribute("subParamList", tdParameterCategoryService.findByParentIdOyderBySortIdAsc(tdParameterCategory.getId()));
-	  						}
-              		  }
-              	  }
+	            	  TdParameterCategory parameterCategory = tdParameterCategoryService.findOne(category.getParamCategoryId());
+	            	  map.addAttribute("par", parameterCategory);
+	              	  if(null != parameList && null != parameterCategory)
+	              	  {
+	              		  for (TdParameterCategory tdParameterCategory : parameList) 
+	              		  {
+	              			  
+		  						if(parameterCategory.getParentTree().contains("["+tdParameterCategory.getId()+"],"))
+		  						{
+		  							map.addAttribute("subParamList", tdParameterCategoryService.findByParentIdOyderBySortIdAsc(tdParameterCategory.getId()));
+		  						}
+	              		  }
+	              	  }
                 } 
+                if(null != category.getParentId() && category.getLayerCount()==3L)
+                {
+                	map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(category.getParentId()));
+                }
             }
         }
 
         return "/site_mag/product_category_edit";
 
     }
+    
+    @RequestMapping(value="/cateCheck",method=RequestMethod.POST)
+    public String cateCheck(Long categoryId,HttpServletRequest req,ModelMap map)
+    {
+    	if(null != categoryId)
+    	{
+    		map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(categoryId));
+    	}
+    	
+    	return "/site_mag/product_category_two";
+    }
+    
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(TdProductCategory cat, Long paramCategory,
+    public String save(TdProductCategory cat, Long paramCategory,Long twoparentId,
     		String[] tagList,
     		String __EVENTTARGET,
             String __EVENTARGUMENT, String __VIEWSTATE, ModelMap map,
@@ -183,6 +199,11 @@ public class TdManagerProductCategoryController {
         if(null != paramCategory && !paramCategory.equals(0L))
         {
         	cat.setParamCategoryId(paramCategory);
+        }
+        
+        if(null != twoparentId && twoparentId !=0L)
+        {
+        	cat.setParentId(twoparentId);
         }
         
         cat = tdProductCategoryService.save(cat);
@@ -224,7 +245,7 @@ public class TdManagerProductCategoryController {
     @RequestMapping(value="/paramCheck",method =RequestMethod.POST)
     public String findParam(Long paramId,HttpServletRequest req,ModelMap map)
     {
-    	System.err.println(paramId);
+    	
     	if(null != paramId)
     	{
     		map.addAttribute("paramLlist", tdParameterCategoryService.findByParentIdOyderBySortIdAsc(paramId));

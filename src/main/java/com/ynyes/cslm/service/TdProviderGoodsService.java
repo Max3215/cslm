@@ -33,6 +33,21 @@ public class TdProviderGoodsService {
 		repository.delete(id);
 	}
 	
+	public void delete(TdProviderGoods e)
+	{
+		if(null != e)
+		{
+			repository.delete(e);
+		}
+	}
+	
+	public void delete(List<TdProviderGoods> e)
+	{
+		if(null != e)
+		{
+			repository.delete(e);
+		}
+	}
 	
 	/**
 	 * 
@@ -374,7 +389,10 @@ public class TdProviderGoodsService {
 															providerId,catStr, "%"+keywords+"%", isAudit,pageRequest);
 	}
 	
-	
+	public List<TdProviderGoods> findByGoodsId(Long goodsId)
+	{
+		return repository.findByGoodsId(goodsId); 
+	}
 	
 	
 	

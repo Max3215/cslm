@@ -219,7 +219,7 @@ public interface TdProviderGoodsRepo extends
 																							Pageable page);
 	
 	
-	
+	List<TdProviderGoods> findByGoodsId(Long goodsId);
 	
 	
 	

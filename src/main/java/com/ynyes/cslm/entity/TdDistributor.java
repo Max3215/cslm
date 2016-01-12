@@ -127,9 +127,8 @@ public class TdDistributor {
     @Column(scale=2)
     private Double aliRation;
     
-    
-    // 邮费比例
-    @Column
+    // 邮费
+    @Column(scale=2)
     private Double postPrice;
     
     // 满额免邮

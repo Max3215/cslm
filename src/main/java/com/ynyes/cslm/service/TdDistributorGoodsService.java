@@ -89,6 +89,14 @@ public class TdDistributorGoodsService {
     	return repository.findByDistributorIdAndIsAuditAndGroupCategoryId(distributorId);
     }
     
+    public List<TdDistributorGoods> findByGoodsIdAndIsOnSale(Long goodsId)
+    {
+    	if(null == goodsId){
+    		return null;
+    	}
+    	return repository.findByGoodsIdAndIsOnSaleTrue(goodsId);
+    }
+    
     public List<TdDistributorGoods> findByGoodsId(Long goodsId)
     {
     	if(null == goodsId){
