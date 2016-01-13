@@ -1,13 +1,18 @@
 package com.ynyes.cslm.controller.management;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdManager;
 import com.ynyes.cslm.entity.TdManagerRole;
@@ -16,7 +21,11 @@ import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.service.TdManagerRoleService;
 import com.ynyes.cslm.service.TdManagerService;
 import com.ynyes.cslm.service.TdNavigationMenuService;
+import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdUserCommentService;
+import com.ynyes.cslm.service.TdUserConsultService;
+import com.ynyes.cslm.service.TdUserReturnService;
 
 /**
  * 后台首页控制器
@@ -34,17 +43,32 @@ public class TdManagerIndexController {
 
     @Autowired
     TdSettingService tdSettingService;
+
+    @Autowired
+    TdOrderService tdOrderService;
+    
+    @Autowired
+    TdUserCommentService tdUserCommentService;
+    
+    @Autowired
+    TdUserConsultService tdUserConsultService;
+    
+    @Autowired
+    TdUserReturnService tdUserReturnService;
+    
+//    @Autowired
+//    TdUserComplainService tdUserComplainService;
     
     @Autowired
     TdManagerRoleService tdManagerRoleService;
-
+    
     @RequestMapping(value = "/Verwalter")
     public String index(ModelMap map, HttpServletRequest req) {
         String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
             return "redirect:/Verwalter/login";
         }
-        
+
         /**
 		 * @author lc
 		 * @注释：管理员角色判断
@@ -52,10 +76,13 @@ public class TdManagerIndexController {
         TdManager tdManager = tdManagerService.findByUsernameAndIsEnableTrue(username);
         TdManagerRole tdManagerRole = null;
         
-        if (null != tdManager.getRoleId())
+        if (null != tdManager && null != tdManager.getRoleId())
         {
             tdManagerRole = tdManagerRoleService.findOne(tdManager.getRoleId());
         }
+        if (null != tdManagerRole) {
+			req.getSession().setAttribute("tdManagerRole", tdManagerRole);
+		}
         
         if (null != tdManagerRole && !tdManagerRole.getIsSys()) {
         	List<TdNavigationMenu> rootMenuList = tdNavigationMenuService
@@ -173,7 +200,7 @@ public class TdManagerIndexController {
 	                }    		
 				
 			}
-			change(rootMenuList, rootmenuList);
+			//change(rootMenuList, rootmenuList);
 			if (null != rootMenuList && rootMenuList.size() > 0){
 				map.addAttribute("root_menu_list", rootMenuList);
 		    }
@@ -212,10 +239,42 @@ public class TdManagerIndexController {
 
             map.addAttribute("root_menu_list", rootMenuList);
         }
-                            
+//        List<TdNavigationMenu> rootMenuList = tdNavigationMenuService
+//                .findByParentIdAndSort(0L);
+//
+//        if (null != rootMenuList && rootMenuList.size() > 0) {
+//            for (int i = 0; i < rootMenuList.size(); i++) {
+//                TdNavigationMenu rootMenu = rootMenuList.get(i);
+//
+//                // 取一级菜单列表
+//                List<TdNavigationMenu> level0MenuList = tdNavigationMenuService
+//                        .findByParentIdAndSort(rootMenu.getId());
+//
+//                if (null != level0MenuList && level0MenuList.size() > 0) {
+//                    map.addAttribute("level_" + i + "_menu_list",
+//                            level0MenuList);
+//
+//                    for (int j = 0; j < level0MenuList.size(); j++) {
+//                        TdNavigationMenu level0Menu = level0MenuList.get(j);
+//
+//                        // 取二级菜单列表
+//                        List<TdNavigationMenu> level1MenuList = tdNavigationMenuService
+//                                .findByParentIdAndSort(level0Menu.getId());
+//
+//                        if (null != level1MenuList && level1MenuList.size() > 0) {
+//                            map.addAttribute("level_" + i + j + "_menu_list",
+//                                    level1MenuList);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        map.addAttribute("root_menu_list", rootMenuList);
+
         return "/site_mag/frame";
     }
-    
+
     /**
 	 * @author lc
 	 * @注释：
@@ -281,4 +340,48 @@ public class TdManagerIndexController {
         return "/site_mag/center";
     }
 
+    /**
+	 * @author lc
+	 * @注释：自动提醒数据验证
+	 */
+//	@RequestMapping(value = "/Verwalter/automaticRemind", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Map<String, Object> automaticRemind(String alipayuser_id, String type, String code,
+//			Boolean isSave, HttpServletRequest req) {
+//		Map<String, Object> res = new HashMap<String, Object>();
+//		res.put("code", 1);
+//		String username = (String) req.getSession().getAttribute("manager");
+//        if (null == username) {
+//        	res.put("msg", "请登陆！");
+//            return res;
+//        }
+//        
+//        //新待确认订单数量查询
+//        res.put("ordernumberconfirmed", tdOrderService.countByStatusId(1L));
+//		       
+//        
+//        //新待支付订单数量查询
+//        res.put("ordernumberbuy", tdOrderService.countByStatusId(2L));
+//		       
+//        //支付订单数量查询
+//        res.put("ordernumberpay", tdOrderService.countByStatusId(3L));
+//	               
+//        //咨询查询
+//		res.put("consults", tdUserConsultService.countAll());
+//
+//        
+//        //评论查询
+//		res.put("comments", tdUserCommentService.countAll());
+//
+//        
+//        //退换货申请查询
+//		res.put("Returns", tdUserReturnService.countAll());
+//
+//        
+//        //投诉查询
+//		res.put("complains", tdUserComplainService.countAll());
+//
+//        res.put("code", 0);
+//		return res;
+//	}
 }

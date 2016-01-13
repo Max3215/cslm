@@ -13,6 +13,9 @@
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
+
+<script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
+<link href="/mag/style/pagination.css" rel="stylesheet" type="text/css">
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -57,53 +60,53 @@ DD_belatedPNG.fix('.,img,background');
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
           <h3>已售的商品</h3>
-          <#-->
-          <input class="mysub" type="submit" value="查询" />
-          <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
-          <input class="mytext" type="text" onFocus="if(value=='商品编码') {value=''}" onBlur="if (value=='') {value='商品编码'}"  value="商品编码" style="width:150px;" />
-          <input class="mytext" type="text" onFocus="if(value=='商品名称') {value=''}" onBlur="if (value=='') {value='商品名称'}"  value="商品名称" />
-            -->
-          <div class="clear"></div>
+          <form action ="/distributor/sale">
+              <input type="hidden" value="${page!'0'}" name="page">
+              <input class="mysub" type="submit" value="查询" />
+              <input class="mytext" type="text"  name="keywords" value="${keywords!''}"/>
+              <p class="fr pl10 c3">时间&nbsp;&nbsp;
+                    <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})">
+                                    &nbsp;&nbsp;至&nbsp;&nbsp;
+                    <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})">
+               </p>
+              <div class="clear"></div>
+          </form>
         </div>
         <table>
           <tr class="mymember_infotab_tit01">
-                <th width="150">订单编号</th>
                 <th width="300">商品名称</th>
+                <th>商品编码</th>
                 <th>数量</th>
                 <th>价格</th>
-                <th>时间</th>
+                <th>售出时间</th>
           </tr>
-          <#if dist_order_page??>
-                <#list dist_order_page.content as order>
-                    <#if order.orderGoodsList??>
-                        <#list order.orderGoodsList as og>
-                            <tr id="tr_1424195166">
-                                <td>${order.orderNumber!''}</td>
-                                <td>
-                                    <a>
-                                        <strong><img width="80" height="80" src="${og.goodsCoverImageUri!''}"  /></strong>
-                                        <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${og.goodsTitle!''}</p>
-                                    </a>
-                                </td>
-                                <td class="tb01">${og.quantity!'0'}</td>
-                                <td class="tb02">￥${og.price?string('0.00')}</td>
-                                <td><p>${order.orderTime!''}</p>
-                                </td>
-                            </tr>
-                        </#list>
-                    </#if>
+          <#if orderGoodsPage??>
+               <#list orderGoodsPage.content as og>
+                    <tr id="tr_1424195166">
+                        <td>
+                            <a>
+                                <strong><img width="80" height="80" src="${og.goodsCoverImageUri!''}"  /></strong>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${og.goodsTitle!''}</p>
+                            </a>
+                        </td>
+                        <td><#if og.code??>${og.code!''}</#if></td>
+                        <td class="tb01">${og.quantity!'0'}</td>
+                        <td class="tb02">￥${og.price?string('0.00')}</td>
+                        <td><#if og.saleTime??>${og.saleTime?string('0.00')}</#if></td>
+                        </td>
+                    </tr>
                 </#list>
            </#if>
         </table>
         <div class="myclear" style="height:10px;"></div>
 
         <div class="mymember_page"> 
-            <#if dist_order_page??>
+            <#if orderGoodsPage??>
                 <#assign continueEnter=false>
-                <#if dist_order_page.totalPages gt 0>
-                    <#list 1..dist_order_page.totalPages as page>
-                        <#if page <= 3 || (dist_order_page.totalPages-page) < 3 || (dist_order_page.number+1-page)?abs<3 >
-                            <#if page == dist_order_page.number+1>
+                <#if orderGoodsPage.totalPages gt 0>
+                    <#list 1..orderGoodsPage.totalPages as page>
+                        <#if page <= 3 || (orderGoodsPage.totalPages-page) < 3 || (orderGoodsPage.number+1-page)?abs<3 >
+                            <#if page == orderGoodsPage.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
                                 <a href="/distributor/sale?page=${page-1}">${page}</a>

@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
 <title>后台管理中心</title>
+<link rel="shortcut icon" href="/client/images/little_logo.ico" />
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/jquery.nicescroll.js"></script>
@@ -102,6 +103,65 @@
 
     });
 
+  var ordernumberconfirmed = 0; //待确认订单
+  var ordernumberbuy = 0;       //立即购买订单
+  var ordernumberpay = 0;       //付款订单
+  var consultsnumber = 0;       //咨询
+  var commentsnumber = 0;       //评论
+  var returnsnumber = 0;        //退换货
+  var complainsnumber = 0;      //投诉
+  $(document).ready(function () {
+     //   setInterval("remind()",30000);
+  });
+  //下单自动提醒
+    function remind(){    
+         $.ajax({
+                type: "post",
+                url: "/Verwalter/automaticRemind",
+                data: {},
+                dataType: "json",
+                success: function (data) {   
+                     if (data.code == 0) {                       
+                        if(data.ordernumberconfirmed>ordernumberconfirmed && ordernumberconfirmed !=0){
+                            alert("有新待确认订单");
+                        }
+                        ordernumberconfirmed = data.ordernumberconfirmed;
+                        
+                        if(data.ordernumberbuy>ordernumberbuy && ordernumberbuy !=0){
+                            alert("有新待支付订单");
+                        }
+                        ordernumberbuy = data.ordernumberbuy;
+                        
+                        if(data.ordernumberpay>ordernumberpay && ordernumberpay !=0){
+                            alert("有新待发货订单！");
+                        }
+                        ordernumberpay = data.ordernumberpay;
+                        
+                        if(data.consults>consultsnumber && consultsnumber !=0){
+                            alert("有新咨询！");
+                        }
+                        consultsnumber = data.consults;
+                        
+                        if(data.comments>commentsnumber && commentsnumber !=0){
+                            alert("有新的评论！");
+                        }
+                        commentsnumber = data.comments;
+                        
+                        if(data.complains>complainsnumber && complainsnumber !=0){
+                            alert("有新的投诉！");
+                        }
+                        complainsnumber = data.complains;
+                        
+                        if(data.Returns>returnsnumber && returnsnumber !=0){
+                            alert("有新退换货申请！");
+                        }
+                        returnsnumber = data.Returns;
+                    } else {
+                       // alert(data.msg);
+                    }
+                }
+            }); 
+    }
 </script>
 </head>
 
@@ -230,7 +290,7 @@
                             </div>
                         </#list>
                     </#if>
-                </div>  
+                </div>
             </div>
         </div>
     

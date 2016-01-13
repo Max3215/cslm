@@ -1,10 +1,14 @@
 package com.ynyes.cslm.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -29,6 +33,9 @@ public class TdOrderGoods {
     // 商品名称
     @Column
     private String goodsTitle;
+    
+    @Column
+    private String goodsCode;
     
     // 商品简介
     @Column
@@ -81,6 +88,11 @@ public class TdOrderGoods {
     // 评论ID
     @Column
     private Long commentId;
+    
+    // 时间
+    @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date saleTime;
 
     public Long getId() {
         return id;
@@ -114,7 +126,15 @@ public class TdOrderGoods {
         this.goodsSubTitle = goodsSubTitle;
     }
 
-    public String getGoodsCoverImageUri() {
+    public String getGoodsCode() {
+		return goodsCode;
+	}
+
+	public void setGoodsCode(String goodsCode) {
+		this.goodsCode = goodsCode;
+	}
+
+	public String getGoodsCoverImageUri() {
         return goodsCoverImageUri;
     }
 
@@ -209,4 +229,13 @@ public class TdOrderGoods {
     public void setCommentId(Long commentId) {
         this.commentId = commentId;
     }
+
+	public Date getSaleTime() {
+		return saleTime;
+	}
+
+	public void setSaleTime(Date saleTime) {
+		this.saleTime = saleTime;
+	}
+    
 }

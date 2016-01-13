@@ -1,5 +1,6 @@
 package com.ynyes.cslm.controller.management;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,7 @@ public class TdManagerManagerController {
         {
             if (__EVENTTARGET.equalsIgnoreCase("btnDelete"))
             {
-                if (username.equalsIgnoreCase("admin"))
+                if (username.equalsIgnoreCase("tdadmin"))
                 {
                     btnDelete(listId, listChkId);
                     tdManagerLogService.addLog("delete", "删除管理员", req);
@@ -164,6 +165,7 @@ public class TdManagerManagerController {
                         ModelMap map,
                         HttpServletRequest req){
         String username = (String) req.getSession().getAttribute("manager");
+        
         if (null == username)
         {
             return "redirect:/Verwalter/login";
@@ -203,6 +205,7 @@ public class TdManagerManagerController {
                         {
                             map.addAttribute("level_" + i + j + "_menu_list", level1MenuList);
                         }
+                        
                     }
                 }
                 
@@ -215,11 +218,12 @@ public class TdManagerManagerController {
     }
     
     @RequestMapping(value="/role/save")
-    public String roleSave(TdManagerRole tdManagerRole, TdManagerPermissionList tdManagerPermissionList,
+    public String roleSave(TdManagerRole tdManagerRole,TdManagerPermissionList tdManagerPermissionList,
                         String __VIEWSTATE,
                         ModelMap map,
                         HttpServletRequest req){
-        String username = (String) req.getSession().getAttribute("manager");
+    	String username = (String) req.getSession().getAttribute("manager");
+       
         if (null == username)
         {
             return "redirect:/Verwalter/login";
@@ -242,9 +246,14 @@ public class TdManagerManagerController {
      			}					
      		}
 		}
-               
+        if(null == tdManagerRole.getPermissionList() && null != tdManagerPermissionList && null !=tdManagerPermissionList.getPermissionlist()){        	
+    		tdManagerRole.setPermissionList(tdManagerPermissionList.getPermissionlist());  		
+    	}    
+        else{       	
+        
         if (null != tdManagerPermissionList && null !=tdManagerPermissionList.getPermissionlist()  ) {
-        	if (tdManagerPermissionList.getPermissionlist().size() < tdManagerRole.getPermissionList().size()) {
+        	       	
+        	 if (tdManagerPermissionList.getPermissionlist().size() < tdManagerRole.getPermissionList().size()) {
     			for(int i = 0; i < tdManagerPermissionList.getPermissionlist().size(); i++){
     				if (null != tdManagerPermissionList.getPermissionlist().get(i).getIsView() && tdManagerPermissionList.getPermissionlist().get(i).getIsView() ) {
     					tdManagerRole.getPermissionList().get(i).setIsView(true);
@@ -286,7 +295,30 @@ public class TdManagerManagerController {
         	
         }
         
-        
+        }
+        if (null == tdManagerRole.getPermissionList() && null == tdManagerPermissionList.getPermissionlist()) {
+        	List<TdManagerPermission> tdManagerPermissions = new ArrayList<>();
+        	tdManagerRole.setPermissionList(tdManagerPermissions);
+        	int totalsize = tdNavigationMenuService.findAllIsEnableTrue().size();
+    		for (int i = 0; i < totalsize; i++) {			
+    			TdManagerPermission tdManagerPermission = new TdManagerPermission();
+    			tdManagerPermission.setIsView(false);
+    			tdManagerRole.getPermissionList().add(tdManagerPermission);    			  								
+     		}
+		}
+        //将为空的权限设为false
+        int totalsize = tdNavigationMenuService.findAllIsEnableTrue().size();
+		for (int i = 0; i < totalsize; i++) {			
+			if (i < tdManagerRole.getPermissionList().size()) {
+				if (null == tdManagerRole.getPermissionList().get(i).getIsView()) {
+	     				tdManagerRole.getPermissionList().get(i).setIsView(false);
+	     		}	
+			}else{
+				TdManagerPermission tdManagerPermission = new TdManagerPermission();
+				tdManagerPermission.setIsView(false);
+				tdManagerRole.getPermissionList().add(tdManagerPermission);
+			}     								
+ 		}
         
         tdManagerRoleService.save(tdManagerRole);
         
@@ -380,7 +412,7 @@ public class TdManagerManagerController {
 		 * @注释：添加角色类型
 		 */
         map.addAttribute("role_list", tdManagerRoleService.findAll());
-        
+
         if (null != id)
         {
             map.addAttribute("tdManager", tdManagerService.findOne(id));

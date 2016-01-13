@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -646,11 +647,14 @@ public class TdDistributorController {
 	 * 
 	 */
 	@RequestMapping(value="/sale", method=RequestMethod.GET)
-	public String distributorSale(Integer page,HttpServletRequest req,ModelMap map)
+	public String distributorSale(Integer page,String keywords,
+			String startTime,String endTime,
+			HttpServletRequest req,ModelMap map) throws ParseException
 	{
 		String username=(String)req.getSession().getAttribute("distributor");
 		
 		tdCommonService.setHeader(map, req);
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
 		if(null == username)
 		{
@@ -662,10 +666,79 @@ public class TdDistributorController {
 			page = 0;
 		}
 		
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date start = null;
+		Date end = null ;
+		
+		if(null != startTime && !"".equals(startTime.trim()))
+		{
+			start = sdf.parse(startTime);
+		}
+		if(null != endTime && !"".equals(endTime.trim()))
+		{
+			end = sdf.parse(endTime);
+		}
+		
+		
+		Page<TdOrderGoods> orderGoodsPage = null;
+		if(null == start)
+		{
+			if(null == end)
+			{
+				if(null == keywords)
+				{	// 普通查询
+					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeId(distributor.getId(), 0L, page, 10);
+				}
+				else
+				{   // 关键字
+					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeId(distributor.getId(), 0L, keywords, page, 10);
+				}
+			}
+			else
+			{
+				if(null == keywords)
+				{	// 截止时间
+					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeBefore(distributor.getId(), 0L, end, page, 10);
+				}
+				else
+				{	// 截止时间+关键字
+					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeIdAndSaleTimeBefore(distributor.getId(), 0L, keywords, end, page, 10);
+				}
+			}
+		}
+		else
+		{
+			if(null == end)
+			{
+				if(null == keywords)
+				{	// 起始时间
+					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeAfter(distributor.getId(), 0L, start, page, 10);
+				}
+				else
+				{   // 起始时间+关键字
+					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeIdAndSaleTimeAfter(distributor.getId(), 0L, keywords, start, page, 10);
+				}
+			}
+			else
+			{
+				if(null == keywords)
+				{	// 起始时间+截止时间
+					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeAfterAndEndTimeBefore(distributor.getId(), 0L, start, end, page, 10);
+				}
+				else
+				{	// 起始时间++截止时间+关键字
+					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIAndTypeIdAndSaleTimeAfterAndEndTimeBefore(distributor.getId(), 0L, keywords, start, end, page,10);
+				}
+			}
+		}
 		
 		map.addAttribute("distributor", distributor);
-		map.addAttribute("dist_order_page", tdOrderService.findByShopIdAndTypeId(distributor.getId(),0L, page, 10));
+//		map.addAttribute("dist_order_page", tdOrderService.findByShopIdAndTypeId(distributor.getId(),0L, page, 10));
+		map.addAttribute("orderGoodsPage", orderGoodsPage);
+		map.addAttribute("page", page);
+		map.addAttribute("startTime", start);
+		map.addAttribute("endTime", end);
+		map.addAttribute("keywords", keywords);
 		
 		return "/client/distributor_sale";
 	}
@@ -2774,6 +2847,8 @@ public class TdDistributorController {
         		 orderGoods.setGoodsCoverImageUri(providerGoods.getGoodsCoverImageUri());
         		 orderGoods.setGoodsTitle(providerGoods.getGoodsTitle());
         		 orderGoods.setGoodsSubTitle(providerGoods.getSubGoodsTitle());
+        		 orderGoods.setGoodsCode(providerGoods.getCode());
+        		 orderGoods.setSaleTime(new Date());
         		 
         		 // 是否退货
         		 orderGoods.setIsReturnApplied(false);
