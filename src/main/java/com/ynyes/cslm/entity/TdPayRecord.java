@@ -63,9 +63,34 @@ public class TdPayRecord {
     @Column
     private String username;
     
-    // 交易金额
+    // 交易总金额
     @Column(scale=2)
     private Double provice;
+    
+    // 物流费
+    @Column(scale=2)
+    private Double postPrice;
+    
+    // 第三方使用费
+    @Column(scale=2)
+    private Double aliPrice;
+    
+    // 平台费
+    @Column(scale=2)
+    private Double servicePrice;
+    
+    // 商品总额
+    @Column(scale=2)
+    private Double totalGoodsPrice;
+    
+    // 实际收入额
+    @Column(scale=2)
+    private Double realPrice;
+    
+    // 分销利
+    @Column(scale=2)
+    private Double turnPrice;
+    
     
     public Long getId() {
         return id;
@@ -169,6 +194,54 @@ public class TdPayRecord {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public Double getPostPrice() {
+		return postPrice;
+	}
+
+	public void setPostPrice(Double postPrice) {
+		this.postPrice = postPrice;
+	}
+
+	public Double getAliPrice() {
+		return aliPrice;
+	}
+
+	public void setAliPrice(Double aliPrice) {
+		this.aliPrice = aliPrice;
+	}
+
+	public Double getServicePrice() {
+		return servicePrice;
+	}
+
+	public void setServicePrice(Double servicePrice) {
+		this.servicePrice = servicePrice;
+	}
+
+	public Double getTotalGoodsPrice() {
+		return totalGoodsPrice;
+	}
+
+	public void setTotalGoodsPrice(Double totalGoodsPrice) {
+		this.totalGoodsPrice = totalGoodsPrice;
+	}
+
+	public Double getRealPrice() {
+		return realPrice;
+	}
+
+	public void setRealPrice(Double realPrice) {
+		this.realPrice = realPrice;
+	}
+
+	public Double getTurnPrice() {
+		return turnPrice;
+	}
+
+	public void setTurnPrice(Double turnPrice) {
+		this.turnPrice = turnPrice;
 	}
     
 }

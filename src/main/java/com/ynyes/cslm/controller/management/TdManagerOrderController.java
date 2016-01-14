@@ -1,5 +1,7 @@
 package com.ynyes.cslm.controller.management;
 
+import static org.apache.commons.lang3.StringUtils.leftPad;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -1567,6 +1570,11 @@ public class TdManagerOrderController {
     	}
     	
     	TdDistributorService.save(distributor);
+    	
+    	Date current = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String curStr = sdf.format(current);
+        Random random = new Random();
         
     	TdPayRecord record = new TdPayRecord();
         record.setCont("平台充值");
@@ -1575,6 +1583,8 @@ public class TdManagerOrderController {
         record.setDistributorTitle(distributor.getTitle());
         record.setStatusCode(1);
         record.setProvice(data);
+        record.setOrderNumber("CZ" + curStr
+                        + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
         tdPayRecordService.save(record);
     	
         res.put("code", 0);

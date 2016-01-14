@@ -352,28 +352,32 @@ $(function () {
             <table border="0" cellspacing="0" cellpadding="0" class="border-table" width="98%">
                 <thead>
                     <tr>
-                        <th width="12%">
-                            记录时间
-                        </th>
-                        <th>
-                            涉及单号
-                        </th>
-                        <th width="10%">
-                            金额
-                        </th>
-                        <th width="12%">
-                            事项
-                        </th>
+                        <th width="20%">订单编号</th>
+                        <th>交易时间</th>
+                        <th>服务费</th>
+                        <th>物流费</th>
+                        <th>第三方使用费</th>
+                        <th>商品总额</th>
+                        <th>订单总金额</th>
+                        <th>实际入账/支出</th>
+                        <th>说明</th>
                     </tr>
                 </thead>
                 <tbody>
                     <#if pay_tecord_list??>
                         <#list pay_tecord_list as re>
                             <tr class="td_c">
-                                 <td >${re.createTime?string('yyyy-MM-dd')}</td>
-                                  <td class="td003">${re.orderNumber!''}</td>
-                                  <td>￥${re.provice?string('0.00')}</td>
-                                  <td>${re.cont}</td>  
+                                 <td >${re.orderNumber!''}</td>
+                                  <td class="td003">
+                                    <p>${re.createTime?string('yyyy-MM-dd')}</p>
+                                  </td>
+                                  <td><#if re.servicePrice??>${re.servicePrice?string('0.00')}<#else>0.00</#if></td>
+                                  <td><#if re.postPrice??>${re.postPrice?string('0.00')}<#else>0.00</#if></td>
+                                  <td><#if re.aliPrice??>${re.aliPrice?string('0.00')}<#else>0.00</#if></td>
+                                  <td><#if re.totalGoodsPrice??>${re.totalGoodsPrice?string('0.00')}<#else>0.00</#if></td>
+                                  <td><#if re.provice??>${re.provice?string('0.00')}<#else>0.00</#if></td>
+                                  <td><#if re.realPrice??>${re.realPrice?string('0.00')}<#else>0.00</#if></td>
+                                  <td>${re.cont}</td> 
                             </tr>
                         </#list>
                     </#if>

@@ -59,22 +59,40 @@ DD_belatedPNG.fix('.,img,background');
     
     <div class="mymember_info mymember_info02">
       <menu class="buy_record">
-        <a class="sel">最近交易记录</a>
+        <a class="sel" href="/supply/pay/record">最近交易记录</a>
       </menu>
 
       <table class="record_tab">
         <tr>
-          <th>创建时间</th>
-          <th>涉及单号</th>
-          <th>金额</th>
-          <th>状态</th>
+          <th width="20%">订单编号</th>
+          <th>交易时间</th>
+          <th>服务费</th>
+          <th>物流费</th>
+          <th>商品总金额</th>
+          <th>代理获利</th>
+          <th>实际收入</th>
+          <th>说明</th>
         </tr>
         <#if pay_record_page?? && pay_record_page.content??>
             <#list pay_record_page.content as re>
                 <tr>
-                      <td >${re.createTime?string('yyyy-MM-dd')}</td>
-                      <td class="td003">${re.orderNumber!''}</td>
-                      <td>￥${re.provice?string('0.00')}</td>
+                      <td >${re.orderNumber!''}</td>
+                      <td class="td003">
+                        <p>${re.createTime?string('yyyy-MM-dd')}</p>
+                      </td>
+                      <#assign serviceprice =0.0>
+                      <#if re.servicePrice?? && re.aliPrice??>
+                        <#assign serviceprice=re.servicePrice+re.aliPrice>
+                      <#elseif re.servicePrice?? && !re.aliPrice??>
+                         <#assign serviceprice=re.servicePrice>
+                      <#elseif !re.servicePrice?? && re.aliPrice??>
+                          <#assign serviceprice=re.aliPrice>
+                      </#if>
+                      <td>${serviceprice?string('0.00')}</td>
+                      <td><#if re.postPrice??>${re.postPrice?string('0.00')}<#else>0.00</#if></td>
+                      <td><#if re.totalGoodsPrice??>${re.totalGoodsPrice?string('0.00')}<#else>0.00</#if></td>
+                      <td><#if re.turnPrice??>${re.turnPrice?string('0.00')}<#else>0.00</#if></td>
+                      <td><#if re.realPrice??>${re.realPrice?string('0.00')}<#else>0.00</#if></td>
                       <td>${re.cont}</td>         
                 </tr>
             </#list>

@@ -245,16 +245,28 @@ public class TdOrder {
     
     @Column
     private Double platformService;
-    
-    @Column
+    // 平台费
+    @Column(scale=2)
     private Double trainService;
     
     // 配送费
     @Column(scale=2)
     private Double postPrice;
     
+    // 第三方使用费
+    @Column(scale=2)
+    private Double aliPrice;
     
-    public Double getPlatformService() {
+    
+    public Double getAliPrice() {
+		return aliPrice;
+	}
+
+	public void setAliPrice(Double aliPrice) {
+		this.aliPrice = aliPrice;
+	}
+
+	public Double getPlatformService() {
 		return platformService;
 	}
 

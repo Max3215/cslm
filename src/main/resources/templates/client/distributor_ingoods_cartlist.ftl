@@ -46,6 +46,6 @@
                    总价：<span class="fc fw-b">￥<#if cart_goods_list??>${totalPrice?string("0.00")}</#if></span>&nbsp;&nbsp;
                 </li>
             </ul>
-            <input class="sub" type="submit" id="submit" onclick="goNext(${totalGoods!'0'})" value="提交订货单">
+            <input class="sub" type="submit" id="submit" onclick="goNext(${totalGoods!'0'})" value="提交并付款订货单">
         </div>
 </#if>

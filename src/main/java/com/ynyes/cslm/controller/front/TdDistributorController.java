@@ -2827,10 +2827,10 @@ public class TdDistributorController {
         
         	 List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();
         	 
-        	 Double totalPrice = 0.0; // 购物总额
-        	 Double serviceRation = 0.0; // 平台返利
         	 Double totalGoodsPrice = 0.0; // 商品总额 
-        	 Double postPrice = 0.0;
+        	 Double totalPrice = 0.0; // 购物总额
+        	 Double serviceRation = 0.0; // 平台费
+        	 Double postPrice = 0.0; // 配送费
         	 
         	 
         	 for (int i = 0; i < m.getValue().size(); i++) {
@@ -2918,12 +2918,11 @@ public class TdDistributorController {
              tdOrder.setOrderGoodsList(orderGoodsList);
              
              if(null != provider.getPostPrice())
-             {
-            	postPrice += totalGoodsPrice*provider.getPostPrice();
-            	totalPrice += totalGoodsPrice+postPrice;
-             }else{
-            	 totalPrice += totalGoodsPrice;
+             { 
+            	postPrice += totalGoodsPrice*provider.getPostPrice(); // 配送费
              }
+             
+             totalPrice += totalGoodsPrice+postPrice; // 进货单总额为：商品总额+配送费
              
              tdOrder.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
              tdOrder.setTrainService(serviceRation); // 平台服务费
@@ -2943,14 +2942,14 @@ public class TdDistributorController {
              tdOrderGoodsService.save(orderGoodsList);
              
              // 扣除超市虚拟账户
-             tdOrder = tdOrderService.save(tdOrder);
-            distributor.setVirtualMoney(distributor.getVirtualMoney()-tdOrder.getTotalPrice());//扣除超市虚拟账户金额
+            tdOrder = tdOrderService.save(tdOrder);
+            distributor.setVirtualMoney(distributor.getVirtualMoney()-totalPrice);//扣除超市虚拟账户金额（订单总额）
             tdDistributorService.save(distributor);
             
      		if(null == provider.getVirtualMoney()){
      			provider.setVirtualMoney(new Double(0));
      		}
-     		provider.setVirtualMoney(provider.getVirtualMoney()+tdOrder.getTotalGoodsPrice() - serviceRation);
+     		provider.setVirtualMoney(provider.getVirtualMoney()+totalPrice - serviceRation); // 批发商收入：订单总额-平台费
      		tdProviderService.save(provider);
      		
 //     		//平台虚拟账户增加金额
@@ -2959,7 +2958,7 @@ public class TdDistributorController {
      		
      		// 保存交易记录
      		TdPayRecord record = new TdPayRecord();
-            record.setCont("批发款");
+            record.setCont("批发货款");
             record.setCreateTime(new Date());
             record.setDistributorId(distributor.getId());
             record.setDistributorTitle(distributor.getTitle());
@@ -2967,7 +2966,10 @@ public class TdDistributorController {
             record.setOrderId(tdOrder.getId());
             record.setOrderNumber(tdOrder.getOrderNumber());
             record.setStatusCode(1);
-            record.setProvice(tdOrder.getTotalPrice());
+            record.setProvice(totalPrice); // 订单总额
+            record.setTotalGoodsPrice(totalGoodsPrice); // 商品总额
+            record.setPostPrice(postPrice); // 邮费
+            record.setRealPrice(totalPrice);// 实际支付
             tdPayRecordService.save(record);
             
             record = new TdPayRecord();
@@ -2979,7 +2981,12 @@ public class TdDistributorController {
             record.setOrderId(tdOrder.getId());
             record.setOrderNumber(tdOrder.getOrderNumber());
             record.setStatusCode(1);
-            record.setProvice(tdOrder.getTotalPrice()-serviceRation);
+            record.setProvice(totalPrice);
+            record.setProvice(totalPrice); // 订单总额
+            record.setTotalGoodsPrice(totalGoodsPrice); // 商品总额
+            record.setPostPrice(postPrice); // 邮费
+            record.setServicePrice(serviceRation);
+            record.setRealPrice(totalPrice-serviceRation);
             tdPayRecordService.save(record);
         	 
         }

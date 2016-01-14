@@ -70,21 +70,34 @@ DD_belatedPNG.fix('.,img,background');
         </div>
         <table style="table-layout: fixed;">
             <tr class="mymember_infotab_tit01">     
-                  <th>订单编号</th>
+                  <th width="20%">订单编号</th>
                   <th>交易时间</th>
-                  <th>总金额</th>
+                  <th>服务费</th>
+                  <th>物流费</th>
+                  <th>商品总金额</th>
+                  <th>实际入账</th>
                   <th>说明</th>
             </tr>     
             <#if pay_record_page?? && pay_record_page.content??>
                 <#list pay_record_page.content as re>
                     <tr>
-                          <td >${re.orderNumber!''}</td>
+                         <td >${re.orderNumber!''}</td>
                           <td class="td003">
                             <p>${re.createTime?string('yyyy-MM-dd')}</p>
-                            <p>${re.createTime?string('HH:mm:ss')}</p>
                           </td>
-                          <td>￥${re.provice?string('0.00')}</td>
-                          <td>${re.cont}</td>         
+                          <#assign serviceprice =0.0>
+                          <#if re.servicePrice?? && re.aliPrice??>
+                            <#assign serviceprice=re.servicePrice+re.aliPrice>
+                          <#elseif re.servicePrice?? && !re.aliPrice??>
+                             <#assign serviceprice=re.servicePrice>
+                          <#elseif !re.servicePrice?? && re.aliPrice??>
+                              <#assign serviceprice=re.aliPrice>
+                          </#if>
+                          <td>${serviceprice?string('0.00')}</td>
+                          <td><#if re.postPrice??>${re.postPrice?string('0.00')}<#else>0.00</#if></td>
+                          <td><#if re.totalGoodsPrice??>${re.totalGoodsPrice?string('0.00')}<#else>0.00</#if></td>
+                          <td><#if re.realPrice??>${re.realPrice?string('0.00')}<#else>0.00</#if></td>
+                          <td>${re.cont}</td>          
                     </tr>
                 </#list>
             </#if>
