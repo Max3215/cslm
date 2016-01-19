@@ -3725,6 +3725,126 @@ public class TdDistributorController {
     	return "redirect:/distributor/ad/list";
     }
     
+    @RequestMapping(value="/info/list")
+    public String infoList(HttpServletRequest req,ModelMap map,Integer page)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	
+    	if(null == distributor)
+    	{
+    		return "/client/error_404";
+    	}
+    	
+    	if(null == page)
+    	{
+    		page = 0;
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("distributor", distributor);
+    	
+    	// 超市快讯
+        List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(10L);
+        if(null != catList && catList.size() >0)
+        {
+        	for (TdArticleCategory tdCat : catList) {
+        		if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
+                {
+                    map.addAttribute("news_page", tdArticleService.findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,
+                                    tdCat.getId(),distributor.getId(), page, 15));
+                    break;
+                }
+			}
+        }
+    	
+    	return "/client/distributor_article_list";
+    }
+    
+    @RequestMapping(value="/info/edit")
+    public String infoEdit(Long id,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
+    	tdCommonService.setHeader(map, req);
+    	
+    	if(null !=id)
+    	{
+    		map.addAttribute("info", tdArticleService.findOne(id));
+    	}
+    	
+    	return "/client/distributor_article_edit";
+    }
+    
+    @RequestMapping(value="/article/save")
+    public String saveArticle(TdArticle article,
+    			HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirct:/login";
+    	}
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	if(null == distributor)
+    	{
+    		return "/client/error_404";
+    	}
+    	
+    	if(null != article)
+    	{
+    		if(null ==article.getId())
+    		{
+    			// 超市快讯
+    	        List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(10L);
+    	        if(null != catList && catList.size() >0)
+    	        {
+    	        	for (TdArticleCategory tdCat : catList) {
+    	        		if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
+    	                {
+    	        			// 设置分类——超市快讯
+    	                    article.setMenuId(tdCat.getMenuId());
+    	                    article.setCategoryId(tdCat.getId());
+    	                    article.setChannelId(tdCat.getChannelId());
+    	        			break;
+    	                }
+    				}
+    	        }
+    	        // 归属店铺
+    	        article.setDistributorId(distributor.getId());
+    	        article.setSource(distributor.getTitle());
+    		}
+    		tdArticleService.save(article);
+    	}
+    	return "redirect:/distributor/info/list";
+    }
+    
+    @RequestMapping(value="/info/delete")
+    public String deleteInfo(Long id,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	if(null != id)
+    	{
+    		tdArticleService.delete(id);
+    	}
+    	return "redirect:/distributor/info/list";
+    }
     
     
     // 批量删除广告
