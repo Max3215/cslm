@@ -3,6 +3,7 @@
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
 <title>内容列表</title>
+
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/jquery.lazyload.min.js"></script>
 <script type="text/javascript" src="/mag/js/lhgdialog.js"></script>

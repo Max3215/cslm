@@ -9,6 +9,7 @@
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
 <![endif]-->
+<link href="/client/images/cslm.ico" rel="shortcut icon">
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/order_info.js"></script>

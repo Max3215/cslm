@@ -10,7 +10,7 @@
    <script src="/client/js/html5.js"></script>
 <![endif]-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
-
+<link href="/client/images/cslm.ico" rel="shortcut icon">
 <script type="text/javascript" src="/client/js/jquery.cookie.js"></script>
 
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">

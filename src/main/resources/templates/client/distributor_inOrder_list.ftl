@@ -6,7 +6,7 @@
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 
-
+<link href="/client/images/cslm.ico" rel="shortcut icon">
 <link href="/client/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/client/css/main.css" rel="stylesheet" type="text/css" />
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />

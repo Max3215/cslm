@@ -6,7 +6,7 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
-
+<link href="/client/images/cslm.ico" rel="shortcut icon">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />

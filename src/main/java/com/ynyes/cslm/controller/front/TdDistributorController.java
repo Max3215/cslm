@@ -3725,6 +3725,8 @@ public class TdDistributorController {
     	return "redirect:/distributor/ad/list";
     }
     
+    
+    
     // 批量删除广告
     public void adDelete(Long[] ids,Integer[] chkIds)
     {

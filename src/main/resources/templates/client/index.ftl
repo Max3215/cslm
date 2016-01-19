@@ -12,7 +12,7 @@
 
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
-<link href="" rel="shortcut icon">
+<link href="/client/images/cslm.ico" rel="shortcut icon">
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>

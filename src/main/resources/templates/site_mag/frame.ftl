@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
 <title>后台管理中心</title>
-<link rel="shortcut icon" href="/client/images/little_logo.ico" />
+
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/jquery.nicescroll.js"></script>
