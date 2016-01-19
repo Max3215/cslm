@@ -258,8 +258,9 @@ function showMsg(){
 					</#if>
 					<div class="clear"></div>
 				</p>
-                <p></p>
-				<#if maxPostPrice??><p class="num">本店满<span style="color:red">￥${maxPostPrice?string('0.00')}</span>&nbsp;包邮</p></#if>
+                <p>&nbsp;  </p>
+                <p class="num"><#if distributor.postPrice??>本店（${distributor.title!''}）配送费<span style="color:#ff5b7d">￥${distributor.postPrice?string('0.00')}</span>&nbsp;</#if>
+                    <#if distributor.maxPostPrice??>满<span style="color:#ff5b7d">￥${distributor.maxPostPrice?string('0.00')}</span>&nbsp;包邮</#if></p>
 				<div class="buy_btn">
 					<div class="clear"></div>
 					<#if dis_goods??>

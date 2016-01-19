@@ -166,7 +166,7 @@ public class TdCommonService {
 	    
 	    if(null != articleCategoryList && articleCategoryList.size() > 0)
 	    {
-	    	for (int i = 0; i < articleCategoryList.size()&& i<4 ; i++)
+	    	for (int i = 0; i < articleCategoryList.size()&& i<5 ; i++)
 	    	{
 	    		//分类文章
 				TdArticleCategory category = articleCategoryList.get(i);

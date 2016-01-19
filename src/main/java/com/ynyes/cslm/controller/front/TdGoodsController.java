@@ -118,7 +118,7 @@ public class TdGoodsController {
     		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
     		req.getSession().setAttribute("distributorTitle", distributor.getTitle()); 
         	
-    		map.addAttribute("maxPostPrice", distributor.getMaxPostPrice());
+    		map.addAttribute("distributor", distributor);
         	 //成交数
             map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, distributorGoods.getGoodsId(),0,5));
             
@@ -136,7 +136,7 @@ public class TdGoodsController {
     		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
     		req.getSession().setAttribute("distributorTitle", distributor.getTitle()); 
     		
-    		map.addAttribute("maxPostPrice", distributor.getMaxPostPrice());
+    		map.addAttribute("distributor", distributor);
     		 //成交数
             map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, distributorGoods.getGoodsId(),0,5));
             

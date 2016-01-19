@@ -1079,7 +1079,7 @@ public class TdOrderController extends AbstractPaytypeController{
             	postPrice += distributor.getPostPrice();
             	
             	// 判断是否满额免
-            	if(totalGoodsPrice > distributor.getMaxPostPrice())
+            	if(null!= distributor.getMaxPostPrice() && totalGoodsPrice > distributor.getMaxPostPrice())
             	{
             		totalPrice += totalGoodsPrice;
             	}else{

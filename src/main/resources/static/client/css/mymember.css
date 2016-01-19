@@ -464,13 +464,7 @@ textarea { resize:none;}
 	margin-left:5px;}
 .mymember_order_search .mysub:hover {
 	background:#eee;}
-.mymember_order_search select {
-	font-family: "微软雅黑";
-	border:1px solid #ddd;
-	background:#fff;
-	height:28px;
-	line-height:28px;
-	}
+.mymember_order_search select { float:right; line-height:30px;}
 
 .mymember_order_search .myselect {
     width:200px;
@@ -810,14 +804,6 @@ textarea { resize:none;}
 	padding:10px 0;
 	background:none;
 	border:none;}
-
-.mymember_address input.text {
-    width:30%;
-    border:1px solid #ddd;
-    height:28px;
-    line-height:28px;
-    text-indent:1em;
-    }
 
 .mymember_address input.mytext {
 	width:50%;

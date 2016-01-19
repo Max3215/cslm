@@ -124,6 +124,6 @@
                 <#list navi_item_list as item>
                     <a class="a1" href="${item.linkUri!''}">${item.title!''}</a>
                 </#list>
-             </#if> 
+             </#if>
         </div>
     </nav>

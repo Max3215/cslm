@@ -49,7 +49,7 @@ $(document).ready(function(){
 </head>
 
 <body>
-    <#--
+    <#---->
 	<header class="main_top">
 		<div class="main">
 			<h1>您好！欢迎光临王明辉超市！</h1>
@@ -69,11 +69,12 @@ $(document).ready(function(){
 			<div class="clear"></div>
 		</div>
 	</header>
-	<!--logo 搜索框部分--
+	<!--logo 搜索框部分-->
 	<section class="main">
 		<a href="/" class="logo"><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
 		<div class="choose_mar">
 			<a href="javascript:void(0);" class="click_a" onclick="$('#mar_box').fadeIn(300);"><#if distributorTitle??>${distributorTitle!''}<#else>请选择地区超市</#if></a>
+		      <a href="/disout" class="btn">平台首页</a>
 		</div>
 		<div class="m_box">
 			<div class="search_box">
@@ -98,7 +99,7 @@ $(document).ready(function(){
 		<div class="clear"></div>
 	</section>
 
-	<!--选择超市弹出框--
+	<!--选择超市弹出框-->
 	<aside class="winbox" id="mar_box">
 		<div class="mar_box">
 			<p class="tit">请选择超市<a href="javascript:void(0);" onclick="$(this).parent().parent().parent().fadeOut(300);"></a></p>
@@ -136,12 +137,12 @@ $(document).ready(function(){
 		</div>
 	</aside>
 
-	<!--导航部分--
+	<!--导航部分-->
 	<nav class="nav_box">
 		<div class="main">
 			<section class="nav_list" id="mainnavdown">
 				<a class="a2">全部商品分类</a>
-				<ul id="nav_down" class="nav_down">
+				<ul id="nav_down" class="nav_down dis_none">
 				    <#if top_cat_list??>
                         <#list top_cat_list as item>
 					       <li>
@@ -175,16 +176,13 @@ $(document).ready(function(){
                     <a class="a1" href="${item.linkUri!''}">${item.title!''}</a>
                 </#list>
              </#if> 
-             <!--
-			<a href="#" class="a1 sel">首页</a>
-            --
-			<div class="right_kx">
-				<h3>超市快讯<!--<a href="#">更多></a>--</h3>
+			<div class="right_kx index_news_list">
+				<h3>超市快讯</h3>
 				<ul>
 				    <#if news_page??>
 				        <#list news_page.content as item>
 				            <#if item_index < 5 >
-					            <li><a target="_blank" href="/info/content/${item.id}?mid=12">${item.title!''}</a></li>
+					            <li><a target="_blank" style="overflow:hidden;display:block;width:100%;height:20px;line-height:20px;" href="/info/content/${item.id}?mid=12">${item.title!''}</a></li>
 					        </#if>
 					    </#list>
 					</#if>
@@ -202,8 +200,9 @@ $(document).ready(function(){
 			</div>
 		</div>
 	</nav>
-	-->
+	<#--
 	<#include "/client/common_header.ftl">
+	-->
 	<!--END nav-->
 	<!--banner-->
 	<section id="banner_box">
