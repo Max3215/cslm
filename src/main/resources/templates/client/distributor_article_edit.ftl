@@ -42,8 +42,8 @@ $(document).ready(function(){
         width: '100%',
         height: '500px',
         resizeType: 1,
-        uploadJson: '/Verwalter/editor/upload?action=EditorFile',
-        fileManagerJson: '/Verwalter/editor/upload?action=EditorFile',
+        uploadJson: '/client/editor/upload?action=EditorFile',
+        fileManagerJson: '/client/editor/upload?action=EditorFile',
         allowFileManager: true
     });
     //（缩略图）
@@ -87,6 +87,7 @@ DD_belatedPNG.fix('.,img,background');
            <input type="hidden" value="<#if info??>${info.categoryId!'0'}</#if>" name="categoryId">
            <input type="hidden" value="<#if info??>${info.channelId!'0'}</#if>" name="channelId">
            <input type="hidden" value="<#if info?? && info.distributorId??>${info.distributorId!'0'}</#if>" name="distributorId">
+           <input type="hidden" value="<#if info?? && info.source??>${info.source!''}</#if>" name="source">
           <table>
             <tr>
               <th>文章名称</th>

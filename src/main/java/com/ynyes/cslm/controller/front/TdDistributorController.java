@@ -3725,6 +3725,11 @@ public class TdDistributorController {
     	return "redirect:/distributor/ad/list";
     }
     
+    /**
+     * 超市资讯列表
+     * @author Max
+     * 
+     */
     @RequestMapping(value="/info/list")
     public String infoList(HttpServletRequest req,ModelMap map,Integer page)
     {
@@ -3766,6 +3771,7 @@ public class TdDistributorController {
     	return "/client/distributor_article_list";
     }
     
+    
     @RequestMapping(value="/info/edit")
     public String infoEdit(Long id,HttpServletRequest req,ModelMap map)
     {
@@ -3787,6 +3793,10 @@ public class TdDistributorController {
     	return "/client/distributor_article_edit";
     }
     
+    /**
+     * 新加资讯
+     * @author Max
+     */
     @RequestMapping(value="/article/save")
     public String saveArticle(TdArticle article,
     			HttpServletRequest req,ModelMap map)
@@ -3825,12 +3835,19 @@ public class TdDistributorController {
     	        // 归属店铺
     	        article.setDistributorId(distributor.getId());
     	        article.setSource(distributor.getTitle());
+    	        article.setImgUrl("");
+    	        article.setCallIndex("");
     		}
+    		article.setSortId(99L);
     		tdArticleService.save(article);
     	}
     	return "redirect:/distributor/info/list";
     }
-    
+    /**
+     * 删除超市资讯
+     * @author Max
+     * 
+     */
     @RequestMapping(value="/info/delete")
     public String deleteInfo(Long id,HttpServletRequest req,ModelMap map)
     {
