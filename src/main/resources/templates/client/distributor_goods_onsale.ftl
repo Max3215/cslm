@@ -183,6 +183,8 @@ DD_belatedPNG.fix('.,img,background');
                         </#list>
                     </#if>
                 </select>
+                &nbsp;
+                <a href="/Verwalter" target="_blank" style="color: #ff5b7d">新增商品</a>
               </form>
           <div class="clear"></div>
         </div>

@@ -52,7 +52,7 @@ DD_belatedPNG.fix('.,img,background');
             <a href="javascript:deleteAd();"  class="a4">批量删除</a>
             <div class="clear h10"></div>
           </div>
-          <form  id="form" action = "/distributor/ad/delete" method="post">
+          <form  id="form" action = "/distributor/ad/deleteAll" method="post">
           <table>
             <tr>
               <th ><input id="checkAll" name="r" type="checkbox"  class="check" onclick="selectAll();"/>全选</th>

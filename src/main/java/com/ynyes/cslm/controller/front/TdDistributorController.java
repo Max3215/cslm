@@ -3707,8 +3707,8 @@ public class TdDistributorController {
     }
     
     // 批量删除广告
-    @RequestMapping(value="/ad/delete")
-    public String delete(
+    @RequestMapping(value="/ad/deleteAll")
+    public String deleteAll(
     			Long[] listId,
     			Integer[] listChkId,
     			HttpServletRequest req,
@@ -3721,6 +3721,23 @@ public class TdDistributorController {
     	}
     	
     	adDelete(listId, listChkId);
+    	
+    	return "redirect:/distributor/ad/list";
+    }
+    
+    @RequestMapping(value="/ad/delete")
+    public String delete(Long id,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	if(null != id)
+    	{
+    		tdAdService.delete(id);
+    	}
     	
     	return "redirect:/distributor/ad/list";
     }

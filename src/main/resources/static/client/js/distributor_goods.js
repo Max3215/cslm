@@ -44,22 +44,49 @@ function deleteDisGoods(type,disId,page){
 }
 
 //超市中心选择批发商品
-function addgoods(gid){
+//function addgoods(gid){
+//    var page = $("#page").val();
+//    var quantity = $("#number"+gid).html();
+//    
+//    if(undefined == quantity || quantity == 0){
+//    	alert("该商品已无存货！")
+//    	return;
+//    }
+//    
+//    $.ajax({
+//        url : "/distributor/goods/addOne",
+//        data : {"pgId":gid},
+//        type :"post",
+//        success:function(res){
+//            $("#cart_goodslist").html(res);
+//            alert("添加成功")
+//        }
+//    })
+//}
+function addGoods(){
     var page = $("#page").val();
-    var quantity = $("#number"+gid).html();
+    var quantity = parseInt($("#quantity").val());
+    var gid = $("#goodsId").val();
+    var leftNumber = parseInt($("#leftNumber").val());
     
     if(undefined == quantity || quantity == 0){
-    	alert("该商品已无存货！")
+    	alert("请输入进货数量！")
     	return;
+    }
+    
+    if(quantity > leftNumber){
+    	alert("库存不足！")
+    	return ;
     }
     
     $.ajax({
         url : "/distributor/goods/addOne",
-        data : {"pgId":gid},
+        data : {"pgId":gid,"quantity":quantity},
         type :"post",
         success:function(res){
             $("#cart_goodslist").html(res);
             alert("添加成功")
+            $('.sub_form').css('display','none');
         }
     })
 }
@@ -100,7 +127,7 @@ function addNum(id)
         url:"/distributor/goods/numberAdd",
         data:{"id":id},
         success:function(data){
-        	console.debug(id)
+        	
             $("#cart_goodslist").html(data);
         }
     });
@@ -122,7 +149,7 @@ function minusNum(id)
 function changeNumber(id)
 {
 	var quantity = $("#number"+id).val();
-	console.debug(quantity);
+	
 	var r = /^\+?[1-9][0-9]*$/;　
 	if( r.test(quantity)){
 		$.ajax({
@@ -165,7 +192,18 @@ function goNext(goodsNum)
         alert("请至少选择一种商品!");
         return false;
     }
-    window.location.href="/distributor/order/info";
+    $.ajax({
+        url : "/distributor/order/info",
+        success:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+            	window.location.href="/distributor/inOrder/list/0";
+            }
+        }
+    })
+//            $('.sub_form').css('display','none');
+//    window.location.href="/distributor/order/info";
 }
 
 function searchGoods(page){

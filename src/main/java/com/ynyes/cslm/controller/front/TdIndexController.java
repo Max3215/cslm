@@ -127,6 +127,14 @@ public class TdIndexController {
                 map.addAttribute("big_scroll_ad_list", tdAdService
                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
             }
+            
+         // 新品推荐广告
+            adType = tdAdTypeService.findByTitle("新品推荐广告");
+
+            if (null != adType) {
+                map.addAttribute("new_goods_ad_list", tdAdService
+                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+            }
         	
         }else{ // 为选择超市
         	if (null != catList && catList.size() > 0) {
@@ -135,8 +143,8 @@ public class TdIndexController {
         			if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
         			{
         				map.addAttribute("news_page", tdArticleService
-        						.findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(10L,
-        								tdCat.getId(), 0, ClientConstant.pageSize));
+                                .findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,
+                                        tdCat.getId(),null, 0, ClientConstant.pageSize));
         				break;
         			}
         			
@@ -160,12 +168,20 @@ public class TdIndexController {
                 }
             }
         	
-        	// 首页大图轮播广告
+         // 首页大图轮播广告
             adType = tdAdTypeService.findByTitle("首页轮播大图广告");
 
             if (null != adType) {
                 map.addAttribute("big_scroll_ad_list", tdAdService
-                        .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
+                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+            }
+            
+         // 新品推荐广告
+            adType = tdAdTypeService.findByTitle("新品推荐广告");
+
+            if (null != adType) {
+                map.addAttribute("new_goods_ad_list", tdAdService
+                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
             }
         	
         }
@@ -201,14 +217,6 @@ public class TdIndexController {
 //        map.addAttribute("recommed_index_page",tdGoodsService.findByIsRecommendIndexTrueAndIsOnSaleTrueOrderByIdDesc(0, 8));
 
         
-        // 新品推荐广告
-        adType = tdAdTypeService.findByTitle("新品推荐广告");
-
-        if (null != adType) {
-            map.addAttribute("new_goods_ad_list", tdAdService
-                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-        }
-
         // 一楼商品中部广告
         adType = tdAdTypeService.findByTitle("一楼分类底部广告");
 
