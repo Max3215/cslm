@@ -18,12 +18,12 @@
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle}</p>
+                            <a href="" target="_blank" class="pic" title="${dg.goodsTitle!''}"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
-                        <td class="tb02">￥<span id="price${dg.id?c}"><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></td>
+                        <td class="tb02"><p>￥<span id="price${dg.id?c}"><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></p></td>
                         <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page});">下架</a></p>
@@ -39,12 +39,12 @@
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                            <a href="" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
-                        <td class="tb02"><#if dg.goodsPrice??>￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></td>
+                        <td class="tb02"><p><#if dg.goodsPrice??>￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></p></td>
                         <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
                             <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page});">上架</a></p>

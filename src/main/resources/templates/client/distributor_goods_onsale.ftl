@@ -200,9 +200,9 @@ DD_belatedPNG.fix('.,img,background');
                     <input type="hidden" value="${goods.code!''}" id="code${goods.id?c}">
                     <input type="hidden" value="${goods.subTitle!''}" id="subTitle${goods.id?c}">
                     <tr id="tr_1424195166">
-                        <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
+                        <td><a class="pic" title="${goods.title!''}"><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01">${goods.code!''}</td>
-                        <td class="tb02">￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span>/${goods.promotion!''}</td>
+                        <td class="tb02"><p>￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span>/${goods.promotion!''}</p></td>
                         <td>
                           <p><a onclick="editgoods(${goods.id?c});">编辑上架</a></p>
                          </td>

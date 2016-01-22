@@ -15,8 +15,8 @@
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${dg.goodsTitle}</p>
+                            <a href="" target="_blank" class="pic" title="${dg.goodsTitle!''}"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${dg.goodsTitle!''}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>

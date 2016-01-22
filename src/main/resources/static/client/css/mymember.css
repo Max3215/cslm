@@ -267,7 +267,7 @@ textarea { resize:none;}
 .mymember_infotab_tit01 th { background:#e7e7e7;text-align:center;}
 .mymember_infotab_tit02 th { background:#fffdef;}
 .mymember_info02 th a {color:#0060aa;}
-.mymember_info02 td {border:1px solid #eee;padding:5px 5px; text-align:center; font-size:12px; position:relative;}
+.mymember_info02 td {border:1px solid #eee;padding:5px 5px; text-align:center; font-size:12px; position:relative;vertical-align: middle;}
 .mymember_info02 td.td001 {border-right:none; text-align:left;}
 .mymember_info02 td.td001 a {
 	display: inline-block;
@@ -281,6 +281,14 @@ textarea { resize:none;}
 .mymember_info02 td.td003 p,.mymember_info02 td.td003 a{color:#989898;}
 .mymember_info02 td.td003 a:hover{color:#ff8800;}
 .mymember_info02 td h4 {color:#ff1000;}
+.mymember_info02 td span,.mymember_info02 td p,.mymember_info02 td p a{position:static;}
+
+/*.mymember_info02 td{display: block;}
+*/
+.mymember_info02 td a.pic{display: block;}
+.mymember_info02 td a.pic strong{display: block;position: absolute;left:28px;top:0;}
+.mymember_info02 td a.pic p{min-height: 60px;}
+
 
 
 .mymember_info02 .car_list td{border:none;border-bottom: 1px solid #eee;}
@@ -925,7 +933,7 @@ textarea { resize:none;}
 
 
 .banner_manage{}
-.banner_manage .menu{}
+.banner_manage .menu{overflow: hidden;}
 .banner_manage .menu a{display: block;float:left;width: 36px;height: 30px;padding-left: 30px;color:#fff;line-height: 30px;margin-right: 12px;}
 .banner_manage .menu a.a1{background: url(../images/menu01.png) 6px center #ff5b7d no-repeat;}
 

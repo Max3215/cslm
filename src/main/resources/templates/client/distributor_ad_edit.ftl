@@ -70,6 +70,7 @@ DD_belatedPNG.fix('.,img,background');
         
         <div class="edit_banner">
         <form id ="form1" action="/distributor/ad/save" method="post">
+           <input type="hidden" value="<#if ad??>${ad.id?c}</#if>" name="id">
           <table>
             <tr>
               <th>所属广告位</th>

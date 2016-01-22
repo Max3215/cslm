@@ -190,9 +190,9 @@ DD_belatedPNG.fix('.,img,background');
            <#if goods_page??>
                 <#list goods_page.content as goods>
                     <tr id="tr_1424195166">
-                        <td><a ><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
+                        <td><a class="pic"><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01"><span id="code${goods.id?c}">${goods.code!''}</span></td>
-                        <td class="tb02">￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></td>
+                        <td class="tb02"><p>￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></p></td>
                         <td>
                           <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">我要分销</a></p>
                          </td>

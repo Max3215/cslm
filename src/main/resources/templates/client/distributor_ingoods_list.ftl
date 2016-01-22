@@ -33,11 +33,11 @@
                     <input id="shopReturnRation${pgoods.id?c}" type="text" value="<#if pgoods.shopReturnRation??>${pgoods.shopReturnRation?string('0.00')}<#else>0</#if>" style="display:none">
                     <tr id="tr_1424195166">
                         <td colspan="2">
-                            <a target="_blank" ><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
+                            <a target="_blank"  class="pic"><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
                             <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="goodsTitle${pgoods.id?c}">${pgoods.goodsTitle!''}</p></a> 
                         </td>
                         <td class="tb01"><span id="providerTitle${pgoods.id?c}">${pgoods.providerTitle!''}</span></td>
-                        <td class="tb02">￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></td>
+                        <td class="tb02"><p>￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></p></td>
                         <td><span id="number${pgoods.id?c}">${pgoods.leftNumber?c!'0'}</span></td>
                         <td>
                             <p><a href="javascript:showSub(${pgoods.id?c});">添加</a></p>

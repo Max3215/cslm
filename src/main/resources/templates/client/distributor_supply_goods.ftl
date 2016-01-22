@@ -16,7 +16,7 @@
                             <input type="hidden" name="listId" id="listId" value="${pgoods.id?c}">
                         </td>
                         <td>
-                            <a href="" target="_blank" ><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
+                            <a href="" target="_blank"  class="pic"><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${pgoods.goodsTitle!''}</p>
                              </a> 
                         </td>
