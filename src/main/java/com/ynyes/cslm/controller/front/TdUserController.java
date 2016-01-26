@@ -1893,12 +1893,17 @@ public class TdUserController{
     }
 
     @RequestMapping(value = "/user/password", method = RequestMethod.POST)
-    public String userPassword(HttpServletRequest req, String oldPassword,
+    @ResponseBody
+    public Map<String,Object> userPassword(HttpServletRequest req, String oldPassword,
             String newPassword, ModelMap map) {
+    	Map<String,Object> res = new HashMap<>();
+    	map.put("code", 0);
+    	
         String username = (String) req.getSession().getAttribute("username");
 
         if (null == username) {
-            return "redirect:/login";
+            res.put("msg", "请重新登录");
+        	return res;
         }
 
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
@@ -1908,8 +1913,10 @@ public class TdUserController{
         }
 
         map.addAttribute("user", tdUserService.save(user));
-
-        return "redirect:/user/password";
+        
+        res.put("msg", "修改成功");
+        res.put("code", 1);
+        return res;
     }
     
     @RequestMapping(value="/user/order/param")

@@ -49,74 +49,49 @@ function menuDownList(boxid, _showname, _name, _hover) {
 }
 
 //banner
-function adChange(outid,imgid,numid,carspeed,fadespeed){
-	//根据ID取值
-	var _out = $("#"+outid);
-	var _img = $("#"+imgid);
-	var _index = 0;//滚动索引
-	var _arr = _img.find("li");//图片数组
-	var _num = _arr.length;//图片数组数量
+function bannerCartoon(_boxid,_part,_numid,_carsp,_speed,_lastid,_nextid){
+	var _box = $("#"+_boxid);
+	var _arr = _box.find(_part);
+	var _length = _arr.length;
+	var _numbox = $("#"+_numid);
+	var _index = 0;
+	_arr.eq(_index).css("display","block").siblings().css("display","none");
 	
-	//按照图片数量添加相应数字
-	var _numstr = "<div id='"+numid+"'><a class='sel'>1</a>";
-	if(_num >= 2){
-		for(var j=2;j<=_num;j++){
-	 	 _numstr += "<a>"+j+"</a>";
-	 	 }
+	//轮播数字
+	var _numstr = "<span class='numsel'>1</span>";
+	for(var i=2;i<_length+1;i++){
+		_numstr += "<span>"+i+"</span>";
 		}
-	_numstr += "</div>";
-	_out.append(_numstr);//判断数量，并添加数字
-	var _numarr = $("#"+numid).find("a");//获取已添加的数字信息
+	_numbox.html(_numstr);
+	var _numarr = _numbox.find("span");
 	
-	//执行动画
-	var _cartoon = setInterval(function(){
-		  _arr.eq(_index).fadeOut(fadespeed);
-			_numarr.eq(_index).removeClass("sel");
-			if(_index == _num-1){
-				_index = -1;
-				}
-			_arr.eq(_index+1).fadeIn(fadespeed);
-			_numarr.eq(_index+1).addClass("sel");
-			_index++;
-		},carspeed);
-		
-	//鼠标事件
-	  _arr.find("a").bind("click",function(){
-   	  clearInterval(_cartoon);
-   	});
-    _arr.find("a").bind("click",function(){
-   	  _cartoon = setInterval(function(){
-		  _arr.eq(_index).fadeOut(fadespeed);
-			_numarr.eq(_index).removeClass("sel");
-			if(_index == _num-1){
-				_index = -1;
-				}
-			_arr.eq(_index+1).fadeIn(fadespeed);
-			_numarr.eq(_index+1).addClass("sel");
-			_index++;
-		},carspeed);
-   	});
-   
-   //数字事件
-   _numarr.bind("click",function(){
-   	  clearInterval(_cartoon);
-   	  var _nn = _numarr.index(this);
-   	  for(var i=0;i<=_num;i++){
-   	  	_arr.eq(i).fadeOut(fadespeed);
-   	  	_numarr.eq(i).removeClass("sel");
-   	  	}
-   	  _index = _nn-1;
-   	  
-   	  _arr.eq(_index).fadeOut(fadespeed);
-			_numarr.eq(_index).removeClass("sel");
-			if(_index == _num-1){
-				_index = -1;
-				}
-			_arr.eq(_index+1).fadeIn(fadespeed);
-			_numarr.eq(_index+1).addClass("sel");
-			_index++;
-   	});
-		
+	var _nextgo = function(){
+		_index++;
+		if(_index >= _length){ _index = 0;}
+		_arr.stop(true,true);
+		_arr.eq(_index).fadeIn(_carsp).siblings().fadeOut(_carsp);
+		_numarr.eq(_index).addClass('numsel').siblings().removeClass('numsel');
+	};//END
+	var _lastgo = function(){
+		_index--;
+		if(_index < 0){ _index = _length-1;}
+		_arr.stop(true,true);
+		_arr.eq(_index).fadeIn(_carsp).siblings().fadeOut(_carsp);
+		_numarr.eq(_index).addClass('numsel').siblings().removeClass('numsel');
+	};//END
+	
+	var _cartoon = setInterval(_nextgo,_speed);
+	_box.hover(function(){
+		clearInterval(_cartoon);
+		},function(){
+			_cartoon = setInterval(_nextgo,_speed);
+			});
+	_numarr.hover(function(){
+		_index = $(this).index();
+		_arr.stop(true,true);
+		_arr.eq(_index).fadeIn(_carsp).siblings().fadeOut(_carsp);
+		_numarr.eq(_index).addClass('numsel').siblings().removeClass('numsel');
+		});
 }
 
 
@@ -228,6 +203,7 @@ function chooseDistributor(disId){
 		}
 	})
 }
+
 
 $(function() {
 	 $("#add").citySelect({

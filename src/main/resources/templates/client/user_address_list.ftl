@@ -78,7 +78,6 @@ DD_belatedPNG.fix('.,img,background');
 		        <div class="haoh pt15 geren_rig">
                     <table class="center_tab">
                          <tr>
-                            <th>选择</th>
                             <th>收货人</th>
                             <th>地区</th>
                             <th>邮政编码</th>
@@ -89,7 +88,6 @@ DD_belatedPNG.fix('.,img,background');
                          <#if address_list??>
                          <#list address_list as address>
                          <tr>
-                            <td><input type="radio" /></td>
                             <td>${address.receiverName!''}</td>
                             <td>${address.province!''}${address.city!''}${address.disctrict!''}</td>
                             <td>${address.postcode!''}</td>

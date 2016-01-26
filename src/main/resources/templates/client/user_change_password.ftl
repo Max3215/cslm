@@ -20,7 +20,14 @@
 $(document).ready(function(){
      //初始化表单验证
     $("#form1").Validform({
-        tiptype: 3
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 window.location.href="/user/password"
+            }
     });
 
     $(".click_a").click(function(){
