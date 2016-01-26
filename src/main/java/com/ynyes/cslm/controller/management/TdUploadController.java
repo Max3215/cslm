@@ -53,10 +53,10 @@ public class TdUploadController {
         res.put("status", 0);
         String username = (String) req.getSession().getAttribute("manager");
         
-        if (null == username) {
-            res.put("msg", "请重新登录！");
-            return res;
-        }
+//        if (null == username) {
+//            res.put("msg", "请重新登录！");
+//            return res;
+//        }
 
         if (null == Filedata || Filedata.isEmpty()) {
             res.put("msg", "图片不存在");
@@ -127,15 +127,15 @@ public class TdUploadController {
     @RequestMapping(value = "/upload/client", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> uploadclient(String action,
-            @RequestParam MultipartFile Filedata, HttpServletRequest req) {
+            @RequestParam MultipartFile Filedata, HttpServletRequest req,HttpServletResponse response) {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("status", 0);
         String username = (String) req.getSession().getAttribute("username");
         
-        if (null == username) {
-            res.put("msg", "请重新登录！");
-            return res;
-        }
+//        if (null == username) {
+//            res.put("msg", "请重新登录！");
+//            return res;
+//        }
 
         if (null == Filedata || Filedata.isEmpty()) {
             res.put("msg", "图片不存在");
@@ -175,6 +175,30 @@ public class TdUploadController {
             res.put("status", 0);
             res.put("msg", "上传文件失败！");
         }
+        
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("textml");
+        
+      
+//        response.setContentType("textml");
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            JSONObject jsonObject = JSONObject.fromObject(res);
+            writer.println(jsonObject);  //想办法把map转成json
+            writer.flush();
+        } catch (IOException e) {
+            System.err.println(e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e) {
+                    System.err.println(e);
+                }
+            }
+        }
 
         return res;
 
@@ -183,16 +207,16 @@ public class TdUploadController {
     @RequestMapping(value = "/editor/upload", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> editorUpload(String action,
-            @RequestParam MultipartFile imgFile, HttpServletRequest req) {
+            @RequestParam MultipartFile imgFile, HttpServletRequest req,HttpServletResponse response) {
         Map<String, Object> res = new HashMap<String, Object>();
 
         res.put("error", 1);
 
-        String username = (String) req.getSession().getAttribute("manager");
-        if (null == username) {
-            res.put("msg", "请重新登录！");
-            return res;
-        }
+//        String username = (String) req.getSession().getAttribute("manager");
+//        if (null == username) {
+//            res.put("msg", "请重新登录！");
+//            return res;
+//        }
 
         if (null == imgFile || imgFile.isEmpty() || null == imgFile.getName()) {
             res.put("msg", "图片不存在");
@@ -226,6 +250,30 @@ public class TdUploadController {
             res.put("msg", "上传文件失败！");
         }
 
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("textml");
+        
+      
+//        response.setContentType("textml");
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            JSONObject jsonObject = JSONObject.fromObject(res);
+            writer.println(jsonObject);  //想办法把map转成json
+            writer.flush();
+        } catch (IOException e) {
+            System.err.println(e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e) {
+                    System.err.println(e);
+                }
+            }
+        }
+        
         return res;
 
     }
