@@ -103,24 +103,24 @@ function categoryChange(e)
       <#if cat??>
           <div style="float:left;" >
             <select name="parentId" id="oneCat" onchange="categoryChange(this);">
-                <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
+                <option value="" <#if cat?? || !cat.parentId?? || cat.parentId==null>selected="selected"</#if>>无父级分类</option>
             	<#if category_list??>
             	   <#list category_list as c>
-            	       <option value="${c.id?c!""}" <#if cat?? && cat.parentTree?? && cat.parentTree?contains("["+c.id?c+"]") || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>>${c.title!""}</option>
+            	       <option value="${c.id?c!""}" <#if cat?? && cat.parentId?? && cat.parentTree?? && cat.parentTree?contains("["+c.id?c+"]") || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>>${c.title!""}</option>
             	   </#list>
             	</#if>
             </select>
           </div>
-            <#if categoryList??>
               <div style="float:left;" id="twoCatDiv" name="twoparentId">
-                <select name="" id="twoCat">
+            <#if categoryList??>
+                <select name="parId" id="twoCat">
                     <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
                        <#list categoryList as c>
                            <option value="${c.id?c!""}" <#if cat?? && cat.parentTree?? && cat.parentTree?contains("["+c.id?c+"]") || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>>${c.title!""}</option>
                        </#list>
                 </select>
-              </div>
             </#if>
+              </div>
          <#else>
          <div style="float:left;" >
             <select name="parentId" id="oneCat" onchange="categoryChange(this);">

@@ -291,7 +291,9 @@ function showMsg(){
 						<p class="pro_cs"></p>
 						<#if goods.paramList??>
                             <#list goods.paramList as param>
+                                <#if param.value??>
     						     <li>${param.paramName!''}：${param.value!''}</li>
+    						     </#if>
     						</#list>
     				    </#if>
 					</ul>

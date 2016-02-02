@@ -466,6 +466,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">如千克/瓶/件，选填</span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>平台服务费比例</dt>
             <dd>
@@ -473,6 +474,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">平台服务费 = 销售价  * 平台服务费比例</span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>添加时间</dt>
             <dd>

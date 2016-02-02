@@ -168,7 +168,7 @@ public class TdDistributorController {
         map.addAttribute("distributor", distributor);
         
         map.addAttribute("dis_goodsIn_order_page",
-        		tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(distributor.getUsername(), 0, 0, 5));
+        		tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(distributor.getUsername(), 1, 0, 5));
         map.addAttribute("dis_goodsOut_order_page",
         		tdOrderService.findByShopIdAndTypeId(distributor.getId(), 0, 0, ClientConstant.pageSize));
         map.addAttribute("total_unpayed",
@@ -2309,7 +2309,7 @@ public class TdDistributorController {
 			distributorGoods.setGoodsId(goods.getId());
 			distributorGoods.setGoodsTitle(goodsTitle);
 			distributorGoods.setSubGoodsTitle(goods.getSubTitle());
-			distributorGoods.setGoodsPrice(goodsPrice);
+			distributorGoods.setGoodsPrice(goodsPrice); // 销售价
 			distributorGoods.setBrandId(goods.getBrandId());
 			distributorGoods.setBrandTitle(goods.getBrandTitle());
 			distributorGoods.setCategoryId(goods.getCategoryId());
@@ -2320,7 +2320,7 @@ public class TdDistributorController {
 			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());
 			distributorGoods.setSelectThreeValue(goods.getSelectThreeValue());
 			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
-			distributorGoods.setGoodsMarketPrice(goodsMarketPrice);
+			distributorGoods.setGoodsMarketPrice(goodsMarketPrice); // 市场价
 			distributorGoods.setIsDistribution(false);
 //			distributorGoods.setGoodsParamList(goods.getParamList());
 			distributorGoods.setReturnPoints(goods.getReturnPoints());
@@ -2341,8 +2341,8 @@ public class TdDistributorController {
 			disGoods.setOnSaleTime(new Date());
 			disGoods.setGoodsTitle(goodsTitle);
 			disGoods.setLeftNumber(leftNumber);
-			disGoods.setGoodsPrice(goodsPrice);
-			disGoods.setGoodsMarketPrice(goodsMarketPrice);
+			disGoods.setGoodsPrice(goodsPrice);// 销售价
+			disGoods.setGoodsMarketPrice(goodsMarketPrice); // 市场价
 			if(null != unit || !"".equals(unit))
 			{
 				disGoods.setUnit(unit);

@@ -165,7 +165,7 @@ public class TdManagerProductCategoryController {
     
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(TdProductCategory cat, Long paramCategory,Long twoparentId,
+    public String save(TdProductCategory cat,Long parId, Long paramCategory,Long twoparentId,
     		String[] tagList,
     		String __EVENTTARGET,
             String __EVENTARGUMENT, String __VIEWSTATE, ModelMap map,
@@ -204,6 +204,10 @@ public class TdManagerProductCategoryController {
         if(null != twoparentId && twoparentId !=0L)
         {
         	cat.setParentId(twoparentId);
+        }
+        if(null != parId)
+        {
+        	cat.setParentId(parId);
         }
         
         cat = tdProductCategoryService.save(cat);

@@ -172,8 +172,8 @@ public class TdProductCategoryService {
         else
         {
             TdProductCategory parent = repository.findOne(e.getParentId());
-            e.setLayerCount(parent.getLayerCount() + 1L);
-            e.setParentTree(parent.getParentTree() + ",[" + e.getId() + "]");
+        	e.setLayerCount(parent.getLayerCount() + 1L);
+        	e.setParentTree(parent.getParentTree() + ",[" + e.getId() + "]");
         }
         
         return repository.save(e);
