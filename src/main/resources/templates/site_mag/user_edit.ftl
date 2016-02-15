@@ -61,7 +61,7 @@ $(function () {
    //修改粮草备注
         function EditOrderRemark() {
             var dialog = $.dialog({
-                title: '修改粮草备注',
+                title: '修改积分备注',
                 content: '<textarea id="pointRemark" name="txtPointRemark" rows="2" cols="20" class="input"></textarea>',
                 min: false,
                 max: false,
@@ -129,8 +129,8 @@ $(function () {
     <div class="content-tab-ul-wrap">
       <ul>
         <li><a href="javascript:;" onclick="tabs(this);" class="selected">基本资料</a></li>
-        <li><a href="javascript:;" onclick="tabs(this);">安全设置</a></li>
         <#--
+        <li><a href="javascript:;" onclick="tabs(this);">安全设置</a></li>
         <li><a href="javascript:;" onclick="tabs(this);">账户信息</a></li>
         -->
       </ul>
@@ -184,6 +184,22 @@ $(function () {
         </span></dd>
     </dl>
     <!--lichong -->
+   <dl>
+    <dt>登录密码</dt>
+    <dd><input name="password" type="password" value="<#if user??>${user.password!''}</#if>" class="input normal" datatype="*6-20" nullmsg="请设置密码" errormsg="密码范围在6-20位之间" sucmsg=" " value=""> <span class="Validform_checktip">*登录的密码，至少6位</span></dd>
+  </dl>
+  <dl>
+    <dt>确认密码</dt>
+    <dd><input name="password1" type="password" value="<#if user??>${user.password!''}</#if>" class="input normal" datatype="*" recheck="password" nullmsg="请再输入一次密码" errormsg="两次输入的密码不一致" sucmsg=" " value=""> <span class="Validform_checktip">*再次输入密码</span></dd>
+  </dl>
+  <dl>
+    <dt>邮箱账号</dt>
+    <dd><input name="email" type="text" value="<#if user??>${user.email!""}</#if>" id="txtEmail" class="input normal" ignore="ignore" datatype="e" sucmsg=" " > <span class="Validform_checktip">*取回密码时用到</span></dd>
+  </dl>
+  <dl>
+    <dt>手机号码</dt>
+    <dd><input name="mobile" type="text" value="<#if user??>${user.mobile!""}</#if>" class="input normal" ignore="ignore" datatype="m" sucmsg=" " ></dd>
+  </dl>
   <dl>
     <dt>用户积分</dt>
     <dd><span><#if user??>${user.totalPoints!"0"}</#if></span></dd>
@@ -248,6 +264,7 @@ $(function () {
 <!--/基本资料-->
 
 <!--安全设置-->
+<#--
 <div class="tab-content" style="display:none;">  
   <dl>
     <dt>登录密码</dt>
@@ -291,6 +308,7 @@ $(function () {
     <dd><span><#if user??>${user.totalReturns!""}</#if></span></dd>
   </dl>
 </div>
+-->
 <!--/安全设置-->
 <#--
 <div class="tab-content" style="display:none;">

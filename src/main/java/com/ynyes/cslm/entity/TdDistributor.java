@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import org.codehaus.commons.compiler.samples.ShippingCost;
+
 /**
  * 超市
  * 
@@ -142,6 +144,11 @@ public class TdDistributor {
     // 是否开启进货权
     @Column
     private Boolean isStock;
+    
+    // 自提点
+    @OneToMany
+    @JoinColumn(name="distributorId")
+    private List<TdShippingAddress> shippingList;
     
     public Long getId() {
         return id;
@@ -391,6 +398,15 @@ public class TdDistributor {
 		this.isStock = isStock;
 	}
 
+	public List<TdShippingAddress> getShippingList() {
+		return shippingList;
+	}
+
+	public void setShippingList(List<TdShippingAddress> shippingList) {
+		this.shippingList = shippingList;
+	}
+
+	
 	
 
 }

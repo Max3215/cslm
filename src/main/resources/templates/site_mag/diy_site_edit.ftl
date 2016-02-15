@@ -113,6 +113,7 @@ $(function () {
 <form name="form1" method="post" action="/Verwalter/order/setting/diysite/save" id="form1">
 <div>
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}">
+<input name="diySiteId" type="text" value='<#if diy_site??>${diy_site.id?c}</#if>' style="display:none">
 </div>
 
 <!--导航栏-->

@@ -53,6 +53,7 @@ import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserPoint;
@@ -74,6 +75,7 @@ import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserCollectService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserReturnService;
@@ -148,6 +150,9 @@ public class TdDistributorController {
 	
 	@Autowired
 	TdAdService tdAdService;
+	
+	@Autowired
+	TdShippingAddressService tdShippingAddressService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -3880,6 +3885,100 @@ public class TdDistributorController {
     	return "redirect:/distributor/info/list";
     }
     
+    /**
+     * 自提点列表
+     * @author Max
+     * 
+     */
+    @RequestMapping(value="/address/{method}")
+    public String addressList(@PathVariable String method,
+    		Long id,
+    		HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	map.addAttribute("distributor", distributor);
+    	if(null != distributor)
+    	{
+    		List<TdShippingAddress> addressList = distributor.getShippingList();
+    		
+    		if (null != method && !method.isEmpty()) {
+                if (method.equalsIgnoreCase("update")) {
+                    if (null != id) {
+                        // map.addAttribute("address", s)
+                        for (TdShippingAddress add : addressList) {
+                            if (add.getId().equals(id)) {
+                                map.addAttribute("address", add);
+                            }
+                        }
+                    }
+                } else if (method.equalsIgnoreCase("delete")) {
+                    if (null != id) {
+                        for (TdShippingAddress add : addressList) {
+                            if (add.getId().equals(id)) {
+                                addressList.remove(id);
+                                distributor.setShippingList(addressList);
+                                tdShippingAddressService.delete(add);
+                                return "redirect:/distributor/address/list";
+                            }
+                        }
+                    }
+                }else if(method.equalsIgnoreCase("default")){
+                	if(null != id){
+                		for (TdShippingAddress address : addressList) {
+							if(address.getId().equals(id)){
+								address.setIsDefaultAddress(true);
+								tdShippingAddressService.save(address);
+							}else{
+								address.setIsDefaultAddress(false);
+								tdShippingAddressService.save(address);
+							}
+						}
+                	}
+                	return "redirect:/distributor/address/list";
+                } 
+            }
+    		map.addAttribute("address_list", distributor.getShippingList());
+    	}
+    	
+    	return "/client/distributor_address_list";
+    }
+    
+    @RequestMapping(value="/address/save",method=RequestMethod.POST)
+    public String addressSave(TdShippingAddress tdShippingAddress,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		return "redirect:/login";
+    	}
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	if(null != distributor)
+    	{
+    		List<TdShippingAddress> addressList = distributor.getShippingList();
+    		
+    		// 修改
+    		if (null != tdShippingAddress.getId()) {
+    			tdShippingAddressService.save(tdShippingAddress);
+    		}
+    		// 新增
+    		else {
+    			addressList.add(tdShippingAddressService
+    					.save(tdShippingAddress));
+    			distributor.setShippingList(addressList);
+    			tdDistributorService.save(distributor);
+    		}
+    	}
+        return "redirect:/distributor/address/list";
+    }
     
     // 批量删除广告
     public void adDelete(Long[] ids,Integer[] chkIds)
