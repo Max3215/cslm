@@ -17,6 +17,7 @@ import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUserSuggestion;
 import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdManagerLogService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdServiceItemService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserSuggestionService;
@@ -46,6 +47,9 @@ public class TdManagerSettingController {
     
     @Autowired
     TdDemandService tdDemandService;
+    
+    @Autowired
+    TdPayRecordService tdPayRecordService;
     
     @RequestMapping
     public String setting(Long status, ModelMap map,
@@ -320,6 +324,58 @@ public class TdManagerSettingController {
         
         return "redirect:/Verwalter/setting/service/list";
     }
+    
+    @RequestMapping(value="/payrecord/list")
+    public String settingPayList(Integer page,
+						        Integer size,
+						        String __EVENTTARGET,
+						        String __EVENTARGUMENT,
+						        String __VIEWSTATE,
+						        Long[] listId,
+						        Integer[] listChkId,
+						        Long[] listSortId,
+						        ModelMap map,
+						        HttpServletRequest req)
+    {
+    	String username = (String) req.getSession().getAttribute("manager");
+        if (null == username) {
+            return "redirect:/Verwalter/login";
+        }
+        if (null != __EVENTTARGET)
+        {
+            if (__EVENTTARGET.equalsIgnoreCase("btnDelete"))
+            {
+                btnDeletePay(listId, listChkId);
+                tdManagerLogService.addLog("delete", "删除交易记录", req);
+            }
+            else if (__EVENTTARGET.equalsIgnoreCase("btnPage"))
+            {
+                if (null != __EVENTARGUMENT)
+                {
+                    page = Integer.parseInt(__EVENTARGUMENT);
+                } 
+            }
+        }
+        
+        if (null == page || page < 0)
+        {
+            page = 0;
+        }
+        
+        if (null == size || size <= 0)
+        {
+            size = SiteMagConstant.pageSize;;
+        }
+        
+        map.addAttribute("page", page);
+        map.addAttribute("size", size);
+        map.addAttribute("__EVENTTARGET", __EVENTTARGET);
+        map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
+        map.addAttribute("__VIEWSTATE", __VIEWSTATE);
+        
+        map.addAttribute("record_page", tdPayRecordService.findByType(1L, page, size));
+    	return "/site_mag/setting_record_list";
+    }
 
     @ModelAttribute
     public void getModel(@RequestParam(value = "id", required = false) Long id,
@@ -378,6 +434,26 @@ public class TdManagerSettingController {
             }
         }
     }
+    
+    private void btnDeletePay(Long[] ids, Integer[] chkIds)
+    {
+        if (null == ids || null == chkIds
+                || ids.length < 1 || chkIds.length < 1)
+        {
+            return;
+        }
+        
+        for (int chkId : chkIds)
+        {
+            if (chkId >=0 && ids.length > chkId)
+            {
+                Long id = ids[chkId];
+                
+                tdPayRecordService.delete(id);
+            }
+        }
+    }
+    
     
     /**
      * 删除团购要求

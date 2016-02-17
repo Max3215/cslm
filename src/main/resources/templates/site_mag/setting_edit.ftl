@@ -166,9 +166,16 @@ $(function () {
             </dd>
         </dl>
         <dl>
-            <dt>虚拟账户</dt>
+            <dt>虚拟账号</dt>
             <dd>
                 <input name="virtualAccount" type="text" <#if setting?? && setting.virtualAccount??>value="${setting.virtualAccount!''}" disabled="disabled" style="background: #EEE;"</#if> class="input normal" datatype="*0-20" sucmsg=" ">
+                <span class="Validform_checktip"></span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>虚拟账户余额</dt>
+            <dd>
+                <input name="virtualAccount" type="text" <#if setting?? && setting.virtualMoney??>value="${setting.virtualMoney!'0'}" </#if> class="input normal" datatype="*0-20" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>

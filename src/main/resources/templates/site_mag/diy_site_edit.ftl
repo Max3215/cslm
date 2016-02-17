@@ -113,7 +113,7 @@ $(function () {
 <form name="form1" method="post" action="/Verwalter/order/setting/diysite/save" id="form1">
 <div>
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}">
-<input name="diySiteId" type="text" value='<#if diy_site??>${diy_site.id?c}</#if>' style="display:none">
+<input name="diySiteId" type="text" value='<#if diy_site??>${diy_site.id?c}</#if>' style="display:none" id="diysiteId">
 </div>
 
 <!--导航栏-->
@@ -144,7 +144,9 @@ $(function () {
   <dl>
     <dt>超市名称</dt>
     <dd>
+        <#--
         <input type="hidden" name="id"  value="<#if diy_site??>${diy_site.id?c}</#if>">
+        -->
         <input name="title" type="text" value="<#if diy_site??>${diy_site.title!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
         <span class="Validform_checktip">*分销商名称</span>
     </dd>
@@ -377,7 +379,7 @@ $(function () {
                                   <td><#if re.totalGoodsPrice??>${re.totalGoodsPrice?string('0.00')}<#else>0.00</#if></td>
                                   <td><#if re.provice??>${re.provice?string('0.00')}<#else>0.00</#if></td>
                                   <td><#if re.realPrice??>${re.realPrice?string('0.00')}<#else>0.00</#if></td>
-                                  <td>${re.cont}</td> 
+                                  <td>${re.cont!''}</td> 
                             </tr>
                         </#list>
                     </#if>

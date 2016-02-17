@@ -114,5 +114,18 @@ public class TdPayRecordService {
     	return repository.findByUsernameOrderByCreateTimeDesc(username, pageRequest);
     }
     
+    public Page<TdPayRecord> findByType(Long type,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
+    	return repository.findByType(type, pageRequest);
+    }
+    
+    public void delete(Long id)
+    {
+    	if(null != id)
+    	{
+    		repository.delete(id);
+    	}
+    }
     
 }

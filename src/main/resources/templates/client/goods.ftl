@@ -56,7 +56,7 @@ function addNum(){
         $("#quantity").val(q+1);
         $("#number").val(q+1);
    </#if>
-    $("#addCart").attr("href", "/cart/init?id=${goods.id?c}&quantity=" + $("#quantity").val());
+    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
 }
 
 <#-- 减少商品数量的方法 -->
@@ -67,7 +67,7 @@ function minusNum(){
         $("#quantity").val(q-1);
         $("#number").val(q-1);
     }
-    $("#addCart").attr("href", "/cart/init?id=${goods.id?c}&quantity=" + $("#quantity").val());
+    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
 }
 
 <!--  加入购物车   -->
@@ -112,11 +112,6 @@ function byNow(dId){
             window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
         }
     });
-}
-
-function showMsg(){
-    alert("请选择其他超市");
-    $('#mar_box').fadeIn(300);
 }
 
 
@@ -268,7 +263,9 @@ function showMsg(){
 					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car">立即预购</a>
 					   <#else>
         					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
-        					<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>
+        					<#--<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>
+        					-->
+        					<a href="/cart/init?id=${dis_goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
 					   </#if>
 					</#if>
 					<div class="clear"></div>

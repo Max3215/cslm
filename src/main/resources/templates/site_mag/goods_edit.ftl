@@ -234,7 +234,7 @@ $(function () {
         
         if (parseFloat(price) < parseFloat(point))
         {
-            alert("购买粮草限额不能大于最高返现额!");
+            alert("购买积分限额不能大于最高返现额!");
             $(this).val("0");
         }
     });
@@ -468,6 +468,22 @@ function del_goods_comb(obj) {
         </dl>
         <#--
         <dl>
+            <dt>赠送积分</dt>
+            <dd>
+                <input name="returnPoints" type="text" value="<#if goods?? && goods.returnPoints??>${goods.returnPoints?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
+                <span class="Validform_checktip">购买该商品赠送的积分</span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>积分购买限额</dt>
+            <dd>
+                <input id="pointLimited" name="pointLimited" type="text" value="<#if goods?? && goods.pointLimited??>${goods.pointLimited?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
+                <span class="Validform_checktip">购买时可使用的积分限额</span>
+            </dd>
+        </dl>
+        -->
+        <#--
+        <dl>
             <dt>平台服务费比例</dt>
             <dd>
                 <input name="platformServiceReturnRation" type="text" value="<#if goods?? && goods.platformServiceReturnRation??>${goods.platformServiceReturnRation?string("0.00")}<#else>0.06</#if>" class="input normal" sucmsg="">
@@ -588,13 +604,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">*销售价</span>
             </dd>
         </dl>
-        <dl>
-            <dt>赠送积分</dt>
-            <dd>
-                <input name="returnPoints" type="text" value="<#if goods?? && goods.returnPoints??>${goods.returnPoints?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
-                <span class="Validform_checktip">购买该商品赠送的积分</span>
-            </dd>
-        </dl>
+        ++
         <dl>
             <dt>分销商返利比例</dt>
             <dd>

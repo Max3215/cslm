@@ -91,6 +91,9 @@ public class TdPayRecord {
     @Column(scale=2)
     private Double turnPrice;
     
+    // 类型 主要区分平台记录
+    @Column
+    private Long type;
     
     public Long getId() {
         return id;
@@ -242,6 +245,14 @@ public class TdPayRecord {
 
 	public void setTurnPrice(Double turnPrice) {
 		this.turnPrice = turnPrice;
+	}
+
+	public Long getType() {
+		return type;
+	}
+
+	public void setType(Long type) {
+		this.type = type;
 	}
     
 }
