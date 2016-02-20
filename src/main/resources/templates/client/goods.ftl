@@ -278,7 +278,7 @@ function byNow(dId){
 			<div class="clear"></div>
 			<section class="info_left">
 				<p class="tit">
-					<a href="#detail_tit" tid="0" class="sel stab">商品详情</a>
+					<a href="#detail_tit" tid="0" class="sel stab">商品介绍</a>
 					<a href="#detail_tit" tid="1" class="stab">商品评价</a>
 					<a href="#detail_tit" tid="2" class="stab">销售记录</a>
 				</p>

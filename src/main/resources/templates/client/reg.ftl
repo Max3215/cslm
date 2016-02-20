@@ -69,7 +69,7 @@ function checkwindowhide()
 <body>
 <iframe class="thickframe" id="" marginwidth="0" marginheight="0" frameborder="0" scrolling="no" style="display:none"></iframe>
 <div  id="tanchuangbackgroud"></div>
-<div class="thickbox" id="tanchuang" style="width: 924px; height: 500px; left: 485.5px; top: 88px; display:none">
+<div class="thickbox" id="tanchuang" style="width: 924px; height: 500px; left: 15%; top: 88px; display:none">
     <div class="thicktitle" id="" style="width:922"><span>超市联盟注册协议</span></div>
     <div class="thickcon" id="" style="width: 922px; height: 450px; padding-left: 0px; padding-right: 0px; border-left-width: 1px; border-right-width: 1px;">
         <div class=" regist-2013">

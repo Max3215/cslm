@@ -85,7 +85,7 @@ DD_belatedPNG.fix('.,img,background');
                             <p>${re.pointTime?string('yyyy-MM-dd')}</p>
                             <p>${re.pointTime?string('HH:mm:ss')}</p>
                           </td>
-                          <td>￥${re.point?string('0.00')}</td>
+                          <td>${re.point?string('0.00')}</td>
                           <td>${re.detail}</td>         
                     </tr>
                 </#list>
