@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
-<title>广告管理</title>
+<title>交易记录</title>
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
@@ -47,6 +47,7 @@ var theForm = document.forms['form1'];
       <ul class="icon-list">
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
+        <li><a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a></li>
       </ul>
     </div>
   </div>

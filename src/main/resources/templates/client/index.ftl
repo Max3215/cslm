@@ -107,33 +107,15 @@ $(document).ready(function(){
 			<p class="tit">请选择超市<a href="javascript:void(0);" onclick="$(this).parent().parent().parent().fadeOut(300);"></a></p>
 			<div class="select" id="add">
 				   <select id="prov" class="prov" style="width: 120px;"></select>
-                   <select id="city" class="city" style="width: 120px;"></select>
-                   <select id="dist" class="dist" style="width: 120px;"></select>
-                   <select id="diys" class="diys" style="width: 120px;" name="shopId" datatype="n" nullmsg="请选择超市" errormsg="请选择超市"></select>
-				<input class="sub" type="submit" value="确定" onclick="changeDistributor()">
+                   <select id="city" class="city" style="width: 120px;" onchange="cityChange(this)"></select>
+                   <select id="dist" class="dist" style="width: 120px;" onchange="distChange(this)"></select>
+                   <#--
+                    <select id="diys" class="diys" style="width: 120px;" name="shopId" datatype="n" nullmsg="请选择超市" errormsg="请选择超市"></select>
+				    <input class="sub" type="submit" value="确定" onclick="changeDistributor()">
+				-->
 			</div>
-			<div class="mar_list">
-				<table>
-				<#if city_list??>
-				    <#list city_list as city> 
-					<tr>
-						<th width="100">${city}：</th>
-						<#if ("disc_"+city_index+"_list")?eval??>
-						      <#list ("disc_"+city_index+"_list")?eval as disc>
-            						<td>
-            							<p>${disc!''}</p>
-            							<#if ("distributor_"+city_index+disc_index+"_list")?eval??>
-            							     <#list ("distributor_"+city_index+disc_index+"_list")?eval as dis>
-            							         <a href="javascript:;" onclick="chooseDistributor(${dis.id?c})">${dis.title!''}</a>
-            							     </#list>
-            							 </#if>
-            						</td>
-						      </#list>
-						 </#if>
-					</tr>
-					</#list>
-			     </#if>
-				</table>
+			<div class="mar_list" id="mar_list">
+				<#include "/client/common_distributor_list.ftl">
 			</div>
 
 		</div>

@@ -165,7 +165,7 @@ $(document).ready(function(){
 					<th>手机号：</th>
 					<td>
 					   <input class="text" type="text" name="mobile" datatype="m" sucmsg=" ">
-					   <span style="float:none;" class="Validform_checktip">*用于接收短信信息</span>
+					   <span style="float:none;" class="Validform_checktip">*</span>
 					</td>
 				</tr>
 				<tr>

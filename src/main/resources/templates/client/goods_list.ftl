@@ -23,8 +23,6 @@ $(document).ready(function(){
     $("#add").citySelect({
     nodata:"none",
     prov: "云南",
-    city: "昆明",
-    <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
     required:false
     });
 

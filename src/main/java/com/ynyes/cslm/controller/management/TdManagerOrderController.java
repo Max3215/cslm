@@ -1484,7 +1484,6 @@ public class TdManagerOrderController {
         	tdDistributor.setIsStock(false);
         }
         
-        
         if (null == tdDistributor.getId())
         {
             tdManagerLogService.addLog("add", "新增加盟超市", req);

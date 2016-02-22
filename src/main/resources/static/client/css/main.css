@@ -30,7 +30,7 @@
 .mar_box .select .sub:hover{background:#39bee9;}
 .mar_list{padding: 24px 0 0 50px;}
 .mar_list th{font-size: 16px;vertical-align: top;font-weight: 400;}
-.mar_list td{width: 184px;display: inline-block;padding-bottom: 10px;_display:block;}
+.mar_list td{width: 184px;display: inline-block;padding-bottom: 10px;_display:block;vertical-align: top; }
 .mar_list td p{font-size: 16px;padding-bottom: 4px;}
 .mar_list td a{display: block;}
 
@@ -396,7 +396,7 @@
 .info_left .text_pic{padding: 0 30px;}
 .info_left .text_pic .pro_cs {color:#fa5e5f;font-size: 16px;padding-top: 20px;border-bottom:1px dotted #424957;padding-bottom: 5px;}
 .info_left .text_pic .pic_ul li{width: 50%;display: block;float: left;padding: 5px 0;border-bottom:1px dotted #424957;color:#424957;}
-.info_left .con{width: 100%;padding-top: 50px;}
+.info_left .con{width: 100%;padding-top: 30px;}
 .info_left .con img{width: 100%;}
 
 .info_left .evaluate{padding: 0 30px;}

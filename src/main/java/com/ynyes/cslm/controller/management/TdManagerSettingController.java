@@ -1,7 +1,21 @@
 package com.ynyes.cslm.controller.management;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -12,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ynyes.cslm.entity.TdDemand;
+import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdServiceItem;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUserSuggestion;
@@ -325,7 +341,8 @@ public class TdManagerSettingController {
         return "redirect:/Verwalter/setting/service/list";
     }
     
-    @RequestMapping(value="/payrecord/list")
+    @SuppressWarnings("deprecation")
+	@RequestMapping(value="/payrecord/list")
     public String settingPayList(Integer page,
 						        Integer size,
 						        String __EVENTTARGET,
@@ -334,8 +351,10 @@ public class TdManagerSettingController {
 						        Long[] listId,
 						        Integer[] listChkId,
 						        Long[] listSortId,
+						        String exportUrl,
 						        ModelMap map,
-						        HttpServletRequest req)
+						        HttpServletRequest req,
+						        HttpServletResponse resp)
     {
     	String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
@@ -355,6 +374,11 @@ public class TdManagerSettingController {
                     page = Integer.parseInt(__EVENTARGUMENT);
                 } 
             }
+            else if (__EVENTTARGET.equalsIgnoreCase("export"))
+            {
+            	exportUrl = SiteMagConstant.backupPath;
+                tdManagerLogService.addLog("export", "导出交易记录", req);
+            }
         }
         
         if (null == page || page < 0)
@@ -367,6 +391,44 @@ public class TdManagerSettingController {
             size = SiteMagConstant.pageSize;;
         }
         
+     // 第一步，创建一个webbook，对应一个Excel文件  
+        HSSFWorkbook wb = new HSSFWorkbook();  
+        // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
+        HSSFSheet sheet = wb.createSheet("order");  
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+        HSSFRow row = sheet.createRow((int) 0);  
+        // 第四步，创建单元格，并设置值表头 设置表头居中  
+        HSSFCellStyle style = wb.createCellStyle();  
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+        
+        HSSFCell cell = row.createCell((short) 0);  
+        cell.setCellValue("单号");  
+        cell.setCellStyle(style);  
+        cell = row.createCell((short) 1);  
+        cell.setCellValue("记录时间");  
+        cell.setCellStyle(style);  
+        cell = row.createCell((short) 2);  
+        cell.setCellValue("物流费");  
+        cell.setCellStyle(style);  
+        cell = row.createCell((short) 3);  
+        cell.setCellValue("服务器");  
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 4);  
+        cell.setCellValue("第三方使用费");  
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 5);  
+        cell.setCellValue("商品总额");  
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 6);  
+        cell.setCellValue("订单总金额");  
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 7);
+        cell.setCellValue("实际入账/支出");  
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 8);
+        cell.setCellValue("说明");  
+        cell.setCellStyle(style);
+        
         map.addAttribute("page", page);
         map.addAttribute("size", size);
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
@@ -374,7 +436,41 @@ public class TdManagerSettingController {
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         
         map.addAttribute("record_page", tdPayRecordService.findByType(1L, page, size));
+        
+        if (null != exportUrl) {
+        	Page<TdPayRecord> recordPage = tdPayRecordService.findByType(1L, page, size);
+        	
+        	if (ImportData(recordPage, row, cell, sheet)) {
+				download(wb, username, resp);
+			}   
+        }
+        
     	return "/site_mag/setting_record_list";
+    }
+    
+    /**
+     * 将平台交易记录数据存入Excel表格
+     * @author Max
+     * 
+     */
+    @SuppressWarnings("deprecation")
+	public boolean ImportData(Page<TdPayRecord> recordPage, HSSFRow row, HSSFCell cell, HSSFSheet sheet){
+    	for (int i = 0; i < recordPage.getContent().size(); i++)  
+        {  // 单号  时间   物流费  服务费  第三方费   商品总额   订单总额   实际   说明
+            row = sheet.createRow((int) i + 1);  
+            TdPayRecord payrecord = recordPage.getContent().get(i);  
+            // 第四步，创建单元格，并设置值  
+            row.createCell((short) 0).setCellValue(payrecord.getOrderNumber());  
+            row.createCell((short) 1).setCellValue(new SimpleDateFormat("yyyy-mm-dd").format(payrecord.getCreateTime()));  
+            row.createCell((short) 2).setCellValue(payrecord.getPostPrice());
+            row.createCell((short) 3).setCellValue(payrecord.getServicePrice());
+        	row.createCell((short) 4).setCellValue(payrecord.getAliPrice());
+            row.createCell((short) 5).setCellValue(payrecord.getTotalGoodsPrice());
+            row.createCell((short) 6).setCellValue(payrecord.getProvice());
+            row.createCell((short) 7).setCellValue(payrecord.getRealPrice());
+            row.createCell((short) 8).setCellValue(payrecord.getCont());
+        } 
+    	return true;
     }
 
     @ModelAttribute
@@ -537,4 +633,47 @@ public class TdManagerSettingController {
             }
         }
     }
+    
+    public Boolean download(HSSFWorkbook wb, String exportUrl, HttpServletResponse resp){
+   	 try  
+        {  
+	          FileOutputStream fout = new FileOutputStream(exportUrl+"order.xls");  
+	          OutputStreamWriter writer = new OutputStreamWriter(fout, "utf8");	                       	     
+	          wb.write(fout);  
+	          fout.close();
+        }catch (Exception e)  
+        {  
+            e.printStackTrace();  
+        } 
+   	 OutputStream os;
+		 try {
+				os = resp.getOutputStream();
+				File file = new File(exportUrl + "order.xls");
+                
+            if (file.exists())
+                {
+                  try {
+                        resp.reset();
+                        resp.setHeader("Content-Disposition", "attachment; filename="
+                                + "order.xls");
+                        resp.setContentType("application/octet-stream; charset=utf-8");
+                        os.write(FileUtils.readFileToByteArray(file));
+                        os.flush();
+                    } finally {
+                        if (os != null) {
+                            os.close();
+                        }
+                    }
+            }
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		 }
+		 return true;	
+   } 
+    
+    
+    
+    
+    
 }

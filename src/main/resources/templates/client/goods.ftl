@@ -32,7 +32,6 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -278,12 +277,13 @@ function byNow(dId){
 			<div class="clear"></div>
 			<section class="info_left">
 				<p class="tit">
-					<a href="#detail_tit" tid="0" class="sel stab">商品介绍</a>
+					<a href="#detail_tit" tid="0" class="sel stab">商品详情</a>
 					<a href="#detail_tit" tid="1" class="stab">商品评价</a>
 					<a href="#detail_tit" tid="2" class="stab">销售记录</a>
 				</p>
 				<!-- 商品详情  -->
 				<div class="text_pic php_z" id="tab0">
+					<#--
 					<ul class="pic_ul">
 						<p class="pro_cs"></p>
 						<#if goods.paramList??>
@@ -295,6 +295,7 @@ function byNow(dId){
     				    </#if>
 					</ul>
 					<div class="clear"></div>
+					-->
 					<div class="con">
 						${goods.detail!''}
 					</div>

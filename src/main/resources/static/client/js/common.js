@@ -209,14 +209,44 @@ $(function() {
 	 $("#add").citySelect({
 	    nodata:"none",
 	    prov: "云南",
-	    city: "昆明",
 	    required:false
 	    });
 
 })
 
+/**   
+ * 新加 
+ * 地区选择后只出现所选地区加盟店
+ * 2-22
+ */
+function cityChange(city)
+{
+    var city = city.value;
+    console.debug(city);
+    $.ajax({
+        url : "/distributor/region/change",
+        data : {"city":city},
+        type : "post",
+        success:function(res){
+            $("#mar_list").html(res);
+        }
+    })
+}
 
-
+function distChange(dist)
+{
+    var city = $("#selcity").val();
+    console.debug(city);
+    var dist = dist.value;
+    $.ajax({
+        url : "/distributor/region/change",
+        data : {"city":city,"dist":dist},
+        type : "post",
+        success:function(res){
+            $("#mar_list").html(res);
+        }
+    })
+}
 
 
 

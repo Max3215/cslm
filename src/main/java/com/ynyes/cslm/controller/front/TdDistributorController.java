@@ -4030,6 +4030,23 @@ public class TdDistributorController {
     	}
     }
     
+    @RequestMapping(value="/region/change",method=RequestMethod.POST)
+    public String regionChange(String city,String dist,HttpServletRequest req,ModelMap map)
+    {
+    	tdCommonService.setHeader(map, req);
+    	
+    	if(null != city)
+    	{
+    		map.addAttribute("selcity", city);
+    	}
+    	if(null != dist)
+    	{
+    		map.addAttribute("dist", dist);
+    	}
+    	
+    	return "/client/common_distributor_list";
+    }
+    
     
     
     // 批量上下架

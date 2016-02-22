@@ -64,14 +64,14 @@ function __doPostBack(eventTarget, eventArgument) {
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
   <tbody>
   <tr class="odd_bg">
-    <th width="8%">选择</th>
-    <th align="left">名称</th>
+    <th width="7%">选择</th>
+    <th align="left" width="15%">名称</th>
     <th align="left">登录名</th>
-    <th align="left">地区</th>
+    <th align="left" width="8%">地区</th>
     <th align="left" width="37%">地理位置</th>
-    <th align="left" width="12%">排序</th>
-    <th width="8%">是否启用</th>
-    <th width="10%">操作</th>
+    <th align="left" width="8%">排序</th>
+    <th width="5%">是否启用</th>
+    <th width="8%">操作</th>
   </tr>
 
     <#if diy_site_page??>
