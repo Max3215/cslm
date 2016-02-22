@@ -1,6 +1,7 @@
 package com.ynyes.cslm.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdGoodsCombination;
 import com.ynyes.cslm.entity.TdGoodsGift;
 import com.ynyes.cslm.entity.TdGoodsParameter;
+import com.ynyes.cslm.entity.TdParameter;
 import com.ynyes.cslm.entity.TdPriceChangeLog;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
@@ -2271,15 +2273,43 @@ public class TdGoodsService {
         }
 
         if (null != e.getParamList() && e.getParamList().size() > 0) {
+        	
+        	TdProductCategory tpc = tdProductCategoryService.findOne(e.getCategoryId()); //
+        	
             String valueCollect = "";
             for (TdGoodsParameter gp : e.getParamList()) {
                 valueCollect += gp.getValue();
                 valueCollect += ",";
+                
+                if (null != tpc && null != tpc.getParamCategoryId()) {// --手动输入参数的自动添加到参数内容记录
+                	// 分类关联参数内容
+            		List<TdParameter> paramList = tdParameterService.findByCategoryTreeContaining(tpc.getParamCategoryId());
+            		if(null != paramList && paramList.size()>0)
+            		{
+            			for (TdParameter tdParameter : paramList) {
+            				// 手动输入参数 
+            				if(null != tdParameter.getInputType() && tdParameter.getInputType()==0 && gp.getParamName().equals(tdParameter.getTitle()))
+            				{
+            					if(null == tdParameter.getValueList())
+            					{
+            						tdParameter.setValueList(gp.getValue());
+            					}
+            					else if(!tdParameter.getValueList().contains(gp.getValue()))
+            					{
+            						tdParameter.setValueList(tdParameter.getValueList()+","+gp.getValue());
+            					}
+            					tdParameterService.save(tdParameter);
+            				}
+            				
+            			}
+            		}
+            	} // --
             }
             e.setParamValueCollect(valueCollect);
 
             // 保存参数
             tdGoodsParameterService.save(e.getParamList());
+
         } else {
             e.setParamValueCollect("");
         }

@@ -104,7 +104,8 @@ public class TdParameterService {
             return null;
         }
         
-        return repository.findByCategoryTreeContainingAndInputTypeAndIsSearchableTrue("["+categoryId+"]", 1L);
+//        return repository.findByCategoryTreeContainingAndInputTypeAndIsSearchableTrue("["+categoryId+"]", 1L);
+        return repository.findByCategoryTreeContainingAndIsSearchableTrue("["+categoryId+"]");
     }
     
     public Page<TdParameter> findAllOrderBySortIdAsc(int page, int size)

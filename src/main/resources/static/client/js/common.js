@@ -236,7 +236,6 @@ function cityChange(city)
 function distChange(dist)
 {
     var city = $("#selcity").val();
-    console.debug(city);
     var dist = dist.value;
     $.ajax({
         url : "/distributor/region/change",

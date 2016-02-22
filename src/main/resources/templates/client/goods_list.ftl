@@ -165,20 +165,22 @@ function byNow(goodsId){
             <!-- 参数开始   -->
             <#if param_list??>
                 <#list param_list as param>
+                    <#if param.valueList?? && param.valueList?contains(",")>
         			<dl>
         				<dt>${param.title!""}：</dt>
         				<dd>
         				<a href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex><#if param_index==pindex_index>-0<#else>-${pindex!'0'}</#if></#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if param_index_list[param_index]==0>class="sel"</#if>>全部</a>
-        					<#if param.valueList??>
+        					<#--<#if param.valueList??> -->
                                 <#list param.valueList?split(",") as value>
                                     <#if value!="">
                                         <a href="${categoryId!'0'}-${brandIndex!'0'}<#list param_index_list as pindex><#if param_index==pindex_index>-${value_index+1}<#else>-${pindex!'0'}</#if></#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if param_index_list[param_index]==value_index+1>class="sel"</#if>>${value?trim!""}</a>
                                     </#if>
                                 </#list>
-                             </#if>
+                             
         				</dd>
         				<div class="clear"></div>
         			</dl>
+        			</#if>
     			</#list>
             </#if>
 		</div><!--  参数结束  -->

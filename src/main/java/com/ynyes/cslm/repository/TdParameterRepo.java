@@ -30,6 +30,8 @@ public interface TdParameterRepo extends
     
     List<TdParameter> findByCategoryTreeContainingAndInputTypeAndIsSearchableTrue(String categoryId, Long inputTypeId);
     
+    List<TdParameter> findByCategoryTreeContainingAndIsSearchableTrue(String categoryId);
+    
     int countByCategoryTreeContaining(String categoryId);
     
     Page<TdParameter> findByTitleContainingOrderBySortIdAsc(String keywords, Pageable page);
