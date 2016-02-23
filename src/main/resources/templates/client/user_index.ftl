@@ -105,6 +105,9 @@ DD_belatedPNG.fix('.,img,background');
           <th rowspan="2" class="mymember_fen">
             <a href="/user/point/list"><img src="/client/images/mymember/buy05.png" /><p>积分：<span>${user.totalPoints!'0'}</span></p></a>
           </th>
+          <th rowspan="2" class="mymember_fen">
+            <a href="/user/point/list"><img src="/client/images/mymember/buy05.png" /><p>积分：<span>0.000${user.totalPoints!'0'}</span></p></a>
+          </th>
         </tr>
         <tr>
           <td><a href="/user/order/list/4"><img src="/client/images/mymember/buy03.png" />待收货：<span>${total_unreceived!'0'}</span></a></td>

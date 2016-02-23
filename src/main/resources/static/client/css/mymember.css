@@ -205,6 +205,7 @@ textarea { resize:none;}
 	overflow:hidden;
 	border-radius:50%;}
 .mymember_header.p_left{left:86px;}
+/**
 .mymember_fen {border-left:1px solid #eee;padding-left:30px;}
 .mymember_fen a {
 	display:block;
@@ -215,6 +216,22 @@ textarea { resize:none;}
 	color:#555;
 	font-weight:400;
 	font-size:14px;}
+.mymember_fen a p span {color:#ff8800;}
+*/
+.mymember_fen {
+    
+    width: 120px;
+    text-align: center;
+}
+.mymember_fen a {
+    border-left: 1px solid #eee;
+    display:block;
+    text-align:center;margin: 0 auto;}
+.mymember_fen a p {
+    margin-top:5px;
+    color:#555;
+    font-weight:400;
+    font-size:14px;}
 .mymember_fen a p span {color:#ff8800;}
 .mymember_info01 td {width:140px;}
 /*.mymember_info01.no_width td{width:0;}*/
