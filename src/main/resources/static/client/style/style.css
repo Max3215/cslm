@@ -1108,4 +1108,32 @@ menu.leftpart a { display:inline-block; white-space:nowrap; font-size:12px; marg
 .identity span input{position: relative;top:2px;}
 
 
+/*新增配送方式*/
+.del_mode{width: 98%; padding: 15px 1%; border: 1px solid #eee;margin-top:40px;overflow: hidden;}
+.del_mode p{font-size: 18px; padding-bottom: 10px;}
 
+.del_mode .part{float:left;}
+.del_mode .part span{}
+.del_mode .part select{margin-left:10px;}
+
+
+.pay_balance{font-size: 16px;}
+.pay_balance span{padding-left:10px;color:red;font-size: 14px;}
+
+
+
+
+.alipay {
+    width: 1172px;
+    background: #dfdfdf;
+    margin: 0 0 20px;
+}
+.alipay li {
+    margin: 16px 24px;
+    display: inline-block;
+    float: left;
+    padding-left: 20px;
+}
+.alipay li input{position:absolute;left:0;top:15px;z-index:10;}
+
+.alipay_tit{font-size: 16px;margin-top:10px;}

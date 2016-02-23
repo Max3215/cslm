@@ -179,6 +179,15 @@ public class TdCartGoods {
 	public void setDistributorGoodsId(Long distributorGoodsId) {
 		this.distributorGoodsId = distributorGoodsId;
 	}
+
+	@Override
+	public String toString() {
+		return "TdCartGoods [id=" + id + ", username=" + username + ", goodsId=" + goodsId + ", goodsTitle="
+				+ goodsTitle + ", quantity=" + quantity + ", distributorId=" + distributorId + ", distributorGoodsId="
+				+ distributorGoodsId + ", distributorTitle=" + distributorTitle + ", providerId=" + providerId
+				+ ", providerTite=" + providerTite + ", price=" + price + ", isSelected=" + isSelected + ", isLoggedIn="
+				+ isLoggedIn + "]";
+	}
     
 	
     

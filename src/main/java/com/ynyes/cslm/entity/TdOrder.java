@@ -257,8 +257,58 @@ public class TdOrder {
     @Column(scale=2)
     private Double aliPrice;
     
+    // 配送方式
+    @Column
+    private Long deliveryMethod;
     
-    public Double getAliPrice() {
+    // 自提点名称
+    @Column
+    private String shipAddressTitle;
+    
+    // 自提点地址
+    @Column
+    private String shipAddress;
+    
+    // 自提点联系方式
+    @Column
+    private String shipMobile;
+    
+    
+    
+    
+    public Long getDeliveryMethod() {
+		return deliveryMethod;
+	}
+
+	public void setDeliveryMethod(Long deliveryMethod) {
+		this.deliveryMethod = deliveryMethod;
+	}
+
+	public String getShipAddressTitle() {
+		return shipAddressTitle;
+	}
+
+	public void setShipAddressTitle(String shipAddressTitle) {
+		this.shipAddressTitle = shipAddressTitle;
+	}
+
+	public String getShipAddress() {
+		return shipAddress;
+	}
+
+	public void setShipAddress(String shipAddress) {
+		this.shipAddress = shipAddress;
+	}
+
+	public String getShipMobile() {
+		return shipMobile;
+	}
+
+	public void setShipMobile(String shipMobile) {
+		this.shipMobile = shipMobile;
+	}
+
+	public Double getAliPrice() {
 		return aliPrice;
 	}
 

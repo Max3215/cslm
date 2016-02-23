@@ -67,6 +67,7 @@ import com.ynyes.cslm.service.TdPayTypeService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 
@@ -138,6 +139,9 @@ public class TdOrderController extends AbstractPaytypeController{
     
     @Autowired
     private TdPayRecordService tdPayRecordService;
+    
+    @Autowired
+    private TdShippingAddressService tdShippingAddressService;
     
 //    @Autowired
 //    private PaymentChannelCEB payChannelCEB;
@@ -694,7 +698,7 @@ public class TdOrderController extends AbstractPaytypeController{
     }
 
     @RequestMapping(value = "/info")
-    public String orderInfo(HttpServletRequest req, HttpServletResponse resp,
+    public String orderInfo(Long code, HttpServletRequest req, HttpServletResponse resp,
             ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 
@@ -741,6 +745,14 @@ public class TdOrderController extends AbstractPaytypeController{
                 totalPrice += cg.getPrice() * cg.getQuantity();
             }
         }
+        
+        // 查询出当前选择商品所属超市ID
+        List<Long> list = tdCartGoodsService.countByDistributorId(username);
+        
+        if(null != list && list.size()==1) // 如果只有一家超市、提供自提点选择
+        {
+        	map.addAttribute("addressList", tdDistributorService.findOne(list.get(0)).getShippingList());
+        }
        
         map.addAttribute("coupon_list",
                 tdCouponService.findByUsernameAndIsUseable(username));
@@ -761,6 +773,12 @@ public class TdOrderController extends AbstractPaytypeController{
 
         // 选中商品
         map.addAttribute("buy_goods_list", selectedGoodsList);
+        
+        // 余额不足提醒
+        if(null != code && code==1)
+        {
+        	map.addAttribute("msg", "余额不足，请选择在线支付！");
+        }
 
         tdCommonService.setHeader(map, req);
 
@@ -845,6 +863,8 @@ public class TdOrderController extends AbstractPaytypeController{
             String invoiceTitle, // 发票抬头
             String userMessage, // 用户留言
             Long couponId, // 优惠券ID
+            Long deliveryType, // 配送方式
+            Long shipAddressId, // 自提点Id
             String type,
             HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
@@ -893,6 +913,7 @@ public class TdOrderController extends AbstractPaytypeController{
         // 储存超市Id 和对应商品  为拆分订单做准备
         Map<Long,List<TdCartGoods>> cartGoodsMap =new HashMap<>();
         
+        Double cartGoodsTotalPrice = 0.0;
         if(null != cartSelectedGoodsList)
         {
         	for (TdCartGoods cartGoods: cartSelectedGoodsList) 
@@ -907,7 +928,7 @@ public class TdOrderController extends AbstractPaytypeController{
 						clist.add(cartGoods);
 						cartGoodsMap.put(cartGoods.getDistributorId(),clist);
 					}
-					
+					cartGoodsTotalPrice += cartGoods.getPrice();
 				}
 			}
         }
@@ -915,6 +936,14 @@ public class TdOrderController extends AbstractPaytypeController{
        
         if(null == cartGoodsMap || cartGoodsMap.size() <= 0){
         	return "/client/error_404";
+        }
+        
+        if(null != payTypeId && payTypeId ==0)
+        {
+        	if(user.getVirtualMoney() == null || cartGoodsTotalPrice > user.getVirtualMoney())
+        	{
+        		return "redirect:/order/info?code="+1;
+        	}
         }
         
         TdOrder order = new TdOrder();
@@ -1057,17 +1086,6 @@ public class TdOrderController extends AbstractPaytypeController{
                         + address.getDetailAddress());
             }
 
-            if (null != payTypeId) {
-                TdPayType payType = tdPayTypeService.findOne(payTypeId);
-
-                // 支付类型
-                payTypeFee = payType.getFee();
-                tdOrder.setPayTypeId(payType.getId());
-                tdOrder.setPayTypeTitle(payType.getTitle());
-                tdOrder.setPayTypeFee(payTypeFee);
-                tdOrder.setIsOnlinePay(payType.getIsOnlinePay());
-            }
-
             // 使用积分
             tdOrder.setPointUse(pointUse);
 
@@ -1076,10 +1094,10 @@ public class TdOrderController extends AbstractPaytypeController{
 
             // 待付款
             tdOrder.setStatusId(2L);
-
-            if(null != distributor.getPostPrice())
+            
+        	if(null != distributor.getPostPrice() && null != deliveryType && deliveryType != 1) // 送货上门计算邮费
             {
-            	// 计算邮费
+        		// 计算邮费
             	postPrice += distributor.getPostPrice();
             	
             	// 判断是否满额免
@@ -1157,6 +1175,82 @@ public class TdOrderController extends AbstractPaytypeController{
             	
             }
             
+            // 支付方式
+            if (null != payTypeId && payTypeId !=0) { // 平台付
+                TdPayType payType = tdPayTypeService.findOne(payTypeId);
+
+                // 支付类型
+                payTypeFee = payType.getFee();
+                tdOrder.setPayTypeId(payType.getId());
+                tdOrder.setPayTypeTitle(payType.getTitle());
+                tdOrder.setPayTypeFee(payTypeFee);
+                tdOrder.setIsOnlinePay(payType.getIsOnlinePay());
+            }
+            else if(payTypeId ==0)// 余额付
+            {
+            	user.setVirtualMoney(user.getVirtualMoney()-totalPrice); // 虚拟账号扣除
+            	tdUserService.save(user);
+            	tdOrder.setStatusId(3L);
+            }
+            
+            tdOrder.setDeliveryMethod(deliveryType); // 配送方式 0、送货上门 1、门店自提
+            if(null != deliveryType && deliveryType==1) // 门店自提
+            {
+            	List<Long> list = tdCartGoodsService.countByDistributorId(username);
+                
+                if(null != list && list.size()==1) // 如果只有一家超市、提供自提点选择
+                {
+                	TdShippingAddress shippingAddress = tdShippingAddressService.findOne(shipAddressId);
+                	if(null != shippingAddress)
+                	{
+                		tdOrder.setShipAddress(appenAddress(shippingAddress).toString()); // 添加自提点地址
+                		tdOrder.setShipMobile(shippingAddress.getReceiverMobile());  // 添加自提点联系方式
+                		tdOrder.setShipAddressTitle(shippingAddress.getReceiverName());
+                	}
+                }
+                else if (list.size()>1) // 多家超市
+                {
+                	List<TdShippingAddress> shippingList = distributor.getShippingList();
+                	
+                	if(null != shippingList) // 超市设置了自提点 取默认地址
+                	{
+                		TdShippingAddress newShipping = new TdShippingAddress();
+                		for (TdShippingAddress tdShippingAddress : shippingList) {
+                			if(tdShippingAddress.getIsDefaultAddress()) 
+                			{
+                				newShipping = tdShippingAddress;
+                			}
+                		}
+                		tdOrder.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
+                		tdOrder.setShipMobile(newShipping.getReceiverMobile());  // 添加自提点联系方式
+                		tdOrder.setShipAddressTitle(newShipping.getReceiverName());
+                	}else{ 
+                		// 超市未设置自提点 取超市地址
+                		StringBuffer newAddress = new StringBuffer();
+                		if(null != distributor.getProvince())
+                		{
+                			newAddress.append(distributor.getProvince()+"-");
+                		}
+                		if(null != distributor.getCity())
+                		{
+                			newAddress.append(distributor.getCity()+"-");
+                		}
+                		if(null != distributor.getDisctrict())
+                		{
+                			newAddress.append(distributor.getDisctrict()+" ");
+                		}
+                		if(null != distributor.getAddress())
+                		{
+                			newAddress.append(distributor.getAddress());
+                		}
+                		tdOrder.setShippingAddress(newAddress.toString()); // 超市地址
+                		tdOrder.setShipAddressTitle(distributor.getTitle()); // 超市名称
+                		tdOrder.setShipMobile(distributor.getMobile()); // 超市联系方式
+                	}
+                }
+            }
+            
+            
             tdOrder.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
             tdOrder.setTotalPrice(totalPrice); // 订单总价
             tdOrder.setPostPrice(postPrice); // 邮费
@@ -1196,8 +1290,38 @@ public class TdOrderController extends AbstractPaytypeController{
         // 删除已生成订单的购物车项
         tdCartGoodsService.delete(cartSelectedGoodsList);
          
+        if(null != payTypeId && payTypeId ==0)
+        {
+        	return "redirect:/user/order?id="+order.getId();
+        }
          return "redirect:/order/pay?orderId=" + order.getId();
         // return "redirect:/order/success?orderId=" + tdOrder.getId();
+    }
+    
+    // 拼接地址
+    public StringBuffer appenAddress(TdShippingAddress shippingAddress)
+    {
+    	StringBuffer newAddress = new StringBuffer();
+    	if(null != shippingAddress)
+    	{
+    		if(null != shippingAddress.getProvince())
+    		{
+    			newAddress.append(shippingAddress.getProvince()+"-");
+    		}
+    		if(null != shippingAddress.getCity())
+    		{
+    			newAddress.append(shippingAddress.getCity()+"-");
+    		}
+    		if(null != shippingAddress.getDisctrict())
+    		{
+    			newAddress.append(shippingAddress.getDisctrict()+" ");
+    		}
+    		if(null != shippingAddress.getDetailAddress())
+    		{
+    			newAddress.append(shippingAddress.getDetailAddress());
+    		}
+    	}
+    	return newAddress;
     }
 
     @RequestMapping(value = "/success")
@@ -1745,7 +1869,12 @@ public class TdOrderController extends AbstractPaytypeController{
         
         setPayTypes(map, true, false, req);
         
-		
+        if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
+    	{
+        	Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        	TdDistributor distributor = tdDistributorService.findOne(disId);
+        	map.addAttribute("addressList", distributor.getShippingList());
+    	}
         
     	return "/client/order_info";
     }

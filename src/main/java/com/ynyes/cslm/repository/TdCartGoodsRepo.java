@@ -3,6 +3,7 @@ package com.ynyes.cslm.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.cslm.entity.TdCartGoods;
@@ -30,4 +31,8 @@ public interface TdCartGoodsRepo extends
     List<TdCartGoods> findByUsernameOrderByIdDesc(String username);
     
     List<TdCartGoods> findByUsernameAndIsSelectedTrueOrderByIdDesc(String username);
+    
+    // 查询用户选择商品所属超市ID
+    @Query(value="select cg.distributorId from TdCartGoods cg where cg.username =?1 and cg.isSelected =true group by cg.distributorId")
+    List<Long> findByUsernameAndIsSelectedTrue(String username);
 }

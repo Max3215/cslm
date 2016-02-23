@@ -195,4 +195,10 @@ public class TdCartGoodsService {
         
         return (List<TdCartGoods>) repository.save(entities);
     }
+    
+    public List<Long> countByDistributorId(String username)
+    {
+    	return repository.findByUsernameAndIsSelectedTrue(username);
+    }
+    
 }

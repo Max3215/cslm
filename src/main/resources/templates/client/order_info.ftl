@@ -24,8 +24,12 @@
 $(document).ready(function(){
     
     $("#form1").Validform({
-         tiptype: 1
+         tiptype: 1,
     });
+    
+    <#if msg??>
+    alert("${msg!''}");
+    </#if>
     
   $(".click_a").click(function(){
     if($(this).next().is(":visible")==false){
@@ -129,11 +133,48 @@ $(document).ready(function(){
                 </tr>
               </table>
             </div>
+      
+     <!-- 配送方式 -->
+    <div class="del_mode">
+        <p>配送方式</p>
+        <div class="part">
+            <span><input type="radio" value="0" name="deliveryType" datatype="n" nullmsg="请选择收货!" />收货上门</span>
+        </div>
+        <div class="part" style="margin-left:30px;">
+            <span><input type="radio" name="deliveryType" value="1" datatype="n" nullmsg="请选择配送方式!" />门店自提</span>
+            <#if addressList??>
+            <select name="shipAddressId">
+                <#list addressList as addr>
+              <option value="${addr.id?c}">${addr.disctrict!''}${addr.detailAddress!''}</option>
+                </#list>
+            </select>
+            </#if>
+        </div>
+    </div>
+    <!-- 配送方式 END -->      
+      
     <div class="clear h20"></div>
     <div class="clear h20"></div>
     
     <section class="paybox">
         <h3>选择支付方式</h3>
+        <div class="pay_balance">
+            <input type="radio" datatype="n" value="0" name="payTypeId" nullmsg="请选择支付方式!"/>余额支付
+            <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
+          </div>
+
+          <p class="alipay_tit">平台支付</p>
+          <div class="alipay">
+              <ul>
+              <#if pay_type_list_third??>
+                <#list pay_type_list_third as pay_type>
+                <li><input type="radio" value="${pay_type.id?c}" name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="${pay_type.coverImageUri!''}" width="148px"></li>
+                </#list>
+            </#if>
+              </ul>
+              <div class="clear"></div>
+           </div>
+        <#--
         <#if pay_type_list_third??>
            <#list pay_type_list_third as pay_type>
                <div class="pay_style">
@@ -143,6 +184,7 @@ $(document).ready(function(){
             </#list>
         </#if>
         <div class="clear"></div>
+        -->
     </section>
     <div class="clear h20"></div>
     <div class="clear h20"></div>
