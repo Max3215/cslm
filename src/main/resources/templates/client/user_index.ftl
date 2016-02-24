@@ -106,7 +106,7 @@ DD_belatedPNG.fix('.,img,background');
             <a href="/user/point/list"><img src="/client/images/mymember/buy05.png" /><p>积分：<span>${user.totalPoints!'0'}</span></p></a>
           </th>
           <th rowspan="2" class="mymember_fen">
-            <a href="/user/virtualMoney/list"><img src="/client/images/mymember/buy05.png" /><p>余额：<span><#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span></p></a>
+            <a href="/user/virtualMoney/list"><img src="/client/images/mymember/buy06.png" /><p>余额：<span><#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span></p></a>
           </th>
         </tr>
         <tr>
@@ -123,7 +123,7 @@ DD_belatedPNG.fix('.,img,background');
                <#list order_page.content as order>
                     <#if order_index < 2 >         
                         <tr>
-                            <th colspan="7">订单编号：<a href="/user/order?id=${order.id?c}">${order.orderNumber!''}</a></th>
+                            <th colspan="7">订单编号：<a href="/user/order?id=${order.id?c}" target="_blank">${order.orderNumber!''}</a></th>
                         </tr>
                         <tr>
                             <td align="left"  colspan="2">
@@ -161,32 +161,12 @@ DD_belatedPNG.fix('.,img,background');
                                 </#if>
                             </td>
                             <td class="td003">
-                                 <a href="/user/order?id=${order.id?c}">查看</a>          
+                                 <a href="/user/order?id=${order.id?c}" target="_blank">查看</a>          
                             </td>
                          </tr>
                     </#if>
                 </#list>
             </#if>    
-           <#--                 
-            <h4>正在发货</h4>
-            <a class="mymember_infotab_show" href="#" onMouseOver="hoverShowInfo('showinfo01')">进度</a>
-            <div class="mymember_info_show" id="showinfo01">
-              <i><img src="/client/images/mymember/arrow04.gif" /></i>
-              <a href="javascript:closeShowInfo();"><img src="/client/images/mymember/close.png" /></a>
-              <h5>
-                <span>处理时间</span>
-                处理信息              </h5>
-              <p>
-                <span>2015-02-23 13:11:28</span>
-                您提交了订单，请等待系统进行确认。              </p>
-              <p>
-                <span>2015-02-23 13:11:28</span>
-                您提交了订单，请等待系统进行确认。              </p>
-              <p>
-                <span>2015-02-23 13:11:28</span>
-                您提交了订单，请等待系统进行确认。              </p>
-            </div>          </td>
-         -->
       </table>
     </div><!--mymember_info END-->
     
@@ -197,7 +177,7 @@ DD_belatedPNG.fix('.,img,background');
             <li>
                 <#if collect_page?? >
                     <#list collect_page.content as item>
-                        <a class="mymember_gzlist" href="/goods/${item.goodsId!''}">
+                        <a class="mymember_gzlist" href="/goods/${item.distributorId!''}" target="_blank">
                             <img src="${item.goodsCoverImageUri!''}" alt="${item.goodsTitle!''}"  width="180px" height="180px"/>
                             <p>${item.goodsTitle!''}</p>
                             <h6>￥${item.goodsSalePrice?string('0.00')}</h6>
@@ -224,11 +204,11 @@ DD_belatedPNG.fix('.,img,background');
                       <#if recommend_goods_page??>
                           <#list recommend_goods_page.content as item>
                               <#if item_index < 4 >
-                                  <a class="mymember_hot_list" href="/goods/${item.id?c}">
-                                      <img src="${item.coverImageUri!''}"  width="75" height="75"/>
-                                      <p>${item.title!''}</p>
-                                      <b>￥${item.marketPrice?string('0.00')}</b>
-                                  </a>
+                                  <a class="mymember_hot_list" href="/goods/${item.id?c}" target="_blank">
+                                       <img src="${item.coverImageUri!''}"  width="75" height="75"/>
+                                       <p>${item.goodsTitle!''}</p>
+                                       <b>￥${item.goodsPrice?string('0.00')}</b>
+                                   </a>
                               </#if>
                           </#list>
                       </#if>
@@ -237,7 +217,7 @@ DD_belatedPNG.fix('.,img,background');
                       <#if hot_goods_page??>
                            <#list hot_goods_page.content as item>
                                <#if item_index < 4 >
-                                   <a class="mymember_hot_list" href="/goods/${item.id?c}">
+                                   <a class="mymember_hot_list" href="/goods/${item.id?c}" target="_blank">
                                        <img src="${item.coverImageUri!''}"  width="75" height="75"/>
                                        <p>${item.goodsTitle!''}</p>
                                        <b>￥${item.goodsPrice?string('0.00')}</b>
@@ -256,7 +236,7 @@ DD_belatedPNG.fix('.,img,background');
                     <li>
                         <#if recent_page??>
                             <#list recent_page.content as rgoods>
-                                 <a class="mymember_hot_story" href="/goods/${rgoods.goodsId?c}">
+                                 <a class="mymember_hot_story" href="/goods/${rgoods.goodsId?c}" target="_blank">
                                     <img src="${rgoods.goodsCoverImageUri!''}"  width="65" height="65"/>
                                     <p>￥${rgoods.goodsSalePrice?string("0.00")}</p>
                                  </a>
@@ -265,7 +245,7 @@ DD_belatedPNG.fix('.,img,background');
                     </li>
                 </ul>
             <div class="myclear"></div>
-                <a id="mymember_story_next" href="#"><img src="/client/images/mymember/arrow02.jpg" /></a>
+                <a id="mymember_story_next" href="javascript:;"><img src="/client/images/mymember/arrow02.jpg" /></a>
             </div>
             <div class="myclear"></div>
        </div><!--mymember_hot_part END-->

@@ -48,6 +48,8 @@ public interface TdDistributorGoodsRepo extends
 		Long findDistributorId(Long id);
 		
 		Page<TdDistributorGoods> findByIsOnSaleTrueOrderBySoldNumberDesc(Pageable page);
+		Page<TdDistributorGoods> findByIsOnSaleTrueOrderByGoodsPriceDesc(Pageable page);
+		
 		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 order by g.soldNumber desc")
 		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,Pageable page);
 		

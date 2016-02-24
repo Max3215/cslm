@@ -225,6 +225,12 @@ public class TdDistributorGoodsService {
     	return repository.findByIsOnSaleTrueOrderBySoldNumberDesc(pageRequest);
     }
     
+    public Page<TdDistributorGoods> findByIsOnSaleTrueByGoodsPriceDesc(int page ,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page,size,new Sort(Direction.DESC, "goodsPrice"));
+    	return repository.findByIsOnSaleTrueOrderByGoodsPriceDesc(pageRequest);
+    }
+    
     public List<TdDistributorGoods> findByDistributorIdAndProductIdAndIsOnSale(Long disId,Long productId){
     	return repository.findByDistributorIdAndProductIdAndIsOnSaleTrue(disId, productId);
     }

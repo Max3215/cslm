@@ -76,18 +76,28 @@ DD_belatedPNG.fix('.,img,background');
 
       <table class="record_tab">
         <tr>
-          <th>创建时间</th>
-          <th>涉及单号</th>
-          <th>金额</th>
-          <th>状态</th>
+          <th >记录时间</th>
+            <th width="18%">单号</th>
+            <th >物流费</th>
+            <th >商品总额</th>
+            <th >订单总金额</th>
+            <th >实际支出</th>
+            <th>说明</th>
         </tr>
         <#if pay_record_page?? && pay_record_page.content??>
             <#list pay_record_page.content as re>
                 <tr>
-                      <td >${re.createTime?string('yyyy-MM-dd')}</td>
-                      <td class="td003">${re.orderNumber!''}</td>
-                      <td>￥${re.provice?string('0.00')}</td>
-                      <td>${re.cont}</td>         
+                    <td >${re.createTime?string('yyyy-MM-dd')}</td>
+                    <td >${re.orderNumber!''}</td>
+                    <td ><#if re.postPrice??>${re.postPrice?string('0.00')}<#else>0.00</#if></td>
+                    <td ><#if re.totalGoodsPrice??>${re.totalGoodsPrice?string('0.00')}<#else>0.00</#if></td>
+                    <td ><#if re.provice??>${re.provice?string('0.00')}<#else>0.00</#if></td>
+                    <td >
+                        <#if re.realPrice??>${re.realPrice?string('0.00')}<#else>0.00</#if>
+                    </td>
+                    <td >
+                        ${re.cont!''}
+                    </td>          
                 </tr>
             </#list>
         </#if>

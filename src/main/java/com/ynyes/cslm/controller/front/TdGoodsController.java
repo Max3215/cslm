@@ -149,11 +149,11 @@ public class TdGoodsController {
 
         // 添加浏览记录
         if (null != username) {
-            tdUserRecentVisitService.addNew(username, goodsId);
+            tdUserRecentVisitService.addNew(username, distributorGoods.getId());
             map.addAttribute("user",
                     tdUserService.findByUsernameAndIsEnabled(username));
         } else {
-            tdUserRecentVisitService.addNew(req.getSession().getId(), goodsId);
+            tdUserRecentVisitService.addNew(req.getSession().getId(),  distributorGoods.getId());
         }
 
         // 促销标志位

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdUserRecentVisit;
 import com.ynyes.cslm.repository.TdUserRecentVisitRepo;
@@ -31,6 +32,9 @@ public class TdUserRecentVisitService {
     
     @Autowired
     TdGoodsService tdGoodsService;
+    
+    @Autowired
+    TdDistributorGoodsService tdDistributorGoodsService;
     
     /**
      * 删除
@@ -142,7 +146,7 @@ public class TdUserRecentVisitService {
         
         if (null == recent)
         {
-            TdGoods goods = tdGoodsService.findOne(goodsId);
+            TdDistributorGoods goods = tdDistributorGoodsService.findOne(goodsId);
             
             if (null == goods)
             {
@@ -153,8 +157,8 @@ public class TdUserRecentVisitService {
             recent.setUsername(username);
             recent.setGoodsId(goodsId);
             recent.setGoodsCoverImageUri(goods.getCoverImageUri());
-            recent.setGoodsSalePrice(goods.getMarketPrice());
-            recent.setGoodsTitle(goods.getTitle());
+            recent.setGoodsSalePrice(goods.getGoodsPrice());
+            recent.setGoodsTitle(goods.getGoodsTitle());
             recent.setVisitTime(new Date());
         }
         else

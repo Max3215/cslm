@@ -175,7 +175,7 @@ public class TdUserController{
         map.addAttribute("hot_goods_page",tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0, ClientConstant.pageSize));
         //推荐商品
         map.addAttribute("recommend_goods_page",
-				tdGoodsService.findByIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(0, ClientConstant.pageSize));
+        		tdDistributorGoodsService.findByIsOnSaleTrueByGoodsPriceDesc(0, ClientConstant.pageSize));
         return "/client/user_index";
     }
 
@@ -968,7 +968,7 @@ public class TdUserController{
 
             collect.setUsername(username);
             collect.setDistributorId(distributorGoods.getId());
-            collect.setGoodsId(distributorGoods.getId());
+            collect.setGoodsId(goods.getId());
             collect.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());
             collect.setGoodsTitle(distributorGoods.getGoodsTitle());
             collect.setGoodsSalePrice(distributorGoods.getGoodsPrice());
