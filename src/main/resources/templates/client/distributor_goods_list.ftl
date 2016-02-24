@@ -26,12 +26,11 @@
                         <td class="tb02"><p>￥<span id="price${dg.id?c}"><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></p></td>
                         <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
-                            <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page});">下架</a></p>
-                            <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
-                            <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page});">删除</a></p>
+                            <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a  href="javascript:recommed(${dg.id?c},${page});" <#if dg.isRecommendIndex?? &&dg.isRecommendIndex>style="color:#ff5b7d"</#if>>首页推荐</a></p>
+                            <p><a href="javascript:editPrice(${dg.id?c},${page?c});">修改信息</a></p>
+                            <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page?c});">删除</a></p>
                        </td>
                       </tr>
-                      
                  <#else>
                       <tr id="tr_1424195166">
                         <td width=10>
@@ -47,12 +46,25 @@
                         <td class="tb02"><p><#if dg.goodsPrice??>￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></p></td>
                         <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
-                            <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page});">上架</a></p>
-                            <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
-                            <p><a href="javascript:deleteDisGoods(false,${dg.id?c},${page});">删除</a></p></td>
+                            <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page?c});">上架</a></p>
+                            <p><a href="javascript:editPrice(${dg.id?c},${page?c});">修改信息</a></p>
+                            <p><a href="javascript:deleteDisGoods(false,${dg.id?c},${page?c});">删除</a></p></td>
                       </tr>
                  </#if>
                  </#if>
             </#list>
         </#if>
 </table>
+<script type="text/javascript">
+function recommed(id,page)
+{
+    $.ajax({
+        url : "/distributor/goods/recommed",
+        data : {"id":id,"page":page},
+        type : "post",
+       success:function(res){
+            $("#dis_goods_table").html(res);
+        }
+    })
+}
+</script>

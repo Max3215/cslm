@@ -911,6 +911,50 @@ public class TdDistributorController {
 		return "/client/distributor_goods_list";
 	}
 	
+	/**
+	 * 设置首页推荐
+	 * @author Max
+	 * 
+	 */
+	@RequestMapping(value="/goods/recommed",method=RequestMethod.POST)
+	public String recommed(Long id,Integer page,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		
+		if(null == id)
+		{
+			return "/client/error_404";
+		}
+		
+		if(null == page )
+		{
+			page = 0;
+		}
+		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(id);
+		
+		if(null != distributorGoods.getIsRecommendIndex() && distributorGoods.getIsRecommendIndex())
+		{
+			distributorGoods.setIsRecommendIndex(false);
+		}else{
+			distributorGoods.setIsRecommendIndex(true);
+		}
+		tdDistributorGoodsService.save(distributorGoods);
+		
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		map.addAttribute("page", page);
+		map.addAttribute("type", true);
+		map.addAttribute("distributor", distributor);
+		
+		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), true, page, 10));
+		
+		return "/client/distributor_goods_list";
+	}
+	
+	
 	@RequestMapping(value="/goods/editOnSale",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> editOnSale(Long goodsId,

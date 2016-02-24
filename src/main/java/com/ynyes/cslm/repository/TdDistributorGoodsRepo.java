@@ -381,10 +381,10 @@ public interface TdDistributorGoodsRepo extends
 																				Boolean isDistribution1,Boolean isAudit1,String keywords1,Pageable page);
 		
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=1 order by g.onSaleTime desc")
-		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(Long distributorId,Pageable page);
+		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=1 and g.isRecommendIndex=1 order by g.onSaleTime desc")
+		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueAndIsRecommendIndexTrueOrderByOnSaleTime(Long distributorId,Pageable page);
 		
-		Page<TdDistributorGoods> findByIsOnSaleTrueOrderByOnSaleTimeDesc(Pageable page);
+		Page<TdDistributorGoods> findByIsOnSaleTrueAndIsRecommendIndexTrueOrderByOnSaleTimeDesc(Pageable page);
 		
 		List<TdDistributorGoods> findByProviderIdAndGoodsIdAndIsDistributionTrue(Long proId,Long goodsId);
 		

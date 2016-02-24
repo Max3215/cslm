@@ -103,7 +103,7 @@ public class TdIndexController {
                 }
             }
         	
-        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByDistribuorIdOrderByOnSaleTime(distributorId, 0, 10));
+        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByDistribuorIdAndIsRecommendIndexTrueOrderByOnSaleTime(distributorId, 0, 10));
         	// 一级分类
             List<TdProductCategory> topCatList = tdProductCategoryService
                     .findByParentIdIsNullOrderBySortIdAsc();
@@ -150,7 +150,7 @@ public class TdIndexController {
         			
         		}
         	}
-        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAllOrderByOnSaleTime(0, 10));
+        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAllByIsRecommendIndexTrueOrderByOnSaleTime(0, 10));
         	
         	// 一级分类
             List<TdProductCategory> topCatList = tdProductCategoryService

@@ -1545,16 +1545,16 @@ public class TdDistributorGoodsService {
 	
 	//--------------------------------------
 	
-	public Page<TdDistributorGoods> findByDistribuorIdOrderByOnSaleTime(Long disId,int page,int size)
+	public Page<TdDistributorGoods> findByDistribuorIdAndIsRecommendIndexTrueOrderByOnSaleTime(Long disId,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(disId, pageRequest);
+		return repository.findByDistributorIdAndIsOnSaleTrueAndIsRecommendIndexTrueOrderByOnSaleTime(disId, pageRequest);
 	}
 	
-	public Page<TdDistributorGoods> findAllOrderByOnSaleTime(int page,int size)
+	public Page<TdDistributorGoods> findAllByIsRecommendIndexTrueOrderByOnSaleTime(int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "onSaleTime"));
-		return repository.findByIsOnSaleTrueOrderByOnSaleTimeDesc(pageRequest);
+		return repository.findByIsOnSaleTrueAndIsRecommendIndexTrueOrderByOnSaleTimeDesc(pageRequest);
 	}
 	
 	public List<TdDistributorGoods> findByProviderIdAndGoodsIdAndIsDistributionTrue(Long proId,Long goodsId){

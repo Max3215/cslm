@@ -142,6 +142,9 @@ public class TdDistributorGoods {
     @Column
     private String unit;
     
+    // 首页推荐
+    private Boolean isRecommendIndex;
+    
 //    // 商品邮费
 //    @Column
 //    private Double postPrice;
@@ -381,6 +384,16 @@ public class TdDistributorGoods {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+
+	public Boolean getIsRecommendIndex() {
+		return isRecommendIndex;
+	}
+
+	public void setIsRecommendIndex(Boolean isRecommendIndex) {
+		this.isRecommendIndex = isRecommendIndex;
+	}
+	
+	
 //
 //	public Double getPostPrice() {
 //		return postPrice;

@@ -190,21 +190,6 @@ $(document).ready(function(){
 	<!--END nav-->
 	<!--banner-->
 	<section id="banner_box">
-	   <#--
-		<ul id="banner_sum">
-		   <#if big_scroll_ad_list??>
-                <#list big_scroll_ad_list as item>
-                    <#if item_index < 3 >
-            			<li style="display:block;">
-            				<a href="${item.linkUri!''}" target="_blank">
-                                  <img src="${item.fileUri!''}" />
-                            </a>
-            			</li>
-            		 </#if>
-                 </#list>
-            </#if>
-		</ul>
-		-->
 		<menu id="banner_sum">
 		      <#if big_scroll_ad_list??>
                 <#list big_scroll_ad_list as item>

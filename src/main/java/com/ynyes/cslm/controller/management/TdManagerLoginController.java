@@ -87,7 +87,7 @@ public class TdManagerLoginController {
 
         tdManagerLogService.addLog("logout", "用户退出登录", request);
         
-        request.getSession().invalidate();
+        request.getSession().removeAttribute("manager");
         
         return "redirect:/Verwalter/login";
     }
