@@ -184,7 +184,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     <a href="/Verwalter/order/edit?id=${order.id?c}&statusId=${statusId!'0'}">${order.orderNumber!""}</a></td>
                 <td>${order.username!""}</td>
                 <td>${order.payTypeTitle!""}</td>
-                <td>${order.deliverTypeTitle!""}</td>
+                <td><#if order.deliveryMethod?? && order.deliveryMethod == 1>门店自提<#else>送货上门</#if></td>
                 <td align="center">
                     <#if order.statusId??>
                         <#if 1==order.statusId>

@@ -1081,9 +1081,7 @@ public class TdOrderController extends AbstractPaytypeController{
 
                 tdOrder.setShippingName(address.getReceiverName());
                 tdOrder.setShippingPhone(address.getReceiverMobile());
-                tdOrder.setShippingAddress(address.getProvince()
-                        + address.getCity() + address.getDisctrict()
-                        + address.getDetailAddress());
+                tdOrder.setShippingAddress(appenAddress(address).toString());
             }
 
             // 使用积分
@@ -1255,6 +1253,8 @@ public class TdOrderController extends AbstractPaytypeController{
             {
             	user.setVirtualMoney(user.getVirtualMoney()-totalPrice); // 虚拟账号扣除
             	tdUserService.save(user);
+            	
+            	tdOrder.setPayTypeTitle("余额支付");
             	tdOrder.setStatusId(3L);
             	
             	// 添加会员虚拟账户金额记录

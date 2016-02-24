@@ -683,14 +683,12 @@
                         </th>
                         <td>${order.payTypeTitle!""}</td>
                     </tr>
-                    <#--
                     <tr>
                         <th>
                             配送方式
                         </th>
-                        <td>${order.deliverTypeTitle!""}</td>
+                        <td><#if order.deliveryMethod?? && order.deliveryMethod == 1>门店自提：${order.shipAddress!''}<#else>送货上门</#if></td>
                     </tr>
-                    -->
                 </tbody>
                 </table>
             </dd>
