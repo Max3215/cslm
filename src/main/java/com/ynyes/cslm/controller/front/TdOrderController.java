@@ -1175,42 +1175,6 @@ public class TdOrderController extends AbstractPaytypeController{
             	
             }
             
-            // 支付方式
-            if (null != payTypeId && payTypeId !=0) { // 平台付
-                TdPayType payType = tdPayTypeService.findOne(payTypeId);
-
-                // 支付类型
-                payTypeFee = payType.getFee();
-                tdOrder.setPayTypeId(payType.getId());
-                tdOrder.setPayTypeTitle(payType.getTitle());
-                tdOrder.setPayTypeFee(payTypeFee);
-                tdOrder.setIsOnlinePay(payType.getIsOnlinePay());
-            }
-            else if(payTypeId ==0)// 余额付
-            {
-            	user.setVirtualMoney(user.getVirtualMoney()-totalPrice); // 虚拟账号扣除
-            	tdUserService.save(user);
-            	tdOrder.setStatusId(3L);
-            	
-            	// 添加会员虚拟账户金额记录
-            	TdPayRecord record = new TdPayRecord();
-            	
-            	record.setAliPrice(aliPrice);
-            	record.setPostPrice(postPrice);
-            	record.setRealPrice(totalPrice);
-            	record.setTotalGoodsPrice(totalGoodsPrice);
-            	record.setServicePrice(servicePrice);
-            	record.setProvice(totalPrice);
-            	record.setOrderNumber(tdOrder.getOrderNumber());
-            	record.setCreateTime(new Date());
-            	record.setUsername(username);
-            	record.setType(2L);
-            	record.setCont("订单支付");
-            	record.setDistributorTitle(distributor.getTitle());
-            	record.setStatusCode(1);
-            	
-            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
-            }
             
             tdOrder.setDeliveryMethod(deliveryType); // 配送方式 0、送货上门 1、门店自提
             if(null != deliveryType && deliveryType==1) // 门店自提
@@ -1275,6 +1239,45 @@ public class TdOrderController extends AbstractPaytypeController{
             tdOrder.setPostPrice(postPrice); // 邮费
             tdOrder.setTrainService(servicePrice); // 平台服务费
             tdOrder.setAliPrice(aliPrice); // 第三方使用费
+            
+            // 支付方式
+            if (null != payTypeId && payTypeId !=0) { // 平台付
+                TdPayType payType = tdPayTypeService.findOne(payTypeId);
+
+                // 支付类型
+                payTypeFee = payType.getFee();
+                tdOrder.setPayTypeId(payType.getId());
+                tdOrder.setPayTypeTitle(payType.getTitle());
+                tdOrder.setPayTypeFee(payTypeFee);
+                tdOrder.setIsOnlinePay(payType.getIsOnlinePay());
+            }
+            else if(payTypeId ==0)// 余额付
+            {
+            	user.setVirtualMoney(user.getVirtualMoney()-totalPrice); // 虚拟账号扣除
+            	tdUserService.save(user);
+            	tdOrder.setStatusId(3L);
+            	
+            	// 添加会员虚拟账户金额记录
+            	TdPayRecord record = new TdPayRecord();
+            	
+            	record.setAliPrice(aliPrice);
+            	record.setPostPrice(postPrice);
+            	record.setRealPrice(totalPrice);
+            	record.setTotalGoodsPrice(totalGoodsPrice);
+            	record.setServicePrice(servicePrice);
+            	record.setProvice(totalPrice);
+            	record.setOrderNumber(tdOrder.getOrderNumber());
+            	record.setCreateTime(new Date());
+            	record.setUsername(username);
+            	record.setType(2L);
+            	record.setCont("订单支付");
+            	record.setDistributorTitle(distributor.getTitle());
+            	record.setStatusCode(1);
+            	
+            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+            	
+            	addVir(tdOrder);// 商家账户记录
+            }
             
 			tdDistributorService.save(distributor);
             
@@ -1960,7 +1963,7 @@ public class TdOrderController extends AbstractPaytypeController{
         price += tdOrder.getTotalPrice();
         postPrice += tdOrder.getPostPrice();
         aliPrice += tdOrder.getAliPrice();
-        servicePrice +=tdOrder.getTotalPrice();
+        servicePrice +=tdOrder.getTrainService();
         totalGoodsPrice += tdOrder.getTotalGoodsPrice();
         
         
@@ -1968,7 +1971,7 @@ public class TdOrderController extends AbstractPaytypeController{
         if(0==tdOrder.getTypeId())
         {
         	
-        	TdDistributor distributor = tdDistributorService.findOne(tdOrder.getId());
+        	TdDistributor distributor = tdDistributorService.findOne(tdOrder.getShopId());
         	if(null != distributor)
         	{	
         		// 超市普通销售单实际收入： 交易总额-第三方使用费-平台服务费=实际收入

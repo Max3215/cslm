@@ -224,7 +224,7 @@ $(document).ready(function(){
 	<!--main-->
 	<section class="main">
 		<div class="index_tj">
-			<h3>今日推荐</h3>
+			<h3>首页推荐</h3>
 			<div class="left_pic">
 			    <#if new_goods_ad_list?? && new_goods_ad_list?size gt 0 >
         			<a href="${new_goods_ad_list[0].linkUri!''}">

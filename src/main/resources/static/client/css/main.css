@@ -68,7 +68,7 @@
 
 
 /* 右边楼层浮动*/
-.float_box{width: 24px; background: #39bee9; z-index: 80; position: fixed; _position: absolute; right: 0px; top: 0%; height: auto; padding: 0 3px; height: 100%; padding-top: 5%;} 
+.float_box{width: 24px; background: #39bee9; z-index: 80; position: fixed; _position: absolute; right: 0px; top: 20%; height: auto; padding: 0 3px; } 
 .float_box .user{display: block;width: 17px;height: 21px;background: url(../images/user.png) no-repeat;margin: 30px 3px 0px 3px;border-bottom:1px solid #75d2f0;padding-bottom: 20px;}
 .float_box .car{display: block;width: 100%;height: 90px;background: url(../images/car02.png) no-repeat center top;margin-top: 30px;color:#fff;padding-top:21px;text-align: center;margin-bottom: 70px;}
 .float_box .car span{display: block;width: 22px;height: 22px;border-radius: 50%;-webkit-border-radius:50%;-moz-border-radius:50%;-o-border-radius:50%;background: #ff5b7d;text-align: center;line-height: 20px;color:#fff;position: absolute;left:1px;bottom:0;}
