@@ -106,7 +106,7 @@ DD_belatedPNG.fix('.,img,background');
             <a href="/user/point/list"><img src="/client/images/mymember/buy05.png" /><p>积分：<span>${user.totalPoints!'0'}</span></p></a>
           </th>
           <th rowspan="2" class="mymember_fen">
-            <a href="/user/point/list"><img src="/client/images/mymember/buy05.png" /><p>积分：<span>0.000${user.totalPoints!'0'}</span></p></a>
+            <a href="/user/virtualMoney/list"><img src="/client/images/mymember/buy05.png" /><p>余额：<span><#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span></p></a>
           </th>
         </tr>
         <tr>

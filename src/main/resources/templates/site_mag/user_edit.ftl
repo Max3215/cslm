@@ -54,9 +54,35 @@ $(function () {
             $(this).parent().addClass("selected");
         }
     });
-    
+    $("#virtualMoneyEdit").click(function () { virtualMoneyEdit(); }); 
     $("#btnEditRemark").click(function () { EditOrderRemark(); });    //修改粮草备注 
 });   
+
+
+// 充值
+    function virtualMoneyEdit() {
+        var dialog = $.dialog({
+            title: '输入充值金额：',
+            content: '<input id="orderRemark" name="txtOrderRemark"  class="input"></input>',
+            min: false,
+            max: false,
+            lock: true,
+            ok: function () {
+                var mon = $("#orderRemark", parent.document).val();
+                var num = /^\d+(\.\d{2})?$/;
+                if (mon == "" || !num.test(mon)) {
+                    $.dialog.alert('对不起，输入的金额有误！', function () { }, dialog);
+                    return false;
+                }
+                var userId = eval(document.getElementById("userId")).value;
+                var postData = { "userId": userId,  "virtualMoney": mon, "type":"virtualMoney" };
+                //发送AJAX请求
+                sendAjaxUrl(dialog, postData, "/Verwalter/user/param/edit");
+                return false;
+            },
+            cancel: true
+        });
+    }
 
    //修改粮草备注
         function EditOrderRemark() {
@@ -199,6 +225,10 @@ $(function () {
   <dl>
     <dt>手机号码</dt>
     <dd><input name="mobile" type="text" value="<#if user??>${user.mobile!""}</#if>" class="input normal" ignore="ignore" datatype="m" sucmsg=" " ></dd>
+  </dl>
+  <dl>
+    <dt>用户余额</dt>
+    <dd><input type="text" value="<#if user?? && user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if>" <#if user?? && user.virtualMoney??>readonly="readonly"</#if> class="input normal" sucmsg=" " ><#if user??>&emsp;&emsp;&emsp;<a id="virtualMoneyEdit" style="color:red">充值</a></#if></dd>
   </dl>
   <dl>
     <dt>用户积分</dt>

@@ -12,7 +12,7 @@
 <!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
-<script type="text/javascript" src="/client/js/common.js"></script>>
+<script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -45,7 +45,7 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
-    !--  顶部  -->
+    <!--  顶部  -->
     <#include "/client/common_header.ftl" />
 
 <div class="myclear"></div>
@@ -74,7 +74,7 @@ DD_belatedPNG.fix('.,img,background');
             <tr class="mymember_infotab_tit01">     
                   <th>订单编号</th>
                   <th>交易时间</th>
-                  <th>总金额</th>
+                  <th>积分</th>
                   <th>说明</th>
             </tr>     
             <#if point_page?? && point_page.content??>

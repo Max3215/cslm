@@ -477,13 +477,16 @@ public class TdLoginController {
 
 	@RequestMapping("/logout")
 	public String logOut(HttpServletRequest request) {
-		request.getSession().invalidate();
+//		request.getSession().invalidate();
+		request.getSession().removeAttribute("username");
 		return "redirect:/";
 	}
 	
 	@RequestMapping("/disout")
 	public String distributorOut(HttpServletRequest request) {
-		request.getSession().invalidate();
+//		request.getSession().invalidate();
+		request.getSession().removeAttribute("DISTRIBUTOR_ID");
+		request.getSession().removeAttribute("distributorTitle");
 		return "redirect:/";
 	}
 

@@ -65,7 +65,7 @@ $(function () {
 // 充值
     function EditOrderRemark() {
         var dialog = $.dialog({
-            title: '输入充值记录：',
+            title: '输入充值金额：',
             content: '<input id="orderRemark" name="txtOrderRemark"  class="input"></input>',
             min: false,
             max: false,

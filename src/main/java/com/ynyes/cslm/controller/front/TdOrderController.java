@@ -1191,6 +1191,25 @@ public class TdOrderController extends AbstractPaytypeController{
             	user.setVirtualMoney(user.getVirtualMoney()-totalPrice); // 虚拟账号扣除
             	tdUserService.save(user);
             	tdOrder.setStatusId(3L);
+            	
+            	// 添加会员虚拟账户金额记录
+            	TdPayRecord record = new TdPayRecord();
+            	
+            	record.setAliPrice(aliPrice);
+            	record.setPostPrice(postPrice);
+            	record.setRealPrice(totalPrice);
+            	record.setTotalGoodsPrice(totalGoodsPrice);
+            	record.setServicePrice(servicePrice);
+            	record.setProvice(totalPrice);
+            	record.setOrderNumber(tdOrder.getOrderNumber());
+            	record.setCreateTime(new Date());
+            	record.setUsername(username);
+            	record.setType(2L);
+            	record.setCont("订单支付");
+            	record.setDistributorTitle(distributor.getTitle());
+            	record.setStatusCode(1);
+            	
+            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
             }
             
             tdOrder.setDeliveryMethod(deliveryType); // 配送方式 0、送货上门 1、门店自提

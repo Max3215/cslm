@@ -1,8 +1,12 @@
 package com.ynyes.cslm.controller.management;
 
+import static org.apache.commons.lang3.StringUtils.leftPad;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDemand;
+import com.ynyes.cslm.entity.TdPayRecord;
+import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserComment;
 import com.ynyes.cslm.entity.TdUserConsult;
@@ -27,6 +33,8 @@ import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdManagerLogService;
+import com.ynyes.cslm.service.TdPayRecordService;
+import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
 import com.ynyes.cslm.service.TdUserCollectService;
 import com.ynyes.cslm.service.TdUserCommentService;
@@ -84,6 +92,12 @@ public class TdManagerUserController {
     
     @Autowired
     TdManagerLogService tdManagerLogService;
+    
+    @Autowired
+    TdPayRecordService tdPayRecordService;
+    
+    @Autowired
+    TdSettingService tdSettingService;
     
     @RequestMapping(value="/check", method = RequestMethod.POST)
     @ResponseBody
@@ -238,6 +252,7 @@ public class TdManagerUserController {
                         Long totalPoints,
                         String data, 
                         String type,
+                        Double virtualMoney,
                         ModelMap map,
                         HttpServletRequest req){
         
@@ -270,6 +285,78 @@ public class TdManagerUserController {
         			return res;
         		}
     		}
+        	else if(type.equalsIgnoreCase("virtualMoney")) // 充值
+        	{
+        		if(null != virtualMoney)
+        		{
+        			if(null == tdUser.getVirtualMoney())
+        			{
+        				tdUser.setVirtualMoney(virtualMoney);
+        			}else{
+        				tdUser.setVirtualMoney(tdUser.getVirtualMoney()+virtualMoney);
+        			}
+        			tdUserService.save(tdUser);
+        			
+        			Date current = new Date();
+        	        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        	        String curStr = sdf.format(current);
+        	        Random random = new Random();
+        	        
+        			// 添加会员虚拟账户金额记录
+                	TdPayRecord record = new TdPayRecord();
+                	
+                	record.setAliPrice(0.0);
+                	record.setPostPrice(0.0);
+                	record.setRealPrice(virtualMoney);
+                	record.setTotalGoodsPrice(virtualMoney);
+                	record.setServicePrice(0.0);
+                	record.setProvice(virtualMoney);
+                	
+                	String number = "CZ" + curStr
+                        	+ leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+                        record.setOrderNumber(number);
+                        
+                	record.setCreateTime(new Date());
+                	record.setUsername(tdUser.getUsername());
+                	record.setType(2L);
+                	record.setCont("平台充值");
+                	record.setStatusCode(1);
+                	
+                	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+                	
+                	TdSetting setting = tdSettingService.findTopBy();
+             		
+             		if( null != setting.getVirtualMoney())
+                    {
+                    	setting.setVirtualMoney(setting.getVirtualMoney()-virtualMoney);
+                    }else{
+                    	setting.setVirtualMoney(0-virtualMoney);
+                    }
+                    tdSettingService.save(setting); // 更新平台虚拟余额
+                    
+                 // 记录平台支出
+                    record = new TdPayRecord();
+                    record.setCont("手动充值支出");
+                    record.setCreateTime(new Date());
+                    record.setUsername(tdUser.getUsername());
+                    record.setOrderNumber(number);
+                    record.setStatusCode(1);
+                    record.setType(1L); // 类型 区分平台记录
+                    
+                    record.setProvice(virtualMoney); // 订单总额
+                    record.setPostPrice(0.0); // 邮费
+                    record.setAliPrice(0.0);	// 第三方费
+                    record.setServicePrice(0.0);	// 平台费
+                    record.setTotalGoodsPrice(virtualMoney); // 商品总价
+                    // 
+                    record.setRealPrice(virtualMoney);
+                    
+                    tdPayRecordService.save(record);
+                    
+                    res.put("code", 0);
+        			return res;
+        		}
+        	}
 		}
         
         

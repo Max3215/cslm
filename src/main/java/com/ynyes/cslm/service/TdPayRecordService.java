@@ -104,14 +104,14 @@ public class TdPayRecordService {
     	return repository.findByProviderIdAndContContainingOrderByCreateTimeDesc(proId, cont, pageRequest);
     }
     
-    public Page<TdPayRecord> findByUsername(String username,int page,int size)
+    public Page<TdPayRecord> findByUsername(String username,Long type,int page,int size)
     {
-    	if(null == username)
+    	if(null == username || null == type)
     	{
     		return null ;
     	}
     	PageRequest pageRequest = new PageRequest(page, size);
-    	return repository.findByUsernameOrderByCreateTimeDesc(username, pageRequest);
+    	return repository.findByUsernameAndTypeOrderByCreateTimeDesc(username,type, pageRequest);
     }
     
     public Page<TdPayRecord> findByType(Long type,int page,int size)

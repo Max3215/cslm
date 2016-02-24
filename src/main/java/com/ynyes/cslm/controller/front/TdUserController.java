@@ -1052,17 +1052,39 @@ public class TdUserController{
 
         map.addAttribute("user", tdUser);
 
-        Page<TdUserPoint> pointPage = null;
-
-        pointPage = tdUserPointService.findByUsername(username, page,
-                ClientConstant.pageSize);
-
-        map.addAttribute("point_page", pointPage);
+        map.addAttribute("point_page", tdUserPointService.findByUsername(username, page,
+                ClientConstant.pageSize));
 
         return "/client/user_point_list";
     }
     
+    /**
+     * 虚拟账户记录
+     * @author Max
+     * 
+     */
+    @RequestMapping(value="/user/virtualMoney/list")
+    public String virtualMoneyLIst(Integer page,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String) req.getSession().getAttribute("username");
 
+        if (null == username) {
+            return "redirect:/login";
+        }
+
+        tdCommonService.setHeader(map, req);
+
+        if (null == page) {
+            page = 0;
+        }
+        
+        map.addAttribute("user", tdUserService.findByUsernameAndIsEnabled(username));
+        map.addAttribute("virtualPage", tdPayRecordService.findByUsername(username, 2L, page, ClientConstant.pageSize));
+        
+    	return "/client/user_virtual_list";
+    }
+    
+    
     @RequestMapping(value = "/user/return/{orderId}")
     public String userReturn(HttpServletRequest req,
             @PathVariable Long orderId, Long id, // 商品ID
@@ -1970,7 +1992,7 @@ public class TdUserController{
     	
     	map.addAttribute("user",tdUserService.findByUsername(username));
     	map.addAttribute("pay_record_page",
-    					tdPayRecordService.findByUsername(username, page, 5));
+    					tdPayRecordService.findByUsername(username, 2L, page, 5));
     	
     	return "/client/user_account";
     }

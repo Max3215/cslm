@@ -25,7 +25,7 @@ public interface TdPayRecordRepo extends
     
     Page<TdPayRecord> findByProviderIdAndContContainingOrderByCreateTimeDesc(Long proId,String cont,Pageable page);
     
-    Page<TdPayRecord> findByUsernameOrderByCreateTimeDesc(String username,Pageable page);
+    Page<TdPayRecord> findByUsernameAndTypeOrderByCreateTimeDesc(String username,Long type,Pageable page);
     
     Page<TdPayRecord> findByType(Long type,Pageable page);
 
