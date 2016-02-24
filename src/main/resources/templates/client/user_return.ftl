@@ -28,7 +28,6 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
     
   $("#nav_down li").hover(function(){
     $(this).find(".nav_show").fadeIn(10);
