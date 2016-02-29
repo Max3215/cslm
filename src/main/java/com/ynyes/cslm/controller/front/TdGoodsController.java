@@ -120,7 +120,7 @@ public class TdGoodsController {
         	
     		map.addAttribute("distributor", distributor);
         	 //成交数
-            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, distributorGoods.getGoodsId(),0,5));
+            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, dgId,0,10));
             
             map.addAttribute("dis_goods", tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,distributorGoods.getGoodsId(), true));
             
@@ -138,7 +138,7 @@ public class TdGoodsController {
     		
     		map.addAttribute("distributor", distributor);
     		 //成交数
-            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, distributorGoods.getGoodsId(),0,5));
+            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, dgId,0,10));
             
             map.addAttribute("dis_goods", tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributorId,distributorGoods.getGoodsId(), true));
             

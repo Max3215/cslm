@@ -16,6 +16,12 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+
+<!--  后台文件  -->
+<link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
+<script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
+<script type="text/javascript" src="/mag/js/layout.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function(){
     $(".click_a").click(function(){
@@ -36,6 +42,54 @@ $(document).ready(function(){
     })
 })
 </script>
+
+<script type="text/javascript">
+    //取消订单
+    function orderCancel(id) {
+        var dialog = $.dialog.confirm('操作提示信息：<br />确定要取消该订单吗？', function () {
+           // var orderNumber = $.trim($("#spanOrderNumber").text());
+            var postData = { "orderId": id, "data": "orderCancel" };
+            //发送AJAX请求
+            sendAjaxUrl(dialog, postData, "/user/order/param");
+            return false;
+        });
+    }
+    
+    function orderService(id) {
+        var dialog = $.dialog.confirm('操作提示信息：<br />确认已经收到商品？', function () {
+           // var orderNumber = $.trim($("#spanOrderNumber").text());
+            var postData = { "orderId": id, "data": "orderService" };
+            //发送AJAX请求
+            sendAjaxUrl(dialog, postData, "/user/order/param");
+            return false;
+        });
+    }
+    
+    
+    
+    
+  //发送AJAX请求
+        function sendAjaxUrl(winObj, postData, sendUrl) {
+            $.ajax({
+                type: "post",
+                url: sendUrl,
+                data: postData,
+                dataType: "json",
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
+                },
+                success: function (data) {
+                
+                    if (data.code == 0) {
+                        winObj.close();
+                        $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
+                    } else {
+                        $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
+                    }
+                }
+            });
+        }  
+</script>   
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
 <![endif]-->
@@ -59,10 +113,6 @@ DD_belatedPNG.fix('.,img,background');
   <#include "/client/common_user_menu.ftl" />
   
   <div class="mymember_mainbox">
-    <div class="mymember_info mymember_info03">
-      <h3>全部订单<a class="a002" href="#">在线客服 >> </a></h3>
-
-    </div><!--mymember_info END-->
     <form name="form1" action="/user/order/list/${status_id}" method="POST">
         <script type="text/javascript">
             var theForm = document.forms['form1'];
@@ -138,12 +188,14 @@ DD_belatedPNG.fix('.,img,background');
                             <#if order.statusId?? && order.statusId == 2>
                                 <p>待付款</p>
                                 <a href="/order/dopay/${order.id?c}">去支付</a>
+                                <a href="javascript:;" id="orderCancel" onclick="orderCancel(${order.id?c})">取消订单</a>
                             </#if>
                             <#if order.statusId?? && order.statusId == 3>
                                 <p>待发货</p>
                              </#if>
                             <#if order.statusId?? && order.statusId == 4>
                                 <p>待收货</p>
+                                <a href="javascript:;" id="orderReturn" onclick="orderService(${order.id?c})">确认收货</a>
                             </#if>
                             <#if order.statusId?? && order.statusId == 5>
                                 <p>待评价</p>
@@ -200,13 +252,13 @@ DD_belatedPNG.fix('.,img,background');
         <ul id="mymember_likelist">
                 <li>
             <#if hot_list?? && hot_list?size gt 0> 
-                <#list hot_list as goods> 
-                    <#if goods_index < 4 >
-                      <a href="/goods/${goods.id?c}">
-                        <img src="${goods.coverImageUri!''}" width="208px" height="208px;"/>
-                        <p>${goods.title!''}</p>
-                        <p>￥<span>${goods.marketPrice?string('0.00')}</span></p>
-                        <i>已售 ${goods.soldNumber!'0'} 件</i>
+                <#list hot_list.content as item> 
+                    <#if item_index < 4 >
+                      <a  href="/goods/${item.id?c}" target="_blank">
+                           <img src="${item.coverImageUri!''}"  width="208px" height="208px;"/>
+                           <p>${item.goodsTitle!''}</p>
+                           <b>￥<span>${item.goodsPrice?string('0.00')}</span></b>
+                            <i>已售 ${item.soldNumber!'0'} 件</i>
                       </a>
                     </#if>
                 </#list>

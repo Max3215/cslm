@@ -51,7 +51,7 @@ function orderService() {
         //发送AJAX请求
         $.ajax({
             type : "post",
-            data : {"orderId":oid},
+            data : {"orderId":oid,"data":"orderService"},
             url : "/user/order/param",
             dataType : "json",
              error: function (XMLHttpRequest, textStatus, errorThrown) {

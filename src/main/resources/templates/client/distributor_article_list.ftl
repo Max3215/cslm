@@ -53,12 +53,12 @@ DD_belatedPNG.fix('.,img,background');
           </div>
           <table>
             <tr>
-              <th style=" display:inline-block;  width:23%;">文章标题</th>
-              <th style="display:inline-block; width:12%;">更新时间</th>
-              <th style="display:inline-block; width:30%;">文章摘要</th>
-              <th style="display:inline-block; width:8%;">状态</th>
-              <th style="display:inline-block; width:8%;">浏览次数</th>
-              <th style="display:inline-block; width:12%;">操作</th>
+              <th style=" width:23%;">文章标题</th>
+              <th style=" width:12%;">更新时间</th>
+              <th style=" width:30%;">文章摘要</th>
+              <th style=" width:8%;">状态</th>
+              <th style=" width:8%;">浏览次数</th>
+              <th style=" width:12%;">操作</th>
             </tr>
             <style type="text/css">
                 .text_hide{width:23%; display:inline-block;}
@@ -74,10 +74,10 @@ DD_belatedPNG.fix('.,img,background');
             <#list news_page.content as info>
                 <tr>
                 
-                  <td  class="text_hide"><a title="${info.title!''}" href="/distributor/info/edit?id=${info.id?c}">${info.title!''}</a></td>
-                  <td style="display:inline-block; width:12%;"><#if info.updateTime??>${info.updateTime?string('yyyy-MM-dd')}</#if></td>
-                  <td class="text_hide" style="display:inline-block; width:30%;"><#if info.brief??>${info.brief!''}</#if> &nbsp;</td>
-                  <td style="display:inline-block; width:8%;">
+                  <td  style=" width:23%;"><a title="${info.title!''}" href="/distributor/info/edit?id=${info.id?c}">${info.title!''}</a></td>
+                  <td style=" width:12%;"><#if info.updateTime??>${info.updateTime?string('yyyy-MM-dd')}</#if></td>
+                  <td  style=" width:30%;"><#if info.brief??>${info.brief!''}</#if> &nbsp;</td>
+                  <td style=" width:8%;">
                         <#if info.statusId??>
                         <#switch info.statusId>
                             <#case 0>正常<#break>
@@ -86,8 +86,8 @@ DD_belatedPNG.fix('.,img,background');
                         </#switch>
                         </#if>
                   </td>
-                  <td style="display:inline-block; width:8%;">${info.viewCount!'0'}</td>
-                  <td style="display:inline-block; width:12%;">
+                  <td style=" width:8%;">${info.viewCount!'0'}</td>
+                  <td style=" width:12%;">
                         <a href="/distributor/info/edit?id=${info.id?c}">修改</a>&nbsp;/&nbsp;
                         <a href ="/distributor/info/delete?id=${info.id?c}">删除</a>
                   </td>

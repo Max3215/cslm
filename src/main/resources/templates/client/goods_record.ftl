@@ -15,7 +15,7 @@
                         <#if item.orderGoodsList?? && item.orderGoodsList?size gt 0>
                             <#list item.orderGoodsList as og>
                                 <#if goods??>
-                                    <#if og.goodsId?c == goods.id?c>
+                                    <#if og.goodsId?c == dis_goods.id?c>
                                         <tr>
                                             <td>${item.username!''}</td>
                                             <td>${og.selectOneValue!''}</td>

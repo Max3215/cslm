@@ -84,6 +84,10 @@ public class TdDistributor {
     @Column
     private String imageUri;
     
+    // 证件地址
+    @Column
+    private String fileUri;
+    
     // 轮播展示图片，多张图片以,隔开
     @Column
     private String showPictures;
@@ -404,6 +408,14 @@ public class TdDistributor {
 
 	public void setShippingList(List<TdShippingAddress> shippingList) {
 		this.shippingList = shippingList;
+	}
+
+	public String getFileUri() {
+		return fileUri;
+	}
+
+	public void setFileUri(String fileUri) {
+		this.fileUri = fileUri;
 	}
 
 	

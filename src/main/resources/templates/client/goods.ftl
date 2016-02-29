@@ -319,7 +319,7 @@ function byNow(dId){
                         <#list dis_hot_list as hot_good> 
                             <#if hot_good_index lt 6>
                                 <li>
-                                    <a href="/goods/${hot_good.goodsId?c}" title="${hot_good.goodsTitle!''}" target="_blank">
+                                    <a href="/goods/${hot_good.id?c}" title="${hot_good.goodsTitle!''}" target="_blank">
                                         <img src="${hot_good.coverImageUri!''}">
                                         <p>${hot_good.goodsTitle!''}</p>
                                     </a>

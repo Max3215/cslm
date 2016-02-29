@@ -94,8 +94,8 @@ DD_belatedPNG.fix('.,img,background');
                     </td>
                   </tr>
                   <tr>
-                    <th>商品价格：</th>
-                    <td><input type="text" class="text lit" datatype="n"/>&emsp;元</td>
+                    <th>商品价格：￥</th>
+                    <td><input type="text" class="text lit" datatype="n"/>&emsp;</td>
                   </tr>
                   <tr>
                     <th>商品数量：</th>

@@ -184,7 +184,7 @@ $(document).ready(function(){
 				<tr>
 				    <th></th>
 				    <td>
-				        <input id="txtImgUrl" style="display:none" name="imageUri" type="text" datatype="*" value="<#if diy_site?? && diy_site.imageUri??>${diy_site.imageUri!""}</#if>" class="input normal upload-path">
+				        <input id="txtImgUrl" style="display:none" name="fileUri" type="text" datatype="*" value="<#if diy_site?? && diy_site.fileUri??>${diy_site.fileUri!""}</#if>" class="input normal upload-path">
                         <div class="upload-box upload-img"></div>
                         <div class="photo-list thumb_ImgUrl_show">
                             <ul>

@@ -193,10 +193,27 @@ $(function () {
         <span class="Validform_checktip">*账号余额</span><#if diy_site??>&emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a></#if>
     </dd>
   </dl>
+  <#--
   <dl>
     <dt>店面图片</dt>
     <dd>
         <input id="txtImgUrl" name="imageUri" type="text" datatype="*" value="<#if diy_site?? && diy_site.imageUri??>${diy_site.imageUri!""}</#if>" class="input normal upload-path">
+        <div class="upload-box upload-img"></div>
+        <div class="photo-list thumb_ImgUrl_show">
+            <ul>
+                <li>
+                    <div class="img-box1"></div>
+                </li>
+            </ul>
+        </div>
+        <span class="Validform_checktip"></span>
+    </dd>
+  </dl>
+  -->
+  <dl>
+    <dt>营业执照</dt>
+    <dd>
+        <input id="txtImgUrl" name="fileUri" type="text" datatype="*" value="<#if diy_site?? && diy_site.fileUri??>${diy_site.fileUri!""}</#if>" class="input normal upload-path">
         <div class="upload-box upload-img"></div>
         <div class="photo-list thumb_ImgUrl_show">
             <ul>

@@ -213,9 +213,9 @@ public class TdUserController{
         map.addAttribute("status_id", statusId);
         map.addAttribute("time_id", timeId);
         
-     // 热卖
+        // 热卖
         map.addAttribute("hot_list",
-                tdGoodsService.findTop12ByIsOnSaleTrueOrderBySoldNumberDesc());
+        		tdDistributorGoodsService.findByIsOnSaleTrueByGoodsPriceDesc(0, ClientConstant.pageSize));
         
         //底部广告
         TdAdType adType = tdAdTypeService.findByTitle("个人中心底部广告");
@@ -1943,7 +1943,7 @@ public class TdUserController{
     
     @RequestMapping(value="/user/order/param")
     @ResponseBody
-    public Map<String,Object> orderOaram(Long orderId,HttpServletRequest req,ModelMap map){
+    public Map<String,Object> orderOaram(Long orderId,String data,HttpServletRequest req,ModelMap map){
     	Map<String,Object> res =new HashMap<>();
     	res.put("code", 1);
     	
@@ -1954,16 +1954,27 @@ public class TdUserController{
     		return res;
     	}
     	
-    	if(null != orderId)
+    	if(null != orderId && null !=data)
     	{
     		TdOrder order = tdOrderService.findOne(orderId);
-    		if(order.getStatusId().equals(4L)){
-    			order.setStatusId(5L);
-    			order.setReceiveTime(new Date());
+    		if(data.equalsIgnoreCase("orderCancel"))
+    		{
+    			if(order.getStatusId().equals(2L))
+    			{
+    				order.setStatusId(7L);
+    				order.setCancelTime(new Date());
+    			}
+    		}
+    		else if(data.equalsIgnoreCase("orderService"))
+    		{
+    			if(order.getStatusId().equals(4L)){
+    				order.setStatusId(5L);
+    				order.setReceiveTime(new Date());
+    			}
     		}
     		tdOrderService.save(order);
     		res.put("code",0);
-    		res.put("message", "已确认收货！");
+    		res.put("message", "操作成功");
     		
     		return res;
     	}
