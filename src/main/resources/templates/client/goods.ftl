@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -85,9 +85,6 @@ function cartInit(dId){
                 alert(data.msg);
                 return;
             }
-            <!--
-            window.open("/cart/init?id="+dId+"&quantity="+quantity);
-            -->
             window.location.href="/cart/init?id="+dId+"&quantity="+quantity;
         }
     });
@@ -244,14 +241,14 @@ function byNow(dId){
 					<#if dis_goods??>
 					<span>数量：</span>
 					<a id="id-minus" href="javascript:minusNum();">-</a>
-					<input class="text" type="text" id="quantity" value="1">
+					<input class="text" type="text" id="quantity" value="1" />
 					<a id="id-plus" href="javascript:addNum();">+</a>
-					<label>库存${dis_goods.leftNumber!'0'}</lable>
+					<label>库存${dis_goods.leftNumber!'0'}</label>
 					<#else>
 					<lable sytle="color:red">*当前超市没有此商品，您可以选择其他超市继续购买</label>
 					</#if>
 					<div class="clear"></div>
-				</p>
+				
                 <p>&nbsp;  </p>
                 <p class="num"><#if distributor.postPrice??>本店（${distributor.title!''}）配送费<span style="color:#ff5b7d">￥${distributor.postPrice?string('0.00')}</span>&nbsp;</#if>
                     <#if distributor.maxPostPrice??>满<span style="color:#ff5b7d">￥${distributor.maxPostPrice?string('0.00')}</span>&nbsp;包邮</#if></p>

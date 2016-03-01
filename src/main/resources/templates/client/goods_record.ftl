@@ -45,7 +45,7 @@
             <#list 1..bargain_record_page.totalPages as page> 
                 <#if page <= 3 || (bargain_record_page.totalPages-page) < 3 || (bargain_record_page.number+1-page)?abs<3 >
                     <#if page == bargain_record_page.number+1>
-                        <a class="sel" href="javascript:;"">${page}</a>
+                        <a class="sel" href="javascript:;">${page}</a>
                     <#else>
                         <a href="javascript:getBargainRecord(${goodsId}, ${page-1});">${page}</a>
                     </#if>

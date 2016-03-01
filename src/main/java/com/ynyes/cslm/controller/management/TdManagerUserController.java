@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDemand;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
@@ -32,6 +33,7 @@ import com.ynyes.cslm.entity.TdUserLevel;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdDemandService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdSettingService;
@@ -98,6 +100,9 @@ public class TdManagerUserController {
     
     @Autowired
     TdSettingService tdSettingService;
+    
+    @Autowired
+    TdDistributorService tdDistributorService;
     
     @RequestMapping(value="/check", method = RequestMethod.POST)
     @ResponseBody
@@ -1148,8 +1153,67 @@ public class TdManagerUserController {
                     
                     if (null != e)
                     {
-                        e.setStatusId(1L);
-                        tdUserReturnService.save(e);
+                    	TdDistributor distributor = tdDistributorService.findOne(e.getShopId());
+                        
+                        if(null != distributor)
+                        {
+                        	if(null != distributor.getVirtualMoney()&&  distributor.getVirtualMoney() > e.getGoodsPrice())
+                        	{
+                        		distributor.setVirtualMoney(distributor.getVirtualMoney()-e.getGoodsPrice());
+                        		tdDistributorService.save(distributor);
+                        		
+                        		e.setStatusId(1L);
+                        		tdUserReturnService.save(e);
+                        		
+                        		TdUser user = tdUserService.findByUsername(e.getUsername());
+                                if(null != user)
+                                {
+                                	if(null != user.getVirtualMoney())
+                                	{
+                                		user.setVirtualMoney(user.getVirtualMoney()+e.getGoodsPrice());
+                                	}else{
+                                		user.setVirtualMoney(e.getGoodsPrice());
+                                	}
+                                }
+                                tdUserService.save(user);
+                                
+                                
+                             // 添加会员虚拟账户金额记录
+                            	TdPayRecord record = new TdPayRecord();
+                            	
+                            	record.setAliPrice(0.0);
+                            	record.setPostPrice(0.0);
+                            	record.setRealPrice(e.getGoodsPrice());
+                            	record.setTotalGoodsPrice(e.getGoodsPrice());
+                            	record.setServicePrice(0.0);
+                            	record.setProvice(e.getGoodsPrice());
+                            	record.setOrderNumber(e.getOrderNumber());
+                            	record.setCreateTime(new Date());
+                            	record.setUsername(user.getUsername());
+                            	record.setType(2L);
+                            	record.setCont("退货返款");
+                            	record.setDistributorTitle(e.getShopTitle());
+                            	record.setStatusCode(1);
+                            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+                            	
+                            	record = new TdPayRecord();
+                            	
+                            	record.setAliPrice(0.0);
+                            	record.setPostPrice(0.0);
+                            	record.setRealPrice(e.getGoodsPrice());
+                            	record.setTotalGoodsPrice(e.getGoodsPrice());
+                            	record.setServicePrice(0.0);
+                            	record.setProvice(e.getGoodsPrice());
+                            	record.setOrderNumber(e.getOrderNumber());
+                            	record.setCreateTime(new Date());
+                            	record.setCont("用户退货返款");
+                            	record.setDistributorId(e.getShopId());
+                            	record.setDistributorTitle(e.getShopTitle());
+                            	record.setStatusCode(1);
+                            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+                        		
+                        	}
+                        }
                     }
                 }
             }

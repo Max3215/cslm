@@ -29,7 +29,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedWebappClassLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -56,7 +55,6 @@ import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
-import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
@@ -3337,19 +3335,81 @@ public class TdDistributorController {
             res.put("message", "请重新登录！");
             return res;
         }
-		if(null != id)
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		
+		if(null != distributor)
 		{
-			TdUserReturn tdReturn = tdUserReturnService.findOne(id);
-			if(null != tdReturn && tdReturn.getStatusId()==0)
+			if(null != id)
 			{
-				tdReturn.setStatusId(1L);
-				tdUserReturnService.save(tdReturn);
-				res.put("message", "已处理此次退货！");
-				res.put("code", 0);
-				return res;
+				TdUserReturn e = tdUserReturnService.findOne(id);
+				if(null != e && e.getStatusId()==0)
+				{
+					if(null != distributor.getVirtualMoney()&&  distributor.getVirtualMoney() > e.getGoodsPrice())
+					{
+						distributor.setVirtualMoney(distributor.getVirtualMoney()-e.getGoodsPrice());
+		        		tdDistributorService.save(distributor);
+		        		
+		        		e.setStatusId(1L);
+		        		tdUserReturnService.save(e);
+		        		
+		        		TdUser user = tdUserService.findByUsername(e.getUsername());
+		                if(null != user)
+		                {
+		                	if(null != user.getVirtualMoney())
+		                	{
+		                		user.setVirtualMoney(user.getVirtualMoney()+e.getGoodsPrice());
+		                	}else{
+		                		user.setVirtualMoney(e.getGoodsPrice());
+		                	}
+		                }
+		                tdUserService.save(user);
+		                
+		                
+		             // 添加会员虚拟账户金额记录
+		            	TdPayRecord record = new TdPayRecord();
+		            	
+		            	record.setAliPrice(0.0);
+		            	record.setPostPrice(0.0);
+		            	record.setRealPrice(e.getGoodsPrice());
+		            	record.setTotalGoodsPrice(e.getGoodsPrice());
+		            	record.setServicePrice(0.0);
+		            	record.setProvice(e.getGoodsPrice());
+		            	record.setOrderNumber(e.getOrderNumber());
+		            	record.setCreateTime(new Date());
+		            	record.setUsername(user.getUsername());
+		            	record.setType(2L);
+		            	record.setCont("退货返款");
+		            	record.setDistributorTitle(e.getShopTitle());
+		            	record.setStatusCode(1);
+		            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+		            	
+		            	record = new TdPayRecord();
+		            	
+		            	record.setAliPrice(0.0);
+		            	record.setPostPrice(0.0);
+		            	record.setRealPrice(e.getGoodsPrice());
+		            	record.setTotalGoodsPrice(e.getGoodsPrice());
+		            	record.setServicePrice(0.0);
+		            	record.setProvice(e.getGoodsPrice());
+		            	record.setOrderNumber(e.getOrderNumber());
+		            	record.setCreateTime(new Date());
+		            	record.setCont("用户退货返款");
+		            	record.setDistributorId(e.getShopId());
+		            	record.setDistributorTitle(e.getShopTitle());
+		            	record.setStatusCode(1);
+		            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+		        		
+		            	res.put("message", "已处理此次退货！");
+		            	res.put("code", 0);
+		            	return res;
+					}else{
+						res.put("message", "账户余额不足");
+						return res;
+					}
+					
+				}
 			}
 		}
-		
 		res.put("message", "参数错误！");
     	return res;
     }
