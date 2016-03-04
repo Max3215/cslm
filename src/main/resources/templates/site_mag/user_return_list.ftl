@@ -76,14 +76,13 @@ var theForm = document.forms['form1'];
   <tr class="odd_bg">
     <th width="8%">选择</th>
     <th align="center">用户名</th>
-    <th align="center" width="10%">联系电话</th>
+    <th align="center" width="8%">联系电话</th>
     <th align="center" width="6%">订单号</th>
-    <th align="center" width="5%">处理商</th>
     <th align="center" width="12%">退换商品</th>
     <th align="center" width="3%">退换数量</th>
     <th width="12%">商品成交价</th>
     <th width="8%">退货/换货</th>
-    <th width="15%">退换货原因</th>
+    <th width="17%">退换货原因</th>
     <th width="6%">退换货时间</th>
     <th width="6%">状态</th>
     <th width="6%">操作</th>
@@ -101,7 +100,6 @@ var theForm = document.forms['form1'];
                 <td align="center">${return.username!""}</td>
                 <td align="center">${return.telephone!""}</td>
                 <td align="center">${return.orderNumber!""}</td>
-                <td align="center">${return.shopTitle!""}</td>
                 <td align="center">${return.goodsTitle!""}</td>
                 <td align="center">${return.returnNumber!""}</td>
                 <td align="center">${return.goodsPrice?string("#.##")}</td>

@@ -1,24 +1,24 @@
 <#if cart_goods_list?? && cart_goods_list?size gt 0>
-    <div class="whitebg">
-      <ul class="car_list main">
+    <section class="cart_list">
+      <ul>
         <#assign allChecked=true >
         <#assign totalGoods=0>
         <#assign totalPrice=0>
         
         <#list cart_goods_list as cg>
             <li>
-              <a class="a1 <#if cg.isSelected>sel<#else><#assign allChecked=false></#if>" href="javascript:toggleSelect(${cg.id?c});">&nbsp;</a>
-              <a class="a2" href="/touch/goods/${cg.goodsId?c}<#if cg.qiang??>?qiang=${cg.qiang!''}</#if>" style="background-image:url(${cg.goodsCoverImageUri!''}); height:64px;">
-                <p>${cg.goodsTitle!''}</p>
-              </a>
-              <div class="car_num">
-                <span class="red">￥${(cg.price*cg.quantity)?string("0.00")}</span>
-                <input type="text" class="text" value="${cg.quantity!''}" />
-                <a class="min" href="javascript:minusNum(${cg.id?c});">-</a>
-                <a class="plus" href="javascript:addNum(${cg.id?c});">+</a>
-              </div>
-              <a class="a3" href="javascript:delCartItem(${cg.id?c});"><img src="/touch/images/delete.png" height="20" /></a>
-              <div class="clear"></div>
+                <a href="javascript:void(0)"  class="choose <#if cg.isSelected?? && cg.isSelected>sel</#if>"></a>
+                <a href="/touch/goods/${cg.distributorGoodsId!''}" class="pic"><img src="${cg.goodsCoverImageUri!''}" /></a>
+                <a href="/touch/goods/${cg.distributorGoodsId!''}" class="name">${cg.goodsTitle!''}</a>
+                <p>价格：￥${cg.price?string("0.00")}</p>
+                <div class="num">
+                  <a href="javascript:minusNum(${cg.id?c})" class="aj">-</a>
+                  <input class="text" type="text" value="${cg.quantity!''}" />
+                  <a href="javascript:addNum(${cg.goodsId});" class="aj">+</a>
+                  <a href="javascript:delCartItem(${cg.id?c});" class="del">删除</a>
+                </div>
+                <div class="clear"></div>
+              </li>
               <#if cg.isSelected>
                 <#assign totalGoods=totalGoods+cg.quantity>
                 <#assign totalPrice=totalPrice+cg.price*cg.quantity>
@@ -26,16 +26,15 @@
             </li>
         </#list>
       </ul>
-    </div>
+    </section>
 
-    <div class="carfoot_bg"></div>
-    <footer class="carfoot">
-      <div class="mainbox">
-        
-        <p><a <#if allChecked>class="a1 sel" href="javascript:toggleAllSelect(1);"<#else>class="a1" href="javascript:toggleAllSelect(0);"</#if>><i></i>全选</a><span>合计：</span><span class="red">￥<#if cart_goods_list??>${totalPrice?string("0.00")}</#if></span></p>
-        <input class="sub" onclick="javascript:goNext(${totalGoods!0});" type="submit" value="去结算（<#if cart_goods_list??>${totalGoods!'0'}</#if>）" />
-      </div>
-    </footer>
+  <div style="height:0.58rem;"></div>
+  <section class="cart_foot">
+    <a href="javascript:void(0)" class="choose" onclick="$(this).toggleClass('sel');">全选</a>
+  <#--  <a href="#" class="del">删除选中的商品</a>-->
+    <p>合计：<span>¥<#if cart_goods_list??>${totalPrice?string("0.00")}</#if></span></p>
+    <a href="javascript:goNext(${totalGoods!0});" class="btn">去结算</a>
+  </section>
 <#else>
     <div>
         <p>购物车空空的哦，去看看心意的商品吧！</p>

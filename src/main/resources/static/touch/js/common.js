@@ -1,3 +1,17 @@
+//页面计算问题
+function setRootSize() {
+	var deviceWidth = document.documentElement.clientWidth; 
+	if(deviceWidth>640){deviceWidth = 640;}  
+	document.documentElement.style.fontSize = deviceWidth / 6.4 + 'px';
+}
+setRootSize();
+window.addEventListener('resize', function () {
+    setRootSize();
+}, false);
+$(document).ready(function(){
+	setRootSize();
+});
+
 //首页banner效果 - 本效果由昆明天度网络IRIS原创制作
 function indexBanner(boxid,sumid,_go,_speed,numid){
 	var startX,startY,endX,endY;//定义判断变量
@@ -19,9 +33,11 @@ function indexBanner(boxid,sumid,_go,_speed,numid){
 	$("#"+boxid).append(_str);
 	var _num = $("#"+numid+" a");
 	
-	var _width = $(window).width();
+	//计算宽度
+    //var _width = $(window).width();
+	var _width = $("#"+boxid).width();
 	var _resize = function(){
-		_width = $(window).width();
+		_width = $("#"+boxid).width();
 		_arr.width(_width);
 		var _move = -_width * _index;
 		_sum.css("left",_move+"px");
@@ -74,11 +90,17 @@ function indexBanner(boxid,sumid,_go,_speed,numid){
 		clearInterval(cartoon);
 		var touch = event.touches[0];
         startX = touch.pageX;
+		startY = touch.pageY;
 		};
 	var touchMove = function(event){
-		event.preventDefault();//这里很重要！！！
 		var touch = event.touches[0];
-        endX = (startX-touch.pageX);
+		var endPos = {x:startX-touch.pageX,y:startY-touch.pageY};
+		var isScrolling = Math.abs(endPos.x)< Math.abs(endPos.y) ? 1:0;//isScrolling为1时，表示纵向滑动，0为横向滑动
+		if(isScrolling === 0){
+			event.preventDefault();//这里很重要！！！
+			endX = (startX-touch.pageX);
+		    //endY = (startY-touch.pageY);
+			}
 		};
 	var touchEnd = function(event){
 		if(endX > 30){
@@ -96,31 +118,7 @@ function indexBanner(boxid,sumid,_go,_speed,numid){
 	
 }//该方法结束
 
-//搜索框部分 - 本效果由昆明天度网络IRIS原创制作
-function searchTextClear(_name,_text,color01,color02){
-	var _obj = $(_name);
-	_obj.val(_text);
-	_obj.css("color",color01);
-	_obj.click(function(){
-		var _now = _obj.val();
-		if(_now == _text){
-			_obj.val("");
-			_obj.css("color",color02);
-		}
-	});
-	_obj.blur(function(){
-		var _now = _obj.val();
-		if(_now == ""){
-			_obj.val(_text);
-			_obj.css("color",color01);
-		}
-	});
-}
 
-function topNavMenu(){
-	$("#topnav_down").slideToggle(200);
-	$("#comnav_bg").slideToggle(200);
-}
 function proMenuDown(obj){
 	var _obj = $(obj);
 	var _box = _obj.parent().find(".pro_menu_part");
@@ -133,27 +131,26 @@ function proMenuDown(obj){
 			}
 }
 
-function screeningHeight(_top){
-	var _obj = $("#screening");
-	var _height = $(window).height() - _top;
-	_obj.height(_height);
-	$(window).resize(function(){
-		_height = $(window).height() - _top;
-		_obj.height(_height);
+
+
+function menuCheckShow(menuid,mname,sumid,sname,_hover,_starnum){
+	var _menu = $("#"+menuid).find(mname);
+	var _arr = $("#"+sumid).find(sname);
+	var _index = _starnum;
+	_menu.eq(_index).addClass(_hover).siblings().removeClass(_hover);
+	_arr.eq(_index).css("display","block").siblings().css("display","none");
+
+	_menu.click(function(){
+		_index = $(this).index();
+		_menu.eq(_index).addClass(_hover).siblings().removeClass(_hover);
+	_arr.eq(_index).css("display","block").siblings().css("display","none");
 		});
 }
 
-function floatBoxQQ(){
-	var _box = $("#floatbox");
-	var _obj = $("#floatqq");
-	var _menu = $("#floatboxlist");
-	_obj.hover(function(){
-		_menu.fadeIn(200);
-		});
-	_box.find(".a0").hover(function(){
-		_menu.fadeOut(200);
-		});
-	_box.mouseleave(function(){
-		_menu.fadeOut(200);
-		});
-}
+
+
+
+
+
+
+

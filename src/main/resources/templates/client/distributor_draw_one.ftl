@@ -18,6 +18,11 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+    //初始化表单验证
+    $("#form1").Validform({
+        tiptype: 3
+    });
   
   $(".float_box .ewm").hover(function(){
     $(this).next().show();
@@ -44,16 +49,17 @@ DD_belatedPNG.fix('.,img,background');
   <#include "/client/common_distributor_menu.ftl">
   
   <div class="mymember_center add_width">
+    <form id="form1" method="post">
     <div class="with_money">
       <p class="tit">提现余额到银行卡</p>
       <table>
         <tr>
           <th>输入银行卡号：</th>
-          <td><input type="text" class="text long" placeholder="请输入您的银行卡号" /></td>
+          <td><input type="text" class="text long" datatype="/^\d{16}|\d{19}$/" placeholder="请输入您的银行卡号" errormsg="请输入正确卡号！"/></td>
         </tr>
         <tr>
           <th>提现金额：</th>
-          <td><input type="text" class="text short" />&nbsp;&nbsp;元</td>
+          <td>￥<input type="text" class="text short" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" errormsg="请输入正确的金额！"/></td>
         </tr>
         <tr>
           <th>输入支付密码：</th>
@@ -65,7 +71,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
       </table>
     </div>
-    
+    </form>
   </div>
 
 

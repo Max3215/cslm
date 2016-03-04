@@ -36,10 +36,10 @@ public class TdTouchRegController {
     				  HttpServletRequest request,
     				  ModelMap map) {
         String username = (String) request.getSession().getAttribute("username");
-        if (null != shareId)
-        {
-            map.addAttribute("share_id", shareId);
-        }
+//        if (null != shareId)
+//        {
+//            map.addAttribute("share_id", shareId);
+//        }
         
         // 基本信息
         tdCommonService.setHeader(map, request);
@@ -65,70 +65,74 @@ public class TdTouchRegController {
                 {
                     map.addAttribute("error", "短信验证码错误");
                 }
+                else if (errCode.equals(4))
+                {
+                    map.addAttribute("error", "手机号已存在");
+                }
                 map.addAttribute("errCode", errCode);
                 map.addAttribute("mobile", mobile);
             }           
-            return "/touch/reg_quick";
+            return "/touch/reg";
         }
         return "redirect:/touch/user";
     }
     
-    @RequestMapping(value="/touch/regquick",method=RequestMethod.POST)
-    public String regquick(String mobile,
-                String code,
-                String smscode,
+    @RequestMapping(value="/touch/reg",method=RequestMethod.POST)
+    public String regquick(String username,
+                String mobile,
+                String password,
 //                Long shareId,
                 HttpServletRequest request){
-        String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
-        String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
-        if (null == smsCodeSave ) {
-			smsCodeSave = "123456";			
-		}
-        if (null == codeBack ) {
-        	codeBack = "123456";			
-		}
+//        String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
+//        String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
+//        if (null == smsCodeSave ) {
+//			smsCodeSave = "123456";			
+//		}
+//        if (null == codeBack ) {
+//        	codeBack = "123456";			
+//		}
         
      // 从session中获取shareid
         Long shareId = (Long) request.getSession().getAttribute("shareId");
         
-        if ( null == code)
-        {
-             if (null == shareId)
-                 {
-                     return "redirect:/touch/reg?mobile="+ mobile ;
-             }
-             else
-             {
-                     return "redirect:/touch/reg?shareId=" + shareId + "&mobile=" + mobile;
-             }
-        }
+//        if ( null == code)
+//        {
+//             if (null == shareId)
+//                 {
+//                     return "redirect:/touch/reg?mobile="+ mobile ;
+//             }
+//             else
+//             {
+//                     return "redirect:/touch/reg?shareId=" + shareId + "&mobile=" + mobile;
+//             }
+//        }
              
-        if (!codeBack.equalsIgnoreCase(code))
-        {
-             if (null == shareId)
-             {
-                     return "redirect:/touch/reg?errCode=1" + "&mobile=" + mobile;
-             }
-             else
-             {
-                     return "redirect:/touch/reg?errCode=1&shareId=" + shareId + "&mobile=" + mobile;
-             }
-        }
+//        if (!codeBack.equalsIgnoreCase(code))
+//        {
+//             if (null == shareId)
+//             {
+//                     return "redirect:/touch/reg?errCode=1" + "&mobile=" + mobile;
+//             }
+//             else
+//             {
+//                     return "redirect:/touch/reg?errCode=1&shareId=" + shareId + "&mobile=" + mobile;
+//             }
+//        }
         	 
-        if (!smsCodeSave.equalsIgnoreCase(smscode))
-        {
-                 if (null == shareId)
-                 {
-                     return "redirect:/touch/reg?errCode=3" + "&mobile=" + mobile;
-                 }
-                 else
-                 {
-                     return "redirect:/touch/reg?errCode=3&shareId=" + shareId + "&mobile=" + mobile;
-                 }
-        }
+//        if (!smsCodeSave.equalsIgnoreCase(smscode))
+//        {
+//                 if (null == shareId)
+//                 {
+//                     return "redirect:/touch/reg?errCode=3" + "&mobile=" + mobile;
+//                 }
+//                 else
+//                 {
+//                     return "redirect:/touch/reg?errCode=3&shareId=" + shareId + "&mobile=" + mobile;
+//                 }
+//        }
         //将手机号作为用户名
                             
-        TdUser user = tdUserService.findByUsername(mobile);
+        TdUser user = tdUserService.findByUsername(username);
         
         if (null != user)
         {
@@ -142,7 +146,21 @@ public class TdTouchRegController {
             }
         }
         
-        user = tdUserService.addNewUser(null, mobile, "huizhidian", mobile, null);
+        user = tdUserService.findByMobile(mobile);
+        
+        if (null != user)
+        {
+            if (null == shareId)
+            {
+                return "redirect:/touch/reg?errCode=4";
+            }
+            else
+            {
+                return "redirect:/touch/reg?errCode=4&shareId=" + shareId;
+            }
+        }
+        
+        user = tdUserService.addNewUser(username, password, mobile, null, null);
         
         if (null == user)
         {
@@ -158,63 +176,7 @@ public class TdTouchRegController {
         
         user = tdUserService.save(user);
         
-        // 奖励分享用户
-        if (null != shareId)
-        {
-            TdUser sharedUser = tdUserService.findOne(shareId);
-            
-            if (null != sharedUser )
-            {
-                TdSetting setting = tdSettingService.findTopBy();
-                TdUserPoint userPoint = new TdUserPoint();
-                
-                if (null != setting)
-                {
-                    userPoint.setPoint(setting.getRegisterSharePoints());
-                }
-                else
-                {
-                    userPoint.setPoint(0L);
-                }
-                
-                if (null != sharedUser.getTotalPoints())
-                {
-                    userPoint.setTotalPoint(sharedUser.getTotalPoints() + userPoint.getPoint());
-                }
-                else
-                {
-                    userPoint.setTotalPoint(userPoint.getPoint());
-                }
-                
-                userPoint.setUsername(sharedUser.getUsername());
-                userPoint.setDetail("用户分享网站成功奖励");
-                
-                userPoint = tdUserPointService.save(userPoint);
-                
-                sharedUser.setTotalPoints(userPoint.getTotalPoint()); // 积分
-                
-                // 角色变换限制
-                if (!sharedUser.getRoleId().equals(2L)) {
-                	sharedUser.setRoleId(1L);
-				}
-                                
-                if (null == sharedUser.getTotalLowerUsers()) {
-					sharedUser.setTotalLowerUsers(1L);
-				}else {
-					sharedUser.setTotalLowerUsers(sharedUser.getTotalLowerUsers() + 1);
-				}
-                
-                tdUserService.save(sharedUser);
-                
-                //用户层级关系
-//                user.setUpperUsername(sharedUser.getUsername());
-                tdUserService.save(user);
-            }
-            
-           
-        }
-        
-        request.getSession().setAttribute("username", mobile);
+        request.getSession().setAttribute("username", username);
         
         String referer = (String) request.getAttribute("referer");
         

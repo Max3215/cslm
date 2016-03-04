@@ -73,10 +73,10 @@ public class TdIndexController {
     @RequestMapping
     public String index(HttpServletRequest req, Device device, ModelMap map) {
         
-        // 触屏
-//        if (device.isMobile() || device.isTablet()) {
-//            return "redirect:/touch/";
-//        }
+//        // 触屏
+        if (device.isMobile() || device.isTablet()) {
+            return "redirect:/touch/";
+        }
         
         tdCommonService.setHeader(map, req);
 

@@ -87,15 +87,21 @@ public class TdTouchLoginController {
 	    public Map<String, Object> login(String username, 
 	                String password, 
 	                String code, 
-	                Boolean isSave,
 	                HttpServletRequest request) {
 	        Map<String, Object> res = new HashMap<String, Object>();
+	        String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
 	        
 	        res.put("code", 1);
 	        
 	        if (username.isEmpty() || password.isEmpty())
 	        {
 	            res.put("msg", "用户名及密码不能为空");
+	            return res;
+	        }
+	        if(code.isEmpty())
+	        {
+	        	res.put("msg", "请输入验证码");
+	        	return res;
 	        }
 	        
 	        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
@@ -107,6 +113,13 @@ public class TdTouchLoginController {
 	                res.put("msg", "密码错误");
 	                return res;
 	            }
+	        	
+	        	if(!code.equalsIgnoreCase(codeBack))
+	        	{
+	        		res.put("msg", "验证码输入错误");
+	        		return res;
+	        	}
+	        	
 	        	user.setLastLoginTime(new Date());
 	             
 	            tdUserService.save(user);
@@ -124,6 +137,13 @@ public class TdTouchLoginController {
 	                res.put("msg", "密码错误");
 	                return res;
 	            }
+	        	
+	        	if(!code.equalsIgnoreCase(codeBack))
+	        	{
+	        		res.put("msg", "验证码输入错误");
+	        		return res;
+	        	}
+	        	
 	        	user.setLastLoginTime(new Date());
 	             
 	            tdUserService.save(user);

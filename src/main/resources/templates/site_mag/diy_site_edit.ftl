@@ -261,7 +261,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  -->
+  
   <dl>
     <dt>付款方式</dt>
     <dd>
@@ -277,7 +277,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  -->
   <dl>
     <dt>客服电话</dt>
     <dd>
@@ -285,7 +285,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  <#--
   <dl>
     <dt>投诉电话</dt>
     <dd>
@@ -293,6 +293,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
+  -->
   <dl>
     <dt>平台服务比例</dt>
     <dd>

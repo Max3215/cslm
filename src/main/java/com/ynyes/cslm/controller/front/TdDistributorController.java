@@ -84,7 +84,7 @@ import com.ynyes.cslm.util.SiteMagConstant;
 
 @Controller
 @RequestMapping(value="/distributor")
-public class TdDistributorController {
+public class TdDistributorController extends AbstractPaytypeController{
 	
 	@Autowired
 	TdOrderService tdOrderService;
@@ -2208,7 +2208,7 @@ public class TdDistributorController {
 	public Map<String,Object> distributorPassword(String title,String province,
 			String city,String disctrict,
 			String address,String mobile,
-			String password,Double postPrice,
+			String password,Double postPrice,String payPassword,
 			Double maxPostPrice,Long id,
 			HttpServletRequest req,ModelMap map)
 	{
@@ -2237,6 +2237,7 @@ public class TdDistributorController {
 		distributor.setAddress(address);
 		distributor.setMobile(mobile);
 		distributor.setPassword(password);
+		distributor.setPayPassword(payPassword);
 		distributor.setPostPrice(postPrice);
 		distributor.setMaxPostPrice(maxPostPrice);
 		
@@ -2246,6 +2247,69 @@ public class TdDistributorController {
 		
 		return res;
 	}
+	
+	
+	@RequestMapping(value="/edit/password",method= RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> passwordEdit(String type,String password,
+							String newPassword,String newPassword2,HttpServletRequest req)
+	{
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("distributor");
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		
+		if(null == distributor)
+		{
+			res.put("msg", "请重新登录");
+			return res;
+		}
+		
+		if(null == password)
+		{
+			res.put("msg", "请输入密码");
+			return res;
+		}
+		
+		if(!password.equalsIgnoreCase(distributor.getPassword()))
+		{
+			res.put("msg", "原密码输入错误");
+			return res;
+		}
+		
+		if(null == newPassword || newPassword.trim().length()< 6 || newPassword.trim().length()>20)
+		{
+			res.put("msg", "新密码长度为6-20");
+			return res;
+		}
+		
+		if(!newPassword.equalsIgnoreCase(newPassword2))
+		{
+			res.put("msg", "两次密码输入不一致");
+			return res;
+		}
+		
+		if(null != type)
+		{
+			if(type.equalsIgnoreCase("pwd"))
+			{
+				distributor.setPassword(newPassword);
+			}else if(type.equalsIgnoreCase("payPwd"))
+			{
+				distributor.setPayPassword(newPassword);
+			}
+		}
+		
+		tdDistributorService.save(distributor);
+		
+		res.put("msg", "修改成功");
+		res.put("code", 1);
+		return res;
+	}
+	
+	
+	
 	
 	@RequestMapping(value="/goods/onsale")
 	public String saleGoods(Integer page,String keywords,Long categoryId,HttpServletRequest req,ModelMap map)
@@ -3721,24 +3785,48 @@ public class TdDistributorController {
     	map.addAttribute("distributor",
     				tdDistributorService.findbyUsername(username));
     	
+    	// 支付方式列表
+        setPayTypes(map, true, false, req);
+    	
     	return "/client/distributor_top_one";
     }
     
     @RequestMapping(value="/topup2",method=RequestMethod.POST)
-    public String topupTwo(HttpServletRequest req,ModelMap map,TdPayRecord record){
+    public String topupTwo(HttpServletRequest req,ModelMap map,
+    			Double provice,Long payTypeId){
     	String username = (String)req.getSession().getAttribute("distributor");
     	if (null == username) {
             return "redirect:/login";
         }
     	
-    	if(null == record)
-    	{
-    		return "/client/error_404";
-    	}
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+
+    	Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
     	
-    	record.setStatusCode(2);
-    	record.setCont("充值");
-    	record.setCreateTime(new Date());
+    	TdPayRecord record = new TdPayRecord();
+    	
+    	if(null != distributor)
+    	{
+    		record.setCont("平台充值");
+    		record.setCreateTime(new Date());
+    		record.setDistributorId(distributor.getId());
+    		record.setDistributorTitle(distributor.getTitle());
+    		record.setStatusCode(1);
+    		record.setProvice(provice);
+    		record.setPayTypeId(payTypeId);
+    		String number = "CZ" + curStr
+    				+ leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+    		record.setOrderNumber(number);
+    	}
+        
+    	
+    	
+//    	record.setStatusCode(2);
+//    	record.setCont("充值");
+//    	record.setCreateTime(new Date());
     	record = tdPayRecordService.save(record);
     	
     	tdCommonService.setHeader(map, req);

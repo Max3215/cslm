@@ -82,10 +82,13 @@ $(document).ready(function(){
                   <a class="red" href="javascriput:viod(0);" onclick="$('.add_address').fadeIn();">新增收货地址</a>
                 </th>
                 <td>
-                     <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择收货地址!"/>
                     <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
                         <#list user.shippingAddressList as address>
-                             <a  href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});">
+                            <#if address.isDefaultAddress?? && address.isDefaultAddress>
+                                <input id="input-address-id" type="hidden" name="addressId" value="${address.id?c}" datatype="n" nullmsg="请选择安装信息!"/>        
+                            <#else>
+                            </#if>
+                             <a  href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});" <#if address.isDefaultAddress?? && address.isDefaultAddress>class="sel"</#if>>
                                 <p>收货人：${address.receiverName!''}</p>
                                 <p class="p1">收货地址：${address.province!''}${address.city!''}${address.disctrict!''}${address.detailAddress!''}</p>
                                 <p>电话：${address.receiverMobile!''}</p>
@@ -196,9 +199,16 @@ $(document).ready(function(){
     </div>
     <div class="clear h20"></div>
     
+    <#assign price=0>
+    <#if postPrice??>
+        <#assign price=totalPrice+postPrice>
+    <#else>
+        <#assign price=totalPrice>
+    </#if>
+    
     <div class="car_btn">
         <a class="ml20 fc" href="javascript:history.go(-1);">返回上一页</a>
-        <span>应付总额：<b class="red fs18">￥${totalPrice?string('0.00')}</b></span>
+        <span>&emsp;&emsp;&emsp;商品总额：<b class="red fs18">￥${totalPrice?string('0.00')}</b>&emsp; 邮费：<#if postPrice??><b class="red fs18">￥${postPrice?string('0.00')}</b><#elseif post??>${post!''}</#if>&emsp;&emsp;&emsp;&emsp;应付总额：<b class="red fs18">￥${price?string('0.00')}</b></span>
         <input class="sub" type="submit" value="提交订单" />
     </div>
     <div class="clear"></div> 

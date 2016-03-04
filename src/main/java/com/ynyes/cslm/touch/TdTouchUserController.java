@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
@@ -42,6 +43,7 @@ import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdCouponService;
 import com.ynyes.cslm.service.TdCouponTypeService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
@@ -111,6 +113,9 @@ public class TdTouchUserController {
     
     @Autowired
     private TdProductCategoryService tdProductCategoryService;
+    
+    @Autowired
+    private TdDistributorGoodsService tdDistributorGoodsService;
     
 //    @Autowired
 //    private TdUserComplainService tdUserComplainService;
@@ -1345,61 +1350,67 @@ public class TdTouchUserController {
         return "redirect:/touch/user/collect/list";
     }
     
-    @RequestMapping(value = "/user/collect/add", method=RequestMethod.POST)
+    @RequestMapping(value = "/user/collect/add", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> collectAdd(HttpServletRequest req, 
-                        Long goodsId,
-                        ModelMap map){
-        
+    public Map<String, Object> collectAdd(HttpServletRequest req, Long disgId,
+            ModelMap map) {
+
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
-        
-        if (null == goodsId)
-        {
+
+        if (null == disgId) {
             res.put("message", "参数错误");
             return res;
         }
-        
+
         String username = (String) req.getSession().getAttribute("username");
-        
-        if (null == username)
-        {
+
+        if (null == username) {
             res.put("message", "请先登录");
             return res;
         }
-        
+
         res.put("code", 0);
-        
+
         // 没有收藏
-//        if (null == tdUserCollectService.findByUsernameAndGoodsId(username, goodsId))
-//        {
-//            TdGoods goods = tdGoodsService.findOne(goodsId);
-//            
-//            if (null == goods)
-//            {
-//                res.put("message", "商品不存在");
-//                return res;
-//            }
-//            
-//            TdUserCollect collect = new TdUserCollect();
-//            
-//            collect.setUsername(username);
-//            collect.setGoodsId(goods.getId());
-//            collect.setGoodsCoverImageUri(goods.getCoverImageUri());
-//            collect.setGoodsTitle(goods.getTitle());
-//            collect.setGoodsSalePrice(goods.getSalePrice());
-//            collect.setCollectTime(new Date());
-//            collect.setLeftNumber(goods.getLeftNumber()); //库存zhangji
-//            
-//            tdUserCollectService.save(collect);
-//            
-//            res.put("message", "添加成功");
-//            
-//            return res;
-//        }
-        
+        if (null == tdUserCollectService.findByUsernameAndDistributorId(username,
+                disgId)) {
+            TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
+
+            if (null == distributorGoods) {
+                res.put("message", "商品不存在");
+                return res;
+            }
+            TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
+            
+            if (null == goods.getTotalCollects())
+            {
+                goods.setTotalCollects(0L);
+            }
+            
+            goods.setTotalCollects(goods.getTotalCollects() + 1L);
+            
+            tdGoodsService.save(goods);
+
+            TdUserCollect collect = new TdUserCollect();
+
+            collect.setUsername(username);
+            collect.setDistributorId(distributorGoods.getId());
+            collect.setGoodsId(goods.getId());
+            collect.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());
+            collect.setGoodsTitle(distributorGoods.getGoodsTitle());
+            collect.setGoodsSalePrice(distributorGoods.getGoodsPrice());
+            collect.setCollectTime(new Date());
+
+            tdUserCollectService.save(collect);
+
+            res.put("message", "添加成功");
+
+            return res;
+        }
+
         res.put("message", "您已收藏了该商品");
-        
+
         return res;
     }
     

@@ -182,24 +182,24 @@ public class TdGoodsController {
 
         // 全部评论
         map.addAttribute("comment_page",
-                tdUserCommentService.findByGoodsIdAndIsShowable(goodsId, 0,
+                tdUserCommentService.findByGoodsIdAndIsShowable(dgId, 0,
                         ClientConstant.pageSize));
 
         // 全部评论数
         map.addAttribute("comment_count",
-                tdUserCommentService.countByGoodsIdAndIsShowable(goodsId));
+                tdUserCommentService.countByGoodsIdAndIsShowable(dgId));
 
         // 好评数
         map.addAttribute("three_star_comment_count", tdUserCommentService
-                .countByGoodsIdAndStarsAndIsShowable(goodsId, 3L));
+                .countByGoodsIdAndStarsAndIsShowable(dgId, 3L));
 
         // 中评数
         map.addAttribute("two_star_comment_count", tdUserCommentService
-                .countByGoodsIdAndStarsAndIsShowable(goodsId, 2L));
+                .countByGoodsIdAndStarsAndIsShowable(dgId, 2L));
 
         // 差评数
         map.addAttribute("one_star_comment_count", tdUserCommentService
-                .countByGoodsIdAndStarsAndIsShowable(goodsId, 1L));
+                .countByGoodsIdAndStarsAndIsShowable(dgId, 1L));
         
         // 收藏总数
         map.addAttribute("total_collects",

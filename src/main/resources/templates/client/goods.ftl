@@ -72,7 +72,7 @@ function minusNum(){
 <!--  加入购物车   -->
 function cartInit(dId){
     var quantity = document.getElementById("quantity").value;
-    if(quantity==0){
+    if(quantity <= 0 || "" == quantity ){
         return;
     }
  <!--   var newTab=window.open('about:blank');-->
@@ -93,7 +93,8 @@ function cartInit(dId){
 <!--  立即购买   -->
 function byNow(dId){
     var quantity = document.getElementById("quantity").value;
-    if(quantity==0){
+    if(quantity <= 0 || "" == quantity ){
+        alert("请选择正确的数量");
         return;
     }
     $.ajax({

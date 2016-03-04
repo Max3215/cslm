@@ -1363,6 +1363,7 @@ public class TdUserController{
             return res;
         }
 
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(ogId);
         TdGoods goods = tdGoodsService.findOne(tdComment.getGoodsId());
 
         if (null == goods) {
@@ -1382,32 +1383,32 @@ public class TdUserController{
         
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
         
-        if(null != user )
-        {
-        	// 判断为超市购物
-        	if(user.getRoleId() ==1)
-        	{
-        		TdDistributor distributor = TdDistributorService.findbyUsername(user.getUsername());
-        		//查看当前有无该商品
-        		TdDistributorGoods disGoods = TdDistributorService.findByIdAndGoodId(distributor.getId(), goods.getId());
-        		if(null!= disGoods)
-        		{
-        			disGoods.setLeftNumber(disGoods.getLeftNumber()+quantity);
-        		}else{
-        			//新建一条超市商品信息
-        			disGoods = new TdDistributorGoods();
-        			disGoods.setCoverImageUri(goods.getCoverImageUri());
-        			disGoods.setGoodsId(goods.getId());
-        			disGoods.setGoodsPrice(goods.getSalePrice());
-        			disGoods.setGoodsTitle(goods.getTitle());
-        			disGoods.setIsOnSale(false);
-        			disGoods.setLeftNumber(quantity);
-        			disGoods.setCode(goods.getCode());
-        		}
-        		distributor.getGoodsList().add(disGoods);//更新超市商品库
-        		TdDistributorService.save(distributor);
-        	}
-        }
+//        if(null != user )
+//        {
+//        	// 判断为超市购物
+//        	if(user.getRoleId() ==1)
+//        	{
+//        		TdDistributor distributor = TdDistributorService.findbyUsername(user.getUsername());
+//        		//查看当前有无该商品
+//        		TdDistributorGoods disGoods = TdDistributorService.findByIdAndGoodId(distributor.getId(), goods.getId());
+//        		if(null!= disGoods)
+//        		{
+//        			disGoods.setLeftNumber(disGoods.getLeftNumber()+quantity);
+//        		}else{
+//        			//新建一条超市商品信息
+//        			disGoods = new TdDistributorGoods();
+//        			disGoods.setCoverImageUri(goods.getCoverImageUri());
+//        			disGoods.setGoodsId(goods.getId());
+//        			disGoods.setGoodsPrice(goods.getSalePrice());
+//        			disGoods.setGoodsTitle(goods.getTitle());
+//        			disGoods.setIsOnSale(false);
+//        			disGoods.setLeftNumber(quantity);
+//        			disGoods.setCode(goods.getCode());
+//        		}
+//        		distributor.getGoodsList().add(disGoods);//更新超市商品库
+//        		TdDistributorService.save(distributor);
+//        	}
+//        }
         // 设置订单信息
         if (null != orderId) {
             TdOrder tdOrder = tdOrderService.findOne(orderId);
@@ -1730,6 +1731,20 @@ public class TdUserController{
                     }
 
                     return "redirect:/user/address/list";
+                }else if(method.equalsIgnoreCase("default")){
+                	if(null != id)
+                	{
+                		for (TdShippingAddress address : addressList) {
+							if(address.getId().equals(id)){
+								address.setIsDefaultAddress(true);
+								tdShippingAddressService.save(address);
+							}else{
+								address.setIsDefaultAddress(false);
+								tdShippingAddressService.save(address);
+							}
+						}
+                	}
+                	return "redirect:/user/address/list";
                 }
             }
 
@@ -1932,6 +1947,9 @@ public class TdUserController{
 
         if (user.getPassword().equals(oldPassword)) {
             user.setPassword(newPassword);
+        }else{
+        	res.put("msg", "原密码输入错误");
+        	return res;
         }
 
         map.addAttribute("user", tdUserService.save(user));

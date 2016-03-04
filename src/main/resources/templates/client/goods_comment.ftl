@@ -4,7 +4,7 @@
             <#if comment_page??>
                 <#list comment_page.content as item>
                     <li>
-                        <p class="p1">${item.content!''}<span>口味：其他口味：其他</span>${item.username!''}</p>
+                        <p class="p1">${item.content!''}<span></span>${item.username!''}</p>
                         <p class="p2">${item.commentTime?string("yyyy-MM-dd HH:hh:ss")}</p>
                          <#if item.isReplied?? && item.isReplied>
                             <p class="p3">商家回复：${item.reply!''}</p>

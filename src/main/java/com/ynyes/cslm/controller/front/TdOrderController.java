@@ -749,9 +749,23 @@ public class TdOrderController extends AbstractPaytypeController{
         // 查询出当前选择商品所属超市ID
         List<Long> list = tdCartGoodsService.countByDistributorId(username);
         
+        Double postPrice = 0.0;
         if(null != list && list.size()==1) // 如果只有一家超市、提供自提点选择
         {
-        	map.addAttribute("addressList", tdDistributorService.findOne(list.get(0)).getShippingList());
+        	TdDistributor distributor = tdDistributorService.findOne(list.get(0));
+        	map.addAttribute("addressList", distributor.getShippingList());
+        	map.addAttribute("distributor", distributor); 
+        	
+        	postPrice += distributor.getPostPrice();
+        	
+        	// 判断是否满额免
+        	if(null!= distributor.getMaxPostPrice() && totalPrice > distributor.getMaxPostPrice())
+        	{
+        		postPrice =0.0;
+        	}
+        	map.addAttribute("postPrice", postPrice);
+        }else{
+        	map.addAttribute("post", "商品来自多个超市，邮费分单后计算");
         }
        
         map.addAttribute("coupon_list",
@@ -1891,12 +1905,23 @@ public class TdOrderController extends AbstractPaytypeController{
         
         setPayTypes(map, true, false, req);
         
+        Double postPrice = 0.0;
         if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
     	{
         	Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
         	TdDistributor distributor = tdDistributorService.findOne(disId);
         	map.addAttribute("addressList", distributor.getShippingList());
+
+        	postPrice += distributor.getPostPrice();
+        	// 判断是否满额免
+        	if(null!= distributor.getMaxPostPrice() && totalPrice > distributor.getMaxPostPrice())
+        	{
+        		postPrice =0.0;
+        	}
     	}
+        
+        	
+        	map.addAttribute("postPrice", postPrice);
         
     	return "/client/order_info";
     }
@@ -1945,7 +1970,20 @@ public class TdOrderController extends AbstractPaytypeController{
         map.addAttribute("type","pro");
         setPayTypes(map, true, false, req);
 		
-    	
+        Double postPrice = 0.0;
+        if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
+    	{
+        	Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        	TdDistributor distributor = tdDistributorService.findOne(disId);
+        	map.addAttribute("addressList", distributor.getShippingList());
+
+        	postPrice += distributor.getPostPrice();
+        	// 判断是否满额免
+        	if(null!= distributor.getMaxPostPrice() && totalPrice > distributor.getMaxPostPrice())
+        	{
+        		postPrice =0.0;
+        	}
+    	}
     	
     	return "/client/order_info";
     }

@@ -26,8 +26,9 @@ $(document).ready(function(){
             alert(data.msg);
             if(data.code==1)
             {
-                 window.location.href="/user/password"
+                 window.location.href="/user/password";
             }
+        }    
     });
 
     $(".click_a").click(function(){

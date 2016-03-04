@@ -129,7 +129,7 @@ public class TdCartController {
 //                    cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 //                    cartGoods.setGoodsTitle(goods.getTitle());
 //                    cartGoods.setPrice(goods.getSalePrice());
-                    System.err.println(quantity);
+                    
                     cartGoods.setQuantity(quantity);
                     
                     tdCartGoodsService.save(cartGoods);
