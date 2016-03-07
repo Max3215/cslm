@@ -2,18 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>车有同盟</title>
+<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 
+<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
+
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
-<script src="/touch/js/cart.js"></script>
-
-<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
-<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -23,13 +21,12 @@ $(document).ready(function(){
 </head>
 
 <body>
-<header class="comhead">
-  <div class="main">
-    <p>订单</p>
-    <a class="a1" href="javascript:history.go(-1);">返回</a>
-    <a class="a2" href="/touch"><img src="/touch/images/home.png" height="25" /></a>
-  </div>
-</header>
+<header class="com_top">
+    <a href="javascript:history.go(-1);" class="back"></a>
+        <p>订单完成</p>
+        <a href="#" class="news"></a>
+    </header>
+    <div style="height:0.88rem;"></div>
 <div class="comhead_bg"></div>
 <!--header END-->
 
@@ -41,7 +38,7 @@ $(document).ready(function(){
         <p>应付金额￥${order.totalPrice?string('0.00')} 
             <a class="blue" href="/touch/order/dopay/${order.id?c}" style="color: #FF0000;">点击支付</a></p>
         <p>您还可以在订单详情页面
-            <a class="blue" style="color: #FF0000;" href="/touch/user/order?id=${order.id?c!''}">修改支付方式</a></p>
+            <a class="blue" style="color: #FF0000;" href="/touch/user/order?id=${order.id?c!''}">查看详情</a></p>
     </div>
 </div>
 

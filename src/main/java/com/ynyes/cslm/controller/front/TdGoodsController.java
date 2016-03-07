@@ -543,15 +543,18 @@ public class TdGoodsController {
     	if (null == page) {
     		page = 0;
     	}
+    	map.addAttribute("dis_goods", tdDistributorGoodsService.findOne(goodsId));
+    	map.addAttribute("page", page);
+    	
     	if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
         {
         	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
         	
         	 //成交数
-            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, goodsId,page,5));
+            map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(distributorId, goodsId,page,10));
         }else
         {
-        	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,page,5));
+        	 map.addAttribute("bargain_record_page",tdOrderService.findByShopIdAndGoodId(null, goodsId,page,10));
         }
         return "/client/goods_record";
     }

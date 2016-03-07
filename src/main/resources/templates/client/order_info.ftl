@@ -141,7 +141,7 @@ $(document).ready(function(){
     <div class="del_mode">
         <p>配送方式</p>
         <div class="part">
-            <span><input type="radio" value="0" name="deliveryType" datatype="n" nullmsg="请选择收货!" />收货上门</span>
+            <span><input type="radio" value="0" name="deliveryType" datatype="n" nullmsg="请选择配送方式!" />送货上门</span>
         </div>
         <div class="part" style="margin-left:30px;">
             <span><input type="radio" name="deliveryType" value="1" datatype="n" nullmsg="请选择配送方式!" />门店自提</span>

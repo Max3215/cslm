@@ -1,170 +1,195 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>车有同盟</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Language" content="zh-CN">
+<title><#if site??>${site.seoTitle!''}-</#if>确认订单</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
-<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-
-<script src="/touch/js/jquery-1.9.1.min.js"></script>
-<script src="/client/js/Validform_v5.3.2_min.js"></script>
-<script src="/touch/js/common.js"></script>
-<script src="/touch/js/order_info.js"></script>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
 
 <link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
-<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
-<!-- add link 2015-7-31 11:24:56 mdj -->
-<script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
-<link href="/client/css/style.css" rel="stylesheet" type="text/css" />
-<!-- add link 2015-7-31 11:24:56 mdj end -->
+
+<script src="/touch/js/jquery-1.9.1.min.js"></script>
+<script src="/touch/js/common.js"></script>
+<script src="/touch/js/Validform_v5.3.2_min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	//indexBanner("box","sum",300,5000,"num");//Banner
+    
     $("#form1").Validform({
-        tiptype: 1
+         btnSubmit:"#btn_sub",
+         tiptype: 4
     });
+    
+    <#if msg??>
+     alert("${msg!''}");
+    </#if>
+
+
+ // $(".address_list a").click(function(){
+ //   $(this).addClass("act").siblings().removeClass("act");
+ // })
+
+//  $(".dis_ways .choose").click(function(){
+//    $(this).addClass("act").siblings(".choose").removeClass("act");
+//  })
+
+//  $(".pay_ways .choose").click(function(){
+//    $(this).addClass("act").siblings(".choose").removeClass("act");
+//  })
+
+ // $(".pay_ways menu a").click(function(){
+ //   $(this).addClass("act").siblings().removeClass("act");
+//  })
+
 });
-</script>
-<script type="text/javascript">
-    var forPaymentFllow = true;
 </script>
 </head>
 
 <body>
-<header class="comhead">
-  <div class="main">
-    <p>购物车</p>
-    <a class="a1" href="javascript:history.go(-1);">返回</a>
-    <a class="a2" href="/touch"><img src="/touch/images/home.png" height="25" /></a>
-  </div>
-</header>
-<div class="comhead_bg"></div>
-<!--header END-->
-
-<form id="form1" name="form1" action="/touch/order/submit" method="post">
-<div class="mainbox">
-<table class="address_tab">
-            <tr>
-                <th width="140">
-                    <p>安装信息</p>
-                    <a class="red" href="javascript:toggleNewAddress();">新增安装信息</a>
-                </th>
-                <td>
-                    <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择安装信息!"/>
-                    <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
-                        <#list user.shippingAddressList as address>
-                            <a href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});">
-                                <p>姓名：${address.receiverName!''}</p>
-                                <p>手机：${address.receiverMobile!''}</p>                              
-                                <p>车牌：${address.receiverCarcode!'' }</p>
-                                <P>车型：${address.receiverCartype!'' }</P>
-                            </a>
-                        </#list>                                                 
-                    </#if>
-                   
-                    <div class="clear"></div>
-                </td>
-            </tr>
-        </table>
-        <div id="addressForm" class="hide">
-            <table class="mymember_address">
-                  <tbody>
-                  <tr>
-                    <th>*姓名：</th>
-                    <td>
-                        <input class="mytext" id="receiverName" value="" type="text">
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>*手机：</th>
-                    <td>
-                        <input class="mytext" id="mobile" value="" type="text">
-                    </td>
-                  </tr>
-                  <tr>
-                  <th>车牌（选填）：</th>
-                  <td>
-                  <input class="mytext" id="receiverCarcode" value="" type="text"/>
-                  </td>
-                  </tr>
-                  <tr>
-                  <th>车型（选填）：</th>
-                  <td>
-                   <input class="mytext" id="receiverCartype" value="" type="text"/>
-                  </td>
-                  </tr>
-                  <tr>
-                    <th></th>
-                    <td><input onclick="javascript:submitAddress();" class="mysub" type="button" value="保存"></td>
-                  </tr>
-                </tbody>
-                </table>
-            </div>
-  <p class="address">选择线下同盟店：</p>
-  <div class="address">
-    <select name="shopId" style="width:100%;" datatype="n" nullmsg="请选择同盟店" errormsg="请选择同盟店">
-        <option value="">请选择同盟店</option>
-        <#if shop_list??>
-            <#list shop_list as item>
-                <option value="${item.id?c}">${item.title!''}</option>
-            </#list>
-        </#if>
-    </select>
-  </div>
-  <!-- 2015-7-31 10:33:03  mdj  add datePicker -->
-  <section class="order_check address" style="width:90%;">
-      <p class="address" style="float:left">选择预约安装时间:</p> 
-      <input name="appointmentTime" type="text" value="" datatype="*" class="text input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',lang:'zh-cn'})" errormsg="请选择预约安装时间" nullmsg="请选择预约安装时间">
-      <a href="javascript:;"><img src="/client/images/content/rl.png" /></a>
-  </section>
-  <!-- end -->
-  <p class="address">使用粮草：
-    <span>（可用：${total_point_limit!'0'}）</span>
-  </p>
-  <input type="text" class="address" value="0" name="pointUse" value="0" onchange="pointChange(this, $(this).val(), ${total_point_limit!'0'});"/>
-  <p class="address">选择优惠券：</p>
-  <div class="address">
-    <select id="couponSelect" name="couponId" style="width:100%;" onchange="couponChange();">
-        <#if coupon_list??>
-            <option value="" fee="0">不使用优惠券</option>
-            <#list coupon_list as item>
-                <option value="${item.id?c}">${item.typeTitle!''}</option>
-            </#list>
-        </#if>
-    </select>
-  </div>
-  <p class="address">选择支付方式：</p>
-  <ul class="paystyle">
-    <#assign maxMethodCount=5/>
-    <#assign changePayMethod=false/>
-    <#include "/client/paybox_common.ftl" />
-    
-  </ul>
-  <div class="clear"></div>
-  <p class="address">留言：</p>
-  <input type="text" class="address" name="userMessage" value="" />
-  
-    <#assign totalQuantity=0>
-    <#assign totalPrice=0>
-    <#if buy_goods_list??>
-        <#list buy_goods_list as sg>
-            <#assign totalQuantity=totalQuantity+sg.quantity>
-            <#assign totalPrice=totalPrice+(sg.price*sg.quantity)>
+	<!-- 顶部 -->
+	<header class="com_top">
+		<a href="javascript:history.go(-1);" class="back"></a>
+		<p>确认订单</p>
+		<a href="#" class="news"></a>
+	</header>
+	<div style="height:0.88rem;"></div>
+	<!-- 顶部 END -->
+<form id="form1" action="/touch/order/submit" method="post">  
+  <!-- 购物车确认 -->
+  <section class="address_list">
+    <input type="hidden" value="" name="addressId" id="addressId" datatype="n" nullmsg="请选择地址!">
+    <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
+        <#list user.shippingAddressList as address>
+            <a href="javascript:;" onclick="selectAddr($(this),${address.id?c})"  <#if address.isDefaultAddress?? && address.isDefaultAddress>class=" choose"</#if> >
+            <p>姓名：${address.receiverName!''}<span>邮编：${address.postcode!''}</span></p>
+            <p>手机号码：${address.receiverMobile!''}</p>
+            <p>备用号码：${address.receiverTelephone!''}</p>
+            <p>省市：<span id="addressprovince">${address.province!''}</span>
+                   <span id="addresscity">${address.city!''}</span>
+                   <span id="addressdisctrict">${address.disctrict!''}</span></p>
+            <p>详细地址：${address.detailAddress!''}</p>
+            </a>
         </#list>
-    </#if>
-        
-  <p class="address ta-r">共<#if totalQuantity??>${totalQuantity!'0'}</#if>件商品，合计￥<span id="totalFee" class="red">${totalPrice?string('0.00')}</span></p>
-</div>
+   </#if> 
+  </section>
+  
+<script type="text/javascript">
+function selectAddr(tag,type){
+    $(tag).addClass("act").siblings().removeClass("act");
+    $("#addressId").attr("value",type)
+}
 
-<div class="carfoot_bg"></div>
-<footer class="carfoot">
-  <div class="mainbox">
-    
-    <p>共<span class="red"><#if totalQuantity??>${totalQuantity!'0'}</#if></span>件，<span class="red">￥${totalPrice?string('0.00')}</span></p>
-    <input class="sub" type="submit" value="提交订单（<#if totalQuantity??>${totalQuantity!'0'}</#if>）" />
+function selectDeliveryTyp(tag,type){
+    $(tag).addClass("act").siblings(".choose").removeClass("act");
+    $("#deliveryType").attr("value",type)
+}
+</script>
+  <div class="dis_ways">
+    <p class="tit">配送方式</p>
+    <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
+    <a href="javascript:;" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流</a>
+    <div class="clear"></div>
+    <a href="javascript:;" class="choose" onclick="selectDeliveryTyp($(this),1)">自提</a>
+    <#if addressList??>
+        <select name="shipAddressId">
+            <#list addressList as addr>
+          <option value="${addr.id?c}">${addr.disctrict!''}${addr.detailAddress!''}</option>
+            </#list>
+        </select>
+    </#if>
   </div>
-</footer>
+<#--
+  <div class="use_integral">
+    <span>积分抵扣</span>
+    <input type="text" class="text" />
+    <input type="submit" class="sub" value="抵扣" />
+    <div class="clear"></div>
+    <p>积分总额：45000&nbsp;&nbsp;&nbsp;&nbsp;100积分兑换1元</p>
+  </div>
+-->
+<script type="text/javascript">
+function selectPayType(tag,type)
+{
+    $(tag).addClass("act").siblings(".choose").removeClass("act");
+    $(".pay_ways menu a").removeClass("act");
+    $("#payTypeId").attr("value",type);
+}
+
+function selectType(tag,type)
+{
+     $(".pay_ways .choose").removeClass("act");
+     $("#server").addClass("act");
+     $("#payTypeId").attr("value",type);
+     $(tag).addClass("act").siblings().removeClass("act"); 
+}
+</script>
+  <div class="pay_ways">
+    <p class="tit">选择支付方式</p>
+    <input type="hidden" value="0" name="payTypeId" id="payTypeId" datatype="n" nullmsg="请选择支付方式!">
+    <a href="javascript:void(0)" class="choose act" onclick="selectPayType($(this),0)" id="vir">余额支付</a>
+    <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
+    <a href="javascript:void(0)" class="choose" id="server">平台支付</a>
+    <div class="clear"></div>
+    <menu>
+        <#if pay_type_list??>
+            <#list pay_type_list as pay_type>
+              <a href="javascript:void(0)" onclick="selectType($(this),${pay_type.id?c})"><img src="${pay_type.coverImageUri!''}" width="90" /></a>
+            </#list>
+        </#if>
+    </menu>
+  </div>
+
+  <div class="pay_massege"><textarea placeholder="给商家留言" name="userMessage"></textarea></div>
+
+  <section class="order_list" style="margin-bottom:0.4rem;border:none;">
+    <ul>
+      <#if selected_goods_list??>
+           <#list selected_goods_list as cg>
+                <li>
+                    <a href="#" class="pic"><img src="${cg.goodsCoverImageUri!''}"></a>
+                    <div class="info">
+                      <a href="#">${cg.goodsTitle!''}</a>
+                      <p>价格：￥${cg.price?string("0.00")}</p>
+                      <p>数量：${cg.quantity!''}</p>
+                    </div>
+                    <div class="clear"></div>
+                  </li>
+           </#list>
+       </#if> 
+    </ul>  
+  </section>
+   
+   <#assign price=0>
+    <#if postPrice??>
+        <#assign price=totalPrice+postPrice>
+    <#else>
+        <#assign price=totalPrice>
+    </#if>
+   
+  <div style="height:0.58rem;"></div>
+  <section class="cart_foot">
+    <p>合计：<span>¥${price?string('0.00')}</span></p>
+    <a href="javascript:;" id="btn_sub" class="btn">确定</a>
+  </section>
+  <!-- 购物车确认 END -->
 </form>
+  <!-- 底部 -->
+  <div style="height:0.88rem;"></div>
+  <section class="comfooter tabfix">
+    	<menu>
+	        <a class="a1 " href="/touch">平台首页</a>
+	        <a class="a2" href="/touch/category/list">商品分类</a>
+	        <a class="a3 sel" href="/touch/cart">购物车</a>
+	        <a class="a4" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
+  <!-- 底部 END -->
+  
 </body>
 </html>

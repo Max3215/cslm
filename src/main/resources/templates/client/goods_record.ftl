@@ -14,7 +14,6 @@
                     <#list bargain_record_page.content as item>
                         <#if item.orderGoodsList?? && item.orderGoodsList?size gt 0>
                             <#list item.orderGoodsList as og>
-                                <#if goods??>
                                     <#if og.goodsId?c == dis_goods.id?c>
                                         <tr>
                                             <td>${item.username!''}</td>
@@ -23,7 +22,6 @@
                                             <td>${item.orderTime!''}</td>
                                         </tr>
                                     </#if>
-                                </#if>
                             </#list>
                         </#if>
                     </#list>
@@ -38,7 +36,7 @@
         <#if bargain_record_page?? && bargain_record_page.number+1 == 1>
             <a  href="javascript:;">上一页</a>
         <#else>
-            <a href="javascript:getBargainRecord(${goodsId},  ${bargain_record_page.number-1});">上一页</a>
+            <a href="javascript:getBargainRecord(${dis_goods.id?c},  ${bargain_record_page.number-1});">上一页</a>
         </#if>
         
         <#if bargain_record_page.totalPages gt 0>
@@ -47,7 +45,7 @@
                     <#if page == bargain_record_page.number+1>
                         <a class="sel" href="javascript:;">${page}</a>
                     <#else>
-                        <a href="javascript:getBargainRecord(${goodsId}, ${page-1});">${page}</a>
+                        <a href="javascript:getBargainRecord(${dis_goods.id?c}, ${page-1});">${page}</a>
                     </#if>
                     <#assign continueEnter=false>
                 <#else>
@@ -62,7 +60,7 @@
         <#if bargain_record_page.number+1 == bargain_record_page.totalPages || bargain_record_page.totalPages==0>
             <a href="javascript:;">下一页</a>
         <#else>
-            <a  href="javascript:getBargainRecord(${goodsId}, ${bargain_record_page.number+1});">下一页</a>
+            <a  href="javascript:getBargainRecord(${dis_goods.id?c}, ${bargain_record_page.number+1});">下一页</a>
         </#if>
     </div>
     </#if>

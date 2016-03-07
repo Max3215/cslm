@@ -268,25 +268,28 @@ public class TdTouchCartController {
     @RequestMapping(value = "/touch/cart/numberAdd", method = RequestMethod.POST)
     public String cartNumberAdd(Long id, HttpServletRequest req, ModelMap map) {
 
-        String username = (String) req.getSession().getAttribute("username");
+    	 String username = (String) req.getSession().getAttribute("username");
 
-        if (null == username) {
-            username = req.getSession().getId();
-        }
+         if (null == username) {
+             username = req.getSession().getId();
+         }
 
-        // 226 和 1644商品仅限购买一次
-        if (null != id && !id.equals(226L) && !id.equals(1644L)) {
-            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+         if (null != id) {
+             TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
+             TdDistributorGoods distributorGoods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), id);
+             
+             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
+                 long quantity = cartGoods.getQuantity();
+                 
+                 if(quantity < distributorGoods.getLeftNumber()){
+                 	cartGoods.setQuantity(quantity + 1);
+                 }
+                 tdCartGoodsService.save(cartGoods);
+             }
+         }
 
-            if (cartGoods.getUsername().equalsIgnoreCase(username)) {
-                long quantity = cartGoods.getQuantity();
-                cartGoods.setQuantity(quantity + 1);
-                tdCartGoodsService.save(cartGoods);
-            }
-        }
-
-        map.addAttribute("cart_goods_list",
-                tdCartGoodsService.updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
+         map.addAttribute("cart_goods_list",
+                 tdCartGoodsService.updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
 
         //判断是否为app链接
         Integer isApp = (Integer) req.getSession().getAttribute("app");
@@ -300,16 +303,18 @@ public class TdTouchCartController {
     @RequestMapping(value = "/touch/cart/numberMinus", method = RequestMethod.POST)
     public String cartNumberMinus(Long id, HttpServletRequest req, ModelMap map) {
 
-        String username = (String) req.getSession().getAttribute("username");
+    	String username = (String) req.getSession().getAttribute("username");
 
         if (null == username) {
             username = req.getSession().getId();
         }
 
-        // 226 和 1644商品仅限购买一次
-        if (null != id && !id.equals(226L) && !id.equals(1644L)) {
-            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+        if (null != id) {
+//            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+        	System.err.println(id+"-"+username);
+        	TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
 
+        	System.err.println(cartGoods);
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
 

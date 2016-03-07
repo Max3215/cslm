@@ -16,6 +16,7 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/cart.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
@@ -44,9 +45,9 @@ $(document).ready(function(){
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1 sel" href="/touch">平台首页</a>
+	        <a class="a1 " href="/touch">平台首页</a>
 	        <a class="a2" href="/touch/touch/category/list">商品分类</a>
-	        <a class="a3" href="/touch/cart">购物车</a>
+	        <a class="a3 sel" href="/touch/cart">购物车</a>
 	        <a class="a4" href="/touch/user">会员中心</a>
       </menu>
   </section>

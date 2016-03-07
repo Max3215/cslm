@@ -1,75 +1,111 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>车有同盟</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Language" content="zh-CN">
+<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
-<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+
+<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
-
-<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
-<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
-
 <script type="text/javascript">
 $(document).ready(function(){
-  searchTextClear(".comserch_text","搜索关键字","#999","#333");
+	//indexBanner("box","sum",300,5000,"num");//Banner
 });
 </script>
 </head>
 
 <body>
-<header class="comhead">
-  <div class="main">
-    <p>会员中心</p>
-    <a class="a1" href="javascript:history.go(-1);">返回</a>
-    <a class="a2" href="/touch"><img src="/touch/images/home.png" height="25" /></a>
-  </div>
-</header>
-<div class="comhead_bg"></div>
-<!--header END-->
-<section class="memberhead main">
-  <a href="#"><img src="${user.headImageUri!'/mag/style/user_avatar.png'}" /></a>
-  <p class="white fs08 ta-c">${user.username!''}</p>
-</section>
+	<!-- 顶部 -->
+	<header class="com_top">
+		<a href="#" class="set_up"></a>
+		<p>会员中心</p>
+		<a href="#" class="news"></a>
+	</header>
+	<div style="height:0.88rem;"></div>
+	<!-- 顶部 END -->
+  
+  <!-- 会员头像部分 -->
+  <section class="viptop_pic">
+    <img src="/touch/images/pictures/v_banner.jpg" />
+    <p class="head_pic"><img src="${user.headImageUri!'/client/headpic.png'}"></p>
+  </section>
+  <!-- 会员头像部分 END -->
 
-<section class="main membertop mt10 mb10">
-  <menu>
-    <a href="/touch/user/order/list/2"><img src="images/order01.png" height="30" /><p>待付款（${total_unpayed!0}）</p></a>
-    <a href="/touch/user/order/list/3"><img src="images/order02.png" height="30" /><p>待发货（${total_undelivered!0}）</p></a>
-    <a href="/touch/user/order/list/4"><img src="images/order03.png" height="30" /><p>待收货（${total_unreceived!'0'}）</p></a>
-    <a href="/touch/user/order/list/6"><img src="images/order04.png" height="30" /><p>已完成（${total_finished!'0'}）</p></a>
+  <section class="m_order">
+    <p>
+      <img src="/touch/images/m_icon01.png" />
+      <span>我的订单</span>
+      <a href="#">查看全部订单&gt;</a>
+    </p>
+    <div class="tabfix o_menu">
+      <menu>
+        <a href="/touch/user/order/list/2">
+          <i>${total_unpayed!'0'}</i>
+          <img src="/touch/images/order01.png" />
+          <span>待付款</span>
+        </a>
+        <a href="/touch/user/order/list/3">
+           <i>${total_undelivered!'0'}</i>
+          <img src="/touch/images/order02.png" />
+          <span>待发货</span>
+        </a>
+        <a href="/touch/user/order/list/4">
+            <i>${total_unreceived!'0'}</i>
+          <img src="/touch/images/order03.png" />
+          <span>待收货</span>
+        </a>
+        <a href="/touch/user/order/list/6">
+           <i>${total_finished!'0'}</i>
+          <img src="/touch/images/order04.png" />
+          <span>已完成</span>
+        </a>
+      </menu>
+    </div>
+  </section>
+
+  <menu class="m_other">
+    <a href="#">
+      <img src="/touch/images/m_icon02.png" />
+      <span>我的地址</span>
+      <font>&gt;</font>
+    </a>
+    <a href="#">
+      <img src="/touch/images/m_icon03.png" />
+      <span>我的收藏</span>
+      <font>&gt;</font>
+    </a>
+    <a href="#">
+      <img src="/touch/images/m_icon04.png" />
+      <span>我的积分</span>
+      <font>&gt;</font>
+    </a>
+    <a href="#">
+      <img src="/touch/images/m_icon05.png" />
+      <span>账户管理</span>
+      <font>&gt;</font>
+    </a>
   </menu>
-</section>
 
-<menu class="main memberlist">
-  <a href="/touch/user/order/list/0">全部订单</a>
-  <a href="/touch/user/point/list">我的粮草（${user.totalPoints!0}）</a>
-  <a href="/touch/user/coupon/list">我的优惠券</a>
-  <a href="/touch/user/collect/list">我的收藏</a>
-  <a href="/touch/user/info">个人信息设置</a>
-</menu>
-
-
-<div class="clear h40"></div>
-<section class="botlogin">
-  <#if username??>
-  <a href="/touch/user">${username!''}</a>
-  <a class="ml20" href="/touch/logout">退出</a>
-  <#else>
-  <a href="/touch/login">登录</a><a class="ml20" href="/touch/reg">注册</a>
-  </#if>
-  <a class="a1" href="javascript:$('html,body').animate({scrollTop:0},500);">TOP</a>
-</section>
-<footer class="comfoot main">
-    <a href="/">电脑版</a>
-    <a href="/touch">触屏版</a>
-</footer>
-<p class="bottext mainbox">${site.copyright!''}</p>
-<p class="bottext mainbox">${site.icpNumber!''}</p>
-
+  <!-- 底部 -->
+  <div style="height:0.88rem;"></div>
+  <section class="comfooter tabfix">
+    	<menu>
+	        <a class="a1" href="/touch">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
+  <!-- 底部 END -->
+  
 </body>
 </html>

@@ -131,7 +131,7 @@ function byNow(dId){
             </#if>
             <#if goods??> 
                 &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-                <a href="/goods/${goods.id?c}" title="${goods.title!''}">${goods.title!''}</a>
+                <a href="/goods/${dis_goods.id?c}" title="${dis_goods.title!''}">${dis_goods.title!''}</a>
             </#if>
         </p>
 	</section>
