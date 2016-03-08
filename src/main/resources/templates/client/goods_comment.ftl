@@ -5,7 +5,7 @@
                 <#list comment_page.content as item>
                     <li>
                         <p class="p1">${item.content!''}<span></span>${item.username!''}</p>
-                        <p class="p2">${item.commentTime?string("yyyy-MM-dd HH:hh:ss")}</p>
+                        <p class="p2">${item.commentTime!''}</p>
                          <#if item.isReplied?? && item.isReplied>
                             <p class="p3">商家回复：${item.reply!''}</p>
                          </#if>

@@ -63,7 +63,7 @@ DD_belatedPNG.fix('.,img,background');
   
     <div class="car_success">
         <p class="fc fs30 lh40 pb10">加入购物车成功</p>
-        <p class="fc fs18 pb10"> <a href="/cart">去购物车结算</a></p>
+        <p class="fc fs18 pb10"> <a href="/cart" style="color:red">去购物车结算</a></p>
         <p>您还可以 <a class="blue" href="/">继续购物</a></p>       
     </div>
   

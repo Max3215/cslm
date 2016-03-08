@@ -91,7 +91,7 @@ DD_belatedPNG.fix('.,img,background');
             </tr>
             <tr>
               <th>进货数量：</th>
-              <td><input type="number" name="shopReturnRation"  id="quantity"></td>
+              <td><input type="number" name="shopReturnRation"  id="quantity" min="0" ></td>
             </tr>
             <tr>
               <th></th>

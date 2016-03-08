@@ -63,7 +63,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th>输入支付密码：</th>
-          <td><input type="text" class="text long" /></td>
+          <td><input type="password" class="text long" /></td>
         </tr>
         <tr>
           <th></th>

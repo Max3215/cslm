@@ -204,7 +204,7 @@ function __doPostBack(eventTarget, eventArgument) {
                         </#if>
                     </#if>
                 </td>
-                <td align="center" width="10%">￥<font color="#C30000">${order.totalPrice?string("#.00")}</font></td>
+                <td align="center" width="10%">￥<font color="#C30000">${order.totalPrice?string("0.00")}</font></td>
                 <td>${order.orderTime?string("yyyy-MM-dd HH:mm:ss")}</td>
                 <td align="center">
                     <a href="/Verwalter/order/edit?id=${order.id?c}&statusId=${statusId!"0"}">详细</a>
