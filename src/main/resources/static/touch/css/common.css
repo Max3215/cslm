@@ -321,10 +321,16 @@ a,button,input{
 
 /*收货地址列表*/
 .address_list{background: #fff;}
-.address_list a{display: block; width: 94%; height: auto; border-bottom: 1px solid #c0bfbf; padding: 10px 3%; color: #333333;background: url(../images/round.png) no-repeat 95% center;background-size:0.30rem;}
-.address_list a p{font-size: 0.22rem;}
-.address_list a p span{padding-left: 10%;}
-.address_list a.act{background: url(../images/round_on.png) no-repeat 95% center #333333;background-size:0.30rem;color:#fff;}
+.address_list .part{display: block; width: 94%; height: auto; border-bottom: 1px solid #c0bfbf; padding: 10px 3%; color: #333333;/*background: url(../images/round.png) no-repeat 95% 20%;background-size:0.30rem;*/}
+.address_list .part p{font-size: 0.22rem;}
+.address_list .part p span{padding-left: 10%;}
+.address_list .part menu{overflow: hidden;position: absolute;top:0.1rem;right:5%;}
+.address_list .part menu a{display: block;font-size: 0.24rem;border:1px solid #c0bfbf;width: 1rem;height: 0.4rem;text-align: center;line-height: 0.4rem;margin-top: 0.2rem;border-radius: 3px;-webkit-border-radius: 3px;}
+
+.address_list .part.act{background:#333333;color:#fff;}
+.address_list .part.act menu a{background: #ff5b7d;border-color:#ff5b7d;color:#fff;}
+
+
 
 .add_address_btn{display: block;width: 100%;height: 1rem;background: #ff5b7d;color:#fff;text-align: center;line-height: 1rem;font-size: 0.28rem;position: fixed;left:0;bottom:0.87rem;}
 
@@ -407,6 +413,9 @@ a,button,input{
 .order_list .btns menu{position: absolute; top: 0.1rem; right: 3%;overflow: hidden;}
 .order_list .btns menu a{display: block; float: left; background: #fefafa; border: 1px solid #c3c2c1; color: #393939; font-size: 0.2rem; margin-left: 8px; padding: 0.01rem 0.08rem; border-radius: 2px; -webkit-border-radius: 2px;}
 .order_list .btns menu a.cur{background: #ff5b7d; border-color: #ff5b7d; color: #fff;}
+
+.order_list .number{height: 0.5rem;background: #D8D8D8;line-height: 0.5rem;color:#333;font-size: 0.24rem;padding-left: 4%;}
+.order_list .number span{position: absolute;top:0;right:4%;z-index: 2;font-size: 0.2rem;}
 
 
 /*注册和登录*/
@@ -546,7 +555,7 @@ a,button,input{
 .evaluate .tit{height:0.56rem;background: #fff;border-bottom:1px solid #dddddd;font-size: 0.22rem;color:#999999;line-height: 0.56rem;padding:0 4%;}
 
 .evaluate .order_list{border:none;margin-top:0;background: #eeeeee;}
-.evaluate .order_list li{display: block;background: #fff;padding: 0.14rem 4%;border:none;overflow: hidden;margin-top:0.2rem;}
+.evaluate .order_list li{display: block;background: #fff;padding: 0.14rem 4%;border:none;overflow: hidden;margin-top:0.1rem;}
 .evaluate .order_list li textarea{width: 100%;height: 1.2rem;border:1px solid #dddddd;background: #f8f8f8;margin-top:0.12rem;border-radius: 3px;-webkit-border-radius: 3px;}
 .evaluate .order_list li .sub{width: 1.3rem;height: 0.42rem;text-align: center;line-height: 0.42rem;color:#fff;font-size: 0.22rem;background: #fe5f73;border-radius: 3px;-webkit-border-radius: 3px;display: block;float:right;margin-top:0.12rem;}
 

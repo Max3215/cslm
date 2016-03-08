@@ -7,6 +7,7 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
@@ -44,27 +45,27 @@ $(document).ready(function(){
     <p>
       <img src="/touch/images/m_icon01.png" />
       <span>我的订单</span>
-      <a href="#">查看全部订单&gt;</a>
+      <a href="/touch/user/order/list/0">查看全部订单&gt;</a>
     </p>
     <div class="tabfix o_menu">
       <menu>
         <a href="/touch/user/order/list/2">
-          <i>${total_unpayed!'0'}</i>
+          <#if total_unpayed??><i>${total_unpayed!'0'}</i></#if>
           <img src="/touch/images/order01.png" />
           <span>待付款</span>
         </a>
         <a href="/touch/user/order/list/3">
-           <i>${total_undelivered!'0'}</i>
+           <#if total_undelivered??><i>${total_undelivered!'0'}</i></#if>
           <img src="/touch/images/order02.png" />
           <span>待发货</span>
         </a>
         <a href="/touch/user/order/list/4">
-            <i>${total_unreceived!'0'}</i>
+            <#if total_unreceived??><i>${total_unreceived!'0'}</i></#if>
           <img src="/touch/images/order03.png" />
           <span>待收货</span>
         </a>
         <a href="/touch/user/order/list/6">
-           <i>${total_finished!'0'}</i>
+           <#if total_finished??><i>${total_finished!'0'}</i></#if>
           <img src="/touch/images/order04.png" />
           <span>已完成</span>
         </a>
@@ -73,7 +74,7 @@ $(document).ready(function(){
   </section>
 
   <menu class="m_other">
-    <a href="#">
+    <a href="/touch/user/address/list">
       <img src="/touch/images/m_icon02.png" />
       <span>我的地址</span>
       <font>&gt;</font>

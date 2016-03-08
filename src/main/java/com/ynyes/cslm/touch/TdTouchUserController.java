@@ -149,16 +149,27 @@ public class TdTouchUserController {
         }
         
         map.addAttribute("user", tdUser);
-        map.addAttribute("order_page", tdOrderService.findByUsername(username, 0, ClientConstant.pageSize));
-        map.addAttribute("collect_page", tdUserCollectService.findByUsername(username, 0, ClientConstant.pageSize));
-        map.addAttribute("recent_page", tdUserRecentVisitService.findByUsernameOrderByVisitTimeDesc(username, 0, ClientConstant.pageSize));
-//        map.addAttribute("total_unpayed", tdOrderService.countByUsernameAndStatusId(username, 2));
-//        map.addAttribute("total_undelivered", tdOrderService.countByUsernameAndStatusId(username, 3));
-//        map.addAttribute("total_unreceived", tdOrderService.countByUsernameAndStatusId(username, 4));
-//        map.addAttribute("total_uncommented", tdOrderService.countByUsernameAndStatusId(username, 5));
-//        map.addAttribute("total_finished", tdOrderService.countByUsernameAndStatusId(username, 6));
-        map.addAttribute("recommend_goods_page", tdGoodsService.findByIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(0, ClientConstant.pageSize));
         
+        Long total_unpayed = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,2);
+        if(null != total_unpayed && total_unpayed >0L)
+        {
+        	map.addAttribute("total_unpayed",total_unpayed);
+        }
+        Long total_undelivered = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,3);
+        if(null != total_undelivered && total_undelivered>0L)
+        {
+        	map.addAttribute("total_undelivered",total_undelivered);
+        }
+        Long total_unreceived = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,4);
+        if(null != total_unpayed && total_unreceived>0L)
+        {
+        	map.addAttribute("total_unreceived",total_unreceived);
+        }
+        Long total_finished = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,6);
+        if(null != total_finished && total_finished>0L)
+        {
+        	map.addAttribute("total_finished",total_finished);
+        }
         return "/touch/user_index";
     }
     
@@ -520,30 +531,25 @@ public class TdTouchUserController {
         Page<TdOrder> orderPage = null;
         
         
-        if (statusId.equals(0))
-            {
-                if (null != keywords && !keywords.isEmpty())
-                {
-                    //orderPage = tdOrderService.findByUsernameAndSearch(username, keywords, page, ClientConstant.pageSize);
-//                	orderPage = tdOrderService.findByUsernameAndStatusIdNotAndSearch(username, 8L, keywords, page, ClientConstant.pageSize);
-                }
-                else
-                {
-                    //orderPage = tdOrderService.findByUsername(username, page, ClientConstant.pageSize);
-//                	orderPage = tdOrderService.findByUsernameAndStatusIdNot(username, 8L, page, ClientConstant.pageSize);
-                }
+        if (statusId.equals(0)) {
+            if (null != keywords && !keywords.isEmpty()) {
+                orderPage = tdOrderService.findByUsernameAndSearch(
+                        username, keywords, page, ClientConstant.pageSize);
+            } else {
+                orderPage = tdOrderService.findByUsername(username, page,
+                        ClientConstant.pageSize);
             }
-            else
-            {
-                if (null != keywords && !keywords.isEmpty())
-                {
-                    orderPage = tdOrderService.findByUsernameAndStatusIdAndSearch(username, statusId, keywords, page, ClientConstant.pageSize);
-                }
-                else
-                {
-                    orderPage = tdOrderService.findByUsernameAndStatusId(username, statusId, page, ClientConstant.pageSize);
-                }
-         }        
+        } else {
+            if (null != keywords && !keywords.isEmpty()) {
+                orderPage = tdOrderService
+                        .findByUsernameAndStatusIdAndSearch(username,
+                                statusId, keywords, page,
+                                ClientConstant.pageSize);
+            } else {
+                orderPage = tdOrderService.findByUsernameAndStatusId(
+                        username, statusId, page, ClientConstant.pageSize);
+            }
+        }
         
         map.addAttribute("order_page", orderPage);
         
@@ -1085,79 +1091,20 @@ public class TdTouchUserController {
         
         tdCommonService.setHeader(map, req);
         
-        //猜你喜欢 zhangji
-//        List<TdUserRecentVisit> lastVisitList = tdUserRecentVisitService.findByUsernameOrderByVisitCountDesc(username);
-//        if (0 == lastVisitList.size())
-//        {
-//            List<TdProductCategory> topCategoryList = tdProductCategoryService
-//                    .findByParentIdIsNullOrderBySortIdAsc();
-//        	//没有浏览记录时，第一页
-//            if (topCategoryList.size() > 0)
-//            {
-//		        map.addAttribute("reco_page0",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(0).getId(), 0, 4));
-//		        map.addAttribute("categoryId0",topCategoryList.get(0).getId());
-//		        map.addAttribute("categoryTitle0",topCategoryList.get(0).getTitle());
-//            }
-//	        //第二页
-//            if (topCategoryList.size() > 1)
-//            {
-//		        map.addAttribute("reco_page1",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(1).getId(), 0, 4));
-//		        map.addAttribute("categoryId1",topCategoryList.get(1).getId());
-//		        map.addAttribute("categoryTitle1",topCategoryList.get(1).getTitle());
-//            }
-//	        //第三页
-//            if (topCategoryList.size() > 2)
-//            {
-//		        map.addAttribute("reco_page2",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(2).getId(), 0, 4));
-//		        map.addAttribute("categoryId2",topCategoryList.get(2).getId());
-//		        map.addAttribute("categoryTitle2",topCategoryList.get(2).getTitle());
-//            }
-//        }
-//        if (lastVisitList.size() > 0)
-//	        	{
-//		        	//猜你喜欢，第一页
-//			        TdGoods good_0 =tdGoodsService.findOne(lastVisitList.get(0).getGoodsId());
-//			        map.addAttribute("reco_page0",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_0.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId0",good_0.getCategoryId());
-//			        map.addAttribute("categoryTitle0",good_0.getCategoryTitle());
-//	        	}
-//         if (lastVisitList.size() > 1)
-//	        	{
-//			        //猜你喜欢，第二页
-//			        TdGoods good_1 =tdGoodsService.findOne(lastVisitList.get(1).getGoodsId());
-//			        map.addAttribute("reco_page1",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_1.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId1",good_1.getCategoryId());
-//			        map.addAttribute("categoryTitle1",good_1.getCategoryTitle());
-//	        	}
-//		  if (lastVisitList.size() > 2)
-//	        	{
-//				    //猜你喜欢，第三页
-//			        TdGoods good_2 =tdGoodsService.findOne(lastVisitList.get(2).getGoodsId());
-//			        map.addAttribute("reco_page2",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_2.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId2",good_2.getCategoryId());
-//			        map.addAttribute("categoryTitle2",good_2.getCategoryTitle());
-//	        	}
-//
-//        if (null != id )
-//        {
-//            TdOrder order = tdOrderService.findOne(id);
-//            
-//            if (null != order)
-//            {
-//                if (1L == order.getStatusId()||2L == order.getStatusId())
-//                {
-//                	if (null == order.getIsCancel()||false == order.getIsCancel())
-//	                {
-//	                    order.setStatusId(7L);
-//	                    order.setCancelApplyTime(new Date());
-//	                    order.setIsCancel(true);
-//	                    order.setIsRefund(true);
-//	                    // 保存
-//	                    tdOrderService.save(order);
-//	                }
-//                }
-//            }
-//        }
+        if (null != id )
+        {
+            TdOrder order = tdOrderService.findOne(id);
+            
+            if (null != order)
+            {
+                if (1L == order.getStatusId()||2L == order.getStatusId())
+                {
+	                    order.setStatusId(7L);
+	                    // 保存
+	                    tdOrderService.save(order);
+                }
+            }
+        }
         
         return "redirect:/touch/user/order/list/0";
     }
@@ -1745,58 +1692,6 @@ public class TdTouchUserController {
         
         pointPage = tdUserPointService.findByUsername(username, page, ClientConstant.pageSize);
         
-        //猜你喜欢 zhangji
-//        List<TdUserRecentVisit> lastVisitList = tdUserRecentVisitService.findByUsernameOrderByVisitCountDesc(username);
-//        if (0 == lastVisitList.size())
-//        {
-//            List<TdProductCategory> topCategoryList = tdProductCategoryService
-//                    .findByParentIdIsNullOrderBySortIdAsc();
-//        	//没有浏览记录时，第一页
-//            if (topCategoryList.size() > 0)
-//            {
-//		        map.addAttribute("reco_page0",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(0).getId(), 0, 4));
-//		        map.addAttribute("categoryId0",topCategoryList.get(0).getId());
-//		        map.addAttribute("categoryTitle0",topCategoryList.get(0).getTitle());
-//            }
-//	        //第二页
-//            if (topCategoryList.size() > 1)
-//            {
-//		        map.addAttribute("reco_page1",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(1).getId(), 0, 4));
-//		        map.addAttribute("categoryId1",topCategoryList.get(1).getId());
-//		        map.addAttribute("categoryTitle1",topCategoryList.get(1).getTitle());
-//            }
-//	        //第三页
-//            if (topCategoryList.size() > 2)
-//            {
-//		        map.addAttribute("reco_page2",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(2).getId(), 0, 4));
-//		        map.addAttribute("categoryId2",topCategoryList.get(2).getId());
-//		        map.addAttribute("categoryTitle2",topCategoryList.get(2).getTitle());
-//            }
-//        }
-//        if (lastVisitList.size() > 0)
-//	        	{
-//		        	//猜你喜欢，第一页
-//			        TdGoods good_0 =tdGoodsService.findOne(lastVisitList.get(0).getGoodsId());
-//			        map.addAttribute("reco_page0",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_0.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId0",good_0.getCategoryId());
-//			        map.addAttribute("categoryTitle0",good_0.getCategoryTitle());
-//	        	}
-//         if (lastVisitList.size() > 1)
-//	        	{
-//			        //猜你喜欢，第二页
-//			        TdGoods good_1 =tdGoodsService.findOne(lastVisitList.get(1).getGoodsId());
-//			        map.addAttribute("reco_page1",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_1.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId1",good_1.getCategoryId());
-//			        map.addAttribute("categoryTitle1",good_1.getCategoryTitle());
-//	        	}
-//		  if (lastVisitList.size() > 2)
-//	        	{
-//				    //猜你喜欢，第三页
-//			        TdGoods good_2 =tdGoodsService.findOne(lastVisitList.get(2).getGoodsId());
-//			        map.addAttribute("reco_page2",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_2.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId2",good_2.getCategoryId());
-//			        map.addAttribute("categoryTitle2",good_2.getCategoryTitle());
-//	        	}
         
         map.addAttribute("point_page", pointPage);
         
@@ -1828,58 +1723,6 @@ public class TdTouchUserController {
         
         tdCommonService.setHeader(map, req);
         
-        //猜你喜欢 zhangji
-//        List<TdUserRecentVisit> lastVisitList = tdUserRecentVisitService.findByUsernameOrderByVisitCountDesc(username);
-//        if (0 == lastVisitList.size())
-//        {
-//            List<TdProductCategory> topCategoryList = tdProductCategoryService
-//                    .findByParentIdIsNullOrderBySortIdAsc();
-//        	//没有浏览记录时，第一页
-//            if (topCategoryList.size() > 0)
-//            {
-//		        map.addAttribute("reco_page0",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(0).getId(), 0, 4));
-//		        map.addAttribute("categoryId0",topCategoryList.get(0).getId());
-//		        map.addAttribute("categoryTitle0",topCategoryList.get(0).getTitle());
-//            }
-//	        //第二页
-//            if (topCategoryList.size() > 1)
-//            {
-//		        map.addAttribute("reco_page1",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(1).getId(), 0, 4));
-//		        map.addAttribute("categoryId1",topCategoryList.get(1).getId());
-//		        map.addAttribute("categoryTitle1",topCategoryList.get(1).getTitle());
-//            }
-//	        //第三页
-//            if (topCategoryList.size() > 2)
-//            {
-//		        map.addAttribute("reco_page2",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(topCategoryList.get(2).getId(), 0, 4));
-//		        map.addAttribute("categoryId2",topCategoryList.get(2).getId());
-//		        map.addAttribute("categoryTitle2",topCategoryList.get(2).getTitle());
-//            }
-//        }
-//        if (lastVisitList.size() > 0)
-//	        	{
-//		        	//猜你喜欢，第一页
-//			        TdGoods good_0 =tdGoodsService.findOne(lastVisitList.get(0).getGoodsId());
-//			        map.addAttribute("reco_page0",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_0.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId0",good_0.getCategoryId());
-//			        map.addAttribute("categoryTitle0",good_0.getCategoryTitle());
-//	        	}
-//         if (lastVisitList.size() > 1)
-//	        	{
-//			        //猜你喜欢，第二页
-//			        TdGoods good_1 =tdGoodsService.findOne(lastVisitList.get(1).getGoodsId());
-//			        map.addAttribute("reco_page1",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_1.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId1",good_1.getCategoryId());
-//			        map.addAttribute("categoryTitle1",good_1.getCategoryTitle());
-//	        	}
-//		  if (lastVisitList.size() > 2)
-//	        	{
-//				    //猜你喜欢，第三页
-//			        TdGoods good_2 =tdGoodsService.findOne(lastVisitList.get(2).getGoodsId());
-//			        map.addAttribute("reco_page2",tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderBySortIdAsc(good_2.getCategoryId(), 0, 4));
-//			        map.addAttribute("categoryId2",good_2.getCategoryId());
-//			        map.addAttribute("categoryTitle2",good_2.getCategoryTitle());
-//	        	}
         
         
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
@@ -1999,7 +1842,7 @@ public class TdTouchUserController {
     @RequestMapping(value = "/user/comment/add", method=RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> commentAdd(HttpServletRequest req,
-            TdUserComment tdComment,String[] hid_photo_name_show360, Long orderId, Long ogId, String code,
+    		TdUserComment tdComment, Long orderId, Long ogId,Long quantity, String code,
             ModelMap map) {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
@@ -2017,6 +1860,7 @@ public class TdTouchUserController {
             return res;
         }
 
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(ogId);
         TdGoods goods = tdGoodsService.findOne(tdComment.getGoodsId());
 
         if (null == goods) {
@@ -2024,11 +1868,6 @@ public class TdTouchUserController {
             return res;
         }
 
-        //zhangji 图片uri
-        String uris = parsePicUris(hid_photo_name_show360);
-
-//        tdComment.setShowPictures(uris);
-        
         tdComment.setCommentTime(new Date());
         tdComment.setGoodsCoverImageUri(goods.getCoverImageUri());
         tdComment.setGoodsTitle(goods.getTitle());
@@ -2038,13 +1877,17 @@ public class TdTouchUserController {
         tdComment.setUsername(username);
         
         tdComment = tdUserCommentService.save(tdComment);
+        
+        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
-        // 设置订单信息
+//        tdComment.setShowPictures(uris);
+        
         if (null != orderId) {
             TdOrder tdOrder = tdOrderService.findOne(orderId);
 
             if (null != tdOrder) {
                 tdComment.setOrderNumber(tdOrder.getOrderNumber());
+                tdComment.setDiysiteId(tdOrder.getShopId());
                 
                 List<TdOrderGoods> ogList = tdOrder.getOrderGoodsList();
 
@@ -2073,7 +1916,6 @@ public class TdTouchUserController {
             }
         }
 
-        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
         if (null != user) {
             tdComment.setUserHeadUri(user.getHeadImageUri());
@@ -2217,9 +2059,9 @@ public class TdTouchUserController {
 	                    }
 	                }
             	}
-//                map.addAttribute("order_page", tdOrderService
-//                        .findByUsernameAndStatusId(username, 5L, page,
-//                                ClientConstant.pageSize));
+                map.addAttribute("order_page", tdOrderService
+                        .findByUsernameAndStatusId(username, 5L, page,
+                                ClientConstant.pageSize));
             } else {
                 // 查找该用户的已评价订单
                 Page<TdOrder> orderPage = tdOrderService
@@ -2663,7 +2505,24 @@ public class TdTouchUserController {
                     }
                     
                     return "redirect:/touch/user/address/list";
+                }else if(method.equalsIgnoreCase("default")){
+                	if(null != id)
+                	{
+                		for (TdShippingAddress address : addressList) {
+							if(address.getId().equals(id)){
+								address.setIsDefaultAddress(true);
+								tdShippingAddressService.save(address);
+							}else{
+								address.setIsDefaultAddress(false);
+								tdShippingAddressService.save(address);
+							}
+						}
+                	}
+                	return "redirect:/touch/user/address/list";
                 }
+            }else if(method.equalsIgnoreCase("edit"))
+            {
+            	return "/touch/user_address_edit";
             }
             
             map.addAttribute("address_list", user.getShippingAddressList());

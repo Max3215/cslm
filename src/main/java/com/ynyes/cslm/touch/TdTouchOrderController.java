@@ -1326,6 +1326,7 @@ public class TdTouchOrderController {
 
                 // 是否已申请退货
                 orderGoods.setIsReturnApplied(false);
+                orderGoods.setIsCommented(false);
 
                 // 销售方式
                 orderGoods.setGoodsSaleType(0);

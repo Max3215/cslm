@@ -1,122 +1,80 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>车有同盟</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Language" content="zh-CN">
+<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
-<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+
+<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
 
-<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
-<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript">
-$(document).ready(function(){
-  
-});
-</script>
 </head>
 
-
 <body>
-<header class="comhead">
-  <div class="main">
-    <p>订单详情</p>
-    <a class="a1" href="javascript:history.go(-1);">返回</a>
-    <a class="a2" href="/touch"><img src="/touch/images/home.png" height="25" /></a>
-  </div>
-</header>
-<div class="comhead_bg"></div>
-<!--header END-->
-<section class="whitebg">
-  <menu class="myorder_info mainbox">
-    <p><span class="c7">下单日期：</span>${order.orderTime!''}</p>
-    <p><span class="c7">订单总价：</span><span class="red fs11">￥<#if order??><#if order.statusId==3>${order.totalLeftPrice?string("0.00")}<#else>${order.totalPrice?string("0.00")}</#if></#if></span></p>
-    <p><span class="c7">订单编号：</span>${order.orderNumber!''}<span class="fc"><#if order.statusId==7>（已取消）</#if></span></p>
-    <p><span class="c7">支付方式：</span>货到付款<span class="red"><#if order??>
-                <#if order.statusId==1>
-                    (待确认)
-                <#elseif order.statusId==2>
-                    (待付款)
-                <#elseif order.statusId==3>
-                   (待付尾款)
-                <#elseif order.statusId==4>
-                    (待服务)
-                <#elseif order.statusId==5>
-                    (待评价)
-                <#elseif order.statusId==6>
-                    (已完成)
-                <#elseif order.statusId==8>
-                    (支付失败)
-                </#if>
-            </#if></span></p>
-  </menu>
-</section>
-<section class="whitebg" style="margin-top:1px;">
-  <menu class="myorder_info mainbox">
-    <p><span class="c7">收货人：</span>${order.shippingName!''}</p>
-    <p><span class="c7">手机号码：</span>${order.shippingPhone!''}</p>
-    <P><span class="c7">同盟店：</span>${order.shopTitle!''}</p>
-    <p><span class="c7">预约时间：</span>${order.appointmentTime!''}</p>
-    <#if order??>
-        <#if order.isNeedInvoice>
-            <p><span class="c7">发票抬头：</span>${order.invoiceTitle!''}</p>
-        </#if>
-    </#if>
-    
-  </menu>
-</section>
-<p class="ta-c lh40">商品清单</p>
-<menu class="whitebg mymenu_list">
-  <#assign totalPrice = 0>
-  <#if order?? && order.orderGoodsList??>
-    <#list order.orderGoodsList as og>
-        <a href="/touch/goods/${og.goodsId?c}">
-            <b><img src="${og.goodsCoverImageUri}" width="64" height="64"/></b>
-            <p>${og.goodsTitle}<span class="sp1">￥${og.price?string("#.##")}</p>
-            <p class="p1">${og.goodsSubTitle}<span class="sp2">X${og.quantity!''}</p>
-            <div class="clear"></div>
-        </a>
-        <#if og.price??>
-            <#assign totalPrice=totalPrice+og.price*og.quantity>
-        </#if>
-    </#list>
-  </#if>
- 
-</menu>
-<section class="whitebg" style="margin-top:1px;">
-  <menu class="myorder_info mainbox">
-    <p><span class="c7">商品总价：</span>￥${totalPrice?string("#.##")}</p>
-    <p><span class="c7">同盟店地址：</span><#if diysite??>${diysite.address!''}</#if></p>
-    <p><span class="c7">优惠：</span>￥<#assign privilege=totalPrice-order.totalPrice>${privilege?string("#.##")}</p>
-    <p class="mt10"><span class="c9">应付总额：</span><span class="red fs11">￥<#if order??><#if order.statusId==3>${order.totalLeftPrice?string("0.00")}<#else>${order.totalPrice?string("0.00")}</#if></#if></span></p>
-  </menu>
-</section>
-<div class="clear h40"></div>
-<footer class="comfoot main">
-    <a href="/user/order?id=${order.id?c}">电脑版</a>
-    <a href="/touch/user/order?id=${order.id?c}">触屏版</a>
-</footer>
-<p class="bottext mainbox">${site.copyright!''}</p>
-<div class="buyfoot_bg"></div>
-<footer class="buyfoot">
-  <div class="mainbox">
-    <#if order.statusId==7>
-    <#else>
-        <#if order.statusId==2>
-           <a class="fr" href="/touch/order/dopay/${order.id?c}">付款</a>
-        <#elseif order.statusId==3>
-           <a class="fr" href="/touch/order/dopayleft/${order.id?c}">付款</a>
-        <#elseif order.statusId==5>
-           <a class="fr" href="#">评价</a>
-        </#if>
-    </#if>
-    <div class="clear"></div>
-  </div>
-</footer>
+	<!-- 顶部 -->
+	<header class="com_top">
+		<a href="javascript:history.go(-1);" class="back"></a>
+		<p>订单详情</p>
+		<a href="#" class="news"></a>
+	</header>
+	<div style="height:0.88rem;"></div>
+	<!-- 顶部 END -->
+  	
+  	<ul class="order_detail">
+		<li>订单日期：<span><#if order??>${order.orderTime?string('yyyy-MM-dd')}</#if></span></li>
+		<li>订单总价：<span>￥<#if order??>${order.totalPrice?string("0.00")}</#if></span></li>
+		<li>订单编号：<span><#if order??>${order.orderNumber!''}</#if></span></li>
+		<li>支付方式：<span>支付宝</span></li>
+		<li>配送方式：<span><#if order?? && order.deliveryMethod?? && order.deliveryMethod==1>门店自提：${order.shipAddress!''}<#else>送货上门</#if></span></li>
+	</ul>
+  	<ul class="order_detail">
+		<li>收货人：<span><#if order??>${order.shippingName!''}</#if></span></li>
+		<li>手机号码：<span>${order.shippingPhone!''}</span></li>
+		<li>详细地址：<span>${order.shippingAddress!''}</span></li>
+		<li>备注：<span>${order.userRemarkInfo!''}</span></li>
+	</ul>
+
+	<section class="order_list" style="margin-bottom:0.4rem;border:none;">
+    <ul>
+        <#if order?? && order.orderGoodsList??>
+            <#list order.orderGoodsList as og> 
+              <li>
+                    <a href="/touch/goods/${og.goodsId?c}" class="pic"><img src="${og.goodsCoverImageUri!''}" /></a>
+                    <div class="info">
+                      <a href="/touch/goods/${og.goodsId?c}">${og.goodsTitle!''}</a>
+                      <p>价格：￥${og.price?string('0.00')}</p>
+                      <p>数量：${og.quantity!'0'}</p>
+                    </div>
+                    <div class="clear"></div>  
+              </li>
+              </#list>
+         </#if>
+    </ul>  
+  </section>
+
+  <ul class="order_detail">
+		<li>商品价格：<span>￥<#if order?? && order.totalGoodsPrice??>${order.totalGoodsPrice?string('0.00')}</#if></span></li>
+		<li>邮费：<span>￥<#if order.postPrice??>${order.postPrice?string("0.00")}<#else>0</#if></span></li>
+		<li style="height:20px;"></li>
+		<li>实付总额：<span style="color:#d64532;">￥<#if order??>${order.totalPrice?string("0.00")}</#if></span></li>
+		
+	</ul>
+<section class="comfooter tabfix">
+        <menu>
+            <a class="a1" href="/touch">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
 </body>
 </html>

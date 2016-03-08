@@ -1,65 +1,189 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>车有同盟</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Language" content="zh-CN">
+<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
-<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+
+<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
 
-<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
-<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
+<script src="/touch/js/message.js"></script>
+<link href="/touch/css/message.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 $(document).ready(function(){
-  
+	//indexBanner("box","sum",300,5000,"num");//Banner
+
 });
+
+function cancelConfirm() {
+    if (!confirm("未付款可直接取消，是否确认取消订单？")) {
+        window.event.returnValue = false;
+    }
+}
+
+function receiveConfirm() {
+    if (!confirm("检查货物质量并确认收货？")) {
+        window.event.returnValue = false;
+    }
+}
+
+function orderReceive(id)
+{
+     $.ajax({
+            type:"post",
+            url:"/touch/user/order/receive",
+            data:{
+                "id":id
+            },
+            success:function(res) {
+                if (0 == res.code)
+                {
+                    //alert(res.message);
+                    ct.alert({
+                        text: res.message,
+                        type: "alert"
+                    });
+                    window.location.reload();
+                }
+                else
+                {
+                    //alert(res.message);
+                    ct.alert({
+                        text: res.message,
+                        type: "alert"
+                    });
+                    if (res.message = "请登录！！")
+                    {
+                    window.location.href="/login"
+                    }
+                }
+            }
+        });
+}
+
 </script>
 </head>
 
 <body>
-<header class="comhead">
-  <div class="main">
-    <p>订单</p>
-    <a class="a1" href="javascript:history.go(-1);">返回</a>
-    <a class="a2" href="/touch"><img src="/touch/images/home.png" height="25" /></a>
-  </div>
-</header>
-<div class="comhead_bg"></div>
+	<!-- 顶部 -->
+	<header class="com_top">
+		<a href="javascript:history.go(-1);" class="back"></a>
+		<p>我的订单</p>
+		<a href="#" class="news"></a>
+	</header>
+	<div style="height:0.88rem;"></div>
+	<!-- 顶部 END -->
+  
+  <!-- 我的订单 -->
+  <menu class="order_tit">
+    <a <#if !status_id?? || status_id==0>class="act"</#if> href="/touch/user/order/list/0"><p>全部订单</p></a>
+    <a <#if status_id?? && status_id==2>class="act"</#if> href="/touch/user/order/list/2"><p>待付款</p></a>
+    <a <#if status_id?? && status_id==4>class="act"</#if> href="/touch/user/order/list/4"><p>待收货</p></a>
+    <a <#if status_id?? && status_id==6>class="act"</#if> href="/touch/user/order/list/6"><p>已完成</p></a>
+  </menu>
+  <div style="height:0.8rem;"></div>
 
-<div class="main comcheck">
-  <nav>
-    <a <#if !status_id?? || status_id==0>class="sel"</#if> href="/touch/user/order/list/0"><p>全部订单</p></a>
-    <a <#if status_id?? && status_id==2>class="sel"</#if> href="/touch/user/order/list/2"><p>待付款</p></a>
-    <a <#if status_id?? && status_id==3>class="sel"</#if> href="/touch/user/order/list/3"><p>待发货</p></a>
-    <a <#if status_id?? && status_id==4>class="sel"</#if> href="/touch/user/order/list/4"><p>待收货</p></a>
-    <a <#if status_id?? && status_id==6>class="sel"</#if> href="/touch/user/order/list/6"><p>已完成</p></a>
-  </nav>
-</div><!--comcheck END-->
-
-<menu class="whitebg mymenu_list">
-<#if order_page??>
+  <#if order_page??>
     <#list order_page.content as order>
-        <h4>订单号：<a href="/touch/user/order?id=${order.id?c}">${order.orderNumber!''}</a><span>共<b class="red">${order.orderGoodsList?size}</b>件商品，总计<b class="red">￥${order.totalPrice?string("0.00")}</b>元</span></h4>
-        <#list order.orderGoodsList as og>
-            <a href="/touch/goods/${og.goodsId?c}">
-                <b><img src="${og.goodsCoverImageUri}" /></b>
-                <p>${og.goodsTitle!''}<span class="sp1">￥${og.price?string("0.00")}</span></p>
-                <p class="p1">${og.goodsSubTitle!''}<span class="sp2">X${og.quantity!''}</span></p>
-                <div class="clear"></div>
-            </a>
-        </#list>
-    </#list>
-</#if>
-</menu>
+  <section class="order_list">
+    <ul>
+      <a href="/touch/user/order?id=${order.id?c}"> <p class="number">订单号：${order.orderNumber!''}</p></a>
+      <#list order.orderGoodsList as og>
+      <li>
+        <a href="/touch/goods/${og.goodsId?c}" class="pic"><img src="${og.goodsCoverImageUri!''}" /></a>
+        <div class="info">
+          <a href="/touch/goods/${og.goodsId?c}">${og.goodsTitle!''}</a>
+          <p>价格：￥${og.price?string('0.00')}</p>
+          <p>数量：${og.quantity!'0'}</p>
+        </div>
+        <div class="clear"></div>
+      </li>
+     </#list>
+    </ul>
+    <div class="btns">
+      <#if order.statusId??>
+      <#switch order.statusId>
+      <#case 1>
+           <span>待确认</span>
+           <menu>
+            <a href="/touch/user/cancel/direct?id=${order.id?c}" onClick="cancelConfirm()" id="">取消订单</a>
+            <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+           </menu>
+      <#break>
+      <#case 2>
+           <span>待付款</span>
+           <menu>
+                <a href="/touch/user/cancel/direct?id=${order.id?c}" onClick="cancelConfirm()" id="">取消订单</a>
+                <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+                <a href="/order/dopay/${order.id?c}" class="cur">去付款</a>
+           </menu>
+      <#break>
+      <#case 3>
+           <span>待发货</span>
+           <menu>
+           <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+           </menu>
+      <#break>
+      <#case 4>
+           <span>待收货</span>
+           <menu>
+                <a href="javascript:orderReceive(${order.id?c});" onClick="receiveConfirm()" class="cur">确认收货</a>
+                <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+           </menu>
+      <#break>
+      <#case 5>
+           <span>待评价</span>
+           <menu>
+                <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+                <a href="/touch/user/comment/list?keywords=${order.orderNumber!''}" class="cur">去评价</a>
+           </menu>
+      <#break>
+      <#case 6>
+           <span>已完成</span>
+           <menu>
+            <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+           </menu>
+      <#break>
+      <#case 7>
+           <span>已取消</span>
+           <menu>
+            <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+           </menu>
+      <#break>
+      <#default>
+            <span>支付取消</span>
+           <menu>
+           </menu>
+        </#switch>
+      </#if>
+    </div>
+  </section>
+   </#list>
+   </#if>
+  <!-- 我的订单 END -->
 
-<#--
-<a class="ma15 ta-c block" href="#"><img src="/touch/images/more.png" height="20" /></a>
--->
-
+  <!-- 底部 -->
+  <div style="height:0.88rem;"></div>
+  <section class="comfooter tabfix">
+    	<menu>
+	        <a class="a1" href="/touch">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
+  <!-- 底部 END -->
+  
 </body>
 </html>
