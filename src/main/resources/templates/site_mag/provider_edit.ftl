@@ -110,7 +110,7 @@ $(function () {
     <dl>
         <dt>登录名</dt>
         <dd>
-            <input name="username" type="text" value="<#if provider??>${provider.username!""}</#if>" class="input normal" <#if provider??><#else>ajaxurl="/Verwalter/provider/check/username"</#if> datatype="s" sucmsg=" ">
+            <input name="username" type="text" value="<#if provider??>${provider.username!""}</#if>" class="input normal" <#if provider??><#else>ajaxurl="/Verwalter/provider/check/username"</#if> datatype="s6-20" sucmsg=" ">
             <span class="Validform_checktip">*登录账号</span>
         </dd>
     </dl>

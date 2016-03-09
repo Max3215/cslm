@@ -216,7 +216,7 @@ function byNow(dId){
   <section class="pro_foot">
     <a href="javascript:addCollect(${dis_goods.id?c})"></a>
     <a href="#">立即购买</a>
-    <a href="/cart/init?id=${dis_goods.id?c}"  id="addCart">加入购物车</a>
+    <a href="/touch/cart/init?id=${dis_goods.id?c}"  id="addCart">加入购物车</a>
   </section>
   <!-- 底部 END -->
   

@@ -46,7 +46,7 @@ $(document).ready(function(){
   <section class="comfooter tabfix">
     	<menu>
 	        <a class="a1 " href="/touch">平台首页</a>
-	        <a class="a2" href="/touch/touch/category/list">商品分类</a>
+	        <a class="a2" href="/touch/category/list">商品分类</a>
 	        <a class="a3 sel" href="/touch/cart">购物车</a>
 	        <a class="a4" href="/touch/user">会员中心</a>
       </menu>
