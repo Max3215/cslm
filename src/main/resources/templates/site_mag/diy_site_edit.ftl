@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
-<title>编辑物流配送</title>
+<title>编辑超市信息</title>
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/Validform_v5.3.2_min.js"></script>
 <script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
@@ -144,9 +144,7 @@ $(function () {
   <dl>
     <dt>超市名称</dt>
     <dd>
-        <#--
         <input type="hidden" name="id"  value="<#if diy_site??>${diy_site.id?c}</#if>">
-        -->
         <input name="title" type="text" value="<#if diy_site??>${diy_site.title!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
         <span class="Validform_checktip">*分销商名称</span>
     </dd>
@@ -365,6 +363,7 @@ $(function () {
     </dd>
   </dl>
 </div>
+
 <div class="tab-content" style="display: none;">
     <dl>
         <dt>交易记录</dt>

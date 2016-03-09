@@ -31,7 +31,7 @@
     </div>
     <#if bargain_record_page??>
     <div class="pages">
-        <span>共${bargain_record_page.content?size!''}条记录&nbsp;&nbsp;&nbsp;&nbsp;${bargain_record_page.number+1}/${bargain_record_page.totalPages!'0'}页</span>
+        <span>共${bargain_record_page.totalElements!'0'}条记录&nbsp;&nbsp;&nbsp;&nbsp;${bargain_record_page.number+1}/${bargain_record_page.totalPages!'0'}页</span>
         <#assign continueEnter=false>
         <#if bargain_record_page?? && bargain_record_page.number+1 == 1>
             <a  href="javascript:;">上一页</a>

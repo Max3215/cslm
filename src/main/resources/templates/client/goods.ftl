@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -38,7 +38,24 @@ $(document).ready(function(){
     },function(){
         $(this).next().hide();
     })
+    
+    //调用方法
+//$("#quantity").keypress(function () {
+//    $("#quantity").val(stripscript($(this).val()));
+//    })
 })
+
+//替换特殊字符
+function stripscript(s) {
+    var pattern = new RegExp("[`~%!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）;—|{}【】‘；：”“'。，、？]")
+    var rs = "";
+    for (var i = 0; i < s.length; i++) {
+        rs = rs + s.substr(i, 1).replace(pattern, '');
+    }
+    console.debug(rs);
+    return rs;
+}
+
 
 function addNum(){
     var q = parseInt($("#quantity").val());
@@ -93,22 +110,13 @@ function cartInit(dId){
 <!--  立即购买   -->
 function byNow(dId){
     var quantity = document.getElementById("quantity").value;
-    if(quantity <= 0 || "" == quantity ){
+    var leftNumber = $("#leftNumber").val();
+    if(quantity <= 0 || "" == quantity || quantity > leftNumber){
         alert("请选择正确的数量");
         return;
     }
-    $.ajax({
-        type: "get",
-        url: "/goods/incart",
-        data: {"id":dId,"quantity":quantity},
-        success: function (data) { 
-            if(data.msg){
-                alert(data.msg);
-                return;
-            }
-            window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
-        }
-    });
+    window.open("/order/byNow/"+dId+"?quantity="+quantity);
+  //  window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
 }
 
 
@@ -242,9 +250,10 @@ function byNow(dId){
 					<#if dis_goods??>
 					<span>数量：</span>
 					<a id="id-minus" href="javascript:minusNum();">-</a>
-					<input class="text" type="text" id="quantity" value="1" />
+					<input class="text" type="text" id="quantity" value="1" onfocus="if(value=='1'||value=='0') {value=''}" onblur="if (value==''||value=='0') {value='1'}" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
 					<a id="id-plus" href="javascript:addNum();">+</a>
 					<label>库存${dis_goods.leftNumber!'0'}</label>
+					<input type="hidden" id="leftNumber" value="${dis_goods.leftNumber!'0'}">
 					<#else>
 					<lable sytle="color:red">*当前超市没有此商品，您可以选择其他超市继续购买</label>
 					</#if>

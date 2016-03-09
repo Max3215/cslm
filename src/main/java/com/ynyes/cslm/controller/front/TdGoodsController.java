@@ -567,49 +567,49 @@ public class TdGoodsController {
      * @param req
      * @return
      */
-    @RequestMapping(value ="/goods/incart")
-    @ResponseBody
-    public Map<String,Object> goodsBeforIncart(Long id,Long quantity,HttpServletRequest req)
-    {
-    	Map<String,Object> res =new HashMap<>();
-    	
-	    	if(null == id)
-	    	{
-	    		res.put("msg","该商品不存在！");
-	    		return res;
-	    	}
-	    	if(null ==quantity)
-	    	{
-	    		quantity =1L;
-	    	}
-	    	
-    	if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
-    	{
-    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-	    	
-	//    	List<TdDistributorGoods> disGoods = tdDistributorGoodsService.findByGoodsId(id);
-//	    	TdDistributorGoods distributorGoods = TdDistributorService.findByIdAndGoodId(disId, id);
-	    	TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(id);
-	    	
-	    	if(null == distributorGoods)
-	    	{
-	    		res.put("msg", "本超市没有该商品，您可以选择其他超市购买！");
-	    		return res;
-	    	}
-	    	
-	    	if(quantity > distributorGoods.getLeftNumber())
-	    	{
-	    		res.put("msg", "本超市库存不足！");
-	    		return res;
-	    	}
-    	}else{
-    		Long distributorId = tdDistributorGoodsService.findDistributorId(id);
-    		TdDistributor distributor = TdDistributorService.findOne(distributorId);
-    		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
-    		req.getSession().setAttribute("distributorTitle", distributor.getTitle());
-    	}
-    	return res;
-    }
+//    @RequestMapping(value ="/goods/incart")
+//    @ResponseBody
+//    public Map<String,Object> goodsBeforIncart(Long id,Long quantity,HttpServletRequest req)
+//    {
+//    	Map<String,Object> res =new HashMap<>();
+//    	
+//	    	if(null == id)
+//	    	{
+//	    		res.put("msg","该商品不存在！");
+//	    		return res;
+//	    	}
+//	    	if(null ==quantity)
+//	    	{
+//	    		quantity =1L;
+//	    	}
+//	    	
+//    	if(null !=req.getSession().getAttribute("DISTRIBUTOR_ID"))
+//    	{
+//    		Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+//	    	
+//	//    	List<TdDistributorGoods> disGoods = tdDistributorGoodsService.findByGoodsId(id);
+////	    	TdDistributorGoods distributorGoods = TdDistributorService.findByIdAndGoodId(disId, id);
+//	    	TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(id);
+//	    	
+//	    	if(null == distributorGoods)
+//	    	{
+//	    		res.put("msg", "本超市没有该商品，您可以选择其他超市购买！");
+//	    		return res;
+//	    	}
+//	    	
+//	    	if(quantity > distributorGoods.getLeftNumber())
+//	    	{
+//	    		res.put("msg", "本超市库存不足！");
+//	    		return res;
+//	    	}
+//    	}else{
+//    		Long distributorId = tdDistributorGoodsService.findDistributorId(id);
+//    		TdDistributor distributor = TdDistributorService.findOne(distributorId);
+//    		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
+//    		req.getSession().setAttribute("distributorTitle", distributor.getTitle());
+//    	}
+//    	return res;
+//    }
 }
 
     

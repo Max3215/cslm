@@ -43,7 +43,7 @@ function topup(){
         alert("输入正确的充值金额");
         return;
     }else{
-        if(provice >= 50000 || provice <= 10){
+        if(provice > 50000 || provice < 10){
             alert("充值金额必须在10~50000之间");
             return;
         }else{

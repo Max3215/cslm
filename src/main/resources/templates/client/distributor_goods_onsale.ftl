@@ -60,7 +60,7 @@ function editgoods(gid){
     var code = $("#code"+gid).val();
     
     $("#goodsTitle").attr("value",goodsTitle);
-    $("#goodsPrice").attr("value",goodsPrice);
+    $("#goodsMarketPrice").attr("value",goodsPrice);
     $("#subTitle").attr("value",subTitle);
     $("#code").attr("value",code);
     $('.sub_form').css('display','block');
@@ -272,12 +272,12 @@ DD_belatedPNG.fix('.,img,background');
           <td><input type="text" class="add_width" name="code" id="code" readonly="readonly"></td>
         </tr>
          <tr>
-          <th>*商品售价：</th>
-          <td><input type="text" name="goodsMarketPrice" id="goodsMarketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
+          <th>*特惠价：</th>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
         </tr>
         <tr>
           <th>*实体店价：</th>
-          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
+          <td><input type="text" name="goodsMarketPrice" id="goodsMarketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
         </tr>
         <tr>
           <th>商品单位：</th>

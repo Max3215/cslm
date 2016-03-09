@@ -111,9 +111,9 @@ function categoryChange(e)
             	</#if>
             </select>
           </div>
-              <div style="float:left;" id="twoCatDiv" name="twoparentId">
+              <div style="float:left;" id="twoCatDiv" >
             <#if categoryList??>
-                <select name="parId" id="twoCat">
+                <select name="twoparentId" id="twoCat">
                     <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
                        <#list categoryList as c>
                            <option value="${c.id?c!""}" <#if cat?? && cat.parentTree?? && cat.parentTree?contains("["+c.id?c+"]") || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>>${c.title!""}</option>

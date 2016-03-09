@@ -84,7 +84,7 @@ DD_belatedPNG.fix('.,img,background');
             <#list collect_page.content as cg>     
             <tr id="tr_1424195166">
                 <td>
-                    <a href="/goods/${cg.goodsId?c}" target="_blank">
+                    <a href="/goods/${cg.distributorId?c}" target="_blank">
                         <strong><img width="100" height="100" src="${cg.goodsCoverImageUri!''}"></strong>
                     </a>
                 </td>

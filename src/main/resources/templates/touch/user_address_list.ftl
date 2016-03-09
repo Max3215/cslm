@@ -69,7 +69,7 @@ $(document).ready(function(){
          </#list>
     </#if>
   </section>
-  <a href="#" class="add_address_btn">添加新地址</a>
+  <a href="/touch/user/address/update" class="add_address_btn">添加新地址</a>
   <div style="height:1rem;"></div>
   <!-- 收货地址列表 END -->
 

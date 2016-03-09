@@ -17,10 +17,28 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/Validform_v5.3.2_min.js"></script>
+<script src="/touch/js/jquery.cityselect.js"></script>
+<script src="/touch/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
+	
+	 //初始化表单验证
+    $("#form1").Validform({
+        tiptype: 3
+    });
+	
+	$("#pcd").citySelect({
+        nodata:"none",
+        <#if address?? && address.province??>prov: "${address.province!''}",</#if>
+        <#if address?? && address.city??>city: "${address.city!''}",</#if>
+        <#if address?? && address.disctrict??>dist: "${address.disctrict!''}",</#if>
+        required:false
+    }); 
 });
+
+
 </script>
 </head>
 
@@ -35,35 +53,43 @@ $(document).ready(function(){
 	<!-- 顶部 END -->
   
   <!-- 收货人信息填写 -->
-  <form>
+  <form id="form1" action="/touch/user/address/save">
   <section class="add_consignee">
-    <p>收货人姓名</p>
-    <input type="text" class="text" />
-    <p>收货人电话</p>
-    <input type="text" class="text" />
-    <p>邮政编码</p>
-    <input type="text" class="text" />
-    <p>收货地址</p>
-    <div class="address">
-          <select class="fl"><option>省</option></select>
-          <select class="fr"><option>市</option></select>
+    <input class="mytext" name="addressId" type="hidden" value="<#if address??>${address.id?c}</#if>">  
+    <div>
+    <p>收货人：</p>
+    <input type="text"  class="text" name="receiverName" datatype="*2-128" value="<#if address??>${address.receiverName!''}</#if>"/>
+    </div>
+    <div>
+    <p>联系电话：</p>
+    <input type="text" class="text" name="receiverMobile" datatype="m" errormsg="请输入正确的电话号码格式！" value="<#if address??>${address.receiverMobile!''}</#if>"/>
+    </div>
+    <div>
+    <p>邮政编码：</p>
+    <input type="text" class="text" name="postcode"  datatype="p" value="<#if address??>${address.postcode!''}</#if>"/>
+    </div>
+    <p>收货地址：</p>
+    <div class="address" id="pcd">
+          <select class="fl prov" name="province"></select>
+          <select class="fr city" name="city"></select>
           <div class="clear"></div>
-          <select style="width:100%;"><option>区</option></select>
+          <select style="width:100%;" class="dist" name="disctrict"></select>
           <p>详细地址</p>
-          <textarea></textarea>
+          <textarea name="detailAddress"><#if address??>${address.detailAddress!''}</#if></textarea>
     </div>
     <input type="submit" class="sub" value="保存" />
   </section>
+  </form>
   <!-- 收货人信息填写 END -->
 
   <!-- 底部 -->
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1 sel" href="#">平台首页</a>
-	        <a class="a2" href="#">商品分类</a>
-	        <a class="a3" href="#">购物车</a>
-	        <a class="a4" href="#">会员中心</a>
+	        <a class="a1" href="/touch">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
       </menu>
   </section>
   <!-- 底部 END -->

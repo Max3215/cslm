@@ -143,7 +143,11 @@ public class TdManagerProductCategoryController {
                 } 
                 if(null != category.getParentId() && category.getLayerCount()==3L)
                 {
-                	map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(category.getParentId()));
+                	TdProductCategory parentCat = tdProductCategoryService.findOne(category.getParentId());
+                	if(null != parentCat && null != parentCat.getParentId())
+                	{
+                		map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(parentCat.getParentId()));
+                	}
                 }
             }
         }
@@ -195,7 +199,7 @@ public class TdManagerProductCategoryController {
         	
         	cat.setTagValueCollect(tagValueCollect);
         }
-        
+
         if(null != paramCategory && !paramCategory.equals(0L))
         {
         	cat.setParamCategoryId(paramCategory);
@@ -204,10 +208,6 @@ public class TdManagerProductCategoryController {
         if(null != twoparentId && twoparentId !=0L)
         {
         	cat.setParentId(twoparentId);
-        }
-        if(null != parId)
-        {
-        	cat.setParentId(parId);
         }
         
         cat = tdProductCategoryService.save(cat);

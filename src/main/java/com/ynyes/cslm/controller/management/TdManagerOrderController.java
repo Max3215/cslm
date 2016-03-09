@@ -1452,52 +1452,6 @@ public class TdManagerOrderController {
         return "redirect:/Verwalter/order/setting/delivery/list";
     }
     
-    @RequestMapping(value="/setting/diysite/save", method = RequestMethod.POST)
-    public String save(TdDistributor tdDistributor,
-                        String[] hid_photo_name_show360,
-                        ModelMap map,Boolean isSupply,Boolean isStock,
-                        HttpServletRequest req){
-        String username = (String) req.getSession().getAttribute("manager");
-        if (null == username)
-        {
-            return "redirect:/Verwalter/login";
-        }
-        
-        String uris = parsePicUris(hid_photo_name_show360);
-        
-        tdDistributor.setShowPictures(uris);
-        if(null == tdDistributor.getVirtualMoney() || "".equals(tdDistributor.getVirtualMoney())){
-        	tdDistributor.setVirtualMoney(new Double(0));
-        }
-        // 修改代理、进货权
-        if(null != isSupply && isSupply)
-        {
-        	tdDistributor.setIsSupply(true);
-        }else{
-        	tdDistributor.setIsSupply(false);
-        }
-        
-        if(null != isStock && isStock)
-        {
-        	tdDistributor.setIsStock(true);
-        }else{
-        	tdDistributor.setIsStock(false);
-        }
-        
-        if (null == tdDistributor.getId())
-        {
-            tdManagerLogService.addLog("add", "新增加盟超市", req);
-        }
-        else
-        {
-            tdManagerLogService.addLog("edit", "修改加盟超市", req);
-        }
-        
-        TdDistributorService.save(tdDistributor);
-        
-        return "redirect:/Verwalter/order/setting/diysite/list";
-    }
-    
     @RequestMapping(value="/dialog/contact")
     public String addressDialog(ModelMap map,
             HttpServletRequest req){
@@ -1810,6 +1764,52 @@ public class TdManagerOrderController {
     	return "/";
     }
     
+    @RequestMapping(value="/setting/diysite/save", method = RequestMethod.POST)
+    public String save(TdDistributor tdDistributor,
+                        String[] hid_photo_name_show360,
+                        ModelMap map,Boolean isSupply,Boolean isStock,
+                        HttpServletRequest req){
+        String username = (String) req.getSession().getAttribute("manager");
+        if (null == username)
+        {
+            return "redirect:/Verwalter/login";
+        }
+        
+        String uris = parsePicUris(hid_photo_name_show360);
+//        System.err.println(TdDistributor);
+        tdDistributor.setShowPictures(uris);
+        if(null == tdDistributor.getVirtualMoney() || "".equals(tdDistributor.getVirtualMoney())){
+        	tdDistributor.setVirtualMoney(new Double(0));
+        }
+        // 修改代理、进货权
+        if(null != isSupply && isSupply)
+        {
+        	tdDistributor.setIsSupply(true);
+        }else{
+        	tdDistributor.setIsSupply(false);
+        }
+        
+        if(null != isStock && isStock)
+        {
+        	tdDistributor.setIsStock(true);
+        }else{
+        	tdDistributor.setIsStock(false);
+        }
+        
+        if (null == tdDistributor.getId())
+        {
+            tdManagerLogService.addLog("add", "新增加盟超市", req);
+        }
+        else
+        {
+            tdManagerLogService.addLog("edit", "修改加盟超市", req);
+        }
+        
+        TdDistributorService.save(tdDistributor);
+        
+        return "redirect:/Verwalter/order/setting/diysite/list";
+    }
+    
     @ModelAttribute
     public void getModel(@RequestParam(value = "payTypeId", required = false) Long payTypeId,
                     @RequestParam(value = "deliveryTypeId", required = false) Long deliveryTypeId,
@@ -1824,7 +1824,7 @@ public class TdManagerOrderController {
         }
         
         if (null != diySiteId) {
-            model.addAttribute("tdDistributor", TdDistributorService.findOne(diySiteId));
+            model.addAttribute("tdDistributor", TdDistributorService.findById(diySiteId));
         }
     }
     

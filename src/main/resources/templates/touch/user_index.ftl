@@ -79,12 +79,12 @@ $(document).ready(function(){
       <span>我的地址</span>
       <font>&gt;</font>
     </a>
-    <a href="#">
+    <a href="/touch/user/collect/list">
       <img src="/touch/images/m_icon03.png" />
       <span>我的收藏</span>
       <font>&gt;</font>
     </a>
-    <a href="#">
+    <a href="/touch/user/point/list">
       <img src="/touch/images/m_icon04.png" />
       <span>我的积分</span>
       <font>&gt;</font>

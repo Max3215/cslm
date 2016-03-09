@@ -1,55 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>车有同盟</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Language" content="zh-CN">
+<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
-<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+
+<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
-
-<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
-<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
-
 <script type="text/javascript">
 $(document).ready(function(){
-  
+	//indexBanner("box","sum",300,5000,"num");//Banner
+
 });
 </script>
 </head>
 
 <body>
-<header class="comhead">
-  <div class="main">
-    <p>我的收藏</p>
-    <a class="a1" href="javascript:history.go(-1);">返回</a>
-    <a class="a2" href="/touch"><img src="/touch/images/home.png" height="25" /></a>
-  </div>
-</header>
-<div class="comhead_bg"></div>
+	<!-- 顶部 -->
+	<header class="com_top">
+		<a href="javascript:history.go(-1);" class="back"></a>
+		<p>我的收藏</p>
+		<a href="/touch" class="c_home"></a>
+	</header>
+	<div style="height:0.88rem;"></div>
+	<!-- 顶部 END -->
+  
+  <!-- 我的收藏 -->
+  <section class="collection_list">
+    <ul>
+    <#if collect_page??>
+        <#list collect_page.content as cg>     
+      <li>
+        <a href="" class="choose" onclick="$(this).toggleClass('sel');"></a>
+        <a href="/touch/goods/${cg.distributorId?c}" class="pic"><img src="${cg.goodsCoverImageUri!''}" /></a>
+        <a href="#" class="name">${cg.goodsTitle!''}</a>
+        <p>价格：￥${cg.goodsSalePrice?string("0.00")}</p>
+        <a href="/touch/user/collect/del?id=${cg.distributorId?c!''}" class="btn">取消收藏</a>
+        <div class="clear"></div>
+      </li>
+        </#list>
+     <#else>
+    <div>
+        <p style="text-align:center">您还没有收藏商品哦！</p>
+        <p style="text-align:center"><a class="blue" href="/touch/">马上去购物>>  </a></p>
+    </div>
+    </#if>
+    </ul>
+    <a href="#" class="all_choose">全选</a>
+  </section>
+  <a href="#" class="add_address_btn">取消收藏</a>
+  <div style="height:2rem;"></div>
+  <!-- 我的收藏 END -->
 
-<div class="main comcheck">
-</div><!--comcheck END-->
-
-<menu class="whitebg mymenu_list">
-<#if collect_page??>
-    <#list collect_page.content as cg>
-        <a href="/touch/goods/${cg.goodsId?c}">
-            <b><img src="${cg.goodsCoverImageUri}" /></b>
-            <p>${cg.goodsTitle!''}<span class="sp1">￥${cg.goodsSalePrice?string("0.00")}</span></p>
-            <p class="p1">${cg.goodsSubTitle!''}</p>
-            <div class="clear"></div>
-        </a>
-    </#list>
-</#if>
-</menu>
-
-<#--
-<a class="ma15 ta-c block" href="#"><img src="/touch/images/more.png" height="20" /></a>
--->
-
+  <!-- 底部 -->
+  <div style="height:0.88rem;"></div>
+  <section class="comfooter tabfix">
+    	<menu>
+	        <a class="a1" href="/touch">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
+  <!-- 底部 END -->
+  
 </body>
 </html>

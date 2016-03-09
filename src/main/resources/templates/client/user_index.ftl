@@ -91,7 +91,7 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
             <th width="150" rowspan="2">
                 <a class="mymember_header test_img" href="#">
-                    <img class="test_img1"  src="${user.headImageUri!'/client/headpic.png'}"  width="120" height="120"/>
+                    <img class="test_img1"  src="${user.headImageUri!'/client/images/user_images.jpg'}"  width="120" height="120"/>
                 </a>
                 <div style="margin-left:25px;margin-top:10px;" class="upload-box upload-img"></div>
             </th>

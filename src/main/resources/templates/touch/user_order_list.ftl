@@ -80,7 +80,7 @@ function orderReceive(id)
 	<header class="com_top">
 		<a href="javascript:history.go(-1);" class="back"></a>
 		<p>我的订单</p>
-		<a href="#" class="news"></a>
+		<a href="/touch" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
