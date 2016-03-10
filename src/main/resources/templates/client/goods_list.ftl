@@ -193,8 +193,8 @@ function byNow(goodsId){
 				</menu>
 				<div class="price">
 					<span>价格区间：</span>
-					<input type="text" id="ParamFiltern_price1" class="text" value="<#if priceLow??>${priceLow?string("#.##")}</#if>"/>-
-                    <input type="text" id="ParamFiltern_price2" class="text" value="<#if priceHigh??>${priceHigh?string("#.##")}</#if>"/>
+					<input type="text" id="ParamFiltern_price1" class="text" value="<#if priceLow??>${priceLow?string("#.##")}</#if>"  onkeyup="value=value.replace(/[^0-9]/g,'')"/>-
+                    <input type="text" id="ParamFiltern_price2" class="text" value="<#if priceHigh??>${priceHigh?string("#.##")}</#if>"  onkeyup="value=value.replace(/[^0-9]/g,'')"/>
                     <input type="submit" class="sub" onclick="setprice()" value="确定" />
 				</div>
 				<div class="page">

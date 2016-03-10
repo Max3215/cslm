@@ -89,7 +89,7 @@ $(document).ready(function(){
       <span>我的积分</span>
       <font>&gt;</font>
     </a>
-    <a href="#">
+    <a href="/touch/user/account/info">
       <img src="/touch/images/m_icon05.png" />
       <span>账户管理</span>
       <font>&gt;</font>

@@ -104,7 +104,7 @@ function changeYzm(){
     <input type="password" class="text" placeholder="请输入密码" id="txt_loginPwd"/>
     <p>
       <input class="text" type="text" id="yzm" placeholder="请输入验证码" style="width:50%;margin:20px 0 0 0;">
-      <a class="yz_code" href="javascript:changeYzm()"><img id="yzm_image" src="" style="height:5%"/></a>
+      <a class="yz_code" href="javascript:changeYzm()"><img id="yzm_image" src="" style="height:35px;width:75px"/></a>
     </p>
     <input type="submit" class="sub" value="登录" id="btn_login"/>
     <p class="login_a">

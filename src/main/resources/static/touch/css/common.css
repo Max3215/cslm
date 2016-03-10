@@ -632,6 +632,19 @@ a,button,input{
 .public_modify .edit a{display: block;width: 0.3rem;height: 0.3rem;background: url(../images/s_close.png) no-repeat;background-size:0.3rem;position: absolute;top:0.24rem;right:0.44rem;}
 .public_modify .sub{width: 60%; margin: 20px auto; line-height: 40px; height: 40px; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; background: #ff5b7d; text-align: center; display: block;}
 
+/** 新加 by:Max  */
+.public_modify .edit1{margin-top:0.2rem;background: #fff;height: 0.78rem;line-height: 0.78rem;padding-left: 0.25rem;border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
+.public_modify .edit1 span{font-size: 0.25rem;color:#333;font-weight: bold;}
+.public_modify .edit1 .text{height: 0.78rem;line-height: 0.78rem;font-size: 0.22rem;margin-left:0.2rem;color:#999999;width: 3.9rem;}
+.public_modify .edit1 a{display: block;width: 0.3rem;height: 0.3rem;background: url(../images/s_close.png) no-repeat;background-size:0.3rem;position: absolute;top:0.24rem;right:0.44rem;}
+
+.public_modify .edit2{margin-top:0.2rem;background: #fff;height: 0.78rem;line-height: 0.78rem;padding-left: 0.25rem;border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
+.public_modify .edit2 span{font-size: 0.25rem;color:#333;font-weight: bold;}
+.public_modify .edit2 .text{height: 0.78rem;line-height: 0.78rem;font-size: 0.22rem;margin-left:0.2rem;color:#999999;width: 3.9rem;}
+.public_modify .edit2 a{display: block;width: 0.3rem;height: 0.3rem;background: url(../images/s_close.png) no-repeat;background-size:0.3rem;position: absolute;top:0.24rem;right:0.44rem;}
+
+/** 新加END   */
+
 /*商品分类*/
 .pro_classify ul{border-right:1px #c0bfbf solid;}
 .pro_classify li{display: block;position: static;}
