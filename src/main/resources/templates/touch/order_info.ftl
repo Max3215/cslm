@@ -7,12 +7,14 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
 
 <link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
@@ -23,7 +25,7 @@ $(document).ready(function(){
     
     $("#form1").Validform({
          btnSubmit:"#btn_sub",
-         tiptype: 4
+         tiptype: 1
     });
     
     <#if msg??>
@@ -62,28 +64,15 @@ $(document).ready(function(){
 	<!-- 顶部 END -->
 <form id="form1" action="/touch/order/submit" method="post">  
   <!-- 购物车确认 -->
-  <section class="address_list">
-    <input type="hidden" value="" name="addressId" id="addressId" datatype="n" nullmsg="请选择地址!">
-    <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
-        <#list user.shippingAddressList as address>
-            <a href="javascript:;" onclick="selectAddr($(this),${address.id?c})"  <#if address.isDefaultAddress?? && address.isDefaultAddress>class=" choose"</#if> >
-            <p>姓名：${address.receiverName!''}<span>邮编：${address.postcode!''}</span></p>
-            <p>手机号码：${address.receiverMobile!''}</p>
-            <p>备用号码：${address.receiverTelephone!''}</p>
-            <p>省市：<span id="addressprovince">${address.province!''}</span>
-                   <span id="addresscity">${address.city!''}</span>
-                   <span id="addressdisctrict">${address.disctrict!''}</span></p>
-            <p>详细地址：${address.detailAddress!''}</p>
-            </a>
-        </#list>
-   </#if> 
-  </section>
+  <#include "/touch/order_info_addr.ftl">
   
 <script type="text/javascript">
+<!--
 function selectAddr(tag,type){
     $(tag).addClass("act").siblings().removeClass("act");
     $("#addressId").attr("value",type)
 }
+-->
 
 function selectDeliveryTyp(tag,type){
     $(tag).addClass("act").siblings(".choose").removeClass("act");

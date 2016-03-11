@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map.Entry;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +32,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ibm.icu.util.Calendar;
 import com.ynyes.cslm.entity.TdCartGoods;
-import com.ynyes.cslm.entity.TdCoupon;
-import com.ynyes.cslm.entity.TdCouponType;
-import com.ynyes.cslm.entity.TdDeliveryType;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
@@ -44,7 +41,6 @@ import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdPayType;
-import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
@@ -1651,6 +1647,35 @@ public class TdTouchOrderController {
         // return "redirect:/order/success?orderId=" + tdOrder.getId();
     }
 
+    @RequestMapping(value="/address",method=RequestMethod.POST)
+    public String address(Long id,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/touch/login";
+    	}
+    	TdUser user = tdUserService.findByUsername(username);
+    	List<TdShippingAddress> addressList = user.getShippingAddressList();
+    	
+    	if(null != id)
+    	{
+    		for (TdShippingAddress address : addressList) {
+				if(address.getId().equals(id)){
+					address.setIsDefaultAddress(true);
+					tdShippingAddressService.save(address);
+				}else{
+					address.setIsDefaultAddress(false);
+					tdShippingAddressService.save(address);
+				}
+			}
+    	}
+    	map.addAttribute("user", user);
+    	
+    	return "/touch/order_info_addr";
+    }
+    
+    
     @RequestMapping(value = "/pay")
     public String pay(Long orderId, ModelMap map, HttpServletRequest req) {
 

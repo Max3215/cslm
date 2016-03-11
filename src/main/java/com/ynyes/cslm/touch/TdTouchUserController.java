@@ -2408,12 +2408,48 @@ public class TdTouchUserController {
     	Map<String,Object> res = new HashMap<>();
     	res.put("code",0);
     	
-    	req.getSession().getAttribute("username");
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		res.put("msg", "登录超时，请再次登录");
+    		return res;
+    	}
     	
+    	TdUser user = tdUserService.findByUsername(username);
+    	if(null != user && null != type && !type.isEmpty())
+    	{
+    		if("email".equalsIgnoreCase(type)) { // 邮箱
+    			user.setEmail(email);
+    		}else if("mobile".equalsIgnoreCase(type)){ // 手机
+    			user.setMobile(mobile);
+    		}else if("password".equalsIgnoreCase(type)){ // 密码
+    			if(null != password && user.getPassword().equalsIgnoreCase(password))
+    			{
+    				user.setPassword(newPwd);
+    			}else{
+    				res.put("msg", "原始密码错误");
+    				return res;
+    			}
+    		}else if("payPassword".equalsIgnoreCase(type)){ // 支付密码
+    			if(null == user.getPayPassword()) // 首次设置
+    			{
+    				user.setPayPassword(newPayPwd);
+    			}else{
+    				if(null != payPassword && payPassword.equalsIgnoreCase(user.getPayPassword())){
+        				user.setPayPassword(newPayPwd);
+        			}else {
+        				res.put("msg", "原密码错误");
+        				return res;
+        			}
+    			} 
+    		}
+    		tdUserService.save(user);
+    		res.put("msg", "修改成功");
+    		res.put("code", 1);
+    		return res;
+    	}
     	
-    	
-    	
-    	
+    	res.put("msg", "参数错误");
     	return res;
     }
     
