@@ -181,6 +181,6 @@ public class TdTouchInfoController {
         	map.addAttribute("app", isApp);
 		}
         
-        return "/touch/info_detail";
+        return "/touch/info";
     }
 }

@@ -87,6 +87,7 @@ $(document).ready(function(){
   <!-- 入口菜单 END -->
 
   <!-- 新品推荐广告位 -->
+  <#if ></#if>
   <section class="new_arrivals">
   	<a href="#" class="left_pic"><img src="/touch/images/pictures/pic01.jpg" /></a>
   	<div class="right_pic">
@@ -111,11 +112,11 @@ $(document).ready(function(){
   	<menu>
   	    <#if news_page?? && news_page.content?size gt 0>
   	    <#list news_page.content as news>
-      		<a href="#">${news.title!''}</a>
+      		<a href="/tooch/info/content/${news.id?c}?mid=10">${news.title!''}</a>
   	    </#list>
   	    </#if>
   	</menu>
-  	<a href="#" class="more_btn">查看更多>></a>
+  	<a href="/touch/info/list/10" class="more_btn">查看更多>></a>
   </section>
   <!-- 超市快讯 END -->
 
