@@ -100,7 +100,7 @@ function changeYzm(){
   <!-- 登录 -->
   <section class="login_box">
     <img src="images/logo.png" />
-    <input type="text" class="text" placeholder="手机号" id="txt_loginId" />
+    <input type="text" class="text" placeholder="请输入账号" id="txt_loginId" />
     <input type="password" class="text" placeholder="请输入密码" id="txt_loginPwd"/>
     <p>
       <input class="text" type="text" id="yzm" placeholder="请输入验证码" style="width:50%;margin:20px 0 0 0;">

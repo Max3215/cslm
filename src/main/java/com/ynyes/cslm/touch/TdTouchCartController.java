@@ -67,7 +67,7 @@ public class TdTouchCartController {
         }
         if(null == distributor)
         {
-        	return "/client/error_404";
+        	return "/touch/error_404";
         }
         
         if (null == username) {
