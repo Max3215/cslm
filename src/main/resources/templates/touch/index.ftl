@@ -87,7 +87,6 @@ $(document).ready(function(){
   <!-- 入口菜单 END -->
 
   <!-- 新品推荐广告位 -->
-  <#if ></#if>
   <section class="new_arrivals">
   	<a href="#" class="left_pic"><img src="/touch/images/pictures/pic01.jpg" /></a>
   	<div class="right_pic">
