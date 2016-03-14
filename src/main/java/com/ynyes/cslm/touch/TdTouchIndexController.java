@@ -100,15 +100,27 @@ public class TdTouchIndexController {
                  }
              }
              
-             // 首页大图轮播广告
-             adType = tdAdTypeService.findByTitle("触屏新品推荐广告");
+             // 首页新品广告
+             adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
 
              if (null != adType) {
-                 map.addAttribute("goodsRecommend_ad_list", tdAdService
+                 map.addAttribute("recommend_right_ad_list", tdAdService
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+             }
+             adType = tdAdTypeService.findByTitle("触屏新品推荐上侧广告");
+
+             if (null != adType) {
+                 map.addAttribute("recommend_top_ad_list", tdAdService
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+             }
+             adType = tdAdTypeService.findByTitle("触屏新品推荐下侧广告");
+
+             if (null != adType) {
+                 map.addAttribute("recommend_bot_ad_list", tdAdService
                          .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
              }
              
-          // 新品推荐广告
+          // 超市快讯广告
              adType = tdAdTypeService.findByTitle("触屏超市快讯图");
 
              if (null != adType) {
@@ -116,7 +128,7 @@ public class TdTouchIndexController {
                          .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
              }
              
-             // 新品推荐广告
+             // 触屏首页轮播广告
              adType = tdAdTypeService.findByTitle("触屏首页轮播广告");
 
              if (null != adType) {
@@ -156,11 +168,24 @@ public class TdTouchIndexController {
                  }
              }
          	
-          // 首页大图轮播广告
-             adType = tdAdTypeService.findByTitle("触屏新品推荐广告");
+          // 新品推荐
+          // 首页新品广告
+             adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
 
              if (null != adType) {
-                 map.addAttribute("goodsRecommend_ad_list", tdAdService
+                 map.addAttribute("recommend_right_ad_list", tdAdService
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+             }
+             adType = tdAdTypeService.findByTitle("触屏新品推荐上侧广告");
+
+             if (null != adType) {
+                 map.addAttribute("recommend_top_ad_list", tdAdService
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+             }
+             adType = tdAdTypeService.findByTitle("触屏新品推荐下侧广告");
+
+             if (null != adType) {
+                 map.addAttribute("recommend_bot_ad_list", tdAdService
                          .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
              }
              

@@ -15,6 +15,7 @@ import com.ynyes.cslm.entity.TdKeywords;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCommonService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdKeywordsService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -40,21 +41,13 @@ public class TdTouchSearchController {
 
 	    @Autowired
 	    private TdArticleService tdArticleService;
+	    
+	    @Autowired
+	    private TdDistributorGoodsService tdDistributorGoodsService;
 
 	    /**
 	     * 搜索
 	     * 
-	     * @param keywords
-	     *            关键字
-	     * @param page
-	     *            页码
-	     * @param st
-	     *            排序字段
-	     * @param sd
-	     *            排序方向 0：降序 1：升序
-	     * @param req
-	     * @param map
-	     * @return
 	     */
 	    @RequestMapping(value = "/search", method = RequestMethod.GET)
 	    public String list(String keywords, Integer page, Integer st, Integer sd,
@@ -79,27 +72,41 @@ public class TdTouchSearchController {
 	        if (null != keywords) {
 	            TdKeywords key = tdKeywordsService.findByTitle(keywords);
 
-	            if (null != key) {
-	                if (null == key.getTotalSearch()) {
+	            if (null != key)
+	            {
+	                if (null == key.getTotalSearch())
+	                {
 	                    key.setTotalSearch(1L);
-	                } else {
+	                }
+	                else
+	                {
 	                    key.setTotalSearch(key.getTotalSearch() + 1L);
 	                }
-
+	                
 	                key.setLastSearchTime(new Date());
-
+	                
 	                tdKeywordsService.save(key);
+	            }
+	            else
+	            {
+	            	key =new TdKeywords();
+	            	key.setTotalSearch(1L);
+	            	key.setTitle(keywords);
+	            	key.setIsEnable(false);
+	            	key.setLastSearchTime(new Date());
+	            	key.setCreateTime(new Date());
+	            	tdKeywordsService.save(key);
 	            }
 	            
 	            String orderColumn = "soldNumber";
 	                    
 	            if (st.equals(1))
 	            {
-	                orderColumn = "salePrice";
+	                orderColumn = "goodsPrice";
 	            }
 	            else if (st.equals(2))
 	            {
-	                orderColumn = "id";
+	                orderColumn = "onSaleTime";
 	            }
 	            
 	            Direction dir = Direction.DESC;
@@ -109,9 +116,16 @@ public class TdTouchSearchController {
 	                dir = Direction.ASC;
 	            }
 
-	            map.addAttribute("goods_page", tdGoodsService.searchGoods(
-	                    keywords.trim(), page, ClientConstant.pageSize,
-	                    orderColumn, dir));
+	            if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+	            {
+	              Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+	              map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderBy(distributorId, 
+	            		  			keywords, true, page, ClientConstant.pageSize,orderColumn,dir));
+	              
+	            }else{
+	            	map.addAttribute("goods_page", tdDistributorGoodsService.searchGoodsAndIsOnSaleOrderBy(keywords, true, page, ClientConstant.pageSize,orderColumn,dir));
+	            	
+	            }
 	        }
 
 	        map.addAttribute("pageId", page);
@@ -125,7 +139,7 @@ public class TdTouchSearchController {
 	        	map.addAttribute("app", isApp);
 			}
 	        
-	        return "/touch/search_result";
+	        return "/touch/search_list";
 	    }
 	    
 	    @RequestMapping(value = "/search", method = RequestMethod.POST)
@@ -167,11 +181,11 @@ public class TdTouchSearchController {
 	                    
 	            if (st.equals(1))
 	            {
-	                orderColumn = "salePrice";
+	                orderColumn = "goodsPrice";
 	            }
 	            else if (st.equals(2))
 	            {
-	                orderColumn = "id";
+	                orderColumn = "onSaleTime";
 	            }
 	            
 	            Direction dir = Direction.DESC;
@@ -181,9 +195,16 @@ public class TdTouchSearchController {
 	                dir = Direction.ASC;
 	            }
 
-	            map.addAttribute("goods_page", tdGoodsService.searchGoods(
-	                    keywords.trim(), page, ClientConstant.pageSize,
-	                    orderColumn, dir));
+	            if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+	            {
+	              Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+	              map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderBy(distributorId, 
+	            		  			keywords, true, page, ClientConstant.pageSize,orderColumn,dir));
+	              
+	            }else{
+	            	map.addAttribute("goods_page", tdDistributorGoodsService.searchGoodsAndIsOnSaleOrderBy(keywords, true, page, ClientConstant.pageSize,orderColumn,dir));
+	            	
+	            }
 	        }
 	        
 	        map.addAttribute("pageId", page);

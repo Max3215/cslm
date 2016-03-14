@@ -1561,4 +1561,36 @@ public class TdDistributorGoodsService {
 		return repository.findByProviderIdAndGoodsIdAndIsDistributionTrue(proId, goodsId);
 	}
 	
+	/**
+	 * 检索
+	 */
+	public Page<TdDistributorGoods> searchAndDistributorIdAndIsOnSaleOrderBy(Long distributorId,String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
+	{
+//		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		if (null == keywords || null == sortName) {
+            return null;
+        }
+
+        PageRequest pageRequest = new PageRequest(page, size, new Sort(dir,sortName));
+		return repository.findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSale(
+													distributorId,"%"+keywords+"%",isOnSale,
+													distributorId,"%"+keywords+"%",isOnSale,
+													distributorId,"%"+keywords+"%",isOnSale,pageRequest);
+	}
+	
+	public Page<TdDistributorGoods> searchGoodsAndIsOnSaleOrderBy(String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
+	{
+//		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		if (null == keywords || null == sortName) {
+            return null;
+        }
+
+        PageRequest pageRequest = new PageRequest(page, size, new Sort(dir,sortName));
+		return repository.findByGoodsTitleContainingAndIsOnSaleOrSubGoodsTitleContainingAndIsOnSaleOrCodeContainingAndIsOnSaleOrDistributorTitleContainingAndIsOnSale(
+								keywords, isOnSale, 
+								keywords, isOnSale, 
+								keywords, isOnSale,
+								keywords, isOnSale,pageRequest);
+	}
+	
 }

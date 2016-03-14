@@ -67,7 +67,6 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_order_search"> 
           <h3>编辑广告</h3>
         </div>
-        
         <div class="edit_banner">
         <form id ="form1" action="/distributor/ad/save" method="post">
            <input type="hidden" value="<#if ad??>${ad.id?c}</#if>" name="id">
@@ -75,11 +74,11 @@ DD_belatedPNG.fix('.,img,background');
             <tr>
               <th>所属广告位</th>
               <td>
-                <select name="typeId" datatype="*">
+                <select name="typeId" datatype="*" >
                    <option value="" <#if !ad??>selected="selected"</#if>>请选择</option>
                     <#if ad_type_list??>
                         <#list ad_type_list as type>
-                            <#if type_index lt 3 >
+                            <#if type_index lt 8 >
                             <option value="${type.id?c}" <#if ad?? && ad.typeId == type.id>selected="selected"</#if>>${type.title}</option>
                             </#if>
                         </#list>

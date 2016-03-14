@@ -39,8 +39,10 @@ $(document).ready(function(){
   <!-- banner -->
   <section id="box" class="bannerbox">
   	<div class="search">
-  		<input type="text" class="text" placeholder="请搜索关键字" />
+  	     <form action="/touch/search">
+  		<input type="text" class="text" name="keywords" placeholder="请搜索关键字" />
   		<input type="submit" class="sub" value=" " />
+  		</form>
   	</div>
     <ul id="sum" class="bannersum">
         <#if banner_ad_list??>
@@ -64,7 +66,7 @@ $(document).ready(function(){
   			<img src="/touch/images/index02.png" />
   			<p>新品推荐</p>
   		</a>
-  		<a href="#">
+  		<a href="/touch/info/list/12">
   			<img src="/touch/images/index03.png" />
   			<p>帮助中心</p>
   		</a>
@@ -88,13 +90,22 @@ $(document).ready(function(){
 
   <!-- 新品推荐广告位 -->
   <section class="new_arrivals">
-  	<a href="#" class="left_pic"><img src="/touch/images/pictures/pic01.jpg" /></a>
+  <#if recommend_right_ad_list?? && recommend_right_ad_list?size gt 0>
+    <a href="${recommend_right_ad_list[0].linkUri!''}" class="left_pic"><img src="${recommend_right_ad_list[0].fileUri!''}" /></a>
+  </#if>
   	<div class="right_pic">
-  		<a href="#" class="row"><img src="/touch/images/pictures/pic02.jpg" /></a>
+  	     <#if recommend_top_ad_list?? && recommend_top_ad_list?size gt 0>
+            <a href="${recommend_top_ad_list[0].linkUri!''}" class="row"><img src="${recommend_top_ad_list[0].fileUri!''}" /></a>
+          </#if>
   		<div class="clear"></div>
   		<menu>
-  			<a href="#"><img src="/touch/images/pictures/pic03.jpg" /></a>
-  			<a href="#"><img src="/touch/images/pictures/pic04.jpg" /></a>
+  		   <#if recommend_bot_ad_list??>
+  		   <#list recommend_bot_ad_list as ad>
+  		        <#if ad_index lt 2>
+        		<a href="${ad.linkUri!''}"><img src="${ad.fileUri!''}" /></a>
+        		</#if>
+  		   </#list>
+  		   </#if> 
   			<div class="clear"></div>
   		</menu>
   	</div>
@@ -111,7 +122,7 @@ $(document).ready(function(){
   	<menu>
   	    <#if news_page?? && news_page.content?size gt 0>
   	    <#list news_page.content as news>
-      		<a href="/tooch/info/content/${news.id?c}?mid=10">${news.title!''}</a>
+      		<a href="/touch/info/content/${news.id?c}?mid=10">${news.title!''}</a>
   	    </#list>
   	    </#if>
   	</menu>
