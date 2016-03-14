@@ -3900,7 +3900,7 @@ public class TdDistributorController extends AbstractPaytypeController{
     	
     	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
     	tdCommonService.setHeader(map, req);
-    	map.addAttribute("ad_type_list", tdAdTypeService.findAll());
+    	map.addAttribute("ad_type_list", tdAdTypeService.findAllOrderBySortIdAsc());
     	
     	if(null != id)
     	{

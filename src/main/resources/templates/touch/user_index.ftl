@@ -27,7 +27,7 @@ $(document).ready(function(){
 <body>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="#" class="set_up"></a>
+		<a href="/s" class="set_up"></a>
 		<p>会员中心</p>
 		<a href="#" class="news"></a>
 	</header>

@@ -129,6 +129,10 @@ public class TdTouchInfoController {
         	map.addAttribute("app", isApp);
 		}
 	    
+        if(mid==12) // 帮助中心
+        {
+        	return "/touch/info_help_list";
+        }
         return "/touch/info_list";
     }
 	
