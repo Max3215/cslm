@@ -16,12 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
-import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCommonService;
-import com.ynyes.cslm.service.TdSettingService;
-import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.SMSUtil;
 import com.ynyes.cslm.util.VerifServlet;
@@ -34,12 +30,6 @@ import com.ynyes.cslm.util.VerifServlet;
 public class TdRegController {
     @Autowired
     private TdUserService tdUserService;
-    
-    @Autowired
-    private TdUserPointService tdUserPointService;
-    
-    @Autowired
-    private TdSettingService tdSettingService;
     
     @Autowired
     private TdCommonService tdCommonService;
@@ -267,10 +257,43 @@ public class TdRegController {
         randomValidateCode.getRandcode(request, response);
     }
     
+//    @RequestMapping(value = "/reg/smscode",method = RequestMethod.GET)
+//    @ResponseBody
+//    public Map<String, Object> smsCode(String mobile, HttpServletResponse response, HttpServletRequest request) {
+//        Random random = new Random();
+//        
+//        String smscode = String.format("%04d", random.nextInt(9999));
+//        
+//        HttpSession session = request.getSession();
+//        
+//        session.setAttribute("SMSCODE", smscode);
+//       
+//        return SMSUtil.send(mobile, "15612" ,new String[]{smscode});
+//    }
+    
     @RequestMapping(value = "/reg/smscode",method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> smsCode(String mobile, HttpServletResponse response, HttpServletRequest request) {
-        Random random = new Random();
+    public Map<String, Object> smsCode(String username,String mobile, HttpServletResponse response, HttpServletRequest request) {
+    	HashMap<String, Object> map = new HashMap<>();
+    	map.put("code", 1);
+    	
+    	TdUser user = tdUserService.findByUsername(username);
+    	if(null == user)
+    	{
+    		user = tdUserService.findByMobile(username);
+    		if(null == user)
+    		{
+    			map.put("msg", "账号不存在");
+    			return map;
+    		}
+    	}
+    	
+    	if(null == mobile || !mobile.equals(user.getMobile())){
+    		map.put("msg", "账号和手机号不匹配");
+    		return map;
+    	}
+    	
+    	Random random = new Random();
         
         String smscode = String.format("%04d", random.nextInt(9999));
         
@@ -278,7 +301,12 @@ public class TdRegController {
         
         session.setAttribute("SMSCODE", smscode);
        
-        return SMSUtil.send(mobile, "15612" ,new String[]{smscode});
+        map = SMSUtil.send(mobile, "73697" ,new String[]{smscode});
+        map.put("status", "0");
+        map.put("msg" ,"验证码发送成功!");
+        map.put("code", smscode);
+        return map;
+        
     }
     
 }

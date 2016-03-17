@@ -231,80 +231,48 @@ public class TdLoginController {
 	 * @注释：密码找回
 	 */
 	@RequestMapping(value = "/login/password_retrieve", method = RequestMethod.GET)
-	public String Retrieve(HttpServletRequest req, ModelMap map){
+	public String Retrieve(String username,String mobile,Integer errCode,HttpServletRequest req, ModelMap map){
 		tdCommonService.setHeader(map, req);
+		
+		if (null != errCode)
+	     {
+	         if (errCode.equals(1))
+	         {
+	             map.addAttribute("error", "验证码错误");
+	         }
+	         
+	         map.addAttribute("errCode", errCode);
+	     }
+		
+		map.addAttribute("username", username);
+		map.addAttribute("mobile", mobile);
 		return "/client/user_retrieve_step1";
 	}
 	
-	@RequestMapping(value = "/login/password_retrieve", method = RequestMethod.POST)
-	@ResponseBody
-	public  Map<String, Object> Check(String username, String code, HttpServletRequest request){
-		Map<String, Object> res = new HashMap<String, Object>();
-		res.put("code", 1);
-		
-		if (username.isEmpty()) {
-			res.put("msg", "用户名不能为空");
-		}
-		
-		String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
-		if (!codeBack.equalsIgnoreCase(code)){
-			res.put("msg", "验证码错误");
-			return res;
-		 }
-		 
-		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if (null != user) {
-			
-			request.getSession().setAttribute("retrieve_username", user.getUsername());
-            
-			res.put("code", 0);
-		}
-		else {
-			res.put("msg", "用户不存在");
-		}
-		
-		return res;
-	}
 	
-	@RequestMapping(value = "/login/retrieve_step2", method = RequestMethod.GET)
-	public String Step2(Integer errCode, HttpServletRequest req, ModelMap map){
+	@RequestMapping(value = "/login/retrieve_step1", method = RequestMethod.POST)
+	public String Step2(String username,String mobile,String smsCode,HttpServletRequest req, ModelMap map){
+		if (null == smsCode) {
+			return "redirect:/login/password_retrieve?errCode=4&username="+username+"&mobile="+mobile;
+		}
+		String smsCodeSave = (String) req.getSession().getAttribute("SMSCODE");
+//		if(null == smsCodeSave){
+//			return "redirect:/login/password_retrieve?errCode=3&username="+username+"&mobile="+mobile;
+//		}
+//		
+//		if (!smsCodeSave.equalsIgnoreCase(smsCode)) {
+//			return "redirect:/login/password_retrieve?errCode=4&username="+username+"&mobile="+mobile;
+//		}
 		tdCommonService.setHeader(map, req);
-		String username = (String) req.getSession().getAttribute("retrieve_username");
-		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		
-		 if (null != errCode)
-         {
-             if (errCode.equals(1))
-             {
-                 map.addAttribute("error", "验证码错误");
-             }
-             
-             map.addAttribute("errCode", errCode);
-         }
-		 
-		map.put("user", user);
+		map.addAttribute("username", username);
+		map.addAttribute("mobile", mobile);
 		
 		return "/client/user_retrieve_step2";
 	}
-	@RequestMapping(value = "/login/retrieve_step2", method = RequestMethod.POST)
-	public String Step2(String smsCode,HttpServletRequest req, ModelMap map){
-		if (null == smsCode) {
-			return "redirect:/login/retrieve_step2?errCode=4";
-		}
-		String smsCodeSave = (String) req.getSession().getAttribute("SMSCODE");
-		if (!smsCodeSave.equalsIgnoreCase(smsCode)) {
-			return "redirect:/login/retrieve_step2?errCode=4";
-		}
-		String username = (String) req.getSession().getAttribute("retrieve_username");
-		map.put("retrieve_username", username);
-		tdCommonService.setHeader(map, req);
-		
-		return "/client/user_retrieve_step3";
-	}
 	
-	@RequestMapping(value = "/login/retrieve_step3", method = RequestMethod.POST)
-	public String Step3(String password, HttpServletRequest req, ModelMap map){
-		String username = (String) req.getSession().getAttribute("retrieve_username");
+	@RequestMapping(value = "/login/retrieve_step2", method = RequestMethod.POST)
+	public String Step3(String username,String password, HttpServletRequest req, ModelMap map){
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		if (null != password) {
 			user.setPassword(password);
@@ -312,7 +280,7 @@ public class TdLoginController {
 			tdCommonService.setHeader(map, req);
 			req.getSession().setAttribute("username", user.getUsername());
 			req.getSession().setAttribute("usermobile", user.getMobile());
-			return "/client/user_retrieve_ok";
+			return "/client/user_retrieve_step3";
 		}
 		return "/client/error_404";
 	}

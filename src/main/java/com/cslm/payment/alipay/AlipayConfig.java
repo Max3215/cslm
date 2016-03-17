@@ -22,8 +22,9 @@ public class AlipayConfig {
     // 签名方式
     public static String SIGN_TYPE = "MD5";
     
+    public static final String CREATE_TRADE_SERVICE = "create_direct_pay_by_user";
     // 纯担保交易
-    public static final String CREATE_TRADE_SERVICE = "create_partner_trade_by_buyer";
+//    public static final String CREATE_TRADE_SERVICE = "create_partner_trade_by_buyer"
     
     // 商品购买
     public static final String PAYMENT_TYPE = "1";

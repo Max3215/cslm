@@ -1137,3 +1137,49 @@ menu.leftpart a { display:inline-block; white-space:nowrap; font-size:12px; marg
 .alipay li input{position:absolute;left:0;top:15px;z-index:10;}
 
 .alipay_tit{font-size: 16px;margin-top:10px;}
+
+
+/* 忘记密码  */
+.fondpassowrdbox{ padding-top: 30px;}
+.fondpassowrd{ position: relative; left: 50%; margin-left: -341px; width: 682px; height: auto; overflow: hidden;}
+.fondpassbar{ display: block; height: 33px; background-color: #eee; line-height: 33px; margin-bottom: 40px;}
+.fondpassbar span{ position: relative; display: block; float: left; width: 33.333%; text-align: center; font-size: 14px; color: #999}
+.fondpassbar span img{ position: absolute; z-index: 2; right: -10px; top: 0;}
+.fondpassbar span.isok{ background-color: #16bddf; color: #fff;}
+.fondpassstep1,
+.fondpassstep2,
+.fondpassstep3{ padding-bottom: 80px; display: block;}
+.fondpassstep1.active,
+.fondpassstep2.active,
+.fondpassstep3.active{ display: block;}
+.fondpassstep1 input,
+.fondpassstep2 input{ height: 38px; padding: 0 10px; width: 240px;}
+.bd{border: 1px solid #ddd;}
+.cf{ color: #fff;}
+.r3{ border-radius: 3px; -webkit-border-radius: 3px; -o-border-radius: 3px; -moz-border-radius: 3px;}
+.ib{display: block;}
+.bggreen{ background-color: #16bddf;}
+.fondpassstep1 .spsititle,
+.fondpassstep2 .spsititle{ font-size: 14px; color: #666; line-height: 40px; width: 60px}
+.fondpassstep2 .spsititle{ width: 90px; text-align: right;}
+.fondpassstep1 .fpsitem,
+.fondpassstep2 .fpsitem{ padding-bottom: 20px; display: block; width: 100%;}
+.fondpassstep1 .fondpassbut,
+.fondpassstep1 .spsigetcode,
+.fondpassstep2 .fondpassbut{ height: 40px; width: 120px; font-size: 14px; text-align: center; line-height: 40px; }
+.fondpassstep1 .fondpassbut:hover,
+.fondpassstep1 .spsigetcode:hover,
+.fondpassstep2 .fondpassbut:hover{ color: #fff;}
+.fondpassstep1 .fondpassbut{ margin-left: 60px; }
+.fondpassstep2 .fondpassbut{ margin-left: 94px; }
+.fondpasssuc{ display: block; text-align: center; height:34px; line-height: 34px; font-size: 18px; color: #000; padding-bottom: 20px;}
+.fondpasssuc img{ position: relative; top: 12px; margin-right: 4px;}
+.fondpassnotice{ display: block; text-align: center;}
+.fondpassstep1 *,
+.fondpassstep2 *,
+.fondpassstep2 *{ float: left;}
+.fondpassstep1 .spsigetcode{ margin-left: 10px;}
+
+.login_dl {width: 100%; background: #fefefe; padding-top: 30px; border: 1px solid #d5dbdb; }
+
+.login_dl i {position: absolute; left: 80px; top: -10px; }
