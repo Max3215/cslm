@@ -256,13 +256,13 @@ public class TdLoginController {
 			return "redirect:/login/password_retrieve?errCode=4&username="+username+"&mobile="+mobile;
 		}
 		String smsCodeSave = (String) req.getSession().getAttribute("SMSCODE");
-//		if(null == smsCodeSave){
-//			return "redirect:/login/password_retrieve?errCode=3&username="+username+"&mobile="+mobile;
-//		}
-//		
-//		if (!smsCodeSave.equalsIgnoreCase(smsCode)) {
-//			return "redirect:/login/password_retrieve?errCode=4&username="+username+"&mobile="+mobile;
-//		}
+		if(null == smsCodeSave){
+			return "redirect:/login/password_retrieve?errCode=3&username="+username+"&mobile="+mobile;
+		}
+		
+		if (!smsCodeSave.equalsIgnoreCase(smsCode)) {
+			return "redirect:/login/password_retrieve?errCode=4&username="+username+"&mobile="+mobile;
+		}
 		tdCommonService.setHeader(map, req);
 		
 		map.addAttribute("username", username);

@@ -165,7 +165,7 @@ function tip()
     {  
         enableBtn();  
         seed = 60;  
-        $("#smsCodeBtn").val('点击获取短信验证码');  
+        $("#smsCodeBtn").val('获取验证码');  
         var t2 = clearInterval(t1);  
     } else {  
         $("#smsCodeBtn").val(seed + "秒后重新获取");  

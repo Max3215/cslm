@@ -300,7 +300,8 @@ public class TdRegController {
         HttpSession session = request.getSession();
         
         session.setAttribute("SMSCODE", smscode);
-       
+        session.setMaxInactiveInterval(60*10*1000);
+        
         map = SMSUtil.send(mobile, "73697" ,new String[]{smscode});
         map.put("status", "0");
         map.put("msg" ,"验证码发送成功!");
