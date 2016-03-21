@@ -1,5 +1,5 @@
 <select  datatype="*" sucmsg=" " id="twoCat" onchange="twoChange();">
-    <#if !goods??>
+    <#if !brand??>
     <option value="">请选择类别...</option>
     </#if>
     <#if cateList??>

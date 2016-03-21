@@ -57,44 +57,44 @@ public class TdManagerBrandController {
             return res;
         }
         
-        if (null == id)
-        {
-            if (null == catId)
-            {
-                if (null != tdBrandService.findByTitle(param))
-                {
-                    res.put("info", "该商品分类下已存在同名品牌");
-                    return res;
-                }
-            }
-            else
-            {
-                if (null != tdBrandService.findByProductCategoryTreeContainingAndTitle(catId, param))
-                {
-                    res.put("info", "该商品分类下已存在同名品牌");
-                    return res;
-                }
-            }
-        }
-        else
-        {
-            if (null == catId)
-            {
-                if (null != tdBrandService.findByTitleAndIdNot(param, id))
-                {
-                    res.put("info", "该商品分类下已存在同名品牌");
-                    return res;
-                }
-            }
-            else
-            {
-                if (null != tdBrandService.findByProductCategoryTreeContainingAndTitleAndIdNot(catId, param, id))
-                {
-                    res.put("info", "该商品分类下已存在同名品牌");
-                    return res;
-                }
-            }
-        }
+//        if (null == id)
+//        {
+//            if (null == catId)
+//            {
+//                if (null != tdBrandService.findByTitle(param))
+//                {
+//                    res.put("info", "该商品分类下已存在同名品牌");
+//                    return res;
+//                }
+//            }
+//            else
+//            {
+//                if (null != tdBrandService.findByProductCategoryIdContainingAndTitle(catId, param))
+//                {
+//                    res.put("info", "该商品分类下已存在同名品牌");
+//                    return res;
+//                }
+//            }
+//        }
+//        else
+//        {
+//            if (null == catId)
+//            {
+//                if (null != tdBrandService.findByTitleAndIdNot(param, id))
+//                {
+//                    res.put("info", "该商品分类下已存在同名品牌");
+//                    return res;
+//                }
+//            }
+//            else
+//            {
+//                if (null != tdBrandService.findByProductCategoryIdContainingAndTitleAndIdNot(catId, param, id))
+//                {
+//                    res.put("info", "该商品分类下已存在同名品牌");
+//                    return res;
+//                }
+//            }
+//        }
         
         res.put("status", "y");
         

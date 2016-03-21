@@ -30,9 +30,9 @@ public interface TdBrandRepo extends
     
     Page<TdBrand> findByStatusIdAndProductCategoryTreeContaining(Long statusId, String productCategoryId, Pageable page);
     
-    TdBrand findByProductCategoryTreeContainingAndTitle(String productCategoryId, String title);
+    TdBrand findByProductCategoryIdAndTitle(Long productCategoryId, String title);
     
-    TdBrand findByProductCategoryTreeContainingAndTitleAndIdNot(String productCategoryId, String title, Long id);
+    TdBrand findByProductCategoryIdAndTitleAndIdNot(Long productCategoryId, String title, Long id);
     
     TdBrand findByTitle(String title);
     

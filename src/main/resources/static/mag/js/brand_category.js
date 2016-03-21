@@ -9,7 +9,7 @@ function cateChange(){
 			$("#twoCatDiv").html(data);
 		}
 	})
-	 var url = "/Verwalter/brand/check?catId=" + $(this).val() + "<#if brand??>&id=${brand.id?c}</#if>";
+	 var url = "/Verwalter/brand/check?catId=" + $(this).val() + <#if brand??>&id=${brand.id?c}</#if>;
     $("#idBrandTitle").attr("ajaxurl", url);
 }
 
@@ -24,6 +24,7 @@ function twoChange(){
 			$("#threeCatDiv").html(data);
 		}
 	})
-	 var url = "/Verwalter/brand/check?catId=" + $(this).val() + "<#if brand??>&id=${brand.id?c}</#if>";
+	 var url = "/Verwalter/brand/check?catId=" + $(this).val() + <#if brand??>&id=${brand.id?c}</#if>;
+	console.debug(url);
     $("#idBrandTitle").attr("ajaxurl", url);
 }

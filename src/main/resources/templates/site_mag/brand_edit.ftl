@@ -11,7 +11,9 @@
 <script type="text/javascript" src="/mag/js/swfupload.js"></script>
 <script type="text/javascript" src="/mag/js/swfupload.queue.js"></script>
 <script type="text/javascript" src="/mag/js/swfupload.handlers.js"></script>
+<!--
 <script type="text/javascript" charset="utf-8" src="/mag/js/zh_CN.js"></script>
+-->
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <link href="/mag/style/WdatePicker.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
@@ -144,7 +146,7 @@ $(function () {
                 <#else>
                 <div style="float:left;">
                     <select id="oneCat" datatype="*" sucmsg=" " onchange="cateChange();">
-                        <#if !goods??>
+                        <#if !brand??>
                         <option value="">请选择类别...</option>
                         </#if>
                         <#if category_list??>
