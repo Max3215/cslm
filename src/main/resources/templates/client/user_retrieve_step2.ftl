@@ -64,7 +64,7 @@
           <dl class="fondpassstep2">
             <dd class="fpsitem">
               <span class="spsititle ib">设置新密码：</span>
-              <input type="password" class="fspass r3 bd" name="password" value="" placeholder="请输入注册时使用的手机号" datatype="s6-20">
+              <input type="password" class="fspass r3 bd" name="password" value="" placeholder="请输入新密码" datatype="s6-20">
               <div class="clear"></div>
             </dd>
             <dd class="fpsitem">

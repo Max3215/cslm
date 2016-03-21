@@ -601,7 +601,7 @@ public class TdDistributorGoodsService {
     }
 
     // 无价格区间
-    public Page<TdDistributorGoods> findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
+    public Page<TdDistributorGoods> findByCategoryIdAndParamsLikeAndIsOnSaleTrue(
             long catId, Pageable pageable, List<String> paramValueList) {
 //        PageRequest pageRequest = new PageRequest(page, size, new Sort(
 //                Direction.ASC, "soldNumber"));
@@ -712,7 +712,7 @@ public class TdDistributorGoodsService {
                         "[" + catId + "]", brandId, paramStr, pageRequest);
     }
 
-   public Page<TdDistributorGoods> findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
+   public Page<TdDistributorGoods> findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
            long catId, long brandId, Pageable pageable,
            List<String> paramValueList) {
 //       PageRequest pageRequest = new PageRequest(page, size, new Sort(
@@ -1077,6 +1077,26 @@ public class TdDistributorGoodsService {
 	            		 distributorId, "%[" + catId + "]%", brandId, paramStr, pageRequest);
 	}
 	
+	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
+			long distributorId, long catId, long brandId, Pageable pageable,
+	        List<String> paramValueList) {
+//	    PageRequest pageRequest = new PageRequest(page, size);
+	
+	    String paramStr = "%";
+	
+	    for (int i = 0; i < paramValueList.size(); i++) {
+	        String value = paramValueList.get(i);
+	        if (!"".equals(value)) {
+	            paramStr += value;
+	            paramStr += "%";
+	        }
+	    }
+	
+	    return repository
+	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderBySoldNumber(
+	            		 distributorId, "%[" + catId + "]%", brandId, paramStr, pageable);
+	}
+	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
 			long distributorId, long catId, long brandId, int page, int size,
 	        List<String> paramValueList) {
@@ -1116,6 +1136,26 @@ public class TdDistributorGoodsService {
 	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
 	            		 distributorId, "%[" + catId + "]%", brandId, paramStr, pageRequest);
 	}
+	
+//	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
+//			long distributorId, long catId, long brandId, int page, int size,
+//	        List<String> paramValueList) {
+//	    PageRequest pageRequest = new PageRequest(page, size);
+//	
+//	    String paramStr = "%";
+//	
+//	    for (int i = 0; i < paramValueList.size(); i++) {
+//	        String value = paramValueList.get(i);
+//	        if (!"".equals(value)) {
+//	            paramStr += value;
+//	            paramStr += "%";
+//	        }
+//	    }
+//	
+//	    return repository
+//	            .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(
+//	            		 distributorId, "%[" + catId + "]%", brandId, paramStr, pageRequest);
+//	}
 
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
       long distributorId,  long catId, long brandId, int page, int size,
