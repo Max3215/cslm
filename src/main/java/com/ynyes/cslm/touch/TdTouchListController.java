@@ -59,10 +59,10 @@ public class TdTouchListController {
 	        
 	        
 	     // 排序字段个数
-	         int totalSorts = 4;
+	         int totalSorts = 3;
 	         
 	         // 4个排序字段
-	         String[] sortName = {"onSaleTime", "salePrice", "soldNumber","totalComments"};
+	         String[] sortName = {"id", "goodsPrice", "soldNumber"};
 	         
 	         Integer priceLow = null; // 价格低值
 	         Integer priceHigh = null; // 价格高值
@@ -240,16 +240,16 @@ public class TdTouchListController {
 	             }
 	         }
 	         
-	         // 排序字段3标志位，0：降序，1：升序
-	         if (numberGroup.length >= paramCount + 7)
-	         {
-	             String sortIdStr = numberGroup[6 + paramCount];
-	             
-	             if (null != sortIdStr)
-	             {
-	                 sortIds[3] = Integer.parseInt(sortIdStr);
-	             }
-	         }
+//	         // 排序字段3标志位，0：降序，1：升序
+//	         if (numberGroup.length >= paramCount + 7)
+//	         {
+//	             String sortIdStr = numberGroup[6 + paramCount];
+//	             
+//	             if (null != sortIdStr)
+//	             {
+//	                 sortIds[3] = Integer.parseInt(sortIdStr);
+//	             }
+//	         }
 	         
 //	         // 排序字段4标志位，0：降序，1：升序
 //	         if (numberGroup.length >= paramCount + 8)
@@ -267,9 +267,9 @@ public class TdTouchListController {
 	         // 页号
 	         Integer pageId = 0;
 	         
-	         if (numberGroup.length >= paramCount + 8)
+	         if (numberGroup.length >= paramCount + 7)
 	         {
-	             String pageIdStr = numberGroup[7 + paramCount];
+	             String pageIdStr = numberGroup[6 + paramCount];
 	             
 	             if (null != pageIdStr)
 	             {
@@ -282,9 +282,9 @@ public class TdTouchListController {
 	         // 是否有货
 	         Integer leftId = 0;
 	         
-	         if (numberGroup.length >= paramCount + 9)
+	         if (numberGroup.length >= paramCount + 8)
 	         {
-	             String leftIdStr = numberGroup[8 + paramCount];
+	             String leftIdStr = numberGroup[7 + paramCount];
 	             
 	             if (null != leftIdStr)
 	             {
@@ -579,72 +579,22 @@ public class TdTouchListController {
 	                if (0 == brandIndex.intValue())
 	                {
 	                    // 按销量排序
-	                    if (0 == orderId.intValue())
-	                    {
-//	                        if (0 == soldId.intValue())
-//	                        {
-//	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-//	                                        categoryId, pageId, ClientConstant.pageSize, paramValueList);
-//	                    
-//	                        }
-//	                        else
-//	                        {
-	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-	                                    categoryId, pageId, ClientConstant.pageSize, paramValueList);
-	                
-//	                        }
-	                    }
+
+	                       goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
+	                                    categoryId, pageRequest, paramValueList);
+
 	                    // 按价格排序
-	                    else if (1 == orderId.intValue())
-	                    {
-//	                        if (0 == priceId.intValue())
-//	                        {
-//	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-//	                                        categoryId, pageId, ClientConstant.pageSize, paramValueList);
-//	                    
-//	                        }
-//	                        else
-//	                        {
-	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-	                                    categoryId, pageId, ClientConstant.pageSize, paramValueList);
-	                
-//	                        }
-	                    }
+
 	                }
 	                else
 	                {
 	                    // 品牌、按销量排序
-	                    if (0 == orderId.intValue())
-	                    {
-//	                        if (0 == soldId.intValue())
-//	                        {
-//	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-//	                                        categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-//	                    
-//	                        }
-//	                        else
-//	                        {
-	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-	                                    categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-	                
-//	                        }
-	                    }
+
+	                       goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
+	                                    categoryId, brandId, pageRequest, paramValueList);
+
 	                    // 品牌、按价格排序
-	                    else if (1 == orderId.intValue())
-	                    {
-//	                        if (0 == priceId.intValue())
-//	                        {
-//	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-//	                                        categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-//	                    
-//	                        }
-//	                        else
-//	                        {
-	                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-	                                    categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-	                
-//	                        }
-	                    }
+
 	                }
 	            }
 	            

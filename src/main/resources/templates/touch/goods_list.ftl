@@ -26,7 +26,7 @@ function loadMore()
 {
     $.ajax({
         type:"post",
-        url:"/touch/list/more/${categoryId!'1'}-${orderId?c!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-" + pageIdx,
+        url:"/touch/list/more/${categoryId!'1'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId?c!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-" + pageIdx,
         success:function(data){
             if ("" == data)
             {
