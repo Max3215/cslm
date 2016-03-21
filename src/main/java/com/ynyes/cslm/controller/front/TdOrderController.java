@@ -915,9 +915,12 @@ public class TdOrderController extends AbstractPaytypeController{
 
         // 使用粮草
         if (null != user.getTotalPoints()) {
-            if (pointUse.compareTo(user.getTotalPoints()) >= 0) {
-                pointUse = user.getTotalPoints();
-            }
+        	if(null != pointUse)
+        	{
+        		if (pointUse.compareTo(user.getTotalPoints()) >= 0) {
+        			pointUse = user.getTotalPoints();
+        		}
+        	}
         }
 
         // 购物车商品
