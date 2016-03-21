@@ -187,7 +187,7 @@ DD_belatedPNG.fix('.,img,background');
                             </#if>
                             <#if order.statusId?? && order.statusId == 2>
                                 <p>待付款</p>
-                               <p><a href="/order/dopay/${order.id?c}">去支付</a></p>
+                               <p><a href="/order/dopay/${order.id?c}" target="_blank">去支付</a></p>
                                 </p><a href="javascript:;" id="orderCancel" onclick="orderCancel(${order.id?c})">取消订单</a></p>
                             </#if>
                             <#if order.statusId?? && order.statusId == 3>

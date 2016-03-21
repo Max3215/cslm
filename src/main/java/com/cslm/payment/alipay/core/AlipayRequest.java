@@ -73,6 +73,7 @@ public class AlipayRequest {
     public static Map<String, String> buildRequestPara(Map<String, String> sParaTemp) {
         //除去数组中的空值和签名参数
         Map<String, String> sPara = paraFilter(sParaTemp);
+        System.err.println(sPara.toString());
         //生成签名结果
         String mysign = buildRequestSign(sPara);
 

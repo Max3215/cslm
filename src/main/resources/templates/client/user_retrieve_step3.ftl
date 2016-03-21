@@ -45,7 +45,6 @@
   <section class="fondpassowrdbox">
     <h3 class="fw400 pb20">
       <span class="ml20 fs20 red">个人用户 - 找回密码</span>
-      <a class="unl fs14" href="#" style="margin-left:700px;">想起密码？立即登陆></a>
     </h3>
   <form id="" name="" url="">
     <div class="login_dl">

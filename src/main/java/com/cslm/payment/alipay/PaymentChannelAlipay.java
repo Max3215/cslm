@@ -71,23 +71,23 @@ public class PaymentChannelAlipay implements PaymentChannel {
         
         requestParameters.put(Constants.KEY_OUT_TRADE_NO, orderId + payRecordId);
         requestParameters.put(Constants.KEY_PAYMENT_TYPE, AlipayConfig.PAYMENT_TYPE);
-        requestParameters.put(Constants.KEY_LOGISTICS_TYPE, AlipayConfig.DEFAULT_EXPRESS);
-        requestParameters.put(Constants.KEY_LOGISTICS_FEE, AlipayConfig.LOGISTICS_FREE);
-        requestParameters.put(Constants.KEY_LOGISTICS_PAYMENT, AlipayConfig.SELLER_PAY);
+//        requestParameters.put(Constants.KEY_LOGISTICS_TYPE, AlipayConfig.DEFAULT_EXPRESS);
+//        requestParameters.put(Constants.KEY_LOGISTICS_FEE, AlipayConfig.LOGISTICS_FREE);
+//        requestParameters.put(Constants.KEY_LOGISTICS_PAYMENT, AlipayConfig.SELLER_PAY);
 
         // 订单金额取得
         String orderAmount = (String) request.getAttribute("totalPrice");
         requestParameters.put(Constants.KEY_PRICE, orderAmount);
+//        requestParameters.put(Constants.KEY_TOTAL_FEE, orderAmount); // 交易金额
         requestParameters.put(Constants.KEY_QUANTITY, AlipayConfig.DEFAULT_QUANTITY);
         requestParameters.put(Constants.KEY_SELLER_EMAIL, AlipayConfig.SELLER_EMAIL);
         requestParameters.put(Constants.KEY_SELLER_ID, AlipayConfig.SELLER_ID);
         requestParameters.put(Constants.KEY_SELLER_ACCOUNT_NAME, AlipayConfig.SELLER_EMAIL);
         
         // 此字段要修改
-        requestParameters.put(Constants.KEY_BODY, "支付测试");
-//        requestParameters.put(Constants.KEY_TOTAL_FEE, orderAmount);
-                 requestParameters.put(Constants.KEY_TBREC_POST,
-                 AlipayConfig.RECORD_POST);
+//        requestParameters.put(Constants.KEY_BODY, "支付测试");
+        requestParameters.put(Constants.KEY_TOTAL_FEE, orderAmount);
+//        requestParameters.put(Constants.KEY_TBREC_POST,AlipayConfig.RECORD_POST);
                  requestParameters.put(Constants.KEY_ITB_PAY, AlipayConfig.PAY_POST);
         return AlipaySubmit.buildRequestForm(requestParameters,
                 Constants.METHOD_POST, Constants.PAY_BUTTON_NAME);

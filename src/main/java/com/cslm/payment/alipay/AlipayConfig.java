@@ -5,7 +5,7 @@ public class AlipayConfig {
     public static final String ISO_8859_1 = "ISO-8859-1";
     
     // 编码方式
-    public static final String CHARSET = "UTF-8";
+    public static final String CHARSET = "gbk";
     
     // 合作身份者ID
     public static final String PARTNER = "2088121425421082";

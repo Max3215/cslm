@@ -1686,8 +1686,10 @@ public class TdOrderController extends AbstractPaytypeController{
             return "/client/order_pay_failed";
         }
         map.put("order", order);
+        System.err.println(verify_result);
+        System.err.println(trade_status);
         if (verify_result) {// 验证成功
-            if ("WAIT_SELLER_SEND_GOODS".equals(trade_status)) {
+            if ("TRADE_SUCCESS".equals(trade_status)) {
 
                 // 订单支付成功
                 afterPaySuccess(order);
@@ -1852,7 +1854,6 @@ public class TdOrderController extends AbstractPaytypeController{
             // 待发货
             tdOrder.setStatusId(3L);
             tdOrder = tdOrderService.save(tdOrder);
-            return;
         }
         addVir(tdOrder);
     }
