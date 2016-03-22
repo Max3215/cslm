@@ -75,11 +75,12 @@ DD_belatedPNG.fix('.,img,background');
 		<div class="haoh pt15 geren_rig">
             <div class="h20"></div>
             <input name="__STATE" type="hidden" value="${user.password}"/>
+            <input type="hidden" value="pwd" name="type" />
             <table class="mymember_address">
                   <tr>
                        <th>旧密码：</th>
                        <td>
-                            <input class="mytext" type="password" name="oldPassword" datatype="*" errormsg="原始密码不正确" recheck="__STATE"/>
+                            <input class="mytext" type="password" name="password" datatype="*" errormsg="原始密码不正确" recheck="__STATE"/>
                             <span class="Validform_checktip"></span>
                        </td>
                   </tr>
@@ -92,7 +93,7 @@ DD_belatedPNG.fix('.,img,background');
                   </tr>
                        <th>确认新密码：</th>
                        <td>
-                            <input class="mytext" type="password" datatype="*" recheck="newPassword"/>
+                            <input class="mytext" type="password" name="newPassword2" datatype="*" recheck="newPassword"/>
                             <span class="Validform_checktip"></span>
                        </td>
                   </tr>

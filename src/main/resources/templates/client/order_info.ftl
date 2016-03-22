@@ -140,10 +140,11 @@ $(document).ready(function(){
      <!-- 配送方式 -->
     <div class="del_mode">
         <p>配送方式</p>
-        <div class="part">
+        <div >
             <span><input type="radio" value="0" name="deliveryType" datatype="n" nullmsg="请选择配送方式!" />送货上门</span>
+            &emsp;&emsp;邮费：<#if postPrice??><b class="red fs18">￥${postPrice?string('0.00')}</b><#elseif post??>${post!''}</#if>
         </div>
-        <div class="part" style="margin-left:30px;">
+        <div  style="margin-top:15px;">
             <span><input type="radio" name="deliveryType" value="1" datatype="n" nullmsg="请选择配送方式!" />门店自提</span>
             <#if addressList??>
             <select name="shipAddressId">
@@ -208,7 +209,7 @@ $(document).ready(function(){
     
     <div class="car_btn">
         <a class="ml20 fc" href="javascript:history.go(-1);">返回上一页</a>
-        <span>&emsp;&emsp;&emsp;商品总额：<b class="red fs18">￥${totalPrice?string('0.00')}</b>&emsp; 邮费：<#if postPrice??><b class="red fs18">￥${postPrice?string('0.00')}</b><#elseif post??>${post!''}</#if>&emsp;&emsp;&emsp;&emsp;应付总额：<b class="red fs18">￥${price?string('0.00')}</b></span>
+        <span>&emsp;&emsp;&emsp;商品总额：<b class="red fs18">￥${totalPrice?string('0.00')}</b>&emsp; &emsp;&emsp;&emsp;&emsp;应付总额：<b class="red fs18">￥${price?string('0.00')}</b></span>
         <input class="sub" type="submit" value="提交订单" />
     </div>
     <div class="clear"></div> 

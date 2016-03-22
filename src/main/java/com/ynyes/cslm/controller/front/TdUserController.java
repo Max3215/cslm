@@ -1931,8 +1931,8 @@ public class TdUserController{
 
     @RequestMapping(value = "/user/password", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> userPassword(HttpServletRequest req, String oldPassword,
-            String newPassword, ModelMap map) {
+    public Map<String,Object> userPassword(HttpServletRequest req, String password,
+            String newPassword,String type,String newPassword2, ModelMap map) {
     	Map<String,Object> res = new HashMap<>();
     	map.put("code", 0);
     	
@@ -1945,13 +1945,50 @@ public class TdUserController{
 
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
-        if (user.getPassword().equals(oldPassword)) {
-            user.setPassword(newPassword);
-        }else{
-        	res.put("msg", "原密码输入错误");
-        	return res;
-        }
-
+        if(null == password)
+		{
+			res.put("msg", "请输入密码");
+			return res;
+		}
+		
+		if(type.equalsIgnoreCase("pwd"))
+		{
+			if(!password.equalsIgnoreCase(user.getPassword()))
+			{
+				res.put("msg", "原密码输入错误");
+				return res;
+			}
+		}else if(type.equalsIgnoreCase("payPwd")){
+			if(null !=  user.getPayPassword() && !password.equalsIgnoreCase(user.getPayPassword()))
+			{
+				res.put("msg", "原密码输入错误");
+				return res;
+			}
+		}
+		
+		if(null == newPassword || newPassword.trim().length()< 6 || newPassword.trim().length()>20)
+		{
+			res.put("msg", "新密码长度为6-20");
+			return res;
+		}
+		
+		if(!newPassword.equalsIgnoreCase(newPassword2))
+		{
+			res.put("msg", "两次密码输入不一致");
+			return res;
+		}
+		
+		if(null != type)
+		{
+			if(type.equalsIgnoreCase("pwd"))
+			{
+				user.setPassword(newPassword);
+			}else if(type.equalsIgnoreCase("payPwd"))
+			{
+				user.setPayPassword(newPassword);
+			}
+		}
+		
         map.addAttribute("user", tdUserService.save(user));
         
         res.put("msg", "修改成功");

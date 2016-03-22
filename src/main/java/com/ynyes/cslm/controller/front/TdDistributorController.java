@@ -2272,10 +2272,19 @@ public class TdDistributorController extends AbstractPaytypeController{
 			return res;
 		}
 		
-		if(!password.equalsIgnoreCase(distributor.getPassword()))
+		if(type.equalsIgnoreCase("pwd"))
 		{
-			res.put("msg", "原密码输入错误");
-			return res;
+			if(!password.equalsIgnoreCase(distributor.getPassword()))
+			{
+				res.put("msg", "原密码输入错误");
+				return res;
+			}
+		}else if(type.equalsIgnoreCase("payPwd")){
+			if(!password.equalsIgnoreCase(distributor.getPayPassword()))
+			{
+				res.put("msg", "原密码输入错误");
+				return res;
+			}
 		}
 		
 		if(null == newPassword || newPassword.trim().length()< 6 || newPassword.trim().length()>20)
@@ -2888,7 +2897,7 @@ public class TdDistributorController extends AbstractPaytypeController{
      */
     @RequestMapping(value="/order/info")
     @ResponseBody
-    public Map<String,Object> orderInfo(HttpServletRequest req)
+    public Map<String,Object> orderInfo(String payPassword,HttpServletRequest req)
     {
     	Map<String,Object> res =new HashMap<>();
     	res.put("code", 0);
@@ -2898,8 +2907,20 @@ public class TdDistributorController extends AbstractPaytypeController{
         	res.put("msg", "请重新登录");
         	return res;
         }
-       TdDistributor distributor = tdDistributorService.findbyUsername(username);
+        if(null == payPassword)
+        {
+        	res.put("msg", "请输入支付密码");
+        	return res;
+        }
         
+       TdDistributor distributor = tdDistributorService.findbyUsername(username);
+       
+       if(null == distributor || null == distributor.getPayPassword() || !payPassword.equalsIgnoreCase(distributor.getPayPassword()))
+       {
+    	   res.put("msg", "支付密码错误");
+    	   return res;
+       }
+       
         List<TdCartGoods> cartSelectedGoodsList = tdCartGoodsService.findByUsernameAndIsSelectedTrue(username);
 
 //        List<TdOrderGoods> orderGoodsList = new ArrayList<TdOrderGoods>();

@@ -46,6 +46,152 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
+<style type="text/css">
+        .win_out{
+    position:fixed;
+    overflow: hidden;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 999999999999999999;
+    background: url(/client/images/win_outbd.png);
+}
+.win_out dl{
+    background: #39BEE9;
+    margin: auto;
+    width: 450px;
+    height:230px;
+    border-radius: 10px;
+    margin-top: 260px;
+}
+.win_out dt{
+    float: left;
+    width: 100%;
+}
+.win_out dt span{
+    float: left;
+    width: 50%;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    color: #333333;
+}
+.win_out dd{
+    float: left;
+    width: 90%;
+    padding:0 5%;
+}
+.win_out dd input{
+    float: left;
+    width: 70%;
+    padding-left: 6%;
+    height: 30px;
+    border: #DDDDDD 1px solid;
+  //  color: #999999;
+    font-size: 16px;
+}
+.win_out dd div{
+    overflow: hidden;
+    margin-top: 20px;
+}
+.win_out dd label{
+    display: block;
+    float: left;
+    width: 90px;
+    line-height: 32px;
+    text-align: center;
+}
+.win_out dd .btn{
+    width: 60px;
+    background: #f79100;
+    color: white;
+    font-size: 18px;
+    border-bottom: none;
+    outline: none;
+    height: 40px;
+}
+.win_out dd span{
+    width: 60px;
+    background: #f79100;
+    color: white;
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    height: 30px;
+    line-height:30px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+.win_out dd .submit{
+    width: 60px;
+    background: #f79100;
+    color: white;
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    height: 30px;
+    line-height:30px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border:none;
+    padding:0px;
+}
+    </style>
+<script src="/client/js/Rich_Lee.js"></script>
+<script src="/client/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript">
+function win_show(){
+    var oUt = rich('.win_out')[0];
+    oUt.style.display = 'block';
+};
+
+function win_hide(){
+    var oUt = rich('.win_out')[0];
+    oUt.style.display = 'none';
+};
+ 
+$(document).ready(function(){
+     //初始化表单验证
+    $("#pas_form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 window.location.href="/user/account"
+            }
+        }
+    });
+ }); 
+</script>
+<div class="win_out" style="display: none;">
+        <dl>    
+            <dt>
+
+            </dt>
+            <dd>
+                <form action="/user/password" method="post" id="pas_form">
+                    <input type="hidden" name="type" value="payPwd" id="type">
+                    <div>
+                        <label>原密码：</label>
+                        <input class="text" type="password" name="password"  value="" />
+                    </div>
+                    <div>
+                        <label>新密码：</label>
+                        <input class="text" type="password" name="newPassword"  value="" />
+                    </div>
+                    <div>
+                        <label>确认新密码：</label>
+                        <input class="text" type="password" name="newPassword2" value="" />
+                    </div>
+                        <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
+                        <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+                </form>
+            </dd>
+        </dl>
+    </div>
     <#include "/client/common_header.ftl">
 <!--mymember-->
 <div class="myclear"></div>
@@ -59,7 +205,7 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${user.headImageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
           <td>账户名称：${user.username!''}</td>
-          <td><a href="#" class="btn">修改</a></td>
+          <td><a href="javascript:;" onclick="win_show();" class="btn">修改密码</a></td>
         </tr>
         <tr>
           <td>账户余额：¥<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></td>

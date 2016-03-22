@@ -205,15 +205,15 @@ $(document).ready(function(){
                     <input type="hidden" name="type" value="" id="type">
                     <div>
                         <label>原密码：</label>
-                        <input class="text" type="text" name="password"  value="" />
+                        <input class="text" type="password" name="password"  value="" />
                     </div>
                     <div>
                         <label>新密码：</label>
-                        <input class="text" type="text" name="newPassword"  value="" />
+                        <input class="text" type="password" name="newPassword"  value="" />
                     </div>
                     <div>
                         <label>确认新密码：</label>
-                        <input class="text" type="text" name="newPassword2" value="" />
+                        <input class="text" type="password" name="newPassword2" value="" />
                     </div>
                         <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
                         <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
