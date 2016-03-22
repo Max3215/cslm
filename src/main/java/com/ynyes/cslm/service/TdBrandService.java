@@ -81,14 +81,14 @@ public class TdBrandService {
         return repository.findOne(id);
     }
     
-    public TdBrand findByProductCategoryIdContainingAndTitle(Long productCategoryId, String title)
+    public TdBrand findByProductCategoryTreeContainingAndTitle(Long productCategoryId, String title)
     {
         if (null == title || null == productCategoryId)
         {
             return null;
         }
         
-        return repository.findByProductCategoryIdAndTitle(productCategoryId, title);
+        return repository.findByProductCategoryTreeContainingAndTitle("["+productCategoryId+"]", title);
     }
     
     public List<TdBrand> findByProductCategoryTreeContaining(Long productCategoryId)
@@ -133,14 +133,14 @@ public class TdBrandService {
         return repository.findByTitle(title);
     }
     
-    public TdBrand findByProductCategoryIdContainingAndTitleAndIdNot(Long productCategoryId, String title, Long id)
+    public TdBrand findByProductCategoryTreeContainingAndTitleAndIdNot(Long productCategoryId, String title, Long id)
     {
         if (null == title || null == productCategoryId || null == id)
         {
             return null;
         }
         
-        return repository.findByProductCategoryIdAndTitleAndIdNot(productCategoryId, title, id);
+        return repository.findByProductCategoryTreeContainingAndTitleAndIdNot("["+productCategoryId+"]", title, id);
     }
     
     public TdBrand findByTitleAndIdNot(String title, Long id)
