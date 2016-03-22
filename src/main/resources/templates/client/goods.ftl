@@ -110,7 +110,8 @@ function cartInit(dId){
 <!--  立即购买   -->
 function byNow(dId){
     var quantity = document.getElementById("quantity").value;
-    var leftNumber = $("#leftNumber").val();
+    var leftNumber = parseInt($("#leftNumber").val());
+    
     if(quantity <= 0 || "" == quantity || quantity > leftNumber){
         alert("请选择正确的数量");
         return;
