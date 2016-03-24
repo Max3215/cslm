@@ -18,6 +18,16 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+     //初始化表单验证
+    $("#form1").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            
+        }
+    });
   
   $(".float_box .ewm").hover(function(){
     $(this).next().show();
@@ -43,21 +53,26 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_main">
   <#include "/client/common_provider_menu.ftl">
   
+  <form id="form1" action="/provider/drwa2" method="post">
   <div class="mymember_center add_width">
     <div class="with_money">
       <p class="tit">提现余额到银行卡</p>
       <table>
         <tr>
           <th>输入银行卡号：</th>
-          <td><input type="text" class="text long" placeholder="请输入您的银行卡号" /></td>
+          <td><input type="text" name="card" class="text long" placeholder="请输入您的银行卡号" datatype="/^(\d{16}|\d{19})$/" errormsg="请输入正确的银行卡号" sucmsg=" " nullmsg="请输入账号"/></td>
         </tr>
         <tr>
           <th>提现金额：</th>
-          <td><input type="text" class="text short" />&nbsp;&nbsp;元</td>
+          <td><input type="text" name="price" class="text short" datatype="/(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/" sucmsg=" " nullmsg="请填写提现金额"/></td>
         </tr>
         <tr>
           <th>输入支付密码：</th>
-          <td><input type="text" class="text long" /></td>
+          <td><input type="password" name="payPassword" class="text long" datatype="s6-20" errormsg="请输入密码！" sucmsg=" " nullmsg = "请输入密码"/></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><span style="color:red;">*每次提现最小金额100元</span></td>
         </tr>
         <tr>
           <th></th>
@@ -65,8 +80,8 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
       </table>
     </div>
-    
   </div>
+  </form>
 
 
 <div class="clear"></div>

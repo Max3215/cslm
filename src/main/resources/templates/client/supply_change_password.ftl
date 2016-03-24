@@ -178,7 +178,7 @@ $(document).ready(function(){
                   <tr>
                        <th>密码：</th>
                        <td>
-                            <input class="mytext" type="password" value="${supply.password!''}" <#if supply.password??>readonly="readonly"</#if>  name="password" datatype="*" errormsg="请输入密码！" sucmsg=" " />&emsp;
+                            <input class="mytext" type="password" value="${supply.password!''}" <#if supply.password??>readonly="readonly"</#if>  name="password" datatype="s6-20" errormsg="请输入密码！" sucmsg=" " />&emsp;
                             <a href="javascript:;" onclick="edit_pwd();">点击修改</a>
                             <span class="Validform_checktip"></span>
                        </td>

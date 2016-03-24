@@ -3897,6 +3897,69 @@ public class TdDistributorController extends AbstractPaytypeController{
     	return "/client/distributor_draw_one";
     }
     
+    @RequestMapping(value="/user/drwa2",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> userDrwa(String card,Double price,String payPassword,
+    			HttpServletRequest req){
+    	Map<String,Object> res = new HashMap<>();
+    	res.put("code", 0);
+    	
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		res.put("msg", "请重新登录");
+    		return res;
+    	}
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	
+    	if(null == price)
+    	{
+    		res.put("msg", "请输入金额");
+    		return res;
+    	}
+    	
+    	if(price < 100){
+    		res.put("msg", "提现金额必须大于100");
+    		return res;
+    	}
+    	
+    	if(null == payPassword || !payPassword.equalsIgnoreCase(distributor.getPayPassword()))
+    	{
+    		res.put("msg", "密码错误");
+    		return res;
+    	}
+    	
+    	if(null != distributor)
+    	{
+    		Date current = new Date();
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        	String curStr = sdf.format(current);
+        	Random random = new Random();
+        	
+    		
+    		TdCash cash = new TdCash();
+    		
+    		cash.setCard(card);
+    		cash.setPrice(price);
+    		cash.setCreateTime(new Date());
+    		cash.setCashNumber("CS"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+    		cash.setShopTitle(distributor.getTitle());
+    		cash.setUsername(username);
+    		cash.setShopType(1L);
+    		cash.setType(2L);
+    		cash.setStatus(1L);
+    		
+    		tdCashService.save(cash);
+    		res.put("msg", "提交成功");
+    		res.put("code", 1);
+    		return res;
+    	}
+    	
+    	res.put("msg", "参数错误");
+    	return res;
+    }
+    
     @RequestMapping(value = "/edit/ImageUrl", method = RequestMethod.POST)
     @ResponseBody
     public String editimageUrl(String imgUrl,HttpServletRequest req)

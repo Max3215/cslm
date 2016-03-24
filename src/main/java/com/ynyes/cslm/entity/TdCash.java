@@ -43,6 +43,10 @@ public class TdCash {
 	@Column
 	private Double price;
 	
+	// 提现卡号
+	@Column
+	private String card;
+	
 	// 会员类型 1-超市  2-批发商  3-分销商  4-会员
 	@Column
 	private Long shopType;
@@ -101,6 +105,14 @@ public class TdCash {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public String getCard() {
+		return card;
+	}
+
+	public void setCard(String card) {
+		this.card = card;
 	}
 
 	public Long getShopType() {
