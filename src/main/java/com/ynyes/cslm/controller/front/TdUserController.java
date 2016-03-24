@@ -1,10 +1,14 @@
 package com.ynyes.cslm.controller.front;
 
+import static org.apache.commons.lang3.StringUtils.leftPad;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cslm.payment.alipay.AlipayConfig;
+import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdAdType;
+import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
@@ -39,6 +46,7 @@ import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.entity.TdUserSuggestion;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
+import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
@@ -66,7 +74,7 @@ import com.ynyes.cslm.util.ClientConstant;
  *
  */
 @Controller
-public class TdUserController{
+public class TdUserController extends AbstractPaytypeController{
 
     @Autowired
     private TdUserService tdUserService;
@@ -136,6 +144,9 @@ public class TdUserController{
     
     @Autowired
     private TdPayRecordService tdPayRecordService;
+    
+    @Autowired
+    private TdCashService tdCashService;
 
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, ModelMap map) {
@@ -2077,30 +2088,73 @@ public class TdUserController{
     	}
     	tdCommonService.setHeader(map, req);
     	map.addAttribute("user", tdUserService.findByUsername(username));
+    	
+    	// 支付方式列表
+        setPayTypes(map, true, false, req);
+        
     	return "/client/user_top_one";
     }
     
     @RequestMapping(value="/user/topup2",method=RequestMethod.POST)
-    public String topupTwo(TdPayRecord record,HttpServletRequest req,ModelMap map)
+    public String topupTwo(Double provice,Long payTypeId,
+    		HttpServletRequest req,ModelMap map)
     {
     	String username = (String)req.getSession().getAttribute("username");
     	if(null == username)
     	{
     		return "redirect:/login";
     	}
-    	if(null == record)
-    	{
-    		return "/client/error_404";
-    	}
-    	
-    	record.setStatusCode(2);
-    	record.setCont("充值");
-    	record.setCreateTime(new Date());
-    	record = tdPayRecordService.save(record);
     	
     	tdCommonService.setHeader(map, req);
+    	
+    	TdUser user = tdUserService.findByUsername(username);
+    	
+    	Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
+    	
+    	TdCash cash = new TdCash();
+    	cash.setCashNumber("USE"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+    	cash.setShopTitle(user.getUsername());
+    	cash.setUsername(username);
+    	cash.setCreateTime(new Date());
+    	cash.setPrice(provice); // 金额
+    	cash.setShopType(4L); // 类型-会员
+    	cash.setType(1L); // 类型-充值
+    	cash.setStatus(1L); // 状态 提交
+    	
+    	cash = tdCashService.save(cash);
+    	
+    	req.setAttribute("orderNumber", cash.getCashNumber());
+    	req.setAttribute("totalPrice",cash.getPrice().toString());
+    	
+    	PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
+        String payForm = paymentChannelAlipay.getPayFormData(req);
+        map.addAttribute("charset", AlipayConfig.CHARSET);
+    	
+        map.addAttribute("payForm", payForm);
+    	
+        return "/client/order_pay_form";
+    	
+//    	return "/client/user_top_end";
+    }
+    
+    @RequestMapping(value="/user/cash")
+    public String cashReturn(String cashNumber,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	
     	map.addAttribute("user",tdUserService.findByUsername(username));
-    	map.addAttribute("record", record);
+    	if(null != cashNumber)
+    	{
+    		map.addAttribute("cash", tdCashService.findByCashNumber(cashNumber));
+    	}
     	
     	return "/client/user_top_end";
     }

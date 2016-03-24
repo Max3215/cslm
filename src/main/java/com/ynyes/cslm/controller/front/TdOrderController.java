@@ -33,6 +33,7 @@ import com.cslm.payment.alipay.Constants;
 import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.cslm.payment.alipay.core.AlipayNotify;
 import com.ynyes.cslm.entity.TdCartGoods;
+import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
 import com.ynyes.cslm.entity.TdDeliveryType;
@@ -52,6 +53,7 @@ import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCartGoodsService;
+import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdCouponService;
 import com.ynyes.cslm.service.TdCouponTypeService;
@@ -142,6 +144,9 @@ public class TdOrderController extends AbstractPaytypeController{
     
     @Autowired
     private TdShippingAddressService tdShippingAddressService;
+    
+    @Autowired
+    private TdCashService tdCashService;
     
 //    @Autowired
 //    private PaymentChannelCEB payChannelCEB;
@@ -1111,6 +1116,7 @@ public class TdOrderController extends AbstractPaytypeController{
             // 待付款
             tdOrder.setStatusId(2L);
             
+            
         	if(null != distributor.getPostPrice() && null != deliveryType && deliveryType != 1) // 送货上门计算邮费
             {
         		// 计算邮费
@@ -1681,31 +1687,57 @@ public class TdOrderController extends AbstractPaytypeController{
         boolean verify_result = AlipayNotify.verify(params);
 
         tdCommonService.setHeader(map, req);
-        orderNo = (orderNo == null) ? "" : (orderNo.length() < 6) ? orderNo
-                : orderNo.substring(0, orderNo.length() - 6);
-        TdOrder order = tdOrderService.findByOrderNumber(orderNo);
-        if (order == null) {
-            // 订单不存在
-            return "/client/order_pay_failed";
-        }
-        map.put("order", order);
-        System.err.println(verify_result);
-        System.err.println(trade_status);
-        if (verify_result) {// 验证成功
-            if ("TRADE_SUCCESS".equals(trade_status)) {
+        
+        if(orderNo.contains("CS") || orderNo.contains("PF") || orderNo.contains("FX") ||orderNo.contains("USE"))
+        {
+        	TdCash cash = tdCashService.findByCashNumber(orderNo);
+//        	if(null == cash){
+//        		return "redirect:/distributor/cash_return?type=1";
+//        	}
+        	
+        	if (verify_result) {// 验证成功
+        		if ("TRADE_SUCCESS".equals(trade_status)) {
 
-                // 订单支付成功
-                afterPaySuccess(order);
-
-                return "/client/order_pay_success";
-            }
+        			afterCash(cash);
+        			if(orderNo.contains("CS"))
+        			{
+        				return "redirect:/distributor/cash?cashNumber="+cash.getCashNumber();
+        			}else if(orderNo.contains("PF")){
+        				return "redirect:/provider/cash?cashNumber="+cash.getCashNumber();
+        			}else if(orderNo.contains("FX")){
+        				return "redirect:/supply/cash?cashNumber="+cash.getCashNumber();
+        			}else if(orderNo.contains("USE")){
+        				return "redirect:/user/cash?cashNumber="+cash.getCashNumber();
+        			}
+        		}
+        	}
+        }else{
+        	orderNo = (orderNo == null) ? "" : (orderNo.length() < 6) ? orderNo
+                    : orderNo.substring(0, orderNo.length() - 6);
+        	TdOrder order = tdOrderService.findByOrderNumber(orderNo);
+        	if (order == null) {
+        		// 订单不存在
+        		return "/client/order_pay_failed";
+        	}
+        	map.put("order", order);
+        	
+        	if (verify_result) {// 验证成功
+        		if ("TRADE_SUCCESS".equals(trade_status)) {
+        			
+        			// 订单支付成功
+        			afterPaySuccess(order);
+        			
+        			return "/client/order_pay_success";
+        		}
+        	}
         }
 
         // 验证失败或者支付失败
         return "/client/order_pay_failed";
     }
 
-    /*
+
+	/*
      * 
      */
     @RequestMapping(value = "/pay/result_cebpay")
@@ -1734,25 +1766,25 @@ public class TdOrderController extends AbstractPaytypeController{
         String orderNo = paymentResult.getString("orderId");
         orderNo = (orderNo == null) ? "" : (orderNo.length() < 6) ? orderNo
                 : orderNo.substring(0, orderNo.length() - 6);
-        TdOrder order = tdOrderService.findByOrderNumber(orderNo);
-        if (order == null) {
-            // 订单不存在
-            return "/client/order_pay_failed";
-        }
-
-        map.put("order", order);
-
-        if (verify_result) {// 验证成功
-            String trade_status = paymentResult.getString("respCode");
-            if ("".equals(trade_status) || "AAAAAAA".equals(trade_status)) {
-                // 订单支付成功
-
-                afterPaySuccess(order);
-
-                return "/client/order_pay_success";
-            }
-
-        }
+    	TdOrder order = tdOrderService.findByOrderNumber(orderNo);
+    	if (order == null) {
+    		// 订单不存在
+    		return "/client/order_pay_failed";
+    	}
+    	
+    	map.put("order", order);
+    	
+    	if (verify_result) {// 验证成功
+    		String trade_status = paymentResult.getString("respCode");
+    		if ("".equals(trade_status) || "AAAAAAA".equals(trade_status)) {
+    			// 订单支付成功
+    			
+    			afterPaySuccess(order);
+    			
+    			return "/client/order_pay_success";
+    		}
+    		
+    	}
         // 验证失败或者支付失败
         return "/client/order_pay_failed";
     }
@@ -2126,5 +2158,135 @@ public class TdOrderController extends AbstractPaytypeController{
         tdPayRecordService.save(record);
     }
     
+
+    /**
+     * @author Max
+     * @param cash
+     * 充值完成
+     * 
+     */
+    private void afterCash(TdCash cash) {
+		if(null != cash)
+		{
+			TdPayRecord record = new TdPayRecord();
+			
+			if(cash.getCashNumber().contains("CS") && cash.getShopType() ==1) // 超市充值
+			{
+				TdDistributor distributor = tdDistributorService.findbyUsername(cash.getUsername());
+				if(null != distributor)
+				{
+					if(null != distributor)
+		        	{
+		        		
+		        		distributor.setVirtualMoney(distributor.getVirtualMoney()+cash.getPrice()); 
+		        		tdDistributorService.save(distributor);
+		        		
+		        		record.setCont("商家充值");
+		        		record.setCreateTime(new Date());
+		        		record.setDistributorId(distributor.getId());
+		        		record.setDistributorTitle(distributor.getTitle());
+//		        		record.setOrderId(cash.getId());
+		        		record.setOrderNumber(cash.getCashNumber());
+		        		record.setStatusCode(1);
+		        		
+		        		record.setProvice(cash.getPrice()); // 订单总额
+		                record.setPostPrice(0.00); // 邮费
+		                record.setAliPrice(0.00);	// 第三方费
+		                record.setServicePrice(0.00);	// 平台费
+		                record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+		                record.setTurnPrice(0.00); // 超市返利
+		                record.setRealPrice(cash.getPrice()); // 实际获利
+		        		tdPayRecordService.save(record);
+		        		
+		        	}
+				}
+			}else if(cash.getCashNumber().contains("USE") && cash.getShopType()==4){
+				TdUser user = tdUserService.findByUsername(cash.getUsername());
+				if(null != user)
+				{
+					user.setVirtualMoney(user.getVirtualMoney()+cash.getPrice());
+					tdUserService.save(user);
+					
+	            	record.setType(2L);
+					
+					record.setCont("会员充值");
+	        		record.setCreateTime(new Date());
+//	        		record.setDistributorId(distributor.getId());
+//	        		record.setDistributorTitle(distributor.getTitle());
+//	        		record.setOrderId(cash.getId());
+	        		record.setOrderNumber(cash.getCashNumber());
+	        		record.setStatusCode(1);
+	        		record.setUsername(cash.getUsername());
+	        		
+	        		record.setProvice(cash.getPrice()); // 订单总额
+	                record.setPostPrice(0.00); // 邮费
+	                record.setAliPrice(0.00);	// 第三方费
+	                record.setServicePrice(0.00);	// 平台费
+	                record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+	                record.setTurnPrice(0.00); // 超市返利
+	                record.setRealPrice(cash.getPrice()); // 实际获利
+	        		tdPayRecordService.save(record);
+				}
+			}else {
+				TdProvider provider = tdProviderService.findByUsername(cash.getUsername());
+				if(null != provider)
+	        	{
+	        		
+	        		provider.setVirtualMoney(provider.getVirtualMoney()+cash.getPrice());
+	        		
+	                record.setCont("商家充值");
+	                record.setCreateTime(new Date());
+//	                record.setDistributorId(distributor.getId());
+//	                record.setDistributorTitle(distributor.getTitle());
+	                record.setProviderId(provider.getId());
+	                record.setProviderTitle(provider.getTitle());
+//	                record.setOrderId(tdOrder.getId());
+	                record.setOrderNumber(cash.getCashNumber());
+	                record.setStatusCode(1);
+	                
+	                record.setProvice(cash.getPrice()); // 订单总额
+	                record.setPostPrice(0.00); // 邮费
+	                record.setAliPrice(0.00);	// 第三方费
+	                record.setServicePrice(0.00);	// 平台费
+	                record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+	                record.setTurnPrice(0.00); // 超市返利
+	                record.setRealPrice(cash.getPrice()); // 实际获利
+	                tdPayRecordService.save(record);
+	        	}
+			}
+			
+			// 平台支出
+			TdSetting setting = tdSettingService.findTopBy();
+	        if( null != setting.getVirtualMoney())
+	        {
+	        	setting.setVirtualMoney(setting.getVirtualMoney()-cash.getPrice());
+	        }
+	        tdSettingService.save(setting); // 更新平台虚拟余额
+	        
+	        // 记录平台收益
+	        record = new TdPayRecord();
+	        record.setCont("商家充值");
+	        record.setCreateTime(new Date());
+	        record.setDistributorTitle(cash.getShopTitle());
+//	        record.setOrderId(tdOrder.getId());
+	        record.setOrderNumber(cash.getCashNumber());
+	        record.setStatusCode(1);
+	        record.setType(1L); // 类型 区分平台记录
+	        
+	        record.setProvice(cash.getPrice()); // 订单总额
+            record.setPostPrice(0.00); // 邮费
+            record.setAliPrice(0.00);	// 第三方费
+            record.setServicePrice(0.00);	// 平台费
+            record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+            record.setTurnPrice(0.00); // 超市返利
+            record.setRealPrice(cash.getPrice()); 
+	        
+	        tdPayRecordService.save(record);
+	        
+	        cash.setStatus(2L); // 已完成
+	        tdCashService.save(cash);
+		}
+		
+	}
     
 }

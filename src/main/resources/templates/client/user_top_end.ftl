@@ -54,10 +54,17 @@ DD_belatedPNG.fix('.,img,background');
   <#include "/client/common_user_menu.ftl">
   
   <div class="mymember_center add_width">
+    <#if cash??>
     <div class="recharge_success">
-      <p class="p1">您已成功充值<#if record.provice??>${record.provice?string('0.00')}</#if>元！</p>
-      <a href="/user/account">返回查看余额</a>
+      <p class="p1">您已成功充值<#if cash.price??>${cash.price?string('0.00')}</#if>元！</p>
+      <a href="/provider/account">返回查看余额</a>
     </div>
+    <#else>
+    <div class="recharge_false">
+      <p class="p1">充值失败！</p>
+      <a href="/provider/account">返回查看余额</a>
+    </div>
+    </#if>
     
   </div>
 

@@ -10,6 +10,7 @@
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
+<link href="/client/css/popup.css" rel="stylesheet" type="text/css" />
 
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
@@ -66,8 +67,9 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
+<#--
 <style type="text/css">
-        .win_out{
+    .win_out{
     position:fixed;
     overflow: hidden;
     left: 0px;
@@ -158,6 +160,7 @@ DD_belatedPNG.fix('.,img,background');
     padding:0px;
 }
     </style>
+    -->
 <script src="/client/js/Rich_Lee.js"></script>
 <script type="text/javascript">
 function win_show(){
@@ -192,8 +195,6 @@ $(document).ready(function(){
         }
     });
  });   
-    
-    
 </script>
   <div class="win_out" style="display: none;">
         <dl>    

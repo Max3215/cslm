@@ -37,10 +37,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cslm.payment.alipay.AlipayConfig;
+import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdAd;
 import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCartGoods;
+import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
@@ -61,6 +64,7 @@ import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCartGoodsService;
+import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
@@ -151,6 +155,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 	
 	@Autowired
 	TdShippingAddressService tdShippingAddressService;
+	
+	@Autowired
+	TdCashService tdCashService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -3820,6 +3827,8 @@ public class TdDistributorController extends AbstractPaytypeController{
             return "redirect:/login";
         }
     	
+    	tdCommonService.setHeader(map, req);
+    	
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
 
     	Date current = new Date();
@@ -3827,35 +3836,46 @@ public class TdDistributorController extends AbstractPaytypeController{
     	String curStr = sdf.format(current);
     	Random random = new Random();
     	
-    	TdPayRecord record = new TdPayRecord();
+    	TdCash cash = new TdCash();
+    	cash.setCashNumber("CS"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+    	cash.setShopTitle(distributor.getTitle());
+    	cash.setUsername(username);
+    	cash.setCreateTime(new Date());
+    	cash.setPrice(provice); // 金额
+    	cash.setShopType(1L); // 类型-超市
+    	cash.setType(1L); // 类型-充值
+    	cash.setStatus(1L); // 状态 提交
     	
-    	if(null != distributor)
-    	{
-    		record.setCont("平台充值");
-    		record.setCreateTime(new Date());
-    		record.setDistributorId(distributor.getId());
-    		record.setDistributorTitle(distributor.getTitle());
-    		record.setStatusCode(1);
-    		record.setProvice(provice);
-    		record.setPayTypeId(payTypeId);
-    		String number = "CZ" + curStr
-    				+ leftPad(Integer.toString(random.nextInt(999)), 3, "0");
-    		record.setOrderNumber(number);
-    	}
-        
+    	cash = tdCashService.save(cash);
     	
+    	req.setAttribute("orderNumber", cash.getCashNumber());
+    	req.setAttribute("totalPrice",cash.getPrice().toString());
     	
-//    	record.setStatusCode(2);
-//    	record.setCont("充值");
-//    	record.setCreateTime(new Date());
-    	record = tdPayRecordService.save(record);
+    	PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
+        String payForm = paymentChannelAlipay.getPayFormData(req);
+        map.addAttribute("charset", AlipayConfig.CHARSET);
+    	
+        map.addAttribute("payForm", payForm);
+    	
+//    	return "/client/distributor_top_end";
+        return "/client/order_pay_form";
+    }
+    
+    @RequestMapping(value="/cash")
+    public String cashReturn(String cashNumber,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
     	
     	tdCommonService.setHeader(map, req);
-    	map.addAttribute("distributor",
-    				tdDistributorService.findbyUsername(username));
     	
-    	
-    	map.addAttribute("record", record);
+    	map.addAttribute("distributor",tdDistributorService.findbyUsername(username));
+    	if(null != cashNumber)
+    	{
+    		map.addAttribute("cash", tdCashService.findByCashNumber(cashNumber));
+    	}
     	
     	return "/client/distributor_top_end";
     }

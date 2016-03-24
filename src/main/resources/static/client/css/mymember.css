@@ -936,6 +936,12 @@ textarea { resize:none;}
 .recharge_success a{font-size: 14px;color:#39bee9;padding-left: 390px;}
 .recharge_success a:hover{text-decoration: underline;}
 
+.recharge_false{background:url(../images/false.png) no-repeat 350px 43px #fff;padding: 50px 0 40px 0;}
+.recharge_false .p1{font-size: 18px;color:#e8323d;padding-left: 390px;padding-bottom: 20px;}
+.recharge_false .p2{font-size: 14px;color:#333333;padding-left: 390px;padding-bottom: 6px;}
+.recharge_false a{font-size: 14px;color:#39bee9;padding-left: 390px;}
+.recharge_false a:hover{text-decoration: underline;}
+
 .with_money{background: #fff;color:#333;padding: 40px 0 0 100px;}
 .with_money .tit{font-size: 18px;padding-bottom: 20px;}
 

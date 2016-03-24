@@ -6,5 +6,5 @@ package com.ynyes.cslm.util;
  */
 public class ClientConstant {
 
-    public static final int pageSize = 4;
+    public static final int pageSize = 20;
 }

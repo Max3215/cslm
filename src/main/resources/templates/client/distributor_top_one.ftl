@@ -71,7 +71,7 @@ DD_belatedPNG.fix('.,img,background');
       <p class="p2">充值账户： ${distributor.virtualAccount!''}</p>
       <p class="p2">充值金额：<input type="text" id="provice" name="provice" class="text" />&nbsp;&nbsp;元&emsp;&emsp;</p>
       <div class="h10"></div>
-      <p class="p1">选择支付银行</p>
+      <p class="p1">选择支付方式</p>
        <#if pay_type_list_third??>
                 <#list pay_type_list_third as pay_type>
                 <li>

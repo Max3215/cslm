@@ -37,6 +37,10 @@ public class TdProvider {
     @Column
     private String password;
     
+    // 支付密码
+    @Column
+    private String payPassword;
+    
     //手机号
     @Column
     private String mobile;
@@ -129,6 +133,14 @@ public class TdProvider {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
 	}
 
 	public String getProvince() {

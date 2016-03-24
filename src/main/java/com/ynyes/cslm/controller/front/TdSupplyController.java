@@ -1,5 +1,7 @@
 package com.ynyes.cslm.controller.front;
 
+import static org.apache.commons.lang3.StringUtils.leftPad;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,8 +33,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cslm.payment.alipay.AlipayConfig;
+import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
+import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
@@ -46,6 +52,7 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
+import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
@@ -68,7 +75,7 @@ import com.ynyes.cslm.util.SiteMagConstant;
  */
 @Controller
 @RequestMapping(value="/supply")
-public class TdSupplyController {
+public class TdSupplyController extends AbstractPaytypeController{
 	
 	@Autowired
 	private TdProviderService tdProviderService;
@@ -111,6 +118,9 @@ public class TdSupplyController {
 	
 	@Autowired
 	TdSettingService tdSettingService;
+	
+	@Autowired
+	private TdCashService tdCashService;
 	
 	@RequestMapping(value="/index")
 	public String Index(HttpServletRequest req,ModelMap map)
@@ -163,7 +173,7 @@ public class TdSupplyController {
 			String city,String disctrict,
 			String address,String mobile,
 			String password,Double postPrice,
-			Long id,
+			Long id,String payPassword,
 			HttpServletRequest req,ModelMap map)
 	{
 		
@@ -192,11 +202,80 @@ public class TdSupplyController {
 		supply.setAddress(address);
 		supply.setMobile(mobile);
 		supply.setPassword(password);
+		supply.setPayPassword(payPassword);
 		supply.setPostPrice(postPrice);
 		
 		tdProviderService.save(supply);
 		
 		res.put("msg", "修改成功！");
+		res.put("code", 1);
+		return res;
+	}
+	
+	@RequestMapping(value="/edit/password",method= RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> passwordEdit(String type,String password,
+							String newPassword,String newPassword2,HttpServletRequest req)
+	{
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("supply");
+		TdProvider supply = tdProviderService.findByUsername(username);
+		
+		if(null == supply)
+		{
+			res.put("msg", "请重新登录");
+			return res;
+		}
+		
+		if(null == password)
+		{
+			res.put("msg", "请输入密码");
+			return res;
+		}
+		
+		if(type.equalsIgnoreCase("pwd"))
+		{
+			if(!password.equalsIgnoreCase(supply.getPassword()))
+			{
+				res.put("msg", "原密码输入错误");
+				return res;
+			}
+		}else if(type.equalsIgnoreCase("payPwd")){
+			if(null != supply.getPayPassword() && !password.equalsIgnoreCase(supply.getPayPassword()))
+			{
+				res.put("msg", "原密码输入错误");
+				return res;
+			}
+		}
+		
+		if(null == newPassword || newPassword.trim().length()< 6 || newPassword.trim().length()>20)
+		{
+			res.put("msg", "新密码长度为6-20");
+			return res;
+		}
+		
+		if(!newPassword.equalsIgnoreCase(newPassword2))
+		{
+			res.put("msg", "两次密码输入不一致");
+			return res;
+		}
+		
+		if(null != type)
+		{
+			if(type.equalsIgnoreCase("pwd"))
+			{
+				supply.setPassword(newPassword);
+			}else if(type.equalsIgnoreCase("payPwd"))
+			{
+				supply.setPayPassword(newPassword);
+			}
+		}
+
+		tdProviderService.save(supply);
+		
+		res.put("msg", "修改成功");
 		res.put("code", 1);
 		return res;
 	}
@@ -1376,8 +1455,70 @@ public class TdSupplyController {
     	tdCommonService.setHeader(map, req);
     	map.addAttribute("supply",
     				tdProviderService.findByUsername(username));
+    	// 支付方式列表
+        setPayTypes(map, true, false, req);
     	
     	return "/client/supply_top_one";
+    }
+    
+    @RequestMapping(value="/topup2",method=RequestMethod.POST)
+    public String topupTwo(HttpServletRequest req,ModelMap map,
+    			Double provice,Long payTypeId){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	TdProvider provider = tdProviderService.findByUsername(username);
+
+    	Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
+    	
+    	TdCash cash = new TdCash();
+    	cash.setCashNumber("FX"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+    	cash.setShopTitle(provider.getTitle());
+    	cash.setUsername(username);
+    	cash.setCreateTime(new Date());
+    	cash.setPrice(provice); // 金额
+    	cash.setShopType(3L); // 类型-超市
+    	cash.setType(1L); // 类型-充值
+    	cash.setStatus(1L); // 状态 提交
+    	
+    	cash = tdCashService.save(cash);
+    	
+    	req.setAttribute("orderNumber", cash.getCashNumber());
+    	req.setAttribute("totalPrice",cash.getPrice().toString());
+    	
+    	PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
+        String payForm = paymentChannelAlipay.getPayFormData(req);
+        map.addAttribute("charset", AlipayConfig.CHARSET);
+    	
+        map.addAttribute("payForm", payForm);
+    	
+//    	return "/client/distributor_top_end";
+        return "/client/order_pay_form";
+    }
+    
+    @RequestMapping(value="/cash")
+    public String cashReturn(String cashNumber,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("supply");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("supply",tdProviderService.findByUsername(username));
+    	if(null != cashNumber)
+    	{
+    		map.addAttribute("cash", tdCashService.findByCashNumber(cashNumber));
+    	}
+    	
+    	return "/client/supply_top_end";
     }
     
     /**

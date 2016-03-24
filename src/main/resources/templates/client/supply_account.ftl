@@ -35,6 +35,61 @@ DD_belatedPNG.fix('.,img,background');
 <![endif]-->
 </head>
 <body>
+<link href="/client/css/popup.css" rel="stylesheet" type="text/css" />
+<script src="/client/js/Rich_Lee.js"></script>
+<script src="/client/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript">
+function win_show(){
+    var oUt = rich('.win_out')[0];
+    oUt.style.display = 'block';
+};
+
+function win_hide(){
+    var oUt = rich('.win_out')[0];
+    oUt.style.display = 'none';
+};
+ 
+$(document).ready(function(){
+     //初始化表单验证
+    $("#pas_form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 window.location.href="/supply/account"
+            }
+        }
+    });
+ }); 
+</script>
+<div class="win_out" style="display: none;">
+        <dl>    
+            <dt>
+
+            </dt>
+            <dd>
+                <form action="/supply/edit/password" method="post" id="pas_form">
+                    <input type="hidden" name="type" value="payPwd" id="type">
+                    <div>
+                        <label>原密码：</label>
+                        <input class="text" type="password" name="password"  value="" />
+                    </div>
+                    <div>
+                        <label>新密码：</label>
+                        <input class="text" type="password" name="newPassword"  value="" />
+                    </div>
+                    <div>
+                        <label>确认新密码：</label>
+                        <input class="text" type="password" name="newPassword2" value="" />
+                    </div>
+                        <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
+                        <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+                </form>
+            </dd>
+        </dl>
+    </div>
 <!--mymember-->
 <div class="myclear"></div>
 <div class="mymember_out">
@@ -47,7 +102,7 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${supply.imageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
           <td>账户名称：${supply.title!''}</td>
-          <td><a href="#" class="btn">修改</a></td>
+          <td><a href="javascript:;" onclick="win_show();" class="btn">修改</a></td>
         </tr>
         <tr>
           <td>账户余额：¥${supply.virtualMoney?string('0.00')}</td>
