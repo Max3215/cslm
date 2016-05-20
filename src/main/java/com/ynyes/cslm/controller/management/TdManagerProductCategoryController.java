@@ -284,7 +284,6 @@ public class TdManagerProductCategoryController {
         for (int chkId : chkIds) {
             if (chkId >= 0 && ids.length > chkId) {
                 Long id = ids[chkId];
-
                 tdProductCategoryService.delete(id);
             }
         }

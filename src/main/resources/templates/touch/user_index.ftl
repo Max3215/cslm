@@ -27,9 +27,12 @@ $(document).ready(function(){
 <body>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="/s" class="set_up"></a>
+		<a href="/touch/setting/index" class="set_up"></a>
 		<p>会员中心</p>
+		<!--
 		<a href="#" class="news"></a>
+		-->
+		<a href="/touch" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
@@ -100,7 +103,7 @@ $(document).ready(function(){
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1" href="/touch">平台首页</a>
+	        <a class="a1" href="/touch/disout">平台首页</a>
             <a class="a2" href="/touch/category/list">商品分类</a>
             <a class="a3" href="/touch/cart">购物车</a>
             <a class="a4 sel" href="/touch/user">会员中心</a>

@@ -40,8 +40,8 @@ $(document).ready(function(){
     <div class="user_balance">
       <p>账户余额<span>¥<#if user?? && user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span></p>
       <div class="btn">
-        <a href="#">充值</a>
-        <a href="#">提现</a>
+        <a href="/touch/user/topup1">充值</a>
+        <a href="/touch/user/draw1">提现</a>
       </div>
     </div>
   </section>
@@ -51,7 +51,7 @@ $(document).ready(function(){
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
         <menu>
-            <a class="a1" href="/touch">平台首页</a>
+            <a class="a1" href="/touch/disout">平台首页</a>
             <a class="a2" href="/touch/category/list">商品分类</a>
             <a class="a3" href="/touch/cart">购物车</a>
             <a class="a4 sel" href="/touch/user">会员中心</a>

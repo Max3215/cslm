@@ -199,7 +199,7 @@ $(document).ready(function(){
                         </td>
                       </tr>
                       <tr>
-                        <th>支付宝使用费比例</th>
+                        <th>第三方使用费比例</th>
                         <td>
                             <input name="aliRation" readonly="readonly" type="text" value="<#if provider?? && provider.aliRation??>${provider.aliRation?string("0.00")}<#else>0.00</#if>" class="mytext" sucmsg=" "> 
                             <span class="Validform_checktip" style="color:red">*不可更改</span>

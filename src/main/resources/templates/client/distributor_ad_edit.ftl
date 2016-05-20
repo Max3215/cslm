@@ -34,6 +34,16 @@ $(document).ready(function(){
         });
     });
     
+//    //（缩略图）
+//    var txtPic = $("#txtImgUrl").val();
+//    if (txtPic == "" || txtPic == null) {
+//        $(".thumb_ImgUrl_show").hide();
+//    }
+//    else {
+//        $(".thumb_ImgUrl_show").html("<ul><li><div class='img-box1'><img src='" + txtPic + "' bigsrc='" + txtPic + "' /></div></li></ul>");
+//        $(".thumb_ImgUrl_show").show();
+//    }
+    
     //（缩略图）
     var txtPic = $("#txtImgUrl").val();
     if (txtPic == "" || txtPic == null) {
@@ -121,12 +131,12 @@ DD_belatedPNG.fix('.,img,background');
             <tr >
               <th >广告图</th>
               <td>
-                <input id="txtImgUrl" name="fileUri" type="text" datatype="*" value="<#if ad??>${ad.fileUri!""}</#if>" class="text normal upload-path">
+                <input id="txtImgUrl" name="fileUri" type="text" datatype="*" value="<#if ad??>${ad.fileUri!""}</#if>" class="text normal upload-path">*图片不得大于10M
                 <div class="upload-box upload-img"></div>
                 <div class="photo-list thumb_ImgUrl_show">
                     <ul>
                         <li>
-                            <div class="img-box"></div>
+                            <div class="img-box1"></div>
                         </li>
                     </ul>
                 </div>

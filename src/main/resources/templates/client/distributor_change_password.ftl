@@ -263,6 +263,22 @@ $(document).ready(function(){
                     </td>
                  </tr>
                  <tr>
+                    <th>经度：</th>
+                    <td>
+                      <input name="longitude" type="text" value="<#if distributor?? && distributor.longitude??>${distributor.longitude?string("#.######")}</#if>" class="mytext"  datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="请正确复制坐标" sucmsg=" ">
+                      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+                      <span class="Validform_checktip"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>纬度：</th>
+                    <td>
+                      <input name="latitude" type="text" value="<#if distributor?? && distributor.longitude??>${distributor.longitude?string("#.######")}</#if>" class="mytext" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="请正确复制坐标" sucmsg=" ">
+                      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+                      <span class="Validform_checktip"></span>
+                    </td>
+                </tr>
+                 <tr>
                     <th>手机号：</th>
                     <td>
                        <input class="text" type="mytext" name="mobile" value="${distributor.mobile!''}" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" sucmsg=" " errormsg="请输入正确的手机号">
@@ -293,7 +309,7 @@ $(document).ready(function(){
                     </td>
                   </tr>
                   <tr>
-                    <th>支付宝使用费比例</th>
+                    <th>第三方使用费比例</th>
                     <td>
                         <input name="aliRation" readonly="readonly" type="text" value="<#if distributor?? && distributor.aliRation??>${distributor.aliRation?string("0.00")}<#else>0</#if>" class="mytext" sucmsg=" "> 
                         <span class="Validform_checktip" style="color:red">*不可更改</span>
@@ -311,6 +327,13 @@ $(document).ready(function(){
                     <td>
                         <input name="maxPostPrice" type="text" value="<#if distributor?? && distributor.maxPostPrice??>${distributor.maxPostPrice?string("0.00")}</#if>" class="mytext" sucmsg=" " errormsg="请输入正确金额"> 
                         <span class="Validform_checktip">*商品总额满额包邮</span>
+                    </td>
+                   </tr>
+                   <tr>
+                    <th>商家配送说明</th>
+                    <td>
+                        <input name="postInfo" type="text" value="<#if distributor?? && distributor.postInfo??>${distributor.postInfo!''}</#if>" class="mytext" sucmsg=" " errormsg=" "> 
+                        <span class="Validform_checktip">&emsp; 商品配送区域说明</span>
                     </td>
                    </tr>
                   <tr>

@@ -45,4 +45,6 @@ public interface TdArticleRepo extends
     Page<TdArticle> findByChannelIdOrderBySortIdAsc(Long channeldId, Pageable page);
     
     int countByCategoryId(Long catId);
+    					  
+    Page<TdArticle> findByDistributorIdAndMenuIdOrderByIdDesc(Long distributorId,Long menuId,Pageable page);
 }

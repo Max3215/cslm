@@ -193,6 +193,7 @@ $(function () {
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}" />
 </div>
 <input name="id" type="text" value='<#if goods??>${goods.id?c}</#if>' style="display:none">
+<#--
 <input name="distributorId" type="text" value='<#if distributorId??>${distributorId}</#if>' style="display:none">
 <input name="goodsId" type="text" value='<#if goods??>${goods.goodsId?c}</#if>' style="display:none">
 <input name="categoryIdTree" type="text" value='<#if goods??>${goods.categoryIdTree!''}</#if>' style="display:none">
@@ -200,7 +201,7 @@ $(function () {
 <input name="paramValueCollect" type="text" value='<#if goods??>${goods.paramValueCollect!''}</#if>' style="display:none">
 <input name="brandTitle" type="text" value='<#if goods??>${goods.brandTitle!''}</#if>' style="display:none">
 <input name="brandId" type="text" value='<#if goods??>${goods.brandId!''}</#if>' style="display:none">
-
+-->
 <!--导航栏-->
 <div class="location">
     <a href="/Verwalter/distributor/goods/list" class="back"><i></i><span>
@@ -294,6 +295,23 @@ $(function () {
                         <label>上架</label>
                         <input type="radio" name="isOnSale" value="0" <#if goods?? && goods.isOnSale?? && goods.isOnSale==false>checked="checked"</#if> >
                         <label>下架</label>
+                    </span>
+                </div>
+            </dd>
+        </dl>
+        <dl>
+            <dt>推荐类型</dt>
+            <dd>
+                <div class="rule-multi-checkbox multi-checkbox">
+                    <span>
+                        <input id="cblItem_0" type="checkbox" name="isRecommendIndex" <#if goods?? && goods.isRecommendIndex?? && goods.isRecommendIndex==true>checked="checked"</#if>>
+                        <label for="cblItem_0">首页推荐</label>
+                        <input id="cblItem_1" type="checkbox" name="isSetRecommend" <#if goods?? && goods.isSetRecommend?? && goods.isSetRecommend==true>checked="checked"</#if>>
+                        <label for="cblItem_1">平台推荐</label>
+                        <input id="cblItem_1" type="checkbox" name="isRecommendType" <#if goods?? && goods.isRecommendType?? && goods.isRecommendType==true>checked="checked"</#if>>
+                        <label for="cblItem_1">分类推荐</label>
+                        <input id="cblItem_1" type="checkbox" name="isTouchHot" <#if goods?? && goods.isTouchHot?? && goods.isTouchHot==true>checked="checked"</#if>>
+                        <label for="cblItem_1">触屏首页热卖</label>
                     </span>
                 </div>
             </dd>

@@ -220,4 +220,46 @@ public class TdTouchSearchController {
 	        
 	        return "/touch/search_result_more";
 	    }
+	    
+	    @RequestMapping(value="/findNew",method = RequestMethod.GET)
+	    public String findNewGoods(Integer page,HttpServletRequest req,ModelMap map){
+	    	tdCommonService.setHeader(map, req);
+	    	
+	    	if (null == page || page < 0) {
+	            page = 0;
+	        }
+	    	
+	    	if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+            {
+              Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+              map.addAttribute("goods_page",tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(distributorId,  page, ClientConstant.pageSize));
+              
+            }else{
+            	 map.addAttribute("goods_page",tdDistributorGoodsService.findAllOrderByOnSaleTime(page, ClientConstant.pageSize));
+            }
+	    	
+	    	map.addAttribute("pageId", page);
+	    	return "/touch/goods_new";
+	    }
+	    
+	    @RequestMapping(value="/findNew",method = RequestMethod.POST)
+	    public String findNewGoodsMore(Integer page,HttpServletRequest req,ModelMap map){
+	    	tdCommonService.setHeader(map, req);
+	    	
+	    	if (null == page || page < 0) {
+	            page = 0;
+	        }
+	    	
+	    	if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+            {
+              Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+              map.addAttribute("goods_page",tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(distributorId,  page, ClientConstant.pageSize));
+              
+            }else{
+            	 map.addAttribute("goods_page",tdDistributorGoodsService.findAllOrderByOnSaleTime(page, ClientConstant.pageSize));
+            }
+	    	
+	    	map.addAttribute("pageId", page);
+	    	return "/touch/search_result_more";
+	    }
 }

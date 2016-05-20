@@ -346,7 +346,7 @@ function del_goods_comb(obj) {
                         </#if>
                         <#if category_list??>
                             <#list category_list as c>
-                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                             </#list>
                         </#if>
                     </select>
@@ -358,7 +358,7 @@ function del_goods_comb(obj) {
                         </#if>
                         <#if cateList??>
                             <#list cateList as c>
-                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                             </#list>
                         </#if>
                     </select>
@@ -370,7 +370,7 @@ function del_goods_comb(obj) {
                         </#if>
                         <#if categoryList??>
                             <#list categoryList as c>
-                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                <option value="${c.id?c}" <#if goods?? && goods.categoryIdTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                             </#list>
                         </#if>
                     </select>
@@ -533,12 +533,13 @@ function del_goods_comb(obj) {
                 <textarea name="detail" class="editor"><#if goods??>${goods.detail!""}</#if></textarea>
             </dd>
         </dl>
-        <dl>
+       <#-- <dl>
             <dt>售后服务</dt>
             <dd>
                 <textarea name="afterMarketService" class="editor"><#if goods??>${goods.afterMarketService!""}</#if></textarea>
             </dd>
         </dl>
+        -->
     </div>
     
         <#--

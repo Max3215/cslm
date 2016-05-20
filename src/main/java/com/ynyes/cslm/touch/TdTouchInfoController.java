@@ -81,47 +81,18 @@ public class TdTouchInfoController {
 	    
 	    map.addAttribute("menu_name", menu.getTitle());
 	    
-	    List<TdArticleCategory> catList = tdArticleCategoryService.findByMenuId(mid);
 	    
-	    if (null !=catList && catList.size() > 0)
-	    {
-	        if (null == catId)
-	        {
-	            catId = catList.get(0).getId();
-	        }
-	        
-//	        map.addAttribute("info_page", tdArticleService.findByMenuIdAndCategoryIdAndIsEnableOrderBySortIdAsc(mid, catId, page, ClientConstant.pageSize));
-	    }
-        
-	    //资讯类别
-	    List<TdArticleCategory> informationcatList = tdArticleCategoryService.findByMenuId(10L);
-	    map.addAttribute("informationcatList", informationcatList);
-	    //帮助中心类别
-	    List<TdArticleCategory> helpcatList = tdArticleCategoryService.findByMenuId(12L);
-	    map.addAttribute("helpcatList", helpcatList);
-	    //关于我们类别
-	    List<TdArticleCategory> aboutuscatList = tdArticleCategoryService.findByMenuId(8L);
-	    map.addAttribute("aboutuscatList", aboutuscatList);
-	    //联系我们类别
-	    List<TdArticleCategory> contactuscatList = tdArticleCategoryService.findByMenuId(13L);
-	    map.addAttribute("contactuscatList", contactuscatList);
-	    
-//	    /**
-//		* @author lc
-//	    * @注释：
-//		*/
-//		// 文章列表页面广告
-//	    TdAdType adType = tdAdTypeService.findByTitle("文章列表页面广告");
-//
-//	    if (null != adType) {
-//	            map.addAttribute("Article_scroll_ad_list", tdAdService
-//	                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-//	    }  
 	    map.addAttribute("pageId", page);
 	    map.addAttribute("catId", catId);
 	    map.addAttribute("mid", mid);
-	    map.addAttribute("info_category_list", catList);
-	    map.addAttribute("latest_info_page", tdArticleService.findByMenuIdAndIsEnableOrderByIdDesc(mid, page, ClientConstant.pageSize));
+	    
+	    if(null != req.getSession().getAttribute("DISTRIBUTOR_ID")){
+	    	Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+	    	System.err.println(distributorId);
+	    	map.addAttribute("latest_info_page", tdArticleService.findByDistributorIdAndMenuIdAndIsEnableOrderByIdDesc(distributorId, mid, page, ClientConstant.pageSize));
+	    }else{
+	    	map.addAttribute("latest_info_page", tdArticleService.findByMenuIdAndIsEnableOrderByIdDesc(mid, page, ClientConstant.pageSize));
+	    }
 	    
 	  //判断是否为app链接
         Integer isApp = (Integer) req.getSession().getAttribute("app");

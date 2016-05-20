@@ -1,5 +1,7 @@
 package com.ynyes.cslm.touch;
 
+import static org.apache.commons.lang3.StringUtils.leftPad;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +28,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cslm.payment.alipay.AlipayConfig;
+import com.cslm.payment.alipay.PaymentChannelAlipay;
+import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
 import com.ynyes.cslm.entity.TdDistributorGoods;
@@ -40,6 +46,8 @@ import com.ynyes.cslm.entity.TdUserConsult;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserRecentVisit;
 import com.ynyes.cslm.entity.TdUserReturn;
+import com.ynyes.cslm.entity.TdUserSuggestion;
+import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdCouponService;
 import com.ynyes.cslm.service.TdCouponTypeService;
@@ -57,6 +65,7 @@ import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserRecentVisitService;
 import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
+import com.ynyes.cslm.service.TdUserSuggestionService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.SiteMagConstant;
 
@@ -116,6 +125,12 @@ public class TdTouchUserController {
     
     @Autowired
     private TdDistributorGoodsService tdDistributorGoodsService;
+    
+    @Autowired
+    private TdUserSuggestionService tdUserSuggestionService;
+    
+    @Autowired
+    private TdCashService tdCashService;
     
 //    @Autowired
 //    private TdUserComplainService tdUserComplainService;
@@ -571,12 +586,12 @@ public class TdTouchUserController {
         
 		 String username = (String) req.getSession().getAttribute("username");
 		        
-		        if (null == username)
-		        {
-		            res.put("message", "请登录！！");
-		            return res;
-		        }
-		        tdCommonService.setHeader(map, req);
+        if (null == username)
+        {
+            res.put("message", "请登录！！");
+            return res;
+        }
+        tdCommonService.setHeader(map, req);
 		        
 		 if(null != id)
 		 {
@@ -1965,7 +1980,7 @@ public class TdTouchUserController {
     @RequestMapping(value = "/user/address/{method}")
     public String address(HttpServletRequest req, 
                         @PathVariable String method,
-                        Long id,
+                        Long id,String type,
                         TdShippingAddress tdShippingAddress, Integer app,
                         ModelMap map){
         String username = (String) req.getSession().getAttribute("username");
@@ -1991,7 +2006,7 @@ public class TdTouchUserController {
                 {
                     if (null != id)
                     {
-                        //map.addAttribute("address", s)
+                        map.addAttribute("type", type);
                         for (TdShippingAddress add : addressList)
                         {
                             if (add.getId().equals(id))
@@ -2032,7 +2047,10 @@ public class TdTouchUserController {
                         user.setShippingAddressList(addressList);
                         tdUserService.save(user);
                     }
-                    
+                    if(null != type)
+                    {
+                    	return "redirect:/touch/order/info";
+                    }
                     return "redirect:/touch/user/address/list";
                 }else if(method.equalsIgnoreCase("default")){
                 	if(null != id)
@@ -2375,6 +2393,169 @@ public class TdTouchUserController {
     }
     
     /**
+     * 充值
+     * 
+     */
+    @RequestMapping(value="/user/topup1")
+    public String topup1(HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/touch/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("user", tdUserService.findByUsername(username));
+    	
+    	return "/touch/user_top_one";
+    }
+    
+    @RequestMapping(value="/user/topup2",method=RequestMethod.POST)
+    public String topupTwo(Double price,Long payTypeId,
+    		HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/touch/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdUser user = tdUserService.findByUsername(username);
+    	
+    	Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
+    	
+    	TdCash cash = new TdCash();
+    	cash.setCashNumber("USE"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+    	cash.setShopTitle(user.getRealName());
+    	cash.setUsername(username);
+    	cash.setCreateTime(new Date());
+    	cash.setPrice(price); // 金额
+    	cash.setShopType(4L); // 类型-会员
+    	cash.setType(1L); // 类型-充值
+    	cash.setStatus(1L); // 状态 提交
+    	
+    	cash = tdCashService.save(cash);
+    	
+    	req.setAttribute("orderNumber", cash.getCashNumber());
+    	req.setAttribute("totalPrice",cash.getPrice().toString());
+    	
+    	PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
+        String payForm = paymentChannelAlipay.getPayFormData(req);
+        map.addAttribute("charset", AlipayConfig.CHARSET);
+    	
+        map.addAttribute("payForm", payForm);
+    	
+        return "/touch/order_pay_form";
+    	
+    }
+    
+    @RequestMapping(value="/user/cash")
+    public String cashReturn(String cashNumber,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if (null == username) {
+            return "redirect:/touch/login";
+        }
+    	
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("user",tdUserService.findByUsername(username));
+    	if(null != cashNumber)
+    	{
+    		map.addAttribute("cash", tdCashService.findByCashNumber(cashNumber));
+    	}
+    	
+    	return "/touch/user_top_end";
+    }
+    
+    /**
+     * 提现
+     * @author Max
+     */
+    @RequestMapping(value="/user/draw1")
+    public String withdraw(HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/touch/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("user", tdUserService.findByUsername(username));
+    	return "/touch/user_draw_one";
+    	
+    }
+    
+    @RequestMapping(value="/user/draw2",method=RequestMethod.POST)
+    public String draw2(String card,Double price,
+    			HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/touch/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	map.addAttribute("user", tdUserService.findByUsername(username));
+    	map.addAttribute("card", card);
+    	map.addAttribute("price", price);
+    	
+    	return "/touch/user_draw_two";
+    }
+    
+    @RequestMapping(value="/user/draw3",method = RequestMethod.POST)
+    public String draw3(String card,Double price,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username)
+    	{
+    		return "redirect:/touch/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdUser user = tdUserService.findByUsername(username);
+    	
+    	if(null == user)
+    	{
+    		return "/touch/error_404";
+    	}
+    	
+		Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
+    	
+		
+		TdCash cash = new TdCash();
+		
+		cash.setCard(card);
+		cash.setPrice(price);
+		cash.setCreateTime(new Date());
+		cash.setCashNumber("USE"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+		cash.setShopTitle(user.getRealName());
+		cash.setUsername(username);
+		cash.setShopType(4L);
+		cash.setType(2L);
+		cash.setStatus(1L);
+		
+		cash = tdCashService.save(cash);
+    	
+    	map.addAttribute("cash", cash);
+    	
+    	return "/touch/user_draw_end";
+    }
+    
+    /**
      * 跳转修改昵称、邮箱、手机、密码、支付密码
      * @author Max
      */
@@ -2451,6 +2632,47 @@ public class TdTouchUserController {
     	
     	res.put("msg", "参数错误");
     	return res;
+    }
+    
+    @RequestMapping(value="/user/suggestion/list")
+    public String suggestionList(HttpServletRequest req,ModelMap map){
+	    
+	     tdCommonService.setHeader(map, req);
+	    
+	     return "/touch/user_suggestion";
+    }
+    
+    @RequestMapping(value = "/suggestion/add", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> suggestionAdd(HttpServletRequest req,
+            String content, String code, ModelMap map) {
+        Map<String, Object> res = new HashMap<String, Object>();
+        res.put("code", 1);
+        
+        String username = (String)req.getSession().getAttribute("username");
+        
+        TdUser user = tdUserService.findByUsername(username);
+        
+        TdUserSuggestion tdSuggestion = new TdUserSuggestion();
+        if(null != user)
+        {
+        	tdSuggestion.setContent(content);
+        	tdSuggestion.setTime(new Date());
+        	tdSuggestion.setName(user.getUsername());
+        	tdSuggestion.setMail(user.getEmail());
+        	tdSuggestion.setMobile(user.getMobile());
+        }else{
+        	tdSuggestion.setContent(content);
+        	tdSuggestion.setTime(new Date());
+        	tdSuggestion.setName("匿名");
+        	tdSuggestion.setMail("");
+        	tdSuggestion.setMobile("");
+        }
+
+        tdUserSuggestionService.save(tdSuggestion);
+        res.put("code", 0);
+        res.put("msg", "提交成功");
+        return res;
     }
     
     @ModelAttribute

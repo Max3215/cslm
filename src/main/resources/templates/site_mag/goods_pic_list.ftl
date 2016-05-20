@@ -108,7 +108,7 @@ function __doPostBack(eventTarget, eventArgument) {
         }else if(null != eventTarget && eventTarget=="categoryId")
         {
              // theForm.categoryId.value = $("#categoryId").val();
-            $("#categoryId").val($("#twoCat").val());
+            $("#categoryId").val($("#category").val());
         }
         theForm.submit();
     }
@@ -146,30 +146,30 @@ function confirmCopy(id)
       <div class="menu-list">
         <div class="rule-single-select">
              <select id="oneCat" onchange="javascript:setTimeout(__doPostBack('oneCat',''), 0)">
-                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
+                <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
                 <#if category_list??>
                     <#list category_list as c>
-                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                     </#list>
                 </#if>
             </select>
         </div>
         <div class="rule-single-select">
              <select id="twoCat" onchange="javascript:setTimeout(__doPostBack('twoCat',''), 0)">
-                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
+                <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
                 <#if cateList??>
                     <#list cateList as c>
-                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                     </#list>
                 </#if>
             </select>
         </div>
         <div class="rule-single-select">
-             <select id="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId',''), 0)">
-                <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
+             <select id="category" onchange="javascript:setTimeout(__doPostBack('categoryId',''), 0)">
+                <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
                 <#if categoryList??>
                     <#list categoryList as c>
-                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                     </#list>
                 </#if>
             </select>
@@ -217,7 +217,7 @@ function confirmCopy(id)
         <div class="details <#if !content.coverImageUri??>nopic</#if>">
             <div class="check">
                 <span class="checkall">
-                    <input type="checkbox" name="listChkId" value="${content_index}">
+                    <input type="checkbox" name="listChkId" value="${content_index?c}">
                 </span>
                 <input type="hidden" name="listId" id="listId" value="${content.id?c}">
             </div>

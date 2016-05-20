@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +39,7 @@ import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCash;
+import com.ynyes.cslm.entity.TdCountSale;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
@@ -258,7 +260,7 @@ public class TdProviderController extends AbstractPaytypeController{
                         		provider.getId(),1, keywords, page, ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -270,7 +272,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -284,7 +286,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -296,7 +298,7 @@ public class TdProviderController extends AbstractPaytypeController{
                         		provider.getId(),1,statusId, page, ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -320,7 +322,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -332,7 +334,7 @@ public class TdProviderController extends AbstractPaytypeController{
                         		provider.getId(),1,time, page, ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -348,7 +350,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -362,7 +364,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -386,7 +388,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -398,7 +400,7 @@ public class TdProviderController extends AbstractPaytypeController{
                         		provider.getId(),1, time, page, ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -414,7 +416,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -428,7 +430,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -452,7 +454,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -464,7 +466,7 @@ public class TdProviderController extends AbstractPaytypeController{
                         		provider.getId(),1, time, page, ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -480,7 +482,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -494,7 +496,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -518,7 +520,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -530,7 +532,7 @@ public class TdProviderController extends AbstractPaytypeController{
                         		provider.getId(),1, time, page, ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -546,7 +548,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -560,7 +562,7 @@ public class TdProviderController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(orderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -642,6 +644,45 @@ public class TdProviderController extends AbstractPaytypeController{
 				{
 					order.setStatusId(6L);
 					order.setFinishTime(new Date());
+					
+					TdDistributor distributor = tdDistributorService.findbyUsername(order.getUsername());
+					List<TdOrderGoods> goodsList = order.getOrderGoodsList();
+					for (TdOrderGoods tdOrderGoods : goodsList) {
+						
+						TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(), tdOrderGoods.getGoodsId());
+						
+						if(null == distributorGoods)
+						{
+							TdGoods goods = tdGoodsService.findOne(tdOrderGoods.getGoodsId());
+//							tdProviderGoodsService.findByProviderIdAndGoodsId(, goodsId)
+							distributorGoods = new TdDistributorGoods();
+							
+							distributorGoods.setDistributorTitle(distributor.getTitle());
+							distributorGoods.setGoodsId(goods.getId());
+							distributorGoods.setGoodsTitle(goods.getTitle());
+//							distributorGoods.setGoodsPrice();
+							distributorGoods.setBrandId(goods.getBrandId());
+							distributorGoods.setBrandTitle(goods.getBrandTitle());
+							distributorGoods.setCategoryId(goods.getCategoryId());
+							distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
+							distributorGoods.setCode(goods.getCode());
+							distributorGoods.setCoverImageUri(goods.getCoverImageUri());
+							distributorGoods.setGoodsMarketPrice(tdOrderGoods.getPrice());
+							distributorGoods.setIsDistribution(false);
+//						distributorGoods.setGoodsParamList(goods.getParamList());
+							distributorGoods.setReturnPoints(goods.getReturnPoints());
+							distributorGoods.setParamValueCollect(goods.getParamValueCollect());
+							distributorGoods.setIsOnSale(false);
+							distributorGoods.setLeftNumber(tdOrderGoods.getQuantity());
+							distributorGoods.setUnit(goods.getSaleType());
+						}else{
+							
+							distributorGoods.setLeftNumber(distributorGoods.getLeftNumber()+tdOrderGoods.getQuantity());
+						}
+						distributor.getGoodsList().add(distributorGoods);
+					}
+					distributor.setGoodsList(distributor.getGoodsList());
+					tdDistributorService.save(distributor);
 				}
 			}
 			 tdOrderService.save(order);
@@ -791,7 +832,7 @@ public class TdProviderController extends AbstractPaytypeController{
 	public String goodsList(@PathVariable Boolean isSale,
 			Integer page,
 			Long categoryId,
-//			String isDistribution,
+			Integer dir,
 			String keywords,
 			HttpServletRequest req,ModelMap map)
 	{
@@ -817,6 +858,7 @@ public class TdProviderController extends AbstractPaytypeController{
 		map.addAttribute("page", page);
 		map.addAttribute("keywords", keywords);
 		map.addAttribute("categoryId", categoryId);
+		map.addAttribute("dir", dir);
 //		map.addAttribute("distribution",isDistribution); 
 		// 所有分类Id
 		List<Long> list = tdProviderGoodsService.findByProviderId(provider.getId());
@@ -855,12 +897,28 @@ public class TdProviderController extends AbstractPaytypeController{
 //			}
 //			else
 //			{
-				if(null == keywords){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),isSale,page,ClientConstant.pageSize));
+				if(null == keywords || "".equals(keywords)){
+					if(null == dir || dir ==0){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),isSale,page,ClientConstant.pageSize));
+					}else if(1== dir){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.findByProviderIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(),isSale,page,ClientConstant.pageSize));
+					}else{
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.findByProviderIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(),isSale,page,ClientConstant.pageSize));
+					}
 				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSale(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
+					if(null == dir || dir ==0){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSale(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
+					}else if(1==dir){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
+					}else{
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
+					}
 				}
 //			}
 		}
@@ -888,12 +946,29 @@ public class TdProviderController extends AbstractPaytypeController{
 //			}
 //			else
 //			{
-				if(null == keywords){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSale(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+				if(null == keywords || "".equals(keywords)){
+					if(null == dir || dir == 0){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSale(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+					}else if(1== dir){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+					}else{
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+					}
 				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+					if(null == dir || 0 ==dir){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+					}else if(1== dir){
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+					}else{
+						map.addAttribute("provider_goods_page",
+								tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+					}
+					
 				}
 //			}
 		}
@@ -929,11 +1004,13 @@ public class TdProviderController extends AbstractPaytypeController{
 		{
 			providerGoods.setIsOnSale(type);
 			tdProviderGoodsService.save(providerGoods);
+			map.addAttribute("isOnSale", false);
 			map.addAttribute("provider_goods_page",
 					tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(), false, page,ClientConstant.pageSize));
 		}else{
 			providerGoods.setIsOnSale(type);
 			tdProviderGoodsService.save(providerGoods);
+			map.addAttribute("isOnSale", true);
 			map.addAttribute("provider_goods_page",
 					tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(), true, page,ClientConstant.pageSize));
 		}
@@ -944,7 +1021,7 @@ public class TdProviderController extends AbstractPaytypeController{
 	
 	@RequestMapping(value="/goods/edit",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> edit(Long goodsId,Integer page,
+	public Map<String,Object> edit(Long goodsId,Integer page,String subTitle, String code,
 					Double outFactoryPrice,Long leftNumber,HttpServletRequest req,ModelMap map)
 	{
 		Map<String,Object> res = new HashMap<>();
@@ -967,11 +1044,14 @@ public class TdProviderController extends AbstractPaytypeController{
 			return res;
 		}
 		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(goodsId);
-		TdProvider provider = tdProviderService.findByUsername(username);
+//		TdProvider provider = tdProviderService.findByUsername(username);
 		
 		providerGoods.setOutFactoryPrice(outFactoryPrice);
 		providerGoods.setLeftNumber(leftNumber);
-		providerGoods.setIsOnSale(true);
+//		providerGoods.setIsOnSale(true);
+		providerGoods.setSubGoodsTitle(subTitle);
+		providerGoods.setCode(code);
+		
 		tdProviderGoodsService.save(providerGoods);
 		
 		res.put("msg", "设置批发成功");
@@ -1113,6 +1193,7 @@ public class TdProviderController extends AbstractPaytypeController{
 	@ResponseBody
 	public Map<String,Object> wholesaling(Long goodsId,
 			String goodsTitle,
+			String subTitle,
 			Double outFactoryPrice,
 			Double marketPrice,
 			Long leftNumber,
@@ -1139,6 +1220,7 @@ public class TdProviderController extends AbstractPaytypeController{
 			proGoods=new TdProviderGoods();
 			proGoods.setGoodsId(goods.getId());
 			proGoods.setGoodsTitle(goodsTitle);
+			proGoods.setSubGoodsTitle(subTitle);
 			proGoods.setSubGoodsTitle(goods.getSubTitle());
 			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 			proGoods.setOutFactoryPrice(outFactoryPrice);
@@ -1154,6 +1236,7 @@ public class TdProviderController extends AbstractPaytypeController{
 		else
 		{
 			proGoods.setGoodsTitle(goodsTitle);
+			proGoods.setSubGoodsTitle(subTitle);
 			proGoods.setLeftNumber(leftNumber);
 			proGoods.setGoodsMarketPrice(marketPrice);
 			proGoods.setOutFactoryPrice(outFactoryPrice);
@@ -1360,6 +1443,107 @@ public class TdProviderController extends AbstractPaytypeController{
 		res.put("message", "参数错误！");
     	return res;
     }
+    /**
+     * 销售统计
+     * @author Max
+     * 
+     */
+    @RequestMapping(value="/order/sum")
+    public String sumOrderGoods(String startTime,String endTime,
+    		String eventTarget,HttpServletResponse resp,
+    		HttpServletRequest req,ModelMap map) throws ParseException
+    {
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if(null == username)
+		{
+			return "redirect:/login";
+		}
+    	tdCommonService.setHeader(map, req);
+    	
+    	TdProvider provider = tdProviderService.findByUsername(username);
+    	if(null == provider)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date start = null;
+		Date end = null ;
+		
+		if(null != startTime && !"".equals(startTime.trim()))
+		{
+			start = sdf.parse(startTime);
+		}
+		if(null != endTime && !"".equals(endTime.trim()))
+		{
+			end = sdf.parse(endTime);
+		}
+		
+		List<TdOrder> list = tdOrderService.searchOrderGoods(provider.getId(),null,1L,start, end);
+		List<TdCountSale> countList = tdOrderService.sumOrderGoods(provider.getId(),1L,list);
+		
+		String excelUrl=null;
+		if(null != eventTarget)
+		{
+			if("excel".equalsIgnoreCase(eventTarget))
+			{
+				excelUrl=SiteMagConstant.backupPath;
+			}
+		}
+		
+        if(null != excelUrl)
+        {
+        	/**
+    		 * 导出表格
+    		 */
+    		// 创建一个webbook 对于一个Excel
+    		HSSFWorkbook wb = new HSSFWorkbook();
+    		// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+    		HSSFSheet sheet = wb.createSheet("countSale"); 
+    		// 设置每个单元格宽度根据字多少自适应
+    		sheet.autoSizeColumn(1);
+    		// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+            HSSFRow row = sheet.createRow((int) 0);
+            // 创建单元格，并设置值表头 设置表头居中 
+            HSSFCellStyle style = wb.createCellStyle();  
+            style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+            
+            HSSFCell cell = row.createCell((short) 0);  
+            cell.setCellValue("商品名称");  
+            cell.setCellStyle(style); 
+            cell = row.createCell((short) 1);  
+            cell.setCellValue("商品副标题");  
+            cell.setCellStyle(style); 
+            cell = row.createCell((short) 2);  
+            cell.setCellValue("商品编码");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 3);  
+            cell.setCellValue("销售数量");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 4);  
+            cell.setCellValue("售价");  
+            cell.setCellStyle(style);
+            
+            cell = row.createCell((short) 5);  
+            cell.setCellValue("销售额");  
+            cell.setCellStyle(style); 
+            
+            
+        	if(saleImport(countList,startTime,endTime, row, cell, sheet))
+        	{
+        		download(wb,"countSale", excelUrl, resp);
+        	}
+        }
+        
+        
+		map.addAttribute("saleList", countList);
+		map.addAttribute("startTime", start);
+		map.addAttribute("endTime", end);
+		
+		return "/client/provider_sale";
+    }
     
     /**
      * 账号管理
@@ -1486,7 +1670,7 @@ public class TdProviderController extends AbstractPaytypeController{
     	return "/client/provider_draw_one";
     }
     
-    @RequestMapping(value="/user/drwa2",method=RequestMethod.POST)
+    @RequestMapping(value="/drwa2",method=RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> userDrwa(String card,Double price,String payPassword,
     			HttpServletRequest req){
@@ -1620,10 +1804,27 @@ public class TdProviderController extends AbstractPaytypeController{
 		return true;
 	}
 	
-	public Boolean download(HSSFWorkbook wb, String exportUrl, HttpServletResponse resp){
+	@SuppressWarnings("deprecation")
+	public Boolean saleImport(List<TdCountSale> saleList,String startTime,String endTime,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+	{
+		for (int i = 0; i < saleList.size(); i++) {
+			row = sheet.createRow((int)i+1);
+			TdCountSale countSale = saleList.get(i);
+			
+			row.createCell((short) 0).setCellValue(countSale.getGoodsTitle());
+			row.createCell((short) 1).setCellValue(countSale.getSubTitle());
+			row.createCell((short) 2).setCellValue(countSale.getGoodsCode());
+			row.createCell((short) 3).setCellValue(countSale.getQuantity());
+			row.createCell((short) 4).setCellValue(countSale.getPrice());
+			row.createCell((short) 5).setCellValue(countSale.getTotalPrice());
+		}
+		return true;
+	}
+	
+	public Boolean download(HSSFWorkbook wb,String name, String exportUrl, HttpServletResponse resp){
 	   	 try  
 	        {  
-		          FileOutputStream fout = new FileOutputStream(exportUrl+"order.xls");  
+		          FileOutputStream fout = new FileOutputStream(exportUrl+name+".xls");  
 //		          OutputStreamWriter writer = new OutputStreamWriter(fout, "utf8");	                       	     
 		          wb.write(fout);  
 		          fout.close();
@@ -1634,14 +1835,14 @@ public class TdProviderController extends AbstractPaytypeController{
 	   	 OutputStream os;
 			 try {
 					os = resp.getOutputStream();
-					File file = new File(exportUrl + "order.xls");
+					File file = new File(exportUrl+name + ".xls");
 	                
 	            if (file.exists())
 	                {
 	                  try {
 	                        resp.reset();
 	                        resp.setHeader("Content-Disposition", "attachment; filename="
-	                                + "order.xls");
+	                                +name +".xls");
 	                        resp.setContentType("application/octet-stream; charset=utf-8");
 	                        os.write(FileUtils.readFileToByteArray(file));
 	                        os.flush();

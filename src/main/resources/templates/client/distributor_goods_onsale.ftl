@@ -155,7 +155,6 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_order_search"> 
           <h3>平台中的商品</h3>
             <form action="/distributor/goods/onsale" id="form1">
-              <input type="hidden" value="${page!'0'}" name="page">
               <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
               <input class="mysub" type="submit" value="查询"/>
               <input class="mytext" type="text"   value="${keywords!''}" name="keywords" id="keywords" />
@@ -163,7 +162,7 @@ DD_belatedPNG.fix('.,img,background');
                     <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if category_list??>
                         <#list category_list as c>
-                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>
@@ -171,7 +170,7 @@ DD_belatedPNG.fix('.,img,background');
                     <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if cateList??>
                         <#list cateList as c>
-                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>
@@ -179,7 +178,7 @@ DD_belatedPNG.fix('.,img,background');
                     <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if categoryList??>
                         <#list categoryList as c>
-                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>
@@ -221,7 +220,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/onsale?page=${page-1}&keywords=${keywords!''}&categoryId=${categoryId!''}">${page}</a>
+                                <a href="/distributor/goods/onsale?page=${(page-1)?c}&keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -265,7 +264,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th>商品副标题：</th>
-          <td><input type="text" class="add_width" name="subGoodsTitle" id="subTitle" readonly="readonly"></td>
+          <td><input type="text" class="add_width" name="subGoodsTitle" id="subTitle" ></td>
         </tr>
         <tr>
           <th>商品编码：</th>

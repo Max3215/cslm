@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>购物车</title>
+<title><#if site??>${site.seoTitle!''}-</#if>提交订单</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -52,6 +52,28 @@ $(document).ready(function(){
         nodata:"none",
         required:false
     }); 
+    
+  $("#delive_post").click(function(){
+        <#assign price=0.00>
+        <#assign postprice=0.00>
+        <#if postPrice??>
+            <#assign postprice=postPrice>
+            <#assign price=totalPrice+postPrice>
+        <#else>
+            <#assign price=totalPrice>
+        </#if>
+       $("#postprice").html(${postprice?string('0.00')})
+       $("#totalPrice").html(${price?string('0.00')}) 
+  }) 
+  
+  $("#delive_u").click(function(){
+        <#assign price=0.00>
+        <#assign postprice=0.00>
+        <#assign price=totalPrice>
+       
+       $("#postprice").html(${postprice?string('0.00')})
+       $("#totalPrice").html(${price?string('0.00')}) 
+  })  
   
 })
 </script>
@@ -141,11 +163,11 @@ $(document).ready(function(){
     <div class="del_mode">
         <p>配送方式</p>
         <div >
-            <span><input type="radio" value="0" name="deliveryType" datatype="n" nullmsg="请选择配送方式!" />送货上门</span>
-            &emsp;&emsp;邮费：<#if postPrice??><b class="red fs18">￥${postPrice?string('0.00')}</b><#elseif post??>${post!''}</#if>
+            <span><input type="radio" value="0" name="deliveryType" checked="checked"  datatype="n" id="delive_post" nullmsg="请选择配送方式!" />送货上门</span>
+            <#if post??>&emsp;&emsp;${post!''}</#if>
         </div>
         <div  style="margin-top:15px;">
-            <span><input type="radio" name="deliveryType" value="1" datatype="n" nullmsg="请选择配送方式!" />门店自提</span>
+            <span><input type="radio" name="deliveryType" value="1" datatype="n" id="delive_u" nullmsg="请选择配送方式!" />门店自提</span>
             <#if addressList??>
             <select name="shipAddressId">
                 <#list addressList as addr>
@@ -167,7 +189,7 @@ $(document).ready(function(){
             <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
           </div>
 
-          <p class="alipay_tit">平台支付</p>
+          <p class="alipay_tit">快捷支付</p>
           <div class="alipay">
               <ul>
               <#if pay_type_list_third??>
@@ -201,15 +223,22 @@ $(document).ready(function(){
     <div class="clear h20"></div>
     
     <#assign price=0>
+    <#assign postprice=0>
     <#if postPrice??>
+        <#assign postprice=postPrice>
         <#assign price=totalPrice+postPrice>
     <#else>
         <#assign price=totalPrice>
     </#if>
     
+    
     <div class="car_btn">
         <a class="ml20 fc" href="javascript:history.go(-1);">返回上一页</a>
-        <span>&emsp;&emsp;&emsp;商品总额：<b class="red fs18">￥${totalPrice?string('0.00')}</b>&emsp; &emsp;&emsp;&emsp;&emsp;应付总额：<b class="red fs18">￥${price?string('0.00')}</b></span>
+       <#-- <span>&emsp;&emsp;&emsp;商品总额：<b class="red fs18">￥${totalPrice?string('0.00')}</b>
+                &emsp; &emsp;&emsp;&emsp;&emsp;应付总额：<b class="red fs18">￥${price?string('0.00')}</b></span>-->
+         <span>&emsp;&emsp;&emsp;商品总额：￥<b class="red fs18" id="goodsPrice">${totalPrice?string('0.00')}</b>&emsp;<b>＋</b>
+                &emsp; 邮费：￥<b class="red fs18" id="postprice"><#if postprice??>${postprice?string('0.00')}</#if></b>&emsp;&emsp;<b>＝</b>&emsp;&emsp;
+                应付总额：￥<b class="red fs18" id="totalPrice">${price?string('0.00')}</b></span>
         <input class="sub" type="submit" value="提交订单" />
     </div>
     <div class="clear"></div> 

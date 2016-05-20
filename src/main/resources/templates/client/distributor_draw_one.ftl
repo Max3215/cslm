@@ -53,7 +53,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_main">
   <#include "/client/common_distributor_menu.ftl">
   
-  <form id="form1" action="/distrbutor/drwa2" method="post">
+  <form id="form1" action="/distributor/drwa2" method="post">
   <div class="mymember_center add_width">
     <div class="with_money">
       <p class="tit">提现余额到银行卡</p>

@@ -67,7 +67,7 @@ public class PaymentChannelAlipay implements PaymentChannel {
         String serverPath = getServerPath(request);
         requestParameters.put(Constants.KEY_NOTIFY_URL, serverPath + "order/pay/notify_alipay");
         requestParameters.put(Constants.KEY_RETURN_URL, serverPath + "order/pay/result_alipay");
-        
+       
         //支付记录号码
         String payRecordId = (String) request.getAttribute("payRecordId");
         // 订单ID
@@ -81,9 +81,9 @@ public class PaymentChannelAlipay implements PaymentChannel {
         	requestParameters.put(Constants.KEY_OUT_TRADE_NO, orderId);
         }
         requestParameters.put(Constants.KEY_PAYMENT_TYPE, AlipayConfig.PAYMENT_TYPE);
-//        requestParameters.put(Constants.KEY_LOGISTICS_TYPE, AlipayConfig.DEFAULT_EXPRESS);
-//        requestParameters.put(Constants.KEY_LOGISTICS_FEE, AlipayConfig.LOGISTICS_FREE);
-//        requestParameters.put(Constants.KEY_LOGISTICS_PAYMENT, AlipayConfig.SELLER_PAY);
+        requestParameters.put(Constants.KEY_LOGISTICS_TYPE, AlipayConfig.DEFAULT_EXPRESS);
+        requestParameters.put(Constants.KEY_LOGISTICS_FEE, AlipayConfig.LOGISTICS_FREE);
+        requestParameters.put(Constants.KEY_LOGISTICS_PAYMENT, AlipayConfig.SELLER_PAY);
 
         // 订单金额取得
         String orderAmount = (String) request.getAttribute("totalPrice");
@@ -98,7 +98,7 @@ public class PaymentChannelAlipay implements PaymentChannel {
 //        requestParameters.put(Constants.KEY_BODY, "支付测试");
         requestParameters.put(Constants.KEY_TOTAL_FEE, orderAmount);
 //        requestParameters.put(Constants.KEY_TBREC_POST,AlipayConfig.RECORD_POST);
-                 requestParameters.put(Constants.KEY_ITB_PAY, AlipayConfig.PAY_POST);
+//                 requestParameters.put(Constants.KEY_ITB_PAY, AlipayConfig.PAY_POST);
         return AlipaySubmit.buildRequestForm(requestParameters,
                 Constants.METHOD_POST, Constants.PAY_BUTTON_NAME);
     }

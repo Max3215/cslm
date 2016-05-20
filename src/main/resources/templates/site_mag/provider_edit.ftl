@@ -161,6 +161,13 @@ $(function () {
         </dd>
     </dl>
     <dl>
+    <dt>支付密码</dt>
+        <dd>
+            <input name="payPassword" type="text" value="<#if provider?? && provider.payPassword??>${provider.payPassword!''}</#if>" class="input normal" > 
+            <span class="Validform_checktip"></span>
+        </dd>
+    </dl>
+    <dl>
     <dt>平台服务费比例</dt>
         <dd>
             <input name="serviceRation" type="text" value="<#if provider?? && provider.serviceRation??>${provider.serviceRation?string("0.00")}<#else>0.01</#if>" class="input normal" sucmsg=" "> 
@@ -168,7 +175,7 @@ $(function () {
         </dd>
     </dl>
     <dl>
-        <dt>支付宝使用费比例</dt>
+        <dt>第三方使用费比例</dt>
         <dd>
             <input name="aliRation" type="text" value="<#if provider?? && provider.aliRation??>${provider.aliRation?string("0.00")}<#else>0</#if>" class="input normal" sucmsg=" "> 
             <span class="Validform_checktip">*</span>

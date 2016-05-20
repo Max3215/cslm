@@ -228,17 +228,21 @@ $(document).ready(function(){
               <th>商品名称：</th>
               <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
             </tr>
+            <tr>
+              <th>商品副标题：</th>
+              <td><input type="text" class="add_width" name="subGoodsTitle" id="subTitle" readonly="readonly"></td>
+            </tr>
              <tr>
               <th>批发价：</th>
               <td><input type="text" name="goodsMarketPrice" readonly="readonly" id="outFactoryPrice" ></td>
             </tr>
              <tr>
               <th>供货商：</th>
-              <td><input type="text" name="providerTitle" readonly="readonly" id="providerTitle"></td>
+              <td><input type="text" name="providerTitle" class="add_width" readonly="readonly" id="providerTitle"></td>
             </tr>
             <tr>
               <th>进货数量：</th>
-              <td><input type="number" name="shopReturnRation"  id="quantity" min="0" ></td>
+              <td><input type="number" name="shopReturnRation"  id="quantity" min="1" ></td>
             </tr>
             <tr>
               <th></th>

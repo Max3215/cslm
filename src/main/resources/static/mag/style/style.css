@@ -210,6 +210,12 @@ textarea.inputw400_h100{ width:445px; height:100px; }
 	.toolbar .r-list .img-view{ display:block; float:left; margin-left:10px; width:30px; height:30px; border:1px solid #dbdbdb; background:url(skin_icons.png) -187px -20px no-repeat #fafafa; text-indent:-9999px; }
 	.toolbar .r-list .txt-view{ display:block; float:left; width:30px; height:30px; border:1px solid #dbdbdb; border-left:none; background:url(skin_icons.png) -216px -20px no-repeat #fafafa; text-indent:-9999px; }
 
+    /** 新加     by Max     */
+    .toolbar .a-list .keyword{ display:block; float:left; margin:0; padding:0 5px; width:150px; height:30px; line-height:28px; font-size:12px; border:1px solid #dbdbdb; color:#444; }  
+    .toolbar .a-list .btn-search{ display:block; float:left; margin:0 0 0 -1px; padding:0; width:30px; height:30px; line-height:30px; border:1px solid #dbdbdb; background:url(skin_icons.png) -160px -20px no-repeat #fafafa; cursor:pointer; text-indent:-9999px; }
+    .toolbar .a-list .img-view{ display:block; float:left; margin-left:10px; width:30px; height:30px; border:1px solid #dbdbdb; background:url(skin_icons.png) -187px -20px no-repeat #fafafa; text-indent:-9999px; }
+    .toolbar .a-list .txt-view{ display:block; float:left; width:30px; height:30px; border:1px solid #dbdbdb; border-left:none; background:url(skin_icons.png) -216px -20px no-repeat #fafafa; text-indent:-9999px; }
+/**   */
 .ltable{ width:100%; border:1px solid #e1e1e1; font-family:"Microsoft YaHei"; font-size:12px; }
 	.ltable th{ padding:8px 0; color:#333; font-size:12px; font-weight:500; background:#f3f3f3; border-bottom:1px solid #E1E1E1; line-height:1.5em; }
 	.ltable td{ padding:8px 0; border-bottom:1px solid #e8e8e8; line-height:1.5em; color:#666; }

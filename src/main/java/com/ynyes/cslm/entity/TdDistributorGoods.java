@@ -145,6 +145,18 @@ public class TdDistributorGoods {
     // 首页推荐
     private Boolean isRecommendIndex;
     
+    // 平台推荐
+    @Column
+    private Boolean isSetRecommend;
+    
+    // 平台分类推荐
+    @Column
+    private Boolean isRecommendType;
+    
+    // 触屏平台热卖
+    @Column
+    private Boolean isTouchHot;
+    
 //    // 商品邮费
 //    @Column
 //    private Double postPrice;
@@ -391,6 +403,30 @@ public class TdDistributorGoods {
 
 	public void setIsRecommendIndex(Boolean isRecommendIndex) {
 		this.isRecommendIndex = isRecommendIndex;
+	}
+
+	public Boolean getIsSetRecommend() {
+		return isSetRecommend;
+	}
+
+	public void setIsSetRecommend(Boolean isSetRecommend) {
+		this.isSetRecommend = isSetRecommend;
+	}
+
+	public Boolean getIsRecommendType() {
+		return isRecommendType;
+	}
+
+	public void setIsRecommendType(Boolean isRecommendType) {
+		this.isRecommendType = isRecommendType;
+	}
+
+	public Boolean getIsTouchHot() {
+		return isTouchHot;
+	}
+
+	public void setIsTouchHot(Boolean isTouchHot) {
+		this.isTouchHot = isTouchHot;
 	}
 	
 	

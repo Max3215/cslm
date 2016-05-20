@@ -29,7 +29,7 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+   // adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -60,39 +60,56 @@ DD_belatedPNG.fix('.,img,background');
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
           <h3>已售的商品</h3>
-          <form action ="/distributor/sale">
-              <input type="hidden" value="${page!'0'}" name="page">
+          <form action ="/distributor/sale" >
               <input class="mysub" type="submit" value="查询" />
-              <input class="mytext" type="text"  name="keywords" value="${keywords!''}"/>
               <p class="fr pl10 c3">时间&nbsp;&nbsp;
-                    <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})">
+                    <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
                                     &nbsp;&nbsp;至&nbsp;&nbsp;
-                    <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})">
+                    <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
                </p>
               <div class="clear"></div>
           </form>
+          <form action ="/distributor/sale" method="POST" id="form1">
+            <input type="hidden" name="startTime"  value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" />
+            <input type="hidden" name="endTime"  value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" />
+            <input type="hidden" name="eventTarget" value="" id="eventTarget">
+                <script type="text/javascript">
+                    var theForm = document.forms['form1'];
+                    if (!theForm) {
+                        theForm = document.form1;
+                    }
+                    function __doPostBack(eventTarget, eventArgument) {
+                        if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                            theForm.eventTarget.value = eventTarget;
+                            theForm.submit();
+                        }
+                    }
+                </script>
+              <input class="mysub" type="button" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
+            </form>
         </div>
         <table>
           <tr class="mymember_infotab_tit01">
-                <th width="300">商品名称</th>
+                <th width="200">商品名称</th>
+                <th width="200">副标题</th>
                 <th>商品编码</th>
                 <th>数量</th>
-                <th>价格</th>
-                <th>售出时间</th>
+                <th>售价</th>
+                <th>销售额价</th>
           </tr>
-          <#if orderGoodsPage??>
-               <#list orderGoodsPage.content as og>
+          <#if saleList??>
+               <#list saleList as item>
                     <tr id="tr_1424195166">
                         <td>
                             <a>
-                                <strong><img width="80" height="80" src="${og.goodsCoverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${og.goodsTitle!''}</p>
+                                <p style="text-align: left;margin:10px 0 10px 5px;max-height:60px;overflow:hidden;">${item.goodsTitle!''}</p>
                             </a>
                         </td>
-                        <td><#if og.code??>${og.code!''}</#if></td>
-                        <td class="tb01">${og.quantity!'0'}</td>
-                        <td class="tb02">￥${og.price?string('0.00')}</td>
-                        <td><#if og.saleTime??>${og.saleTime?string('0.00')}</#if></td>
+                        <td><p style="text-align: left;margin:10px 0 10px 5px;max-height:60px;overflow:hidden;" >${item.subTitle!''}</p></td>
+                        <td><#if item.goodsCode??>${item.goodsCode!''}</#if></td>
+                        <td class="tb01">${item.quantity!'0'}</td>
+                        <td class="tb02">￥${item.price?string('0.00')}</td>
+                        <td class="tb02">￥${item.totalPrice?string('0.00')}</td>
                         </td>
                     </tr>
                 </#list>
@@ -101,6 +118,7 @@ DD_belatedPNG.fix('.,img,background');
         <div class="myclear" style="height:10px;"></div>
 
         <div class="mymember_page"> 
+<#--
             <#if orderGoodsPage??>
                 <#assign continueEnter=false>
                 <#if orderGoodsPage.totalPages gt 0>
@@ -121,6 +139,7 @@ DD_belatedPNG.fix('.,img,background');
                     </#list>
                 </#if>
             </#if>
+        -->
         </div>
       </div>
       <!--mymember_info END-->

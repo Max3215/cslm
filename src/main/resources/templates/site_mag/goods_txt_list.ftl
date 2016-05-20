@@ -180,7 +180,7 @@ function __doPostBack(eventTarget, eventArgument) {
         <tr>
             <td align="center">
                 <span class="checkall" style="vertical-align:middle;">
-                    <input id="listChkId" type="checkbox" name="listChkId" value="${content_index}" >
+                    <input id="listChkId" type="checkbox" name="listChkId" value="${content_index?c}" >
                 </span>
                 <input type="hidden" name="listId" id="listId" value="${content.id?c}">
             </td>

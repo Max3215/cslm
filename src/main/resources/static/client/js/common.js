@@ -222,7 +222,7 @@ $(function() {
 function cityChange(city)
 {
     var city = city.value;
-    console.debug(city);
+    
     $.ajax({
         url : "/distributor/region/change",
         data : {"city":city},

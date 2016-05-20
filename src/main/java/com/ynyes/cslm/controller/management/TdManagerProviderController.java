@@ -284,6 +284,11 @@ public class TdManagerProviderController {
         if(null == tdProvider.getVirtualMoney() || "".equals(tdProvider.getVirtualMoney())){
         	tdProvider.setVirtualMoney(new Double(0));
         }
+        if(null == tdProvider.getPayPassword() || "".equals(tdProvider.getPayPassword().trim()))
+        {
+        	// 设置初始密码
+        	tdProvider.setPayPassword(tdProvider.getPassword());
+        }
         
         if (null == tdProvider.getId())
         {

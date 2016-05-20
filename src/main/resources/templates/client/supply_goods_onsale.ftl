@@ -42,18 +42,21 @@ $(document).ready(function(){
 function editgoods(gid){
     $("#goodsId").attr("value",gid);
     var goodsTitle = $("#title"+gid).html();
+    var subTitle = $("#subTitle"+gid).val();
     var code = $("#code"+gid).html();
     var marketPrice = $("#marketPrice"+gid).html();
     
     $("#code").attr("value",code);
     $("#marketPrice").attr("value",marketPrice);
     $("#goodsTitle").attr("value",goodsTitle);
+    $("#subTitle").attr("value",subTitle);
     $('.sub_form').css('display','block');
 }
 
 function subDisGoods(){
     var goodsId = $("#goodsId").val();
     var goodsTitle = $("#goodsTitle").val();
+    var subTitle = $("#subTitle").val();
     var outFactoryPrice = $("#outFactoryPrice").val();
     var marketPrice = $("#marketPrice").val();
     var leftNumber = $("#leftNumber").val();
@@ -100,6 +103,7 @@ function subDisGoods(){
         url : "/supply/distribution",
         data : {"goodsId":goodsId,
             "goodsTitle":goodsTitle,
+            "subTitle":subTitle,
             "outFactoryPrice":outFactoryPrice,
             "marketPrice":marketPrice,
             "leftNumber":leftNumber,
@@ -149,7 +153,6 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_order_search"> 
           <h3>平台的商品</h3>
           <form action="/supply/goods/distribution" id="form1">
-              <input type="hidden" value="${page!'0'}" name="page">
               <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
               <input class="mysub" type="submit" value="查询"/>
               <input class="mytext" type="text"   value="${keywords!''}" name="keywords" id="keywords" />
@@ -157,7 +160,7 @@ DD_belatedPNG.fix('.,img,background');
                     <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if category_list??>
                         <#list category_list as c>
-                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>
@@ -165,7 +168,7 @@ DD_belatedPNG.fix('.,img,background');
                     <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if cateList??>
                         <#list cateList as c>
-                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>
@@ -173,7 +176,7 @@ DD_belatedPNG.fix('.,img,background');
                     <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if categoryList??>
                         <#list categoryList as c>
-                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                            <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                         </#list>
                     </#if>
                 </select>
@@ -190,6 +193,7 @@ DD_belatedPNG.fix('.,img,background');
            <#if goods_page??>
                 <#list goods_page.content as goods>
                     <tr id="tr_1424195166">
+                        <input type="hidden" id="subTitle${goods.id?c}" value="${goods.subTitle!''}">
                         <td><a class="pic"><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01"><span id="code${goods.id?c}">${goods.code!''}</span></td>
                         <td class="tb02"><p>￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></p></td>
@@ -211,7 +215,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/supply/goods/distribution?page=${page-1}&keywords=${keywords!''}&categoryId=${categoryId!''}">${page}</a>
+                                <a href="/supply/goods/distribution?page=${page-1}&keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -252,6 +256,10 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th>*商品名称：</th>
           <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+        </tr>
+        <tr>
+          <th>*商品副标题：</th>
+          <td><input type="text" class="add_width" name="subTitle" id="subTitle" ></td>
         </tr>
         <tr>
           <th>商品编码：</th>

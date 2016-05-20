@@ -8,7 +8,7 @@
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
 <![endif]-->
-<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
+<title>${dis_goods.goodsTitle!''}-<#if site??>${site.seoTitle!''}</#if></title>
 <link href="/client/images/cslm.ico" rel="shortcut icon">
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
@@ -73,6 +73,7 @@ function addNum(){
         $("#number").val(q+1);
    </#if>
     $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
+    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
 }
 
 <#-- 减少商品数量的方法 -->
@@ -84,6 +85,7 @@ function minusNum(){
         $("#number").val(q-1);
     }
     $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
+    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
 }
 
 <!--  加入购物车   -->
@@ -116,10 +118,17 @@ function byNow(dId){
         alert("请选择正确的数量");
         return;
     }
-    window.open("/order/byNow/"+dId+"?quantity="+quantity);
-  //  window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
+ //   window.open("/order/byNow/"+dId+"?quantity="+quantity);
+    window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
 }
 
+function proGoods(did)
+{
+    var quantity = document.getElementById("quantity").value;
+    
+    // window.location.href = "/order/proGoods/"+did+"?quantity="+quantity;
+    window.open("/order/proGoods/"+did+"?quantity="+quantity);
+}
 
 </script>
 
@@ -183,12 +192,12 @@ function byNow(dId){
 				<#if dis_goods??><a href="javascript:addCollect(${dis_goods.id?c})" class="love" title="收藏商品">收藏商品</a></#if>
 			</section>
 			<section class="proinfo_right">
-				<h2>${goods.title!''}</h2>
-				<p class="subtitle">${goods.subTitle!''}</p>
+				<h2>${dis_goods.goodsTitle!''}</h2>
+				<p class="subtitle">${dis_goods.subGoodsTitle!''}</p>
 				<p class="num"><#if goods.code??>商品编号：<span>${goods.code!''}</span></#if>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#if goods.brandTitle??>商品品牌：<span>${goods.brandTitle!''}</span></#if></p>
 				<div class="price">
 					<#if dis_goods??><p>特惠价：<span>￥${dis_goods.goodsPrice?string('0.00')}</span><#if dis_goods.unit??>/${dis_goods.unit!''}</#if></p></#if>
-					<p class="lth">实体店价：￥<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#else>${goods.marketPrice?string("0.00")}</#if></p>
+					<p class="lth">实体店价：￥<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#else>${goods.marketPrice?string("0.00")}</#if><#if dis_goods.unit??>/${dis_goods.unit!''}</#if></p>
 				</div>
 				
 				<!-- 参数开始   -->
@@ -263,17 +272,21 @@ function byNow(dId){
                 <p>&nbsp;  </p>
                 <p class="num"><#if distributor.postPrice??>本店（${distributor.title!''}）配送费<span style="color:#ff5b7d">￥${distributor.postPrice?string('0.00')}</span>&nbsp;</#if>
                     <#if distributor.maxPostPrice??>满<span style="color:#ff5b7d">￥${distributor.maxPostPrice?string('0.00')}</span>&nbsp;包邮</#if></p>
+                 <p ><span style="color:#ff5b7d">*${distributor.postInfo!''}</span></p>
 				<div class="buy_btn">
 					<div class="clear"></div>
 					<#if dis_goods??>
 					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
-					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car">立即预购</a>
+					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car" id="proGoods">立即预购</a>
+					       <!--
+					       <a href="javascript:proGoods(${dis_goods.id?c});" target="_blank"  title="预购商品" class="car">立即预购</a>
+					       -->
 					   <#else>
         					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
         					<#--<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>
         					-->
-        					<a href="/cart/init?id=${dis_goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
 					   </#if>
+        					<a href="/cart/init?id=${dis_goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
 					</#if>
 					<div class="clear"></div>
 				</div>
@@ -331,7 +344,7 @@ function byNow(dId){
                                         <img src="${hot_good.coverImageUri!''}">
                                         <p>${hot_good.goodsTitle!''}</p>
                                     </a>
-                                    <p class="price">￥${hot_good.goodsMarketPrice?string("0.00")}</p>
+                                    <p class="price">￥${hot_good.goodsPrice?string("0.00")}</p>
                                 </li>
                              </#if>
                          </#list>

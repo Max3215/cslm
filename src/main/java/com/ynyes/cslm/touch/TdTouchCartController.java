@@ -109,15 +109,17 @@ public class TdTouchCartController {
                     cartGoods.setIsLoggedIn(isLoggedIn);
                     cartGoods.setUsername(username);
     
-                    cartGoods.setIsSelected(true);
+                    cartGoods.setIsSelected(false);
                     cartGoods.setGoodsId(goods.getGoodsId());
                     cartGoods.setDistributorId(distributor.getId());
                     cartGoods.setDistributorTitle(distributor.getTitle());
                     cartGoods.setDistributorGoodsId(goods.getId());
-                    // 商品信息在读取购物车时再获取
-//                    cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
-//                    cartGoods.setGoodsTitle(goods.getTitle());
-//                    cartGoods.setPrice(goods.getSalePrice());
+            		cartGoods.setGoodsTitle(goods.getGoodsTitle());
+            		
+            		cartGoods.setDistributorId(tdDistributorGoodsService.findDistributorId(id));
+            		cartGoods.setDistributorTitle(goods.getDistributorTitle());
+            		cartGoods.setProviderId(goods.getProviderId());
+            		cartGoods.setProviderTite(goods.getProviderTitle());
                     
                     cartGoods.setQuantity(quantity);
                     

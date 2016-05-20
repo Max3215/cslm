@@ -149,7 +149,7 @@ DD_belatedPNG.fix('.,img,background');
                                 </#if>
                             </td>
                             <td class="td003">
-                                <a href="">查看</a>          
+                                <a href="/supply/order?id=${order.id?c}">查看</a>          
                             </td>
                         </tr>
                     </#if>

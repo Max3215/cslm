@@ -7,6 +7,7 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
@@ -16,10 +17,61 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ZBClgucj8qbtCxOFFd003zZ"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	indexBanner("box","sum",300,5000,"num");//Banner
 });
+
+    var lng =0;
+    var lat =0;
+  // 百度地图API功能
+  var geolocation = new BMap.Geolocation();
+  geolocation.getCurrentPosition(function(r){
+    if(this.getStatus() == BMAP_STATUS_SUCCESS){
+      lng = r.point.lng;
+      lat = r.point.lat;
+      distance(lng,lat);
+     
+    }
+    else {
+      alert('failed'+this.getStatus());
+    }        
+  },{enableHighAccuracy: true})
+
+function distance(lng,lat){
+    
+    $.ajax({
+        type: "post",
+        data : {"lng":lng,"lat":lat},
+        url : "/touch/distance",
+        success:function(data){
+            $("#shopList").html(data)
+        }
+    })
+}
+
+
+function chooseDistributor(disId){
+    $.ajax({
+        url : "/touch/distributor/change",
+        async : true,
+        type : 'GET',
+        dataType : "json",
+        data : {"disId":disId},
+        success : function(data){
+            if(data.msg){
+                alter(data.msg)
+            }
+            var url = window.location.href;          
+            if(undefined==url || ""==url){
+                window.location.href="/";
+             }else{
+                 window.location.href = url; 
+             }
+        }
+    })
+}
 </script>
 </head>
 
@@ -27,13 +79,16 @@ $(document).ready(function(){
 <div id="allmap" style="display:none"></div>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="#" class="home"></a>
-		<div class="branch">
-			<p>王明辉超市五华总店</p>
-		</div>
-		<a href="#" class="news"></a>
-	</header>
-	<div style="height:0.88rem;"></div>
+        <a href="javascript:;" class="home"></a>
+        <div class="branch">
+            <a href="javascript:void(0)" onclick="$('.infp_eject').fadeIn(300)"><#if distributorTitle??>${distributorTitle!''}<#else>超市联盟</#if></a>     
+        </div>
+    <div class="infp_eject" style="display: none;" id="shopList">
+       <#include "/touch/shop_list.ftl" />
+    </div>
+        <a href="javascript:;" class=""></a>
+    </header>
+    <div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
   
   <!-- banner -->
@@ -62,7 +117,7 @@ $(document).ready(function(){
   			<img src="/touch/images/index01.png" />
   			<p>商品分类</p>
   		</a>
-  		<a href="#">
+  		<a href="/touch/findNew">
   			<img src="/touch/images/index02.png" />
   			<p>新品推荐</p>
   		</a>
@@ -80,7 +135,7 @@ $(document).ready(function(){
   			<img src="/touch/images/index05.png" />
   			<p>购物车</p>
   		</a>
-  		<a href="#">
+  		<a href="/touch/user/suggestion/list">
   			<img src="/touch/images/index06.png" />
   			<p>投诉建议</p>
   		</a>
@@ -177,7 +232,7 @@ $(document).ready(function(){
   	<menu>
   	 <#if top_cat_goods_page2?? && top_cat_goods_page2.content?size gt 0 >
         <#list top_cat_goods_page2.content as item>
-             <#if item_index lt 5 > 
+             <#if item_index lt 4 > 
                 <a href="/touch/goods/${item.id?c!''}">
                     <img src="${item.coverImageUri!''}" />
                     <p>${item.goodsTitle!''}</p>
@@ -207,7 +262,7 @@ $(document).ready(function(){
   	<menu>
   	     <#if top_cat_goods_page5?? && top_cat_goods_page5.content?size gt 0 >
             <#list top_cat_goods_page5.content as item>
-                 <#if item_index lt 5 > 
+                 <#if item_index lt 4 > 
                     <a href="/touch/goods/${item.id?c!''}">
                         <img src="${item.coverImageUri!''}" />
                         <p>${item.goodsTitle!''}</p>
@@ -243,7 +298,7 @@ $(document).ready(function(){
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1 sel" href="/touch">平台首页</a>
+	        <a class="a1 sel" href="/touch/disout">平台首页</a>
 	        <a class="a2" href="/touch/category/list">商品分类</a>
 	        <a class="a3" href="/touch/cart">购物车</a>
 	        <a class="a4" href="/touch/user">会员中心</a>

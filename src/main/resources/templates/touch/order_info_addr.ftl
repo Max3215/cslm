@@ -19,12 +19,13 @@
                   </a>
               </#if>
             <menu>
-                <a href="/touch/user/address/update?id=${address.id?c}">修改</a>
+                <a href="/touch/user/address/update?id=${address.id?c}&type=order">修改</a>
                 <a href="/touch/user/address/delete?id=${address.id?c}">删除</a>
               <menu>
               </div>
         </#list>
    </#if> 
+   <a href="/touch/user/address/update?type=order" class="add_btn">添加收货地址</a>
 </section>
 
 <script type="text/javascript">

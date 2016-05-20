@@ -200,16 +200,16 @@ function byNow(goodsId){
 				<div class="page">
 					<span><b><#if goods_page.totalPages==0>0<#else>${goods_page.number+1}</#if></b>/${goods_page.totalPages!"0"}</span>
 					
-					<#if goods_page.number+1 == goods_page.totalPages || goods_page.totalPages==0>
-                        <a href="javascript:;">上一页</a>
+					<#if goods_page.number == 0>
+                         <a href="javascript:;">上一页</a>
                     <#else>
-                        <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number+1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">上一页</a> <#-- goods_page.number+1 -->
+                         <a href="${categoryId?c!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${(goods_page.number-1)?c}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">上一页</a>
                     </#if>
                             
-                    <#if goods_page.number+1 == 1>
+                   <#if goods_page.number+1 == goods_page.totalPages || goods_page.totalPages==0>
                         <a href="javascript:;">下一页</a>
                     <#else>
-                        <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number-1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">下一页</a> <#-- goods_page.number-1 -->
+                        <a href="${categoryId?c!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${(goods_page.number+1)?c}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">下一页</a>
                     </#if>
 				</div>
 			</div>
@@ -225,7 +225,7 @@ function byNow(goodsId){
         					<p class="red">${goods.distributorTitle!''}</p>
         					<p class="price">￥${goods.goodsPrice?string("#.##")}<span>原价：￥${goods.goodsMarketPrice?string("#.##")}</span></p>
         					<menu class="btn">
-        						<a href="javascript:cartInit(${goods.id?c});" class="car" title="加入购物车" ></a>
+        						<#if !goods.isDistribution?? || !goods.isDistribution><a href="/cart/init?id=${goods.id?c}" target="_blank" class="car" title="加入购物车" ></a></#if>
         						<#if goods.isDistribution><a href="/order/proGoods/${goods.id?c}" class="buy">立即预购</a></#if> 
         						<div class="clear"></div>
         					</menu>
@@ -245,7 +245,7 @@ function byNow(goodsId){
 				    <#if goods_page.number == 0>
                          <a href="javascript:;">上一页</a>
                     <#else>
-                         <a href="${categoryId?c!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number-1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">上一页</a>
+                         <a href="${categoryId?c!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${(goods_page.number-1)?c}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">上一页</a>
                     </#if>
 				    <#if goods_page.totalPages gt 0>
                         <#list 1..goods_page.totalPages as page>
@@ -253,7 +253,7 @@ function byNow(goodsId){
                                 <#if page == goods_page.number+1>
                                     <a class="sel" href="javascript:;">${page}</a>
                                 <#else>
-                                    <a href="${categoryId?c!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${page-1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">${page}</a> 
+                                    <a href="${categoryId?c!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${(page-1)?c}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">${page}</a> 
                                 </#if>
                                 <#assign continueEnter=false>
                             <#else>
@@ -268,7 +268,7 @@ function byNow(goodsId){
                     <#if goods_page.number+1 == goods_page.totalPages || goods_page.totalPages==0>
                         <a href="javascript:;">下一页</a>
                     <#else>
-                        <a href="${categoryId!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${goods_page.number+1}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">下一页</a>
+                        <a href="${categoryId?c!'0'}-${brandIndex!0}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}-${soldId!'0'}-${priceId!'0'}-${timeId!'0'}-${(goods_page.number+1)?c}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>">下一页</a>
                     </#if>
                 </#if>
 			</div>

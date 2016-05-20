@@ -31,7 +31,6 @@ $(document).ready(function(){
 
 	navDownList("nav_down","li",".nav_show");
 	menuDownList("mainnavdown","#nav_down",".a2","sel");
-	//adChange("banner_box","banner_sum","banner_num",3000,1000);
 	bannerCartoon("banner_sum","a","banner_num",300,5000,"","");
 	
 	//楼层计算

@@ -1,7 +1,13 @@
 package com.ynyes.cslm.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,9 +16,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
+import com.ynyes.cslm.entity.TdCountSale;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.repository.TdOrderRepo;
+import com.ynyes.cslm.util.Restrictions;
+import com.ynyes.cslm.util.Criteria;
 
 /**
  * TdOrder 服务类
@@ -26,6 +39,15 @@ import com.ynyes.cslm.repository.TdOrderRepo;
 public class TdOrderService {
     @Autowired
     TdOrderRepo repository;
+    
+    @Autowired
+    TdProviderGoodsService tdProviderGoodsService;
+    
+    @Autowired
+    TdDistributorGoodsService tdDistributorGoodsService;
+    
+    @Autowired
+    TdCountSaleService tdCountSaleService;
     
     /**
      * 删除
@@ -645,8 +667,111 @@ public class TdOrderService {
     																						keywords, statusId, typeId, time, pageRequest);
     }
     
+    public List<TdOrder> searchOrderGoods(Long shopId,Long providerId, Long type, Date begin, Date end
+    		//,int page,
+			//int size
+    		) {
+	//	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "orderTime"));
+		Criteria<TdOrder> c = new Criteria<>();
+		if(null != shopId)
+		{
+			c.add(Restrictions.eq("shopId", providerId, true));
+		}
+		if(null != providerId)
+		{
+			c.add(Restrictions.eq("providerId", providerId, true));
+		}
+		if(null != type)
+		{
+			c.add(Restrictions.eq("typeId", type, true));
+		}
+		if (begin != null) {
+			c.add(Restrictions.gte("orderTime", begin, true));
+		}
+		if (end != null) {
+			c.add(Restrictions.lte("orderTime", end, true));
+		}
+		return repository.findAll(c);
+	}
     
     
+    public List<TdCountSale> sumOrderGoods(Long shopId,Long saleType,List<TdOrder> orderList)
+    {
+    	// 删除之前数据
+    	tdCountSaleService.delete(shopId, saleType);
+    	
+    	Map<Long,Long> goodsMap = new HashMap<>();
+    	Map<Long,Double> priceMap = new HashMap<>();
+    	if(null != orderList && orderList.size()>0)
+    	{
+    		for (TdOrder tdOrder : orderList) {
+				List<TdOrderGoods> goodsList = tdOrder.getOrderGoodsList();
+				if(null != goodsList && goodsList.size()>0)
+				{
+					for (TdOrderGoods tdOrderGoods : goodsList) {
+						if(goodsMap.containsKey(tdOrderGoods.getGoodsId())) // 判断Map是否存有当前商品
+						{
+							long quantity = Long.parseLong(goodsMap.get(tdOrderGoods.getGoodsId())+"");  
+							long oldQuantity = Long.parseLong(tdOrderGoods.getQuantity()+"");
+							Double price = priceMap.get(tdOrderGoods.getGoodsId());
+							Double newPrice  = tdOrderGoods.getPrice()*oldQuantity;
+							
+							goodsMap.put(tdOrderGoods.getGoodsId(), quantity+oldQuantity); // 如map存有商品，数量相加
+							priceMap.put(tdOrderGoods.getGoodsId(), price+newPrice);
+						}else{
+							goodsMap.put(tdOrderGoods.getGoodsId(), tdOrderGoods.getQuantity()); // 如没有，存入商品ID及数量
+							priceMap.put(tdOrderGoods.getGoodsId(), tdOrderGoods.getQuantity()*tdOrderGoods.getPrice());
+						}
+					}
+				}
+			}
+    	}
+    	
+    	List<TdCountSale> saleList = new ArrayList<>();
+    
+    	if(goodsMap.size()>0)
+    	{
+    		for (long key : goodsMap.keySet()) {
+    			if(saleType ==0L || saleType==2)
+    			{
+    				TdDistributorGoods goods = tdDistributorGoodsService.findOne(key);
+    				if(null != goods)
+    				{
+    					TdCountSale countSale = new TdCountSale();
+    					countSale.setGoodsTitle(goods.getGoodsTitle());
+    					countSale.setSubTitle(goods.getSubGoodsTitle());
+    					countSale.setGoodsCode(goods.getCode());
+    					countSale.setPrice(goods.getGoodsPrice());
+    					countSale.setQuantity(goodsMap.get(key));
+    					countSale.setTotalPrice(priceMap.get(key));
+    					countSale.setShipId(shopId);
+    					countSale.setSaleType(saleType);
+    					saleList.add(countSale);
+    				}
+    			}else{
+    				TdProviderGoods goods = tdProviderGoodsService.findByProviderIdAndGoodsId(shopId, key);
+    				if(null != goods)
+    				{
+    					TdCountSale countSale = new TdCountSale();
+    					countSale.setGoodsTitle(goods.getGoodsTitle());
+    					countSale.setSubTitle(goods.getSubGoodsTitle());
+    					countSale.setGoodsCode(goods.getCode());
+    					countSale.setPrice(goods.getOutFactoryPrice());
+    					countSale.setQuantity(goodsMap.get(key));
+    					countSale.setTotalPrice(priceMap.get(key));
+    					countSale.setShipId(shopId);
+    					countSale.setSaleType(saleType);
+    					saleList.add(countSale);
+    				}
+    			}
+    		}
+    	}
+    	
+    	tdCountSaleService.save(saleList);
+    	
+    	return tdCountSaleService.findByShipIdAndTypeId(shopId, saleType);
+    	
+    }
     
     
     

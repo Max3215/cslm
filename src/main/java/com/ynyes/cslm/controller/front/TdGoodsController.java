@@ -107,6 +107,10 @@ public class TdGoodsController {
             return "/client/error_404";
         }
         TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(dgId);
+        if(null == distributorGoods)
+        {
+        	return "/client/error_404";
+        }
         
         Long goodsId = distributorGoods.getGoodsId();
         

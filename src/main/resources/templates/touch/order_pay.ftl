@@ -24,7 +24,7 @@ $(document).ready(function(){
 <header class="com_top">
     <a href="javascript:history.go(-1);" class="back"></a>
         <p>订单完成</p>
-        <a href="#" class="news"></a>
+        <a href="/" class="c_home"></a>
     </header>
     <div style="height:0.88rem;"></div>
 <div class="comhead_bg"></div>

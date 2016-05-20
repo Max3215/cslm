@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -37,10 +39,11 @@ public class TdCash {
 	// 时间
 	@Column
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
 	
 	// 金额
-	@Column
+	@Column(scale=2)
 	private Double price;
 	
 	// 提现卡号
@@ -138,5 +141,14 @@ public class TdCash {
 	public void setStatus(Long status) {
 		this.status = status;
 	}
+
+	@Override
+	public String toString() {
+		return "TdCash [id=" + id + ", cashNumber=" + cashNumber + ", shopTitle=" + shopTitle + ", username=" + username
+				+ ", createTime=" + createTime + ", price=" + price + ", card=" + card + ", shopType=" + shopType
+				+ ", type=" + type + ", status=" + status + "]";
+	}
+	
+	
 	
 }

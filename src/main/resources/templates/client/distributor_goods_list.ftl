@@ -4,20 +4,25 @@
         <th width="300">商品名称</th>
         <th width="170">商品编码</th>
         <th>价格</th>
-        <th>库存</th>
+        <#if sort?? &&  sort==1>
+        <th><a href="/distributor/goods/sale/${isOnSale?c}?keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>&dir=2">库存↓↑</a></th>
+        <#else>
+        <th><a href="/distributor/goods/sale/${isOnSale?c}?keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>&dir=1">库存↓↑</a></th>
+        </#if>
+        
         <th>操作</th>
      </tr>
       <#if dis_goods_page?? && dis_goods_page.content?size gt 0>
            <#list dis_goods_page.content as dg>
-               <#if dg.isDistribution>
-               <#else>
+               <#if !dg.isDistribution>
                <#if dg.isOnSale>
                       <tr id="tr_1424195166">
                         <td width=10>
-                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index}" class="check""/>
+                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index?c}" class="check""/>
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
+                            <input type="hidden"  value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}">
                             <a href="" target="_blank" class="pic" title="${dg.goodsTitle!''}"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
                              </a> 
@@ -34,10 +39,11 @@
                  <#else>
                       <tr id="tr_1424195166">
                         <td width=10>
-                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index}" class="check"/>
+                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index?c}" class="check"/>
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
+                            <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}">
                             <a href="" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
                              </a> 

@@ -52,7 +52,7 @@
                 </#if>
                 <a href="/distributor/goods/sale/1">出售中的商品</a> 
                 <a href="/distributor/goods/sale/0">仓库中的商品</a> 
-                <a href="/distributor/sale">已卖出的商品</a> 
+                <a href="/distributor/sale">销售统计</a> 
              </div>
         </div> <!--mymember_menu_part END-->
         <div class="mymember_menu_part"> 

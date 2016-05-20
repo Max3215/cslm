@@ -8,6 +8,7 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
@@ -28,13 +29,18 @@ $(document).ready(function(){
         tiptype: 1,
         ajaxPost:true,
         callback:function(data){
-            ct.alert({
-                text: data.msg,
-                type: "alert"
-            });
             if(data.code==1)
             {
+                ct.alert({
+                    text: data.msg,
+                    type: "alert"
+                });
                  window.location.href="/touch/user"
+            }else{
+                ct.alert({
+                    text: data.msg,
+                    type: "alert"
+                });
             }
         }
     });
@@ -136,7 +142,7 @@ function tip()
   <section class="modify_mm">
     <input type="text" class="text" name="username" id="username" placeholder="用户名"  datatype="*"/>
   	<input type="text" class="text" name="mobile" placeholder="手机号码" id="mobile"  datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/"/>
-  	<input type="text" class="text fl" name="smsCode" style="width: 50%;" placeholder="请输入验证码" datatype="">
+  	<input type="text" class="text fl" name="smsCode" style="width: 50%;" placeholder="请输入验证码" datatype="*">
   	<input id="smsCodeBtn" onclick="smsSend();" class="sub" style="width:40%; font-size:0.8em;" readonly="readonly"  value="获取验证码" />
   	<div class="clear"></div>
   	<input type="password" class="text" placeholder="请输入新密码"  name="password" datatype="s6-20"/>

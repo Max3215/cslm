@@ -38,8 +38,8 @@
     <a href="javascript:goNext(${totalGoods!0});" class="btn">去结算</a>
   </section>
 <#else>
-    <div>
-        <p>购物车空空的哦，去看看心意的商品吧！</p>
-        <p><a class="blue" href="/touch">马上去购物>>  </a></p>
-    </div>
+     <section class="cart_empty">
+        <p>购物车是空的，去看看心仪的产品吧！</p>
+        <a href="/touch">马上去购物&gt;&gt;</a>
+      </section>
 </#if>

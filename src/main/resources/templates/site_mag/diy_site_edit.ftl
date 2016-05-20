@@ -152,7 +152,7 @@ $(function () {
   <dl>
     <dt>登录名</dt>
     <dd>
-        <input name="username" type="text" value="<#if diy_site??>${diy_site.username!""}</#if>" class="input normal" <#if !diy_site??>ajaxurl="/Verwalter/order/setting/diysite/check"</#if> datatype="*6-100" sucmsg=" "> 
+        <input name="username" type="text" value="<#if diy_site??>${diy_site.username!""}</#if>" class="input normal" ajaxurl="/Verwalter/order/setting/diysite/check<#if diy_site??>?id=${diy_site.id?c}</#if>"  datatype="*6-100" sucmsg=" "> 
         <span class="Validform_checktip">*登录账号</span>
     </dd>
   </dl>
@@ -180,7 +180,7 @@ $(function () {
   <dl>
     <dt>超市虚拟账号</dt>
     <dd>
-        <input name="virtualAccount" type="text" value="<#if diy_site??>${diy_site.virtualAccount!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
+        <input name="virtualAccount" type="text" value="<#if diy_site??>${diy_site.virtualAccount!""}</#if>" class="input normal"  sucmsg=" "> 
         <span class="Validform_checktip">*虚拟账号</span>
     </dd>
   </dl>
@@ -189,6 +189,13 @@ $(function () {
     <dd>
         <input name="virtualMoney" type="text" value="<#if diy_site?? && diy_site.virtualMoney??>${diy_site.virtualMoney?string("0.00")}<#else>0</#if>" <#if diy_site?? && diy_site.virtualMoney??>readonly="readonly"</#if> class="input normal" sucmsg=" "> 
         <span class="Validform_checktip">*账号余额</span><#if diy_site??>&emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a></#if>
+    </dd>
+  </dl>
+  <dl>
+    <dt>支付密码</dt>
+    <dd>
+        <input name="payPassword" type="text" value="<#if diy_site?? && diy_site.payPassword??>${diy_site.payPassword!''}</#if>" class="input normal" > 
+        <span class="Validform_checktip"></span>
     </dd>
   </dl>
   <#--
@@ -241,25 +248,25 @@ $(function () {
       <span class="Validform_checktip">该信息可以帮助用户选择最合适的同盟店</span>
     </dd>
   </dl>
+  
+  <dl>
+        <dt>经度</dt>
+        <dd>
+          <input name="longitude" type="text" value="<#if diy_site?? && diy_site.longitude??>${diy_site.longitude?string("#.######")}</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
+          <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+          <span class="Validform_checktip"></span>
+        </dd>
+          </dl>
+          
+          <dl>
+        <dt>纬度</dt>
+        <dd>
+          <input name="latitude" type="text" value="<#if diy_site?? && diy_site.latitude??>${diy_site.latitude?string("#.######")}</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
+          <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+          <span class="Validform_checktip"></span>
+        </dd>
+  </dl>
   <#--
-  <dl>
-    <dt>经度</dt>
-    <dd>
-      <input name="longitude" type="text" value="<#if diy_site?? && diy_site.longitude??>${diy_site.longitude?string("#.######")}</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
-      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
-      <span class="Validform_checktip"></span>
-    </dd>
-  </dl>
-  
-  <dl>
-    <dt>纬度</dt>
-    <dd>
-      <input name="latitude" type="text" value="<#if diy_site?? && diy_site.latitude??>${diy_site.latitude?string("#.######")}</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
-      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
-      <span class="Validform_checktip"></span>
-    </dd>
-  </dl>
-  
   <dl>
     <dt>付款方式</dt>
     <dd>
@@ -300,7 +307,7 @@ $(function () {
     </dd>
   </dl>
   <dl>
-    <dt>支付宝使用费比例</dt>
+    <dt>第三方使用费比例</dt>
     <dd>
         <input name="aliRation" type="text" value="<#if diy_site?? && diy_site.aliRation??>${diy_site.aliRation?string("0.00")}<#else>0</#if>" class="input normal" sucmsg=" "> 
         <span class="Validform_checktip">*</span>

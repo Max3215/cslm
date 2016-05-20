@@ -2,25 +2,25 @@
         <div class="main">
             <h1>您好！欢迎光临<#if distributorTitle??>${distributorTitle!''}<#else>超市联盟</#if>！</h1>
             <#if username??>
-                <a href="/user">${username}</a>
+                <a href="/user" target="_blank">${username}</a>
                 <a href="/logout">退出</a>
             <#else>
-                <a href="/login">请登陆</a>
-                <a href="/reg">注册</a>
+                <a href="/login" target="_blank">请登陆</a>
+                <a href="/reg" target="_blank">注册</a>
             </#if>
             <menu class="top_menu">
-                <a href="/user/order/list/0">我的订单<span>丨</span></a>
-                <a href="/cart">我的购物车<span>丨</span></a>
-                <a href="/user">超市会员<span>丨</span></a>
+                <a href="/user/order/list/0" target="_blank">我的订单<span>丨</span></a>
+                <a href="/cart" target="_blank">我的购物车<span>丨</span></a>
+                <a href="/user" target="_blank">超市会员<span>丨</span></a>
                 <a href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>">客户服务<span>丨</span></a>
-                <a href="/user/collect/list">我的收藏</a>
+                <a href="/user/collect/list" target="_blank">我的收藏</a>
             </menu>
             <div class="clear"></div>
         </div>
     </header>
     <!--logo 搜索框部分-->
     <section class="main">
-        <a href="/" class="logo"><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
+        <a href="/" class="logo" ><img src="<#if site??>${site.logoUri!''}</#if>" /></a>
         <div class="choose_mar">
             <a href="javascript:void(0);" class="click_a" onclick="$('#mar_box').fadeIn(300);"><#if distributorTitle??>${distributorTitle!''}<#else>请选择地区超市</#if></a>
             <a href="/disout" class="btn">商城首页</a>
@@ -43,7 +43,7 @@
             </menu>
         </div>
         <div class="gu_car">
-            <a href="/cart">去购物车结算<span><#if cart_goods_list??>${cart_goods_list?size}<#else>0</#if></span></a>
+            <a href="/cart" target="_blank">去购物车结算<span><#if cart_goods_list??>${cart_goods_list?size}<#else>0</#if></span></a>
         </div>
         <div class="clear"></div>
     </section>

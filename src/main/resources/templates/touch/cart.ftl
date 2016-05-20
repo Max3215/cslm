@@ -7,6 +7,7 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
@@ -30,7 +31,7 @@ $(document).ready(function(){
 	<header class="com_top">
 		<a href="javascript:history.go(-1);" class="back"></a>
 		<p>购物车</p>
-		<a href="#" class="news"></a>
+		<a href="/touch" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
@@ -45,7 +46,7 @@ $(document).ready(function(){
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1 " href="/touch">平台首页</a>
+	        <a class="a1 " href="/touch/disout">平台首页</a>
 	        <a class="a2" href="/touch/category/list">商品分类</a>
 	        <a class="a3 sel" href="/touch/cart">购物车</a>
 	        <a class="a4" href="/touch/user">会员中心</a>

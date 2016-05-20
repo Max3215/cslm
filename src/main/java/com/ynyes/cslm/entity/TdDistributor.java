@@ -154,6 +154,11 @@ public class TdDistributor {
     @JoinColumn(name="distributorId")
     private List<TdShippingAddress> shippingList;
     
+    // 配送说明
+    @Column
+    private String postInfo;
+    
+    
     public Long getId() {
         return id;
     }
@@ -416,6 +421,14 @@ public class TdDistributor {
 
 	public void setFileUri(String fileUri) {
 		this.fileUri = fileUri;
+	}
+
+	public String getPostInfo() {
+		return postInfo;
+	}
+
+	public void setPostInfo(String postInfo) {
+		this.postInfo = postInfo;
 	}
 
 	

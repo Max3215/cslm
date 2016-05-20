@@ -1,6 +1,5 @@
 package com.ynyes.cslm.controller.front;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
-import com.ynyes.cslm.entity.TdGoods;
-import com.ynyes.cslm.entity.TdGoodsGift;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
@@ -50,7 +47,7 @@ public class TdCartController {
     private TdDistributorService tdDistributorService;
     
     @Autowired
-    private TdDistributorGoodsService tdDistributorGoodsServicer;
+    private TdDistributorGoodsService tdDistributorGoodsService;
 
     /**
      * 加入购物车
@@ -75,7 +72,14 @@ public class TdCartController {
         	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
         	distributor = tdDistributorService.findOne(distributorId);
         	
+        }else{
+        	Long distributorId = tdDistributorGoodsService.findDistributorId(id);
+    		distributor = tdDistributorService.findOne(distributorId);
+    		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
+    		req.getSession().setAttribute("distributorTitle", distributor.getTitle());
         }
+        
+        
         if(null == distributor)
         {
         	return "/client/error_404";
@@ -97,7 +101,7 @@ public class TdCartController {
         }
         
         if (null != id) {
-        	TdDistributorGoods goods = tdDistributorGoodsServicer.findOne(id);
+        	TdDistributorGoods goods = tdDistributorGoodsService.findOne(id);
             if (null != goods) {
                 
                 List<TdCartGoods> oldCartGoodsList = null;
@@ -109,7 +113,12 @@ public class TdCartController {
                 // 有多项，则在第一项上数量进行相加
                 if (null != oldCartGoodsList && oldCartGoodsList.size() > 0) {
                     long oldQuantity = oldCartGoodsList.get(0).getQuantity();
-                    oldCartGoodsList.get(0).setQuantity(oldQuantity + quantity);
+                    if(oldQuantity + quantity >= goods.getLeftNumber())
+                    {
+                    	oldCartGoodsList.get(0).setQuantity(goods.getLeftNumber());
+                    }else{
+                    	oldCartGoodsList.get(0).setQuantity(oldQuantity + quantity);
+                    }
                     tdCartGoodsService.save(oldCartGoodsList.get(0));
                 }
                 // 新增购物车项
@@ -120,7 +129,7 @@ public class TdCartController {
                     cartGoods.setIsLoggedIn(isLoggedIn);
                     cartGoods.setUsername(username);
     
-                    cartGoods.setIsSelected(true);
+                    cartGoods.setIsSelected(false);
                     cartGoods.setGoodsId(goods.getGoodsId());
                     cartGoods.setDistributorId(distributor.getId());
                     cartGoods.setDistributorTitle(distributor.getTitle());
@@ -129,6 +138,10 @@ public class TdCartController {
 //                    cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 //                    cartGoods.setGoodsTitle(goods.getTitle());
 //                    cartGoods.setPrice(goods.getSalePrice());
+                    cartGoods.setDistributorId(tdDistributorGoodsService.findDistributorId(id));
+            		cartGoods.setDistributorTitle(goods.getDistributorTitle());
+            		cartGoods.setProviderId(goods.getProviderId());
+            		cartGoods.setProviderTite(goods.getProviderTitle());
                     
                     cartGoods.setQuantity(quantity);
                     

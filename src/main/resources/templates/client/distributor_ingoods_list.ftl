@@ -1,12 +1,7 @@
     <div class="mymember_order_search"> 
         <h3>批发商的商品</h3>
         <form action="/distributor/goods/list" id="form">
-        <input type="hidden" value="${page!'0'}" name="page"/>
         <input class="mysub" type="submit" value="查询" />
-        <#--
-        <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
-        <input class="mytext" type="text" onFocus="if(value=='批发商') {value=''}" onBlur="if (value=='') {value='批发商'}"  value="批发商" style="width:150px;" />
-        -->
         <input class="mytext" type="text" name="keywords" value="${keywords!''}" id="keywords"/>
         <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods()">
             <option value="">选择批发商</option>
@@ -21,29 +16,35 @@
     </div>
     <table>
             <tr class="mymember_infotab_tit01">
-                <th width="50"></th>
-                <th width="300">商品名称</th>
-                <th width="170">批发商</th>
+                <th width="80"></th>
+                <th width="200">商品名称</th>
+                <th width="200">副标题</th>
+                <th>编码</th>
                 <th>批发价</th>
                 <th>库存</th>
                 <th>操作</th>
              </tr>
             <#if proGoods_page??>
                 <#list proGoods_page.content as pgoods>
-                    <input id="shopReturnRation${pgoods.id?c}" type="text" value="<#if pgoods.shopReturnRation??>${pgoods.shopReturnRation?string('0.00')}<#else>0</#if>" style="display:none">
-                    <tr id="tr_1424195166">
+                    <input type="hidden" id="providerTitle${pgoods.id?c}" value="${pgoods.providerTitle!''}">
+                    <tr>
                         <td colspan="2">
-                            <a target="_blank"  class="pic"><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
-                            <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="goodsTitle${pgoods.id?c}">${pgoods.goodsTitle!''}</p></a> 
+                            <a href="" target="_blank" class="pic" title="${pgoods.goodsTitle!''}">
+                                <strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="goodsTitle${pgoods.id?c}">${pgoods.goodsTitle!''}</p>
+                             </a> 
                         </td>
-                        <td class="tb01"><span id="providerTitle${pgoods.id?c}">${pgoods.providerTitle!''}</span></td>
-                        <td class="tb02"><p>￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></p></td>
+                        <td><p style="text-align: left;margin:10px 0 10px 5px;max-height:60px;overflow:hidden;" id="subTitle${pgoods.id?c}">${pgoods.subGoodsTitle!''}</p></td>
+                        <td class="tb01"><span id="code${pgoods.id?c}">${pgoods.code!''}</span></td>
+                        <td class="tb02">￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></td>
                         <td><span id="number${pgoods.id?c}">${pgoods.leftNumber?c!'0'}</span></td>
                         <td>
                             <p><a href="javascript:showSub(${pgoods.id?c});">添加</a></p>
                             <p><a href="javascript:collect(${pgoods.id?c});">收藏</a></p>
                         </td>
-                     </tr>
+                  </tr>
+                  
+                    <input id="shopReturnRation${pgoods.id?c}" type="text" value="<#if pgoods.shopReturnRation??>${pgoods.shopReturnRation?string('0.00')}<#else>0</#if>" style="display:none">
                 </#list>
             </#if>
         </table>
@@ -105,11 +106,13 @@ function showSub(pid)
         return;
     }
     var goodsTitle = $("#goodsTitle"+pid).html();
-    var providerTitle = $("#providerTitle"+pid).html();
+    var subTitle = $("#subTitle"+pid).html();
+    var providerTitle = $("#providerTitle"+pid).val();
     var outFactoryPrice = $("#outFactoryPrice"+pid).html();
     
     $("#goodsId").attr("value",pid);
     $("#goodsTitle").attr("value",goodsTitle);
+    $("#subTitle").attr("value",subTitle);
     $("#providerTitle").attr("value",providerTitle);
     $("#outFactoryPrice").attr("value",outFactoryPrice);
     $("#leftNumber").attr("value",leftNumber);

@@ -46,7 +46,7 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+ //   adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -66,12 +66,14 @@ function searchSale(){
 
 function editPrice(dgId,page){
     var goodsTitle = $("#title"+dgId).html();
+    var subTitle = $("#subTitle"+dgId).val();
     var goodsPrice = $("#price"+dgId).html();
     var leftNumber = $("#number"+dgId).html();
     
     $("#goodsId").attr("value",dgId);
     $("#page").attr("value",page);
     $("#goodsTitle").attr("value",goodsTitle);
+    $("#subGoodsTitle").attr("value",subTitle);
     $("#goodsPrice").attr("value",goodsPrice);
     $("#leftNumber").attr("value",leftNumber);
     $('.sub_form').css('display','block');
@@ -154,12 +156,12 @@ DD_belatedPNG.fix('.,img,background');
                           <input class="mysub" type="submit" value="查询" />
                           <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
                           <input class="mytext" type="text" name="keywords"  value="${keywords!''}" id="keywords" />
-                          <input type="hidden" name="page" value="${page?c}"/>
+                          <input type="hidden" name="dir" value="${sort!''}" />
                           <select id="oneCat" onchange="javascript:search('oneCat')" >
                                 <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                                 <#if category_list??>
                                     <#list category_list as c>
-                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                                     </#list>
                                 </#if>
                             </select>
@@ -167,7 +169,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                                 <#if cateList??>
                                     <#list cateList as c>
-                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                                     </#list>
                                 </#if>
                             </select>
@@ -175,7 +177,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
                                 <#if categoryList??>
                                     <#list categoryList as c>
-                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+                                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
                                     </#list>
                                 </#if>
                             </select>
@@ -190,13 +192,14 @@ DD_belatedPNG.fix('.,img,background');
                             </select>
                             -->
                           </form>
+                          
                     <div class="clear"></div>
                 </div>
                 
                 <form action="/distributor/onsaleAll/${isOnSale?c}" method="post" id="form">
-                <input type="hidden" name="page" value="${page?c}"/>
-                <input type="hidden" name="categoryId" value="${categoryId!''}"/>
+                <input type="hidden" name="categoryId" value="<#if categoryId??>${categoryId?c!''}</#if>"/>
                 <input type="hidden" name="keywords" value="${keywords!''}"/>
+                <input type="hidden" name="dir" value="${sort!''}" >
                 <div id="dis_goods_list">
                     <#include "/client/distributor_goods_list.ftl">
                 </div>
@@ -218,7 +221,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == dis_goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/sale/${isOnSale?c}?page=${page-1}&keywords=${keywords!''}&categoryId=${categoryId!''}">${page}</a>
+                                <a href="/distributor/goods/sale/${isOnSale?c}?page=${(page-1)?c}&keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if><#if sort??>&dir=${sort}</#if>">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -258,6 +261,10 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th>*商品名称：</th>
           <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+        </tr>
+        <tr>
+          <th>*商品名称：</th>
+          <td><input type="text" class="add_width" name="subGoodsTitle" id="subGoodsTitle" ></td>
         </tr>
          <tr>
           <th>*特惠价：</th>

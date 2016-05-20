@@ -120,6 +120,7 @@ public class TdUserService {
         
         user.setUsername(username);
         user.setPassword(password);
+        user.setPayPassword(password); // 初始支付密码为登录密码
         user.setMobile(mobile);
         user.setEmail(email);
         user.setCarCode(carCode);
@@ -127,6 +128,7 @@ public class TdUserService {
         user.setLastLoginTime(new Date());
         user.setStatusId(1L); // 正常
         user.setRoleId(0L); // 普通用户
+        user.setHeadImageUri("/client/images/user.png");
         
         user.setTotalCashRewards(0L);
         user.setTotalCollectedGoods(0L);
@@ -387,7 +389,7 @@ public class TdUserService {
     
     public Page<TdUser> findAllOrderBySortIdAsc(int page, int size)
     {
-        PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.ASC, "sortId"));
+        PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "lastLoginTime"));
         
         return repository.findAll(pageRequest);
     }

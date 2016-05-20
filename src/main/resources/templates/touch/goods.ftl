@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if dis_goods??>${dis_goods.title!''}-</#if></title>
+<title><#if dis_goods??>${dis_goods.goodsTitle!''}-</#if>商品详情</title>
 <meta name="keywords" content="${goods.seoKeywords!''}">
 <meta name="description" content="${goods.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
@@ -106,21 +107,27 @@ function cartInit(dId){
 <!--  立即购买   -->
 function byNow(dId){
     var quantity = document.getElementById("quantity").value;
-    if(quantity==0){
+    var leftNumber = parseInt($("#leftNumber").val());
+    
+    if(quantity <= 0 || "" == quantity || quantity > leftNumber){
+        alert("请选择正确的数量");
         return;
     }
-    $.ajax({
-        type: "get",
-        url: "/touch/goods/incart",
-        data: {"id":dId,"quantity":quantity},
-        success: function (data) { 
-            if(data.msg){
-                alert(data.msg);
-                return;
-            }
-            window.location.href = "/touch/order/byNow/"+dId+"?quantity="+quantity;
-        }
-    });
+  //  window.open("/order/byNow/"+dId+"?quantity="+quantity);
+    window.location.href = "/touch/order/byNow/"+dId+"?quantity="+quantity;
+}
+
+
+function proGoods(dId){
+    var quantity = document.getElementById("quantity").value;
+    var leftNumber = parseInt($("#leftNumber").val());
+    
+    if(quantity <= 0 || "" == quantity || quantity > leftNumber){
+        alert("请选择正确的数量");
+        return;
+    }
+  //  window.open("/order/byNow/"+dId+"?quantity="+quantity);
+    window.location.href = "/touch/order/proGoods/"+dId+"?quantity="+quantity;
 }
 </script>
 </head>
@@ -132,7 +139,7 @@ function byNow(dId){
 		<div class="search_box">
       <input type="text" class="text" placeholder="搜索" />  
     </div>
-		<a href="#" class="news"></a>
+		<a href="/touch" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
@@ -155,8 +162,8 @@ function byNow(dId){
   <!-- 商品信息 -->
   <section class="pro_info">
     <div class="con">
-      <h3>${goods.title!''}</h3>
-      <p class="f_tit">${goods.subTitle!''}</p>
+      <h3>${dis_goods.goodsTitle!''}</h3>
+      <p class="f_tit">${dis_goods.subGoodsTitle!''}</p>
       <p class="num">商品编号：${goods.code!''}&nbsp;&nbsp;&nbsp;&nbsp;商品品牌：${goods.brandTitle!''}</p>
       <p class="price">￥<#if dis_goods??>${dis_goods.goodsPrice?string('0.00')}</#if><span>￥<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#else>${goods.marketPrice?string("0.00")}</#if></span></p>
     </div>
@@ -169,18 +176,19 @@ function byNow(dId){
     <div class="part">
       <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
       <dl>
-      <#--
-        <dt>选择口味</dt>
-        <dd><a href="#" class="act">臭味</a></dd>
-        <dd><a href="#">酸味</a></dd>
-        <dd><a href="#">麻辣味</a></dd>
-      -->
+        <dt>商品来源：</dt>
+        <dd>${dis_goods.distributorTitle!''}</dd>
+      </dl>
+      <dl>
+        <dt>邮费说明</dt>
+        <dd>邮费：${distributor.postPrice?string('0.00')}元/满${distributor.maxPostPrice?string('0.00')}包邮</dd>
       </dl>
       <div class="number">
         <span>购买数量</span>
         <a id="id-minus" href="javascript:minusNum();">-</a>
         <input class="text" type="text" id="quantity" value="1" />
         <a id="id-plus" href="javascript:addNum();">+</a>
+        <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber!'0'}">
       </div>
     </div>
   </aside>
@@ -196,7 +204,7 @@ function byNow(dId){
       ${goods.detail!''}
     </div>
     <ul class="text">
-        <#if comment_page??>
+        <#if comment_page?? && comment_page.content?size gt 0>
             <#list comment_page.content as item>
               <li>
                     <p>${item.username!''}<span>${item.commentTime?string("yyyy-MM-dd HH:hh:ss")}</span></p>
@@ -206,6 +214,8 @@ function byNow(dId){
                     </#if>
               </li>
             </#list>
+         <#else>
+         <li>暂时无人评价</li>
         </#if> 
     </ul>
   </section>
@@ -215,7 +225,11 @@ function byNow(dId){
   <div style="height:0.78rem;"></div>
   <section class="pro_foot">
     <a href="javascript:addCollect(${dis_goods.id?c})"></a>
-    <a href="#">立即购买</a>
+    <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
+       <a href="javascript:proGoods(${dis_goods.id?c});" target="_blank" title="立即购买" >立即预购</a>
+   <#else>
+    <a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" >立即购买</a>
+   </#if>
     <a href="/touch/cart/init?id=${dis_goods.id?c}"  id="addCart">加入购物车</a>
   </section>
   <!-- 底部 END -->

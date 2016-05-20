@@ -99,7 +99,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == proGoods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${page-1}&providerId=${providerId!''}">${page}</a>
+                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${(page-1)?c}&providerId=${providerId!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

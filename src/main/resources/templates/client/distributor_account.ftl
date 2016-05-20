@@ -65,7 +65,7 @@ $(document).ready(function(){
  }); 
 </script>
 <div class="win_out" style="display: none;">
-        <dl>    
+        <dl style="height:265px">    
             <dt>
 
             </dt>
@@ -84,8 +84,11 @@ $(document).ready(function(){
                         <label>确认新密码：</label>
                         <input class="text" type="password" name="newPassword2" value="" />
                     </div>
-                        <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
-                        <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+                    <div>   
+                          &emsp;&emsp;&emsp;*初始密码为初次登录密码
+                    </div>
+                        <input style="margin-top: 24px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
+                        <span style="margin-top: 24px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
                 </form>
             </dd>
         </dl>
@@ -102,7 +105,7 @@ $(document).ready(function(){
         <tr>
           <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${distributor.imageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
           <td>账户名称：${distributor.title!''}</td>
-          <td><a href="javascript:;" onclick="win_show();" class="btn">修改</a></td>
+          <td><a href="javascript:;" onclick="win_show();" class="btn" style="width:100px;">修改支付密码</a></td>
         </tr>
         <tr>
           <td>账户余额：¥${distributor.virtualMoney?string('0.00')}</td>

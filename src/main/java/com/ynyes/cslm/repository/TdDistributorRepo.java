@@ -44,8 +44,5 @@ public interface TdDistributorRepo extends
     TdDistributorGoods findByIdAndGoodsId(Long id, Long goodsId);
     
    
-    @Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=?2")
-    Page<TdDistributorGoods> findByIdAndIsOnSale(Long id, Boolean isOnSale, Pageable page);
-    
     
 }

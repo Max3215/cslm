@@ -89,11 +89,11 @@ DD_belatedPNG.fix('.,img,background');
                     </a>
                 </td>
                 <td class="tb01">
-                    <a href="/goods/${cg.goodsId?c}" target="_blank">${cg.goodsTitle!''}</a>
+                    <a href="/goods/${cg.distributorId?c}" target="_blank">${cg.goodsTitle!''}</a>
                 </td>
                 <td class="tb02">￥${cg.goodsSalePrice?string("#.##")}</td>
                 <td>
-                    <p><a href="/cart/init?id=${cg.goodsId?c!''}" target="_blank">加入购物车</a></p>
+                    <p><a href="/cart/init?id=${cg.distributorId?c}" target="_blank">加入购物车</a></p>
                     <p><a href="/user/collect/del?id=${cg.distributorId?c!''}">取消关注</a></p>
                 </td>
             </tr>

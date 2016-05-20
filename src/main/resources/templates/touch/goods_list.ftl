@@ -7,6 +7,7 @@
 <meta name="keywords" content="<#if productCategory??>${productCategory.seoKeywords!''}</#if>" />
 <meta name="description" content="<#if productCategory??>${productCategory.seoDescription!''}</#if>" />
 <meta name="copyright" content="<#if site??>${site.copyright!''}</#if>" /> 
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
@@ -47,9 +48,9 @@ function loadMore()
 <body>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="avascript:history.go(-1);" class="back"></a>
+		<a href="javascript:history.go(-1);" class="back"></a>
 		<p><#if productCategory??>${productCategory.title!''}</#if></p>
-		<a href="#" class="news"></a>
+		<a href="/touch/" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
@@ -134,7 +135,7 @@ function loadMore()
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1 sel" href="/touch">平台首页</a>
+	        <a class="a1 sel" href="/touch/disout">平台首页</a>
 	        <a class="a2" href="/touch/category/list">商品分类</a>
 	        <a class="a3" href="/touch/cart">购物车</a>
 	        <a class="a4" href="/touch/user">会员中心</a>

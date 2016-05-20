@@ -172,7 +172,7 @@ $(document).ready(function(){
                     <#list hot_sale_list as item>
                          <#if item_index < 6>
                             <li>
-                                <a href="/goods/${item.goodsId?c}" title="${item.goodsTitle!''}" target="_blank">
+                                <a href="/goods/${item.id?c}" title="${item.goodsTitle!''}" target="_blank">
                                     <img src="${item.coverImageUri!''}" title="${item.goodsTitle!''}"/>
                                     <p>${item.goodsTitle!''}</p>
                                 </a>

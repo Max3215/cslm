@@ -54,6 +54,7 @@ $(document).ready(function(){
   
   <!-- 收货人信息填写 -->
   <form id="form1" action="/touch/user/address/save">
+  <input type="hidden" value="${type!''}" name="type">
   <section class="add_consignee">
     <input class="mytext" name="addressId" type="hidden" value="<#if address??>${address.id?c}</#if>">  
     <div>
@@ -86,7 +87,7 @@ $(document).ready(function(){
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1" href="/touch">平台首页</a>
+	        <a class="a1" href="/touch/disout">平台首页</a>
             <a class="a2" href="/touch/category/list">商品分类</a>
             <a class="a3" href="/touch/cart">购物车</a>
             <a class="a4 sel" href="/touch/user">会员中心</a>

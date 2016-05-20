@@ -162,6 +162,22 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				<tr>
+                    <th>经度：</th>
+                    <td>
+                      <input name="longitude" type="text" value="" class="text" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
+                      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+                      <span class="Validform_checktip"></span>
+                    </td>
+              </tr>
+              <tr>
+                    <th>纬度：</th>
+                    <td>
+                      <input name="latitude" type="text" value="" class="text" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
+                      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+                      <span class="Validform_checktip"></span>
+                    </td>
+              </tr>
+				<tr>
 					<th>手机号：</th>
 					<td>
 					   <input class="text" type="text" name="mobile" datatype="m" sucmsg=" ">

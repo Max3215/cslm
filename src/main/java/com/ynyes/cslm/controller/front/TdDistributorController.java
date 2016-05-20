@@ -44,6 +44,7 @@ import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdCash;
+import com.ynyes.cslm.entity.TdCountSale;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
@@ -656,9 +657,10 @@ public class TdDistributorController extends AbstractPaytypeController{
 	 * 超市已卖出商品
 	 * 
 	 */
-	@RequestMapping(value="/sale", method=RequestMethod.GET)
-	public String distributorSale(Integer page,String keywords,
+	@RequestMapping(value="/sale")
+	public String distributorSale(//Integer page,String keywords,
 			String startTime,String endTime,
+			String eventTarget,HttpServletResponse resp,
 			HttpServletRequest req,ModelMap map) throws ParseException
 	{
 		String username=(String)req.getSession().getAttribute("distributor");
@@ -671,12 +673,12 @@ public class TdDistributorController extends AbstractPaytypeController{
 			return "redirect:/login";
 		}
 		
-		if(null == page)
-		{
-			page = 0;
-		}
+//		if(null == page)
+//		{
+//			page = 0;
+//		}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date start = null;
 		Date end = null ;
 		
@@ -689,66 +691,124 @@ public class TdDistributorController extends AbstractPaytypeController{
 			end = sdf.parse(endTime);
 		}
 		
+		List<TdOrder> list = tdOrderService.searchOrderGoods(distributor.getId(),null,0L,start, end);
+		List<TdCountSale> countList = tdOrderService.sumOrderGoods(distributor.getId(),0L,list);
 		
-		Page<TdOrderGoods> orderGoodsPage = null;
-		if(null == start)
+		String excelUrl=null;
+		if(null != eventTarget)
 		{
-			if(null == end)
+			if("excel".equalsIgnoreCase(eventTarget))
 			{
-				if(null == keywords)
-				{	// 普通查询
-					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeId(distributor.getId(), 0L, page, 10);
-				}
-				else
-				{   // 关键字
-					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeId(distributor.getId(), 0L, keywords, page, 10);
-				}
-			}
-			else
-			{
-				if(null == keywords)
-				{	// 截止时间
-					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeBefore(distributor.getId(), 0L, end, page, 10);
-				}
-				else
-				{	// 截止时间+关键字
-					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeIdAndSaleTimeBefore(distributor.getId(), 0L, keywords, end, page, 10);
-				}
+				excelUrl=SiteMagConstant.backupPath;
 			}
 		}
-		else
-		{
-			if(null == end)
-			{
-				if(null == keywords)
-				{	// 起始时间
-					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeAfter(distributor.getId(), 0L, start, page, 10);
-				}
-				else
-				{   // 起始时间+关键字
-					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeIdAndSaleTimeAfter(distributor.getId(), 0L, keywords, start, page, 10);
-				}
-			}
-			else
-			{
-				if(null == keywords)
-				{	// 起始时间+截止时间
-					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeAfterAndEndTimeBefore(distributor.getId(), 0L, start, end, page, 10);
-				}
-				else
-				{	// 起始时间++截止时间+关键字
-					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIAndTypeIdAndSaleTimeAfterAndEndTimeBefore(distributor.getId(), 0L, keywords, start, end, page,10);
-				}
-			}
-		}
+		
+        if(null != excelUrl)
+        {
+        	/**
+    		 * 导出表格
+    		 */
+    		// 创建一个webbook 对于一个Excel
+    		HSSFWorkbook wb = new HSSFWorkbook();
+    		// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+    		HSSFSheet sheet = wb.createSheet("countSale"); 
+    		// 设置每个单元格宽度根据字多少自适应
+    		sheet.autoSizeColumn(1);
+    		// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+            HSSFRow row = sheet.createRow((int) 0);
+            // 创建单元格，并设置值表头 设置表头居中 
+            HSSFCellStyle style = wb.createCellStyle();  
+            style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+            
+            HSSFCell cell = row.createCell((short) 0);  
+            cell.setCellValue("商品名称");  
+            cell.setCellStyle(style); 
+            cell = row.createCell((short) 1);  
+            cell.setCellValue("商品副标题");  
+            cell.setCellStyle(style); 
+            cell = row.createCell((short) 2);  
+            cell.setCellValue("商品编码");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 3);  
+            cell.setCellValue("销售数量");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 4);  
+            cell.setCellValue("售价");  
+            cell.setCellStyle(style);
+            
+            cell = row.createCell((short) 5);  
+            cell.setCellValue("销售额");  
+            cell.setCellStyle(style); 
+            
+            
+        	if(saleImport(countList,startTime,endTime, row, cell, sheet))
+        	{
+        		download(wb,"countSale", excelUrl, resp);
+        	}
+        }
+		
+		map.addAttribute("saleList", countList);
+//		Page<TdOrderGoods> orderGoodsPage = null;
+//		if(null == start)
+//		{
+//			if(null == end)
+//			{
+//				if(null == keywords)
+//				{	// 普通查询
+//					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeId(distributor.getId(), 0L, page, 10);
+//				}
+//				else
+//				{   // 关键字
+//					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeId(distributor.getId(), 0L, keywords, page, 10);
+//				}
+//			}
+//			else
+//			{
+//				if(null == keywords)
+//				{	// 截止时间
+//					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeBefore(distributor.getId(), 0L, end, page, 10);
+//				}
+//				else
+//				{	// 截止时间+关键字
+//					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeIdAndSaleTimeBefore(distributor.getId(), 0L, keywords, end, page, 10);
+//				}
+//			}
+//		}
+//		else
+//		{
+//			if(null == end)
+//			{
+//				if(null == keywords)
+//				{	// 起始时间
+//					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeAfter(distributor.getId(), 0L, start, page, 10);
+//				}
+//				else
+//				{   // 起始时间+关键字
+//					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIdAndTypeIdAndSaleTimeAfter(distributor.getId(), 0L, keywords, start, page, 10);
+//				}
+//			}
+//			else
+//			{
+//				if(null == keywords)
+//				{	// 起始时间+截止时间
+//					orderGoodsPage = tdOrderGoodsService.findByDistributorIdAndTypeIdAndSaleTimeAfterAndEndTimeBefore(distributor.getId(), 0L, start, end, page, 10);
+//				}
+//				else
+//				{	// 起始时间++截止时间+关键字
+//					orderGoodsPage = tdOrderGoodsService.searchAndDistributorIAndTypeIdAndSaleTimeAfterAndEndTimeBefore(distributor.getId(), 0L, keywords, start, end, page,10);
+//				}
+//			}
+//		}
 		
 		map.addAttribute("distributor", distributor);
 //		map.addAttribute("dist_order_page", tdOrderService.findByShopIdAndTypeId(distributor.getId(),0L, page, 10));
-		map.addAttribute("orderGoodsPage", orderGoodsPage);
-		map.addAttribute("page", page);
+//		map.addAttribute("orderGoodsPage", orderGoodsPage);
+//		map.addAttribute("page", page);
 		map.addAttribute("startTime", start);
 		map.addAttribute("endTime", end);
-		map.addAttribute("keywords", keywords);
+//		map.addAttribute("keywords", keywords);
 		
 		return "/client/distributor_sale";
 	}
@@ -785,7 +845,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 	 * 
 	 */
 	@RequestMapping(value="/goods/sale/{isSale}", method= RequestMethod.GET)
-	public String disGoodsSale(@PathVariable Boolean isSale,Long categoryId,String keywords, Integer page,HttpServletRequest req,ModelMap map)
+	public String disGoodsSale(@PathVariable Boolean isSale,Integer dir,Long categoryId,String keywords, Integer page,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
@@ -798,8 +858,13 @@ public class TdDistributorController extends AbstractPaytypeController{
 		{
 			page = 0;
 		}
+		if(null == dir)
+		{
+			dir = 1;
+		}
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
+		map.addAttribute("sort", dir);
 		map.addAttribute("distributor", distributor);
 		map.addAttribute("isOnSale", isSale);
 		map.addAttribute("page",page);
@@ -807,18 +872,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 		map.addAttribute("categoryId", categoryId);
 		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
 		
-//		List<Long> list = tdDistributorGoodsService.findByDistributorId(distributor.getId());
-//		List<TdProductCategory> category_list = new ArrayList<>();
-//		
-//		if(null != list)
-//		{
-//			for (int i = 0; i < list.size(); i++) {
-//				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
-//			}
-//		}// 所有该批发商有的分类
-//		map.addAttribute("category_list",category_list);
-		
-//		map.addAttribute("category_list", tdProductCategoryService.findAll());
 		
 		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
@@ -827,26 +880,54 @@ public class TdDistributorController extends AbstractPaytypeController{
 		{
 			if(null == keywords || "".equals(keywords))
 			{
-				map.addAttribute("dis_goods_page",
-						tdDistributorService.findByIdAndIsOnSale(distributor.getId(), isSale, page, 10));
+				if(null == dir || dir ==1)
+				{
+					map.addAttribute("dis_goods_page",
+							tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(), isSale, page, 10));
+				}else{
+					map.addAttribute("dis_goods_page",
+							tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(), isSale, page, 10));
+				}
 			}
 			else
 			{
-				map.addAttribute("dis_goods_page",
-						tdDistributorGoodsService.searchAndIsOnSale(keywords, isSale, page, 10));
+				if(null == dir || dir ==1)
+				{
+					map.addAttribute("dis_goods_page",
+							tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(),keywords, isSale, page, 10));
+				}else{
+					map.addAttribute("dis_goods_page",
+							tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(),keywords, isSale, page, 10));
+				}
+//				map.addAttribute("dis_goods_page",
+//						tdDistributorGoodsService.searchAndDistributorIdAndIsOnSale(distributor.getId(),keywords, isSale, page, 10));
 			}
 		}
 		else
 		{
-			if(null == keywords)
+			if(null == keywords || "".equals(keywords))
 			{
-				map.addAttribute("dis_goods_page", 
-						tdDistributorGoodsService.findByCategoryIdAndIsOnSale(categoryId, isSale, page, 10));
+				if(null == dir || dir ==1)
+				{
+					map.addAttribute("dis_goods_page", 
+							tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(),categoryId, isSale, page, 10));
+				}else{
+					map.addAttribute("dis_goods_page", 
+							tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(),categoryId, isSale, page, 10));
+				}
+//				map.addAttribute("dis_goods_page", 
+//						tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributor.getId(),categoryId, isSale, page, 10));
 			}
 			else
 			{
-				map.addAttribute("dis_goods_page", 
-						tdDistributorGoodsService.searchAndCategoryIdAndIsOnSale(categoryId, keywords, isSale, page, 10));
+				if(null == dir || dir ==1)
+				{
+					map.addAttribute("dis_goods_page", 
+								tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(), categoryId, keywords, isSale, page, 10));
+				}else{
+					map.addAttribute("dis_goods_page", 
+							tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(), categoryId, keywords, isSale, page, 10));
+				}
 			}
 			
 			TdProductCategory category = tdProductCategoryService.findOne(categoryId);
@@ -905,12 +986,14 @@ public class TdDistributorController extends AbstractPaytypeController{
 		if(type)
 		{
 			distributorGoods.setIsOnSale(type);
+			map.addAttribute("isOnSale", true);
 			tdDistributorGoodsService.save(distributorGoods);
-			map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
+			map.addAttribute("dis_goods_page", tdDistributorGoodsService.findByIdAndIsOnSale(distributor.getId(), false, page, 10));
 		}else{
 			distributorGoods.setIsOnSale(type);
+			map.addAttribute("isOnSale", false);
 			tdDistributorGoodsService.save(distributorGoods);
-			map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), true, page,10));
+			map.addAttribute("dis_goods_page", tdDistributorGoodsService.findByIdAndIsOnSale(distributor.getId(), true, page,10));
 		}
 		
 		return "/client/distributor_goods_list";
@@ -953,8 +1036,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 		map.addAttribute("page", page);
 		map.addAttribute("type", true);
 		map.addAttribute("distributor", distributor);
+		map.addAttribute("isOnSale", true);
 		
-		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), true, page, 10));
+		map.addAttribute("dis_goods_page", tdDistributorGoodsService.findByIdAndIsOnSale(distributor.getId(), true, page, 10));
 		
 		return "/client/distributor_goods_list";
 	}
@@ -964,6 +1048,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 	@ResponseBody
 	public Map<String,Object> editOnSale(Long goodsId,
 					Double goodsPrice,
+					String subGoodsTitle,
 					Long leftNumber,Boolean type,
 					Integer page,HttpServletRequest req)
 	{
@@ -999,7 +1084,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setGoodsPrice(goodsPrice);
 		}
 		distributorGoods.setLeftNumber(leftNumber);
-		
+		distributorGoods.setSubGoodsTitle(subGoodsTitle);
 		distributorGoods.setIsOnSale(true);
 		tdDistributorGoodsService.save(distributorGoods);
 //		
@@ -1039,7 +1124,8 @@ public class TdDistributorController extends AbstractPaytypeController{
 		tdDistributorGoodsService.delete(disId);
 		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		map.addAttribute("dis_goods_page", tdDistributorService.findByIdAndIsOnSale(distributor.getId(), type, page, 10));
+		map.addAttribute("dis_goods_page", tdDistributorGoodsService.findByIdAndIsOnSale(distributor.getId(), type, page, 10));
+		map.addAttribute("isOnSale", type);
 		map.addAttribute("page",page);
 		map.addAttribute("distributor",distributor);
 		return "/client/distributor_goods_list";
@@ -1196,7 +1282,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 distributor.getId(),typeId, keywords, page, ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1208,7 +1294,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1224,7 +1310,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                         ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1236,7 +1322,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 distributor.getId(),typeId,statusId, page, ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1261,7 +1347,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                         ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1273,7 +1359,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 distributor.getId(),typeId,time, page, ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1290,7 +1376,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                         ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1304,7 +1390,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                          ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1328,7 +1414,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1340,7 +1426,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 distributor.getId(),typeId, time, page, ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1356,7 +1442,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1370,7 +1456,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1394,7 +1480,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1406,7 +1492,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 distributor.getId(),typeId, time, page, ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1422,7 +1508,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1436,7 +1522,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1460,7 +1546,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1472,7 +1558,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 distributor.getId(),typeId, time, page, ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1488,7 +1574,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1502,7 +1588,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(ImportData(order_Page,row,cell,sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1618,7 +1704,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                     	Page<TdOrder> order_page = tdOrderService.findByUsernameAndTypeIdAndSearch(username, 1, keywords, page, ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1630,7 +1716,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1646,7 +1732,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1658,7 +1744,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 username,1, statusId, page, ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1682,7 +1768,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1694,7 +1780,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 username, 1,time, page, ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1710,7 +1796,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1724,7 +1810,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1748,7 +1834,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1760,7 +1846,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 username,1, time, page, ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1776,7 +1862,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1790,7 +1876,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1814,7 +1900,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1826,7 +1912,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 username,1, time, page, ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1842,7 +1928,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1856,7 +1942,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1880,7 +1966,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1892,7 +1978,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 username,1, time, page, ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -1908,7 +1994,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 } else {
@@ -1922,7 +2008,7 @@ public class TdDistributorController extends AbstractPaytypeController{
                                 ClientConstant.pageSize);
                     	if(InOrderImport(order_page, row, cell, sheet))
                     	{
-                    		download(wb, excelUrl, resp);
+                    		download(wb,"order", excelUrl, resp);
                     	}
                     }
                 }
@@ -2216,7 +2302,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			String city,String disctrict,
 			String address,String mobile,
 			String password,Double postPrice,String payPassword,
-			Double maxPostPrice,Long id,
+			Double maxPostPrice,Long id,String postInfo,
 			HttpServletRequest req,ModelMap map)
 	{
 		Map<String,Object> res = new HashMap<>();
@@ -2247,6 +2333,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		distributor.setPayPassword(payPassword);
 		distributor.setPostPrice(postPrice);
 		distributor.setMaxPostPrice(maxPostPrice);
+		distributor.setPostInfo(postInfo);
 		
 		tdDistributorService.save(distributor);
 		res.put("msg", "修改成功！");
@@ -2406,6 +2493,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 	@ResponseBody
 	public Map<String,Object> goodsOnsale(Long goodsId,
 				String goodsTitle,
+				String subGoodsTitle,
 				Double goodsPrice,
 				Double goodsMarketPrice,
 				Long leftNumber,
@@ -2436,7 +2524,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setDistributorTitle(distributor.getTitle());
 			distributorGoods.setGoodsId(goods.getId());
 			distributorGoods.setGoodsTitle(goodsTitle);
-			distributorGoods.setSubGoodsTitle(goods.getSubTitle());
+			distributorGoods.setSubGoodsTitle(subGoodsTitle);
 			distributorGoods.setGoodsPrice(goodsPrice); // 销售价
 			distributorGoods.setBrandId(goods.getBrandId());
 			distributorGoods.setBrandTitle(goods.getBrandTitle());
@@ -2468,6 +2556,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			disGoods.setIsAudit(true);
 			disGoods.setOnSaleTime(new Date());
 			disGoods.setGoodsTitle(goodsTitle);
+			disGoods.setSubGoodsTitle(subGoodsTitle);
 			disGoods.setLeftNumber(leftNumber);
 			disGoods.setGoodsPrice(goodsPrice);// 销售价
 			disGoods.setGoodsMarketPrice(goodsMarketPrice); // 市场价
@@ -3897,7 +3986,7 @@ public class TdDistributorController extends AbstractPaytypeController{
     	return "/client/distributor_draw_one";
     }
     
-    @RequestMapping(value="/user/drwa2",method=RequestMethod.POST)
+    @RequestMapping(value="/drwa2",method=RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> userDrwa(String card,Double price,String payPassword,
     			HttpServletRequest req){
@@ -4432,7 +4521,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());
 			distributorGoods.setSelectThreeValue(goods.getSelectThreeValue());
 			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
-			distributorGoods.setGoodsMarketPrice(pGoods.getOutFactoryPrice());
+			distributorGoods.setGoodsMarketPrice(pGoods.getGoodsMarketPrice());
 //			distributorGoods.setGoodsParamList(goods.getParamList());
 			distributorGoods.setReturnPoints(goods.getReturnPoints());
 			distributorGoods.setParamValueCollect(goods.getParamValueCollect());
@@ -4442,6 +4531,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setIsOnSale(true);
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setOnSaleTime(new Date());
+			distributorGoods.setLeftNumber(pGoods.getLeftNumber());
 			
 			distributor.getGoodsList().add(distributorGoods);
     	}else{
@@ -4449,6 +4539,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
     		distributorGoods.setGoodsPrice(pGoods.getOutFactoryPrice());
     		distributorGoods.setGoodsTitle(pGoods.getGoodsTitle());
+    		distributorGoods.setLeftNumber(pGoods.getLeftNumber());
     		distributorGoods.setIsDistribution(true);
 			distributorGoods.setIsOnSale(true);
 			distributorGoods.setIsAudit(true);
@@ -4535,10 +4626,27 @@ public class TdDistributorController extends AbstractPaytypeController{
 		return true;
 	}
 	
-	public Boolean download(HSSFWorkbook wb, String exportUrl, HttpServletResponse resp){
+	@SuppressWarnings("deprecation")
+	public Boolean saleImport(List<TdCountSale> saleList,String startTime,String endTime,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+	{
+		for (int i = 0; i < saleList.size(); i++) {
+			row = sheet.createRow((int)i+1);
+			TdCountSale countSale = saleList.get(i);
+			
+			row.createCell((short) 0).setCellValue(countSale.getGoodsTitle());
+			row.createCell((short) 1).setCellValue(countSale.getSubTitle());
+			row.createCell((short) 2).setCellValue(countSale.getGoodsCode());
+			row.createCell((short) 3).setCellValue(countSale.getQuantity());
+			row.createCell((short) 4).setCellValue(countSale.getPrice());
+			row.createCell((short) 5).setCellValue(countSale.getTotalPrice());
+		}
+		return true;
+	}
+	
+	public Boolean download(HSSFWorkbook wb,String name, String exportUrl, HttpServletResponse resp){
    	 try  
         {  
-	          FileOutputStream fout = new FileOutputStream(exportUrl+"order.xls");  
+	          FileOutputStream fout = new FileOutputStream(exportUrl+name+".xls");  
 //	          OutputStreamWriter writer = new OutputStreamWriter(fout, "utf8");	                       	     
 	          wb.write(fout);  
 	          fout.close();
@@ -4549,14 +4657,14 @@ public class TdDistributorController extends AbstractPaytypeController{
    	 OutputStream os;
 		 try {
 				os = resp.getOutputStream();
-				File file = new File(exportUrl + "order.xls");
+				File file = new File(exportUrl +name+".xls");
                 
             if (file.exists())
                 {
                   try {
                         resp.reset();
                         resp.setHeader("Content-Disposition", "attachment; filename="
-                                + "order.xls");
+                        		+name+".xls");
                         resp.setContentType("application/octet-stream; charset=utf-8");
                         os.write(FileUtils.readFileToByteArray(file));
                         os.flush();
@@ -4594,7 +4702,7 @@ public class TdDistributorController extends AbstractPaytypeController{
         if(0==tdOrder.getTypeId())
         {
         	
-        	TdDistributor distributor = tdDistributorService.findOne(tdOrder.getId());
+        	TdDistributor distributor = tdDistributorService.findOne(tdOrder.getShopId());
         	if(null != distributor)
         	{	
         		// 超市普通销售单实际收入： 交易总额-第三方使用费-平台服务费=实际收入

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -373,5 +375,12 @@ public class TdArticleService {
         }
         
         return repository.save(article);
+    }
+    
+    public Page<TdArticle> findByDistributorIdAndMenuIdAndIsEnableOrderByIdDesc(Long distributorId,Long menuId,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"id"));
+    	
+    	return repository.findByDistributorIdAndMenuIdOrderByIdDesc(distributorId, menuId, pageRequest);
     }
 }

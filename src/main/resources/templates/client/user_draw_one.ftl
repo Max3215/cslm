@@ -34,7 +34,7 @@ $(document).ready(function(){
       $(this).next().slideUp(300);
     }
   });//选择超市下拉效果
-
+；
      navDownList("nav_down","li",".nav_show");
   menuDownList("mainnavdown","#nav_down",".a2","sel");
 

@@ -77,7 +77,7 @@ function __doPostBack(eventTarget, eventArgument) {
         <tr id="${cat.id?c}">
             <td align="center">
                 <span class="checkall" style="vertical-align:middle;">
-                    <input id="rptList_ctl01_chkId" type="checkbox" name="listChkId" value="${cat_index}">
+                    <input id="rptList_ctl01_chkId" type="checkbox" name="listChkId" value="${cat_index?c}">
                 </span>
                 <input type="hidden" name="listId" id="listId" value="${cat.id?c}">
             </td>

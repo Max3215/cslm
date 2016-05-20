@@ -104,7 +104,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == news_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/info/list?page=${page-1}">${page}</a>
+                                <a href="/distributor/info/list?page=${(page-1)?c}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

@@ -58,7 +58,7 @@ $(document).ready(function(){
 	<header class="com_top">
 		<a href="javascript:history.go(-1);" class="back"></a>
 		<p>确认订单</p>
-		<a href="#" class="news"></a>
+		<a href="/touch/" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
@@ -77,12 +77,24 @@ function selectAddr(tag,type){
 function selectDeliveryTyp(tag,type){
     $(tag).addClass("act").siblings(".choose").removeClass("act");
     $("#deliveryType").attr("value",type)
+    
+    var postPrice = parseFloat($("#postPrice").val());
+    var price = parseFloat($("#price").val());
+    
+    if(type==0)
+    {
+        $("#totalPrice").html(price+postPrice);
+    }else{
+        $("#totalPrice").html(price);
+    }
 }
 </script>
   <div class="dis_ways">
     <p class="tit">配送方式</p>
+    <input type="hidden" id="postPrice" value="<#if postPrice??>${postPrice}<#else>0</#if>">
     <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
     <a href="javascript:;" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流</a>
+    <#if post??>&emsp;&emsp;<span style="font-size:0.15rem;line-height:0.58rem;">${post!''}</span></#if>
     <div class="clear"></div>
     <a href="javascript:;" class="choose" onclick="selectDeliveryTyp($(this),1)">自提</a>
     <#if addressList??>
@@ -122,8 +134,10 @@ function selectType(tag,type)
     <p class="tit">选择支付方式</p>
     <input type="hidden" value="0" name="payTypeId" id="payTypeId" datatype="n" nullmsg="请选择支付方式!">
     <a href="javascript:void(0)" class="choose act" onclick="selectPayType($(this),0)" id="vir">余额支付</a>
-    <span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
-    <a href="javascript:void(0)" class="choose" id="server">平台支付</a>
+    <span>&emsp;&emsp;&emsp;余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span>
+    <#--
+    <a href="javascript:void(0)" class="choose" id="server">快捷支付</a>
+    -->
     <div class="clear"></div>
     <menu>
         <#if pay_type_list??>
@@ -141,9 +155,9 @@ function selectType(tag,type)
       <#if selected_goods_list??>
            <#list selected_goods_list as cg>
                 <li>
-                    <a href="#" class="pic"><img src="${cg.goodsCoverImageUri!''}"></a>
+                    <a href="/touch/goods/${cg.distributorGoodsId?c}" class="pic"><img src="${cg.goodsCoverImageUri!''}"></a>
                     <div class="info">
-                      <a href="#">${cg.goodsTitle!''}</a>
+                      <a href="/touch/goods/${cg.distributorGoodsId?c}">${cg.goodsTitle!''}</a>
                       <p>价格：￥${cg.price?string("0.00")}</p>
                       <p>数量：${cg.quantity!''}</p>
                     </div>
@@ -153,7 +167,7 @@ function selectType(tag,type)
        </#if> 
     </ul>  
   </section>
-   
+   <p class="pay_total">共<span>${totalQuantity!'0'}</span>件，合计<span>¥${totalPrice?string('0.00')}</span></p>
    <#assign price=0>
     <#if postPrice??>
         <#assign price=totalPrice+postPrice>
@@ -163,7 +177,8 @@ function selectType(tag,type)
    
   <div style="height:0.58rem;"></div>
   <section class="cart_foot">
-    <p>合计：<span>¥${price?string('0.00')}</span></p>
+    <input type="hidden" value="<#if totalPrice??>${totalPrice}</#if>" id="price">
+    <p>总金额：￥<span id="totalPrice">${price?string('0.00')}</span>元</p>
     <a href="javascript:;" id="btn_sub" class="btn">确定</a>
   </section>
   <!-- 购物车确认 END -->
@@ -172,7 +187,7 @@ function selectType(tag,type)
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1 " href="/touch">平台首页</a>
+	        <a class="a1 " href="/touch/disout">平台首页</a>
 	        <a class="a2" href="/touch/category/list">商品分类</a>
 	        <a class="a3 sel" href="/touch/cart">购物车</a>
 	        <a class="a4" href="/touch/user">会员中心</a>

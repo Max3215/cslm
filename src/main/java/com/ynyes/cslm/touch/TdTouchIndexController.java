@@ -1,6 +1,12 @@
 package com.ynyes.cslm.touch;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
@@ -22,6 +31,7 @@ import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.util.ClientConstant;
+import com.ynyes.cslm.util.Cnvter;
 
 @Controller
 @RequestMapping("/touch")
@@ -61,6 +71,7 @@ public class TdTouchIndexController {
     		req.getSession().setAttribute("username", username);
 		}
     	
+    	
     	// 超市快讯
         List<TdArticleCategory> catList = tdArticleCategoryService
                 .findByMenuId(10L);
@@ -69,6 +80,9 @@ public class TdTouchIndexController {
     	 if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
          {
          	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+         	
+         	map.addAttribute("distributor", tdDistributorService.findOne(distributorId));
+         	
          	if (null != catList && catList.size() > 0) {
                  for (TdArticleCategory tdCat : catList)
                  {
@@ -83,7 +97,7 @@ public class TdTouchIndexController {
                  }
              }
          	
-         	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByDistribuorIdAndIsRecommendIndexTrueOrderByOnSaleTime(distributorId, 0, 10));
+         	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberDesc(distributorId,true, 0, 40));
          	// 一级分类
              List<TdProductCategory> topCatList = tdProductCategoryService
                      .findByParentIdIsNullOrderBySortIdAsc();
@@ -150,7 +164,7 @@ public class TdTouchIndexController {
          			
          		}
          	}
-         	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAllByIsRecommendIndexTrueOrderByOnSaleTime(0, 10));
+         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIsOnSaleTrueAndIsTouchHotTrueOrderByOnSaleTimeDesc(0, 40));
          	
          	// 一级分类
              List<TdProductCategory> topCatList = tdProductCategoryService
@@ -205,8 +219,6 @@ public class TdTouchIndexController {
                          .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
              }
              
-             map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAllByIsRecommendIndexTrueOrderByOnSaleTime(0, 10));
-         	
          }
     	
            
@@ -229,4 +241,113 @@ public class TdTouchIndexController {
         
         return "/touch/category_list";
     }
+    
+    @RequestMapping(value="/distributor/change" , method=RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> changeDistributor(HttpServletRequest req,Long disId)
+	{
+		Map<String,Object> res = new HashMap<>();
+		if(null ==disId)
+		{
+			res.put("msg", "请选择超市");
+			return res;
+		}
+		
+		TdDistributor distributor = tdDistributorService.findOne(disId);
+		 if(null == distributor)
+		 {
+			 res.put("msg","选择的超市不存在");
+			 return res;
+		 }
+		 
+		req.getSession().setAttribute("DISTRIBUTOR_ID", distributor.getId());
+		req.getSession().setAttribute("distributorTitle", distributor.getTitle());
+		return res;
+	}
+    
+    @RequestMapping("/disout")
+	public String distributorOut(HttpServletRequest request) {
+//		request.getSession().invalidate();
+		request.getSession().removeAttribute("DISTRIBUTOR_ID");
+		request.getSession().removeAttribute("distributorTitle");
+		return "redirect:/touch";
+	}
+    
+    /**
+     * 根据定位缩小超市范围
+     * @author Max
+     * 
+     */
+    @RequestMapping(value="/distance",method = RequestMethod.POST)
+    public String mapdistance(Double lng,Double lat,HttpServletRequest req,ModelMap map){
+    	Map<String,Object> res = new HashMap<>();
+
+    	Map<String,Double> inmap = new HashMap<>();
+    	Map<String,Double> moremap = new HashMap<>();
+    	List<TdDistributor> disList = tdDistributorService.findByIsEnableTrue();
+    	
+    	if(null != disList)
+    	{
+    		for (TdDistributor tdDistributor : disList) {
+				if(null != tdDistributor.getLatitude() && null != tdDistributor.getLongitude())
+				{
+					double d = Cnvter.getDistance(lng, lat, tdDistributor.getLongitude(), tdDistributor.getLatitude());
+					
+					if(d < 5*1000){
+						inmap.put(tdDistributor.getId()+"", d);
+					}else{
+						moremap.put(tdDistributor.getId()+"", d);
+					}
+				}
+			}
+    	}
+    	 
+    	List<Long> ids = new ArrayList<>(); // 定义一个list存范围内Id
+    	List<Long> outhers = new ArrayList<>(); // 定义一个list存范围外id
+    	
+    	ValueComparator bvc =  new ValueComparator(inmap);  
+    	TreeMap<String,Double> sorted_map = new TreeMap<String,Double>(bvc);  
+    	sorted_map.putAll(inmap);
+    	Set<String> set = sorted_map.keySet();
+    	for (String string : set) {
+			ids.add(Long.parseLong(string));
+		}
+    	
+    	ValueComparator mbvc =  new ValueComparator(moremap);
+    	TreeMap<String,Double> more_map = new TreeMap<String,Double>(mbvc); 
+    	more_map.putAll(moremap);
+    	Set<String> more = more_map.keySet();
+    	for (String str : more) {
+			outhers.add(Long.parseLong(str));
+    	}
+    	
+    	map.addAttribute("shop_list", tdDistributorService.findAll(ids));
+    	map.addAttribute("more_list", tdDistributorService.findAll(outhers));
+    	
+    	return "/touch/shop_list";
+    }
+    
+    
+    /**
+     * map 按value值排序
+     * @author Max
+     *
+     */
+    class ValueComparator implements Comparator<String> {  
+  	  
+        Map<String, Double> base;  
+        public ValueComparator(Map<String, Double> map) {  
+            this.base = map;  
+        }  
+      
+	    public int compare(String a, String b) {  
+	        if (base.get(a) <= base.get(b)) {  
+	            return -1;  
+	        } else {  
+	            return 1;  
+	        } 
+	    }  
+    } 
+    
+    
 }

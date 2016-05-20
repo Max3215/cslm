@@ -26,7 +26,7 @@ $(document).ready(function(){
             if(data.code==1)
             {
                  $('.sub_form').css('display','none');
-                  window.location.href="/provider/goods/list/0?page=${page?c}&categoryId=${categoryId?c}"
+                  window.location.href="/provider/goods/list/${isOnSale?c}?page=${page?c}&dir=${dir!'0'}<#if categoryId??>&categoryId=${categoryId?c}</#if>"
             }
         }
     });
@@ -41,7 +41,7 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+ //   adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -95,7 +95,7 @@ DD_belatedPNG.fix('.,img,background');
                 <div class="mymember_order_search"> 
                     <h3><#if isOnSale?? && isOnSale>批发中的商品<#else>仓库中的商品</#if></h3>
                       <form action="/provider/goods/list/${isOnSale?c}" id="form1">
-                            <input type="hidden" value="${page!'0'}" name="page"/>
+                            <input type="hidden" value="${dir!'0'}" name="dir">
                             <input class="mysub" type="submit" value="查询" />
                             <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
                             <select  id="categoryId" name="categoryId" class="myselect" onchange="searchGoods()">
@@ -118,8 +118,8 @@ DD_belatedPNG.fix('.,img,background');
                 </div>
                 
                 <form action="/provider/goods/checkAll/${isOnSale?c}" method="post" id="form">
-                <input type="hidden" name="page" value="${page!'0'}"/>
-                <input type="hidden" name="categoryId" value="${categoryId!''}"/>
+                <input type="hidden" value="${dir!'0'}" name="dir">
+                <input type="hidden" name="categoryId" value="<#if categoryId??>${categoryId?c!''}</#if>"/>
                 <input type="hidden" name="keywords" value="${keywords!''}"/>
                 <div id="dis_goods_list">
                     <#include "/client/provider_goods_list.ftl">
@@ -141,7 +141,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == provider_goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/provider/goods/list/${isOnSale?c}?page=${page-1}">${page}</a>
+                                <a href="/provider/goods/list/${isOnSale?c}?page=${page-1}&dir=${dir!'0'}<#if categoryId??>&categoryId=${categoryId?c}</#if>">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -181,13 +181,21 @@ DD_belatedPNG.fix('.,img,background');
               <th>*商品名称：</th>
               <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
             </tr>
+            <tr>
+              <th>*商品副标题：</th>
+              <td><input type="text" class="add_width" name="subTitle" id="subTitle" datatype="*" sucmsg=" "></td>
+            </tr>
+            <tr>
+              <th>*编码：</th>
+              <td><input type="text" class="add_width" name="code" id="code" datatype="*" sucmsg=" "></td>
+            </tr>
              <tr>
               <th>*商品批发价：</th>
-              <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=""></td>
+              <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" "></td>
             </tr>
              <tr>
               <th>*库存：</th>
-              <td><input type="text" name="leftNumber" id="leftNumber" datatype="n"></td>
+              <td><input type="text" name="leftNumber" id="leftNumber" datatype="n" sucmsg=" "></td>
             </tr>
             <tr>
               <th></th>

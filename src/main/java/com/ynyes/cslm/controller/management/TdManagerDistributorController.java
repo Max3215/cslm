@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
@@ -517,6 +520,8 @@ public class TdManagerDistributorController {
 	
 	@RequestMapping(value="/goods/save")
     public String save(TdDistributorGoods tdDistributorGoods,
+    		Boolean isRecommendIndex,Boolean isSetRecommend,
+    		Boolean isRecommendType,Boolean isTouchHot,
     		String __EVENTTARGET, String __EVENTARGUMENT, String __VIEWSTATE,
     		HttpServletRequest req,ModelMap map){
     	String username = (String) req.getSession().getAttribute("manager");
@@ -529,10 +534,43 @@ public class TdManagerDistributorController {
         	tdDistributorGoods.setOnSaleTime(new Date());
         }
         
+        // 推荐类型
+        if(null != isRecommendIndex && isRecommendIndex){
+        	tdDistributorGoods.setIsRecommendIndex(true);
+        }else{
+        	tdDistributorGoods.setIsRecommendIndex(false);
+        }
+        
+        if(null != isSetRecommend && isSetRecommend){
+        	tdDistributorGoods.setIsSetRecommend(true);
+        }else{
+        	tdDistributorGoods.setIsSetRecommend(false);
+        }
+        
+        if(null != isRecommendType && isRecommendType){
+        	tdDistributorGoods.setIsRecommendType(true);
+        }else{
+        	tdDistributorGoods.setIsRecommendType(false);
+        }
+        
+        if(null != isTouchHot && isTouchHot){
+        	tdDistributorGoods.setIsTouchHot(true);
+        }else{
+        	tdDistributorGoods.setIsTouchHot(false);
+        }
+        
         tdDistributorGoodsService.save(tdDistributorGoods);
         return "redirect:/Verwalter/distributor/goods/list?__EVENTTARGET=" + __EVENTTARGET
                 + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE="
                 + __VIEWSTATE;
+    }
+	
+	@ModelAttribute
+    public void getModel(@RequestParam(value = "id", required = false) Long id,
+                        Model model) {
+        if (null != id) {
+            model.addAttribute("tdDistributorGoods", tdDistributorGoodsService.findOne(id));
+        }
     }
 	
 	

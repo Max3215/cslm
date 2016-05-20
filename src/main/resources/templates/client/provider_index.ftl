@@ -132,11 +132,11 @@ DD_belatedPNG.fix('.,img,background');
                                 <p>${order.orderTime?string('HH:mm:ss')}</p>
                             </td>
                             <td>
-                                <#if order.statusId?? && order.statusId==1>
-                                       <p>待发货</p>
-                                <#elseif order.statusId?? &&  order.statusId==2>
+                                <#if order.statusId?? && order.statusId==3>
+                                    <p>待发货</p>
+                                <#elseif order.statusId?? &&  order.statusId==4>
                                        <p>待收货</p>
-                                <#elseif order.statusId?? &&  order.statusId==3>
+                                <#elseif order.statusId?? &&  order.statusId==6>
                                        <p>已完成</p>
                                 </#if>
                             </td>
