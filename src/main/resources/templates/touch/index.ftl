@@ -277,11 +277,15 @@ function chooseDistributor(disId){
 
   <!-- 热卖商品 -->
   <section class="pro_hot">
-  	<p class="tit">热卖商品</p>
+    <#if DISTRIBUTOR_ID??>
+  	     <p class="tit">热卖商品</p>
+  	<#else>
+  	     <p class="tit">推荐商品</p>
+  	</#if>
   	<menu>
   	 <#if recommed_index_page?? && recommed_index_page.content?size gt 0 >
          <#list recommed_index_page.content as item>
-         <#if item_index lt 12>
+         <#if item_index lt 40>
             <a href="/touch/goods/${item.id?c}">
                 <img src="${item.coverImageUri!''}"" />
                 <p>${item.goodsTitle!""}</p>

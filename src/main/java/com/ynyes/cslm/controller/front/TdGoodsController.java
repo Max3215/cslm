@@ -2,9 +2,7 @@ package com.ynyes.cslm.controller.front;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,12 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
-import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdProduct;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdSetting;
@@ -29,7 +25,6 @@ import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
-import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -68,9 +63,6 @@ public class TdGoodsController {
 
     @Autowired
     private TdCommonService tdCommonService;
-
-    @Autowired
-    private TdGoodsCombinationService tdGoodsCombinationService;
 
     @Autowired
     private TdUserRecentVisitService tdUserRecentVisitService;

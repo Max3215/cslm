@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
-import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.repository.TdDistributorRepo;
 
 /**

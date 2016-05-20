@@ -28,7 +28,6 @@ import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
-import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.Cnvter;
@@ -38,9 +37,6 @@ import com.ynyes.cslm.util.Cnvter;
 public class TdTouchIndexController {
 	@Autowired
     private TdCommonService tdCommonService;
-
-    @Autowired
-    private TdGoodsService tdGoodsService;
 
     @Autowired
     private TdAdTypeService tdAdTypeService;
@@ -280,7 +276,6 @@ public class TdTouchIndexController {
      */
     @RequestMapping(value="/distance",method = RequestMethod.POST)
     public String mapdistance(Double lng,Double lat,HttpServletRequest req,ModelMap map){
-    	Map<String,Object> res = new HashMap<>();
 
     	Map<String,Double> inmap = new HashMap<>();
     	Map<String,Double> moremap = new HashMap<>();
