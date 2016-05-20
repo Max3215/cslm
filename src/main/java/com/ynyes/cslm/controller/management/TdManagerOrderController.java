@@ -1825,7 +1825,7 @@ public class TdManagerOrderController {
         }
         
         String uris = parsePicUris(hid_photo_name_show360);
-//        System.err.println(TdDistributor);
+
         tdDistributor.setShowPictures(uris);
         if(null == tdDistributor.getVirtualMoney() || "".equals(tdDistributor.getVirtualMoney())){
         	tdDistributor.setVirtualMoney(new Double(0));

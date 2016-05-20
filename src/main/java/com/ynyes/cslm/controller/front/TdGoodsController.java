@@ -119,6 +119,10 @@ public class TdGoodsController {
         {
         	Long distributorId = tdDistributorGoodsService.findDistributorId(dgId);
         	TdDistributor distributor = TdDistributorService.findOne(distributorId);
+        	if(null == distributor)
+        	{
+        		return "/client/error_404";
+        	}
     		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
     		req.getSession().setAttribute("distributorTitle", distributor.getTitle()); 
         	
@@ -137,6 +141,10 @@ public class TdGoodsController {
         	// 如没有选择超市 则默认选择所选商品所在超市
         	Long distributorId = tdDistributorGoodsService.findDistributorId(dgId);
         	TdDistributor distributor = TdDistributorService.findOne(distributorId);
+        	if(null == distributor)
+        	{
+        		return "/client/error_404";
+        	}
     		req.getSession().setAttribute("DISTRIBUTOR_ID",distributor.getId());
     		req.getSession().setAttribute("distributorTitle", distributor.getTitle()); 
     		

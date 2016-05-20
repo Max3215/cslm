@@ -162,10 +162,22 @@ public class TdDistributorService {
      */
     public TdDistributor save(TdDistributor e)
     {
-        // 保存分销商商品
-    	if(null != e.getGoodsList())
+    	if(null == e){
+    		return null;
+    	}
+    	
+    	List<TdDistributorGoods> goodsList = e.getGoodsList();
+    	if(null == e.getIsEnable() || !e.getIsEnable()){ // 如果禁用超市，则同时下架超市所有商品
+    		if(null != goodsList){
+    			for (TdDistributorGoods tdDistributorGoods : goodsList) {
+					tdDistributorGoods.setIsOnSale(false);
+				}
+    		}
+    	}
+    	// 保存分销商商品
+    	if(null != goodsList)
     	{
-    			tdDistributorGoodsService.save(e.getGoodsList());
+    		tdDistributorGoodsService.save(goodsList);
     	}
         
         return repository.save(e);
