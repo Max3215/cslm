@@ -364,7 +364,7 @@ function del_goods_comb(obj) {
                     </select>
                 </div>
                 <div style="float:left;" id="threeCatDiv">
-                    <select  datatype="*" sucmsg=" "id="categoryId" onchange="parameter();" name="categoryId">
+                    <select  datatype="*" sucmsg=" "id="categoryId" onchange="findParam();" name="categoryId">
                         <#if !goods??>
                         <option value="">请选择类别...</option>
                         </#if>
@@ -462,7 +462,7 @@ function del_goods_comb(obj) {
         <dl>
             <dt>单位</dt>
             <dd>
-                <input name="promotion" type="text" value="<#if goods?? && goods.saleType??>${goods.saleType!''}</#if>" class="input normal" datatype="*">
+                <input name="promotion" type="text" value="<#if goods?? && goods.saleType??>${goods.saleType!''}</#if>" class="input normal" >
                 <span class="Validform_checktip">如千克/瓶/件，选填</span>
             </dd>
         </dl>

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdBrand;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdGoodsCombination;
 import com.ynyes.cslm.entity.TdGoodsGift;
@@ -22,6 +23,7 @@ import com.ynyes.cslm.entity.TdParameter;
 import com.ynyes.cslm.entity.TdPriceChangeLog;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
+import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSite;
 import com.ynyes.cslm.entity.TdWarehouse;
 import com.ynyes.cslm.repository.TdGoodsRepo;
@@ -2182,17 +2184,6 @@ public class TdGoodsService {
             }
         }
 
-        // 保存销售价
-        // if (null == e.getReturnPrice()) {
-        // e.setReturnPrice(0.0);
-        // }
-        //
-        // if (null == e.getOutFactoryPrice()) {
-        // e.setOutFactoryPrice(0.0);
-        // }
-        //
-        // e.setSalePrice(e.getReturnPrice() + e.getOutFactoryPrice());
-
         // 创建时间
         if (null == e.getCreateTime()) {
             e.setCreateTime(new Date());
@@ -2203,32 +2194,7 @@ public class TdGoodsService {
             e.setOnSaleTime(new Date());
         }
 
-        // 站点
-        if (null != e.getSiteId()) {
-            TdSite s = tdSiteService.findOne(e.getSiteId());
 
-            if (null != s) {
-                e.setSiteTitle(s.getTitle());
-            }
-        }
-
-        // 仓库名
-        if (null != e.getWarehouseId()) {
-            TdWarehouse w = tdWarehouseService.findOne(e.getWarehouseId());
-
-            if (null != w) {
-                e.setWarehouseTitle(w.getTitle());
-            }
-        }
-
-        // 供应商名
-        if (null != e.getProductId()) {
-            TdProvider p = tdProviderService.findOne(e.getProductId());
-
-            if (null != p) {
-                e.setProviderTitle(p.getTitle());
-            }
-        }
 
         // 当修改时，若切换过类型，参数数量由多变少，需要删除多余的参数
         if (null != e.getId() && null != paramCategoryId) {
@@ -2244,33 +2210,6 @@ public class TdGoodsService {
             }
         }
 
-        // 当修改时，赠品数量减少时，需删除多余的赠品
-        if (null != e.getId() && null != e.getGiftList()
-                && null != e.getTotalGift()) {
-            int count = e.getTotalGift();
-            int size = e.getGiftList().size();
-
-            if (size > count) {
-                List<TdGoodsGift> subList = e.getGiftList()
-                        .subList(count, size);
-                tdGoodsGiftService.delete(subList);
-                e.getGiftList().removeAll(subList);
-            }
-        }
-
-        // 当修改时，组合商品数量减少时，需删除多余的组合商品
-        if (null != e.getId() && null != e.getCombList()
-                && null != e.getTotalComb()) {
-            int count = e.getTotalComb();
-            int size = e.getCombList().size();
-
-            if (size > count) {
-                List<TdGoodsCombination> subList = e.getCombList().subList(
-                        count, size);
-                tdGoodsCombinationService.delete(subList);
-                e.getCombList().removeAll(subList);
-            }
-        }
 
         if (null != e.getParamList() && e.getParamList().size() > 0) {
         	
@@ -2314,52 +2253,29 @@ public class TdGoodsService {
             e.setParamValueCollect("");
         }
 
-        if (null == e.getId()) {
-            if (null != e.getGiftList() && e.getGiftList().size() > 0) {
-                e.setTotalGift(e.getGiftList().size());
-            }
-
-            if (null != e.getCombList() && e.getCombList().size() > 0) {
-                e.setTotalComb(e.getCombList().size());
-            }
+        if (null != e.getId()) {
+        	List<TdDistributorGoods> disGoodslist = tdDistributorGoodsService.findByGoodsId(e.getId());
+        	if(null != disGoodslist && disGoodslist.size() >0 )
+        	{
+        		for (TdDistributorGoods tdDistributorGoods : disGoodslist) {
+					tdDistributorGoods.setCoverImageUri(e.getCoverImageUri());
+				}
+        	}
+        	// 同步更新超市商品封面
+        	tdDistributorGoodsService.save(disGoodslist);
+        	
+        	List<TdProviderGoods> proGoodslist = tdProviderGoodsService.findByGoodsId(e.getId());
+        	if(null != proGoodslist && proGoodslist.size()> 0){
+        		for (TdProviderGoods tdProviderGoods : proGoodslist) {
+					tdProviderGoods.setGoodsCoverImageUri(e.getCoverImageUri());
+				}
+        	}
+        	// 同步更新批发、分销商品封面图片
+        	tdProviderGoodsService.save(proGoodslist);
         }
-
-        // 保存赠品
-        tdGoodsGiftService.save(e.getGiftList());
-
-        // 保存组合
-        tdGoodsCombinationService.save(e.getCombList());
 
         e = repository.save(e);
 
-//        // 添加改价记录
-//        TdPriceChangeLog priceLog = tdPriceChangeLogService
-//                .findTopByGoodsIdOrderByIdDesc(e.getId());
-//
-//        // 没有改过价，或改价后的记录与当前销售价不相等
-//        if (null == priceLog || !priceLog.getPrice().equals(e.getSalePrice())) {
-//            TdPriceChangeLog newPriceLog = new TdPriceChangeLog();
-//
-//            newPriceLog.setCreateTime(new Date());
-//            newPriceLog.setGoodsId(e.getId());
-//            newPriceLog.setGoodsTitle(e.getTitle()
-//                    + (null == e.getSelectOneValue() ? "" : " "
-//                            + e.getSelectOneValue())
-//                    + (null == e.getSelectTwoValue() ? "" : " "
-//                            + e.getSelectTwoValue())
-//                    + (null == e.getSelectThreeValue() ? "" : " "
-//                            + e.getSelectThreeValue()));
-//            newPriceLog.setOperator(manager);
-//
-//            if (null != priceLog) {
-//                newPriceLog.setOriginPrice(priceLog.getPrice());
-//            }
-//
-//            newPriceLog.setPrice(e.getSalePrice());
-//            newPriceLog.setSortId(99L);
-//
-//            tdPriceChangeLogService.save(newPriceLog);
-//        }
 
         return e;
     }

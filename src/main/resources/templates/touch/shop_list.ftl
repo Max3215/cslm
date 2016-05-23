@@ -2,7 +2,7 @@
     <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
     <div style="height:100%;overflow:auto;">
         <dl>
-            <dt>附件商家:</dt>
+            <dt>附近商家:</dt>
         </dl>
       <#if shop_list?? && shop_list?size gt 0>
           <#list shop_list as shop>

@@ -27,8 +27,14 @@ function twoChange(){
 	parameter(categoryId);
 }
 
+function findParam(){
+	var categoryId = $("#categoryId").val(); 
+	console.debug(categoryId);
+	parameter(categoryId);
+}
+
 function parameter(categoryId){
-//	var categoryId = $("#categoryId").val();
+	
     $.ajax({
         url : '/Verwalter/goods/edit/parameter/'+categoryId,
         type : 'POST',
