@@ -22,7 +22,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
     $("#orderService").click(function(){orderService();});
-
+    $("#btnOrderService").click(function(){orderService();});
+    
      $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){
             $(this).next().slideDown(300);
@@ -33,7 +34,7 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+ 
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -257,6 +258,13 @@ DD_belatedPNG.fix('.,img,background');
             </tr>
             </#list>
             </#if>
+            <tr>
+                <div class="btn-list">
+                    <#if order.statusId==4>
+                        <input type="button" id="btnOrderService" value="确认收货" class="btn green">
+                    </#if>
+                </div>
+            </tr>
         </table>
     </div><!--mymember_info END-->
 

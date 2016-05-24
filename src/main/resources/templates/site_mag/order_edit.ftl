@@ -610,10 +610,6 @@
                                     <td>${goods.goodsId!""}</td>
                                     <td style="text-align: left; white-space: normal;">
                                         ${goods.goodsTitle!""} 
-                                        ${goods.goodsColor!""}
-                                        ${goods.goodsCapacity!""}
-                                        ${goods.goodsVersion!""}
-                                        ${goods.goodsSaleType!""}
                                     </td>
                                     <td>${goods.price?string("#.00")}</td>
                                     <td>${goods.quantity!""}</td>

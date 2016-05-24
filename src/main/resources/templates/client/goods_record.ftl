@@ -4,7 +4,6 @@
             <thead>
                 <tr>
                     <td>买家</td>
-                    <td>款式/型号</td>
                     <td>数量</td>
                     <td>时间</td>
                 </tr>
@@ -17,7 +16,6 @@
                                     <#if og.goodsId?c == dis_goods.id?c>
                                         <tr>
                                             <td>${item.username!''}</td>
-                                            <td>${og.selectOneValue!''}</td>
                                             <td>${og.quantity!'0'}</td>
                                             <td>${item.orderTime!''}</td>
                                         </tr>

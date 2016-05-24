@@ -1374,17 +1374,17 @@ public class TdUserController extends AbstractPaytypeController{
             return res;
         }
 
-        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(ogId);
-        TdGoods goods = tdGoodsService.findOne(tdComment.getGoodsId());
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(tdComment.getGoodsId());
 
-        if (null == goods) {
+        if (null == distributorGoods) {
             res.put("message", "评论的商品不存在！");
             return res;
         }
+        TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
 
         tdComment.setCommentTime(new Date());
-        tdComment.setGoodsCoverImageUri(goods.getCoverImageUri());
-        tdComment.setGoodsTitle(goods.getTitle());
+        tdComment.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());
+        tdComment.setGoodsTitle(distributorGoods.getGoodsTitle());
         tdComment.setIsReplied(false);
         tdComment.setNegativeNumber(0L);
         tdComment.setPositiveNumber(0L);
@@ -1394,42 +1394,12 @@ public class TdUserController extends AbstractPaytypeController{
         
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
         
-//        if(null != user )
-//        {
-//        	// 判断为超市购物
-//        	if(user.getRoleId() ==1)
-//        	{
-//        		TdDistributor distributor = TdDistributorService.findbyUsername(user.getUsername());
-//        		//查看当前有无该商品
-//        		TdDistributorGoods disGoods = TdDistributorService.findByIdAndGoodId(distributor.getId(), goods.getId());
-//        		if(null!= disGoods)
-//        		{
-//        			disGoods.setLeftNumber(disGoods.getLeftNumber()+quantity);
-//        		}else{
-//        			//新建一条超市商品信息
-//        			disGoods = new TdDistributorGoods();
-//        			disGoods.setCoverImageUri(goods.getCoverImageUri());
-//        			disGoods.setGoodsId(goods.getId());
-//        			disGoods.setGoodsPrice(goods.getSalePrice());
-//        			disGoods.setGoodsTitle(goods.getTitle());
-//        			disGoods.setIsOnSale(false);
-//        			disGoods.setLeftNumber(quantity);
-//        			disGoods.setCode(goods.getCode());
-//        		}
-//        		distributor.getGoodsList().add(disGoods);//更新超市商品库
-//        		TdDistributorService.save(distributor);
-//        	}
-//        }
         // 设置订单信息
         if (null != orderId) {
             TdOrder tdOrder = tdOrderService.findOne(orderId);
 
             if (null != tdOrder) {
                 tdComment.setOrderNumber(tdOrder.getOrderNumber());
-                /**
-				 * @author lc
-				 * @注释：添加同盟店评价
-				 */
                 tdComment.setDiysiteId(tdOrder.getShopId());
                 
                 List<TdOrderGoods> ogList = tdOrder.getOrderGoodsList();

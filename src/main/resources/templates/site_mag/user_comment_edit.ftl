@@ -62,7 +62,18 @@
   </dl>
   <dl>
     <dt>评论得分</dt>
-    <dd><#if user_comment??>${user_comment.stars!""}</#if></dd>
+    <dd>
+        ${user_comment.goodsStar!''}星
+        <#if user_comment?? && user_comment.stars??>
+            <#if user_comment.stars==1>
+                差评
+            <#elseif user_comment.stars==2>
+                中评
+            <#else>
+                好评
+            </#if>
+        </#if>
+    </dd>
   </dl>
   <dl>
     <dt>评论内容</dt>

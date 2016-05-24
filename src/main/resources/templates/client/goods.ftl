@@ -121,6 +121,9 @@ function byNow(dId){
  //   window.open("/order/byNow/"+dId+"?quantity="+quantity);
     window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
 }
+function showmsg(){
+    alert("库存不足！")
+}
 
 function proGoods(did)
 {
@@ -263,7 +266,7 @@ function proGoods(did)
 					<input class="text" type="text" id="quantity" value="1" onfocus="if(value=='1'||value=='0') {value=''}" onblur="if (value==''||value=='0') {value='1'}" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
 					<a id="id-plus" href="javascript:addNum();">+</a>
 					<label>库存${dis_goods.leftNumber!'0'}</label>
-					<input type="hidden" id="leftNumber" value="${dis_goods.leftNumber!'0'}">
+					<input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">
 					<#else>
 					<lable sytle="color:red">*当前超市没有此商品，您可以选择其他超市继续购买</label>
 					</#if>
@@ -278,15 +281,14 @@ function proGoods(did)
 					<#if dis_goods??>
 					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
 					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car" id="proGoods">立即预购</a>
-					       <!--
-					       <a href="javascript:proGoods(${dis_goods.id?c});" target="_blank"  title="预购商品" class="car">立即预购</a>
-					       -->
 					   <#else>
         					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
-        					<#--<a href="javascript:cartInit(${dis_goods.id?c});" target="_blank"  title="加入购物车" class="car">加入购物车</a>
-        					-->
 					   </#if>
+					       <#if dis_goods.leftNumber?? && dis_goods.leftNumber gt 0>
         					<a href="/cart/init?id=${dis_goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
+        					<#else>
+        					<a href="javascript:showmsg();" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
+        					</#if>
 					</#if>
 					<div class="clear"></div>
 				</div>

@@ -4,7 +4,7 @@
             <#if comment_page??>
                 <#list comment_page.content as item>
                     <li>
-                        <p class="p1">${item.content!''}<span></span>${item.username!''}</p>
+                        <p class="p1">${item.content!''}<span></span>用户：${item.username!''}</p>
                         <p class="p2">${item.commentTime!''}</p>
                          <#if item.isReplied?? && item.isReplied>
                             <p class="p3">商家回复：${item.reply!''}</p>
@@ -16,7 +16,7 @@
     </div>
     <#if comment_page??>
     <div class="pages">
-        <span>共${comment_page.content?size!''}条记录&nbsp;&nbsp;&nbsp;&nbsp;${comment_page.number+1}/${comment_page.totalPages!'0'}页</span>
+        <span>共${comment_page.content?size!''}条记录&nbsp;&nbsp;&nbsp;&nbsp;<#if comment_page.totalPages==0>0<#else>${comment_page.number+1}</#if>/${comment_page.totalPages!'0'}页</span>
         <#assign continueEnter=false>
         <#if comment_page?? && comment_page.number+1 == 1>
             <a  href="javascript:;">上一页</a>
