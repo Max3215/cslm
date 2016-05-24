@@ -173,7 +173,7 @@ public class TdListController {
         List<String> paramValueList = new ArrayList<String>();
         
         // 参数列表
-        if (null != tdProductCategory.getParamCategoryId())
+        if (null != tdProductCategory.getParamCategoryId() && tdProductCategory.getLayerCount() != 1)
         {
             Long paramCategoryId = tdProductCategory.getParamCategoryId();
             
