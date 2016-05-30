@@ -1524,7 +1524,8 @@ public class TdOrderController extends AbstractPaytypeController {
 		tdCartGoodsService.save(cartGoods);
 		cartGoodsList.add(cartGoods);
 
-		map.addAttribute("totalPrice", dgoods.getGoodsPrice() * quantity);
+		totalPrice = dgoods.getGoodsPrice() * quantity;
+		map.addAttribute("totalPrice", totalPrice);
 
 		map.addAttribute("selected_goods_list", cartGoodsList);
 
@@ -1589,7 +1590,8 @@ public class TdOrderController extends AbstractPaytypeController {
 		tdCartGoodsService.save(cartGoods);
 		cartGoodsList.add(cartGoods);
 
-		map.addAttribute("totalPrice", dgoods.getGoodsPrice() * quantity);
+		totalPrice = dgoods.getGoodsPrice() * quantity;
+		map.addAttribute("totalPrice", totalPrice);
 
 		map.addAttribute("selected_goods_list", cartGoodsList);
 

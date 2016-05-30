@@ -176,7 +176,7 @@ DD_belatedPNG.fix('.,img,background');
                       </td>
                       <td>${order.shippingName!''}</td>
                       <td>
-                            <p>￥${order.totalGoodsPrice?string('0.00')}</p>
+                            <p>￥${order.totalPrice?string('0.00')}</p>
                       </td>
                       <td class="td003">
                         <p>${order.orderTime!''}</p>

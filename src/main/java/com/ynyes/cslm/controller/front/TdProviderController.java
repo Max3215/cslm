@@ -1735,16 +1735,22 @@ public class TdProviderController extends AbstractPaytypeController{
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)
     @ResponseBody
-    public String saveHeadPortrait(String imgUrl,HttpServletRequest rep)
+    public Map<String, Object> saveHeadPortrait(String imgUrl,HttpServletRequest rep)
     {
+		Map<String, Object> res = new HashMap<>();
+    	res.put("code", 1);
+    	
     	String username = (String)rep.getSession().getAttribute("provider");
     	if (null == username) {
-            return "redirect:/login";
+    		res.put("msg", "登录超时");
+            return res;
         }
         TdProvider provider = tdProviderService.findByUsername(username);
         provider.setImageUri(imgUrl);
         tdProviderService.save(provider);
-    	return "client/provider_index";
+        
+        res.put("code", 0);
+    	return res;
     }
 	
 	

@@ -2214,17 +2214,21 @@ public class TdUserController extends AbstractPaytypeController{
      */
     @RequestMapping(value = "/user/headImageUrl", method = RequestMethod.POST)
     @ResponseBody
-    public String saveHeadPortrait(String imgUrl,HttpServletRequest rep)
+    public Map<String, Object> saveHeadPortrait(String imgUrl,HttpServletRequest rep)
     {
+    	Map<String, Object> res = new HashMap<>();
+    	res.put("code", 1);
+    	
     	String username = (String)rep.getSession().getAttribute("username");
     	if (null == username) {
-            return "redirect:/login";
+            res.put("msg", "登录超时");
+            return res;
         }
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
     	user.setHeadImageUri(imgUrl);
     	tdUserService.save(user);
-    	
-    	return "client/user_index";
+    	res.put("code", 0);
+    	return res;
     }
     
     @ModelAttribute

@@ -128,7 +128,7 @@ public class TdUserService {
         user.setLastLoginTime(new Date());
         user.setStatusId(1L); // 正常
         user.setRoleId(0L); // 普通用户
-        user.setHeadImageUri("/client/images/user.png");
+        user.setHeadImageUri("/client/images/headimg.jpg");
         
         user.setTotalCashRewards(0L);
         user.setTotalCollectedGoods(0L);

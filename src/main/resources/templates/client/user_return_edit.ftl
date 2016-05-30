@@ -108,6 +108,7 @@ DD_belatedPNG.fix('.,img,background');
                         <input type="hidden" name="goodsId" value="${order_goods.goodsId?c!''}" />
                         <input type="hidden" name="id" value="${order.id?c}" />
                         <input type="hidden" name="shopId" value="${shop.id?c}" />
+                        <input type="hidden" name="shopTitle" value="${shop.title!''}" />
                         
                         <div class="mymember_eva_div">
                           <b><font>* </font>问题描述：</b>
@@ -116,7 +117,7 @@ DD_belatedPNG.fix('.,img,background');
                         </div>
                         <div class="mymember_eva_div">
                             <b style="top:4px;">商家信息：</b>
-                            <span style="line-height:30px;" name="shopTitle">${shop.title!''}</span>
+                            <span style="line-height:30px;" >${shop.title!''}</span>
                         </div>
                         <div class="mymember_eva_div">
                             <b style="top:4px;">商家地址：</b>

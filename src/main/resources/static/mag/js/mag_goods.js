@@ -29,7 +29,6 @@ function twoChange(){
 
 function findParam(){
 	var categoryId = $("#categoryId").val(); 
-	console.debug(categoryId);
 	parameter(categoryId);
 }
 

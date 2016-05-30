@@ -55,10 +55,14 @@ $(function () {
         {
             return;
         }
-    $.post("/user/headImageUrl",{"imgUrl": imageUrl},function(date){
-       console.debug(date);
-        alert("头像更改成功");
-    })
+        $.post("/user/headImageUrl",{"imgUrl": imageUrl},function(date){
+            if(date.code == 1){
+                alert(date.msg);
+                window.location.href = "/login";
+            }else{
+                location.reload();
+            }
+        })
    }
 </script>
 
@@ -90,7 +94,7 @@ DD_belatedPNG.fix('.,img,background');
       <table>
         <tr>
             <th width="150" rowspan="2">
-                <a class="mymember_header test_img" href="#">
+                <a class="mymember_header test_img" href="javascript:;">
                     <img class="test_img1"  src="${user.headImageUri!'/client/images/user_images.jpg'}"  width="120" height="120"/>
                 </a>
                 <div style="margin-left:25px;margin-top:10px;" class="upload-box upload-img"></div>

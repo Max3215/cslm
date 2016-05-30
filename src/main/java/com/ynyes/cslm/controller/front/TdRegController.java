@@ -152,35 +152,12 @@ public class TdRegController {
                 String carCode,
                 HttpServletRequest request){
         String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
-//        String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
-//        if (null == codeBack || null == smsCodeSave)
-//        {
-//            if (null == shareId)
-//            {
-//                return "redirect:/reg?name= "+username+"&carCode="+carCode;
-//            }
-//            else
-//            {
-//                return "redirect:/reg?shareId=" + shareId + "&name= "+username+"&carCode="+carCode;
-//            }
-//        }
         
         if (!codeBack.equalsIgnoreCase(code))
         {
                 return "redirect:/reg?errCode=1&name= "+username+"&carCode="+carCode;
         }
         
-//        if (!smsCodeSave.equalsIgnoreCase(smsCode))
-//        {
-//            if (null == shareId)
-//            {
-//                return "redirect:/reg?errCode=4&name= "+username+"&mobile="+mobile;
-//            }
-//            else
-//            {
-//                return "redirect:/reg?errCode=4&shareId=" + shareId + "&name= "+username+"&carCode="+carCode;
-//            }
-//        }
         
         
        TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
@@ -193,42 +170,6 @@ public class TdRegController {
         user = tdUserService.save(user);
         
 //        // 奖励分享用户
-//        if (null != shareId)
-//        {
-//            TdUser sharedUser = tdUserService.findOne(shareId);
-//            
-//            if (null != sharedUser && sharedUser.getRoleId().equals(0L))
-//            {
-//                TdSetting setting = tdSettingService.findTopBy();
-//                TdUserPoint userPoint = new TdUserPoint();
-//                
-//                if (null != setting)
-//                {
-//                    userPoint.setPoint(setting.getRegisterSharePoints());
-//                }
-//                else
-//                {
-//                    userPoint.setPoint(0L);
-//                }
-//                
-//                if (null != sharedUser.getTotalPoints())
-//                {
-//                    userPoint.setTotalPoint(sharedUser.getTotalPoints() + userPoint.getPoint());
-//                }
-//                else
-//                {
-//                    userPoint.setTotalPoint(userPoint.getPoint());
-//                }
-//                
-//                userPoint.setUsername(sharedUser.getUsername());
-//                userPoint.setDetail("用户分享网站成功奖励");
-//                
-//                userPoint = tdUserPointService.save(userPoint);
-//                
-//                sharedUser.setTotalPoints(userPoint.getTotalPoint()); // 积分
-//                tdUserService.save(sharedUser);
-//            }
-//        }
         
         request.getSession().setAttribute("username", username);
         

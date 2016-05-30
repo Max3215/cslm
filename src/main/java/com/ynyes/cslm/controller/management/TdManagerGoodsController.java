@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdGoodsParameter;
+import com.ynyes.cslm.entity.TdParameterCategory;
 import com.ynyes.cslm.entity.TdPriceChangeLog;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.service.TdArticleService;
@@ -28,6 +29,7 @@ import com.ynyes.cslm.service.TdBrandService;
 import com.ynyes.cslm.service.TdGoodsParameterService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdManagerLogService;
+import com.ynyes.cslm.service.TdParameterCategoryService;
 import com.ynyes.cslm.service.TdParameterService;
 import com.ynyes.cslm.service.TdPriceChangeLogService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -86,6 +88,9 @@ public class TdManagerGoodsController {
     
     @Autowired
     TdTagService tagService;
+    
+    @Autowired
+    TdParameterCategoryService tdParameterCategoryService;
 
     @RequestMapping(value = "/edit/parameter/{categoryId}", method = RequestMethod.POST)
     public String parameter(@PathVariable Long categoryId, ModelMap map,
@@ -99,21 +104,22 @@ public class TdManagerGoodsController {
 
         if (null != tpc) {
             Long pcId = tpc.getParamCategoryId();
-//            TdParameterCategory category = tdParameterCategoryService.findOne(pcId);
-//            
-//            if (null != pcId) {
-//            	if(null != category.getParentId())
-//            	{
-//            		map.addAttribute("param_list",
-//            				tdParameterService.findByCategoryTreeContaining(category.getParentId()));
-//            	}else{
-//            		map.addAttribute("param_list",
-//            				tdParameterService.findByCategoryTreeContaining(pcId));
-//            	}
+            TdParameterCategory category = tdParameterCategoryService.findOne(pcId);
             
             if (null != pcId) {
-                map.addAttribute("param_list",
-                        tdParameterService.findByCategoryTreeContaining(pcId));
+            	if(null != category.getParentId() && tpc.getLayerCount()==3)
+            	{
+            		map.addAttribute("param_list",
+            				tdParameterService.findByCategoryTreeContaining(category.getParentId()));
+            	}else{
+            		map.addAttribute("param_list",
+            				tdParameterService.findByCategoryId(pcId));
+            	}
+            }
+            
+            if (null != pcId) {
+//                map.addAttribute("param_list",
+//                        tdParameterService.findByCategoryTreeContaining(pcId));
 
                 // 查找产品列表
                 map.addAttribute("product_list", tdProductService

@@ -4051,16 +4051,21 @@ public class TdDistributorController extends AbstractPaytypeController{
     
     @RequestMapping(value = "/edit/ImageUrl", method = RequestMethod.POST)
     @ResponseBody
-    public String editimageUrl(String imgUrl,HttpServletRequest req)
+    public Map<String, Object> editimageUrl(String imgUrl,HttpServletRequest req)
     {
+    	Map<String, Object> res = new HashMap<>();
+    	res.put("code", 1);
+    	
     	String username = (String)req.getSession().getAttribute("distributor");
     	if (null == username) {
-            return "redirect:/login";
+            res.put("msg", "登录超时");
+            return res;
         }
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
     	distributor.setImageUri(imgUrl);
     	tdDistributorService.save(distributor);
-    	return "client/distributor_index";
+    	res.put("code", 0);
+    	return res;
     }
     
     // 广告列表

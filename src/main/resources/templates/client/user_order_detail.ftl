@@ -114,6 +114,8 @@ DD_belatedPNG.fix('.,img,background');
                     待评价
                 <#elseif order.statusId==6>
                     已完成
+                <#elseif order.statusId==6>
+                    已取消
                 <#elseif order.statusId==8>
                     支付失败
                 </#if>

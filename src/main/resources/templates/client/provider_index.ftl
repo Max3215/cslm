@@ -58,7 +58,12 @@ $(function () {
             return;
         }
     $.post("/provider/edit/ImgUrl",{"imgUrl": imageUrl},function(date){
-       console.debug(date);
+            if(date.code == 1){
+                alert(date.msg);
+                window.location.href = "/login";
+            }else{
+                location.reload();
+            }
     })
    }
 </script>
