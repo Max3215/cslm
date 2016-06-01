@@ -20,6 +20,7 @@ import com.ynyes.cslm.entity.TdGoodsCombination;
 import com.ynyes.cslm.entity.TdGoodsGift;
 import com.ynyes.cslm.entity.TdGoodsParameter;
 import com.ynyes.cslm.entity.TdParameter;
+import com.ynyes.cslm.entity.TdParameterCategory;
 import com.ynyes.cslm.entity.TdPriceChangeLog;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
@@ -79,6 +80,9 @@ public class TdGoodsService {
     
     @Autowired
     TdProviderGoodsService tdProviderGoodsService;
+    
+    @Autowired
+    TdParameterCategoryService tdParameterCategoryService;
     
     /**
      * 热销
@@ -2172,7 +2176,17 @@ public class TdGoodsService {
             e.setCategoryTitle(cat.getTitle());
             e.setCategoryIdTree(cat.getParentTree());
 
-            paramCategoryId = cat.getParamCategoryId();
+            Long pcId = cat.getParamCategoryId();
+            TdParameterCategory category = tdParameterCategoryService.findOne(pcId);
+            
+            if (null != pcId) {
+            	if(null != category.getParentId() && cat.getLayerCount()==3)
+            	{
+            		paramCategoryId = category.getParentId();
+            	}else{
+            		paramCategoryId = cat.getParamCategoryId();
+            	}
+            }
         }
 
         // 保存品牌名称

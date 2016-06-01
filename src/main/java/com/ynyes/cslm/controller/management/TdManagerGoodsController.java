@@ -664,12 +664,21 @@ public class TdManagerGoodsController {
                 TdProductCategory tpc = tdProductCategoryService
                         .findOne(tdGoods.getCategoryId());
 
-                if (null != tpc && null != tpc.getParamCategoryId()) {
-                    map.addAttribute("param_list", tdParameterService
-                            .findByCategoryTreeContaining(tpc
-                                    .getParamCategoryId()));
+                Long pcId = tpc.getParamCategoryId();
+                TdParameterCategory category = tdParameterCategoryService.findOne(pcId);
+                
+                if (null != pcId) {
+                	if(null != category.getParentId() && tpc.getLayerCount()==3)
+                	{
+                		map.addAttribute("param_list",
+                				tdParameterService.findByCategoryTreeContaining(category.getParentId()));
+                	}else{
+                		map.addAttribute("param_list",
+                				tdParameterService.findByCategoryId(pcId));
+                	}
                 }
-
+                
+                
                 // 查找产品列表
                 map.addAttribute("product_list", tdProductService
                         .findByProductCategoryTreeContaining(tdGoods
