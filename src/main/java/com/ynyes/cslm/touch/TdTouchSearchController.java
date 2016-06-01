@@ -119,7 +119,7 @@ public class TdTouchSearchController {
 	            if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
 	            {
 	              Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-	              map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderBy(distributorId, 
+	              map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDisIdAndIsOnSaleOrderBy(distributorId, 
 	            		  			keywords, true, page, ClientConstant.pageSize,orderColumn,dir));
 	              
 	            }else{
@@ -198,8 +198,8 @@ public class TdTouchSearchController {
 	            if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
 	            {
 	              Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-	              map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderBy(distributorId, 
-	            		  			keywords, true, page, ClientConstant.pageSize,orderColumn,dir));
+	              map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDisIdAndIsOnSaleOrderBy(distributorId, 
+      		  				keywords, true, page, ClientConstant.pageSize,orderColumn,dir));
 	              
 	            }else{
 	            	map.addAttribute("goods_page", tdDistributorGoodsService.searchGoodsAndIsOnSaleOrderBy(keywords, true, page, ClientConstant.pageSize,orderColumn,dir));

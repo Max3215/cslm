@@ -6,6 +6,4 @@
                 <p >￥${goods.goodsPrice?string("#.##")}</p>
             </a>
     </#list>
-<#else>
-  <div style="text-align: center; padding: 15px;">此类商品正在扩充中，敬请期待！</div>
 </#if> 

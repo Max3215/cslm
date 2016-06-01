@@ -59,7 +59,8 @@ function loadMore()
          <a <#if st==1>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=1&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>价格</span></a>
          <a <#if st==2>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=2&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>上架时间</span></a>
     </section>
-
+    <div style="height:0.6rem;"></div>
+    
   <!-- 商品类表 -->
   <section class="pro_hot">
   	<menu id="goods-menu">

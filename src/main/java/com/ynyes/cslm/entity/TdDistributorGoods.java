@@ -128,6 +128,9 @@ public class TdDistributorGoods {
 	private Date onSaleTime;
 
     @Column
+    private Long disId;
+    
+    @Column
     private String distributorTitle;
     
     // 批发商Id
@@ -331,6 +334,14 @@ public class TdDistributorGoods {
 
 	public void setOnSaleTime(Date onSaleTime) {
 		this.onSaleTime = onSaleTime;
+	}
+
+	public Long getDisId() {
+		return disId;
+	}
+
+	public void setDisId(Long disId) {
+		this.disId = disId;
 	}
 
 	public String getDistributorTitle() {

@@ -322,64 +322,35 @@ public class TdTouchListController {
 	             }
 	         }
 	        
-	         
-	         System.err.println(orderId);
 	        // 查找商品
 	        Page<TdDistributorGoods> goodsPage = null;
 	        if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
 	        {
 		          Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-//		          PageRequest pageRequest = new PageRequest(pageId, ClientConstant.pageSize);
-//		          
-//		          if (0 == brandIndex.intValue())
-//		          {
-//		        	  
-//		                  goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrue(
-//		                		  distributorId, categoryId, pageRequest, paramValueList);
-//		      
-//		          }
-//		          else if (1 == brandIndex.intValue())
-//		          {
-//		                  goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
-//		                         distributorId, categoryId, brandId, pageRequest, paramValueList);
-//		      
-//		          }
-		          // 0 降序   1 升序
-		          // sortIds 0---综合
-		          // sortIds 1---价格
-		          // sortIds 2---销量
-	                  // 按销量排序
-	                  if (0 == sortIds[2])
-	                  {
-	                      if (0 == sortIds[1])
-	                      {
-	                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-	                        		  distributorId,  categoryId, pageId, ClientConstant.pageSize, paramValueList);
-	                  
-	                      }
-	                      else
-	                      {
-	                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-	                        		  distributorId,categoryId, pageId, ClientConstant.pageSize, paramValueList);
-	              
-	                      }
-	                  }
-	                  // 按价格排序
-	                  else if (1 == sortIds[2])
-	                  {
-	                      if (0 == sortIds[1])
-	                      {
-	                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-	                        		  distributorId, categoryId, pageId, ClientConstant.pageSize, paramValueList);
-	                  
-	                      }
-	                      else
-	                      {
-	                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-	                        		  distributorId,  categoryId, pageId, ClientConstant.pageSize, paramValueList);
-	              
-	                      }
-	                  }
+		          PageRequest pageRequest;
+			         // 0: 降序 1: 升序
+		         if (0 == sortIds[orderId])
+		         {
+		             pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+		                 Direction.DESC, sortName[orderId]));
+		         }
+		         else
+		         {
+		             pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+		                     Direction.ASC, sortName[orderId]));
+		         }
+		         
+		        if (0 == brandIndex.intValue())
+                {
+                       goodsPage = tdDistributorGoodsService.findByDisIdAndCategoryIdAndParamsLikeAndIsOnSaleTrue(
+                                    distributorId,categoryId, pageRequest, paramValueList);
+                }
+                else
+                {
+                       goodsPage = tdDistributorGoodsService.findByDisIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
+                                   distributorId, categoryId, brandId, pageRequest, paramValueList);
+
+                }
 	       } 
 	       else// 未选择超市
 	      {
@@ -400,7 +371,6 @@ public class TdTouchListController {
                 {
                        goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrue(
                                     categoryId, pageRequest, paramValueList);
-
                 }
                 else
                 {
@@ -707,18 +677,18 @@ public class TdTouchListController {
 	        if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
 	        {
 		          Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-		          if (0 == orderId.intValue())
-		          {
-		                  goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
-		                		  distributorId, categoryId, brandId, pageRequest, paramValueList);
-		      
-		          }
-		          else if (1 == orderId.intValue())
-		          {
-		                  goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
-		                         distributorId, categoryId, brandId, pageRequest, paramValueList);
-		      
-		          }
+		         
+		        if (0 == brandIndex.intValue())
+	             {
+	                    goodsPage = tdDistributorGoodsService.findByDisIdAndCategoryIdAndParamsLikeAndIsOnSaleTrue(
+	                                 distributorId,categoryId, pageRequest, paramValueList);
+	             }
+	             else
+	             {
+	                    goodsPage = tdDistributorGoodsService.findByDisIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
+	                                distributorId, categoryId, brandId, pageRequest, paramValueList);
+	
+	             }
 	       } 
 	       else// 未选择超市
 	      {

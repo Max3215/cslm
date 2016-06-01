@@ -27,7 +27,7 @@ function loadMore()
 {
     $.ajax({
         type:"post",
-        url:"/touch/list/more/${categoryId!'1'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId?c!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-" + pageIdx,
+        url:"/touch/list/more/${categoryId?c!'1'}-${brandIndex?c!'0'}<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-${orderId?c!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-" + pageIdx,
         success:function(data){
             if ("" == data)
             {
@@ -57,9 +57,9 @@ function loadMore()
   
   <!-- 商品筛选栏 -->
   <section class="pro_screen">
-    <td <#if orderId==0><#if sort_id_list[0]==0>class="act"<#else>class="act"</#if></#if>><a  href="${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-0<#if sort_id_list??><#list sort_id_list as sortId><#if sortId_index==0><#if sortId==0>-1<#else>-0</#if><#else>-${sortId!'0'}</#if></#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><span>综合</span></a></td>
-    <td <#if orderId==1><#if sort_id_list[1]==0>class="act"<#else>class="act"</#if></#if>><a  href="${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-1<#if sort_id_list??><#list sort_id_list as sortId><#if sortId_index==1><#if sortId==0>-1<#else>-0</#if><#else>-${sortId!'0'}</#if></#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><span>价格</span></a></td>
-    <td <#if orderId==2><#if sort_id_list[2]==0>class="act"<#else>class="act"</#if></#if>><a  href="${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex!'0'}</#list>-2<#if sort_id_list??><#list sort_id_list as sortId><#if sortId_index==2><#if sortId==0>-1<#else>-0</#if><#else>-${sortId!'0'}</#if></#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><span>销量</span></a></td>
+    <td <#if orderId==0><#if sort_id_list[0]==0>class="act"<#else>class="act"</#if></#if>><a  href="${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-0<#if sort_id_list??><#list sort_id_list as sortId><#if sortId_index==0><#if sortId==0>-1<#else>-0</#if><#else>-${sortId!'0'}</#if></#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><span>综合</span></a></td>
+    <td <#if orderId==1><#if sort_id_list[1]==0>class="act"<#else>class="act"</#if></#if>><a  href="${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-1<#if sort_id_list??><#list sort_id_list as sortId><#if sortId_index==1><#if sortId==0>-1<#else>-0</#if><#else>-${sortId!'0'}</#if></#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><span>价格</span></a></td>
+    <td <#if orderId==2><#if sort_id_list[2]==0>class="act"<#else>class="act"</#if></#if>><a  href="${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-2<#if sort_id_list??><#list sort_id_list as sortId><#if sortId_index==2><#if sortId==0>-1<#else>-0</#if><#else>-${sortId!'0'}</#if></#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>"><span>销量</span></a></td>
     <a href="javascript:void(0)" onclick="$('.screen_box').fadeIn(300);">筛选</a>
   </section>
   <div style="height:0.6rem;"></div>
@@ -73,9 +73,9 @@ function loadMore()
       <menu>
         <p>品牌：</p>
         <#if brand_list??>
-          <a href="${categoryId?c!'0'}-0<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if brandIndex==0>class="sel"</#if>>全部</a>
+          <a href="${categoryId?c!'0'}-0<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if brandIndex==0>class="sel"</#if>>全部</a>
           <#list brand_list as brand>
-                <a href="${categoryId?c!'0'}-${brand_index+1}<#list param_index_list as pindex>-${pindex!'0'}</#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if brandIndex==brand_index+1>class="act"</#if>>${brand.title?trim!''}</a>
+                <a href="${categoryId?c!'0'}-${(brand_index+1)?c}<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if brandIndex==brand_index+1>class="act"</#if>>${brand.title?trim!''}</a>
           </#list>
       </#if>
       </menu>
@@ -86,7 +86,7 @@ function loadMore()
                 <p>${param.title!""}：</p>
                     <#list param.valueList?split(",") as value>
                         <#if value!="">
-                            <a href="${categoryId?c!'0'}-${brandIndex!'0'}<#list param_index_list as pindex><#if param_index==pindex_index>-${value_index+1}<#else>-${pindex!'0'}</#if></#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if param_index_list[param_index]==value_index+1>class="act"</#if>>${value?trim!""}</a>
+                            <a href="${categoryId?c!'0'}-${brandIndex?c!'0'}<#list param_index_list as pindex><#if param_index==pindex_index>-${(value_index+1)?c}<#else>-${pindex?c!'0'}</#if></#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if param_index_list[param_index]==value_index+1>class="act"</#if>>${value?trim!""}</a>
                         </#if>
                     </#list>
                  </#if>

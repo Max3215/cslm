@@ -1060,7 +1060,12 @@ public class TdDistributorController extends AbstractPaytypeController{
 			res.put("msg", "请重新登录!");
 			return res;
 		}
-		
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		if(null == distributor)
+		{
+			res.put("msg", "参数错误!");
+			return res;
+		}
 		if(null == goodsId)
 		{
 			res.put("msg", "参数错误!");
@@ -1083,6 +1088,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		{
 			distributorGoods.setGoodsPrice(goodsPrice);
 		}
+		distributorGoods.setDisId(distributor.getId());
 		distributorGoods.setLeftNumber(leftNumber);
 		distributorGoods.setSubGoodsTitle(subGoodsTitle);
 		distributorGoods.setIsOnSale(true);
@@ -2085,77 +2091,6 @@ public class TdDistributorController extends AbstractPaytypeController{
             //确认付款
             else if(type.equalsIgnoreCase("orderPay"))
             {
-//            	TdUser tdUser = tdUserService.findByUsername(order.getUsername());
-//            	TdDistributor distributor = tdDistributorService.findOne(order.getShopId());
-//            	TdProvider provider = tdProviderService.findOne(order.getProviderId());
-            	
-//            	List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
-            	
-//            	 Long totalPoints = 0L;
-//                 Double totalCash = 0.0;
-//                 Double platformService = 0.0; // 平台服务费
-//                 Double trainService = 0.0;	// 分销返利
-                
-                 // 返利总额
-//                 if (null != tdOrderGoodsList) {
-//                     for (TdOrderGoods tog : tdOrderGoodsList) {
-//                         if (0 == tog.getGoodsSaleType()) // 正常销售
-//                         {
-//                        	 TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributor.getId(), tog.getGoodsId(), true);
-//                        	 TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
-//
-////                             if (null != disGoods && null != disGoods.getReturnPoints()) {
-////                                 totalPoints += disGoods.getReturnPoints(); // 赠送积分
-//
-////                                 if (null != tdGoods.getShopReturnRation()) {
-////                                     totalCash += tdGoods.getCostPrice()
-////                                             * tdGoods.getShopReturnRation();
-////                                 }
-////                             }
-////                             if (null != disGoods && null != tdGoods.getPlatformServiceReturnRation()) {
-////                            	 platformService += tog.getPrice() * tdGoods.getPlatformServiceReturnRation();
-////         					}
-//                             if(null != order.getProviderId()){
-//                            	 TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(order.getProviderId(), tog.getGoodsId());
-//                            	 if (null != providerGoods && null != providerGoods.getShopReturnRation()) {
-//                            		 trainService += tog.getPrice() * providerGoods.getShopReturnRation(); 
-//                            	 }
-//                             }
-//                         }
-//                     }
-                  // 用户返利
-//                     if (null != tdUser) {
-//                         TdUserPoint userPoint = new TdUserPoint();
-//
-//                         userPoint.setDetail("购买商品赠送积分");
-//                         userPoint.setOrderNumber(order.getOrderNumber());
-//                         userPoint.setPoint(totalPoints);
-//                         userPoint.setPointTime(new Date());
-//                         userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
-//                         userPoint.setUsername(tdUser.getUsername());
-//
-//                         userPoint = tdUserPointService.save(userPoint);
-//
-//                         tdUser.setTotalPoints(userPoint.getTotalPoint());
-//
-//                         tdUserService.save(tdUser);
-//                     }
-//                     order.setRebate(order.getTotalGoodsPrice()-platformService);// 设置订单超市收益
-//                     order.setPlatformService(platformService);// 设置订单平台服务费
-//                     order.setTrainService(trainService);// 设置订单培训服务费
-//                     order = tdOrderService.save(order);
-                     //超市入账
-//	                   if(null != distributor)
-//	                   {
-//	                	   distributor.setVirtualMoney(distributor.getVirtualMoney()+trainService);
-//	                       tdDistributorService.save(distributor);
-//	                   }
-//	                   // 批发商入帐
-//	                   if(null != provider){
-//	                	   provider.setVirtualMoney(provider.getVirtualMoney()+order.getTotalGoodsPrice()-platformService-trainService);
-//	                	   tdProviderService.save(provider);
-//	                   }
-//                 }
             	 addVir(order);
                  order.setStatusId(3L);
                  order.setPayTime(new Date());
@@ -2263,8 +2198,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 							distributorGoods.setIsOnSale(false);
 							distributorGoods.setLeftNumber(tdOrderGoods.getQuantity());
 							distributorGoods.setUnit(goods.getSaleType());
+							distributorGoods.setDisId(distributor.getId());
 						}else{
-							
+							distributorGoods.setDisId(distributor.getId());
 							distributorGoods.setLeftNumber(distributorGoods.getLeftNumber()+tdOrderGoods.getQuantity());
 						}
 						distributor.getGoodsList().add(distributorGoods);
@@ -2551,8 +2487,10 @@ public class TdDistributorController extends AbstractPaytypeController{
 			}else{
 				distributorGoods.setUnit(goods.getPromotion());
 			}
+			distributorGoods.setDisId(distributor.getId());
 			distributor.getGoodsList().add(distributorGoods);
 		}else{
+			disGoods.setDisId(distributor.getId());
 			disGoods.setIsAudit(true);
 			disGoods.setOnSaleTime(new Date());
 			disGoods.setGoodsTitle(goodsTitle);
@@ -4537,6 +4475,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setOnSaleTime(new Date());
 			distributorGoods.setLeftNumber(pGoods.getLeftNumber());
+			distributorGoods.setDisId(distributor.getId());
 			
 			distributor.getGoodsList().add(distributorGoods);
     	}else{
@@ -4549,6 +4488,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setIsOnSale(true);
 			distributorGoods.setIsAudit(true);
 			distributorGoods.setOnSaleTime(new Date());
+			distributorGoods.setDisId(distributor.getId());
     	}
     	tdDistributorService.save(distributor);
 	}
