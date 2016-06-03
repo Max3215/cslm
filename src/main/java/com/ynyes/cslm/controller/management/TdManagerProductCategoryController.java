@@ -44,7 +44,7 @@ public class TdManagerProductCategoryController {
 
     @RequestMapping(value = "/list")
     public String categoryList(String __EVENTTARGET, String __EVENTARGUMENT,
-            String __VIEWSTATE, Long[] listId, Integer[] listChkId,Long id,
+            String __VIEWSTATE, Long[] listId, Integer[] listChkId,Long id,String keywords,
             Long[] listSortId, ModelMap map, HttpServletRequest req) {
         String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
@@ -65,13 +65,19 @@ public class TdManagerProductCategoryController {
             }
         }
 
-        map.addAttribute("category_list", tdProductCategoryService.findAll());
+//        map.addAttribute("category_list", tdProductCategoryService.findAll());
+        if (null == keywords || keywords.isEmpty()) {
+        	map.addAttribute("category_list", tdProductCategoryService.findAll());
+		}else {
+			map.addAttribute("category_list", tdProductCategoryService.searchAll(keywords));
+		}
 
         // 参数注回
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         map.addAttribute("id", id);
+        map.addAttribute("keywords", keywords);
         
         return "/site_mag/product_category_list";
     }
@@ -96,7 +102,8 @@ public class TdManagerProductCategoryController {
         map.addAttribute("tag_list",tdTagService.findByTypeId(1L));
 
         // 参数类型表
-        List<TdParameterCategory> parameList = tdParameterCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+//        List<TdParameterCategory> parameList = tdParameterCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        List<TdParameterCategory> parameList = tdParameterCategoryService.findAll();
         
         map.addAttribute("param_category_list",
                 parameList);

@@ -158,6 +158,77 @@ public class TdParameterCategoryService {
         return resList;
     }
     
+    /**
+     * 查找参数分类
+     * 查找第二级分类，如果结果不为空则去除重复的第一类别相同的想，如果为空则收索第第一级
+     * 
+     */
+    public List<TdParameterCategory> searchAll(String keywords)
+    {
+    	List<TdParameterCategory> paramList = new ArrayList<>();
+    	
+    	// 收索第二级别
+    	List<TdParameterCategory> secondList = repository.findByTitleContainingAndLayerCount(keywords, 2L);
+    	
+    	if(null != secondList && secondList.size() >0)
+    	{
+    		// 获取第二级别
+    		for (TdParameterCategory tdParameterCategory : secondList) {
+				String str = tdParameterCategory.getParentTree().split(",")[0];
+				TdParameterCategory category = repository.findByparentTree(str);
+				if(null != category)
+				{
+					if(!paramList.contains(category)){
+						paramList.add(category);
+					}
+				}
+			}
+    	}
+    	
+    	// 收索第一级
+    	List<TdParameterCategory> oneList = repository.findByTitleContainingAndLayerCount(keywords, 1L);
+    	if(null != oneList && oneList.size() >0)
+    	{
+    		// 获取第二级别
+    		for (TdParameterCategory tdParameterCategory : oneList) {
+				String str = tdParameterCategory.getParentTree().split(",")[0];
+				TdParameterCategory category = repository.findByparentTree(str);
+				if(null != category)
+				{
+					if(!paramList.contains(category)){
+						paramList.add(category);
+					}
+				}
+			}
+    	}
+    	
+    	List<TdParameterCategory> resList = new ArrayList<>();
+    	
+    	for (TdParameterCategory top : paramList) {
+    		resList.add(top);
+            
+            List<TdParameterCategory> childList = repository.findByParentIdOrderBySortIdAsc(top.getId());
+            
+            if (null != childList && childList.size() > 0)
+            {
+                for (TdParameterCategory child : childList)
+                {
+                    resList.add(child);
+                    
+                    List<TdParameterCategory> grandChildList = repository.findByParentIdOrderBySortIdAsc(child.getId());
+                    
+                    if (null != grandChildList && grandChildList.size() > 0)
+                    {
+                        resList.addAll(grandChildList);
+                    }
+                }
+            }
+		}
+    	
+    	
+    	return resList;
+    }
+    
     public List<TdParameterCategory> findByParentIdIsNullOrderBySortIdAsc()
     {
     	return  repository.findByParentIdIsNullOrderBySortIdAsc();

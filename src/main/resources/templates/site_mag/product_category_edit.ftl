@@ -155,6 +155,7 @@ function categoryChange(e)
   <dl>
     <dt>关联参数</dt>
     <dd>
+       <#--
        <#if cat??>
           <div style="float:left;">
             <select id="categoryParamType" name="paramCategoryId" onchange="findCh();" datatype="n0-100">
@@ -190,6 +191,17 @@ function categoryChange(e)
          <div style="folat:left;" id="paramDiv" style="display:none">
          </div>
       </#if>
+      -->
+      <div class="rule-single-select">
+        <select id="categoryParamType" name="paramCategoryId" datatype="n0-100">
+            <option value="0">无关联参数</option>
+            <#if param_category_list??>
+              <#list param_category_list as c>
+                    <option value="${c.id?c!""}" <#if cat?? && cat.paramCategoryId?? && cat.paramCategoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                </#list>
+            </#if>
+        </select>
+      </div>
     </dd>
   </dl>
 </div>

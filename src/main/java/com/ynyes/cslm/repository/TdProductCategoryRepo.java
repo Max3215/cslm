@@ -23,4 +23,7 @@ public interface TdProductCategoryRepo extends
     TdProductCategory findByTitle(String title);
     TdProductCategory findTopByTitleContaining(String title);
     TdProductCategory findByTitleAndIdNot(String title, Long id);
+    
+    TdProductCategory findByparentTree(String parentTree);
+    List<TdProductCategory> findByTitleContainingAndLayerCount(String keywords, Long layerCount);
 }

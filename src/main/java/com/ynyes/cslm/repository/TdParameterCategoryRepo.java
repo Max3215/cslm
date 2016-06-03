@@ -26,4 +26,8 @@ public interface TdParameterCategoryRepo extends
     
     TdParameterCategory findByTitleAndParentIdIsNullAndIdNot(String title, Long id);
     TdParameterCategory findByTitleAndParentIdAndIdNot(String title, Long parentId, Long id);
+    
+    List<TdParameterCategory> findByTitleContainingAndLayerCount(String keywords,Long layercount);
+    TdParameterCategory findByparentTree(String parentTree);
+    
 }

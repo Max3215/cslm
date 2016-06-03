@@ -107,6 +107,90 @@ public class TdProductCategoryService {
     }
     
     /**
+     * 查找商品分类
+     * 从第三级开始搜索、如果结果不为空则去除重复的第一级别类别相同的项，如果为空则搜索第二级别，
+     */
+    public List<TdProductCategory> searchAll(String keywords){
+    	
+    	//查询结果的第一级别类别
+    	List<TdProductCategory> topList = new ArrayList<>();
+    	
+    	//搜索第三级别
+    	List<TdProductCategory> thirdList = repository.findByTitleContainingAndLayerCount(keywords, 3L);
+    	
+    	if (null != thirdList && !thirdList.isEmpty()) {
+			//获取第一级别
+    		for(TdProductCategory tdProductCategory : thirdList){
+    			String temp = tdProductCategory.getParentTree().split(",")[0];
+    			TdProductCategory tdProductCategorytemp = repository.findByparentTree(temp);
+    			if (null != tdProductCategorytemp) {
+    				if (!topList.contains(tdProductCategorytemp)) {
+    					topList.add(tdProductCategorytemp);
+					}
+				}
+    		}
+		}
+    	
+    	//搜索第二级别
+    	List<TdProductCategory> secondList = repository.findByTitleContainingAndLayerCount(keywords, 2L);
+    	
+    	if (null != secondList && !secondList.isEmpty()) {
+			//获取第一级别
+    		for(TdProductCategory tdProductCategory : secondList){
+    			String temp = tdProductCategory.getParentTree().split(",")[0];
+    			TdProductCategory tdProductCategorytemp = repository.findByparentTree(temp);
+    			if (null != tdProductCategorytemp) {
+    				if (!topList.contains(tdProductCategorytemp)) {
+    					topList.add(tdProductCategorytemp);
+					}
+				}
+    		}
+		}
+    	
+    	//搜索第一级别
+    	List<TdProductCategory> oneList = repository.findByTitleContainingAndLayerCount(keywords, 1L);
+    	
+    	if (null != oneList && !oneList.isEmpty()) {
+			//获取第一级别
+    		for(TdProductCategory tdProductCategory : oneList){
+    			String temp = tdProductCategory.getParentTree();
+    			TdProductCategory tdProductCategorytemp = repository.findByparentTree(temp);
+    			if (null != tdProductCategorytemp) {
+    				if (!topList.contains(tdProductCategorytemp)) {
+    					topList.add(tdProductCategorytemp);
+					}
+				}
+    		}
+		}
+    	
+    	List<TdProductCategory> resList = new ArrayList<TdProductCategory>();
+    	
+    	for (TdProductCategory top : topList)
+        {
+            resList.add(top);
+            
+            List<TdProductCategory> childList = repository.findByParentIdOrderBySortIdAsc(top.getId());
+            
+            if (null != childList && childList.size() > 0)
+            {
+                for (TdProductCategory child : childList)
+                {
+                    resList.add(child);
+                    
+                    List<TdProductCategory> grandChildList = repository.findByParentIdOrderBySortIdAsc(child.getId());
+                    
+                    if (null != grandChildList && grandChildList.size() > 0)
+                    {
+                        resList.addAll(grandChildList);
+                    }
+                }
+            }
+        }
+        
+        return resList;
+    }
+    
+    /**
      * 删除
      * 
      * @param id 菜单项ID

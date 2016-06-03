@@ -462,7 +462,7 @@ function del_goods_comb(obj) {
         <dl>
             <dt>单位</dt>
             <dd>
-                <input name="promotion" type="text" value="<#if goods?? && goods.saleType??>${goods.saleType!''}</#if>" class="input normal" >
+                <input name="promotion" type="text" value="<#if goods?? && goods.promotion??>${goods.promotion!''}</#if>" class="input normal" >
                 <span class="Validform_checktip">如千克/瓶/件，选填</span>
             </dd>
         </dl>

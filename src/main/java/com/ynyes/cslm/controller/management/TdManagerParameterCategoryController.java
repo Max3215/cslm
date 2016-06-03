@@ -99,6 +99,7 @@ public class TdManagerParameterCategoryController {
                           Long[] listId,Long id,
                           Integer[] listChkId,
                           Long[] listSortId,
+                          String keywords,
                           ModelMap map,
                           HttpServletRequest req){
         String username = (String) req.getSession().getAttribute("manager");
@@ -125,8 +126,13 @@ public class TdManagerParameterCategoryController {
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         map.addAttribute("id", id);
+        map.addAttribute("keywords", keywords);
         
-        map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+        if(null == keywords || keywords.isEmpty()){
+        	map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+        }else{
+        	map.addAttribute("parameter_category_list", tdParameterCategoryService.searchAll(keywords));
+        }
         
         return "/site_mag/parameter_category_list";
     }

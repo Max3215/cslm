@@ -25,7 +25,7 @@
                 </#list>
              </#if>
             <div class="b_contact">
-                <a  class="qq" href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>"><img src="/client/images/qq01.png"></a>
+                <a  class="qq" target="_blank"  href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>"><img src="/client/images/qq01.png"></a>
                 <span><i><img src="/client/images/phone01.png"></i><#if site.telephone??>${site.telephone}</#if></span>
             </div>
             <div class="clear"></div>
