@@ -2179,7 +2179,7 @@ public class TdGoodsService {
             Long pcId = cat.getParamCategoryId();
             TdParameterCategory category = tdParameterCategoryService.findOne(pcId);
             
-            if (null != pcId) {
+            if (null != pcId && null != category) {
             	if(null != category.getParentId() && cat.getLayerCount()==3)
             	{
             		paramCategoryId = category.getParentId();

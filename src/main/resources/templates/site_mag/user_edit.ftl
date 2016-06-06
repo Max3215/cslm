@@ -275,7 +275,7 @@ $(function () {
         <label>保密</label>
         <input type="radio" name="sex" value="男" <#if user?? && user.sex?? && user.sex=="男">checked="checked"</#if>>
         <label>男</label>
-        <input type="radio" name="rblSex" value="女" <#if user?? && user.sex?? && user.sex=="女">checked="checked"</#if>>
+        <input type="radio" name="sex" value="女" <#if user?? && user.sex?? && user.sex=="女">checked="checked"</#if>>
         <label>女</label>
         </span>
       </div>

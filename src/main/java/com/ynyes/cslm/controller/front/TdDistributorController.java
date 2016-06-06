@@ -3105,6 +3105,7 @@ public class TdDistributorController extends AbstractPaytypeController{
             	 res.put("msg", "账户余额不足，请先充值！");
             	 return res;
              }
+             tdOrder.setPayTypeTitle("余额支付");
              
              // 保存商品信息
              tdOrderGoodsService.save(orderGoodsList);
