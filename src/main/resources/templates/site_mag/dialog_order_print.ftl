@@ -51,6 +51,7 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="5" style="font-size: 12px; font-family: '微软雅黑'; background: #fff;">
                         <tbody><tr>
                             <td align="left" style="background: #ccc;">商品名称</td>
+                            <td width="10%" align="left" style="background: #ccc;">商品编码</td>
                             <td width="12%" align="left" style="background: #ccc;">成交价</td>
                             <td width="10%" align="left" style="background: #ccc;">数量</td>
                             <td width="12%" align="left" style="background: #ccc;">金额合计</td>
@@ -61,6 +62,7 @@
                                 <td>
                                     ${og.goodsTitle!''} ${og.goodsColor!''} ${og.goodsCapacity!''} ${og.goodsVersion!''}
                                 </td>
+                                <td>${og.goodsCode!''}</td>
                                 <td>${og.price?string("0.00")}</td>
                                 <td>${og.quantity!'0'}</td>
                                 <td>${(og.price*og.quantity)?string("0.00")}</td>

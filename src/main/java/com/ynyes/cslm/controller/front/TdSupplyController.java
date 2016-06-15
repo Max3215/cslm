@@ -716,20 +716,20 @@ public class TdSupplyController extends AbstractPaytypeController{
 		proGoods.setSubGoodsTitle(subTitle);
 		if(null != outFactoryPrice)
 		{
-			if(proGoods.getOutFactoryPrice() != outFactoryPrice) // 修改价格，同步超市分销商品
-			{
-				List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),proGoods.getGoodsId());
-				if(null != list && list.size() >0){
-					for (TdDistributorGoods tdDistributorGoods : list) {
-						if(null != tdDistributorGoods)
-						{
-							tdDistributorGoods.setGoodsPrice(outFactoryPrice);
-							tdDistributorGoodsService.save(tdDistributorGoods);
-						}
-					}
+			proGoods.setOutFactoryPrice(outFactoryPrice);
+		}
+		
+		List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),proGoods.getGoodsId());
+		if(null != list && list.size() >0){
+			for (TdDistributorGoods tdDistributorGoods : list) {
+				if(null != tdDistributorGoods)
+				{
+					tdDistributorGoods.setGoodsPrice(outFactoryPrice);
+					tdDistributorGoods.setSubGoodsTitle(subTitle);
+					tdDistributorGoods.setLeftNumber(leftNumber);
+					tdDistributorGoodsService.save(tdDistributorGoods);
 				}
 			}
-			proGoods.setOutFactoryPrice(outFactoryPrice);
 		}
 		tdProviderGoodsService.save(proGoods);
 		
@@ -1247,103 +1247,6 @@ public class TdSupplyController extends AbstractPaytypeController{
 			{
 				if(order.getStatusId().equals(2L))
 				{
-//					TdUser tdUser = tdUserService.findByUsername(order.getUsername());
-//	            	TdDistributor distributor = tdDistributorService.findOne(order.getShopId());
-//	            	TdProvider provider = tdProviderService.findOne(order.getProviderId());
-//	            	
-//	            	List<TdOrderGoods> tdOrderGoodsList = order.getOrderGoodsList();
-//	            	
-//	            	 Long totalPoints = 0L;
-//	                 Double totalCash = 0.0;
-//	                 Double platformService = 0.0; // 平台服务费
-//	                 Double trainService = 0.0;	// 分销返利
-//	                
-//	                 // 返利总额
-//	                 if (null != tdOrderGoodsList) {
-//	                     for (TdOrderGoods tog : tdOrderGoodsList) {
-//	                         if (0 == tog.getGoodsSaleType()) // 正常销售
-//	                         {
-//	                             TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(order.getProviderId(), tog.getGoodsId());
-//	                        	 TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsIdAndIsOnSale(distributor.getId(), tog.getGoodsId(), true);
-//	                        	 TdGoods tdGoods = tdGoodsService.findOne(tog.getGoodsId());
-//
-//	                             if (null != disGoods && null != disGoods.getReturnPoints()) {
-//	                                 totalPoints += disGoods.getReturnPoints(); // 赠送积分
-//
-////	                                 if (null != tdGoods.getShopReturnRation()) {
-////	                                     totalCash += tdGoods.getCostPrice()
-////	                                             * tdGoods.getShopReturnRation();
-////	                                 }
-//	                             }
-//	                             if (null != disGoods && null != tdGoods.getPlatformServiceReturnRation()) {
-//	                             	platformService += tog.getPrice() * tdGoods.getPlatformServiceReturnRation();
-//	         					}
-//	                             if (null != providerGoods && null != providerGoods.getShopReturnRation()) {
-//	                             	trainService += tog.getPrice() * providerGoods.getShopReturnRation(); 
-//	         					}
-//	                         }
-//	                     }
-//	                  // 用户返利
-//	                     if (null != tdUser) {
-//	                         TdUserPoint userPoint = new TdUserPoint();
-//
-//	                         userPoint.setDetail("购买商品赠送积分");
-//	                         userPoint.setOrderNumber(order.getOrderNumber());
-//	                         userPoint.setPoint(totalPoints);
-//	                         userPoint.setPointTime(new Date());
-//	                         userPoint.setTotalPoint(tdUser.getTotalPoints() + totalPoints);
-//	                         userPoint.setUsername(tdUser.getUsername());
-//
-//	                         userPoint = tdUserPointService.save(userPoint);
-//
-//	                         tdUser.setTotalPoints(userPoint.getTotalPoint());
-//
-//	                         tdUserService.save(tdUser);
-//	                     }
-//	                     order.setRebate(order.getTotalGoodsPrice()-platformService);// 设置订单超市收益
-//	                     order.setPlatformService(platformService);// 设置订单平台服务费
-//	                     order.setTrainService(trainService);// 设置订单培训服务费
-//	                     order = tdOrderService.save(order);
-//	                  //超市入账
-//	                   if(null != distributor)
-//	                   {
-//	                	   distributor.setVirtualMoney(distributor.getVirtualMoney()+trainService);
-//	                       tdDistributorService.save(distributor);
-//	                   }
-//	                   // 保存交易记录
-//	                   TdPayRecord record = new TdPayRecord();
-//	                   record.setCont("代售提成");
-//	                   record.setCreateTime(new Date());
-//	                   record.setDistributorId(distributor.getId());
-//	                   record.setDistributorTitle(distributor.getTitle());
-////	                   record.setProviderId(provider.getId());
-//	                   record.setProviderTitle(provider.getTitle());
-//	                   record.setOrderId(order.getId());
-//	                   record.setOrderNumber(order.getOrderNumber());
-//	                   record.setStatusCode(1);
-//	                   record.setProvice(order.getTotalGoodsPrice());
-//	                   tdPayRecordService.save(record);
-//	                   
-//	                   // 批发商入帐
-//	                   if(null != provider){
-//	                	   provider.setVirtualMoney(provider.getVirtualMoney()+order.getTotalGoodsPrice()-platformService-trainService);
-//	                	   tdProviderService.save(provider);
-//	                   }
-//	                   // 保存交易记录
-//	                   record = new TdPayRecord();
-//	                   record.setCont("分销收款");
-//	                   record.setCreateTime(new Date());
-////	                   record.setDistributorId(distributor.getId());
-//	                   record.setDistributorTitle(distributor.getTitle());
-//	                   record.setProviderId(provider.getId());
-//	                   record.setProviderTitle(provider.getTitle());
-//	                   record.setOrderId(order.getId());
-//	                   record.setOrderNumber(order.getOrderNumber());
-//	                   record.setStatusCode(1);
-//	                   record.setProvice(order.getTotalGoodsPrice());
-//	                   tdPayRecordService.save(record);
-//	                  
-//	                 }
 					addVir(order);
 					order.setStatusId(3L);
 					order.setFinishTime(new Date());

@@ -74,6 +74,7 @@ function addNum(){
    </#if>
     $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
     $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
+    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + $("#quantity").val());
 }
 
 <#-- 减少商品数量的方法 -->
@@ -86,6 +87,7 @@ function minusNum(){
     }
     $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
     $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
+    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + $("#quantity").val());
 }
 
 <!--  加入购物车   -->
@@ -122,7 +124,8 @@ function byNow(dId){
     window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
 }
 function showmsg(){
-    alert("库存不足！")
+    alert("库存不足！");
+    return;
 }
 
 function proGoods(did)
@@ -279,15 +282,19 @@ function proGoods(did)
 				<div class="buy_btn">
 					<div class="clear"></div>
 					<#if dis_goods??>
-					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
-					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car" id="proGoods">立即预购</a>
-					   <#else>
-        					<a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" class="buy">立即购买</a>
-					   </#if>
+				          <#if dis_goods.leftNumber?? && dis_goods.leftNumber gt 0>
+        					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
+        					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car" id="proGoods">立即预购</a>
+        					   <#else>
+            					   <a href="/order/byNow/${dis_goods.id?c}" id="buyNow" target="_blank" title="立即购买" class="buy">立即购买</a>
+        					   </#if>
+    					   <#else>
+    					       <a href="javascript:; " onclick="showmsg();"  title="立即购买" class="buy">立即购买</a>
+    					   </#if>
 					       <#if dis_goods.leftNumber?? && dis_goods.leftNumber gt 0>
         					<a href="/cart/init?id=${dis_goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
         					<#else>
-        					<a href="javascript:showmsg();" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
+        					<a href="javascript:; " onclick="showmsg();"  title="加入购物车" class="car" id="addCart">加入购物车</a>
         					</#if>
 					</#if>
 					<div class="clear"></div>

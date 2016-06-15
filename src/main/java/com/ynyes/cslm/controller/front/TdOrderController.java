@@ -442,12 +442,7 @@ public class TdOrderController extends AbstractPaytypeController {
 				orderGoods.setPrice(distributorGoods.getGoodsPrice());
 
 				// 数量
-				long quantity = 0;
-				if (distributorGoods.getIsDistribution()) {
-					quantity = 1L;
-				} else {
-					quantity = Math.min(cartGoods.getQuantity(), distributorGoods.getLeftNumber());
-				}
+				long quantity = Math.min(cartGoods.getQuantity(), distributorGoods.getLeftNumber());
 
 				orderGoods.setQuantity(quantity);
 
