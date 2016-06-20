@@ -82,7 +82,7 @@ $(document).ready(function(){
       <span>我的地址</span>
       <font>&gt;</font>
     </a>
-    <a href="/touch/user/collect/list">
+    <a href="/touch/user/collect/list/1">
       <img src="/touch/images/m_icon03.png" />
       <span>我的收藏</span>
       <font>&gt;</font>

@@ -1,3 +1,63 @@
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ZBClgucj8qbtCxOFFd003zZ"></script>
+
+<script type="text/javascript">
+var lng =0;
+var lat =0;
+  // 百度地图API功能
+  var geolocation = new BMap.Geolocation();
+  geolocation.getCurrentPosition(function(r){
+    if(this.getStatus() == BMAP_STATUS_SUCCESS){
+      lng = r.point.lng;
+      lat = r.point.lat;
+      
+      <#if !index?? >
+      distance(lng,lat);
+      </#if>
+     
+    }
+    else {
+      alert('failed'+this.getStatus());
+    }        
+  },{enableHighAccuracy: true})
+
+
+function distance(lng,lat){
+    
+    $.ajax({
+        type: "post",
+        data : {"lng":lng,"lat":lat},
+        url : "/touch/distance",
+        success:function(data){
+            $("#shopList").html(data)
+        }
+    })
+}
+
+
+function chooseDistributor(disId){
+    $.ajax({
+        url : "/touch/distributor/change",
+        async : true,
+        type : 'GET',
+        dataType : "json",
+        data : {"disId":disId},
+        success : function(data){
+            if(data.msg){
+                alter(data.msg)
+            }
+            var url = window.location.href;          
+            if(undefined==url || ""==url){
+                window.location.href="/";
+             }else{
+                 window.location.href = url; 
+             }
+        }
+    })
+}
+
+
+</script>
+
 <div class="show_list">
     <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
     <div style="height:100%;overflow:auto;">

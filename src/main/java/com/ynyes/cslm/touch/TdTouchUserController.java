@@ -33,6 +33,7 @@ import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdCouponType;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
@@ -52,6 +53,7 @@ import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdCouponService;
 import com.ynyes.cslm.service.TdCouponTypeService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
@@ -131,6 +133,9 @@ public class TdTouchUserController {
     
     @Autowired
     private TdCashService tdCashService;
+    
+    @Autowired
+    private TdDistributorService tdDistributorService;
     
 //    @Autowired
 //    private TdUserComplainService tdUserComplainService;
@@ -899,8 +904,9 @@ public class TdTouchUserController {
         return "/touch/user_order_detail";
     }
     
-    @RequestMapping(value = "/user/collect/list")
-    public String collectList(HttpServletRequest req, 
+    @RequestMapping(value = "/user/collect/list/{type}")
+    public String collectList(@PathVariable Integer type,
+    					HttpServletRequest req, 
                         Integer page,
                         String keywords, String username, Integer app,
                         ModelMap map){
@@ -919,23 +925,17 @@ public class TdTouchUserController {
             page = 0;
         }
         
+        
+        if(null == type){
+        	type = 1;
+        }
+        
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
         
         map.addAttribute("user", tdUser);
+        map.addAttribute("type", type);
         
-        Page<TdUserCollect> collectPage = null;
-        
-        if (null == keywords || keywords.isEmpty())
-        {
-            collectPage = tdUserCollectService.findByUsername(username, page, ClientConstant.pageSize);
-        }
-        else
-        {
-            collectPage = tdUserCollectService.findByUsernameAndSearch(username, keywords, page, ClientConstant.pageSize);
-        }
-        
-        map.addAttribute("collect_page", collectPage);
-        map.addAttribute("keywords", keywords);
+        map.addAttribute("collect_page", tdUserCollectService.findByUsername(username,type, page, ClientConstant.pageSize));
         
         //判断是否为app链接
         if (null == app) {
@@ -947,8 +947,86 @@ public class TdTouchUserController {
 			map.addAttribute("app", app);
 		}
         
-        return "/touch/user_collect_list";
+        if(type==1)
+        {
+        	return "/touch/user_collect_list";
+        }else{
+        	return "/touch/user_collect_shop";
+        }
     }
+    
+    @RequestMapping(value="/user/collect/select")
+    public String select(Long id,HttpServletRequest req,ModelMap map){
+    	String username = (String) req.getSession().getAttribute("username");
+
+        if (null == username) {
+            return "redirect:/touch/login";
+        }
+        
+    	if(null != id){
+    		TdUserCollect collect = tdUserCollectService.findOne(id);
+    		
+    		if(null != collect)
+    		{
+    			if(null == collect.getIsSelect() || !collect.getIsSelect())
+    			{
+    				collect.setIsSelect(true);
+    			}else{
+    				collect.setIsSelect(false);
+    			}
+    			tdUserCollectService.save(collect);
+    		}
+    	}
+    	return "redirect:/touch/user/collect/list/1";
+    }
+    
+    @RequestMapping(value="/user/collect/selectAll")
+    public String selectAll(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("username");
+    	
+    	if (null == username) {
+            return "redirect:/touch/login";
+        }
+		
+    	List<TdUserCollect> list = tdUserCollectService.findByUsername(username,1, 0, ClientConstant.pageSize).getContent();
+		
+		if(null != list && list.size() > 0)
+		{
+			for (TdUserCollect collect : list) {
+				if(null == collect.getIsSelect() || !collect.getIsSelect())
+				{
+					collect.setIsSelect(true);
+				}else{
+					collect.setIsSelect(false);
+				}
+				tdUserCollectService.save(collect);
+			}
+		}
+    	return "redirect:/touch/user/collect/list/1";
+    }
+    
+    @RequestMapping(value="/user/collect/delAll")
+    public String delAll(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("username");
+    	
+    	if (null == username) {
+            return "redirect:/touch/login";
+        }
+		
+    	List<TdUserCollect> list = tdUserCollectService.findByUsername(username,1, 0, ClientConstant.pageSize).getContent();
+		
+		if(null != list && list.size() > 0)
+		{
+			for (TdUserCollect collect : list) {
+				if(null != collect.getIsSelect() && collect.getIsSelect())
+				{
+					tdUserCollectService.delete(collect);;
+				}
+			}
+		}
+    	return "redirect:/touch/user/collect/list/1";
+    }
+    
     
     @RequestMapping(value = "/user/collect/del")
     public String collectDel(HttpServletRequest req, 
@@ -962,7 +1040,7 @@ public class TdTouchUserController {
         
         if (null != id) {
             TdUserCollect collect = tdUserCollectService
-                    .findByUsernameAndDistributorId(username, id);
+                    .findByUsernameAndDistributorId(username, id,1);
 
             // 删除收藏
             if (null != collect) {
@@ -979,7 +1057,7 @@ public class TdTouchUserController {
             }
         }
         
-        return "redirect:/touch/user/collect/list";
+        return "redirect:/touch/user/collect/list/1";
     }
     
     @RequestMapping(value = "/user/collect/add", method = RequestMethod.POST)
@@ -990,23 +1068,22 @@ public class TdTouchUserController {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
 
-        if (null == disgId) {
-            res.put("message", "参数错误");
-            return res;
-        }
-
         String username = (String) req.getSession().getAttribute("username");
 
         if (null == username) {
             res.put("message", "请先登录");
             return res;
         }
-
         res.put("code", 0);
+        
+        if (null == disgId) {
+            res.put("message", "参数错误");
+            return res;
+        }
 
         // 没有收藏
         if (null == tdUserCollectService.findByUsernameAndDistributorId(username,
-                disgId)) {
+                disgId,1)) {
             TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
 
             if (null == distributorGoods) {
@@ -1033,6 +1110,7 @@ public class TdTouchUserController {
             collect.setGoodsTitle(distributorGoods.getGoodsTitle());
             collect.setGoodsSalePrice(distributorGoods.getGoodsPrice());
             collect.setCollectTime(new Date());
+            collect.setType(1);
 
             tdUserCollectService.save(collect);
 
@@ -1044,6 +1122,75 @@ public class TdTouchUserController {
         res.put("message", "您已收藏了该商品");
 
         return res;
+    }
+    
+    @RequestMapping(value="/user/collect/shop")
+    @ResponseBody
+    public Map<String,Object> collectShop(Long disId,HttpServletRequest req)
+    {
+    	Map<String, Object> res = new HashMap<String, Object>();
+        res.put("code", 1);
+
+        String username = (String) req.getSession().getAttribute("username");
+
+        if (null == username) {
+            res.put("message", "请先登录");
+            return res;
+        }
+        
+        res.put("code", 0);
+        if (null == disId) {
+            res.put("message", "参数错误");
+            return res;
+        }
+        
+        TdUserCollect collect = tdUserCollectService.findByUsernameAndDistributorId(username, disId, 2);
+        if(null == collect){
+        	collect = new TdUserCollect();
+        	
+        	TdDistributor distributor = tdDistributorService.findOne(disId);
+
+        	if(null != distributor){
+        		
+        		collect.setUsername(username);
+        		collect.setDistributorId(disId);
+        		collect.setCollectTime(new Date());
+        		collect.setGoodsCoverImageUri(distributor.getImageUri());
+        		collect.setGoodsTitle(distributor.getTitle());
+        		collect.setType(2);
+        		
+        		tdUserCollectService.save(collect);
+        		res.put("message","收藏成功");
+        	}
+        	
+        }else{
+        	res.put("message", "您已收藏该店铺");
+        }
+
+        return res;
+    }
+    
+    @RequestMapping(value = "/user/collect/delshop")
+    public String collectDelShop(HttpServletRequest req, 
+            Long id,
+            ModelMap map){
+        String username = (String) req.getSession().getAttribute("username");
+
+        if (null == username) {
+            return "redirect:/touch/login";
+        }
+        
+        if (null != id) {
+            TdUserCollect collect = tdUserCollectService.findOne(id);
+
+            // 删除收藏
+            if (null != collect) {
+                tdUserCollectService.delete(collect);
+                
+            }
+        }
+        
+        return "redirect:/touch/user/collect/list/2";
     }
     
     @RequestMapping(value = "/user/recent/list")

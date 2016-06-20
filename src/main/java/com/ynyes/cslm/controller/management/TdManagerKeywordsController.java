@@ -123,11 +123,11 @@ public class TdManagerKeywordsController {
         
         if (null == tdKeywords.getId())
         {
-            tdManagerLogService.addLog("add", "用户修改关键词", req);
+            tdManagerLogService.addLog("add", "用户新增关键词"+tdKeywords.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "用户修改关键词", req);
+            tdManagerLogService.addLog("edit", "用户修改关键词"+tdKeywords.getTitle(), req);
         }
         
         tdKeywordsService.save(tdKeywords);

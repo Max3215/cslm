@@ -23,12 +23,12 @@
         <div class="mymember_menu_part">
             <a class="mymember_menu_tit" ><img src="/client/images/mymember/menu03.png" />订单中心</a>
             <div>
-                <a href="/distributor/outOrder/list/0">我的销售单</a>
+                <a href="/distributor/outOrder/list">我的销售单</a>
                 <#if distributor?? && distributor.isStock?? && distributor.isStock==true>
-                    <a href="/distributor/inOrder/list/0">我的进货单</a>
+                    <a href="/distributor/inOrder/list">我的进货单</a>
                 </#if>
                 <#if distributor?? && distributor.isSupply?? && distributor.isSupply==true>
-                    <a href="/distributor/outOrder/list/0?typeId=2">分销订单</a>
+                    <a href="/distributor/outOrder/list?typeId=2">分销订单</a>
                 </#if>
                 <a href="/distributor/return/list">处理退货</a>
                 <#if distributor?? && distributor.isStock?? && distributor.isStock==true>

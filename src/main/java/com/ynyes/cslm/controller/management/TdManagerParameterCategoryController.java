@@ -180,20 +180,16 @@ public class TdManagerParameterCategoryController {
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         
-        String type = null;
-        
         if (null == tdParameterCategory.getId())
         {
-            type = "add";
+        	tdManagerLogService.addLog("add", "用户新增参数类型"+tdParameterCategory.getTitle(), req);
         }
         else
         {
-            type = "edit";
+        	tdManagerLogService.addLog("edit", "用户修改参数类型"+tdParameterCategory.getTitle(), req);
         }
         
         tdParameterCategory = tdParameterCategoryService.save(tdParameterCategory);
-        
-        tdManagerLogService.addLog(type, "用户修改参数类型", req);
         
         return "redirect:/Verwalter/parameter/category/list?id="+tdParameterCategory.getId();
     }

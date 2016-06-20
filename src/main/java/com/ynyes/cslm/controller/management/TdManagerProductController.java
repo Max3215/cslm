@@ -235,11 +235,11 @@ public class TdManagerProductController {
         
         if (null == tdProduct.getId())
         {
-            tdManagerLogService.addLog("add", "用户修改产品", req);
+            tdManagerLogService.addLog("add", "用户新增产品"+tdProduct.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "用户修改产品", req);
+            tdManagerLogService.addLog("edit", "用户修改产品"+tdProduct.getTitle(), req);
         }
         
         tdProductService.save(tdProduct);

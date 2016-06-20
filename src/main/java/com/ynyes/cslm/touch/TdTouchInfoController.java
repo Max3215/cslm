@@ -88,10 +88,10 @@ public class TdTouchInfoController {
 	    
 	    if(null != req.getSession().getAttribute("DISTRIBUTOR_ID")){
 	    	Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-	    	System.err.println(distributorId);
 	    	map.addAttribute("latest_info_page", tdArticleService.findByDistributorIdAndMenuIdAndIsEnableOrderByIdDesc(distributorId, mid, page, ClientConstant.pageSize));
 	    }else{
-	    	map.addAttribute("latest_info_page", tdArticleService.findByMenuIdAndIsEnableOrderByIdDesc(mid, page, ClientConstant.pageSize));
+	    	map.addAttribute("latest_info_page", tdArticleService.findByDistributorIdAndMenuIdAndIsEnableOrderByIdDesc(null, mid, page, ClientConstant.pageSize));
+//	    	map.addAttribute("latest_info_page", tdArticleService.findByMenuIdAndIsEnableOrderByIdDesc(mid, page, ClientConstant.pageSize));
 	    }
 	    
 	  //判断是否为app链接

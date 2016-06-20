@@ -172,7 +172,7 @@ a,button,input{
 
 
 /*首页*/
-.com_top{width: 100%;height: 0.88rem;background: #39bee9;position: fixed;left:0;top:0;z-index: 100;}
+.com_top{width: 100%;height: 0.88rem;background: #39bee9;position: fixed;left:0;top:0;z-index:101;}
 .com_top a{z-index: 2;}
 .com_top .home{display: block;width: 0.52rem;height: 0.46rem;background: url(../images/top01.png) no-repeat;background-size:0.52rem 0.46rem;position: absolute;left:4%;top:0.2rem;}
 .com_top .set_up{display: block;width: 0.54rem;height: 0.5rem;background: url(../images/top03.png) no-repeat;background-size:0.54rem 0.5rem;position: absolute;left:4%;top:0.2rem;}
@@ -180,7 +180,20 @@ a,button,input{
 .com_top .c_home{display: block;width: 0.51rem;height:0.45rem;background: url(../images/top05.png) no-repeat;background-size:0.51rem 0.45rem;position: absolute;right:4%;top:0.18rem;}
 
 .com_top .branch{position: absolute;left:1rem;top:0.26rem;}
-.com_top .branch a{font-size: 0.24rem;color:#fff;padding-right:0.4rem;background: url(../images/arrow01.png) no-repeat right center;background-size:0.21rem 0.11rem;line-height: 0.24rem;}
+.com_top .branch a{font-size: 0.24rem;color:#fff;padding-right:0.4rem;background: url(../images/arrow01.png) no-repeat right center;background-size:0.21rem 0.11rem;line-height: 0.24rem;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;}
+
+.com_top .modify_branch{/*position: absolute;left:1rem;top:0;*/padding-left: 0.7rem;background: url(../images/top01.png) no-repeat left center;background-size: 0.52rem;height: 100%;line-height: 0.88rem;width: 45%;margin: 0 auto;overflow: hidden;}
+.com_top .modify_branch a{font-size: 0.24rem;color:#fff;padding-right:0.4rem;background: url(../images/arrow01.png) no-repeat right center;background-size:0.21rem 0.11rem;line-height: 0.24rem;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;}
+
+
+.com_top .ser{display: block; width: 0.44rem; height: 0.44rem; background: url(../images/search_btn01.png) no-repeat; background-size: 100%; position: absolute; right: 4%; top: 0.2rem;}
+
+
+.pop_search{width: 100%;height: 0.88rem;background: #39bee9;position: fixed;left:0;top:0;z-index: 200;overflow: hidden;display: none;}
+.pop_search .con{overflow: hidden;margin: 0.2rem 0 0 4%;}
+.pop_search .text{background: #fff;width: 65%;height: 0.5rem;float: left;font-size: 0.22rem;text-indent: 0.1rem;}
+.pop_search .sub{width: 15%;height: 0.5rem;background: #dddddd;text-align: center;line-height: 0.5rem;color:#333333;font-size: 0.24rem;float:left;}
+.pop_search .close{display: block;width: 14%;height: 100%;background: #444444 url(../images/close01.png) no-repeat center center;position: absolute;top:0;right:0;background-size: 0.4rem;}
 
 
 .infp_eject{width: 100%; height: 100%; background: url(../images/darkbg.png) repeat; position: fixed; left: 0; top: 0; z-index: 200;}
@@ -405,7 +418,14 @@ a,button,input{
 
 
 /*我的收藏*/
+.collection_tit{width: 100%;background: #fefafa;overflow: hidden;position: fixed;left:0;top:0.88rem;z-index: 100;}
+.collection_tit a{display: block;float:left;width: 50%;font-size: 0.24rem;color:#333;line-height: 0.6rem;text-align: center;border-bottom: 1px solid #dddddd;}
+.collection_tit a.sel{color:#39bee9;border-color:#39bee9;}
+
+
 .collection_list li{display: block; padding: 10px 3% 10px 10%; width: 87%; background: #fff; position: relative; border-bottom: 1px solid #c0bfbf;}
+.collection_list li i{display: block;width: 0.39rem;height: 0.31rem;position: absolute;left:2%;top:50%;margin-top: -0.15rem;background: url(../images/shop.png) no-repeat;background-size: 100%;}
+
 .collection_list li a.choose{display: block; width: 20px; height: 20px; background: url(../images/round.png) no-repeat center center; background-size: 18px; position: absolute; top: 50%; margin-top: -10px; left: 2%;}
 .collection_list li a.choose.sel{background: url(../images/round_on.png) no-repeat center center; background-size: 18px;}
 .collection_list li a.pic{width: 30%; float: left;display: block;border:1px solid #c0bfbf;}
@@ -413,6 +433,11 @@ a,button,input{
 .collection_list li a.name{width: 66%; float: right;display: block;color:#252525;font-size: 0.22rem;}
 .collection_list li p{font-size: 0.22rem;color:#999999;float:right;width: 66%;}
 .collection_list li a.btn{width: 1.1rem; height: 0.4rem; font-size: 0.24rem; color: #000; background: #fefafa; border: 1px solid #c0bfbf; border-radius: 3px; -webkit-border-radius: 3px; line-height: 0.4rem; text-align: center; float: none; position: absolute; right: 3%; bottom: 10px;}
+
+.collection_list li menu{overflow: hidden;position: static;float:right;}
+.collection_list li menu .btn{position: static;float:right;float:right;margin-left: 0.2rem;}
+.collection_list li menu .btn.btn01{background: #ff5b7d;border-color:#ff5b7d;color:#fff;}
+
 
 .collection_list .all_choose{display: block; width: 90%; height: 35px; line-height: 35px; border-bottom: 1px solid #c0bfbf; color: #777676; padding-left: 10%; background: url(../images/round.png) no-repeat 3% center #fff; background-size: 18px;}
 
@@ -537,6 +562,12 @@ a,button,input{
 .pro_info .con .num{font-size: 0.24rem;color:#999999;}
 .pro_info .con .price{font-size: 0.4rem;color:#ff5b7d;padding-top:0.2rem;}
 .pro_info .con .price span{color:#999999;font-size: 0.3rem;text-decoration: line-through;padding-left: 0.6rem;}
+.pro_info .con .sc_shop{font-size: 0.24rem; color: #999999;padding:0.1rem 0 0;/*border-top: 1px solid #ccc;*/}
+.pro_info .con .sc_shop .name{padding-left: 0.5rem;background: url(../images/shop.png) no-repeat left center;background-size: 0.4rem;margin-top: 0.1rem;}
+.pro_info .con .sc_shop .name a{background: #ff5b7d;color:#fff;padding:1px 0.1rem;border-radius: 2px;-webkit-border-radius: 2px;left:0.2rem;}
+.pro_info .con .postage{font-size: 0.24rem; color: #999999;padding:0.1rem 0 0;}
+
+
 
 .pro_info .choose{display: block;height: 0.58rem;line-height: 0.58rem;color:#999999;font-size: 0.24rem;background: url(../images/arrow04.png) no-repeat right center;background-size:auto 0.22rem;width: 90%;margin-left:3%;}
 
@@ -716,7 +747,10 @@ a,button,input{
 .error_box menu a:nth-child(2){background: #ff5b7d;float:right;text-indent: 0.72rem;}
 
 
-
+.collection_list .all_choose.sel {
+	background: url(../images/round_on.png) no-repeat 3% center #fff;
+    background-size: 18px;
+}
 
 
 

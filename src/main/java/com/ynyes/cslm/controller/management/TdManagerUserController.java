@@ -286,6 +286,7 @@ public class TdManagerUserController {
         			}
         			userPoint = tdUserPointService.save(userPoint);
         			
+        			tdManagerLogService.addLog("add", "手动将会员"+tdUser.getUsername()+"修改积分为"+data, req);
         			res.put("code", 0);
         			return res;
         		}
@@ -358,6 +359,8 @@ public class TdManagerUserController {
                     
                     tdPayRecordService.save(record);
                     
+                    tdManagerLogService.addLog("add", "手动给会员"+tdUser.getUsername()+"充值"+data, req);
+                    
                     res.put("code", 0);
         			return res;
         		}
@@ -399,11 +402,11 @@ public class TdManagerUserController {
         
         if (null == tdUser.getId())
         {
-            tdManagerLogService.addLog("add", "修改用户", req);
+            tdManagerLogService.addLog("add", "修改会员"+tdUser.getUsername(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "修改用户", req);
+            tdManagerLogService.addLog("edit", "修改会员"+tdUser.getUsername(), req);
         }
         
         tdUserService.save(tdUser);
@@ -797,7 +800,7 @@ public class TdManagerUserController {
                     return "/site_mag/error_404";
                 }
                 
-                map.addAttribute("user_collect_page", tdUserCollectService.findByUsername(user.getUsername(), page, size));
+                map.addAttribute("user_collect_page", tdUserCollectService.findByUsername(user.getUsername(),1, page, size));
                 return "/site_mag/user_collect_list";
             }
             else if (type.equalsIgnoreCase("recent")) // 最近浏览

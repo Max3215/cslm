@@ -145,11 +145,11 @@ public class TdManagerEditController {
         
         if (null == cat.getId())
         {
-            tdManagerLogService.addLog("add", "用户修改文章分类", req);
+            tdManagerLogService.addLog("add", "用户修改文章分类"+cat.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "用户修改文章分类", req);
+            tdManagerLogService.addLog("edit", "用户修改文章分类"+cat.getTitle(), req);
         }
         
         tdArticleCategoryService.save(cat);
@@ -252,18 +252,16 @@ public class TdManagerEditController {
             return "redirect:/Verwalter/login";
         }
         
-        String logType = null;
         if (null == article.getId())
         {
-            logType = "add";
+            tdManagerLogService.addLog("add", "用户新增文章"+article.getTitle(), req);
         }
         else
         {
-            logType = "edit";
+            tdManagerLogService.addLog("edit", "用户修改文章"+article.getTitle(), req);
         }
         tdArticleService.save(article);
         
-        tdManagerLogService.addLog(logType, "用户修改文章", req);
         
         return "redirect:/Verwalter/content/list?cid=" + article.getChannelId() 
                 + "&mid=" + article.getMenuId()

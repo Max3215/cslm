@@ -324,11 +324,11 @@ public class TdManagerManagerController {
         
         if (null == tdManagerRole.getId())
         {
-            tdManagerLogService.addLog("add", "修改管理角色权限", req);
+            tdManagerLogService.addLog("add", "修改管理角色权限"+tdManagerRole.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "修改管理角色权限", req);
+            tdManagerLogService.addLog("edit", "修改管理角色权限"+tdManagerRole.getTitle(), req);
         }
         
         return "redirect:/Verwalter/manager/role/list";

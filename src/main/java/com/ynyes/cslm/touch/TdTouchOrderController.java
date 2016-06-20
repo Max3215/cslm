@@ -446,6 +446,7 @@ public class TdTouchOrderController {
 			Double totalGoodsPrice = 0.0;// 商品总价
 			Double returnPrice = 0.0;// 商品返利
 			Long totalPointReturn = 0L; // 积分总额
+			Long disPointReturn  = 0L;
 			Double servicePrice = 0.0;// 平台服务费
 			Double disGoodsPrice = 0.0; // 分销商品费用
 
@@ -484,26 +485,28 @@ public class TdTouchOrderController {
 				orderGoods.setPrice(distributorGoods.getGoodsPrice());
 
 				// 数量
-				long quantity = 0;
-				if (distributorGoods.getIsDistribution()) {
-					quantity = 1L;
-				} else {
-					quantity = Math.min(cartGoods.getQuantity(), distributorGoods.getLeftNumber());
-				}
+				long quantity = Math.min(cartGoods.getQuantity(), distributorGoods.getLeftNumber());
 
 				orderGoods.setQuantity(quantity);
 
-				// 获得积分
-				if (null != goods.getReturnPoints()) {
-					totalPointReturn += goods.getReturnPoints() * quantity;
-					orderGoods.setPoints(goods.getReturnPoints() * quantity);
-				}
-
 				if (null == distributorGoods || !distributorGoods.getIsDistribution()) {
+					
+					// 获得积分
+					if (null != goods.getReturnPoints()) {
+						totalPointReturn += goods.getReturnPoints() * quantity;
+						orderGoods.setPoints(goods.getReturnPoints() * quantity);
+					}
+					
 					// 商品总价
 					totalGoodsPrice += cartGoods.getPrice() * cartGoods.getQuantity();
 					orderGoodsList.add(orderGoods);
 				} else {
+					// 获得积分
+					if (null != goods.getReturnPoints()) {
+						disPointReturn += goods.getReturnPoints() * quantity;
+						orderGoods.setPoints(goods.getReturnPoints() * quantity);
+					}
+					
 					// 商品总价
 					disGoodsPrice += cartGoods.getPrice() * cartGoods.getQuantity();
 					disOrderGoodsList.add(orderGoods);
@@ -538,6 +541,9 @@ public class TdTouchOrderController {
 						leftNumber = leftNumber - quantity;
 					}
 					distributorGoods.setLeftNumber(leftNumber);
+					if(distributorGoods.getLeftNumber() < 1){
+						distributorGoods.setIsOnSale(false);
+					}
 				} else {
 					TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(
 							distributorGoods.getProviderId(), distributorGoods.getGoodsId());
@@ -550,7 +556,9 @@ public class TdTouchOrderController {
 					if (null != list && list.size() > 0) {
 						for (TdDistributorGoods tdDistributorGoods : list) {
 							tdDistributorGoods.setLeftNumber(providerGoods.getLeftNumber());
-
+							if(distributorGoods.getLeftNumber() < 1){
+								distributorGoods.setIsOnSale(false);
+							}
 							tdDistributorGoodsService.save(tdDistributorGoods); // 更新各超市该商品库存
 						}
 					}
@@ -627,8 +635,8 @@ public class TdTouchOrderController {
 				// tdOrder.setOrderGoodsList(disOrderGoodsList);
 				// tdOrder.setTotalGoodsPrice(disGoodsPrice);
 
-				// 粮草奖励
-				tdOrder.setPoints(totalPointReturn);
+				// 积分奖励
+				tdOrder.setPoints(disPointReturn);
 
 				// 保存订单商品及订单
 				// tdOrderGoodsService.save(orderGoodsList);
@@ -759,6 +767,8 @@ public class TdTouchOrderController {
 				}
 
 				order = tdOrderService.save(tdOrder);
+				
+				addUserPoint(order,username);
 			}
 
 			if (null != orderGoodsList && orderGoodsList.size() > 0) {
@@ -949,32 +959,10 @@ public class TdTouchOrderController {
 				}
 
 				order = tdOrderService.save(order);
+				
+				addUserPoint(order,username);
 			}
 
-			// // 添加积分使用记录
-			// if (null != user) {
-			// if (null == user.getTotalPoints())
-			// {
-			// user.setTotalPoints(0L);
-			//
-			// user = tdUserService.save(user);
-			// }
-			//
-			// if (pointUse.compareTo(0L) >= 0 && null != user.getTotalPoints()
-			// && user.getTotalPoints().compareTo(pointUse) >= 0) {
-			// TdUserPoint userPoint = new TdUserPoint();
-			// userPoint.setDetail("购买商品使用积分抵扣");
-			// userPoint.setOrderNumber(tdOrder.getOrderNumber());
-			// userPoint.setPoint(0 - pointUse);
-			// userPoint.setPointTime(new Date());
-			// userPoint.setUsername(username);
-			// userPoint.setTotalPoint(user.getTotalPoints() - pointUse);
-			// tdUserPointService.save(userPoint);
-			//
-			// user.setTotalPoints(user.getTotalPoints() - pointUse);
-			// tdUserService.save(user);
-			// }
-			// }
 		}
 
         // 删除已生成订单的购物车项
@@ -988,6 +976,32 @@ public class TdTouchOrderController {
         // return "redirect:/order/success?orderId=" + tdOrder.getId();
     }
     
+ // 添加会员积分
+ 	public void addUserPoint(TdOrder order,String username){
+ 		
+ 		TdUser user = tdUserService.findByUsername(username);
+ 		
+ 		 // 添加积分使用记录
+ 		 if (null != user) {
+ 			 if (null == user.getTotalPoints())
+ 			 {
+ 				 user.setTotalPoints(0L);
+ 				 user = tdUserService.save(user);
+ 			 }
+ 		
+ 				 TdUserPoint userPoint = new TdUserPoint();
+ 				 userPoint.setDetail("购买商品获得积分抵扣");
+ 				 userPoint.setOrderNumber(order.getOrderNumber());
+ 				 userPoint.setPoint(order.getPoints());
+ 				 userPoint.setPointTime(new Date());
+ 				 userPoint.setUsername(username);
+ 				 userPoint.setTotalPoint(user.getTotalPoints() + order.getPoints());
+ 				 tdUserPointService.save(userPoint);
+ 				
+ 				 user.setTotalPoints(user.getTotalPoints() + order.getPoints());
+ 				 tdUserService.save(user);
+ 		 }
+ 	}
     
     /**
      * 立即购买

@@ -33,7 +33,6 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -99,7 +98,7 @@ DD_belatedPNG.fix('.,img,background');
         <table align="left">
             <tr class="mymember_infotab_tit01">
                 <th colspan="2">商品信息</th>
-                <th width="60">退换数量</th>
+                <th width="60">价格*数量</th>
                 <th width="120">订单号</th>
                 <th width="120">用户名</th>
                 <th width="120">联系电话</th>
@@ -115,7 +114,7 @@ DD_belatedPNG.fix('.,img,background');
                       <td class="td002">
                         <a>${return.goodsTitle!''}</a>
                       </td>
-                      <td>${return.returnNumber!''}</td>
+                      <td>${return.goodsPrice?string('0.00')}*${return.returnNumber!''}</td>
                       <td>${return.orderNumber!''}</td>
                       <td class="td003">${return.username!''}</td>
                       <td class="td003">${return.telephone!''}</td>

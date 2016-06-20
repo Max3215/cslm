@@ -1425,11 +1425,11 @@ public class TdManagerOrderController {
         
         if (null == tdPayType.getId())
         {
-            tdManagerLogService.addLog("add", "新增支付方式", req);
+            tdManagerLogService.addLog("add", "新增支付方式"+tdPayType.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "修改支付方式", req);
+            tdManagerLogService.addLog("edit", "修改支付方式"+tdPayType.getTitle(), req);
         }
         tdPayTypeService.save(tdPayType);
         
@@ -1590,6 +1590,8 @@ public class TdManagerOrderController {
         record.setRealPrice(data);
         
         tdPayRecordService.save(record);
+        
+        tdManagerLogService.addLog("add", "手动给"+distributor.getTitle()+"充值"+data, req);
     	
         res.put("code", 0);
         res.put("message", "充值成功！");
@@ -1795,7 +1797,7 @@ public class TdManagerOrderController {
             }
             
             tdOrderService.save(order);
-            tdManagerLogService.addLog("edit", "修改订单", req);
+            tdManagerLogService.addLog("edit", "修改订单"+orderNumber, req);
             
             res.put("code", 0);
             res.put("message", "修改成功!");
@@ -1854,11 +1856,11 @@ public class TdManagerOrderController {
         
         if (null == tdDistributor.getId())
         {
-            tdManagerLogService.addLog("add", "新增加盟超市", req);
+            tdManagerLogService.addLog("add", "新增加盟超市"+tdDistributor.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "修改加盟超市", req);
+            tdManagerLogService.addLog("edit", "修改加盟超市"+tdDistributor.getTitle(), req);
         }
         
         TdDistributorService.save(tdDistributor);

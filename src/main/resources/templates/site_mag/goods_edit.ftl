@@ -466,7 +466,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">如千克/瓶/件，选填</span>
             </dd>
         </dl>
-        <#--
+        
         <dl>
             <dt>赠送积分</dt>
             <dd>
@@ -474,6 +474,7 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">购买该商品赠送的积分</span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>积分购买限额</dt>
             <dd>

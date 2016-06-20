@@ -21,7 +21,9 @@ public interface TdDistributorGoodsRepo extends
 		PagingAndSortingRepository<TdDistributorGoods, Long>,
 		JpaSpecificationExecutor<TdDistributorGoods>
 {
-//	Page<TdDistGoods> findByDistId(Pageable page);
+	
+		List<TdDistributorGoods> findByIsOnSaleTrueAndLeftNumberLessThan(Long leftNumber);
+		
 		@Query(value="select category_id from td_distributor_goods where distributor_id=?1 group by category_id",nativeQuery=true)
 		List<Long> findByDistributorIdAndGroupCategoryId(Long distributorId);
 		
@@ -54,8 +56,8 @@ public interface TdDistributorGoodsRepo extends
 		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,Pageable page);
 		
 		Page<TdDistributorGoods> findByCategoryIdTreeContainingAndIsOnSaleTrueOrderBySoldNumberDesc(String catstr,Pageable page);
-		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=true order by g.soldNumber")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,String catstr,Pageable page);
+		
+		Page<TdDistributorGoods> findByDisIdAndCategoryIdTreeContainingAndIsOnSaleTrueOrderBySoldNumberDesc(long disId,String catstr,Pageable page);
 		
 		@Query(value = "select g from TdDistributor d join d.goodsList g where d.id=?1 and g.productId=?2 and g.isOnSale=1")
 		List<TdDistributorGoods> findByDistributorIdAndProductIdAndIsOnSaleTrue(Long disId,Long productId);

@@ -23,6 +23,7 @@ $(document).ready(function(){
   menuCheckShow("check_menu","a","check_con",".text","act","")//选项卡
 });
 
+// 收藏商品
 function addCollect(goodsId)
 {
     if (undefined == goodsId)
@@ -53,7 +54,30 @@ function addCollect(goodsId)
         }
     });
 }
-
+// 收藏店铺
+function collectShop(disId){
+    if(undefined == disId){
+        return ;
+    }
+    
+    $.ajax({
+        type:"post",
+        url:"/touch/user/collect/shop",
+        data:{"disId": disId},
+        dataType: "json",
+        success:function(res){
+            alert(res.message);
+            // 需登录
+            if (res.code==1)
+            {
+                setTimeout(function(){
+                    window.location.href = "/touch/login";
+                }, 1000); 
+            }
+        }
+    });
+    
+}
 <!-- 减少商品数量的方法 -->
 function minusNum(){
     var q = parseInt($("#quantity").val());
@@ -166,6 +190,15 @@ function proGoods(dId){
       <p class="f_tit">${dis_goods.subGoodsTitle!''}</p>
       <p class="num">商品编号：${goods.code!''}&nbsp;&nbsp;&nbsp;&nbsp;商品品牌：${goods.brandTitle!''}</p>
       <p class="price">￥<#if dis_goods??>${dis_goods.goodsPrice?string('0.00')}</#if><span>￥<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#else>${goods.marketPrice?string("0.00")}</#if></span></p>
+       
+        <div class="sc_shop">
+            <p>商品来源：</p>
+            <p class="name">${dis_goods.distributorTitle!''}<a href="javascript:collectShop(${dis_goods.disId?c});">收藏店铺</a></p>
+       </div>
+       <div class="postage">
+            <p>邮费说明：</p>
+            <p>${distributor.postPrice?string('0.00')}元/满${distributor.maxPostPrice?string('0.00')}包邮</p>
+          </div>
     </div>
     <a href="javascript:void(0)" class="choose" onclick="$('.pro_eject').fadeIn(300);">选择   数量</a>
   </section>
@@ -175,6 +208,7 @@ function proGoods(dId){
   <aside class="pro_eject">
     <div class="part">
       <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
+      <#--
       <dl>
         <dt>商品来源：</dt>
         <dd>${dis_goods.distributorTitle!''}</dd>
@@ -183,11 +217,12 @@ function proGoods(dId){
         <dt>邮费说明</dt>
         <dd>邮费：${distributor.postPrice?string('0.00')}元/满${distributor.maxPostPrice?string('0.00')}包邮</dd>
       </dl>
+      -->
       <div class="number">
         <span>购买数量</span>
-        <a id="id-minus" href="javascript:minusNum();">-</a>
+        <a id="id-minus" href="javascript:addNum();">+</a>
         <input class="text" type="text" id="quantity" value="1" />
-        <a id="id-plus" href="javascript:addNum();">+</a>
+        <a id="id-plus"  href="javascript:minusNum();">-</a>
         <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber!'0'}">
       </div>
     </div>

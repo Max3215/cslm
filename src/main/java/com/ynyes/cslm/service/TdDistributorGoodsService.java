@@ -74,6 +74,10 @@ public class TdDistributorGoodsService {
             repository.delete(entities);
         }
     }
+    
+    public List<TdDistributorGoods> findByIsOnSaleAndLeftNumber(){
+    	return repository.findByIsOnSaleTrueAndLeftNumberLessThan(1L);
+    }
 	
     /**
      * 
@@ -373,7 +377,7 @@ public class TdDistributorGoodsService {
     	PageRequest pageRequest = new PageRequest(page,size);
     	String catStr = "[" + catId + "]";
     	
-    	return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleTrueOrderBySoldNumberDesc(disId,catStr, pageRequest);
+    	return repository.findByDisIdAndCategoryIdTreeContainingAndIsOnSaleTrueOrderBySoldNumberDesc(disId,catStr, pageRequest);
     }
     
     /**
@@ -1179,17 +1183,17 @@ public class TdDistributorGoodsService {
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
       long distributorId,  long catId, long brandId, int page, int size,
         List<String> paramValueList) {
-    PageRequest pageRequest = new PageRequest(page, size);
-
-    String paramStr = "%";
-
-    for (int i = 0; i < paramValueList.size(); i++) {
-        String value = paramValueList.get(i);
-        if (!"".equals(value)) {
-            paramStr += value;
-            paramStr += "%";
-        }
-    }
+	    PageRequest pageRequest = new PageRequest(page, size);
+	
+	    String paramStr = "%";
+	
+	    for (int i = 0; i < paramValueList.size(); i++) {
+	        String value = paramValueList.get(i);
+	        if (!"".equals(value)) {
+	            paramStr += value;
+	            paramStr += "%";
+	        }
+	    }
 
     return repository
             .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrueOrderByGoodsPrice(

@@ -262,6 +262,8 @@ public class TdManagerProviderController {
         
         tdPayRecordService.save(record);
     	
+        tdManagerLogService.addLog("add", "手动给"+provider.getTitle()+"充值"+data, req);
+        
         res.put("code", 0);
         res.put("message", "充值成功！");
     	return res;
@@ -292,11 +294,11 @@ public class TdManagerProviderController {
         
         if (null == tdProvider.getId())
         {
-            tdManagerLogService.addLog("add", "用户修改供应商", req);
+            tdManagerLogService.addLog("add", "用户新增供应商"+tdProvider.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "用户修改供应商", req);
+            tdManagerLogService.addLog("edit", "用户修改供应商"+tdProvider.getTitle(), req);
         }
         
         tdProviderService.save(tdProvider);
@@ -617,6 +619,9 @@ public class TdManagerProviderController {
             return "redirect:/Verwalter/login";
         }
         tdProviderGoodsService.save(providerGoods);
+        
+        tdManagerLogService.addLog("edit", "用户修改"+providerGoods.getProviderTitle()+"商品："+providerGoods.getGoodsTitle(), req);
+        
         return "redirect:/Verwalter/provider/goods/list?__EVENTTARGET=" + __EVENTTARGET
                 + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE="
                 + __VIEWSTATE;

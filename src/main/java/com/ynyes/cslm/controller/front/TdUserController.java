@@ -170,7 +170,7 @@ public class TdUserController extends AbstractPaytypeController{
         map.addAttribute("order_page", tdOrderService.findByUsername(username,
                 0, ClientConstant.pageSize));
         map.addAttribute("collect_page", tdUserCollectService.findByUsername(
-                username, 0, ClientConstant.pageSize));
+                username,1, 0, ClientConstant.pageSize));
         map.addAttribute("recent_page", tdUserRecentVisitService
                 .findByUsernameOrderByVisitTimeDesc(username, 0,
                         ClientConstant.pageSize));
@@ -549,254 +549,250 @@ public class TdUserController extends AbstractPaytypeController{
         return "/client/user_order_detail";
     }
 
-    /**
-     * @author lc
-     * @注释：同盟店订单查询
-     */
-    @SuppressWarnings("deprecation")
-	@RequestMapping(value = "/user/diysite/order/list/{statusId}")
-    public String diysiteorderList(@PathVariable Integer statusId, Integer page,
-            String keywords, Integer timeId, HttpServletRequest req,
-            ModelMap map) {
-    	String username = (String) req.getSession().getAttribute("diysiteUsername");
-
-        if (null == username) {
-            return "redirect:/login";
-        }
-
-        tdCommonService.setHeader(map, req);
-
-        if (null == page) {
-            page = 0;
-        }
-
-        if (null == timeId) {
-            timeId = 0;
-        }
-
-        if (null == statusId) {
-            statusId = 0;
-        }
-
-        TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-        TdDistributor TdDistributor = TdDistributorService.findbyUsername(username);
-        
-        map.addAttribute("user", tdUser);
-        map.addAttribute("status_id", statusId);
-        map.addAttribute("time_id", timeId);
-
-        Page<TdOrder> orderPage = null;
-
-        if (timeId.equals(0)) {
-            if (statusId.equals(0)) {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService.findByDiysitenameAndSearch(
-                    		TdDistributor.getTitle(), keywords, page, ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitename(TdDistributor.getTitle(), page,
-                            ClientConstant.pageSize);
-                }
-            } else {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndSearch(TdDistributor.getTitle(),
-                                    statusId, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitenameAndStatusId(
-                    		TdDistributor.getTitle(), statusId, page, ClientConstant.pageSize);
-                }
-            }
-        } else if (timeId.equals(1)) {
-            Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            //calendar.add(Calendar.MONTH, -1);// 月份减一
-            //calendar.add(Calendar.DAY_OF_MONTH, -1);
-            Date time = calendar.getTime();
-            time.setHours(0);
-            time.setMinutes(0);
-            if (statusId.equals(0)) {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-                                    time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-                }
-            } else {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-                                    statusId, time, page,
-                                    ClientConstant.pageSize);
-                }
-            }
-        }else if (timeId.equals(2)) {
-            Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            //calendar.add(Calendar.MONTH, -1);// 月份减一
-            calendar.add(Calendar.DAY_OF_MONTH, -7);
-            Date time = calendar.getTime();
-
-            if (statusId.equals(0)) {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-                                    time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-                }
-            } else {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-                                    statusId, time, page,
-                                    ClientConstant.pageSize);
-                }
-            }
-        }  
-        else if (timeId.equals(3)) {
-            Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.MONTH, -1);// 月份减一
-            Date time = calendar.getTime();
-
-            if (statusId.equals(0)) {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-                                    time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-                }
-            } else {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-                                    statusId, time, page,
-                                    ClientConstant.pageSize);
-                }
-            }
-        } else if (timeId.equals(4)) {
-            Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.MONTH, -3);// 月份减一
-            Date time = calendar.getTime();
-
-            if (statusId.equals(0)) {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-                                    time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-                }
-            } else {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-                                    statusId, time, page,
-                                    ClientConstant.pageSize);
-                }
-            }
-        } else if (timeId.equals(6)) {
-            Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.MONTH, -6);// 月份减一
-            Date time = calendar.getTime();
-
-            if (statusId.equals(0)) {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-                                    time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-                }
-            } else {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-                                    statusId, time, page,
-                                    ClientConstant.pageSize);
-                }
-            }
-        } else if (timeId.equals(12)) {
-            Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.YEAR, -1);// 减一
-            Date time = calendar.getTime();
-
-            if (statusId.equals(0)) {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-                                    time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-                }
-            } else {
-                if (null != keywords && !keywords.isEmpty()) {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-                                    ClientConstant.pageSize);
-                } else {
-                    orderPage = tdOrderService
-                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-                                    statusId, time, page,
-                                    ClientConstant.pageSize);
-                }
-            }
-        }
-
-        map.addAttribute("order_page", orderPage);
-
-        return "/client/diysite_order_list";
-    }
+//    @SuppressWarnings("deprecation")
+//	@RequestMapping(value = "/user/diysite/order/list/{statusId}")
+//    public String diysiteorderList(@PathVariable Integer statusId, Integer page,
+//            String keywords, Integer timeId, HttpServletRequest req,
+//            ModelMap map) {
+//    	String username = (String) req.getSession().getAttribute("diysiteUsername");
+//
+//        if (null == username) {
+//            return "redirect:/login";
+//        }
+//
+//        tdCommonService.setHeader(map, req);
+//
+//        if (null == page) {
+//            page = 0;
+//        }
+//
+//        if (null == timeId) {
+//            timeId = 0;
+//        }
+//
+//        if (null == statusId) {
+//            statusId = 0;
+//        }
+//
+//        TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
+//        TdDistributor TdDistributor = TdDistributorService.findbyUsername(username);
+//        
+//        map.addAttribute("user", tdUser);
+//        map.addAttribute("status_id", statusId);
+//        map.addAttribute("time_id", timeId);
+//
+//        Page<TdOrder> orderPage = null;
+//
+//        if (timeId.equals(0)) {
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService.findByDiysitenameAndSearch(
+//                    		TdDistributor.getTitle(), keywords, page, ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitename(TdDistributor.getTitle(), page,
+//                            ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndSearch(TdDistributor.getTitle(),
+//                                    statusId, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitenameAndStatusId(
+//                    		TdDistributor.getTitle(), statusId, page, ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(1)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            //calendar.add(Calendar.MONTH, -1);// 月份减一
+//            //calendar.add(Calendar.DAY_OF_MONTH, -1);
+//            Date time = calendar.getTime();
+//            time.setHours(0);
+//            time.setMinutes(0);
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
+//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
+//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        }else if (timeId.equals(2)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            //calendar.add(Calendar.MONTH, -1);// 月份减一
+//            calendar.add(Calendar.DAY_OF_MONTH, -7);
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
+//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
+//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        }  
+//        else if (timeId.equals(3)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -1);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
+//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
+//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(4)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -3);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
+//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
+//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(6)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.MONTH, -6);// 月份减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
+//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
+//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        } else if (timeId.equals(12)) {
+//            Date cur = new Date();
+//            Calendar calendar = Calendar.getInstance();// 日历对象
+//            calendar.setTime(cur);// 设置当前日期
+//            calendar.add(Calendar.YEAR, -1);// 减一
+//            Date time = calendar.getTime();
+//
+//            if (statusId.equals(0)) {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
+//                                    time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
+//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
+//                }
+//            } else {
+//                if (null != keywords && !keywords.isEmpty()) {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
+//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
+//                                    ClientConstant.pageSize);
+//                } else {
+//                    orderPage = tdOrderService
+//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
+//                                    statusId, time, page,
+//                                    ClientConstant.pageSize);
+//                }
+//            }
+//        }
+//
+//        map.addAttribute("order_page", orderPage);
+//
+//        return "/client/diysite_order_list";
+//    }
     /**
 	 * @author lc
 	 * @注释：同盟店订单详情
@@ -890,11 +886,11 @@ public class TdUserController extends AbstractPaytypeController{
         Page<TdUserCollect> collectPage = null;
 
         if (null == keywords || keywords.isEmpty()) {
-            collectPage = tdUserCollectService.findByUsername(username, page,
+            collectPage = tdUserCollectService.findByUsername(username,1, page,
                     ClientConstant.pageSize);
         } else {
             collectPage = tdUserCollectService.findByUsernameAndSearch(
-                    username, keywords, page, ClientConstant.pageSize);
+                    username, keywords,1, page, ClientConstant.pageSize);
         }
 
         map.addAttribute("collect_page", collectPage);
@@ -913,7 +909,7 @@ public class TdUserController extends AbstractPaytypeController{
 
         if (null != id) {
             TdUserCollect collect = tdUserCollectService
-                    .findByUsernameAndDistributorId(username, id);
+                    .findByUsernameAndDistributorId(username, id,1);
 
             // 删除收藏
             if (null != collect) {
@@ -957,7 +953,7 @@ public class TdUserController extends AbstractPaytypeController{
 
         // 没有收藏
         if (null == tdUserCollectService.findByUsernameAndDistributorId(username,
-                disgId)) {
+                disgId,1)) {
             TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
 
             if (null == distributorGoods) {
@@ -984,6 +980,7 @@ public class TdUserController extends AbstractPaytypeController{
             collect.setGoodsTitle(distributorGoods.getGoodsTitle());
             collect.setGoodsSalePrice(distributorGoods.getGoodsPrice());
             collect.setCollectTime(new Date());
+            collect.setType(1);
 
             tdUserCollectService.save(collect);
 

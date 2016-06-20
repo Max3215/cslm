@@ -61,8 +61,8 @@ var theForm = document.forms['form1'];
   <tbody>
   <tr class="odd_bg">
     <th width="8%">选择</th>
-    <th align="center" width="15%">用户名</th>
-    <th align="center" width="15%">操作类型</th>
+    <th align="center" width="10%">用户名</th>
+    <th align="center" width="8%">操作类型</th>
     <th>备注</th>
     <th align="center" width="15%">用户IP</th>
     <th align="center" width="15%">添加时间</th>

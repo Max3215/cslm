@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.directory.DirContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,54 +224,54 @@ public class TdOrderService {
 	 * @author lichong
 	 * @注释：
 	 */
-    public Page<TdOrder> findByDiysitename(String diysitename, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleOrderByIdDesc(diysitename, pageRequest);
-    }
-    public Page<TdOrder> findByDiysitenameAndSearch(String diysitename, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleAndOrderNumberContainingOrderByIdDesc(diysitename, keywords, pageRequest);
-    }
-    public Page<TdOrder> findByDiysitenameAndStatusIdAndSearch(String diysitename, long statusId, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleAndStatusIdAndOrderNumberContainingOrderByIdDesc(diysitename, statusId, keywords, pageRequest);
-    }
-    public Page<TdOrder> findByDiysitenameAndStatusId(String diysitename, long statusId, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleAndStatusIdOrderByIdDesc(diysitename, statusId, pageRequest);
-    }
-    public Page<TdOrder> findByDiysitenameAndTimeAfter(String diysitename, Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleAndOrderTimeAfterOrderByIdDesc(diysitename, time, pageRequest);
-    }
-    public Page<TdOrder> findByDiysitenameAndTimeAfterAndSearch(String diysitename, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(diysitename, time, keywords, pageRequest);
-    }
-    public Page<TdOrder> findByDiysitenameAndStatusIdAndTimeAfterAndSearch(String diysitename, long statusId, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(diysitename, statusId, time, keywords, pageRequest);
-    }
-    public Page<TdOrder> findByDiysitenameAndStatusIdAndTimeAfter(String diysitename, long statusId, Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByshopTitleAndStatusIdAndOrderTimeAfterOrderByIdDesc(diysitename, statusId, time, pageRequest);
-    }
+//    public Page<TdOrder> findByDiysitename(String diysitename, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleOrderByIdDesc(diysitename, pageRequest);
+//    }
+//    public Page<TdOrder> findByDiysitenameAndSearch(String diysitename, String keywords, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleAndOrderNumberContainingOrderByIdDesc(diysitename, keywords, pageRequest);
+//    }
+//    public Page<TdOrder> findByDiysitenameAndStatusIdAndSearch(String diysitename, long statusId, String keywords, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleAndStatusIdAndOrderNumberContainingOrderByIdDesc(diysitename, statusId, keywords, pageRequest);
+//    }
+//    public Page<TdOrder> findByDiysitenameAndStatusId(String diysitename, long statusId, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleAndStatusIdOrderByIdDesc(diysitename, statusId, pageRequest);
+//    }
+//    public Page<TdOrder> findByDiysitenameAndTimeAfter(String diysitename, Date time, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleAndOrderTimeAfterOrderByIdDesc(diysitename, time, pageRequest);
+//    }
+//    public Page<TdOrder> findByDiysitenameAndTimeAfterAndSearch(String diysitename, Date time, String keywords, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(diysitename, time, keywords, pageRequest);
+//    }
+//    public Page<TdOrder> findByDiysitenameAndStatusIdAndTimeAfterAndSearch(String diysitename, long statusId, Date time, String keywords, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(diysitename, statusId, time, keywords, pageRequest);
+//    }
+//    public Page<TdOrder> findByDiysitenameAndStatusIdAndTimeAfter(String diysitename, long statusId, Date time, int page, int size)
+//    {
+//        PageRequest pageRequest = new PageRequest(page, size);
+//        
+//        return repository.findByshopTitleAndStatusIdAndOrderTimeAfterOrderByIdDesc(diysitename, statusId, time, pageRequest);
+//    }
     
     /**
 	 * @author lc
@@ -432,111 +433,7 @@ public class TdOrderService {
     	PageRequest pageRequest=new PageRequest(page, size);
     	return repository.findByProviderIdAndTypeIdOrderByOrderTimeDesc(shopId,typeId,pageRequest);
     }
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓		进   货   单   查   询		↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓			 libiao					↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    public Page<TdOrder> findByUsernameAndTypeIdAndTimeAfter(String username, long typeId,Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByUsernameAndTypeIdAndOrderTimeAfterOrderByIdDesc(username, typeId,time, pageRequest);
-    }
     
-    public Page<TdOrder> findByUsernameAndTypeIdAndTimeAfterAndSearch(String username,long typeId, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByUsernameAndTypeIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(username,typeId, time, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByUsernameAndTypeIdAndSearch(String username, long typeId,String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByUsernameAndTypeIdAndOrderNumberContainingOrderByIdDesc(username,typeId, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByUsernameAndTypeIdAndStatusId(String username,long typeId, long statusId, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByUsernameAndTypeIdAndStatusIdOrderByIdDesc(username,typeId,statusId, pageRequest);
-    }
-    
-    public Page<TdOrder> findByUsernameAndTypeIdAndStatusIdAndSearch(String username,long typeId, long statusId, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByUsernameAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(username, typeId,statusId, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByUsernameAndTypeIdAndStatusIdAndTimeAfter(String username,long typeId, long statusId, Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByUsernameAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(username,typeId, statusId, time, pageRequest);
-    }
-    
-    public Page<TdOrder> findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(String username,long typeId, long statusId, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByUsernameAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(username, typeId,statusId, time, keywords, pageRequest);
-    }
-    
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓		销   售   单   查   询		↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓			 libiao					↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    public Page<TdOrder> findByShopIdAndTypeIdAndTimeAfter(long shopId, long typeId,Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByShopIdAndTypeIdAndOrderTimeAfterOrderByIdDesc(shopId, typeId,time, pageRequest);
-    }
-    
-    public Page<TdOrder> findByShopIdAndTypeIdAndTimeAfterAndSearch(long ShopId,long typeId, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByShopIdAndTypeIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(ShopId,typeId, time, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByShopIdAndTypeIdAndSearch(long ShopId, long typeId,String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByShopIdAndTypeIdAndOrderNumberContainingOrderByIdDesc(ShopId,typeId, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByShopIdAndTypeIdAndStatusId(long ShopId,long typeId, long statusId, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByShopIdAndTypeIdAndStatusIdOrderByIdDesc(ShopId,typeId,statusId, pageRequest);
-    }
-    
-    public Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndSearch(long ShopId,long typeId, long statusId, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByShopIdAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(ShopId, typeId,statusId, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndTimeAfter(long ShopId,long typeId, long statusId, Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByShopIdAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(ShopId,typeId, statusId, time, pageRequest);
-    }
-    
-    public Page<TdOrder> findByShopIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(long ShopId,long typeId, long statusId, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByShopIdAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(ShopId, typeId,statusId, time, keywords, pageRequest);
-    }
     public Long countByShopIdAndTypeIdAndStatusId(Long shopId,long typeId, long statusId)
     {
     	
@@ -549,58 +446,76 @@ public class TdOrderService {
         return repository.countByProviderIdAndTypeIdAndStatusId(providerId,typeId ,statusId);
     }
     
-    
- // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓		分   销   单   查   询		↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓			 libiao					↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-    public Page<TdOrder> findByProviderIdAndTypeIdAndTimeAfter(long shopId, long typeId,Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByProviderIdAndTypeIdAndOrderTimeAfterOrderByIdDesc(shopId, typeId,time, pageRequest);
+    public Page<TdOrder> findAll(Long shopId,int statusId,int typeId,Date startTime,Date endTime,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "orderTime"));
+    	Criteria<TdOrder> c = new Criteria<>();
+    	
+    	if(null != shopId){
+    		c.add(Restrictions.eq("shopId", shopId, true));
+    	}
+    	
+    	if(statusId != 0 ){
+    		c.add(Restrictions.eq("statusId", statusId, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("orderTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("orderTime", endTime, true));
+    	}
+    	c.add(Restrictions.eq("typeId", typeId, true));
+    	
+    	return repository.findAll(c,pageRequest);
     }
     
-    public Page<TdOrder> findByProviderIdAndTypeIdAndTimeAfterAndSearch(long ProviderId,long typeId, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByProviderIdAndTypeIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(ProviderId,typeId, time, keywords, pageRequest);
+    public Page<TdOrder> findAll(String username,int statusId,int typeId,Date startTime,Date endTime,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "orderTime"));
+    	Criteria<TdOrder> c = new Criteria<>();
+    	
+    	if(null != username){
+    		c.add(Restrictions.eq("username", username, true));
+    	}
+    	
+    	if(statusId != 0 ){
+    		c.add(Restrictions.eq("statusId", statusId, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("orderTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("orderTime", endTime, true));
+    	}
+    	c.add(Restrictions.eq("typeId", typeId, true));
+    	
+    	return repository.findAll(c,pageRequest);
     }
     
-    public Page<TdOrder> findByProviderIdAndTypeIdAndSearch(long ProviderId, long typeId,String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByProviderIdAndTypeIdAndOrderNumberContainingOrderByIdDesc(ProviderId,typeId, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusId(long ProviderId,long typeId, long statusId, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByProviderIdAndTypeIdAndStatusIdOrderByIdDesc(ProviderId,typeId,statusId, pageRequest);
-    }
-    
-    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndSearch(long ProviderId,long typeId, long statusId, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByProviderIdAndTypeIdAndStatusIdAndOrderNumberContainingOrderByIdDesc(ProviderId, typeId,statusId, keywords, pageRequest);
-    }
-    
-    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndTimeAfter(long ProviderId,long typeId, long statusId, Date time, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByProviderIdAndTypeIdAndStatusIdAndOrderTimeAfterOrderByIdDesc(ProviderId,typeId, statusId, time, pageRequest);
-    }
-    
-    public Page<TdOrder> findByProviderIdAndTypeIdAndStatusIdAndTimeAfterAndSearch(long ProviderId,long typeId, long statusId, Date time, String keywords, int page, int size)
-    {
-        PageRequest pageRequest = new PageRequest(page, size);
-        
-        return repository.findByProviderIdAndTypeIdAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(ProviderId, typeId,statusId, time, keywords, pageRequest);
+    public Page<TdOrder> findByProviderId(Long providerId,int statusId,int typeId,Date startTime,Date endTime,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "orderTime"));
+    	Criteria<TdOrder> c = new Criteria<>();
+    	
+    	if(null != providerId){
+    		c.add(Restrictions.eq("providerId", providerId, true));
+    	}
+    	
+    	if(statusId != 0 ){
+    		c.add(Restrictions.eq("statusId", statusId, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("orderTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("orderTime", endTime, true));
+    	}
+    	c.add(Restrictions.eq("typeId", typeId, true));
+    	
+    	return repository.findAll(c,pageRequest);
     }
     
     // 关键字筛选

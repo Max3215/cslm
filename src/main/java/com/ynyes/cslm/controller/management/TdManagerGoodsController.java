@@ -851,7 +851,7 @@ public class TdManagerGoodsController {
             newGoods.setWarehouseTitle(tdGoods.getWarehouseTitle());
             
             tdGoodsService.save(newGoods, username);
-            tdManagerLogService.addLog("add", "用户复制商品", req);
+            tdManagerLogService.addLog("add", "用户复制商品"+tdGoods.getTitle(), req);
         }
 
         return "redirect:/Verwalter/goods/list";
@@ -933,7 +933,7 @@ public class TdManagerGoodsController {
 		}
         tdGoodsService.save(tdGoods, username);
 
-        tdManagerLogService.addLog(type, "用户修改商品", req);
+        tdManagerLogService.addLog(type, "用户修改商品"+tdGoods.getTitle(), req);
 
         return "redirect:/Verwalter/goods/list?__EVENTTARGET=" + __EVENTTARGET
                 + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE="

@@ -381,6 +381,6 @@ public class TdArticleService {
     {
     	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"id"));
     	
-    	return repository.findByDistributorIdAndMenuIdOrderByIdDesc(distributorId, menuId, pageRequest);
+    	return repository.findByDistributorIdAndMenuIdAndStatusIdOrderByIdDesc(distributorId, menuId,0L, pageRequest);
     }
 }

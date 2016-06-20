@@ -15,6 +15,7 @@
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
+<script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -28,7 +29,6 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -58,8 +58,9 @@ DD_belatedPNG.fix('.,img,background');
   <#include "/client/common_supply_menu.ftl" />
   
   <div class="mymember_mainbox">
-    <form name="form1" action="/supply/disOrder/list/${status_id}" method="POST">
+    <form name="form1" action="/supply/disOrder/list" method="POST">
         <input type="hidden" name="eventTarget" value="" id="eventTarget">
+        <input type="hidden" value="${page!'0'}" name="page" id="page">
         <script type="text/javascript">
             var theForm = document.forms['form1'];
             if (!theForm) {
@@ -75,11 +76,15 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_info mymember_info02">
             <div class="mymember_order_search">
                 <a class="a001" >销售订单</a>
-                <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
-            <#--
-            <input class="mysub" type="submit" value="查询" />
-            <input class="mytext" type="text" onFocus="if(value=='商品名称、订单编号') {value=''}" onBlur="if (value=='') {value='商品名称、订单编号'}"  value="商品名称、订单编号" />
-            -->
+                <input class="mysub" type="submit" value="查询" onclick="javascript:setTimeout(__doPostBack('submit',''), 0)" />
+                  <p class="fr pl10 c3">时间&nbsp;&nbsp;
+                        <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                                        &nbsp;&nbsp;至&nbsp;&nbsp;
+                        <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                   </p>
+                  <div class="clear"></div>
+                 <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
+                 <input class="mysub" type="submit" value="导出全部" name="excel" onclick="javascript:setTimeout(__doPostBack('excelAll',''), 0)"/>
                 <div class="clear"></div>
             </div>
             <table>
@@ -88,25 +93,19 @@ DD_belatedPNG.fix('.,img,background');
                     <th width="70">购买用户</th>
                     <th width="80">订单金额</th>
                     <th width="80">
-                        <select name="timeId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
-                            <option value="0" <#if !time_id?? || time_id==0>selected="selected"</#if>>所有订单</option>
-                            <option value="1" <#if time_id==1>selected="selected"</#if>>最近一个月</option>
-                            <option value="3" <#if time_id==3>selected="selected"</#if>>最近三个月</option>
-                            <option value="6" <#if time_id==6>selected="selected"</#if>>最近半年</option>
-                            <option value="12" <#if time_id==12>selected="selected"</#if>>最近一年</option>                              
-                        </select>
+                        订单时间
                     </th>
                     <th width="80">
-                        <select name="statusid" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
-                            <option value="0" <#if !status_id?? || status_id==0>selected="selected"</#if>>所有订单</option>
-                            <option value="1" <#if status_id==1>selected="selected"</#if>>待确认</option>
-                            <option value="2" <#if status_id==2>selected="selected"</#if>>待付款</option>
-                            <option value="3" <#if status_id==3>selected="selected"</#if>>待发货</option>
-                            <option value="4" <#if status_id==4>selected="selected"</#if>>待收货</option>
-                            <option value="5" <#if status_id==5>selected="selected"</#if>>待评价</option>
-                            <option value="6" <#if status_id==6>selected="selected"</#if>>已完成</option>
-                            <option value="7" <#if status_id==7>selected="selected"</#if>>已取消</option>
-                            <option value="8" <#if status_id==8>selected="selected"</#if>>支付取消</option> 
+                        <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
+                            <option value="0" <#if !statusId?? || statusId==0>selected="selected"</#if>>所有订单</option>
+                            <option value="1" <#if statusId==1>selected="selected"</#if>>待确认</option>
+                            <option value="2" <#if statusId==2>selected="selected"</#if>>待付款</option>
+                            <option value="3" <#if statusId==3>selected="selected"</#if>>待发货</option>
+                            <option value="4" <#if statusId==4>selected="selected"</#if>>待收货</option>
+                            <option value="5" <#if statusId==5>selected="selected"</#if>>待评价</option>
+                            <option value="6" <#if statusId==6>selected="selected"</#if>>已完成</option>
+                            <option value="7" <#if statusId==7>selected="selected"</#if>>已取消</option>
+                            <option value="8" <#if statusId==8>selected="selected"</#if>>支付取消</option> 
                         </select>
                     </th>
                     <th width="60">操作</th>
@@ -164,7 +163,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == order_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/supply/disOrder/list/${statusId}?page=${page-1}&timeId=${time_id}&keywords=${keywords!''}">${page}</a>
+                                <a href="javascript:;" onclick="javascript:setTimeout(__doPostBack('page',${(page-1)?c}), 0)">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

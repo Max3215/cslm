@@ -231,11 +231,11 @@ public class TdManagerBrandController {
         
         if (null == tdBrand.getId())
         {
-            tdManagerLogService.addLog("add", "用户修改品牌", req);
+            tdManagerLogService.addLog("add", "用户新增品牌"+tdBrand.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "用户修改品牌", req);
+            tdManagerLogService.addLog("edit", "用户修改品牌"+tdBrand.getTitle(), req);
         }
         
         tdBrandService.save(tdBrand);

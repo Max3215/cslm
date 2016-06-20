@@ -61,6 +61,14 @@ public class TdUserCollect {
 	// 排序号
     @Column
     private Long sortId;
+    
+    // 类型，1为商品收藏，2为店铺收藏
+    @Column
+    private Integer type;
+    
+    @Column
+    private Boolean isSelect;
+    
 
     public Long getId() {
         return id;
@@ -141,5 +149,21 @@ public class TdUserCollect {
     public void setGoodsSalePrice(Double goodsSalePrice) {
         this.goodsSalePrice = goodsSalePrice;
     }
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Boolean getIsSelect() {
+		return isSelect;
+	}
+
+	public void setIsSelect(Boolean isSelect) {
+		this.isSelect = isSelect;
+	}
     
 }

@@ -46,5 +46,5 @@ public interface TdArticleRepo extends
     
     int countByCategoryId(Long catId);
     					  
-    Page<TdArticle> findByDistributorIdAndMenuIdOrderByIdDesc(Long distributorId,Long menuId,Pageable page);
+    Page<TdArticle> findByDistributorIdAndMenuIdAndStatusIdOrderByIdDesc(Long distributorId,Long menuId, Long statusId,Pageable page);
 }

@@ -187,9 +187,9 @@ public class TdManagerProductCategoryController {
         }
 
         if (null == cat.getId()) {
-            tdManagerLogService.addLog("add", "用户修改产品分类", req);
+            tdManagerLogService.addLog("add", "用户新增产品分类"+cat.getTitle(), req);
         } else {
-            tdManagerLogService.addLog("edit", "用户修改产品分类", req);
+            tdManagerLogService.addLog("edit", "用户修改产品分类"+cat.getTitle(), req);
         }
         
         String tagValueCollect = "";

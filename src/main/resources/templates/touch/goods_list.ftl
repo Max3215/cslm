@@ -49,9 +49,26 @@ function loadMore()
 	<!-- 顶部 -->
 	<header class="com_top">
 		<a href="javascript:history.go(-1);" class="back"></a>
+		<#--
 		<p><#if productCategory??>${productCategory.title!''}</#if></p>
-		<a href="/touch/" class="c_home"></a>
+		-->
+		<div class="modify_branch">
+          <a href="javascript:void(0)" onclick="$('.infp_eject').fadeIn(300)"><#if distributorTitle??>${distributorTitle!''}<#else>超市联盟</#if></a>     
+        </div>
+        <div class="infp_eject" style="display: none;" id="shopList">
+           <#include "/touch/shop_list.ftl" />
+        </div>
+		<a href="javascript:void(0)" class="ser" onclick="$('.pop_search').show();"></a>
 	</header>
+	<div class="pop_search">
+        <div class="con">
+          <form action="/touch/search">
+          <input type="text" class="text" name="keywords" placeholder="输入关键字" />
+          <input type="submit" class="sub" value="搜索" />
+          </form>
+        </div>
+        <a href="javascript:void(0)" class="close" onclick="$(this).parent('.pop_search').hide();"></a>
+      </div>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
   

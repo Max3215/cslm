@@ -238,6 +238,19 @@ public class TdTouchIndexController {
         return "/touch/category_list";
     }
     
+    @RequestMapping(value="/index")
+    public String index(Long id,HttpServletRequest req,ModelMap map){
+    	if(null != id){
+    		TdDistributor distributor = tdDistributorService.findOne(id);
+    		if(null != distributor)
+    		{
+    			req.getSession().setAttribute("DISTRIBUTOR_ID", distributor.getId());
+    			req.getSession().setAttribute("distributorTitle", distributor.getTitle());
+    		}
+    	}
+    	return "redirect:/touch";
+    }
+    
     @RequestMapping(value="/distributor/change" , method=RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> changeDistributor(HttpServletRequest req,Long disId)
@@ -318,6 +331,7 @@ public class TdTouchIndexController {
     	
     	map.addAttribute("shop_list", tdDistributorService.findAll(ids));
     	map.addAttribute("more_list", tdDistributorService.findAll(outhers));
+    	map.addAttribute("index", true);
     	
     	return "/touch/shop_list";
     }

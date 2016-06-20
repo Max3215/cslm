@@ -183,11 +183,11 @@ public class TdManagerSiteLinkController {
         
         if (null == tdSiteLink.getId())
         {
-            tdManagerLogService.addLog("add", "用户修改友情链接", req);
+            tdManagerLogService.addLog("add", "用户新增友情链接"+tdSiteLink.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "用户修改友情链接", req);
+            tdManagerLogService.addLog("edit", "用户修改友情链接"+tdSiteLink.getTitle(), req);
         }
         
         tdSiteLinkService.save(tdSiteLink);

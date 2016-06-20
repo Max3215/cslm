@@ -101,11 +101,11 @@ public class TdManagerNaviBarItemController {
         
         if (null == tdNaviBarItem.getId())
         {
-            tdManagerLogService.addLog("add", "修改导航栏项", req);
+            tdManagerLogService.addLog("add", "新增导航栏项"+tdNaviBarItem.getTitle(), req);
         }
         else
         {
-            tdManagerLogService.addLog("edit", "修改导航栏项", req);
+            tdManagerLogService.addLog("edit", "修改导航栏项"+tdNaviBarItem.getTitle(), req);
         }
         
         tdNaviBarItemService.save(tdNaviBarItem);

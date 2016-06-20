@@ -24,7 +24,7 @@
                 <img src="/client/images/mymember/menu01.png" />批发单中心
             </a>
               <div>
-                <a href="/provider/order/list/0">我的批发单</a>
+                <a href="/provider/order/list">我的批发单</a>
                 <a href="/provider/order/sum">销售统计</a>
                  <a href="/provider/return/list">退货处理</a> 
                 <a href="/provider/goods/list/1">批发中商品</a>

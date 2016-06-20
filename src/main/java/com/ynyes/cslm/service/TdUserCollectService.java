@@ -83,14 +83,14 @@ public class TdUserCollectService {
      * @param ids
      * @return
      */
-    public TdUserCollect findByUsernameAndDistributorId(String username, Long disId)
+    public TdUserCollect findByUsernameAndDistributorId(String username, Long disId,Integer type)
     {
-        if (null == username || null == disId)
+        if (null == username || null == disId || null == type)
         {
             return null;
         }
         
-        return repository.findByUsernameAndDistributorId(username, disId);
+        return repository.findByUsernameAndDistributorIdAndType(username, disId,type);
     }
     
     public TdUserCollect findByUsernameAndProviderId(String username, Long pId)
@@ -125,18 +125,18 @@ public class TdUserCollectService {
         return repository.findAll(pageRequest);
     }
     
-    public Page<TdUserCollect> findByUsername(String username, int page, int size)
+    public Page<TdUserCollect> findByUsername(String username,Integer type, int page, int size)
     {
         PageRequest pageRequest = new PageRequest(page, size);
         
-        return repository.findByUsernameOrderByIdDesc(username, pageRequest);
+        return repository.findByUsernameAndTypeOrderByIdDesc(username,type, pageRequest);
     }
     
-    public Page<TdUserCollect> findByUsernameAndSearch(String username, String keywords, int page, int size)
+    public Page<TdUserCollect> findByUsernameAndSearch(String username, String keywords,Integer type, int page, int size)
     {
         PageRequest pageRequest = new PageRequest(page, size);
         
-        return repository.findByUsernameAndGoodsTitleContainingOrderByIdDesc(username, keywords, pageRequest);
+        return repository.findByUsernameAndGoodsTitleContainingAndTypeOrderByIdDesc(username, keywords,type, pageRequest);
     }
     
     /**

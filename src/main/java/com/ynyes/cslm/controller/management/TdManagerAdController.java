@@ -148,7 +148,7 @@ public class TdManagerAdController {
         
         tdAdService.save(tdAd);
         
-        tdManagerLogService.addLog(type, "用户修改广告", req);
+        tdManagerLogService.addLog(type, "用户修改广告"+tdAd.getTitle(), req);
         
         return "redirect:/Verwalter/ad/list";
     }

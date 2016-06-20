@@ -559,6 +559,9 @@ public class TdManagerDistributorController {
         	tdDistributorGoods.setIsTouchHot(false);
         }
         
+    	tdManagerLogService.addLog("edit", "用户修改"+tdDistributorGoods.getDistributorTitle()+"商品："+tdDistributorGoods.getGoodsTitle(), req);
+
+        
         tdDistributorGoodsService.save(tdDistributorGoods);
         return "redirect:/Verwalter/distributor/goods/list?__EVENTTARGET=" + __EVENTTARGET
                 + "&__EVENTARGUMENT=" + __EVENTARGUMENT + "&__VIEWSTATE="

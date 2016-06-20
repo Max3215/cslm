@@ -20,7 +20,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 
 @Configuration
@@ -30,6 +32,9 @@ public class Application extends SpringBootServletInitializer implements Command
     
 	@Autowired
     private TdOrderService tdOrderService;
+	
+	@Autowired
+	private TdDistributorGoodsService tdDistributorGoodsService;
 	
 	@Bean
 	public CharacterEncodingFilter encodingFilter() {
@@ -85,6 +90,14 @@ public class Application extends SpringBootServletInitializer implements Command
 						}
 					}
                 }
+                
+                List<TdDistributorGoods> list = tdDistributorGoodsService.findByIsOnSaleAndLeftNumber();
+                if(null != list  && list.size() > 0 ){
+                	for (TdDistributorGoods goods : list) {
+						goods.setIsOnSale(false);
+					}
+                }
+                tdDistributorGoodsService.save(list);
             }
         };
         

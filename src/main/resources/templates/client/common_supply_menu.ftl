@@ -24,7 +24,7 @@
                 <img src="/client/images/mymember/menu01.png" />订单中心
             </a>
               <div>
-                <a href="/supply/disOrder/list/0">我的分销单</a>
+                <a href="/supply/disOrder/list">我的分销单</a>
                 <a href="/supply/goods/list/1">分销中商品</a>
                 <a href="/supply/goods/list/0">仓库中商品</a>
                 <a href="/supply/goods/audit">待审核商品</a>

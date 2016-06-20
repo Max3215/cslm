@@ -136,7 +136,7 @@ public class TdManagerAdTypeController {
         
         tdAdTypeService.save(tdAdType);
         
-        tdManagerLogService.addLog(type, "用户修改广告位", req);
+        tdManagerLogService.addLog(type, "用户修改广告位"+tdAdType.getTitle(), req);
         
         return "redirect:/Verwalter/ad/type/list";
     }

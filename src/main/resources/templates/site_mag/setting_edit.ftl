@@ -253,6 +253,7 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
+        <!--
          <dl>
             <dt>二号客服QQ</dt>
             <dd>
@@ -274,7 +275,7 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
-        
+        -->
         <dl>
             <dt>管理员邮箱</dt>
             <dd>
@@ -418,12 +419,13 @@ $(function () {
     </div> 
     <div class="tab-content" style="display: none;">
         <dl>
-            <dt>注册成功奖励粮草</dt>
+            <dt>注册成功奖励积分</dt>
             <dd>
                 <input name="registerSuccessPoints" type="text" value="<#if setting??>${setting.registerSuccessPoints!"50"}<#else>50</#if>" class="input normal" datatype="n" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>分享注册奖励粮草</dt>
             <dd>
@@ -445,6 +447,7 @@ $(function () {
                 <span class="Validform_checktip">同一天通过商品分享获得的粮草超过该值将不再奖励粮草</span>
             </dd>
         </dl>
+        -->
     </div>    
     <div class="tab-content" style="display: none;">
         <dl>

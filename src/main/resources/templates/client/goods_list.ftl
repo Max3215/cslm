@@ -213,6 +213,12 @@ function byNow(goodsId){
                     </#if>
 				</div>
 			</div>
+<script>
+function showmsg(){
+    alert("库存不足！");
+    return;
+}
+</script>
 			<!--    商品列表   -->
 			<ul class="pro_list">
 			    <#if goods_page?? && goods_page.content?size gt 0>
@@ -225,8 +231,20 @@ function byNow(goodsId){
         					<p class="red">${goods.distributorTitle!''}</p>
         					<p class="price">￥${goods.goodsPrice?string("#.##")}<span>原价：￥${goods.goodsMarketPrice?string("#.##")}</span></p>
         					<menu class="btn">
-        						<#if !goods.isDistribution?? || !goods.isDistribution><a href="/cart/init?id=${goods.id?c}" target="_blank" class="car" title="加入购物车" ></a></#if>
-        						<#if goods.isDistribution><a href="/order/proGoods/${goods.id?c}" class="buy">立即预购</a></#if> 
+        					   <#if goods.leftNumber?? && goods.leftNumber gt 0>
+                                    <a href="/cart/init?id=${goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart"></a>
+                                <#else>
+                                    <a href="javascript:; " onclick="showmsg();"  title="加入购物车" class="car" id="addCart"></a>
+                                </#if>
+                                <#if goods.leftNumber?? && goods.leftNumber gt 0>
+                                   <#if goods.isDistribution?? && goods.isDistribution == true>
+                                       <a href="/order/proGoods/${goods.id?c}" target="_blank"  title="预购商品" class="buy" id="proGoods">立即预购</a>
+                                   <#else>
+                                       <a href="/order/byNow/${goods.id?c}" id="buyNow" target="_blank" title="立即购买" class="buy">立即购买</a>
+                                   </#if>
+                               <#else>
+                                   <a href="javascript:; " onclick="showmsg();"  title="立即购买" class="buy">立即购买</a>
+                               </#if>
         						<div class="clear"></div>
         					</menu>
         				</li>

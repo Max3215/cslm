@@ -197,20 +197,16 @@ public class TdManagerParameterController {
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         
-        String type = null;
-        
         if (null == tdParameter.getId())
         {
-            type = "add";
+        	tdManagerLogService.addLog("add", "用户修改参数"+tdParameter.getTitle(), req);
         }
         else
         {
-            type = "edit";
+        	tdManagerLogService.addLog("edit", "用户修改参数"+tdParameter.getTitle(), req);
         }
         
         tdParameterService.save(tdParameter);
-        
-        tdManagerLogService.addLog(type, "用户修改参数", req);
         
         return "redirect:/Verwalter/parameter/list";
     }

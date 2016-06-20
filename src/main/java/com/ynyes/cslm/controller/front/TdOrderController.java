@@ -139,6 +139,9 @@ public class TdOrderController extends AbstractPaytypeController {
 
 	@Autowired
 	private TdCashService tdCashService;
+	
+	@Autowired
+	private TdUserPointService tdUserPointService;
 
 	// @Autowired
 	// private PaymentChannelCEB payChannelCEB;
@@ -404,6 +407,7 @@ public class TdOrderController extends AbstractPaytypeController {
 			Double totalGoodsPrice = 0.0;// 商品总价
 			Double returnPrice = 0.0;// 商品返利
 			Long totalPointReturn = 0L; // 积分总额
+			Long disPointReturn  = 0L;
 			Double servicePrice = 0.0;// 平台服务费
 			Double disGoodsPrice = 0.0; // 分销商品费用
 
@@ -446,22 +450,28 @@ public class TdOrderController extends AbstractPaytypeController {
 
 				orderGoods.setQuantity(quantity);
 
-				// 获得积分
-				if (null != goods.getReturnPoints()) {
-					totalPointReturn += goods.getReturnPoints() * quantity;
-					orderGoods.setPoints(goods.getReturnPoints() * quantity);
-				}
-
 				if (null == distributorGoods || !distributorGoods.getIsDistribution()) {
+					
+					// 获得积分
+					if (null != goods.getReturnPoints()) {
+						totalPointReturn += goods.getReturnPoints() * quantity;
+						orderGoods.setPoints(goods.getReturnPoints() * quantity);
+					}
 					// 商品总价
 					totalGoodsPrice += cartGoods.getPrice() * cartGoods.getQuantity();
 					orderGoodsList.add(orderGoods);
 				} else {
+					
+					// 获得积分
+					if (null != goods.getReturnPoints()) {
+						disPointReturn += goods.getReturnPoints() * quantity;
+						orderGoods.setPoints(goods.getReturnPoints() * quantity);
+					}
 					// 商品总价
 					disGoodsPrice += cartGoods.getPrice() * cartGoods.getQuantity();
 					disOrderGoodsList.add(orderGoods);
 				}
-
+				
 				// 分销商品添加发货商信息
 				if (distributorGoods.getIsDistribution()) {
 					tdOrder.setProviderId(distributorGoods.getProviderId());
@@ -491,6 +501,10 @@ public class TdOrderController extends AbstractPaytypeController {
 						leftNumber = leftNumber - quantity;
 					}
 					distributorGoods.setLeftNumber(leftNumber);
+					
+					if(distributorGoods.getLeftNumber() < 1){
+						distributorGoods.setIsOnSale(false);
+					}
 				} else {
 					TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(
 							distributorGoods.getProviderId(), distributorGoods.getGoodsId());
@@ -503,7 +517,9 @@ public class TdOrderController extends AbstractPaytypeController {
 					if (null != list && list.size() > 0) {
 						for (TdDistributorGoods tdDistributorGoods : list) {
 							tdDistributorGoods.setLeftNumber(providerGoods.getLeftNumber());
-
+							if(distributorGoods.getLeftNumber() < 1){
+								distributorGoods.setIsOnSale(false);
+							}
 							tdDistributorGoodsService.save(tdDistributorGoods); // 更新各超市该商品库存
 						}
 					}
@@ -554,14 +570,12 @@ public class TdOrderController extends AbstractPaytypeController {
 					postPrice += distributor.getPostPrice();
 
 					// 判断是否满额免
-					if (orderGoodsList.size() == 0) {
-						if (null != distributor.getMaxPostPrice()
-								&& totalGoodsPrice + disGoodsPrice > distributor.getMaxPostPrice()) {
-							postPrice = 0.0;
-							totalPrice += disGoodsPrice;
-						} else {
-							totalPrice += disGoodsPrice + postPrice;
-						}
+					if (null != distributor.getMaxPostPrice()
+							&& totalGoodsPrice + disGoodsPrice > distributor.getMaxPostPrice()) {
+						postPrice = 0.0;
+						totalPrice += disGoodsPrice;
+					} else {
+						totalPrice += disGoodsPrice + postPrice;
 					}
 
 				} else {
@@ -576,15 +590,9 @@ public class TdOrderController extends AbstractPaytypeController {
 					tdOrder.setIsNeedInvoice(false);
 				}
 
-				// 订单商品
-				// tdOrder.setOrderGoodsList(disOrderGoodsList);
-				// tdOrder.setTotalGoodsPrice(disGoodsPrice);
+				// 积分奖励
+				tdOrder.setPoints(disPointReturn);
 
-				// 粮草奖励
-				tdOrder.setPoints(totalPointReturn);
-
-				// 保存订单商品及订单
-				// tdOrderGoodsService.save(orderGoodsList);
 
 				// 添加订单超市信息
 				tdOrder.setShopId(distributor.getId());
@@ -664,7 +672,6 @@ public class TdOrderController extends AbstractPaytypeController {
 					servicePrice += provider.getServiceRation() * totalGoodsPrice; // 平台服务费
 				}
 				
-				tdOrder.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
 				tdOrder.setTotalPrice(totalPrice); // 订单总价
 				tdOrder.setPostPrice(postPrice); // 邮费
 				tdOrder.setTrainService(servicePrice); // 平台服务费
@@ -711,6 +718,8 @@ public class TdOrderController extends AbstractPaytypeController {
 				}
 
 				order = tdOrderService.save(tdOrder);
+				
+				addUserPoint(order,username);
 			}
 
 			if (null != orderGoodsList && orderGoodsList.size() > 0) {
@@ -901,32 +910,10 @@ public class TdOrderController extends AbstractPaytypeController {
 				}
 
 				order = tdOrderService.save(order);
+				
+				addUserPoint(order,username);
 			}
 
-			// // 添加积分使用记录
-			// if (null != user) {
-			// if (null == user.getTotalPoints())
-			// {
-			// user.setTotalPoints(0L);
-			//
-			// user = tdUserService.save(user);
-			// }
-			//
-			// if (pointUse.compareTo(0L) >= 0 && null != user.getTotalPoints()
-			// && user.getTotalPoints().compareTo(pointUse) >= 0) {
-			// TdUserPoint userPoint = new TdUserPoint();
-			// userPoint.setDetail("购买商品使用积分抵扣");
-			// userPoint.setOrderNumber(tdOrder.getOrderNumber());
-			// userPoint.setPoint(0 - pointUse);
-			// userPoint.setPointTime(new Date());
-			// userPoint.setUsername(username);
-			// userPoint.setTotalPoint(user.getTotalPoints() - pointUse);
-			// tdUserPointService.save(userPoint);
-			//
-			// user.setTotalPoints(user.getTotalPoints() - pointUse);
-			// tdUserService.save(user);
-			// }
-			// }
 		}
 
 		// 删除已生成订单的购物车项
@@ -937,6 +924,34 @@ public class TdOrderController extends AbstractPaytypeController {
 		}
 		return "redirect:/order/pay?orderId=" + order.getId();
 		// return "redirect:/order/success?orderId=" + tdOrder.getId();
+	}
+	
+	
+	// 添加会员积分
+	public void addUserPoint(TdOrder order,String username){
+		
+		TdUser user = tdUserService.findByUsername(username);
+		
+		 // 添加积分使用记录
+		 if (null != user) {
+			 if (null == user.getTotalPoints())
+			 {
+				 user.setTotalPoints(0L);
+				 user = tdUserService.save(user);
+			 }
+		
+				 TdUserPoint userPoint = new TdUserPoint();
+				 userPoint.setDetail("购买商品获得积分抵扣");
+				 userPoint.setOrderNumber(order.getOrderNumber());
+				 userPoint.setPoint(order.getPoints());
+				 userPoint.setPointTime(new Date());
+				 userPoint.setUsername(username);
+				 userPoint.setTotalPoint(user.getTotalPoints() + order.getPoints());
+				 tdUserPointService.save(userPoint);
+				
+				 user.setTotalPoints(user.getTotalPoints() + order.getPoints());
+				 tdUserService.save(user);
+		 }
 	}
 
 	// 拼接地址

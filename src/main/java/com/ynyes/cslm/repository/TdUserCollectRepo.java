@@ -20,13 +20,13 @@ public interface TdUserCollectRepo extends
 		PagingAndSortingRepository<TdUserCollect, Long>,
 		JpaSpecificationExecutor<TdUserCollect> 
 {
-    Page<TdUserCollect> findByUsernameOrderByIdDesc(String username, Pageable page);
+    Page<TdUserCollect> findByUsernameAndTypeOrderByIdDesc(String username,Integer type, Pageable page);
     
-    Page<TdUserCollect> findByUsernameAndGoodsTitleContainingOrderByIdDesc(String username, String keywords, Pageable page);
+    Page<TdUserCollect> findByUsernameAndGoodsTitleContainingAndTypeOrderByIdDesc(String username, String keywords,Integer type, Pageable page);
     
     List<TdUserCollect> findByUsername(String username);
     
-    TdUserCollect findByUsernameAndDistributorId(String username, Long goodsId);
+    TdUserCollect findByUsernameAndDistributorIdAndType(String username, Long goodsId,Integer type);
     
     TdUserCollect findByUsernameAndProviderId(String username, Long pId);
     

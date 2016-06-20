@@ -21,7 +21,7 @@ $(document).ready(function(){
     changeYzm(); 
    //初始化表单验证
     $("#form1").Validform({
-        tiptype: 3
+        tiptype: 1
     });
     
     $("#isCheck").change(function(){
@@ -69,7 +69,7 @@ function checkwindowhide()
 <body>
 <iframe class="thickframe" id="" marginwidth="0" marginheight="0" frameborder="0" scrolling="no" style="display:none"></iframe>
 <div  id="tanchuangbackgroud"></div>
-<div class="thickbox" id="tanchuang" style="width: 924px; height: 500px; left: 15%; top: 88px; display:none">
+<div class="thickbox" id="tanchuang" style="width: 924px; height: 500px; left: 50%; top: 88px; display:none;margin-left:-462px;">
     <div class="thicktitle" id="" style="width:922"><span>超市联盟注册协议</span></div>
     <div class="thickcon" id="" style="width: 922px; height: 450px; padding-left: 0px; padding-right: 0px; border-left-width: 1px; border-right-width: 1px;">
         <div class=" regist-2013">
@@ -199,17 +199,17 @@ function checkwindowhide()
              <section class="loginbox">
                 <div>
                     <p>请输入用户名</p>
-                    <input class="text" name="username" type="text" datatype="s6-20" ajaxurl="/reg/check/username"/>
+                    <input class="text" name="username" type="text" datatype="s6-20" ajaxurl="/reg/check/username" nullmsg="请输入登录账号"/>
                     <span class="Validform_checktip Validform_wrong" style=""></span>
                 </div>
                 <div>
                     <p>请输入手机号</p>
-                    <input id="mobileNumber" class="text" name="mobile" type="text" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/"/>
+                    <input id="mobileNumber" class="text" name="mobile" type="text" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" nullmsg="请输入手机号"/>
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div>
                     <p>请输入密码</p>
-                    <input class="text" name="password" type="password" datatype="s6-20"/>
+                    <input class="text" name="password" type="password" datatype="s6-20" nullmsg="请输入密码"/>
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div>
@@ -220,7 +220,7 @@ function checkwindowhide()
                 <div>
                     <p>请输入验证码</p>
                     <div class="clear"></div>
-                    <input class="text fl" type="text" name="code" style="width:35%;" datatype="*"/>
+                    <input class="text fl" type="text" name="code" style="width:35%;" datatype="*" nullmsg="请输入验证码"/>
                     <a class="yzm01" href="javascript:changeYzm()"><img id="yzm_image" src="" width="100px;" height="37px;"/></a>
                     <a class="yzm02" href="javascript:changeYzm()">看不清楚？换一张</a>
                     <span class="Validform_checktip Validform_wrong">
