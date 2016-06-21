@@ -160,10 +160,14 @@ function proGoods(dId){
 	<!-- 顶部 -->
 	<header class="com_top">
 		<a href="javascript:history.go(-1);" class="back"></a>
+		<p>商品详情</p>
+		<!--
 		<div class="search_box">
-      <input type="text" class="text" placeholder="搜索" />  
-    </div>
-		<a href="/touch" class="c_home"></a>
+          <input type="text" class="text" placeholder="搜索" />  
+        </div>
+		<a href="javascript:void(0)" class="ser" onclick="$('.pop_search').show();"></a>
+        -->
+        <a href="/touch/" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
@@ -198,7 +202,13 @@ function proGoods(dId){
        <div class="postage">
             <p>邮费说明：</p>
             <p>${distributor.postPrice?string('0.00')}元/满${distributor.maxPostPrice?string('0.00')}包邮</p>
-          </div>
+       </div>
+       <#if distributor.postInfo??>
+       <div class="postage">
+            <p>配送说明：</p>
+            <p>${distributor.postInfo!''}</p>
+       </div>
+       </#if>
     </div>
     <a href="javascript:void(0)" class="choose" onclick="$('.pro_eject').fadeIn(300);">选择   数量</a>
   </section>

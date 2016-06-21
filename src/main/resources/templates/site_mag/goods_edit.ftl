@@ -441,7 +441,7 @@ function del_goods_comb(obj) {
         <dl>
             <dt>商品副标题</dt>
             <dd>
-                <input name="subTitle" type="text" value="<#if goods??>${goods.subTitle!""}</#if>" class="input normal" datatype="*1-255" sucmsg=" ">
+                <input name="subTitle" type="text" value="<#if goods??>${goods.subTitle!""}</#if>" class="input normal" >
                 <span class="Validform_checktip">*标题最多255个字符</span>
             </dd>
         </dl>
@@ -455,7 +455,7 @@ function del_goods_comb(obj) {
         <dl>
             <dt>市场价</dt>
             <dd>
-                <input name="marketPrice" type="text" value="<#if goods?? && goods.marketPrice??>${goods.marketPrice?string("0.00")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
+                <input name="marketPrice" type="text" value="<#if goods?? && goods.marketPrice??>${goods.marketPrice?string("0.00")}<#else>0</#if>" class="input normal"  sucmsg=" ">
                 <span class="Validform_checktip">*市场价格</span>
             </dd>
         </dl>

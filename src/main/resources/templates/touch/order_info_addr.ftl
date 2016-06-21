@@ -24,6 +24,8 @@
               <menu>
               </div>
         </#list>
+   <#else>
+   <input type="hidden" value="" name="addressId"  datatype="n" nullmsg="请先添加地址!">
    </#if> 
    <a href="/touch/user/address/update?type=order" class="add_btn">添加收货地址</a>
 </section>

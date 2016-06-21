@@ -818,7 +818,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
 		
 		
-		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
 		
 		if(null == categoryId)
@@ -880,13 +880,13 @@ public class TdDistributorController extends AbstractPaytypeController{
             	
             	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
             	{
-            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(tdProductCategory.getId());
             		map.addAttribute("cateList", cateList);
             		
             		for (TdProductCategory productCategory : cateList) {
             			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
             			{
-            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(productCategory.getId()));
             			}
             		}
             		
@@ -1731,7 +1731,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		map.addAttribute("categoryId", categoryId);
 		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
 		
-		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
 		if(null == categoryId){
 			if(null == keywords)
@@ -1763,13 +1763,13 @@ public class TdDistributorController extends AbstractPaytypeController{
             	
             	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
             	{
-            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(tdProductCategory.getId());
             		map.addAttribute("cateList", cateList);
             		
             		for (TdProductCategory productCategory : cateList) {
             			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
             			{
-            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(productCategory.getId()));
             			}
             		}
             		
@@ -2466,6 +2466,7 @@ public class TdDistributorController extends AbstractPaytypeController{
             	 return res;
              }
              tdOrder.setPayTypeTitle("余额支付");
+             tdOrder.setPayTypeId(0L);
              
              // 保存商品信息
              tdOrderGoodsService.save(orderGoodsList);
@@ -3050,7 +3051,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 //		}// 所有该批发商有的分类
 //		map.addAttribute("category_list",category_list);
 //		map.addAttribute("category_list", tdProductCategoryService.findAll());
-		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
 		
 		if(null == categoryId)
@@ -3084,13 +3085,13 @@ public class TdDistributorController extends AbstractPaytypeController{
             	
             	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
             	{
-            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(tdProductCategory.getId());
             		map.addAttribute("cateList", cateList);
             		
             		for (TdProductCategory productCategory : cateList) {
             			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
             			{
-            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(productCategory.getId()));
             			}
             		}
             		

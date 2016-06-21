@@ -690,7 +690,7 @@ public class TdListController {
 
             if (null != adType) {
                 map.addAttribute("list_scroll_ad_list", tdAdService
-                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
             }
         }
         

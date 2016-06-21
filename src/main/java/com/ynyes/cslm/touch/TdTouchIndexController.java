@@ -184,19 +184,19 @@ public class TdTouchIndexController {
 
              if (null != adType) {
                  map.addAttribute("recommend_right_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
              }
              adType = tdAdTypeService.findByTitle("触屏新品推荐上侧广告");
 
              if (null != adType) {
                  map.addAttribute("recommend_top_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
              }
              adType = tdAdTypeService.findByTitle("触屏新品推荐下侧广告");
 
              if (null != adType) {
                  map.addAttribute("recommend_bot_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
              }
              
           // 超市快讯广告
@@ -204,7 +204,7 @@ public class TdTouchIndexController {
 
              if (null != adType) {
                  map.addAttribute("news_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
              }
              
              // 新品推荐广告
@@ -212,7 +212,7 @@ public class TdTouchIndexController {
 
              if (null != adType) {
                  map.addAttribute("banner_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
              }
              
          }

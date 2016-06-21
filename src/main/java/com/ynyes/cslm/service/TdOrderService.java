@@ -470,6 +470,33 @@ public class TdOrderService {
     	return repository.findAll(c,pageRequest);
     }
     
+    public Page<TdOrder> findAll(Long statusId,Long payId,Date startTime,Date endTime,String keywords,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "orderTime"));
+    	Criteria<TdOrder> c = new Criteria<>();
+    	
+    	
+    	if(statusId != 0 ){
+    		c.add(Restrictions.eq("statusId", statusId, true));
+    	}
+    	
+    	if(payId != null ){
+    		c.add(Restrictions.eq("payTypeId", payId, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("orderTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("orderTime", endTime, true));
+    	}
+    	if(null != keywords && !keywords.isEmpty()){
+    		c.add(Restrictions.or(Restrictions.like("orderNumber", keywords, true),Restrictions.like("username", keywords, true)));
+    	}
+    	
+    	return repository.findAll(c,pageRequest);
+    }
+    
     public Page<TdOrder> findAll(String username,int statusId,int typeId,Date startTime,Date endTime,int page,int size){
     	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "orderTime"));
     	Criteria<TdOrder> c = new Criteria<>();

@@ -82,6 +82,10 @@ public class TdProductCategory {
     // SEO描述
     @Column
     private String seoDescription;
+    
+    // 是否启用
+    @Column
+    private Boolean isEnable;
 
     public Long getId() {
         return id;
@@ -218,4 +222,14 @@ public class TdProductCategory {
     public void setSeoDescription(String seoDescription) {
         this.seoDescription = seoDescription;
     }
+
+	public Boolean getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(Boolean isEnable) {
+		this.isEnable = isEnable;
+	}
+    
+    
 }

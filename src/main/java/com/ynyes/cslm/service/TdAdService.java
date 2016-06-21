@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ynyes.cslm.entity.TdAd;
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.repository.TdAdRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdAd 服务类
@@ -123,6 +125,23 @@ public class TdAdService {
     public List<TdAd> findByDistributorId(Long disId)
     {
     	return repository.findByDistributorId(disId);
+    }
+    
+    public Page<TdAd> findAll(Long typeId,Long disId,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.ASC, "sortId"));
+    	Criteria<TdAd> c = new Criteria<>();
+    	
+    	if(null != typeId)
+    	{
+    		c.add(Restrictions.eq("typeId", typeId, true));
+    	}
+    	if(null != disId)
+    	{
+    		c.add(Restrictions.eq("distributorId", disId, true));
+    	}
+    	
+    	return repository.findAll(c, pageRequest);
     }
     
     /**

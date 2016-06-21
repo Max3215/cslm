@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdCash;
+import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.repository.TdCashRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * 
@@ -66,48 +69,31 @@ public class TdCashService {
 		
 		return repository.findAll(pageRequest);
 	}
+	
+	public Page<TdCash> findAll(Long shopType,Long type,Date startTime,Date endTime,int page,int size){
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "createTime"));
+    	Criteria<TdCash> c = new Criteria<>();
+    	
+    	if(null != shopType)
+    	{
+    		c.add(Restrictions.eq("shopType", shopType, true));
+    	}
+    	if(null != type)
+    	{
+    		c.add(Restrictions.eq("type", type, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("createTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("createTime", endTime, true));
+    	}
+		
+    	return repository.findAll(c,pageRequest);
+	}
 
-	public Page<TdCash> findByCreateTimeBetween(Date startTime, Date endTime, Integer page, Integer size) 
-	{
-		PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "createTime"));
-		return repository.findByCreateTimeBetween(startTime, endTime, pageRequest);
-	}
-	
-	public Page<TdCash> findByType(Long type, Integer page, Integer size) 
-	{
-		PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "createTime"));
-		return repository.findByType(type, pageRequest);
-	}
-	
-	public Page<TdCash> findByTypeAndCreateTimeBetween(Long type,Date startTime, Date endTime, Integer page, Integer size) 
-	{
-		PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "createTime"));
-		return repository.findByTypeAndCreateTimeBetween(type,startTime, endTime, pageRequest);
-	}
-	
-	public Page<TdCash> findByShopType(Long shopType,int page, int size)
-	{
-		PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "createTime"));
-		return repository.findByShopType(shopType, pageRequest);
-	}
-	
-	public Page<TdCash> findByShopTypeAndCreateTimeBetween(Long shopType,Date startTime, Date endTime, Integer page, Integer size) 
-	{
-		PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "createTime"));
-		return repository.findByShopTypeAndCreateTimeBetween(shopType, startTime, endTime, pageRequest);
-	}
-	
-	public Page<TdCash> findByShopTypeAndType(Long shopType,Long type, Integer page, Integer size) 
-	{
-		PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "createTime"));
-		return repository.findByShopTypeAndType(shopType, type, pageRequest);
-	}
-	
-	public Page<TdCash> findByShopTypeAndTypeAndCreateTimeBetween(Long shopType,Long type,Date startTime, Date endTime, Integer page, Integer size) 
-	{
-		PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "createTime"));
-		return repository.findByShopTypeAndTypeAndCreateTimeBetween(shopType,type,startTime, endTime, pageRequest);
-	}
 	
 	
 }

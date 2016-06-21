@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -404,7 +405,7 @@ public class TdManagerOrderController {
                                 @PathVariable Long type,
                                 Integer page, 
                                 Integer size,
-                                Integer timeId,
+                                String startTime,String endTime,
                                 String __EVENTTARGET,
                                 String __EVENTARGUMENT,
                                 String __VIEWSTATE,
@@ -412,9 +413,9 @@ public class TdManagerOrderController {
                                 Integer[] listChkId,
                                 ModelMap map,
                                 String exportUrl,
-//                                String dateId,
+                                Long payId,
                                 HttpServletResponse resp,
-                                HttpServletRequest req){
+                                HttpServletRequest req) throws ParseException{
         String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
             return "redirect:/Verwalter/login";
@@ -441,6 +442,11 @@ public class TdManagerOrderController {
             	exportUrl = SiteMagConstant.backupPath;
                 tdManagerLogService.addLog("export", "导出订单", req);
             }
+            else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+            {
+            	exportUrl = SiteMagConstant.backupPath;
+                tdManagerLogService.addLog("export", "导出订单", req);
+            }
             else if (__EVENTTARGET.equalsIgnoreCase("btnPage"))
             {
                 if (null != __EVENTARGUMENT)
@@ -460,847 +466,81 @@ public class TdManagerOrderController {
             size = SiteMagConstant.pageSize;;
         }
         
-        if (null == timeId) {
-            timeId = 0;
-        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date start = null;
+		Date end = null ;
+		
+		if(null != startTime && !"".equals(startTime.trim()))
+		{
+			start = sdf.parse(startTime);
+		}
+		if(null != endTime && !"".equals(endTime.trim()))
+		{
+			end = sdf.parse(endTime);
+		}
         
         
-        /**
-  		 * @author lc
-  		 * @注释：根据不同条件导出excel文件
-  		 */
-          // 第一步，创建一个webbook，对应一个Excel文件  
-          HSSFWorkbook wb = new HSSFWorkbook();  
-          // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
-          HSSFSheet sheet = wb.createSheet("order");  
-          // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
-          HSSFRow row = sheet.createRow((int) 0);  
-          // 第四步，创建单元格，并设置值表头 设置表头居中  
-          HSSFCellStyle style = wb.createCellStyle();  
-          style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+        map.addAttribute("pay_list", tdPayTypeService.findByIsEnableTrue());
+       
+		map.addAttribute("order_page", tdOrderService.findAll(statusId,payId, start, end, keywords, page, size));
           
-          HSSFCell cell = row.createCell((short) 0);  
-          cell.setCellValue("订单号");  
-          cell.setCellStyle(style);  
-          cell = row.createCell((short) 1);  
-          cell.setCellValue("会员账号");  
-          cell.setCellStyle(style);  
-          cell = row.createCell((short) 2);  
-          cell.setCellValue("支付方式");  
-          cell.setCellStyle(style);  
-          cell = row.createCell((short) 3);  
-          cell.setCellValue("配送方式");  
-          cell.setCellStyle(style);
-          cell = row.createCell((short) 4);  
-          cell.setCellValue("订单状态");  
-          cell.setCellStyle(style);
-          cell = row.createCell((short) 5);  
-          cell.setCellValue("总金额");  
-          cell.setCellStyle(style);
-          cell = row.createCell((short) 6);  
-          cell.setCellValue("下单时间");  
-          cell.setCellStyle(style);
-        
-        /**
-		 * @author lc
-		 * @注释：时间删选
-		 */
-        Double price = new Double(0.00);
-        Double sales = new Double(0.00);
-        if (timeId.equals(0)) {
-        	if (null != statusId) {
-    			if (statusId.equals(0L)) {				
-                	if (type.equals(0L)) {
-                		if(null == keywords || "".equals(keywords.trim()))
-                		{
-//                			List<TdOrder> list = tdOrderService.findAll();                   	
-//                			price = countprice(list);
-//                			sales = countsales(list);
-                			map.addAttribute("order_page", tdOrderService.findAllOrderByIdDesc(page, size));
-                			if (null != exportUrl) {
-                				Page<TdOrder> tdOrderPage = tdOrderService.findAllOrderByIdDesc(page, size);
-                				
-                				if (ImportData(tdOrderPage, row, cell, sheet)) {
-                					download(wb, exportUrl, resp);
-                				}                          	                          
-                			}
-                		}else{
-                			map.addAttribute("order_page", tdOrderService.searchAll(keywords, page, size));
-                			if (null != exportUrl) {
-                				Page<TdOrder> tdOrderPage = tdOrderService.searchAll(keywords, page, size);
-                				
-                				if (ImportData(tdOrderPage, row, cell, sheet)) {
-                					download(wb, exportUrl, resp);
-                				}                          	                          
-                			}
-                		}
-    				}
-                	else {
-                		if(null == keywords || "".equals(keywords.trim()))
-                		{
-//                		List<TdOrder> list = tdOrderService.findBytypeIdOrderByIdDesc(type);
-//                		price = countprice(list);
-//                    	sales = countsales(list);
-                			map.addAttribute("order_page", tdOrderService.findBytypeIdOrderByIdDesc(type, page, size));
-                			if (null != exportUrl) {
-                				Page<TdOrder> tdOrderPage = tdOrderService.findBytypeIdOrderByIdDesc(type, page, size);
-                				
-                				if (ImportData(tdOrderPage, row, cell, sheet)) {
-                					download(wb, exportUrl, resp);
-                				}                         	                           
-                			}
-                		}else{
-                			map.addAttribute("order_page", tdOrderService.searchAndtypeIdOrderByIdDesc(keywords, type, page, size));
-                			if (null != exportUrl) {
-                				Page<TdOrder> tdOrderPage =  tdOrderService.searchAndtypeIdOrderByIdDesc(keywords, type, page, size);
-                				
-                				if (ImportData(tdOrderPage, row, cell, sheet)) {
-                					download(wb, exportUrl, resp);
-                				}                         	                           
-                			}
-                		}
-    				}				
-    			}else{
-    				if (type.equals(0L)) {
-    					if(null == keywords || "".equals(keywords.trim()))
-    					{
-//    						List<TdOrder> list = tdOrderService.findByStatusOrderByIdDesc(statusId);
-//    						price = countprice(list);
-//    						sales = countsales(list);
-    						map.addAttribute("order_page", tdOrderService.findByStatusOrderByIdDesc(statusId, page, size));
-    						if (null != exportUrl) {
-    							Page<TdOrder> tdOrderPage = tdOrderService.findByStatusOrderByIdDesc(statusId, page, size);
-    							
-    							if (ImportData(tdOrderPage, row, cell, sheet)) {
-    								download(wb, exportUrl, resp);
-    							}                         	                           
-    						}
-    					}else{
-    						map.addAttribute("order_page", tdOrderService.searchAndStatusId(keywords, statusId, page, size));
-    						if (null != exportUrl) {
-    							Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusId(keywords, statusId, page, size);
-    							
-    							if (ImportData(tdOrderPage, row, cell, sheet)) {
-    								download(wb, exportUrl, resp);
-    							}                         	                           
-    						}
-    					}
-    				}
-    				else{
-    					if(null == keywords || "".equals(keywords.trim()))
-    					{
-//    						List<TdOrder> list = tdOrderService.findByStatusAndTypeIdOrderByIdDesc(statusId, type);
-//    						price = countprice(list);
-//    						sales = countsales(list);
-    						map.addAttribute("order_page", tdOrderService.findByStatusAndTypeOrderByIdDesc(statusId, type, page, size));
-    						if (null != exportUrl) {
-    							Page<TdOrder> tdOrderPage = tdOrderService.findByStatusAndTypeOrderByIdDesc(statusId, type, page, size);
-    							
-    							if (ImportData(tdOrderPage, row, cell, sheet)) {
-    								download(wb, exportUrl, resp);
-    							}                         	                           
-    						}
-    					}else{
-    						map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndTypeId(keywords, statusId, type, page, size));
-    						if (null != exportUrl) {
-    							Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndTypeId(keywords, statusId, type, page, size);
-    							
-    							if (ImportData(tdOrderPage, row, cell, sheet)) {
-    								download(wb, exportUrl, resp);
-    							}                         	                           
-    						}
-    					}
-    				}
-    			}
-    		}
+		if (null != exportUrl) {
+        	  
+        	// 第一步，创建一个webbook，对应一个Excel文件  
+	      HSSFWorkbook wb = new HSSFWorkbook();  
+	      // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
+	      HSSFSheet sheet = wb.createSheet("order");  
+	      // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+	      HSSFRow row = sheet.createRow((int) 0);  
+	      // 第四步，创建单元格，并设置值表头 设置表头居中  
+	      HSSFCellStyle style = wb.createCellStyle();  
+	      style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+	      
+	      HSSFCell cell = row.createCell((short) 0);  
+	      cell.setCellValue("订单号");  
+	      cell.setCellStyle(style);  
+	      cell = row.createCell((short) 1);  
+	      cell.setCellValue("会员账号");  
+	      cell.setCellStyle(style);  
+	      cell = row.createCell((short) 2);  
+	      cell.setCellValue("支付方式");  
+	      cell.setCellStyle(style);  
+	      cell = row.createCell((short) 3);  
+	      cell.setCellValue("配送方式");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 4);  
+	      cell.setCellValue("订单状态");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 5);  
+	      cell.setCellValue("总金额");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 6);  
+	      cell.setCellValue("下单时间");  
+	      cell.setCellStyle(style);
+	      
+	      Page<TdOrder> tdOrderPage = null;
+	      if (__EVENTTARGET.equalsIgnoreCase("export"))
+	      {
+	    	  tdOrderService.findAll(statusId,payId, start, end, keywords, page, size);
+	      }
+	      else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+	      {
+	            tdOrderService.findAll(statusId,payId, start, end, keywords, page, Integer.MAX_VALUE);
+	        }
+			
+			if (ImportData(tdOrderPage, row, cell, sheet)) {
+				download(wb, exportUrl, resp);
+			}                          	                          
 		}
-        else if (timeId.equals(1)) {
-        	Date cur = new Date(); 
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-          //  calendar.add(Calendar.MONTH, -1);// 月份减一
-          //  calendar.add(Calendar.DAY_OF_MONTH, -1);
-            Date time = calendar.getTime();
-            time.setHours(0);
-            time.setMinutes(0);            
-        	if (statusId.equals(0L)) {
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByTimeAfterOrderByIdDesc(time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTimeAfter(keywords, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTimeAfter(keywords, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-        	else{
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-		}
-        else if (timeId.equals(2)) {
-        	Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-          //  calendar.add(Calendar.MONTH, -1);// 月份减一
-            calendar.add(Calendar.DAY_OF_MONTH, -7);
-            Date time = calendar.getTime();
-            if (statusId.equals(0L)) {
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByTimeAfterOrderByIdDesc(time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTimeAfter(keywords, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTimeAfter(keywords, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-        	else{
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-		}
-        else if (timeId.equals(3)) {
-        	Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.MONTH, -1);// 月份减一
-           // calendar.add(Calendar.DAY_OF_MONTH, -7);
-            Date time = calendar.getTime();
-            if (statusId.equals(0L)) {
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByTimeAfterOrderByIdDesc(time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTimeAfter(keywords, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTimeAfter(keywords, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-        	else{
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-		}
-        else if (timeId.equals(4)) {
-        	Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.MONTH, -3);// 月份减一
-           // calendar.add(Calendar.DAY_OF_MONTH, -7);
-            Date time = calendar.getTime();
-            if (statusId.equals(0L)) {
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByTimeAfterOrderByIdDesc(time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page",tdOrderService.searchAndTimeAfter(keywords, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTimeAfter(keywords, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-        	else{
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-		}
-        else if (timeId.equals(6)) {
-        	Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.MONTH, -6);// 月份减一
-           // calendar.add(Calendar.DAY_OF_MONTH, -7);
-            Date time = calendar.getTime();
-            if (statusId.equals(0L)) {
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByTimeAfterOrderByIdDesc(time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTimeAfter(keywords, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTimeAfter(keywords, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords  || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-        	else{
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords  || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-		}
-        else if (timeId.equals(12)) {
-        	Date cur = new Date();
-            Calendar calendar = Calendar.getInstance();// 日历对象
-            calendar.setTime(cur);// 设置当前日期
-            calendar.add(Calendar.MONTH, -12);// 月份减一
-           // calendar.add(Calendar.DAY_OF_MONTH, -7);
-            Date time = calendar.getTime();
-            if (statusId.equals(0L)) {
-        		if (type.equals(0L)) {
-        			if(null == keywords  || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByTimeAfterOrderByIdDesc(time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByTimeAfterOrderByIdDesc(time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTimeAfter(keywords, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTimeAfter(keywords, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-//        				map.addAttribute("order_page", tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findBytypeIdAndTimeAfterOrderByIdDesc(type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndTypeIdAndOrderTimeAfter(keywords, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-        	else{
-        		if (type.equals(0L)) {
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusAndTimeAfterOrderByIdDesc(statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndOrderTimeAfter(keywords, statusId, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        		else{
-        			if(null == keywords || "".equals(keywords.trim()))
-        			{
-//        				List<TdOrder> list = tdOrderService.findByStatusAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time);
-//        				price = countprice(list);
-//        				sales = countsales(list);
-        				map.addAttribute("order_page", tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.findByStatusIdAndTypeIdAndTimeAfterOrderByIdDesc(statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}else{
-        				map.addAttribute("order_page", tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size));
-        				if (null != exportUrl) {
-        					Page<TdOrder> tdOrderPage = tdOrderService.searchAndStatusIdAndTypeIdAndOrderTimeAfter(keywords, statusId, type, time, page, size);
-        					
-        					if (ImportData(tdOrderPage, row, cell, sheet)) {
-        						download(wb, exportUrl, resp);
-        					}                         	                           
-        				}
-        			}
-        		}
-        	}
-		}       
+          
         // 参数注回
-//        map.addAttribute("dateId",dateId);
-        map.addAttribute("price",price);
-        map.addAttribute("sales",sales);
         map.addAttribute("page", page);
         map.addAttribute("size", size);
         map.addAttribute("keywords", keywords);
         map.addAttribute("statusId", statusId);
-        /**
-		 * @author lc
-		 * @注释：添加时间删选参数
-		 */
-        map.addAttribute("time_id", timeId);
+        map.addAttribute("startTime", start);
+		map.addAttribute("endTime", end);
+        
         map.addAttribute("type", type);
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);

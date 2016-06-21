@@ -5,6 +5,7 @@
 <title>交易记录</title>
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
+<script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <link href="/mag/style/pagination.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
@@ -48,7 +49,20 @@ var theForm = document.forms['form1'];
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
         <li><a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a></li>
+        <li><a class="all" href="javascript:__doPostBack('exportAll','')"><span>导出全部</span></a></li>
       </ul>
+      <ul class="icon-list">
+            <li>
+                <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+            </li>
+            <li><a>至</a></li>
+            <li>
+                <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+            </li>
+        </ul>
+    </div>
+    <div class="a-list">
+        <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('btnSearch','')">查询</a>
     </div>
   </div>
 </div>

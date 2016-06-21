@@ -30,6 +30,38 @@ function __doPostBack(eventTarget, eventArgument) {
         theForm.submit();
     }
 }
+
+function changeEnable(id) {
+        var dialog = $.dialog.confirm('确认后将修改该类别显示状态，确认要继续吗？', function () {
+            var postData = { "id": id};
+            //发送AJAX请求
+            sendAjaxUrl(dialog, postData, "/Verwalter/product/category/param/edit");
+            return false;
+        });
+    }
+
+//发送AJAX请求
+    function sendAjaxUrl(winObj, postData, sendUrl) {
+        $.ajax({
+            type: "post",
+            url: sendUrl,
+            data: postData,
+            dataType: "json",
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    winObj.close();
+                    $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
+                } else {
+                    $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
+                }
+            }
+        });
+    }
+
+
 <#if id??>
  $(function () {
     $("html,body").animate({scrollTop:$("#${id?c}").offset().top-130},5);
@@ -57,6 +89,17 @@ function __doPostBack(eventTarget, eventArgument) {
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>
+      <div class="menu-list">
+        <div class="rule-single-select">
+             <select name="categoryId" onchange="javascript:setTimeout(__doPostBack('oneCat',''), 0)">
+                <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
+                <#if oneCatLlist??>
+                    <#list oneCatLlist as c>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
     </div>
     <div class="r-list">
           <input name="keywords" type="text" value="${keywords!''}" class="keyword">
@@ -73,6 +116,7 @@ function __doPostBack(eventTarget, eventArgument) {
         <th width="6%">选择</th>
         <th align="left">类别名称</th>
         <th align="left" width="12%">排序</th>
+        <th align="left">显示/隐藏</th>
         <th width="12%">操作</th>
     </tr>
 
@@ -94,6 +138,7 @@ function __doPostBack(eventTarget, eventArgument) {
                 <a href="/Verwalter/product/category/edit?id=${cat.id?c!""}">${cat.title!""}</a>
             </td>
             <td><input name="listSortId" type="text" value="${cat.sortId!""}" class="sort" onkeydown="return checkNumber(event);"></td>
+            <td><a href="javascript:;" id="isEnable" onclick="changeEnable(${cat.id?c})"><#if cat.isEnable?? && cat.isEnable>显示<#else>隐藏</#if></a></td>
             <td align="center">
                 <a href="/Verwalter/product/category/edit?id=${cat.id?c!""}&sub=1">添加子类</a>
                 <a href="/Verwalter/product/category/edit?id=${cat.id?c!""}">修改</a>

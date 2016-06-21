@@ -742,6 +742,7 @@ public class TdTouchOrderController {
 					tdUserService.save(user);
 
 					tdOrder.setPayTypeTitle("余额支付");
+					tdOrder.setPayTypeId(0L);
 					tdOrder.setStatusId(3L);
 
 					// 添加会员虚拟账户金额记录
@@ -934,6 +935,7 @@ public class TdTouchOrderController {
 					tdUserService.save(user);
 
 					order.setPayTypeTitle("余额支付");
+					tdOrder.setPayTypeId(0L);
 					order.setStatusId(3L);
 
 					// 添加会员虚拟账户金额记录

@@ -1,6 +1,7 @@
 package com.ynyes.cslm.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.repository.TdPayRecordRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * 订单支付记录操作服务类
@@ -126,6 +129,26 @@ public class TdPayRecordService {
     	{
     		repository.delete(id);
     	}
+    }
+    
+    public Page<TdPayRecord> findAll(Long typy,Date startTime,Date endTime,int page,int size){
+    	
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
+    	Criteria<TdPayRecord> c = new Criteria<>();
+    	
+    	if(null != typy){
+    		c.add(Restrictions.eq("type", typy, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("createTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("createTime", endTime, true));
+    	}
+    	
+    	return repository.findAll(c, pageRequest);
     }
     
 }

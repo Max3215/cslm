@@ -18,6 +18,9 @@ public interface TdProductCategoryRepo extends
 		PagingAndSortingRepository<TdProductCategory, Long>,
 		JpaSpecificationExecutor<TdProductCategory> 
 {
+	List<TdProductCategory> findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
+    List<TdProductCategory> findByParentIdAndIsEnableTrueOrderBySortIdAsc(Long parentId);
+	
     List<TdProductCategory> findByParentIdIsNullOrderBySortIdAsc();
     List<TdProductCategory> findByParentIdOrderBySortIdAsc(Long parentId);
     TdProductCategory findByTitle(String title);

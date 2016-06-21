@@ -69,6 +69,21 @@ public class TdProductCategoryService {
         return repository.findByParentIdIsNullOrderBySortIdAsc();
     }
     
+    public List<TdProductCategory> findByParentIdAndIsEnableTrueOrderBySortIdAsc(Long parentId)
+    {
+        if (null == parentId)
+        {
+            return null;
+        }
+        
+        return repository.findByParentIdAndIsEnableTrueOrderBySortIdAsc(parentId);
+    }
+    
+    public List<TdProductCategory> findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc()
+    {
+        return repository.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
+    }
+    
     
     /**
      * 查找商品分类，只支持三级菜单
@@ -104,6 +119,35 @@ public class TdProductCategoryService {
         }
         
         return resList;
+    }
+    
+    public List<TdProductCategory> findByParentId(Long id)
+    {
+    	List<TdProductCategory> resList = new ArrayList<TdProductCategory>();
+    	if(null != id)
+    	{
+    		TdProductCategory category = repository.findOne(id);
+    		resList.add(category);
+            
+            List<TdProductCategory> childList = repository.findByParentIdOrderBySortIdAsc(category.getId());
+            
+            if (null != childList && childList.size() > 0)
+            {
+                for (TdProductCategory child : childList)
+                {
+                    resList.add(child);
+                    
+                    List<TdProductCategory> grandChildList = repository.findByParentIdOrderBySortIdAsc(child.getId());
+                    
+                    if (null != grandChildList && grandChildList.size() > 0)
+                    {
+                        resList.addAll(grandChildList);
+                    }
+                }
+            }
+    	}
+    	
+    	return resList;
     }
     
     /**

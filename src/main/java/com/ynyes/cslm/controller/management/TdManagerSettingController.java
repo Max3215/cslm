@@ -386,7 +386,7 @@ public class TdManagerSettingController {
 					        Long shopType,
                             Long status,
 					        HttpServletRequest req,
-					        HttpServletResponse resp)
+					        HttpServletResponse resp) throws ParseException
     {
     	
     	String username = (String) req.getSession().getAttribute("manager");
@@ -422,12 +422,17 @@ public class TdManagerSettingController {
             else if (__EVENTTARGET.equalsIgnoreCase("btnDelete"))
             {
             	cashDelete(listId, listChkId);
-                tdManagerLogService.addLog("delete", "删除订单", req);
+                tdManagerLogService.addLog("delete", "删除充值提现记录", req);
             }
             else if (__EVENTTARGET.equalsIgnoreCase("export"))
             {
             	exportUrl = SiteMagConstant.backupPath;
-                tdManagerLogService.addLog("export", "导出记录", req);
+                tdManagerLogService.addLog("export", "导出充值提现记录", req);
+            }
+            else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+            {
+            	exportUrl = SiteMagConstant.backupPath;
+                tdManagerLogService.addLog("export", "导出充值提现记录", req);
             }
             else if (__EVENTTARGET.equalsIgnoreCase("btnPage"))
             {
@@ -447,169 +452,89 @@ public class TdManagerSettingController {
         {
             size = SiteMagConstant.pageSize;;
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         
         Date startTime =null; // 起始时间
         Date endTime = null; // 截止时间
+        
         if(null != start && !"".equals(start.trim()))
         {
-        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        	try {
-				startTime = sdf.parse(start);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			startTime = sdf.parse(start);
         }
         
         if(null != end && !"".equals(end.trim()))
         {
-        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        	try {
-				endTime = sdf.parse(end);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-        }else{
-        	endTime= new Date();
+			endTime = sdf.parse(end);
         }
         
-        String name = "cash";
-        HSSFWorkbook wb = new HSSFWorkbook();
-		// 在webbook中添加一个sheet,对应Excel文件中的sheet 
-		HSSFSheet sheet = wb.createSheet(name); 
-		// 设置每个单元格宽度根据字多少自适应
-		sheet.autoSizeColumn(1);
-		// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
-        HSSFRow row = sheet.createRow((int) 0);
-        // 创建单元格，并设置值表头 设置表头居中 
-        HSSFCellStyle style = wb.createCellStyle();  
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+        map.addAttribute("cash_page", tdCashService.findAll(shopType, type, startTime, endTime, page, size));
         
-        HSSFCell cell = row.createCell((short) 0);  
-        cell.setCellValue("单号");  
-        cell.setCellStyle(style); 
+        if (null != exportUrl) {
+        	
+        	
+        	Page<TdCash> cash_page =  null;
+        	if (__EVENTTARGET.equalsIgnoreCase("export"))
+            {
+        		cash_page =  tdCashService.findAll(shopType, type, startTime, endTime, page, size);
+            }
+        	else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+            {
+            	cash_page =  tdCashService.findAll(shopType, type, startTime, endTime, page, Integer.MAX_VALUE);
+            }
+			
+        	String name = "cash";
+            HSSFWorkbook wb = new HSSFWorkbook();
+    		// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+    		HSSFSheet sheet = wb.createSheet(name); 
+    		// 设置每个单元格宽度根据字多少自适应
+    		sheet.autoSizeColumn(1);
+    		// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+            HSSFRow row = sheet.createRow((int) 0);
+            // 创建单元格，并设置值表头 设置表头居中 
+            HSSFCellStyle style = wb.createCellStyle();  
+            style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+            
+            HSSFCell cell = row.createCell((short) 0);  
+            cell.setCellValue("单号");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 1);  
+            cell.setCellValue("名称");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 2);  
+            cell.setCellValue("账号");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 3);  
+            cell.setCellValue("提交时间");  
+            cell.setCellStyle(style);
+            
+            cell = row.createCell((short) 4);  
+            cell.setCellValue("金额");  
+            cell.setCellStyle(style);
+            
+            cell = row.createCell((short) 5);  
+            cell.setCellValue("卡号");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 6);  
+            cell.setCellValue("会员类型");  
+            cell.setCellStyle(style); 
+            
+            cell = row.createCell((short) 7);  
+            cell.setCellValue("类型");  
+            cell.setCellStyle(style);
+            
+            cell = row.createCell((short) 8);  
+            cell.setCellValue("状态");  
+            cell.setCellStyle(style); 
+        	
+			if (cashImportData(cash_page, row, cell, sheet)) {
+				download(wb, exportUrl,name, resp);
+			}                          	                          
+		}
         
-        cell = row.createCell((short) 1);  
-        cell.setCellValue("名称");  
-        cell.setCellStyle(style); 
-        
-        cell = row.createCell((short) 2);  
-        cell.setCellValue("账号");  
-        cell.setCellStyle(style); 
-        
-        cell = row.createCell((short) 3);  
-        cell.setCellValue("提交时间");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell((short) 4);  
-        cell.setCellValue("金额");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell((short) 5);  
-        cell.setCellValue("卡号");  
-        cell.setCellStyle(style); 
-        
-        cell = row.createCell((short) 6);  
-        cell.setCellValue("会员类型");  
-        cell.setCellStyle(style); 
-        
-        cell = row.createCell((short) 7);  
-        cell.setCellValue("类型");  
-        cell.setCellStyle(style);
-        
-        cell = row.createCell((short) 8);  
-        cell.setCellValue("状态");  
-        cell.setCellStyle(style); 
-        
-        if(null == shopType) // 未选择角色类型
-        {
-        	if(null == type) // 未选择操作类型
-        	{
-        		if(null == startTime){
-        			map.addAttribute("cash_page", tdCashService.findAll(page, size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findAll(page, size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}else{
-        			map.addAttribute("cash_page", tdCashService.findByCreateTimeBetween(startTime,endTime,page,size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findByCreateTimeBetween(startTime,endTime,page,size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}
-        	}else{
-        		if(null == startTime){
-        			map.addAttribute("cash_page", tdCashService.findByType(type, page, size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findByType(type, page, size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}else{
-        			map.addAttribute("cash_page", tdCashService.findByTypeAndCreateTimeBetween(type, startTime, endTime, page, size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findByTypeAndCreateTimeBetween(type, startTime, endTime, page, size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}
-        	}
-        }
-        else
-        {
-        	if(null == type) // 未选择操作类型
-        	{
-        		if(null == startTime){
-        			map.addAttribute("cash_page", tdCashService.findByShopType(shopType, page, size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findByShopType(shopType, page, size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}else{
-        			map.addAttribute("cash_page", tdCashService.findByShopTypeAndCreateTimeBetween(shopType,startTime,endTime,page,size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findByShopTypeAndCreateTimeBetween(shopType,startTime,endTime,page,size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}
-        	}else{
-        		if(null == startTime){
-        			map.addAttribute("cash_page", tdCashService.findByShopTypeAndType(shopType, type, page, size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findByShopTypeAndType(shopType, type, page, size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}else{
-        			map.addAttribute("cash_page", tdCashService.findByShopTypeAndTypeAndCreateTimeBetween(shopType,type, startTime, endTime, page, size));
-        			if (null != exportUrl) {
-        				Page<TdCash> cash_page =  tdCashService.findByShopTypeAndTypeAndCreateTimeBetween(shopType,type, startTime, endTime, page, size);
-        				
-        				if (cashImportData(cash_page, row, cell, sheet)) {
-        					download(wb, exportUrl,name, resp);
-        				}                          	                          
-        			}
-        		}
-        	}
-        }
         
         
         map.addAttribute("shopType", shopType);
@@ -633,12 +558,13 @@ public class TdManagerSettingController {
 						        String __EVENTTARGET,
 						        String __EVENTARGUMENT,
 						        String __VIEWSTATE,
+						        String startTime,String endTime,
 						        Long[] listId,
 						        Integer[] listChkId,
 						        String exportUrl,
 						        ModelMap map,
 						        HttpServletRequest req,
-						        HttpServletResponse resp)
+						        HttpServletResponse resp) throws ParseException
     {
     	String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
@@ -663,6 +589,11 @@ public class TdManagerSettingController {
             	exportUrl = SiteMagConstant.backupPath;
                 tdManagerLogService.addLog("export", "导出交易记录", req);
             }
+            else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+            {
+            	exportUrl = SiteMagConstant.backupPath;
+                tdManagerLogService.addLog("export", "导出交易记录", req);
+            }
         }
         
         if (null == page || page < 0)
@@ -675,60 +606,85 @@ public class TdManagerSettingController {
             size = SiteMagConstant.pageSize;;
         }
         
-        String name= "record";
-     // 第一步，创建一个webbook，对应一个Excel文件  
-        HSSFWorkbook wb = new HSSFWorkbook();  
-        // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
-        HSSFSheet sheet = wb.createSheet(name);  
-        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
-        HSSFRow row = sheet.createRow((int) 0);  
-        // 第四步，创建单元格，并设置值表头 设置表头居中  
-        HSSFCellStyle style = wb.createCellStyle();  
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date start = null;
+		Date end = null ;
+		
+		if(null != startTime && !"".equals(startTime.trim()))
+		{
+			start = sdf.parse(startTime);
+		}
+		if(null != endTime && !"".equals(endTime.trim()))
+		{
+			end = sdf.parse(endTime);
+		}
         
-        HSSFCell cell = row.createCell((short) 0);  
-        cell.setCellValue("单号");  
-        cell.setCellStyle(style);  
-        cell = row.createCell((short) 1);  
-        cell.setCellValue("记录时间");  
-        cell.setCellStyle(style);  
-        cell = row.createCell((short) 2);  
-        cell.setCellValue("物流费");  
-        cell.setCellStyle(style);  
-        cell = row.createCell((short) 3);  
-        cell.setCellValue("服务器");  
-        cell.setCellStyle(style);
-        cell = row.createCell((short) 4);  
-        cell.setCellValue("第三方使用费");  
-        cell.setCellStyle(style);
-        cell = row.createCell((short) 5);  
-        cell.setCellValue("商品总额");  
-        cell.setCellStyle(style);
-        cell = row.createCell((short) 6);  
-        cell.setCellValue("订单总金额");  
-        cell.setCellStyle(style);
-        cell = row.createCell((short) 7);
-        cell.setCellValue("实际入账/支出");  
-        cell.setCellStyle(style);
-        cell = row.createCell((short) 8);
-        cell.setCellValue("说明");  
-        cell.setCellStyle(style);
+		map.addAttribute("record_page", tdPayRecordService.findAll(1L, start, end, page, size));
         
+        if (null != exportUrl) {
+        	Page<TdPayRecord> recordPage = null;
+        	
+        	if (__EVENTTARGET.equalsIgnoreCase("export"))
+  	      	{
+        		recordPage = tdPayRecordService.findByType(1L, page, size);
+  	      	}
+        	else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+  	      	{
+        		recordPage = tdPayRecordService.findByType(1L, page, Integer.MAX_VALUE);
+  	      	}
+        	
+        	String name= "record";
+            // 第一步，创建一个webbook，对应一个Excel文件  
+               HSSFWorkbook wb = new HSSFWorkbook();  
+               // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
+               HSSFSheet sheet = wb.createSheet(name);  
+               // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+               HSSFRow row = sheet.createRow((int) 0);  
+               // 第四步，创建单元格，并设置值表头 设置表头居中  
+               HSSFCellStyle style = wb.createCellStyle();  
+               style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+               
+               HSSFCell cell = row.createCell((short) 0);  
+               cell.setCellValue("单号");  
+               cell.setCellStyle(style);  
+               cell = row.createCell((short) 1);  
+               cell.setCellValue("记录时间");  
+               cell.setCellStyle(style);  
+               cell = row.createCell((short) 2);  
+               cell.setCellValue("物流费");  
+               cell.setCellStyle(style);  
+               cell = row.createCell((short) 3);  
+               cell.setCellValue("服务器");  
+               cell.setCellStyle(style);
+               cell = row.createCell((short) 4);  
+               cell.setCellValue("第三方使用费");  
+               cell.setCellStyle(style);
+               cell = row.createCell((short) 5);  
+               cell.setCellValue("商品总额");  
+               cell.setCellStyle(style);
+               cell = row.createCell((short) 6);  
+               cell.setCellValue("订单总金额");  
+               cell.setCellStyle(style);
+               cell = row.createCell((short) 7);
+               cell.setCellValue("实际入账/支出");  
+               cell.setCellStyle(style);
+               cell = row.createCell((short) 8);
+               cell.setCellValue("说明");  
+               cell.setCellStyle(style);
+        	
+        	if (ImportData(recordPage, row, cell, sheet)) {
+				download(wb, exportUrl,name, resp);
+			}   
+        }
+		
+        map.addAttribute("startTime", start);
+		map.addAttribute("endTime", end);
         map.addAttribute("page", page);
         map.addAttribute("size", size);
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         
-        map.addAttribute("record_page", tdPayRecordService.findByType(1L, page, size));
-        
-        if (null != exportUrl) {
-        	Page<TdPayRecord> recordPage = tdPayRecordService.findByType(1L, page, size);
-        	
-        	if (ImportData(recordPage, row, cell, sheet)) {
-				download(wb, exportUrl,name, resp);
-			}   
-        }
         
     	return "/site_mag/setting_record_list";
     }
@@ -1045,6 +1001,10 @@ public class TdManagerSettingController {
             {
                 Long id = ids[chkId];
                 
+                TdCash cash = tdCashService.findOne(id);
+                if(cash.getStatus() == 2 ){
+                	continue;
+                }
                 tdCashService.delete(id);
             }
         }

@@ -6,6 +6,7 @@
 <title>待付款订单</title>
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
+<script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <link href="/mag/style/pagination.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
@@ -77,58 +78,31 @@ function __doPostBack(eventTarget, eventArgument) {
                         <a onclick="return ExePostBack('btnDelete','删除后订单将无法恢复，是否继续？');" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除订单</span></a>
                     </li>
                     </#if>
-                    <!--
-                    <li>
-                        <a class="all"><span>订单总额：￥${price!0.00}</span></a>
-                    </li>
-                    <li>
-                        <a class="all"><span>销售额：￥${sales!0.00}</span></a>
-                    </li>
-                    <li>
-                    	<a class="all" href="/Verwalter/order/list/${statusId!''}/1"><span>普通订单</span></a>
-                    </li>                  
-                    <li>
-                    	<a class="all" href="/Verwalter/order/list/${statusId!''}/2"><span>组合购买</span></a>
-                    </li>
-                    <li>
-                    	<a class="all" href="/Verwalter/order/list/${statusId!''}/3"><span>抢购</span></a>
-                    </li>
-                    <li>
-                    	<a class="all" href="/Verwalter/order/list/${statusId!''}/4"><span>十人团</span></a>
-                    </li>
-                    <li>
-                    	<a class="all" href="/Verwalter/order/list/${statusId!''}/5"><span>百人团</span></a>
-                    </li>
-                    <li style="">
-                    	 <select name="timeId" onchange="javascript:setTimeout(__doPostBack('btnTime',''), 0)">
-                                <option value="0" <#if !time_id?? || time_id==0>selected="selected"</#if>>所有订单</option>
-                                <option value="1" <#if time_id==1>selected="selected"</#if>>今天</option>
-                                <option value="2" <#if time_id==2>selected="selected"</#if>>最近一周</option>
-                                <option value="3" <#if time_id==3>selected="selected"</#if>>最近一个月</option>
-                                <option value="4" <#if time_id==4>selected="selected"</#if>>最近三个月</option>
-                                <option value="6" <#if time_id==6>selected="selected"</#if>>最近半年</option>
-                                <option value="12" <#if time_id==12>selected="selected"</#if>>最近一年</option>                              
-                         </select>
-                    </li>
-                    -->
-                    <li>
-                    	<a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a>
-                    
-                    </li>
+                    <li><a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a></li>
+                    <li><a class="all" href="javascript:__doPostBack('exportAll','')"><span>导出全部</span></a></li>
                 </ul>
                 <div class="menu-list">
                     <div class="rule-single-select">
-                        <select name="timeId" onchange="javascript:setTimeout(__doPostBack('btnTime',''), 0)">
-                            <option value="0" <#if !time_id?? || time_id==0>selected="selected"</#if>>所有订单</option>
-                            <option value="1" <#if time_id==1>selected="selected"</#if>>今天</option>
-                            <option value="2" <#if time_id==2>selected="selected"</#if>>最近一周</option>
-                            <option value="3" <#if time_id==3>selected="selected"</#if>>最近一个月</option>
-                            <option value="4" <#if time_id==4>selected="selected"</#if>>最近三个月</option>
-                            <option value="6" <#if time_id==6>selected="selected"</#if>>最近半年</option>
-                            <option value="12" <#if time_id==12>selected="selected"</#if>>最近一年</option> 
-                        </select>
+                         <select name="payId" onchange="javascript:setTimeout(__doPostBack('oneCat',''), 0)">
+                            <option <#if !payId??>selected="selected"</#if> value="">所有方式</option>
+                            <option <#if payId?? && payId==0>selected="selected"</#if> value="0">余额支付</option>
+                            <#if pay_list?? && pay_list?size gt 0>
+                                <#list pay_list as pay>
+                                    <option <#if payId?? && payId== pay.id>selected="selected"</#if> value="${pay.id?c}">${pay.title!''}</option>
+                                </#list>
+                            </#if>
+                         </select>
                     </div>
                 </div>
+                <ul class="icon-list">
+                    <li>
+                        <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                    </li>
+                    <li><a>至</a></li>
+                    <li>
+                        <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                    </li>
+                </ul>
             </div>
             <div class="r-list">
                 <input name="keywords" type="text" class="keyword" value="${keywords!''}">

@@ -130,7 +130,7 @@ function loadMore()
         </#if> 
   	</menu>
   	<#if goods_page?? && goods_page.content?size gt 0>
-   <a id="a-more" class="grey_more" href="javascript:loadMore();"><img src="/touch/images/more.png" /></a>
+   <a id="a-more" class="grey_more" href="javascript:loadMore();"><img src="/touch/images/load.png" /></a>
    </#if>
   </section>
   <!-- 商品类表 END -->

@@ -173,7 +173,7 @@ public class TdIndexController {
 
             if (null != adType) {
                 map.addAttribute("big_scroll_ad_list", tdAdService
-                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
             }
             
          // 新品推荐广告
@@ -181,7 +181,7 @@ public class TdIndexController {
 
             if (null != adType) {
                 map.addAttribute("new_goods_ad_list", tdAdService
-                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),null));
+                        .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
             }
         	
         }

@@ -43,7 +43,7 @@ public class TdManagerProductCategoryController {
     TdTagService tdTagService;
 
     @RequestMapping(value = "/list")
-    public String categoryList(String __EVENTTARGET, String __EVENTARGUMENT,
+    public String categoryList(String __EVENTTARGET, String __EVENTARGUMENT,Long categoryId,
             String __VIEWSTATE, Long[] listId, Integer[] listChkId,Long id,String keywords,
             Long[] listSortId, ModelMap map, HttpServletRequest req) {
         String username = (String) req.getSession().getAttribute("manager");
@@ -64,10 +64,19 @@ public class TdManagerProductCategoryController {
                 break;
             }
         }
+        
+        map.addAttribute("oneCatLlist", tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc());
 
 //        map.addAttribute("category_list", tdProductCategoryService.findAll());
+        
         if (null == keywords || keywords.isEmpty()) {
-        	map.addAttribute("category_list", tdProductCategoryService.findAll());
+        	if(null != categoryId)
+        	{
+        		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
+        		map.addAttribute("category_list", tdProductCategoryService.findByParentId(categoryId));
+        	}else{
+        		map.addAttribute("category_list", tdProductCategoryService.findAll());
+        	}
 		}else {
 			map.addAttribute("category_list", tdProductCategoryService.searchAll(keywords));
 		}
@@ -251,6 +260,49 @@ public class TdManagerProductCategoryController {
         res.put("status", "y");
 
         return res;
+    }
+    
+    
+    /**
+     * 修改分类显示/隐藏状态
+     * @author Max
+     * 
+     */
+    @RequestMapping(value="/param/edit",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> changeEnable(Long id,HttpServletRequest req)
+    {
+    	Map<String,Object> res = new HashMap<>();
+    	res.put("code", 1);
+    	
+    	String username = (String) req.getSession().getAttribute("manager");
+        if (null == username)
+        {
+            res.put("message", "请重新登录");
+            return res;
+        }
+    	
+        if(null != id)
+        {
+        	TdProductCategory category = tdProductCategoryService.findOne(id);
+        	if(null != category)
+        	{
+        		if(category.getIsEnable())
+        		{
+        			category.setIsEnable(false);
+        		}else{
+        			category.setIsEnable(true);
+        		}
+        		tdProductCategoryService.save(category);
+        		
+        		res.put("code", 0);
+        		res.put("message", "修改成功");
+        		return res;
+        	}
+        }
+    	res.put("message", "参数错误");
+    	
+    	return res;
     }
     
     @RequestMapping(value="/paramCheck",method =RequestMethod.POST)

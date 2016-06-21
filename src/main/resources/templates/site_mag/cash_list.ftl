@@ -50,6 +50,7 @@ var theForm = document.forms['form1'];
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
         <li><a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a></li>
+        <li><a class="all" href="javascript:__doPostBack('exportAll','')"><span>导出全部</span></a></li>
       </ul>
        <div class="menu-list">
         <div class="rule-single-select single-select">

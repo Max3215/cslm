@@ -306,7 +306,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 		
 		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
 		
-		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
         
 		if(null == categoryId){
@@ -338,13 +338,13 @@ public class TdSupplyController extends AbstractPaytypeController{
             	
             	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
             	{
-            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(tdProductCategory.getId());
             		map.addAttribute("cateList", cateList);
             		
             		for (TdProductCategory productCategory : cateList) {
             			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
             			{
-            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdAndIsEnableTrueOrderBySortIdAsc(productCategory.getId()));
             			}
             		}
             		

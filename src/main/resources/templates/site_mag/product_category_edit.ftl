@@ -153,6 +153,19 @@ function categoryChange(e)
     </dd>
   </dl>
   <dl>
+        <dt>状态</dt>
+        <dd>
+            <div class="rule-multi-radio multi-radio">
+                <span>
+                    <input type="radio" name="isEnable" value="1" <#if cat?? && cat.isEnable??  && cat.isEnable>checked="checked"</#if>>
+                    <label>显示</label>
+                    <input type="radio" name="isEnable" value="0" <#if !cat?? || !cat.isEnable?? || !cat.isEnable>checked="checked"</#if>>
+                    <label>隐藏</label>
+                </span>
+            </div>
+        </dd>
+    </dl>
+  <dl>
     <dt>关联参数</dt>
     <dd>
        <#--

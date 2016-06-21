@@ -45,6 +45,7 @@ public class TdManagerAdController {
                           String __EVENTTARGET,
                           String __EVENTARGUMENT,
                           String __VIEWSTATE,
+                          Long typeId,Long disId, 
                           Long[] listId,
                           Integer[] listChkId,
                           Long[] listSortId,
@@ -89,11 +90,15 @@ public class TdManagerAdController {
         
         map.addAttribute("page", page);
         map.addAttribute("size", size);
+        map.addAttribute("typeId", typeId);
+        map.addAttribute("disId", disId);
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         
-        map.addAttribute("ad_page", tdAdService.findAllOrderBySortIdAsc(page, size));
+        map.addAttribute("ad_type_list", tdAdTypeService.findAllOrderBySortIdAsc());
+        map.addAttribute("dis_list", tdDistributorService.findByIsEnableTrue());
+        map.addAttribute("ad_page", tdAdService.findAll(typeId, disId, page, size));
         
         return "/site_mag/ad_list";
     }

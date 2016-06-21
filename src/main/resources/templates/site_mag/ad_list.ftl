@@ -52,6 +52,31 @@ var theForm = document.forms['form1'];
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>
+      <div class="menu-list">
+        <div class="rule-single-select">
+             <select name="typeId" onchange="javascript:setTimeout(__doPostBack('typeId',''), 0)">
+                <option <#if !typeId??>selected="selected"</#if> value="">所有类别</option>
+                <#if ad_type_list??>
+                    <#list ad_type_list as type>
+                        <option value="${type.id?c}" <#if typeId?? && typeId== type.id>selected="selected"</#if>>${type.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
+    </div>
+    <div class="menu-list">
+        <div class="rule-single-select">
+             <select name="disId" onchange="javascript:setTimeout(__doPostBack('typeId',''), 0)">
+                <option <#if !disId??>selected="selected"</#if> value="">所有商家</option>
+                <option <#if disId?? && disId == 0>selected="selected"</#if> value="0">平台广告</option>
+                <#if dis_list??>
+                    <#list dis_list as dis>
+                        <option value="${dis.id?c}" <#if disId?? && disId== dis.id>selected="selected"</#if>>${dis.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
+    </div>
     </div>
   </div>
 </div>
