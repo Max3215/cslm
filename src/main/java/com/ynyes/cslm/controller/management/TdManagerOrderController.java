@@ -57,7 +57,7 @@ import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.SiteMagConstant;
-
+import com.ynyes.cslm.util.StringUtils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;  
@@ -540,6 +540,7 @@ public class TdManagerOrderController {
         map.addAttribute("statusId", statusId);
         map.addAttribute("startTime", start);
 		map.addAttribute("endTime", end);
+		map.addAttribute("payId", payId);
         
         map.addAttribute("type", type);
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
@@ -581,9 +582,9 @@ public class TdManagerOrderController {
 				row.createCell((short) 4).setCellValue("已删除");
 			}
             
-            row.createCell((short) 5).setCellValue(tdOrder.getTotalPrice());
+            row.createCell((short) 5).setCellValue(StringUtils.scale(tdOrder.getTotalPrice()));
             cell = row.createCell((short) 6);  
-            cell.setCellValue(new SimpleDateFormat("yyyy-mm-dd").format(tdOrder.getOrderTime()));                                
+            cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(tdOrder.getOrderTime()));                                
       
         } 
     	return true;

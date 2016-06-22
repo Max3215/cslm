@@ -1,5 +1,6 @@
 package com.ynyes.cslm.util;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -196,6 +197,15 @@ public class StringUtils {
 		}
 	}
    
+   public static double scale(Double price)
+   {
+   	double f = 0.0;
+   	if(null != price){
+   		BigDecimal b = new BigDecimal(price);  
+   		f = b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();  
+   	}
+   	return f;
+   }
 } 
   
 

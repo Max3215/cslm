@@ -91,20 +91,6 @@ public interface TdProviderGoodsRepo extends
 																						String keywords,
 																						Boolean isDistribution,
 																						Boolean isAudit,Pageable page);
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 and pg.isAudit=?4 or "
-																+ " p.id=?1 and pg.code like ?2 and pg.isDistribution=?3 and pg.isAudit=?4 order by pg.leftNumber desc")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCodeLikeAndIsDistributionAndIsAuditOrderByLeftNumberDesc(
-																							Long providerId,
-																							String keywords,
-																							Boolean isDistribution,
-																							Boolean isAudit,Pageable page);
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 and pg.isAudit=?4 or "
-												+ " p.id=?1 and pg.code like ?2 and pg.isDistribution=?3 and pg.isAudit=?4 order by pg.leftNumber asc")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCodeLikeAndIsDistributionAndIsAuditOrderByLeftNumberAsc(
-																					Long providerId,
-																					String keywords,
-																					Boolean isDistribution,
-																					Boolean isAudit,Pageable page);
 	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.isDistribution=?2")
 	Page<TdProviderGoods> findByProviderIdAndIsDistribution(Long providerId,Boolean isDistribution,Pageable page);
@@ -113,11 +99,6 @@ public interface TdProviderGoodsRepo extends
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.isDistribution=?2 order by pg.leftNumber asc")
 	Page<TdProviderGoods> findByProviderIdAndIsDistributionOrderByLeftNumberAsc(Long providerId,Boolean isDistribution,Pageable page);
 	
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 "
-															+ "or p.id=?1 and pg.code like ?2 and pg.isDistribution=?3")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCodeLikeAndIsDistribution(
-																						Long providerId,String keywords,
-																						Boolean isDistribution,Pageable page);
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 and pg.isDistribution=?3 "
 															+ "or p.id=?1 and pg.code like ?2 and pg.isDistribution=?3 order by pg.leftNumber desc")
 	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCodeLikeAndIsDistributionOrderByLeftNumberDesc(
@@ -150,9 +131,6 @@ public interface TdProviderGoodsRepo extends
 																						String keywords2,
 																						Boolean isOnSale2,Pageable page);
 	
-	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.goodsTitle like ?2 or p.id=?3 and pg.code like ?4")
-	Page<TdProviderGoods> findByProviderIdAndGoodsTitleLikeOrProviderIdAndCodeLike(Long providerId,String keywords,
-																				Long providerId2,String keywords2,Pageable page);
 	
 	@Query("select pg from TdProvider p join p.goodsList pg where p.id=?1 and pg.categoryIdTree like ?2 and pg.isDistribution=?3")
 	Page<TdProviderGoods> findByProviderIdAndCategoryIdTreeLikeAndIsDistribution(Long providerId,String catId,Boolean isDistribution,Pageable page);

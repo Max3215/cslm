@@ -102,7 +102,7 @@ DD_belatedPNG.fix('.,img,background');
                       <form action="/supply/goods/list/${isDistribution?c}" id="form1">
                             <input type="hidden" value="${dir!'0'}" name="dir">
                             <input class="mysub" type="submit" value="查询" />
-                            <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
+                            <input class="mytext" type="text"  value="${keywords!''}" name="keywords"/>
                             <select  id="categoryId" name="categoryId" class="myselect" onchange="searchGoods()">
                                 <option value="">请选择类别...</option>
                                 <#if category_list??>

@@ -95,6 +95,9 @@ public class TdProviderGoods {
 	@Column
 	private String unit;
 	
+	@Column
+	private Long proId;
+	
 	public Long getId() {
 		return id;
 	}
@@ -237,6 +240,14 @@ public class TdProviderGoods {
 
 	public void setGoodsMarketPrice(Double goodsMarketPrice) {
 		this.goodsMarketPrice = goodsMarketPrice;
+	}
+
+	public Long getProId() {
+		return proId;
+	}
+
+	public void setProId(Long proId) {
+		this.proId = proId;
 	}
 	
 	

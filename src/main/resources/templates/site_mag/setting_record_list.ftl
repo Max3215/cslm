@@ -53,11 +53,11 @@ var theForm = document.forms['form1'];
       </ul>
       <ul class="icon-list">
             <li>
-                <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})">
             </li>
             <li><a>至</a></li>
             <li>
-                <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyy-MM-dd')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})">
             </li>
         </ul>
     </div>

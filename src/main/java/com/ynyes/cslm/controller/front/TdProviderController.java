@@ -71,6 +71,7 @@ import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.SiteMagConstant;
+import com.ynyes.cslm.util.StringUtils;
 
 /**
  * 批发商
@@ -940,6 +941,7 @@ public class TdProviderController extends AbstractPaytypeController{
 			proGoods.setCategoryId(goods.getCategoryId());
 			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
 			proGoods.setUnit(goods.getSaleType());
+			proGoods.setProId(provider.getId());
 		}
 		else
 		{
@@ -951,27 +953,13 @@ public class TdProviderController extends AbstractPaytypeController{
 			proGoods.setUnit(goods.getSaleType());
 			proGoods.setOnSaleTime(new Date());
 			proGoods.setIsOnSale(true);
+			proGoods.setProId(provider.getId());
 		}
 		proGoods.setProviderTitle(provider.getTitle());
 		
-		// 分销状态
-//		if(null == shopReturnRation || 0 ==shopReturnRation)
-//		{
-//			proGoods.setShopReturnRation(new Double(0));
-//			proGoods.setIsDistribution(false);
-//			proGoods.setIsAudit(true);
-			provider.getGoodsList().add(proGoods);
-			tdProviderService.save(provider);
-			res.put("msg","设置批发成功");
-//		}else{
-//			proGoods.setShopReturnRation(shopReturnRation);
-//			proGoods.setIsDistribution(true);
-//			proGoods.setIsAudit(false);
-//			proGoods.setShopReturnRation(shopReturnRation);
-//			provider.getGoodsList().add(proGoods);
-//			tdProviderService.save(provider);
-//			res.put("msg", "分销商品，等待平台审核~");
-//		}
+		provider.getGoodsList().add(proGoods);
+		tdProviderService.save(provider);
+		res.put("msg","设置批发成功");
 		return res;
 	}
 	
@@ -1493,7 +1481,7 @@ public class TdProviderController extends AbstractPaytypeController{
 			row.createCell((short) 1).setCellValue(order.getShopTitle());
 			row.createCell((short) 2).setCellValue(order.getShippingName());
 			row.createCell((short) 3).setCellValue(order.getShippingAddress());
-			row.createCell((short) 4).setCellValue(order.getTotalPrice());
+			row.createCell((short) 4).setCellValue(StringUtils.scale(order.getTotalPrice()));
 			row.createCell((short) 5).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
 			if(order.getStatusId() ==2)
 			{
@@ -1529,8 +1517,8 @@ public class TdProviderController extends AbstractPaytypeController{
 			row.createCell((short) 1).setCellValue(countSale.getSubTitle());
 			row.createCell((short) 2).setCellValue(countSale.getGoodsCode());
 			row.createCell((short) 3).setCellValue(countSale.getQuantity());
-			row.createCell((short) 4).setCellValue(countSale.getPrice());
-			row.createCell((short) 5).setCellValue(countSale.getTotalPrice());
+			row.createCell((short) 4).setCellValue(StringUtils.scale(countSale.getPrice()));
+			row.createCell((short) 5).setCellValue(StringUtils.scale(countSale.getTotalPrice()));
 		}
 		return true;
 	}

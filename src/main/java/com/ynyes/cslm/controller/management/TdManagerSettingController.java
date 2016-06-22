@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,6 +53,7 @@ import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.service.TdUserSuggestionService;
 import com.ynyes.cslm.util.SiteMagConstant;
+import com.ynyes.cslm.util.StringUtils;
 
 /**
  * 后台广告管理控制器
@@ -606,7 +608,7 @@ public class TdManagerSettingController {
             size = SiteMagConstant.pageSize;;
         }
         
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date start = null;
 		Date end = null ;
 		
@@ -696,19 +698,20 @@ public class TdManagerSettingController {
      */
     @SuppressWarnings("deprecation")
 	public boolean ImportData(Page<TdPayRecord> recordPage, HSSFRow row, HSSFCell cell, HSSFSheet sheet){
+    	
     	for (int i = 0; i < recordPage.getContent().size(); i++)  
         {  // 单号  时间   物流费  服务费  第三方费   商品总额   订单总额   实际   说明
             row = sheet.createRow((int) i + 1);  
             TdPayRecord payrecord = recordPage.getContent().get(i);  
             // 第四步，创建单元格，并设置值  
             row.createCell((short) 0).setCellValue(payrecord.getOrderNumber());  
-            row.createCell((short) 1).setCellValue(new SimpleDateFormat("yyyy-mm-dd").format(payrecord.getCreateTime()));  
-            row.createCell((short) 2).setCellValue(payrecord.getPostPrice());
-            row.createCell((short) 3).setCellValue(payrecord.getServicePrice());
-        	row.createCell((short) 4).setCellValue(payrecord.getAliPrice());
-            row.createCell((short) 5).setCellValue(payrecord.getTotalGoodsPrice());
-            row.createCell((short) 6).setCellValue(payrecord.getProvice());
-            row.createCell((short) 7).setCellValue(payrecord.getRealPrice());
+            row.createCell((short) 1).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(payrecord.getCreateTime()));  
+            row.createCell((short) 2).setCellValue(StringUtils.scale(payrecord.getPostPrice()));
+            row.createCell((short) 3).setCellValue(StringUtils.scale(payrecord.getServicePrice()));
+        	row.createCell((short) 4).setCellValue(StringUtils.scale(payrecord.getAliPrice()));
+            row.createCell((short) 5).setCellValue(StringUtils.scale(payrecord.getTotalGoodsPrice()));
+            row.createCell((short) 6).setCellValue(StringUtils.scale(payrecord.getProvice()));
+            row.createCell((short) 7).setCellValue(StringUtils.scale(payrecord.getRealPrice()));
             row.createCell((short) 8).setCellValue(payrecord.getCont());
         } 
     	return true;
@@ -725,7 +728,7 @@ public class TdManagerSettingController {
 			row.createCell((short) 1).setCellValue(cash.getShopTitle());
 			row.createCell((short) 2).setCellValue(cash.getUsername());
 			row.createCell((short) 3).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(cash.getCreateTime()));
-			row.createCell((short) 4).setCellValue(cash.getPrice());
+			row.createCell((short) 4).setCellValue(StringUtils.scale(cash.getPrice()));
 			row.createCell((short) 5).setCellValue(cash.getCard());
 			if(cash.getShopType()==1){
 				row.createCell((short) 6).setCellValue("超市");

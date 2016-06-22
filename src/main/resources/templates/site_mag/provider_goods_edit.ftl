@@ -192,12 +192,13 @@ $(function () {
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="${__EVENTARGUMENT!""}" />
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}" />
 </div>
+<input name="providerId" type="text" value='<#if providerGoods??>${providerGoods.id?c}</#if>' style="display:none">
+<#--
 <input name="id" type="text" value='<#if providerGoods??>${providerGoods.id?c}</#if>' style="display:none">
-<input name="providerId" type="text" value='<#if providerId??>${providerId}</#if>' style="display:none">
 <input name="goodsId" type="text" value='<#if providerGoods??>${providerGoods.goodsId?c}</#if>' style="display:none">
 <input name="categoryId" type="text" value='<#if providerGoods??>${providerGoods.categoryId?c}</#if>' style="display:none">
 <input name="categoryIdTree" type="text" value='<#if providerGoods??>${providerGoods.categoryIdTree!''}</#if>' style="display:none">
-<#--
+
 <input name="isOnSale" type="text" value='<#if providerGoods?? >${providerGoods.isOnSale?c}</#if>' style="display:none">
 <input name="isDistrition" type="text" value='<#if providerGoods??>${providerGoods.isDistribution?c}</#if>' style="display:none">
 -->

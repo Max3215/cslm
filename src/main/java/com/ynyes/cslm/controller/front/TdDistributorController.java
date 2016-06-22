@@ -85,6 +85,7 @@ import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.SiteMagConstant;
+import com.ynyes.cslm.util.StringUtils;
 
 
 @Controller
@@ -3871,7 +3872,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			row.createCell((short) 2).setCellValue(order.getShippingName());
 			row.createCell((short) 3).setCellValue(order.getShippingAddress());
 			row.createCell((short) 4).setCellValue(order.getShippingPhone());
-			row.createCell((short) 5).setCellValue(order.getTotalPrice());
+			row.createCell((short) 5).setCellValue(StringUtils.scale(order.getTotalPrice()));
 			row.createCell((short) 6).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
 			if(order.getStatusId() ==2)
 			{
@@ -3909,7 +3910,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			row.createCell((short) 0).setCellValue(order.getOrderNumber());
 			row.createCell((short) 1).setCellValue(order.getShippingName());
 			row.createCell((short) 2).setCellValue(order.getShopTitle());
-			row.createCell((short) 3).setCellValue(order.getTotalPrice());
+			row.createCell((short) 3).setCellValue(StringUtils.scale(order.getTotalPrice()));
 			row.createCell((short) 4).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
 			if(order.getStatusId() ==2)
 			{
@@ -3945,8 +3946,8 @@ public class TdDistributorController extends AbstractPaytypeController{
 			row.createCell((short) 1).setCellValue(countSale.getSubTitle());
 			row.createCell((short) 2).setCellValue(countSale.getGoodsCode());
 			row.createCell((short) 3).setCellValue(countSale.getQuantity());
-			row.createCell((short) 4).setCellValue(countSale.getPrice());
-			row.createCell((short) 5).setCellValue(countSale.getTotalPrice());
+			row.createCell((short) 4).setCellValue(StringUtils.scale(countSale.getPrice()));
+			row.createCell((short) 5).setCellValue(StringUtils.scale(countSale.getTotalPrice()));
 		}
 		return true;
 	}

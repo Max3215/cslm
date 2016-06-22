@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.repository.TdProviderGoodsRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdProviderGoods 服务类
@@ -237,6 +239,34 @@ public class TdProviderGoodsService {
 		return repository.findByProviderIdAndIsDistributionAndIsAudit(providerId, isDistribution, isAudit, pageRequest);
 	}
 	
+	public Page<TdProviderGoods> findAll(Long providerId,Long categoryId,String keywords,Boolean isDistribution,Boolean isAudit,PageRequest pageRequest)
+	{
+		Criteria<TdProviderGoods> c = new Criteria<>();
+		if(null != providerId)
+		{
+			c.add(Restrictions.eq("proId", providerId, true));
+		}
+		if(null != keywords && !"".equals(keywords.trim()))
+		{
+			c.add(Restrictions.or(Restrictions.like("goodsTitle", keywords, true),Restrictions.like("code", keywords, true)));
+		}
+		
+		if(null != isDistribution)
+		{
+			c.add(Restrictions.eq("isDistribution", isDistribution, true));
+		}
+		if(null != isAudit)
+		{
+			c.add(Restrictions.eq("isAudit", isAudit, true));
+		}
+		if(null != categoryId)
+		{
+			c.add(Restrictions.like("categoryIdTree", "["+categoryId+"]", true));
+		}
+		
+		return repository.findAll(c, pageRequest);
+	}
+	
 	public Page<TdProviderGoods> findByProviderIdAndIsDistributionAndIsAuditOrderByLeftNumberDesc(Long providerId,Boolean isDistribution,Boolean isAudit,int page,int size)
 	{
 		if(null == providerId){
@@ -262,16 +292,6 @@ public class TdProviderGoodsService {
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCodeLikeAndIsDistributionAndIsAudit(providerId, "%"+keywords+"%", isDistribution, isAudit, pageRequest);
 	}
-	public Page<TdProviderGoods> searchAndProviderIdAndIsDistributionAndIsAuditOrderByLeftNumberDesc(Long providerId,Boolean isDistribution,Boolean isAudit,String keywords,int page,int size)
-	{
-		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCodeLikeAndIsDistributionAndIsAuditOrderByLeftNumberDesc(providerId, "%"+keywords+"%", isDistribution, isAudit, pageRequest);
-	}
-	public Page<TdProviderGoods> searchAndProviderIdAndIsDistributionAndIsAuditOrderByLeftNumberAsc(Long providerId,Boolean isDistribution,Boolean isAudit,String keywords,int page,int size)
-	{
-		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionAndIsAuditOrProviderIdAndCodeLikeAndIsDistributionAndIsAuditOrderByLeftNumberAsc(providerId, "%"+keywords+"%", isDistribution, isAudit, pageRequest);
-	}
 	//-------------------------------------------------------------------------------------
 	
 	public Page<TdProviderGoods> findByProviderIdAndIsDistribution(Long providerId,Boolean isDistribution,int page,int size)
@@ -291,11 +311,6 @@ public class TdProviderGoodsService {
 	}
 	// -------------------------------------------------------------
 	
-	public Page<TdProviderGoods> searchAndProviderIdAndIsDistribution(Long providerId,String keywords,Boolean isDistribution,int page,int size)
-	{
-		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeAndIsDistributionOrProviderIdAndCodeLikeAndIsDistribution(providerId, "%"+keywords+"%", isDistribution, pageRequest);
-	}
 	public Page<TdProviderGoods> searchAndProviderIdAndIsDistributionOrderByLeftNumberDesc(Long providerId,String keywords,Boolean isDistribution,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
@@ -326,11 +341,6 @@ public class TdProviderGoodsService {
 		return repository.findByProviderIdAndGoodsTitleLikeAndIsOnSaleOrProviderIdAndCodeLikeAndIsOnSale(providerId, "%"+keywords+"%", isOnSale, providerId, "%"+keywords+"%", isOnSale, pageRequest);
 	}
 	
-	public Page<TdProviderGoods> searchAndProviderIdAndKeywords(Long providerId,String keywords,int page,int size)
-	{
-		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-		return repository.findByProviderIdAndGoodsTitleLikeOrProviderIdAndCodeLike(providerId, "%"+keywords+"%", providerId, "%"+keywords+"%", pageRequest);
-	}
 	
 	//----------------------------
 	public Page<TdProviderGoods> findByProviderIdAndCategoryIdAndIsDistribution(Long providerId,Long catId,Boolean isDistribution,int page,int size)
