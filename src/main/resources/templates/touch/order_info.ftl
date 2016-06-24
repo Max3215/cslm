@@ -93,7 +93,7 @@ function selectDeliveryTyp(tag,type){
     <p class="tit">配送方式</p>
     <input type="hidden" id="postPrice" value="<#if postPrice??>${postPrice}<#else>0</#if>">
     <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
-    <a href="javascript:;" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流</a>
+    <a href="javascript:;" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流<#if postPrice??><span style="font-size:0.15rem;line-height:0.58rem;">&nbsp;￥${postPrice?string("0.00")}</span></#if></a>
     <#if post??>&emsp;&emsp;<span style="font-size:0.15rem;line-height:0.58rem;">${post!''}</span></#if>
     <div class="clear"></div>
     <a href="javascript:;" class="choose" onclick="selectDeliveryTyp($(this),1)">自提</a>

@@ -91,8 +91,9 @@ function minusNum(){
 
 function addNum(){
     var q = parseInt($("#quantity").val());
-    <#if dis_goods?? && dis_goods.leftNumber??>
-        if (q < ${dis_goods.leftNumber!'0'})
+    var ln = parseInt($("#leftNumber").val());
+//    <#if dis_goods?? && dis_goods.leftNumber??>
+        if (q < ln)
         {
             $("#quantity").val(q+1);
         }
@@ -100,10 +101,10 @@ function addNum(){
         {
             alert("已达到库存最大值");
         }
-   <#else>
-        $("#quantity").val(q+1);
-        $("#number").val(q+1);
-   </#if>
+//   <#else>
+//        $("#quantity").val(q+1);
+//        $("#number").val(q+1);
+ //  </#if>
     $("#addCart").attr("href", "/touch/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
 }
 
@@ -228,12 +229,12 @@ function proGoods(dId){
         <dd>邮费：${distributor.postPrice?string('0.00')}元/满${distributor.maxPostPrice?string('0.00')}包邮</dd>
       </dl>
       -->
-      <div class="number">
-        <span>购买数量</span>
+      <div class="number" style="margin-top: 0.7em;">
+        <span>购买数量（库存：${dis_goods.leftNumber?c!'0'}）</span>
         <a id="id-minus" href="javascript:addNum();">+</a>
         <input class="text" type="text" id="quantity" value="1" />
         <a id="id-plus"  href="javascript:minusNum();">-</a>
-        <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber!'0'}">
+        <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">
       </div>
     </div>
   </aside>

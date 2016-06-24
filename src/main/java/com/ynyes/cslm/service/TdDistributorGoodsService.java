@@ -21,6 +21,8 @@ import com.ynyes.cslm.entity.TdGoodsParameter;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.repository.TdDistributorGoodsRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdDistGoods 服务类
@@ -1607,8 +1609,15 @@ public class TdDistributorGoodsService {
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		String catIdStr = "%[" + catId + "]%";
-		return repository.findByDistributorIdAndCategoryIdTreeLikeAndIsOnSale(distributorId,catIdStr, isOnSale, pageRequest);
+		return repository.findByDisIdAndCategoryIdTreeLikeAndIsOnSale(distributorId,catIdStr, isOnSale, pageRequest);
 	}
+	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsOnSaleAndIsRecommendCategory(Long distributorId,Long catId,int page,int size)
+	{
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		String catIdStr = "%[" + catId + "]%";
+		return repository.findByDisIdAndCategoryIdTreeLikeAndIsOnSaleTrueAndIsRecommendCategoryTrue(distributorId,catIdStr,  pageRequest);
+	}
+	
 	public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(Long distributorId,Long catId,Boolean isOnSale,int page,int size)
 	{
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
@@ -1833,6 +1842,27 @@ public class TdDistributorGoodsService {
 	
 	
 	
+	public Page<TdDistributorGoods> findAll(Long disId,Boolean isOnsSale,Long catId,String keywords,PageRequest pageRequest)
+	{
+		Criteria<TdDistributorGoods> c = new Criteria<>();
+		if(null != disId)
+		{
+			c.add(Restrictions.eq("disId", disId, true));
+		}
+		if(null != isOnsSale)
+		{
+			c.add(Restrictions.eq("isOnSale", isOnsSale, true));
+		}
+		if(null != catId)
+		{
+			c.add(Restrictions.like("categoryIdTree", "[" + catId + "]", true));
+		}
+		if(null != keywords && !"".equals(keywords.trim()))
+		{
+			c.add(Restrictions.or(Restrictions.like("goodsTitle", keywords, true),Restrictions.like("code", keywords, true)));
+		}
+		return repository.findAll(c, pageRequest);
+	}
 	
 	
 	

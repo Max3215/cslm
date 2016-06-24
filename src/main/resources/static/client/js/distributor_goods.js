@@ -214,5 +214,5 @@ function goNext(goodsNum)
 
 function searchGoods(page){
 	var keywords = $("#keywords").val();
-	window.location.href="/distributor/goods/list?keywords="+keywords+"&page="+page;
+	window.location.href="/distributor/goods/list?keywords="+keywords;
 }

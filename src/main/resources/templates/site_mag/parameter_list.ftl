@@ -119,7 +119,8 @@ function __doPostBack(eventTarget, eventArgument) {
         <th width="6%">选择</th>
         <th align="left" >名称</th>
         <th align="left" width="15%">类别</th>
-        <th align="left" width="65">排序</th>
+        <th align="left" width="8%">前台显示</th>
+        <th align="left" width="8%">排序</th>
         <th width="10%">操作</th>
     </tr>
     
@@ -143,6 +144,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     </#list>
                 </#if>
             </td>
+            <td><#if content.isSearchable?? && content.isSearchable>显示<#else>隐藏</#if></td>
             <td>
                 <input name="listSortId" type="text" value="${content.sortId!""}" id="listSortId" class="sort" onkeydown="return checkNumber(event);">
             </td>

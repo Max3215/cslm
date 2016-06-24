@@ -31,9 +31,12 @@
                         <td class="tb02"><p>￥<span id="price${dg.id?c}"><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></p></td>
                         <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
                         <td>
-                            <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a  href="javascript:recommed(${dg.id?c},${page});" <#if dg.isRecommendIndex?? &&dg.isRecommendIndex>style="color:#ff5b7d"</#if>>首页推荐</a></p>
+                            <p><a href="javascript:recommed(${dg.id?c},${page},'cat');" <#if dg.isRecommendCategory?? &&dg.isRecommendCategory>style="color:#ff5b7d"</#if>>分类推荐</a>
+                                &nbsp;/&nbsp;
+                                <a href="javascript:recommed(${dg.id?c},${page},'index');" <#if dg.isRecommendIndex?? &&dg.isRecommendIndex>style="color:#ff5b7d"</#if>>首页推荐</a>
+                             </p>
                             <p><a href="javascript:editPrice(${dg.id?c},${page?c});">修改信息</a></p>
-                            <p><a href="javascript:deleteDisGoods(true,${dg.id?c},${page?c});">删除</a></p>
+                            <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a href="javascript:deleteDisGoods(true,${dg.id?c},${page?c});">删除</a></p>
                        </td>
                       </tr>
                  <#else>
@@ -62,11 +65,14 @@
         </#if>
 </table>
 <script type="text/javascript">
-function recommed(id,page)
+function recommed(id,page,type)
 {
+    var categoryId = $("#categoryId").val();
+    var key = $("#keywords").val();
+    var dir = $("#sort").val();
     $.ajax({
         url : "/distributor/goods/recommed",
-        data : {"id":id,"page":page},
+        data : {"id":id,"page":page,"type":type,"categoryId":categoryId,"dir":dir,"keywords":key},
         type : "post",
        success:function(res){
             $("#dis_goods_table").html(res);

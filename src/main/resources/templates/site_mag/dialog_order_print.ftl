@@ -78,11 +78,17 @@
                 <td colspan="3" style="border-top: 1px solid #000;">
                     <table width="100%" border="0" cellspacing="0" cellpadding="5" style="margin: 5px auto; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
                         <tbody>
+                        <#if order.typeId ==2>
+                        <tr>
+                            <td width="44%">售出店铺： ${order.shopTitle!''}
+                            </td>
+                            <td width="56%">店铺地址：${order.deliveryPerson!''}<br></td>
+                        </tr>
+                        </#if>
                         <tr>
                             <td width="44%">会员账户：
                                 ${order.username}
                             </td>
-                          <#--  <td width="56%">客户姓名：<#if user??>${user.realName!''}</#if><br>          -->                
                             </td>
                             <td width="56%">姓名：${order.shippingName!''}<br>                          
                             </td>

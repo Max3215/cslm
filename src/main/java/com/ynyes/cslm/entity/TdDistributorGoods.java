@@ -160,6 +160,10 @@ public class TdDistributorGoods {
     @Column
     private Boolean isTouchHot;
     
+    // 分类推荐
+    @Column
+    private Boolean isRecommendCategory;
+    
 //    // 商品邮费
 //    @Column
 //    private Double postPrice;
@@ -438,6 +442,14 @@ public class TdDistributorGoods {
 
 	public void setIsTouchHot(Boolean isTouchHot) {
 		this.isTouchHot = isTouchHot;
+	}
+
+	public Boolean getIsRecommendCategory() {
+		return isRecommendCategory;
+	}
+
+	public void setIsRecommendCategory(Boolean isRecommendCategory) {
+		this.isRecommendCategory = isRecommendCategory;
 	}
 	
 	

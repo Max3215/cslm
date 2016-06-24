@@ -115,7 +115,7 @@ public class TdIndexController {
 
                     if (null != topCat) {
                         map.addAttribute( "top_cat_goods_page" + i,
-                        		tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributorId, topCat.getId(), true, 0, 10));
+                        		tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleAndIsRecommendCategory(distributorId, topCat.getId(), 0, 10));
                     }
                 }
             }

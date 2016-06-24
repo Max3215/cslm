@@ -46,7 +46,7 @@ $(document).ready(function(){
         $("#btnPayment").click(function () { OrderPayment(); });   //确认付款
         $("#btnPaymentLeft").click(function () { OrderPaymentLeft(); });   //确认发货
         $("#btnService").click(function () { OrderService(); });   //确认收货
-
+        $("#btnPrint").click(function () { OrderPrint(); });       //打印订单
         $("#btnOrderExpress").click(function () { OrderExpress(); });   //确认发货
         $("#btnOrderComplete").click(function () { OrderComplete(); }); //完成订单
     });
@@ -72,6 +72,19 @@ $(document).ready(function(){
             return false;
         });
     }  
+    
+    //打印订单
+    function OrderPrint() {
+        var dialog = $.dialog({
+            title: '打印订单',
+            content: 'url:/Verwalter/order/dialog/print?orderNumber=' + $.trim($("#spanOrderNumber").text()),
+            min: false,
+            max: false,
+            lock: true,
+            width: 850//,
+            // height: 500
+        });
+    }
     
     //确认发货
     function OrderPaymentLeft() {
@@ -312,7 +325,7 @@ DD_belatedPNG.fix('.,img,background');
                     <#elseif order.statusId==3>
                         <input type="button" id="btnPaymentLeft" value="确认发货" class="btn">
                     </#if>
-                    
+                    <input type="button" id="btnPrint" value="打印订单" class="btn green">
                 </div>
             </tr>
         </table>

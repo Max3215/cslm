@@ -239,8 +239,8 @@ public interface TdDistributorGoodsRepo extends
 																									Long disId1,String catId1,String keywords1,
 																									Boolean isOnSale1,Boolean isAudit1,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSale(Long distributorId,String catId,Boolean isOnSale,Pageable page);
+		Page<TdDistributorGoods> findByDisIdAndCategoryIdTreeLikeAndIsOnSale(Long distributorId,String catId,Boolean isOnSale,Pageable page);
+		Page<TdDistributorGoods> findByDisIdAndCategoryIdTreeLikeAndIsOnSaleTrueAndIsRecommendCategoryTrue(Long distributorId,String catId,Pageable page);
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 order by g.leftNumber desc ")
 		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleOrderByLeftNumberDesc(Long distributorId,String catId,Boolean isOnSale,Pageable page);
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 order by g.leftNumber asc ")

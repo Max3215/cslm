@@ -62,7 +62,6 @@ DD_belatedPNG.fix('.,img,background');
          <div class="mymember_order_search"> 
             <h3>分销商的商品</h3>
             <form action="/distributor/supply/list" id="form">
-                <input type="hidden" value="${page!'0'}" name="page"/>
                 <input class="mysub" type="submit" value="查询" />
                 <#--
                 <p class="fr pl10 c3">价格&nbsp;&nbsp;<input type="text" style="width:50px;">&nbsp;&nbsp;至&nbsp;&nbsp;<input type="text" style="width:50px;"></p>
@@ -99,7 +98,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == proGoods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${(page-1)?c}&providerId=${providerId!''}">${page}</a>
+                                <a href="/distributor/supply/list?keywords=${keywords!''}&page=${(page-1)?c}&providerId=${providerId!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

@@ -30,6 +30,9 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -804,10 +807,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		{
 			page = 0;
 		}
-		if(null == dir)
-		{
-			dir = 1;
-		}
+		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		
 		map.addAttribute("sort", dir);
@@ -822,60 +822,74 @@ public class TdDistributorController extends AbstractPaytypeController{
 		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
 		
-		if(null == categoryId)
+        PageRequest pageRequest = null;
+        if(null != dir && dir ==1)
 		{
-			if(null == keywords || "".equals(keywords))
-			{
-				if(null == dir || dir ==1)
-				{
-					map.addAttribute("dis_goods_page",
-							tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(), isSale, page, 10));
-				}else{
-					map.addAttribute("dis_goods_page",
-							tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(), isSale, page, 10));
-				}
-			}
-			else
-			{
-				if(null == dir || dir ==1)
-				{
-					map.addAttribute("dis_goods_page",
-							tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(),keywords, isSale, page, 10));
-				}else{
-					map.addAttribute("dis_goods_page",
-							tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(),keywords, isSale, page, 10));
-				}
-//				map.addAttribute("dis_goods_page",
-//						tdDistributorGoodsService.searchAndDistributorIdAndIsOnSale(distributor.getId(),keywords, isSale, page, 10));
-			}
+        	pageRequest = new PageRequest(page, 10,new Sort(Direction.ASC, "leftNumber"));
 		}
-		else
+        else if(null != dir && dir ==2)
 		{
-			if(null == keywords || "".equals(keywords))
-			{
-				if(null == dir || dir ==1)
-				{
-					map.addAttribute("dis_goods_page", 
-							tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(),categoryId, isSale, page, 10));
-				}else{
-					map.addAttribute("dis_goods_page", 
-							tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(),categoryId, isSale, page, 10));
-				}
-//				map.addAttribute("dis_goods_page", 
-//						tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributor.getId(),categoryId, isSale, page, 10));
-			}
-			else
-			{
-				if(null == dir || dir ==1)
-				{
-					map.addAttribute("dis_goods_page", 
-								tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(), categoryId, keywords, isSale, page, 10));
-				}else{
-					map.addAttribute("dis_goods_page", 
-							tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(), categoryId, keywords, isSale, page, 10));
-				}
-			}
-			
+        	pageRequest = new PageRequest(page, 10,new Sort(Direction.DESC, "leftNumber"));
+		}
+        else
+        {
+        	pageRequest = new PageRequest(page, 10);
+        }
+        map.addAttribute("dis_goods_page",tdDistributorGoodsService.findAll(distributor.getId(), isSale, categoryId, keywords, pageRequest));
+		if(null != categoryId)
+		{
+//			if(null == keywords || "".equals(keywords))
+//			{
+//				if(null == dir || dir ==1)
+//				{
+//					map.addAttribute("dis_goods_page",
+//							tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(), isSale, page, 10));
+//				}else{
+//					map.addAttribute("dis_goods_page",
+//							tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(), isSale, page, 10));
+//				}
+//			}
+//			else
+//			{
+//				if(null == dir || dir ==1)
+//				{
+//					map.addAttribute("dis_goods_page",
+//							tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(),keywords, isSale, page, 10));
+//				}else{
+//					map.addAttribute("dis_goods_page",
+//							tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(),keywords, isSale, page, 10));
+//				}
+////				map.addAttribute("dis_goods_page",
+////						tdDistributorGoodsService.searchAndDistributorIdAndIsOnSale(distributor.getId(),keywords, isSale, page, 10));
+//			}
+//		}
+//		else
+//		{
+//			if(null == keywords || "".equals(keywords))
+//			{
+//				if(null == dir || dir ==1)
+//				{
+//					map.addAttribute("dis_goods_page", 
+//							tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(),categoryId, isSale, page, 10));
+//				}else{
+//					map.addAttribute("dis_goods_page", 
+//							tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(),categoryId, isSale, page, 10));
+//				}
+////				map.addAttribute("dis_goods_page", 
+////						tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributor.getId(),categoryId, isSale, page, 10));
+//			}
+//			else
+//			{
+//				if(null == dir || dir ==1)
+//				{
+//					map.addAttribute("dis_goods_page", 
+//								tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(distributor.getId(), categoryId, keywords, isSale, page, 10));
+//				}else{
+//					map.addAttribute("dis_goods_page", 
+//							tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(distributor.getId(), categoryId, keywords, isSale, page, 10));
+//				}
+//			}
+//			
 			TdProductCategory category = tdProductCategoryService.findOne(categoryId);
             for (TdProductCategory tdProductCategory : categortList) {
             	
@@ -896,6 +910,77 @@ public class TdDistributorController extends AbstractPaytypeController{
 		}
 		
 		return "/client/distributor_goods";
+	}
+	
+	/**
+	 * 设置推荐
+	 * @author Max
+	 * 
+	 */
+	@RequestMapping(value="/goods/recommed",method=RequestMethod.POST)
+	public String recommed(Long id,Integer page,
+							Long categoryId,Integer dir,String keywords,
+							String type,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		
+		if(null == id)
+		{
+			return "/client/error_404";
+		}
+		
+		if(null == page )
+		{
+			page = 0;
+		}
+		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(id);
+		
+		if("cat".equals(type))
+		{
+			if(null != distributorGoods.getIsRecommendCategory() && distributorGoods.getIsRecommendCategory())
+			{
+				distributorGoods.setIsRecommendCategory(false);;
+			}else{
+				distributorGoods.setIsRecommendCategory(true);
+			}
+		}
+		else if("index".equals(type))
+		{
+			if(null != distributorGoods.getIsRecommendIndex() && distributorGoods.getIsRecommendIndex())
+			{
+				distributorGoods.setIsRecommendIndex(false);
+			}else{
+				distributorGoods.setIsRecommendIndex(true);
+			}
+		}
+		tdDistributorGoodsService.save(distributorGoods);
+		
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		map.addAttribute("page", page);
+		map.addAttribute("type", true);
+		map.addAttribute("distributor", distributor);
+		map.addAttribute("isOnSale", true);
+		
+		PageRequest pageRequest = null;
+        if(null != dir && dir ==1)
+		{
+        	pageRequest = new PageRequest(page, 10,new Sort(Direction.ASC, "leftNumber"));
+		}
+        else if(null != dir && dir ==2)
+		{
+        	pageRequest = new PageRequest(page, 10,new Sort(Direction.DESC, "leftNumber"));
+		}
+        else
+        {
+        	pageRequest = new PageRequest(page, 10);
+        }
+        map.addAttribute("dis_goods_page",tdDistributorGoodsService.findAll(distributor.getId(), true, categoryId, keywords, pageRequest));
+		
+		return "/client/distributor_goods_list";
 	}
 	
 	/**
@@ -941,50 +1026,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 			tdDistributorGoodsService.save(distributorGoods);
 			map.addAttribute("dis_goods_page", tdDistributorGoodsService.findByIdAndIsOnSale(distributor.getId(), true, page,10));
 		}
-		
-		return "/client/distributor_goods_list";
-	}
-	
-	/**
-	 * 设置首页推荐
-	 * @author Max
-	 * 
-	 */
-	@RequestMapping(value="/goods/recommed",method=RequestMethod.POST)
-	public String recommed(Long id,Integer page,HttpServletRequest req,ModelMap map)
-	{
-		String username = (String)req.getSession().getAttribute("distributor");
-		if(null == username)
-		{
-			return "redirect:/login";
-		}
-		
-		if(null == id)
-		{
-			return "/client/error_404";
-		}
-		
-		if(null == page )
-		{
-			page = 0;
-		}
-		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(id);
-		
-		if(null != distributorGoods.getIsRecommendIndex() && distributorGoods.getIsRecommendIndex())
-		{
-			distributorGoods.setIsRecommendIndex(false);
-		}else{
-			distributorGoods.setIsRecommendIndex(true);
-		}
-		tdDistributorGoodsService.save(distributorGoods);
-		
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		map.addAttribute("page", page);
-		map.addAttribute("type", true);
-		map.addAttribute("distributor", distributor);
-		map.addAttribute("isOnSale", true);
-		
-		map.addAttribute("dis_goods_page", tdDistributorGoodsService.findByIdAndIsOnSale(distributor.getId(), true, page, 10));
 		
 		return "/client/distributor_goods_list";
 	}

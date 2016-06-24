@@ -169,7 +169,7 @@ $(document).ready(function(){
             alert(data.msg);
             if(data.code==1)
             {
-                 window.location.href="/distributor/inOrder/list/0";
+                 window.location.href="/distributor/inOrder/list";
             }
         }
     });

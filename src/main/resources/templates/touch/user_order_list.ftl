@@ -7,6 +7,7 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">

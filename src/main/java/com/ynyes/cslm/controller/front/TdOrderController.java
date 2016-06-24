@@ -600,6 +600,22 @@ public class TdOrderController extends AbstractPaytypeController {
 
 				// if(null != type && type.equals("pro")){
 
+				// 超市未设置自提点 取超市地址
+				StringBuffer newAddress = new StringBuffer();
+				if (null != distributor.getProvince()) {
+					newAddress.append(distributor.getProvince() + "-");
+				}
+				if (null != distributor.getCity()) {
+					newAddress.append(distributor.getCity() + "-");
+				}
+				if (null != distributor.getDisctrict()) {
+					newAddress.append(distributor.getDisctrict() + " ");
+				}
+				if (null != distributor.getAddress()) {
+					newAddress.append(distributor.getAddress());
+				}
+				
+				tdOrder.setDeliveryPerson(newAddress.toString()); // 分销商供货地址（超市地址）
 				tdOrder.setDeliveryMethod(deliveryType); // 配送方式 0、送货上门 1、门店自提
 				if (null != deliveryType && deliveryType == 1) // 门店自提
 				{
@@ -612,6 +628,7 @@ public class TdOrderController extends AbstractPaytypeController {
 							tdOrder.setShipAddress(appenAddress(shippingAddress).toString()); // 添加自提点地址
 							tdOrder.setShipMobile(shippingAddress.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(shippingAddress.getReceiverName());
+							tdOrder.setDeliveryPerson(appenAddress(shippingAddress).toString());
 						}
 					} else if (list.size() > 1) // 多家超市
 					{
@@ -628,21 +645,9 @@ public class TdOrderController extends AbstractPaytypeController {
 							tdOrder.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
 							tdOrder.setShipMobile(newShipping.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(newShipping.getReceiverName());
+							
+							tdOrder.setDeliveryPerson(appenAddress(newShipping).toString());
 						} else {
-							// 超市未设置自提点 取超市地址
-							StringBuffer newAddress = new StringBuffer();
-							if (null != distributor.getProvince()) {
-								newAddress.append(distributor.getProvince() + "-");
-							}
-							if (null != distributor.getCity()) {
-								newAddress.append(distributor.getCity() + "-");
-							}
-							if (null != distributor.getDisctrict()) {
-								newAddress.append(distributor.getDisctrict() + " ");
-							}
-							if (null != distributor.getAddress()) {
-								newAddress.append(distributor.getAddress());
-							}
 							tdOrder.setShippingAddress(newAddress.toString()); // 超市地址
 							tdOrder.setShipAddressTitle(distributor.getTitle()); // 超市名称
 							tdOrder.setShipMobile(distributor.getMobile()); // 超市联系方式
