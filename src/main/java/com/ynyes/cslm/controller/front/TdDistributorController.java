@@ -2432,6 +2432,9 @@ public class TdDistributorController extends AbstractPaytypeController{
         		 long quantity = 0;
         		 quantity = Math.min(cartGoods.getQuantity(),providerGoods.getLeftNumber());
         		 orderGoods.setQuantity(quantity);
+        		
+        		 // 单位
+ 				 orderGoods.setUnit(providerGoods.getUnit());
         		 
         		 // 商品总价
         		 totalGoodsPrice +=cartGoods.getPrice()*cartGoods.getQuantity();

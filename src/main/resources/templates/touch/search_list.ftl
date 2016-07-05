@@ -17,30 +17,34 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/search.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
+	
+	var url = '/touch/search?keywords=${keywords!''}';
+    $('#goods-menu').refresh(url,"#goods-menu",0);
 });
 
-var pageIdx = 1;
-function loadMore()
-{
-    $.ajax({
-        type:"post",
-        url:"/touch/search?keywords=${keywords!''}&page=" + pageIdx,
-        success:function(data){
-            if ("" == data)
-            {
-                $("#a-more").css("display", "none");
-            }
-            else
-            {
-                $("#goods-menu").append(data);
-                pageIdx++;
-            }
-        }
-    });
-}
+ //   var pageIdx = 1;
+ //   function loadMore()
+ //   {
+ //       $.ajax({
+ //           type:"post",
+ //           url:"/touch/search?keywords=${keywords!''}&page=" + pageIdx,
+ //           success:function(data){
+ //               if ("" == data)
+ //               {
+ //                   $("#a-more").css("display", "none");
+ //               }
+ //               else
+ //               {
+ //                   $("#goods-menu").append(data);
+ //                   pageIdx++;
+ //               }
+ //           }
+ //       });
+ //   }
 
 </script>
 </head>
@@ -58,7 +62,7 @@ function loadMore()
 	<section class="pro_screen">
         <a <#if st==0>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=0&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>销量</span></a>
          <a <#if st==1>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=1&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>价格</span></a>
-         <a <#if st==2>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=2&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>上架时间</span></a>
+         <a <#if st==2>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=2&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>时间</span></a>
     </section>
     <div style="height:0.6rem;"></div>
     
@@ -77,9 +81,11 @@ function loadMore()
           <div style="text-align: center; padding: 15px;">此类商品正在扩充中，敬请期待！</div>
         </#if> 
   	</menu>
+  	<#--
   	<#if goods_page?? && goods_page.content?size gt 0>
    <a id="a-more" class="grey_more" href="javascript:loadMore();"><img src="/touch/images/load.png" /></a>
    </#if>
+   -->
   </section>
   <!-- 商品类表 END -->
 <style>

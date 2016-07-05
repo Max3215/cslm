@@ -93,6 +93,10 @@ public class TdOrderGoods {
     @Column
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date saleTime;
+    
+    // 单位
+    @Column
+    private String unit;
 
     public Long getId() {
         return id;
@@ -236,6 +240,14 @@ public class TdOrderGoods {
 
 	public void setSaleTime(Date saleTime) {
 		this.saleTime = saleTime;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
     
 }

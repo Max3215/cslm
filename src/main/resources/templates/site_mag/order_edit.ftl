@@ -611,7 +611,7 @@
                                     <td style="text-align: left; white-space: normal;">
                                         ${goods.goodsTitle!""} 
                                     </td>
-                                    <td>${goods.price?string("#.00")}</td>
+                                    <td>${goods.price?string("#.00")}<#if goods.unit??>${goods.unit!''}</#if></td>
                                     <td>${goods.quantity!""}</td>
                                     <td>${(goods.price*goods.quantity)?string("#.00")}</td>
                                 </tr>

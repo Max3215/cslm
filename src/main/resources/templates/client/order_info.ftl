@@ -104,10 +104,12 @@ $(document).ready(function(){
                   <a class="red" href="javascriput:viod(0);" onclick="$('.add_address').fadeIn();">新增收货地址</a>
                 </th>
                 <td>
+                    <#assign defaul = false>
                     <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
                         <#list user.shippingAddressList as address>
                             <#if address.isDefaultAddress?? && address.isDefaultAddress>
-                                <input id="input-address-id" type="hidden" name="addressId" value="${address.id?c}" datatype="n" nullmsg="请选择安装信息!"/>        
+                                <input id="input-address-id" type="hidden" name="addressId" value="${address.id?c}" datatype="n" nullmsg="请选择收货地址!"/>
+                                <#assign defaul = true>        
                             <#else>
                             </#if>
                              <a  href="javascript:;" onclick="javascript:selectAddress(this, ${address.id?c});" <#if address.isDefaultAddress?? && address.isDefaultAddress>class="sel"</#if>>
@@ -116,6 +118,9 @@ $(document).ready(function(){
                                 <p>电话：${address.receiverMobile!''}</p>
                              </a>
                         </#list>                                                 
+                     </#if>
+                     <#if defaul == false>
+                     <input id="input-address-id" type="hidden" name="addressId" value="" datatype="n" nullmsg="请选择收货地址!"/>
                      </#if>
                     <div class="clear"></div>
                 </td>

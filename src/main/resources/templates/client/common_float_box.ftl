@@ -6,9 +6,27 @@
         <a href="/user/recent/list" class="history" title="浏览记录"></a>
         <a  class="ewm" title=""></a>
         <div class="ewm_show"><img src="${site.wxQrCode!''}"></div>
+        <a href="javascript:void(0)" class="service"></a>
+            <div class="show_kefu">
+                <a href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>javascript:;</#if>" title="在线咨询" id="floatqq" target="_blank"">售前1</a>
+                <a href="<#if site.qq2??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq2!''}&site=qq&menu=yes<#else>javascript:;</#if>" title="在线咨询" id="floatqq" target="_blank"">售前2</a>
+                <a href="<#if site.qq3??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq3!''}&site=qq&menu=yes<#else>javascript:;</#if>" title="在线咨询" id="floatqq" target="_blank"">售前3</a>
+                <a href="<#if site.qq4??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq4!''}&site=qq&menu=yes<#else>javascript:;</#if>" title="在线咨询" id="floatqq" target="_blank"" class="last">售后1</a>
+            </div>
+        <!--
         <a href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>" title="在线咨询" id="floatqq" target="_blank" class="service"></a>
+        -->
         <a href="javascript:move()" class="go_top" title="跳转顶部">TOP</a>
- <script>       
+
+<script type="text/javascript">
+    $(".float_box .service").hover(function(){
+        $(".show_kefu").show();
+    });
+    $(".show_kefu").hover(function(){
+        $(this).show();
+    },function(){
+        $(this).hide();
+    });
 function move()
 {
     $('html,body').animate({scrollTop:0},500);

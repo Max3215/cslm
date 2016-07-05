@@ -28,7 +28,7 @@
         <div class="m_box">
             <div class="search_box">
                 <form action="/search" method="get" id="search_form" >
-                     <input class="text" type="text" id="keywords" name="keywords" value="${keywords!keywords_list[0].title}">
+                     <input class="text" type="text" id="keywords" name="keywords"  <#if keywords?? && keywords != ''>value="${keywords}"<#else>placeholder="<#if keywords_list?? && keywords_list[0]??>${keywords!keywords_list[0].title}</#if>"</#if>>
                      <a href="javascript:submitSearch()">搜索</a>
                 </form>
             </div>

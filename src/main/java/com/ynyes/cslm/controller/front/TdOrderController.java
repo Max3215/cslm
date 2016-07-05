@@ -445,6 +445,8 @@ public class TdOrderController extends AbstractPaytypeController {
 				// 销售价
 				orderGoods.setPrice(distributorGoods.getGoodsPrice());
 
+				// 单位
+				orderGoods.setUnit(distributorGoods.getUnit());
 				// 数量
 				long quantity = Math.min(cartGoods.getQuantity(), distributorGoods.getLeftNumber());
 

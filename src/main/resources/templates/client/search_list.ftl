@@ -30,7 +30,7 @@ $(document).ready(function(){
 
 	navDownList("nav_down","li",".nav_show");
 	menuDownList("mainnavdown","#nav_down",".a2","sel");
-	adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+	bannerCartoon("n_banner_box","a","n_banner_num",300,5000,"","");
 
 	$(".float_box .ewm").hover(function(){
 		$(this).next().show();
@@ -58,6 +58,7 @@ $(document).ready(function(){
 	<!--banner-->
 	<#if list_scroll_ad_list?? && list_scroll_ad_list?size gt 0>
     	<section id="n_banner_box">
+    		<#--
     		<ul id="n_banner_sum">
     		  <#list list_scroll_ad_list as ad>
     		      <#if ad_index == 0>
@@ -76,6 +77,14 @@ $(document).ready(function(){
     			  </#if>
     		  </#list>
     		</ul>
+    		-->
+    		<menu id="banner_sum">
+                <#list list_scroll_ad_list as item>
+                    <a href="${item.linkUri!''}" target="_blank">
+                              <img src="${item.fileUri!''}" />
+                        </a>
+                </#list>
+        </menu>
     	</section>
     </#if>
     <!--右边悬浮框-->

@@ -63,7 +63,7 @@
                                     ${og.goodsTitle!''} ${og.goodsColor!''} ${og.goodsCapacity!''} ${og.goodsVersion!''}
                                 </td>
                                 <td>${og.goodsCode!''}</td>
-                                <td>${og.price?string("0.00")}</td>
+                                <td>${og.price?string("0.00")}<#if og.unit??>/${og.unit!''}</#if></td>
                                 <td>${og.quantity!'0'}</td>
                                 <td>${(og.price*og.quantity)?string("0.00")}</td>
                             </tr>
@@ -108,14 +108,16 @@
                         </tr>
                     </tbody></table>
                     <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" style="border-top: 1px solid #000; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
-                        <tbody><tr>
-                            <td align="right">商品金额：￥${order.totalGoodsPrice?string("0.00")}
-                          <#if order.postPrice??>  + 配送费：￥${order.postPrice?string("0.00")}</#if>
+                        <tbody>
+                            <tr>
+                            <td width="40%"></td>
+                            <td align="center">商品金额：￥${order.totalGoodsPrice?string("0.00")}
+                                 <#if order.postPrice??>  + 配送费：￥${order.postPrice?string("0.00")}</#if>
                               <#--      + 支付手续费：￥${order.payTypeFee?string("0.00")}
                           -->      
                                 = 订单总额：${order.totalPrice?string("0.00")}
                                 </td>
-                        </tr>
+                            </tr>
                     </tbody></table>
                 </td>
             </tr>

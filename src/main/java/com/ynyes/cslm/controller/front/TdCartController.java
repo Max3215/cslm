@@ -134,14 +134,11 @@ public class TdCartController {
                     cartGoods.setDistributorId(distributor.getId());
                     cartGoods.setDistributorTitle(distributor.getTitle());
                     cartGoods.setDistributorGoodsId(goods.getId());
-                    // 商品信息在读取购物车时再获取
-//                    cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
-//                    cartGoods.setGoodsTitle(goods.getTitle());
-//                    cartGoods.setPrice(goods.getSalePrice());
                     cartGoods.setDistributorId(tdDistributorGoodsService.findDistributorId(id));
             		cartGoods.setDistributorTitle(goods.getDistributorTitle());
             		cartGoods.setProviderId(goods.getProviderId());
             		cartGoods.setProviderTite(goods.getProviderTitle());
+            		cartGoods.setUnit(goods.getUnit());
                     
                     cartGoods.setQuantity(quantity);
                     

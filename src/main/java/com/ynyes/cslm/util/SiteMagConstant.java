@@ -13,6 +13,7 @@ public class SiteMagConstant {
     
     public static final String templatePath = "src/main/resources/templates/client/";
     
+    public static final String apkPath ;
     public static final String backupPath;
     public static final String imagePath ;
     
@@ -22,9 +23,11 @@ public class SiteMagConstant {
 		if(operation.contains("Linux")){
 			backupPath = "/mnt/root/backup/";
 			imagePath = "/mnt/root/images/goods";
+			apkPath = "/mnt/root/max/";
 		}else{
 			backupPath = "src/main/resources/backup/";
 			imagePath = "src/main/resources/static/images";
+			apkPath = "src/main/resources/apk/";
 		}
     }
 

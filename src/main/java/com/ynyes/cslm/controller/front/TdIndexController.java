@@ -1,12 +1,10 @@
 package com.ynyes.cslm.controller.front;
 
-import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
-import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
@@ -26,6 +23,7 @@ import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdProductCategoryService;
+import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdSiteLinkService;
 import com.ynyes.cslm.util.ClientConstant;
 
@@ -69,6 +67,7 @@ public class TdIndexController {
     
     @Autowired
     private TdDistributorService tdDistributorService;
+    
 
     @RequestMapping
     public String index(HttpServletRequest req, Device device, ModelMap map) {
@@ -261,18 +260,7 @@ public class TdIndexController {
         
         return "/client/index";
     }
-    /**
-	 * @author lc
-	 * @注释：计算秒杀商品剩余数量
-	 */
-    public int countleft(List<TdGoods> tdGoods){
-    	int totals = 0;
-    	for(int i = 0; i < tdGoods.size(); i++){
-    		if (null != tdGoods.get(i).getFlashSaleLeftNumber()) {
-				totals += tdGoods.get(i).getFlashSaleLeftNumber();
-			}
-    	}
-    	return totals;
-    }
+    
+    
     
 }

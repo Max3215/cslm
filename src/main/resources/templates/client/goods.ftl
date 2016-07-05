@@ -52,15 +52,17 @@ function stripscript(s) {
     for (var i = 0; i < s.length; i++) {
         rs = rs + s.substr(i, 1).replace(pattern, '');
     }
-    console.debug(rs);
+  
     return rs;
 }
 
 
 function addNum(){
     var q = parseInt($("#quantity").val());
-    <#if dis_goods?? && dis_goods.leftNumber??>
-        if (q < ${dis_goods.leftNumber!'0'})
+    var ln = parseInt($("#leftNumber").val());
+    console.debug(ln)
+ //   <#if dis_goods?? && dis_goods.leftNumber??>
+        if (q < ${dis_goods.leftNumber?c!'0'})
         {
             $("#quantity").val(q+1);
         }
@@ -68,10 +70,10 @@ function addNum(){
         {
             alert("已达到库存最大值");
         }
-   <#else>
-        $("#quantity").val(q+1);
-        $("#number").val(q+1);
-   </#if>
+//   <#else>
+//        $("#quantity").val(q+1);
+//        $("#number").val(q+1);
+//  </#if>
     $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
     $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
     $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + $("#quantity").val());
@@ -278,7 +280,7 @@ function proGoods(did)
                 <p>&nbsp;  </p>
                 <p class="num"><#if distributor.postPrice??>本店（${distributor.title!''}）配送费<span style="color:#ff5b7d">￥${distributor.postPrice?string('0.00')}</span>&nbsp;</#if>
                     <#if distributor.maxPostPrice??>满<span style="color:#ff5b7d">￥${distributor.maxPostPrice?string('0.00')}</span>&nbsp;包邮</#if></p>
-                 <p ><span style="color:#ff5b7d">*${distributor.postInfo!''}</span></p>
+                 <p ><span style="color:#ff5b7d"><#if distributor.postInfo??>*${distributor.postInfo!''}</#if></span></p>
 				<div class="buy_btn">
 					<div class="clear"></div>
 					<#if dis_goods??>

@@ -387,7 +387,7 @@ public class TdTouchListController {
 	    
 	    
 	    @RequestMapping("/list/more/{listStr}")
-	    public String goodsList(@PathVariable String listStr, ModelMap map, HttpServletRequest req){
+	    public String goodsList(@PathVariable String listStr,int page, ModelMap map, HttpServletRequest req){
 	    	if (null == listStr || "".equals(listStr))
 	        {
 	            return "/client/error_404";
@@ -600,20 +600,20 @@ public class TdTouchListController {
 	         
 	         map.addAttribute("sort_id_list", sortIds);
 
-	         // 页号
-	         Integer pageId = 0;
-	         
-	         if (numberGroup.length >= paramCount + 7)
-	         {
-	             String pageIdStr = numberGroup[6 + paramCount];
-	             
-	             if (null != pageIdStr)
-	             {
-	                 pageId = Integer.parseInt(pageIdStr);
-	             }
-	         }
-	         
-	         map.addAttribute("pageId", pageId);
+//	         // 页号
+//	         Integer pageId = 0;
+//	         
+//	         if (numberGroup.length >= paramCount + 7)
+//	         {
+//	             String pageIdStr = numberGroup[6 + paramCount];
+//	             
+//	             if (null != pageIdStr)
+//	             {
+//	                 pageId = Integer.parseInt(pageIdStr);
+//	             }
+//	         }
+//	         
+	         map.addAttribute("pageId", page);
 	         
 	         // 是否有货
 	         Integer leftId = 0;
@@ -663,12 +663,12 @@ public class TdTouchListController {
 	         // 0: 降序 1: 升序
 	         if (0 == sortIds[orderId])
 	         {
-	             pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+	             pageRequest = new PageRequest(page, ClientConstant.pageSize, new Sort(
 	                 Direction.DESC, sortName[orderId]));
 	         }
 	         else
 	         {
-	             pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+	             pageRequest = new PageRequest(page, ClientConstant.pageSize, new Sort(
 	                     Direction.ASC, sortName[orderId]));
 	         }
 	         

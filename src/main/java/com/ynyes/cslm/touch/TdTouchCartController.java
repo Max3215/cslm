@@ -120,6 +120,7 @@ public class TdTouchCartController {
             		cartGoods.setDistributorTitle(goods.getDistributorTitle());
             		cartGoods.setProviderId(goods.getProviderId());
             		cartGoods.setProviderTite(goods.getProviderTitle());
+                    cartGoods.setUnit(goods.getUnit());
                     
                     cartGoods.setQuantity(quantity);
                     

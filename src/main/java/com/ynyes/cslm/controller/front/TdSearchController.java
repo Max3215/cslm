@@ -109,11 +109,27 @@ public class TdSearchController {
               map.addAttribute("goods_page",tdDistributorGoodsService.searchAndDistributorIdAndIsOnSale(distributorId, keywords, true, page, ClientConstant.pageSize));
               
               map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(distributorId,0,10).getContent());
+            
+           // 列表页轮播广告
+              TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
+
+              if (null != adType) {
+                  map.addAttribute("list_scroll_ad_list", tdAdService
+                          .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+              }
             }else{
             	map.addAttribute("goods_page", tdDistributorGoodsService.searchGoodsAndIsOnSale(keywords, true, page, ClientConstant.pageSize));
             	
             	// 热卖
             	map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0,10).getContent());
+            	
+            	// 列表页轮播广告
+                TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
+
+                if (null != adType) {
+                    map.addAttribute("list_scroll_ad_list", tdAdService
+                            .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
+                }
             }
         }
         
@@ -133,12 +149,12 @@ public class TdSearchController {
         map.addAttribute("keywords", keywords);
         
         // 列表页轮播广告
-        TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
-
-        if (null != adType) {
-            map.addAttribute("list_scroll_ad_list", tdAdService
-                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
-        }
+//        TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
+//
+//        if (null != adType) {
+//            map.addAttribute("list_scroll_ad_list", tdAdService
+//                    .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
+//        }
         
 //        // 热卖推荐
 //        map.addAttribute("hot_sale_list", tdGoodsService.findByIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(0, 10).getContent());   

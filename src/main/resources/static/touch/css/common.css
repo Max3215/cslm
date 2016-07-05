@@ -754,7 +754,11 @@ a,button,input{
 
 
 
-
+.pro_hot menu a p:nth-child(3) span {
+    color: #999;
+    font-size: 0.18rem;
+    padding-left: 5px;
+}
 
 
 

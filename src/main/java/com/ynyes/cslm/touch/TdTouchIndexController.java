@@ -1,5 +1,8 @@
 package com.ynyes.cslm.touch;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,7 +12,9 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,6 +26,7 @@ import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdProductCategory;
+import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdArticleCategoryService;
@@ -29,8 +35,10 @@ import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdProductCategoryService;
+import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.Cnvter;
+import com.ynyes.cslm.util.SiteMagConstant;
 
 @Controller
 @RequestMapping("/touch")
@@ -58,6 +66,9 @@ public class TdTouchIndexController {
     
     @Autowired
     private TdArticleService tdArticleService;
+    
+    @Autowired
+    private TdSettingService tdSettingService;
 
     @RequestMapping
     public String index(HttpServletRequest req, ModelMap map, String username, Integer app) {
@@ -358,5 +369,49 @@ public class TdTouchIndexController {
 	    }  
     } 
     
+    
+    // 扫二维码下载Android apk
+    @RequestMapping(value="/download/android/apk")    
+    public String getApk1(HttpServletRequest req, ModelMap map, HttpServletResponse resp){
+    	
+    	String url = SiteMagConstant.apkPath;
+    	
+    	TdSetting tdSetting = tdSettingService.findTopBy();
+    	String filename = tdSetting.getAndroidUrl();
+    	
+    	if (download(filename, url, resp)) {
+			return null;
+		}    	
+    	return null ;
+    }
+    
+    
+    public Boolean download(String filename, String exportUrl, HttpServletResponse resp){
+        
+      	 OutputStream os;
+  		 try {
+  				os = resp.getOutputStream();
+  				File file = new File(exportUrl + filename);   				
+               if (file.exists())
+                   {
+                     try {
+                           resp.reset();
+                           resp.setHeader("Content-Disposition", "attachment; filename="
+                                   + filename );
+                           resp.setContentType("application/octet-stream; charset=utf-8");
+                           os.write(FileUtils.readFileToByteArray(file));
+                           os.flush();
+                       } finally {
+                           if (os != null) {
+                               os.close();
+                           }
+                       }
+               }
+  			} catch (IOException e) {
+  				// TODO Auto-generated catch block
+  				e.printStackTrace();
+  		 }
+  		 return true;	
+   } 
     
 }

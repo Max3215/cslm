@@ -219,6 +219,12 @@ $(function () {
         </dl>
         -->
         <dl>
+            <dt>安卓App文件</dt>
+            <dd>
+                <input id="androidImgUrl" name="androidUrl" type="text" datatype="*0-255" value="<#if setting??>${setting.androidUrl!""}</#if>" class="input normal">
+            </dd>
+        </dl>
+        <dl>
             <dt>公司名称</dt>
             <dd>
                 <input name="company" type="text" value="<#if setting??>${setting.company!""}</#if>" class="input normal" datatype="*0-100" sucmsg=" ">
@@ -247,35 +253,33 @@ $(function () {
             </dd>
         </dl>
         <dl>
-            <dt>一号客服QQ</dt>
+            <dt>售前QQ（一）</dt>
             <dd>
                 <input name="qq1" type="text" value="<#if setting??>${setting.qq1!""}</#if>" class="input normal" datatype="n0-100" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
-        <!--
          <dl>
-            <dt>二号客服QQ</dt>
+            <dt>售前QQ（二）</dt>
             <dd>
                 <input name="qq2" type="text" value="<#if setting??>${setting.qq2!""}</#if>" class="input normal" datatype="n0-100" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
          <dl>
-            <dt>三号客服QQ</dt>
+            <dt>售前QQ（三）</dt>
             <dd>
                 <input name="qq3" type="text" value="<#if setting??>${setting.qq3!""}</#if>" class="input normal" datatype="n0-100" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
          <dl>
-            <dt>四号客服QQ</dt>
+            <dt>售后QQ（一）</dt>
             <dd>
                 <input name="qq4" type="text" value="<#if setting??>${setting.qq4!""}</#if>" class="input normal" datatype="n0-100" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
-        -->
         <dl>
             <dt>管理员邮箱</dt>
             <dd>

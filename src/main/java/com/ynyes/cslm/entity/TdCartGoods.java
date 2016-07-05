@@ -14,6 +14,10 @@ import javax.persistence.Id;
  *
  */
 
+/**
+ * @author Max
+ *
+ */
 @Entity
 public class TdCartGoods {
     @Id
@@ -67,6 +71,10 @@ public class TdCartGoods {
     // 是否是登陆用户
     @Column
     private Boolean isLoggedIn;
+    
+    // 单位
+    @Column
+    private String unit;
 
     public Long getId() {
         return id;
@@ -180,15 +188,14 @@ public class TdCartGoods {
 		this.distributorGoodsId = distributorGoodsId;
 	}
 
-	@Override
-	public String toString() {
-		return "TdCartGoods [id=" + id + ", username=" + username + ", goodsId=" + goodsId + ", goodsTitle="
-				+ goodsTitle + ", quantity=" + quantity + ", distributorId=" + distributorId + ", distributorGoodsId="
-				+ distributorGoodsId + ", distributorTitle=" + distributorTitle + ", providerId=" + providerId
-				+ ", providerTite=" + providerTite + ", price=" + price + ", isSelected=" + isSelected + ", isLoggedIn="
-				+ isLoggedIn + "]";
+	public String getUnit() {
+		return unit;
 	}
-    
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
 	
     
     

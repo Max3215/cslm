@@ -146,6 +146,10 @@ public class TdSetting {
     @Column
     private String androidQrCode;
     
+    // 安卓安装包地址
+    @Column
+    private String androidUrl;
+    
     // 商城访问量
     @Column
     private Long totalVisits;
@@ -506,4 +510,14 @@ public class TdSetting {
 	public void setBottomLogoLink3(String bottomLogoLink3) {
 		this.bottomLogoLink3 = bottomLogoLink3;
 	}
+
+	public String getAndroidUrl() {
+		return androidUrl;
+	}
+
+	public void setAndroidUrl(String androidUrl) {
+		this.androidUrl = androidUrl;
+	}
+	
+	
 }
