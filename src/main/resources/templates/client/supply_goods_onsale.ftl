@@ -43,6 +43,7 @@ function editgoods(gid){
     $("#goodsId").attr("value",gid);
     var goodsTitle = $("#title"+gid).html();
     var subTitle = $("#subTitle"+gid).val();
+    var unit = $("#unit"+gid).val();
     var code = $("#code"+gid).html();
     var marketPrice = $("#marketPrice"+gid).html();
     
@@ -50,6 +51,7 @@ function editgoods(gid){
     $("#marketPrice").attr("value",marketPrice);
     $("#goodsTitle").attr("value",goodsTitle);
     $("#subTitle").attr("value",subTitle);
+    $("#unit").attr("value",unit);
     $('.sub_form').css('display','block');
 }
 
@@ -61,6 +63,7 @@ function subDisGoods(){
     var marketPrice = $("#marketPrice").val();
     var leftNumber = $("#leftNumber").val();
     var shopReturnRation = $("#shopReturnRation").val();
+    var unit = $("#unit").val();
     
     if(undefined == goodsTitle || ""==goodsTitle)
     {
@@ -107,6 +110,7 @@ function subDisGoods(){
             "outFactoryPrice":outFactoryPrice,
             "marketPrice":marketPrice,
             "leftNumber":leftNumber,
+            "unit":unit,
             "shopReturnRation":shopReturnRation},
         dataType : "json",
         success:function(data){
@@ -194,6 +198,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#list goods_page.content as goods>
                     <tr id="tr_1424195166">
                         <input type="hidden" id="subTitle${goods.id?c}" value="${goods.subTitle!''}">
+                        <input type="hidden" id="unit${goods.id?c}" value="${goods.unit!''}">
                         <td><a class="pic"><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
                         <td class="tb01"><span id="code${goods.id?c}">${goods.code!''}</span></td>
                         <td class="tb02"><p>￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></p></td>
@@ -271,7 +276,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
          <tr>
           <th>*商品售价：</th>
-          <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" ></td>
+          <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" >&emsp;单位：<input type="text" name="unit" id="unit"></td>
         </tr>
          <tr>
           <th>*库存：</th>

@@ -124,12 +124,19 @@ function submitAddress()
         $("#detailAddress").focus();
         return;
     }
+    
     if (undefined == mobile || "" == mobile)
     {
         alert("手机号码不能为空");
         $("#mobile").focus();
         return;
     }
+    
+    if(!(/^1[3|4|5|7|8]\d{9}$/.test(mobile))){ 
+        alert("手机号码有误，请重填");
+        $("#mobile").focus();
+        return; 
+    } 
     
     $.ajax({
         type:"post",

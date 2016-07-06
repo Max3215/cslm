@@ -77,3 +77,21 @@ function goNext(goodsNum)
     }
     window.location.href="/order/info";
 }
+
+
+// 输入数量
+function chechQuantity(cid,quantity)
+{
+	$.ajax({
+        type:"post",
+        url:"/cart/changeQuantity",
+        data:{"id": cid,"quantity":quantity},
+        success:function(data){
+            if(data.code==1){
+            	window.location.reload();
+            }else{
+            	alert(data.msg)
+            }
+        }
+    });
+}

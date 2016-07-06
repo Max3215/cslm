@@ -291,7 +291,8 @@ public class TdSupplyController extends AbstractPaytypeController{
 	 * 
 	 */
 	@RequestMapping(value="/goods/distribution")
-	public String wholesaling(Integer page,Long categoryId,String keywords,HttpServletRequest req,ModelMap map)
+	public String wholesaling(Integer page,Long categoryId,
+			String keywords,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("supply");
 		if(null == username)
@@ -369,6 +370,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 			Double marketPrice,
 			Double shopReturnRation,
 			Long leftNumber,
+			String unit,
 			HttpServletRequest req)
 	{
 		Map<String,Object> res =new HashMap<>();
@@ -407,6 +409,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 			proGoods.setShopReturnRation(shopReturnRation);
 			proGoods.setIsDistribution(true);
 			proGoods.setIsAudit(false);
+			proGoods.setUnit(unit);
 			proGoods.setProId(provider.getId());
 		}
 		else
@@ -420,7 +423,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 			proGoods.setShopReturnRation(shopReturnRation);
 			proGoods.setCategoryId(goods.getCategoryId());
 			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
-			proGoods.setUnit(goods.getSaleType());
+			proGoods.setUnit(unit);
 			proGoods.setIsDistribution(true);
 			proGoods.setIsAudit(false);
 			proGoods.setProId(provider.getId());
@@ -684,7 +687,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 	@ResponseBody
 	public Map<String,Object> editOnSale(Long goodsId,Double outFactoryPrice,
 							Long leftNumber,Double shopReturnRation,
-							String code,String subTitle,
+							String code,String subTitle,String unit,
 							Integer page,HttpServletRequest req)
 	{
 		Map<String,Object> res = new HashMap<>();
@@ -719,6 +722,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 		proGoods.setShopReturnRation(shopReturnRation);
 		proGoods.setCode(code);
 		proGoods.setSubGoodsTitle(subTitle);
+		proGoods.setUnit(unit);
 		if(null != outFactoryPrice)
 		{
 			proGoods.setOutFactoryPrice(outFactoryPrice);
@@ -732,6 +736,8 @@ public class TdSupplyController extends AbstractPaytypeController{
 					tdDistributorGoods.setGoodsPrice(outFactoryPrice);
 					tdDistributorGoods.setSubGoodsTitle(subTitle);
 					tdDistributorGoods.setLeftNumber(leftNumber);
+					tdDistributorGoods.setUnit(unit);
+					
 					tdDistributorGoodsService.save(tdDistributorGoods);
 				}
 			}

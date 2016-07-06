@@ -50,20 +50,20 @@
                     
                     <table width="100%" border="0" cellspacing="0" cellpadding="5" style="font-size: 12px; font-family: '微软雅黑'; background: #fff;">
                         <tbody><tr>
-                            <td align="left" style="background: #ccc;">商品名称</td>
-                            <td width="10%" align="left" style="background: #ccc;">商品编码</td>
-                            <td width="12%" align="left" style="background: #ccc;">成交价</td>
+                            <td width="55%" align="left" style="background: #ccc;">商品名称</td>
+                            <td width="11%" align="left" style="background: #ccc;">商品编码</td>
+                            <td width="15%" align="center" style="background: #ccc;">成交价</td>
                             <td width="10%" align="left" style="background: #ccc;">数量</td>
-                            <td width="12%" align="left" style="background: #ccc;">金额合计</td>
+                            <td width="10%" align="left" style="background: #ccc;">金额合计</td>
                         </tr>
                     <#if order??>
                         <#list order.orderGoodsList as og>
                             <tr>
-                                <td>
+                                <td  width="55%">
                                     ${og.goodsTitle!''} ${og.goodsColor!''} ${og.goodsCapacity!''} ${og.goodsVersion!''}
                                 </td>
                                 <td>${og.goodsCode!''}</td>
-                                <td>${og.price?string("0.00")}<#if og.unit??>/${og.unit!''}</#if></td>
+                                <td align="center">${og.price?string("0.00")}<#if og.unit??>/${og.unit!''}</#if></td>
                                 <td>${og.quantity!'0'}</td>
                                 <td>${(og.price*og.quantity)?string("0.00")}</td>
                             </tr>
@@ -93,11 +93,16 @@
                             <td width="56%">姓名：${order.shippingName!''}<br>                          
                             </td>
                         </tr>
+                        
                         <tr>
                             <td valign="top">支付方式：${order.payTypeTitle!''}</td>
+                            <#if order?? && order.deliveryMethod?? && order.deliveryMethod==1>
+                            <td>门店自提：${order.shipAddress!''}</td>
+                            <#else>
                             <td>送货地址：
                                 ${order.shippingAddress!''}<br>
                             </td>
+                            </#if>
                         </tr>
                         <tr>
                             <td valign="top">用户留言：${order.userRemarkInfo!''}</td>

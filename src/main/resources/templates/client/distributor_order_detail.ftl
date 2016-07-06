@@ -253,7 +253,7 @@ DD_belatedPNG.fix('.,img,background');
             </tr>
             <tr>
                 <th>配送方式</th>
-                <td><#if order?? && order.deliveryMethod?? && order.deliveryMethod==1>门店自提：${order.ShipAddress!''}<#else>送货上门</#if></td>
+                <td><#if order?? && order.deliveryMethod?? && order.deliveryMethod==1>门店自提：${order.shipAddress!''}<#else>送货上门</#if></td>
             </tr>
         </table>
     </div><!--mymember_info END-->

@@ -123,7 +123,6 @@ function addNum(id)
         url:"/distributor/goods/numberAdd",
         data:{"id":id},
         success:function(data){
-        	console.debug(id)
             $("#cart_goodslist").html(data);
         }
     });
@@ -145,7 +144,7 @@ function minusNum(id)
 function changeNumber(id)
 {
 	var quantity = $("#number"+id).val();
-	console.debug(quantity);
+	
 	var r = /^\+?[1-9][0-9]*$/;　
 	if( r.test(quantity)){
 		$.ajax({

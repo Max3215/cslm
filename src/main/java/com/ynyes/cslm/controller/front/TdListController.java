@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -95,6 +98,12 @@ public class TdListController {
                     .findByMenuIdAndCategoryIdAndIsEnableOrderByIdDesc(10L,
                             articleCatId, 0, ClientConstant.pageSize));
         }
+        
+     // 排序字段个数
+        int totalSorts = 3;
+        
+        // 4个排序字段
+        String[] sortName = {"id", "goodsPrice", "soldNumber"};
         
         Integer priceLow = null; // 价格低值
         Integer priceHigh = null; // 价格高值
@@ -220,7 +229,6 @@ public class TdListController {
         map.addAttribute("param_count", paramCount);
         map.addAttribute("param_index_list", paramIndexList);
         
-        // 排序字段
         Integer orderId = 0;
         
         if (numberGroup.length >= paramCount + 3)
@@ -235,51 +243,66 @@ public class TdListController {
         
         map.addAttribute("orderId", orderId);
         
-        //  销量排序标志
-        Integer soldId = 0;
+     // 排序字段
+        int[] sortIds = new int[totalSorts];
         
+        //  排序字段0标志位，0：降序，1：升序
         if (numberGroup.length >= paramCount + 4)
         {
-            String soldIdStr = numberGroup[3 + paramCount];
+            String sortIdStr = numberGroup[3 + paramCount];
             
-            if (null != soldIdStr)
+            if (null != sortIdStr)
             {
-                soldId = Integer.parseInt(soldIdStr);
+                sortIds[0] = Integer.parseInt(sortIdStr);
             }
         }
         
-        map.addAttribute("soldId", soldId);
-        
-        // 价格排序标志
-        Integer priceId = 0;
-        
+        // 排序字段1标志位，0：降序，1：升序
         if (numberGroup.length >= paramCount + 5)
         {
-            String priceIdStr = numberGroup[4 + paramCount];
+            String sortIdStr = numberGroup[4 + paramCount];
             
-            if (null != priceIdStr)
+            if (null != sortIdStr)
             {
-                priceId = Integer.parseInt(priceIdStr);
+                sortIds[1] = Integer.parseInt(sortIdStr);
             }
         }
         
-        map.addAttribute("priceId", priceId);
-        
-        // 上架时间排序标志
-        Integer timeId = 0;
-        
+        // 排序字段2标志位，0：降序，1：升序
         if (numberGroup.length >= paramCount + 6)
         {
-            String timeIdStr = numberGroup[5 + paramCount];
+            String sortIdStr = numberGroup[5 + paramCount];
             
-            if (null != timeIdStr)
+            if (null != sortIdStr)
             {
-                timeId = Integer.parseInt(timeIdStr);
+                sortIds[2] = Integer.parseInt(sortIdStr);
             }
         }
         
-        map.addAttribute("timeId", timeId);
+//        // 排序字段3标志位，0：降序，1：升序
+//        if (numberGroup.length >= paramCount + 7)
+//        {
+//            String sortIdStr = numberGroup[6 + paramCount];
+//            
+//            if (null != sortIdStr)
+//            {
+//                sortIds[3] = Integer.parseInt(sortIdStr);
+//            }
+//        }
         
+//        // 排序字段4标志位，0：降序，1：升序
+//        if (numberGroup.length >= paramCount + 8)
+//        {
+//            String sortIdStr = numberGroup[7 + paramCount];
+//            
+//            if (null != sortIdStr)
+//            {
+//                sortIds[4] = Integer.parseInt(sortIdStr);
+//            }
+//        }
+        
+        map.addAttribute("sort_id_list", sortIds);
+
         // 页号
         Integer pageId = 0;
         
@@ -345,14 +368,6 @@ public class TdListController {
         }else{
         	map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(categoryId,0,10).getContent());
         }
-//        	// 分类热卖推荐
-//          map.addAttribute("hot_sale_list", tdGoodsService.findByCategoryIdAndIsRecommendTypeTrueAndIsOnSaleTrueOrderByIdDesc(categoryId, 0, 10).getContent());   
-        
-        // 销量排行
-     //   map.addAttribute("most_sold_list", tdGoodsService.findByCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(categoryId, 0, 10).getContent());   
-        
-        // 新品推荐
-      //  map.addAttribute("newest_list", tdGoodsService.findByCategoryIdAndIsOnSaleTrueOrderByOnSaleTimeDesc(categoryId, 0, 10).getContent());   
         
         // 浏览记录
         String username = (String) req.getSession().getAttribute("username");
@@ -370,157 +385,21 @@ public class TdListController {
         if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
         {
           Long distributorId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-       // 按价格区间
-          if (null != priceLow && null != priceHigh)
-          {
-              // 全部品牌
-              if (0 == brandIndex.intValue())
-              {
-                  // 价格区间、按销量排序
-                  if (0 == orderId.intValue())
-                  {
-                      
-                      if (0 == soldId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                                     distributorId, categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                        		  distributorId, categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-                  // 价格区间、按价格排序
-                  else if (1 == orderId.intValue())
-                  {
-                      if (0 == priceId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                        		  distributorId, categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                        		  distributorId, categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-              }
-              else
-              {
-                  // 品牌、价格区间、按销量排序
-                  if (0 == orderId.intValue())
-                  {
-                      if (0 == soldId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                        		  distributorId,  categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                        		  distributorId, categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-                  // 品牌、价格区间、按价格排序
-                  else if (1 == orderId.intValue())
-                  {
-                      if (0 == priceId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                        		  distributorId,  categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                        		  distributorId,  categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-              }
-          }
-          // 所有价格
-          else
-          {
-              // 全部品牌
-              if (0 == brandIndex.intValue())
-              {
-                  // 按销量排序
-                  if (0 == orderId.intValue())
-                  {
-                      if (0 == soldId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                        		  distributorId,  categoryId, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                        		  distributorId,categoryId, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-                  // 按价格排序
-                  else if (1 == orderId.intValue())
-                  {
-                      if (0 == priceId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                        		  distributorId, categoryId, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                        		  distributorId,  categoryId, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-              }
-              else
-              {
-                  // 品牌、按销量排序
-                  if (0 == orderId.intValue())
-                  {
-                      if (0 == soldId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                        		  distributorId, categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                        		  distributorId, categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-                  // 品牌、按价格排序
-                  else if (1 == orderId.intValue())
-                  {
-                      if (0 == priceId.intValue())
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                        		  distributorId, categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-                  
-                      }
-                      else
-                      {
-                          goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                                 distributorId, categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-              
-                      }
-                  }
-              }
-          }
+          
+          PageRequest pageRequest;
+	         // 0: 降序 1: 升序
+	      if (0 == sortIds[orderId])
+	      {
+	          pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+	              Direction.DESC, sortName[orderId]));
+	      }
+	      else
+	      {
+	          pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+	                  Direction.ASC, sortName[orderId]));
+	      }
+          
+	      goodsPage = tdDistributorGoodsService.findByDisId(distributorId, categoryId, brandId, priceLow, priceHigh, paramValueList, pageRequest);
           
        // 列表页轮播广告
           TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
@@ -532,159 +411,6 @@ public class TdListController {
        } 
        else// 未选择超市
       {
-        	// 按价格区间
-            if (null != priceLow && null != priceHigh)
-            {
-                // 全部品牌
-                if (0 == brandIndex.intValue())
-                {
-                    // 价格区间、按销量排序
-                    if (0 == orderId.intValue())
-                    {
-                        
-                        if (0 == soldId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                                        categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                                    categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                    // 价格区间、按价格排序
-                    else if (1 == orderId.intValue())
-                    {
-                        if (0 == priceId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                                        categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                                    categoryId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                }
-                else
-                {
-                    // 品牌、价格区间、按销量排序
-                    if (0 == orderId.intValue())
-                    {
-                        if (0 == soldId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                                        categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                                    categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                    // 品牌、价格区间、按价格排序
-                    else if (1 == orderId.intValue())
-                    {
-                        if (0 == priceId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                                        categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndSalePriceBetweenAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                                    categoryId, brandId, priceLow, priceHigh, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                }
-            }
-            // 所有价格
-            else
-            {
-                // 全部品牌
-                if (0 == brandIndex.intValue())
-                {
-                    // 按销量排序
-                    if (0 == orderId.intValue())
-                    {
-                        if (0 == soldId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                                        categoryId, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                                    categoryId, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                    // 按价格排序
-                    else if (1 == orderId.intValue())
-                    {
-                        if (0 == priceId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                                        categoryId, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                                    categoryId, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                }
-                else
-                {
-                    // 品牌、按销量排序
-                    if (0 == orderId.intValue())
-                    {
-                        if (0 == soldId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberDesc(
-                                        categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySoldNumberAsc(
-                                    categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                    // 品牌、按价格排序
-                    else if (1 == orderId.intValue())
-                    {
-                        if (0 == priceId.intValue())
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceDesc(
-                                        categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-                    
-                        }
-                        else
-                        {
-                            goodsPage = tdDistributorGoodsService.findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrueOrderBySalePriceAsc(
-                                    categoryId, brandId, pageId, ClientConstant.pageSize, paramValueList);
-                
-                        }
-                    }
-                }
-            }
-            
-            
          // 列表页轮播广告
             TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
 
@@ -692,6 +418,21 @@ public class TdListController {
                 map.addAttribute("list_scroll_ad_list", tdAdService
                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
             }
+            
+            PageRequest pageRequest;
+	         // 0: 降序 1: 升序
+	      if (0 == sortIds[orderId])
+	      {
+	          pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+	              Direction.DESC, sortName[orderId]));
+	      }
+	      else
+	      {
+	          pageRequest = new PageRequest(pageId, ClientConstant.pageSize, new Sort(
+	                  Direction.ASC, sortName[orderId]));
+	      }
+         
+	      goodsPage = tdDistributorGoodsService.findByDisId(null, categoryId, brandId, priceLow, priceHigh, paramValueList, pageRequest);
         }
         
         map.addAttribute("goods_page", goodsPage);  

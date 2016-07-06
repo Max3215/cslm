@@ -62,6 +62,7 @@ function editPrice(dgId,page){
     var goodsTitle = $("#title"+dgId).html();
     var subTitle = $("#subTitle"+dgId).val();
     var code = $("#code"+dgId).val();
+    var unit = $("#unit"+dgId).val();
     var outFactoryPrice = $("#price"+dgId).html();
     var shopReturnRation = $("#ration"+dgId).html();
     var leftNumber = $("#number"+dgId).html();
@@ -71,6 +72,7 @@ function editPrice(dgId,page){
     $("#goodsTitle").attr("value",goodsTitle);
     $("#subTitle").attr("value",subTitle);
     $("#code").attr("value",code);
+    $("#unit").attr("value",unit);
     $("#outFactoryPrice").attr("value",outFactoryPrice);
     $("#shopReturnRation").attr("value",shopReturnRation);
     $("#leftNumber").attr("value",leftNumber);
@@ -188,7 +190,10 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
          <tr>
           <th>*商品售价：</th>
-          <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " ></td>
+          <td>
+            <input type="text" name="outFactoryPrice" id="outFactoryPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " >&emsp;
+            单位：<input type="text" name="unit" id="unit">
+          </td>
         </tr>
         <tr>
           <th>*返利比：</th>

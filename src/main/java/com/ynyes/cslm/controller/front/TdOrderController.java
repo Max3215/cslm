@@ -640,7 +640,7 @@ public class TdOrderController extends AbstractPaytypeController {
 						{
 							TdShippingAddress newShipping = new TdShippingAddress();
 							for (TdShippingAddress tdShippingAddress : shippingList) {
-								if (tdShippingAddress.getIsDefaultAddress()) {
+								if (null != tdShippingAddress.getIsDefaultAddress() && tdShippingAddress.getIsDefaultAddress()) {
 									newShipping = tdShippingAddress;
 								}
 							}
@@ -818,12 +818,11 @@ public class TdOrderController extends AbstractPaytypeController {
 					} else if (list.size() > 1) // 多家超市
 					{
 						List<TdShippingAddress> shippingList = distributor.getShippingList();
-
 						if (null != shippingList) // 超市设置了自提点 取默认地址
 						{
 							TdShippingAddress newShipping = new TdShippingAddress();
 							for (TdShippingAddress tdShippingAddress : shippingList) {
-								if (tdShippingAddress.getIsDefaultAddress()) {
+								if (null != tdShippingAddress.getIsDefaultAddress() && tdShippingAddress.getIsDefaultAddress()) {
 									newShipping = tdShippingAddress;
 								}
 							}

@@ -25,10 +25,11 @@
                              </a> 
                              <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" /> 
                              <input type="hidden" value="${dg.code!''}" id="code${dg.id?c}" />
+                             <input type="hidden" value="${dg.unit!''}" id="unit${dg.id?c}" />
                         </td>
                         <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
                         <td class="tb02"><span id="ration${dg.id?c}">${dg.shopReturnRation!'0'}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber?c}</span></td>
                         <td>
                                 <p><a href="javascript:goodsAudit(false,${dg.id?c},${page})">取消分销</a></p>
                                 <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
@@ -46,10 +47,11 @@
                              </a> 
                              <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" /> 
                              <input type="hidden" value="${dg.code!''}" id="code${dg.id?c}" />
+                             <input type="hidden" value="${dg.unit!''}" id="unit${dg.id?c}" />
                         </td>
                         <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
                         <td class="tb02"><span id="ration${dg.id?c}">${dg.shopReturnRation!'0'}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber?c}</span></td>
                         <td>
                                 <p><a href="javascript:goodsAudit(true,${dg.id?c},${page})">上架分销</a></p>
                                 <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>

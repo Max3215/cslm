@@ -17,30 +17,34 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/search.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
+	
+	var url = '/touch/findNew';
+    $('#goods-menu').refresh(url,"#goods-menu",0);
 });
 
-var pageIdx = 1;
-function loadMore()
-{
-    $.ajax({
-        type:"post",
-        url:"/touch/findNew?page=" + pageIdx,
-        success:function(data){
-            if ("" == data)
-            {
-                $("#a-more").css("display", "none");
-            }
-            else
-            {
-                $("#goods-menu").append(data);
-                pageIdx++;
-            }
-        }
-    });
-}
+  //  var pageIdx = 1;
+  //  function loadMore()
+  //  {
+  //      $.ajax({
+  //          type:"post",
+  //          url:"/touch/findNew?page=" + pageIdx,
+  //          success:function(data){
+  //              if ("" == data)
+  //              {
+  //                  $("#a-more").css("display", "none");
+  //              }
+  //              else
+  //              {
+  //                  $("#goods-menu").append(data);
+  //                  pageIdx++;
+  //              }
+  //          }
+  //      });
+  //  }
 
 </script>
 </head>
@@ -71,16 +75,18 @@ function loadMore()
                     <a href="/touch/goods/${goods.id?c}" class="a1">
                         <img src="${goods.coverImageUri!''}"/>
                         <p>${goods.goodsTitle!""}</p>
-                        <p >￥${goods.goodsPrice?string("#.##")}</p>
+                        <p >￥${goods.goodsPrice?string("#.##")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
                     </a>
             </#list>
           <#else>
           <div style="text-align: center; padding: 15px;">此类商品正在扩充中，敬请期待！</div>
         </#if> 
   	</menu>
+  	<#--
   	<#if goods_page?? && goods_page.content?size gt 0>
    <a id="a-more" class="grey_more" href="javascript:loadMore();"><img src="/touch/images/load.png" /></a>
    </#if>
+   -->
   </section>
   <!-- 商品类表 END -->
 <style>

@@ -214,7 +214,7 @@ DD_belatedPNG.fix('.,img,background');
                 <td width="60" class="td001">
                     <a href="/goods/${og.goodsId?c}"><img src="${og.goodsCoverImageUri}" /></a>
                 </td>
-                <td>
+                <td width="40%">
                     <a href="/goods/${og.goodsId?c}">${og.goodsTitle}</a>
                 </td>
                 <td>

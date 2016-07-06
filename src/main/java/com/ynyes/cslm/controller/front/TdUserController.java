@@ -1387,59 +1387,59 @@ public class TdUserController extends AbstractPaytypeController{
         tdComment.setPositiveNumber(0L);
         tdComment.setUsername(username);
         
-        tdComment = tdUserCommentService.save(tdComment);
-        
-        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-        
-        // 设置订单信息
-        if (null != orderId) {
-            TdOrder tdOrder = tdOrderService.findOne(orderId);
-
-            if (null != tdOrder) {
-                tdComment.setOrderNumber(tdOrder.getOrderNumber());
-                tdComment.setDiysiteId(tdOrder.getShopId());
-                
-                List<TdOrderGoods> ogList = tdOrder.getOrderGoodsList();
-
-                for (TdOrderGoods og : ogList) {
-                    if (og.getId().equals(ogId)) {
-                        og.setIsCommented(true);
-                        og.setCommentId(tdComment.getId());
-                        tdOrder = tdOrderService.save(tdOrder);
-                        break;
-                    }
-                }
-
-                // 判断订单是否完成
-                boolean allIsCommented = true;
-                for (TdOrderGoods og : tdOrder.getOrderGoodsList()) {
-                    if (null == og.getIsCommented() || !og.getIsCommented()) {
-                        allIsCommented = false;
-                        break;
-                    }
-                }
-
-                if (allIsCommented) {
-                    tdOrder.setStatusId(6L);
-                    tdOrder = tdOrderService.save(tdOrder);
-                }
-            }
-        }
-
-
-        if (null != user) {
-            tdComment.setUserHeadUri(user.getHeadImageUri());
-        }
-
-        tdComment.setStatusId(0L);
-
-        tdComment = tdUserCommentService.save(tdComment);
-
-        if (null == goods.getTotalComments()) {
-            goods.setTotalComments(1L);
-        } else {
-            goods.setTotalComments(goods.getTotalComments() + 1L);
-        }
+//        tdComment = tdUserCommentService.save(tdComment);
+//        
+//        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+//        
+//        // 设置订单信息
+//        if (null != orderId) {
+//            TdOrder tdOrder = tdOrderService.findOne(orderId);
+//
+//            if (null != tdOrder) {
+//                tdComment.setOrderNumber(tdOrder.getOrderNumber());
+//                tdComment.setDiysiteId(tdOrder.getShopId());
+//                
+//                List<TdOrderGoods> ogList = tdOrder.getOrderGoodsList();
+//
+//                for (TdOrderGoods og : ogList) {
+//                    if (og.getId().equals(ogId)) {
+//                        og.setIsCommented(true);
+//                        og.setCommentId(tdComment.getId());
+//                        tdOrder = tdOrderService.save(tdOrder);
+//                        break;
+//                    }
+//                }
+//
+//                // 判断订单是否完成
+//                boolean allIsCommented = true;
+//                for (TdOrderGoods og : tdOrder.getOrderGoodsList()) {
+//                    if (null == og.getIsCommented() || !og.getIsCommented()) {
+//                        allIsCommented = false;
+//                        break;
+//                    }
+//                }
+//
+//                if (allIsCommented) {
+//                    tdOrder.setStatusId(6L);
+//                    tdOrder = tdOrderService.save(tdOrder);
+//                }
+//            }
+//        }
+//
+//
+//        if (null != user) {
+//            tdComment.setUserHeadUri(user.getHeadImageUri());
+//        }
+//
+//        tdComment.setStatusId(0L);
+//
+//        tdComment = tdUserCommentService.save(tdComment);
+//
+//        if (null == goods.getTotalComments()) {
+//            goods.setTotalComments(1L);
+//        } else {
+//            goods.setTotalComments(goods.getTotalComments() + 1L);
+//        }
 
         res.put("code", 0);
 
@@ -1469,7 +1469,7 @@ public class TdUserController extends AbstractPaytypeController{
         }
 
         if (null == statusId) {
-            statusId = 0;
+            statusId = 5;
         }
 
       //底部广告
@@ -1485,15 +1485,9 @@ public class TdUserController extends AbstractPaytypeController{
         map.addAttribute("user", tdUser);
 
         if (null != tdUser) {
-            if (0 == statusId) {
-                // 查找该用户的未评价订单
-                map.addAttribute("order_page", tdOrderService
-                        .findByUsernameAndStatusId(username, 5L, page,
-                                ClientConstant.pageSize));
-            } else {
                 // 查找该用户的未评价订单
                 Page<TdOrder> orderPage = tdOrderService
-                        .findByUsernameAndStatusId(username, 6L, page,
+                        .findByUsernameAndStatusId(username, statusId, page,
                                 ClientConstant.pageSize);
                 map.addAttribute("order_page", orderPage);
 
@@ -1502,14 +1496,13 @@ public class TdUserController extends AbstractPaytypeController{
                         if (null != tdOrder) {
                             for (TdOrderGoods og : tdOrder.getOrderGoodsList()) {
                                 if (null != og && null != og.getCommentId()) {
-                                    TdUserComment uc = tdUserCommentService
-                                            .findOne(og.getCommentId());
+                                    TdUserComment uc = tdUserCommentService .findOne(og.getCommentId());
                                     map.addAttribute("comment_"+tdOrder.getId()+"_"+og.getId(), uc);
                                 }
                             }
                         }
                     }
-                }
+//                }
             }
         }
 

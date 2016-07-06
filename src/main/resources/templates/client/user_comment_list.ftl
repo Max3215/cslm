@@ -71,8 +71,8 @@ DD_belatedPNG.fix('.,img,background');
             <div class="mymember_order_search">
                 <a class="a001" >商品评价/晒单</a>
                 <select id="commentTypeSelect" onchange="javascript:commentJump();">
-                    <option value="0" <#if statusId==0>selected="selected"</#if>>待评价订单</option>
-                    <option value="1" <#if statusId==1>selected="selected"</#if>>已评价订单</option> 
+                    <option value="5" <#if statusId==5>selected="selected"</#if>>待评价订单</option>
+                    <option value="6" <#if statusId==6>selected="selected"</#if>>已评价订单</option> 
                 </select>
                 <div class="clear"></div>
             </div>
@@ -95,7 +95,7 @@ DD_belatedPNG.fix('.,img,background');
                             <td>${order.orderTime?string("yyyy-MM-dd")}</td>
                             <td class="td003">
                                 <#if item.isCommented?? && item.isCommented>
-                                    <a href="javascript:evaluateShow(${order_index}, ${item_index});">已评价</a>
+                                    <a href="javascript:evaluateShow('comment-tr${order_index}${item_index}','mymember_evabox' );">已评价</a>
                                 <#else>
                                     <a href="javascript:evaluateShow('comment-tr${order_index}${item_index}','mymember_evabox'  );">发表评价</a>
                                 </#if>
@@ -113,7 +113,7 @@ DD_belatedPNG.fix('.,img,background');
                                             </div>
                                             <span style="position:absolute;right:88px;top:-13px;"><img src="/client/images/mymember/arrow06.gif" /></span>
                                             <div class="mymember_eva_div">
-                                                  <b><font>* </font>商品满意度：</b>
+                                                  <b><font>* </font>满意度：</b>
                                                   <div class="myclear"></div>
                                                   <a class="a001" href="javascript:;"><img src="/client/images/mymember/<#if comt.goodsStar?? && comt.goodsStar gt 0>star02.png<#else>star01.png</#if>"></a>
                                                   <a class="a001" href="javascript:;"><img src="/client/images/mymember/<#if comt.goodsStar?? && comt.goodsStar gt 1>star02.png<#else>star01.png</#if>"></a>
@@ -132,12 +132,12 @@ DD_belatedPNG.fix('.,img,background');
                                 </#if>
                             <#else>
                                 <tr id="comment-tr${order_index}${item_index}" class="mymember_evabox">
-                                    <form class="commentForm${order_index}${item_index}" action="/user/comment/add" method="post">
+                                    <td class="td004" colspan="4">
+                                    <form id="commentForm${order_index}${item_index}" action="/user/comment/add" method="post">
                                         <input type="hidden" name="orderId" value=${order.id?c} />
                                         <input type="hidden" name="ogId" value=${item.id?c} />
                                         <input type="hidden" name="goodsId" value=${item.goodsId?c} />
                                         <input type="hidden" name="quantity" value=${item.quantity} />
-                                        <td class="td004" colspan="4">
                                             <div class="pb20 lh25">
                                                 <input class="ml20" type="radio" name="stars" value="3" datatype="n" nullmsg="请点击进行评价"/><span class="mr20"> 好评</span>
                                                 <input type="radio" name="stars" value="2" datatype="n" nullmsg="请点击进行评价"/><span class="mr20"> 中评</span>
@@ -161,13 +161,13 @@ DD_belatedPNG.fix('.,img,background');
                                             <div class="mymember_eva_div">
                                               <input class="mysub" type="submit" value="发表评论">
                                             </div>
-                                        </td>
                                     </form>
+                                    </td>
                                 </tr>
 <script>  
 $(document).ready(function(){  
      //初始化表单验证
-    $(".commentForm${order_index}${item_index}").Validform({
+    $("#commentForm${order_index}${item_index}").Validform({
         tiptype: 4,
         ajaxPost:true,
         callback: function(data) {

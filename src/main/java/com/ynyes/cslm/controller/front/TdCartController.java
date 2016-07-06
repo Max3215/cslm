@@ -1,6 +1,8 @@
 package com.ynyes.cslm.controller.front;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdDistributor;
@@ -367,4 +370,38 @@ public class TdCartController {
 
         return "/client/cart_goods";
     }
+    
+    @RequestMapping(value="/cart/changeQuantity",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> changeQuantity(Long id,Long quantity,HttpServletRequest req)
+    {
+    	Map<String,Object> res = new HashMap<>();
+    	res.put("code", 0);
+    	
+    	if(null != id && null != quantity && quantity != 0)
+    	{
+    		TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+    		
+    		if(null != cartGoods)
+    		{
+    			TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByIdAndIsInSaleTrue(cartGoods.getDistributorGoodsId());
+    			if(null != distributorGoods)
+    			{
+    				if(quantity > distributorGoods.getLeftNumber()){
+    					res.put("msg", "商家库存不足，请重新输入");
+    				}else{
+    					cartGoods.setQuantity(quantity);
+    					tdCartGoodsService.save(cartGoods);
+    					res.put("code", 1);
+    					return res;
+    				}
+    			}
+    		}
+    	}
+        res.put("msg", "参数错误");
+        return res;
+    }
+    
+    
+    
 }

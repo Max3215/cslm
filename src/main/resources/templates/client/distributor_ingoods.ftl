@@ -157,6 +157,7 @@ function edit_pwd(){
 
 function win_hide(){
     var oUt = rich('.win_out')[0];
+    $("#payPwd").val('');
     oUt.style.display = 'none';
 };
  
@@ -187,7 +188,7 @@ $(document).ready(function(){
                     <input type="hidden" name="type" value="" id="type">
                     <div>
                         <label>支付密码：</label>
-                        <input class="text" type="password" name="payPassword"  value="" />
+                        <input class="text" id="payPwd" type="password" name="payPassword"  value="" />
                     </div>
                         <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
                         <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>

@@ -250,6 +250,10 @@ DD_belatedPNG.fix('.,img,background');
                 <td><#if order??>${order.shippingAddress!''}</#if></td>
             </tr>
             <tr>
+                <th>配送方式</th>
+                <td><#if order?? && order.deliveryMethod?? && order.deliveryMethod==1>门店自提：${order.shipAddress!''}<#else>送货上门</#if></td>
+            </tr>
+            <tr>
                 <th>代理商</th>
                 <td><#if order??>${order.shopTitle!''}</#if></td>
             </tr>

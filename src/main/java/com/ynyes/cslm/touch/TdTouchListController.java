@@ -58,7 +58,7 @@ public class TdTouchListController {
 	        }
 	        
 	        
-	     // 排序字段个数
+	        // 排序字段个数
 	         int totalSorts = 3;
 	         
 	         // 4个排序字段

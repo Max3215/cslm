@@ -20,7 +20,7 @@
               <td class="red">￥${cg.price?string("0.00")}</td>
               <td width="150" class="num">
                 <a href="javascript:minusNum(${cg.goodsId?c});"> - </a>
-                <input class="text" type="text" value="${cg.quantity!''}" />
+                <input class="text" type="text" value="${cg.quantity!''}"  onblur="chechQuantity(${cg.id?c},this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
                 <a href="javascript:addNum(${cg.goodsId?c});"> + </a>
               </td>
               <td class="red">￥${(cg.price*cg.quantity)?string("0.00")}</td>

@@ -194,7 +194,7 @@ $(function () {
   <dl>
     <dt>支付密码</dt>
     <dd>
-        <input name="payPassword" type="text" value="<#if diy_site?? && diy_site.payPassword??>${diy_site.payPassword!''}</#if>" class="input normal" > 
+        <input name="payPassword" type="password" value="<#if diy_site?? && diy_site.payPassword??>${diy_site.payPassword!''}</#if>" class="input normal" > 
         <span class="Validform_checktip"></span>
     </dd>
   </dl>

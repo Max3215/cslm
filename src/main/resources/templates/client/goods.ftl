@@ -264,11 +264,40 @@ function proGoods(did)
                     </#if>
                 </#if>
 				<!--  参数结束    -->
+				<script>
+				function checkNumber(num)
+				{
+				    if (num==''|| num=='0') 
+				    {
+				        $("#quantity").val(1);
+				        return ;
+				    }
+				    // 验证手动输入数量库存
+				    $.ajax({
+                            type: "get",
+                            url: "/goods/incart",
+                            data: {"id":${dis_goods.id?c},"quantity":num},
+                            success: function (data) { 
+                                if(data.code== 0 ){
+                                    alert(data.msg);
+                                    $("#quantity").val(1);
+                                    return;
+                                }else{
+                                    $("#quantity").val(num);
+                                    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" +num);
+                                    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + num);
+                                    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + num);
+                                }
+                            }
+                        });
+				}
+				
+				</script>
 				<p class="digital">
 					<#if dis_goods??>
 					<span>数量：</span>
 					<a id="id-minus" href="javascript:minusNum();">-</a>
-					<input class="text" type="text" id="quantity" value="1" onfocus="if(value=='1'||value=='0') {value=''}" onblur="if (value==''||value=='0') {value='1'}" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
+					<input class="text" type="text" id="quantity" value="1" onfocus="if(value=='1'||value=='0') {value='1'}" onblur="checkNumber(this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
 					<a id="id-plus" href="javascript:addNum();">+</a>
 					<label>库存${dis_goods.leftNumber!'0'}</label>
 					<input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">

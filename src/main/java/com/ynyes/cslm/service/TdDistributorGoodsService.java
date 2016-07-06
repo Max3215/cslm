@@ -96,13 +96,6 @@ public class TdDistributorGoodsService {
     	return repository.findByDistributorIdAndIsAuditAndGroupCategoryId(distributorId);
     }
     
-    public List<TdDistributorGoods> findByGoodsIdAndIsOnSale(Long goodsId)
-    {
-    	if(null == goodsId){
-    		return null;
-    	}
-    	return repository.findByGoodsIdAndIsOnSaleTrue(goodsId);
-    }
     
     public List<TdDistributorGoods> findByGoodsId(Long goodsId)
     {
@@ -194,6 +187,11 @@ public class TdDistributorGoodsService {
     public Long findDistributorId(Long id)
     {
     	return repository.findDistributorId(id);
+    }
+    
+    public TdDistributorGoods findByIdAndIsInSaleTrue(Long id)
+    {
+    	return repository.findByIdAndIsOnSaleTrue(id);
     }
     
     public TdDistributorGoods findByDistributorIdAndGoodsIdAndIsOnSale(Long distributorId,Long goodsId, Boolean isOnSale)
@@ -1839,6 +1837,46 @@ public class TdDistributorGoodsService {
 	       return repository .findByDisIdAndCategoryIdTreeContainingAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrue(
 	                       						disId,"[" + catId + "]", brandId, paramStr, pageable);
 	   }
+	
+	public Page<TdDistributorGoods> findByDisId(Long disId,Long catId,Long brandId,
+					Integer priceLow,Integer priceHigh,List<String> paramValueList,Pageable pageable)
+	{
+		Criteria<TdDistributorGoods> c = new Criteria<>();
+		
+		if(null != disId)
+		{
+			c.add(Restrictions.eq("disId", disId, true));
+		}
+		if(null != brandId)
+		{
+			c.add(Restrictions.eq("brandId", brandId, true));
+		}
+		if(null != catId)
+		{
+			c.add(Restrictions.like("categoryIdTree", "["+catId+"]", true));
+		}
+		if(null != priceLow)
+		{
+			c.add(Restrictions.gte("goodsPrice", priceLow, true));
+		}
+		if(null != priceHigh)
+		{
+			c.add(Restrictions.lte("goodsPrice", priceHigh, true));
+		}
+		
+		String paramStr = "%";
+
+       for (int i = 0; i < paramValueList.size(); i++) {
+           String value = paramValueList.get(i);
+           if (!"".equals(value)) {
+               paramStr += value;
+               paramStr += "%";
+           }
+       }
+		c.add(Restrictions.like("paramValueCollect", paramStr, true));
+		
+		return repository.findAll(c, pageable);
+	}
 	
 	
 	
