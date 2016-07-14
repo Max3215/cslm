@@ -109,51 +109,13 @@ DD_belatedPNG.fix('.,img,background');
               <input type="text" id="mobile" name="mobile" datatype="m" errormsg="请输入联系方式，以便进行联系"/>
             </div>         
             <div class="mymember_eva_div">
-              <input class="mysub" type="submit" value="提交我的投诉" />
+              <input class="mysub" type="submit" value="提交我的留言" />
             </div>
           </td>
         </tr>
-        <#--
-       <tr >
-            <td ><a href="#">25145555555455845</a></td>
-            <td align="left"><table width="100" border="0"  align=left>
-                <tr>
-                  <td><img width="50" height="50" title="海飞丝去屑洗发露丝质柔滑型750ML（新老包装随机发放）" src="http://img10.360buyimg.com/N5/jfs/t700/1/460177142/106757/518f3708/54b33408N943aca15.jpg" /> <br>
-                  <a href="会员-退换货详细.html?wareId=206735&orderId=8641147682" ></a></td>
-                  
-                </tr>
-              </table></td>
-            <td ><p>2015-02-23</p>
-              <p>15:35:11</p></td>
-          <td><a href="javascript:evaluateShow('mymember_eva02','mymember_evabox');">我要投诉</a></td>
-          </tr>
-      
-       <tr id="mymember_eva02" class="mymember_evabox">
-          <td class="td004" colspan="4">
-            <span style="position:absolute;right:88px;top:-13px;"><img src="/client/images/mymember/arrow06.gif" /></span>
-            <div class="mymember_eva_div">
-      涉及订单：8654519396投诉类型： <select>
-              <option>产品相关</option>
-              <option>价格相关</option>
-              <option>服务相关</option>
-              <option>物流相关</option>
-              <option>其它相关</option>
-            </select>
-             
-            </div>
-            <div class="mymember_eva_div">
-              <b><font>* </font>投诉内容：</b>
-              <textarea></textarea>
-            </div>         
-            <div class="mymember_eva_div">
-              <input class="mysub" type="submit" value="提交我的投诉" />
-            </div>
-          </td>
-        </tr> -->
         </table>
         </form>
         <div class="myclear" style="height:10px;"></div>
-      <#--  <div class="mymember_page"> <a class="mysel" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a> <a href="#">6</a> </div>  -->
     </div><!--mymember_info END-->
     
   </div>

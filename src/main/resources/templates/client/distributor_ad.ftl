@@ -49,7 +49,7 @@ DD_belatedPNG.fix('.,img,background');
         <div class="banner_manage">
           <div class="menu">
             <a href="/distributor/ad/edit" class="a1">新增</a>
-            <a href="javascript:deleteAd();"  class="a4">批量删除</a>
+            <a href="javascript:deleteAd();"  class="a4" style="width: 60px;">批量删除</a>
             <div class="clear h10"></div>
           </div>
           <form  id="form" action = "/distributor/ad/deleteAll" method="post">

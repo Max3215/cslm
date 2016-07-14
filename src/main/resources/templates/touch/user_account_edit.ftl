@@ -124,7 +124,7 @@ function clear2(){
                 <h4></h4>
                 <div class="edit2">
                     <span>确认密码：</span>
-                    <input type="password" class="text" placeholder="请再次输入支付密码" datatype="*2-6" recheck="newpassword"/>
+                    <input type="password" class="text" placeholder="请再次输入支付密码" datatype="*2-6" recheck="newPayPwd"/>
                     <a href="javascript:clear2();" ></a>
                 </div>
                 <h4></h4>
@@ -133,7 +133,7 @@ function clear2(){
               		<span>昵称：</span>
               		<input type="text" class="text" name="realName" placeholder="请输入名称" nullmsg="请输入名称" datatype="*2-6"/>
               		<a href="javascript:clear();" ></a>
-                <div class="edit">
+                </div>
         </#if>
   	     <input type="submit" class="sub" value="保存">
   </section>

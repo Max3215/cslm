@@ -1036,6 +1036,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 	public Map<String,Object> editOnSale(Long goodsId,
 					Double goodsPrice,
 					String subGoodsTitle,
+					String code,String unit,
 					Long leftNumber,Boolean type,
 					Integer page,HttpServletRequest req)
 	{
@@ -1078,7 +1079,11 @@ public class TdDistributorController extends AbstractPaytypeController{
 		distributorGoods.setDisId(distributor.getId());
 		distributorGoods.setLeftNumber(leftNumber);
 		distributorGoods.setSubGoodsTitle(subGoodsTitle);
+		distributorGoods.setUnit(unit);
+		distributorGoods.setCode(code);
+		
 		distributorGoods.setIsOnSale(true);
+		
 		tdDistributorGoodsService.save(distributorGoods);
 //		
 		res.put("msg", "修改成功！");

@@ -119,6 +119,7 @@ $(document).ready(function(){
   <!-- 新品推荐广告位 END -->
 
   <!-- 超市快讯 -->
+  <#if news_page?? && news_page.content?size gt 0>
   <section class="news_flash">
     <#if news_ad_list??>
         <#list news_ad_list as ad>
@@ -126,14 +127,14 @@ $(document).ready(function(){
         </#list>
     </#if>
   	<menu>
-  	    <#if news_page?? && news_page.content?size gt 0>
+  	    
   	    <#list news_page.content as news>
       		<a href="/touch/info/content/${news.id?c}?mid=10">${news.title!''}</a>
   	    </#list>
-  	    </#if>
   	</menu>
   	<a href="/touch/info/list/10" class="more_btn">查看更多>></a>
   </section>
+    </#if>
   <!-- 超市快讯 END -->
 
   <!-- 楼层part -->

@@ -297,6 +297,16 @@ public class TdUserService {
         return repository.findByUsernameAndIdNot(username, id);
     }
     
+    public TdUser findByMobileAndIdNot(String username, Long id)
+    {
+        if (null == username || null == id)
+        {
+            return null;
+        }
+        
+        return repository.findByMobileAndIdNot(username, id);
+    }
+    
     public Page<TdUser> findByUpperDiySiteIdAndIsEnabled(Long upperDiySiteId, int page, int size)
     {
         if (null == upperDiySiteId)

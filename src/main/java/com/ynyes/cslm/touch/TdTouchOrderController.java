@@ -174,9 +174,10 @@ public class TdTouchOrderController {
 
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
-        if (null != user) {
-            map.addAttribute("user", user);
+        if (null == user) {
+        	return "redirect:/touch/login";
         }
+        map.addAttribute("user", user);
 
         List<TdCartGoods> selectedGoodsList = tdCartGoodsService
                 .findByUsernameAndIsSelectedTrue(username);
@@ -354,11 +355,12 @@ public class TdTouchOrderController {
         if (null == username) {
             return "redirect:/touch/login";
         }
-
+        tdCommonService.setHeader(map, req);
+        
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
         if (null == user) {
-            return "//touch/error_404";
+            return "/touch/error_404";
         }
 
         double payTypeFee = 0.0;

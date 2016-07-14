@@ -106,7 +106,7 @@ DD_belatedPNG.fix('.,img,background');
     </div>
     
     <div class="mymember_info mymember_info02">
-        <h3>我的进货单<a href="/distributor/inOrder/list/0">查看全部进货单</a></h3>
+        <h3>我的进货单<a href="/distributor/inOrder/list">查看全部进货单</a></h3>
         <table width="100%">    
             <#if dis_goodsIn_order_page?? && dis_goodsIn_order_page.content??>
             <#list dis_goodsIn_order_page.content as order>

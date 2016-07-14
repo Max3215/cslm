@@ -108,7 +108,7 @@ DD_belatedPNG.fix('.,img,background');
     </div>
     
     <div class="mymember_info mymember_info02">
-      <h3>我的批发单<a href="/provider/order/list/0">查看全部订单</a></h3>
+      <h3>我的批发单<a href="/provider/order/list">查看全部订单</a></h3>
       <table width="100%"> 
             <#if provider_order_page??>
                 <#list provider_order_page.content as order>

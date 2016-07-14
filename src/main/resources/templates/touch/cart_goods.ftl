@@ -12,9 +12,9 @@
                 <a href="/touch/goods/${cg.distributorGoodsId!''}" class="name">${cg.goodsTitle!''}</a>
                 <p>价格：￥${cg.price?string("0.00")}</p>
                 <div class="num">
-                  <a href="javascript:minusNum(${cg.goodsId?c})" class="aj">-</a>
+                  <a href="javascript:minusNum(${cg.id?c})" class="aj">-</a>
                   <input class="text" type="text" value="${cg.quantity!''}" />
-                  <a href="javascript:addNum(${cg.goodsId?c});" class="aj">+</a>
+                  <a href="javascript:addNum(${cg.id?c});" class="aj">+</a>
                   <a href="javascript:delCartItem(${cg.id?c});" class="del">删除</a>
                 </div>
                 <div class="clear"></div>

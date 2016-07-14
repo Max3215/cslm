@@ -46,6 +46,7 @@ function win_show(){
 
 function win_hide(){
     var oUt = rich('.win_out')[0];
+    $(".text").val('');
     oUt.style.display = 'none';
 };
  

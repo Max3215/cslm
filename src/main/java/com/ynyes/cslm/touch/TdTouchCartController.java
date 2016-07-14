@@ -93,7 +93,7 @@ public class TdTouchCartController {
                 
                 // 购物车是否已有该商品
                 oldCartGoodsList = tdCartGoodsService
-                                .findByGoodsIdAndUsername(goods.getGoodsId(), username);
+                                .findByGoodsIdAndUsername(goods.getId(), username);
                 
                 // 有多项，则在第一项上数量进行相加
                 if (null != oldCartGoodsList && oldCartGoodsList.size() > 0) {
@@ -180,7 +180,7 @@ public class TdTouchCartController {
             {
                 // 删除重复的商品
                 List<TdCartGoods> findList = tdCartGoodsService
-                        .findByGoodsIdAndUsername(cg1.getGoodsId(), username);
+                        .findByGoodsIdAndUsername(cg1.getDistributorGoodsId(), username);
 
                 if (null != findList && findList.size() > 1) 
                 {
@@ -278,9 +278,11 @@ public class TdTouchCartController {
          }
 
          if (null != id) {
-             TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
-             TdDistributorGoods distributorGoods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), id);
-             
+//             TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
+//             TdDistributorGoods distributorGoods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), id);
+        	 TdCartGoods cartGoods =tdCartGoodsService.findOne(id);
+             TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(cartGoods.getDistributorGoodsId());
+        	 
              if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                  long quantity = cartGoods.getQuantity();
                  
@@ -313,11 +315,9 @@ public class TdTouchCartController {
         }
 
         if (null != id) {
-//            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
-        	System.err.println(id+"-"+username);
-        	TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
+            TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
+//        	TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
 
-        	System.err.println(cartGoods);
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
 

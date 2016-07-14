@@ -7,12 +7,14 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
 
 <link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
@@ -23,7 +25,7 @@ $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
     
     $("#form1").Validform({
-        tiptype: 4  
+        tiptype: 1 
     });
 
 
@@ -46,10 +48,10 @@ $(document).ready(function(){
     <form action="/touch/reg" method="post" id="form1">
          <p style="color: #F00">${error!''}</p>
         <div>
-            <input type="text" name="username" class="text" placeholder="请输入账号" datatype="s6-12">
+            <input type="text" name="username" class="text" placeholder="请输入账号" ajaxurl="/reg/check/username" datatype="s6-12">
         </div>
         <div>
-        <input type="text" name="mobile" class="text" placeholder="请输入手机号" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/">
+        <input type="text" name="mobile" class="text" placeholder="请输入手机号" errormsg="手机号格式错误" ajaxurl="/reg/check/mobile" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/">
         </div>
         <#--
         <input type="text" class="text fl" style="width: 50%;" placeholder="请输入验证码">

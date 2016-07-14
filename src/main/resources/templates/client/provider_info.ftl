@@ -52,7 +52,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="myclear"></div>
 <div class="mymember_out">
   <div class="mymember_main">
-      <#include "/client/common_providerr_menu.ftl">
+      <#include "/client/common_provider_menu.ftl">
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
 	      <article class="essayamin">

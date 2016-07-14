@@ -1289,7 +1289,7 @@ public class TdSupplyController extends AbstractPaytypeController{
     @RequestMapping(value="/topup2",method=RequestMethod.POST)
     public String topupTwo(HttpServletRequest req,ModelMap map,
     			Double provice,Long payTypeId){
-    	String username = (String)req.getSession().getAttribute("distributor");
+    	String username = (String)req.getSession().getAttribute("supply");
     	if (null == username) {
             return "redirect:/login";
         }

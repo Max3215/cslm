@@ -38,6 +38,7 @@ public interface TdUserRepo extends
     TdUser findByUsernameIgnoreCase(String username);
     
     TdUser findByUsernameAndIdNot(String username, Long id);
+    TdUser findByMobileAndIdNot(String username, Long id);
     
     Page<TdUser> findByUpperDiySiteIdAndStatusIdOrderByIdDesc(Long upperDiySiteId, Long statusId, Pageable page);
     

@@ -555,12 +555,32 @@ a,button,input{
 
 
 /*商品详情*/
+/* 
 .pro_info{background: #fff;border-top:1px solid #c0bfbf;border-bottom:1px solid #c0bfbf;margin:0.18rem 0;}
 .pro_info .con{padding:0.14rem 3%;border-bottom:1px solid #c0bfbf;}
+.pro_info .con .price{font-size: 0.4rem;color:#ff5b7d;padding-top:0.2rem;}
+*/
+.pro_info {
+    /* background: #fff; */
+    border-top: 1px solid #c0bfbf;
+    border-bottom: 1px solid #c0bfbf;
+    margin: 0.18rem 0;
+}
+.pro_info .con {
+    padding: 0.14rem 3%;
+    border-bottom: 1px solid #c0bfbf;
+    background-color: #fff;
+}
 .pro_info .con h3{color:#333333;font-size: 0.3rem;line-height: 0.4rem;}
 .pro_info .con .f_tit{font-size: 0.24rem;color:#ff5b7d;padding:0.1rem 0;}
 .pro_info .con .num{font-size: 0.24rem;color:#999999;}
-.pro_info .con .price{font-size: 0.4rem;color:#ff5b7d;padding-top:0.2rem;}
+.pro_info .con .price {
+    font-size: 0.4rem;
+    color: #ff5b7d;
+    padding-top: 0.2rem;
+    border-bottom: 1px solid #c0bfbf;
+    padding-bottom: 0.2rem;
+}
 .pro_info .con .price span{color:#999999;font-size: 0.3rem;text-decoration: line-through;padding-left: 0.6rem;}
 .pro_info .con .sc_shop{font-size: 0.24rem; color: #999999;padding:0.1rem 0 0;/*border-top: 1px solid #ccc;*/}
 .pro_info .con .sc_shop .name{padding-left: 0.5rem;background: url(../images/shop.png) no-repeat left center;background-size: 0.4rem;margin-top: 0.1rem;}
@@ -568,9 +588,23 @@ a,button,input{
 .pro_info .con .postage{font-size: 0.24rem; color: #999999;padding:0.1rem 0 0;}
 
 
-
+.pro_info .choose {
+    display: block;
+    height: 0.58rem;
+    line-height: 0.58rem;
+    color: #333;
+    font-size: 0.24rem;
+    background: url(../images/arrow04.png) no-repeat 94% center #fff;
+    background-size: auto 0.22rem;
+    width: 100%;
+    /* margin-left: 3%; */
+    padding-left: 3%;
+    margin-top: 0.18rem;
+    border-top: 1px solid #c0bfbf;
+}
+/*
 .pro_info .choose{display: block;height: 0.58rem;line-height: 0.58rem;color:#999999;font-size: 0.24rem;background: url(../images/arrow04.png) no-repeat right center;background-size:auto 0.22rem;width: 90%;margin-left:3%;}
-
+*/
 .pro_eject{width: 100%;height: 100%;background: url(../images/darkbg.png) repeat;position: fixed;left:0;top:0;z-index: 200;display:none;}
 .pro_eject .part{background: #eeeeee;position:absolute;left:0;bottom:0.78rem;width: 100%;padding-bottom: 1rem;}
 .pro_eject .part .close{display: block;width: 0.6rem;height: 0.6rem;background: url(../images/close.png) no-repeat;position: absolute;top:-0.3rem;right:0.42rem;background-size: 0.6rem;z-index: 2;}

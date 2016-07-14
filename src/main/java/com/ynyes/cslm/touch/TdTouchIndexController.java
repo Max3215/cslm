@@ -97,7 +97,7 @@ public class TdTouchIndexController {
                      {
                          map.addAttribute("news_page", tdArticleService
                                  .findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,
-                                         tdCat.getId(),distributorId, 0, ClientConstant.pageSize));
+                                         tdCat.getId(),distributorId, 0, 5));
                          break;
                      }
                      
@@ -165,7 +165,7 @@ public class TdTouchIndexController {
          			{
          				map.addAttribute("news_page", tdArticleService
                                  .findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,
-                                         tdCat.getId(),null, 0, ClientConstant.pageSize));
+                                         tdCat.getId(),null, 0, 5));
          				break;
          			}
          			

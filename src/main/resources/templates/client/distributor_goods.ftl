@@ -67,6 +67,8 @@ function searchSale(){
 function editPrice(dgId,page){
     var goodsTitle = $("#title"+dgId).html();
     var subTitle = $("#subTitle"+dgId).val();
+    var unit = $("#unit"+dgId).val();
+    var code = $("#code"+dgId).val();
     var goodsPrice = $("#price"+dgId).html();
     var leftNumber = $("#number"+dgId).html();
     
@@ -76,6 +78,8 @@ function editPrice(dgId,page){
     $("#subGoodsTitle").attr("value",subTitle);
     $("#goodsPrice").attr("value",goodsPrice);
     $("#leftNumber").attr("value",leftNumber);
+    $("#unit").attr("value",unit);
+    $("#code").attr("value",code);
     $('.sub_form').css('display','block');
 }
 
@@ -260,19 +264,27 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+          <td ><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
         </tr>
         <tr>
-          <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="subGoodsTitle" id="subGoodsTitle" ></td>
+          <th>*商品副标题：</th>
+          <td ><input type="text" class="add_width" name="subGoodsTitle" id="subGoodsTitle" ></td>
+        </tr>
+        <tr>
+          <th>商品编码：</th>
+          <td ><input type="text" class="add_width" name="code" id="code" ></td>
         </tr>
          <tr>
           <th>*特惠价：</th>
-          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请正确输入" nullmsg="请输入价格"></td>
+        </tr>
+        <tr>
+            <th>单位：</th>
+            <td><input type="text" name="unit" id="unit" ></td>
         </tr>
         <tr>
           <th>*库存：</th>
-          <td><input type="text" name="leftNumber" id="leftNumber" datatype="n" sucmsg=" " nullmsg="请输入库存" errormsg="请输入正确的库存"></td>
+          <td ><input type="text" name="leftNumber" id="leftNumber" datatype="n" sucmsg=" " nullmsg="请输入库存" errormsg="请输入正确的库存"></td>
         </tr>
         <tr>
           <th></th>

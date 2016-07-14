@@ -2194,7 +2194,7 @@ public class TdTouchUserController {
                         user.setShippingAddressList(addressList);
                         tdUserService.save(user);
                     }
-                    if(null != type)
+                    if(null != type && !"".equals(type))
                     {
                     	return "redirect:/touch/order/info";
                     }
@@ -2770,6 +2770,8 @@ public class TdTouchUserController {
         				return res;
         			}
     			} 
+    		}else{
+    			user.setRealName(realName);
     		}
     		tdUserService.save(user);
     		res.put("msg", "修改成功");

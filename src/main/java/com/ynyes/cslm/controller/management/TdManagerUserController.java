@@ -104,35 +104,56 @@ public class TdManagerUserController {
     @Autowired
     TdDistributorService tdDistributorService;
     
-    @RequestMapping(value="/check", method = RequestMethod.POST)
+    @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, String> validateForm(String param, Long id) {
+    public Map<String, String> userCheckForm(@PathVariable String type,String param, Long id) {
         Map<String, String> res = new HashMap<String, String>();
         
         res.put("status", "n");
+        
         
         if (null == param || param.isEmpty())
         {
             res.put("info", "该字段不能为空");
             return res;
         }
+        if("username".equals(type))
+        {
+        	if (null == id)
+            {
+                if (null != tdUserService.findByUsername(param))
+                {
+                    res.put("info", "已存在同名用户");
+                    return res;
+                }
+            }
+            else
+            {
+                if (null != tdUserService.findByUsernameAndIdNot(param, id))
+                {
+                    res.put("info", "已存在同名用户");
+                    return res;
+                }
+            }
+        }else if("mobile".equals(type)){
+        	if (null == id)
+            {
+                if (null != tdUserService.findByMobile(param))
+                {
+                    res.put("info", "此手机号已被占用");
+                    return res;
+                }
+            }
+            else
+            {
+                if (null != tdUserService.findByMobileAndIdNot(param, id))
+                {
+                    res.put("info", "此手机号已被占用");
+                    return res;
+                }
+            }
+        }
         
-        if (null == id)
-        {
-            if (null != tdUserService.findByUsername(param))
-            {
-                res.put("info", "已存在同名用户");
-                return res;
-            }
-        }
-        else
-        {
-            if (null != tdUserService.findByUsernameAndIdNot(param, id))
-            {
-                res.put("info", "已存在同名用户");
-                return res;
-            }
-        }
         
         res.put("status", "y");
         

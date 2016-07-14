@@ -57,7 +57,7 @@ $(document).ready(function(){
 			    <a href="/user">${username}</a>
 			    <a href="/logout">退出</a>
 			<#else>
-    			<a href="/login">请登陆</a>
+    			<a href="/login">请登录</a>
     			<a href="/reg">注册</a>
 			</#if>
 			<menu class="top_menu">

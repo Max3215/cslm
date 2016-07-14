@@ -125,7 +125,7 @@ public class TdCartGoodsService {
             return null;
         }
         
-        return repository.findByGoodsIdAndUsername(goodsId, username);
+        return repository.findByDistributorGoodsIdAndUsername(goodsId, username);
     }
     
     public List<TdCartGoods> findByGoodsIdAndUsernameAndProviderId(Long goodsId, String username,Long providerId)

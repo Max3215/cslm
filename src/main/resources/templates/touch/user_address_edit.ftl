@@ -14,7 +14,7 @@
 <meta content="telephone=no" name="format-detection">
 
 <link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
-
+<link href="/touch/css/style.css" rel="stylesheet" type="text/css" />
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
 <script src="/touch/js/Validform_v5.3.2_min.js"></script>
@@ -26,7 +26,7 @@ $(document).ready(function(){
 	
 	 //初始化表单验证
     $("#form1").Validform({
-        tiptype: 3
+        tiptype: 1
     });
 	
 	$("#pcd").citySelect({
@@ -71,10 +71,10 @@ $(document).ready(function(){
     </div>
     <p>收货地址：</p>
     <div class="address" id="pcd">
-          <select class="fl prov" name="province"></select>
-          <select class="fr city" name="city"></select>
+          <select class="fl prov" name="province" datatype="*"></select>
+          <select class="fr city" name="city" datatype="*"></select>
           <div class="clear"></div>
-          <select style="width:100%;" class="dist" name="disctrict"></select>
+          <select style="width:100%;" class="dist" datatype="*" name="disctrict"></select>
           <p>详细地址</p>
           <textarea name="detailAddress"><#if address??>${address.detailAddress!''}</#if></textarea>
     </div>

@@ -23,6 +23,8 @@
                         </td>
                         <td>
                             <input type="hidden"  value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}">
+                            <input type="hidden"  value="${dg.unit!''}" id="unit${dg.id?c}">
+                            <input type="hidden"  value="${dg.code!''}" id="code${dg.id?c}">
                             <a href="" target="_blank" class="pic" title="${dg.goodsTitle!''}"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
                              </a> 
@@ -47,6 +49,8 @@
                         </td>
                         <td>
                             <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}">
+                            <input type="hidden"  value="${dg.unit!''}" id="unit${dg.id?c}">
+                            <input type="hidden"  value="${dg.code!''}" id="code${dg.id?c}">
                             <a href="" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
                              </a> 

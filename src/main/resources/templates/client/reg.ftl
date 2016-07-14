@@ -204,7 +204,7 @@ function checkwindowhide()
                 </div>
                 <div>
                     <p>请输入手机号</p>
-                    <input id="mobileNumber" class="text" name="mobile" type="text" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" nullmsg="请输入手机号"/>
+                    <input id="mobileNumber" class="text" name="mobile" type="text" ajaxurl="/reg/check/mobile" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" nullmsg="请输入手机号"/>
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div>

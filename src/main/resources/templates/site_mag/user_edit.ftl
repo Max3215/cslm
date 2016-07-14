@@ -204,7 +204,7 @@ $(function () {
             <#if user??>
                 <span>${user.username!""}</span>
             <#else>
-                <input name="username" type="text" maxlength="200" class="input normal" datatype="s6-20" ajaxurl="/Verwalter/user/check<#if user??>?id=${user.id?c}</#if>" sucmsg=" " minlength="2">
+                <input name="username" type="text" maxlength="200" class="input normal" datatype="s6-20" ajaxurl="/Verwalter/user/check/username<#if user??>?id=${user.id?c}</#if>" sucmsg=" " minlength="2">
             </#if>
             <span class="Validform_checktip">
         </span></dd>
@@ -224,7 +224,7 @@ $(function () {
   </dl>
   <dl>
     <dt>手机号码</dt>
-    <dd><input name="mobile" type="text" value="<#if user??>${user.mobile!""}</#if>" class="input normal" ignore="ignore" datatype="m" sucmsg=" " ></dd>
+    <dd><input name="mobile" type="text" value="<#if user??>${user.mobile!""}</#if>" class="input normal" ignore="ignore" ajaxurl="/Verwalter/user/check/mobile<#if user??>?id=${user.id?c}</#if>" datatype="m" sucmsg=" " ></dd>
   </dl>
   <dl>
     <dt>用户余额</dt>

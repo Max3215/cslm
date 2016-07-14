@@ -34,13 +34,11 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
-import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserComment;
 import com.ynyes.cslm.entity.TdUserConsult;
-import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserRecentVisit;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.entity.TdUserSuggestion;
@@ -1377,6 +1375,7 @@ public class TdUserController extends AbstractPaytypeController{
             res.put("message", "评论的商品不存在！");
             return res;
         }
+        
         TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
 
         tdComment.setCommentTime(new Date());

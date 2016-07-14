@@ -19,9 +19,9 @@
               <td width="400" style="text-align:left;"><a href="/goods/${cg.distributorGoodsId!''}">${cg.goodsTitle!''}</a></td>
               <td class="red">￥${cg.price?string("0.00")}</td>
               <td width="150" class="num">
-                <a href="javascript:minusNum(${cg.goodsId?c});"> - </a>
+                <a href="javascript:minusNum(${cg.id?c});"> - </a>
                 <input class="text" type="text" value="${cg.quantity!''}"  onblur="chechQuantity(${cg.id?c},this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
-                <a href="javascript:addNum(${cg.goodsId?c});"> + </a>
+                <a href="javascript:addNum(${cg.id?c});"> + </a>
               </td>
               <td class="red">￥${(cg.price*cg.quantity)?string("0.00")}</td>
               <td><a class="del" href="javascript:delCartItem(${cg.id?c});">删除</a></td>
