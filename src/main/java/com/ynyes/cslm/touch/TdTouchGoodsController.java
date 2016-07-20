@@ -156,6 +156,10 @@ public class TdTouchGoodsController {
             return "error_404";
         }
 
+        // 是否收藏
+        if(null != tdUserCollectService.findByUsernameAndDistributorId(username,dgId,1)){
+        	map.addAttribute("collect", true);
+        }
         
         // 商品
         map.addAttribute("goods", goods);

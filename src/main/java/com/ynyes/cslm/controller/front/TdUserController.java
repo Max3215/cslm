@@ -547,250 +547,6 @@ public class TdUserController extends AbstractPaytypeController{
         return "/client/user_order_detail";
     }
 
-//    @SuppressWarnings("deprecation")
-//	@RequestMapping(value = "/user/diysite/order/list/{statusId}")
-//    public String diysiteorderList(@PathVariable Integer statusId, Integer page,
-//            String keywords, Integer timeId, HttpServletRequest req,
-//            ModelMap map) {
-//    	String username = (String) req.getSession().getAttribute("diysiteUsername");
-//
-//        if (null == username) {
-//            return "redirect:/login";
-//        }
-//
-//        tdCommonService.setHeader(map, req);
-//
-//        if (null == page) {
-//            page = 0;
-//        }
-//
-//        if (null == timeId) {
-//            timeId = 0;
-//        }
-//
-//        if (null == statusId) {
-//            statusId = 0;
-//        }
-//
-//        TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-//        TdDistributor TdDistributor = TdDistributorService.findbyUsername(username);
-//        
-//        map.addAttribute("user", tdUser);
-//        map.addAttribute("status_id", statusId);
-//        map.addAttribute("time_id", timeId);
-//
-//        Page<TdOrder> orderPage = null;
-//
-//        if (timeId.equals(0)) {
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService.findByDiysitenameAndSearch(
-//                    		TdDistributor.getTitle(), keywords, page, ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitename(TdDistributor.getTitle(), page,
-//                            ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndSearch(TdDistributor.getTitle(),
-//                                    statusId, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitenameAndStatusId(
-//                    		TdDistributor.getTitle(), statusId, page, ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(1)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            //calendar.add(Calendar.MONTH, -1);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -1);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        }else if (timeId.equals(2)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            //calendar.add(Calendar.MONTH, -1);// 月份减一
-//            calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        }  
-//        else if (timeId.equals(3)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -1);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(4)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -3);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(6)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -6);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(12)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.YEAR, -1);// 减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndTimeAfterAndSearch(TdDistributor.getTitle(),
-//                                    time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByDiysitenameAndTimeAfter(
-//                    		TdDistributor.getTitle(), time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfterAndSearch(
-//                            		TdDistributor.getTitle(), statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByDiysitenameAndStatusIdAndTimeAfter(TdDistributor.getTitle(),
-//                                    statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        }
-//
-//        map.addAttribute("order_page", orderPage);
-//
-//        return "/client/diysite_order_list";
-//    }
     /**
 	 * @author lc
 	 * @注释：同盟店订单详情
@@ -946,18 +702,19 @@ public class TdUserController extends AbstractPaytypeController{
             res.put("message", "请先登录");
             return res;
         }
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
+
+        if (null == distributorGoods) {
+            res.put("message", "商品不存在");
+            return res;
+        }
 
         res.put("code", 0);
 
         // 没有收藏
-        if (null == tdUserCollectService.findByUsernameAndDistributorId(username,
-                disgId,1)) {
-            TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
-
-            if (null == distributorGoods) {
-                res.put("message", "商品不存在");
-                return res;
-            }
+        TdUserCollect collect = tdUserCollectService.findByUsernameAndDistributorId(username,disgId,1);
+        if (null == collect) {
+            
             TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
             
             if (null == goods.getTotalCollects())
@@ -969,7 +726,7 @@ public class TdUserController extends AbstractPaytypeController{
             
             tdGoodsService.save(goods);
 
-            TdUserCollect collect = new TdUserCollect();
+            collect = new TdUserCollect();
 
             collect.setUsername(username);
             collect.setDistributorId(distributorGoods.getId());
@@ -985,9 +742,10 @@ public class TdUserController extends AbstractPaytypeController{
             res.put("message", "添加成功");
 
             return res;
+        }else{
+        	tdUserCollectService.delete(collect);
+        	res.put("message", "");
         }
-
-        res.put("message", "您已收藏了该商品");
 
         return res;
     }
@@ -1376,7 +1134,6 @@ public class TdUserController extends AbstractPaytypeController{
             return res;
         }
         
-        TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
 
         tdComment.setCommentTime(new Date());
         tdComment.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());
@@ -1386,59 +1143,6 @@ public class TdUserController extends AbstractPaytypeController{
         tdComment.setPositiveNumber(0L);
         tdComment.setUsername(username);
         
-//        tdComment = tdUserCommentService.save(tdComment);
-//        
-//        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-//        
-//        // 设置订单信息
-//        if (null != orderId) {
-//            TdOrder tdOrder = tdOrderService.findOne(orderId);
-//
-//            if (null != tdOrder) {
-//                tdComment.setOrderNumber(tdOrder.getOrderNumber());
-//                tdComment.setDiysiteId(tdOrder.getShopId());
-//                
-//                List<TdOrderGoods> ogList = tdOrder.getOrderGoodsList();
-//
-//                for (TdOrderGoods og : ogList) {
-//                    if (og.getId().equals(ogId)) {
-//                        og.setIsCommented(true);
-//                        og.setCommentId(tdComment.getId());
-//                        tdOrder = tdOrderService.save(tdOrder);
-//                        break;
-//                    }
-//                }
-//
-//                // 判断订单是否完成
-//                boolean allIsCommented = true;
-//                for (TdOrderGoods og : tdOrder.getOrderGoodsList()) {
-//                    if (null == og.getIsCommented() || !og.getIsCommented()) {
-//                        allIsCommented = false;
-//                        break;
-//                    }
-//                }
-//
-//                if (allIsCommented) {
-//                    tdOrder.setStatusId(6L);
-//                    tdOrder = tdOrderService.save(tdOrder);
-//                }
-//            }
-//        }
-//
-//
-//        if (null != user) {
-//            tdComment.setUserHeadUri(user.getHeadImageUri());
-//        }
-//
-//        tdComment.setStatusId(0L);
-//
-//        tdComment = tdUserCommentService.save(tdComment);
-//
-//        if (null == goods.getTotalComments()) {
-//            goods.setTotalComments(1L);
-//        } else {
-//            goods.setTotalComments(goods.getTotalComments() + 1L);
-//        }
 
         res.put("code", 0);
 
@@ -1749,31 +1453,6 @@ public class TdUserController extends AbstractPaytypeController{
         return "/client/user_distributor_return";
     }
 
-//    @RequestMapping(value = "/user/distributor/lower")
-//    public String distributorLowerList(HttpServletRequest req, Integer page,
-//            ModelMap map) {
-//
-//        String username = (String) req.getSession().getAttribute("username");
-//
-//        if (null == username) {
-//            return "redirect:/login";
-//        }
-//
-//        tdCommonService.setHeader(map, req);
-//
-//        if (null == page) {
-//            page = 0;
-//        }
-//
-//        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-//
-//        map.addAttribute("user", user);
-//        map.addAttribute("lower_page", tdUserService
-//                .findByUpperUsernameAndIsEnabled(username, page,
-//                        ClientConstant.pageSize));
-//
-//        return "/client/user_distributor_lower";
-//    }
 
     @RequestMapping(value = "/user/distributor/bankcard")
     public String distributorLowerList(HttpServletRequest req, ModelMap map) {

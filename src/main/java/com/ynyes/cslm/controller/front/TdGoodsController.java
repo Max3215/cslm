@@ -183,6 +183,9 @@ public class TdGoodsController {
             return "error_404";
         }
 
+        if(null != tdUserCollectService.findByUsernameAndDistributorId(username,dgId,1)){
+        	map.addAttribute("collect", true);
+        }
         
         // 商品
         map.addAttribute("goods", goods);

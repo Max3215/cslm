@@ -376,7 +376,7 @@ $(function () {
         <dl>
             <dt>销量</dt>
             <dd>
-                <input name="leftNumber" type="text" value="<#if goods?? && goods.soldNumber??>${goods.soldNumber?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
+                <input name="soldNumber" type="text" value="<#if goods?? && goods.soldNumber??>${goods.soldNumber?c!"0"}<#else>0</#if>" class="input normal" datatype="n" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
@@ -384,7 +384,7 @@ $(function () {
             <dt>库存余量</dt>
             <dd>
                 <input name="leftNumber" type="text" value="<#if goods?? && goods.leftNumber??>${goods.leftNumber?c!"99"}<#else>99</#if>" class="input normal" datatype="n" sucmsg=" ">
-                <span class="Validform_checktip">库存为0时显示为缺货</span>
+                <span class="Validform_checktip">库存为0时自动下架</span>
             </dd>
         </dl>
     </div>

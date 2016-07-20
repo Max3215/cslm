@@ -51,7 +51,7 @@ DD_belatedPNG.fix('.,img,background');
 <#include "/client/common_header.ftl" />
 <!-- header结束 -->
 
-
+<div class="clear20"></div>
 <div class="main">
     <menu class="car_top">
         <p style="z-index:10; width:34%;">我的购物车<i></i></p>

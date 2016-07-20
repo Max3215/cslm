@@ -199,28 +199,28 @@ function checkwindowhide()
              <section class="loginbox">
                 <div>
                     <p>请输入用户名</p>
-                    <input class="text" name="username" type="text" datatype="s6-20" ajaxurl="/reg/check/username" nullmsg="请输入登录账号"/>
+                    <input class="text" name="username" type="text" datatype="s6-20" ajaxurl="/reg/check/username" placeholder="请输入6-20个字符" errmsg="请正确输入账号" nullmsg="请输入登录账号"/>
                     <span class="Validform_checktip Validform_wrong" style=""></span>
                 </div>
                 <div>
                     <p>请输入手机号</p>
-                    <input id="mobileNumber" class="text" name="mobile" type="text" ajaxurl="/reg/check/mobile" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" nullmsg="请输入手机号"/>
+                    <input id="mobileNumber" class="text" name="mobile" placeholder="请输入手机号" type="text" ajaxurl="/reg/check/mobile" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" nullmsg="请输入手机号"/>
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div>
                     <p>请输入密码</p>
-                    <input class="text" name="password" type="password" datatype="s6-20" nullmsg="请输入密码"/>
+                    <input class="text" name="password" type="password" datatype="s6-20" placeholder="请输入密码" nullmsg="请输入密码"/>
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div>
                     <p>请确认密码</p>
-                    <input class="text" type="password" datatype="*" recheck="password"/>
+                    <input class="text" type="password" datatype="*" placeholder="请再次输入密码" recheck="password"/>
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div>
                     <p>请输入验证码</p>
                     <div class="clear"></div>
-                    <input class="text fl" type="text" name="code" style="width:35%;" datatype="*" nullmsg="请输入验证码"/>
+                    <input class="text fl" type="text" name="code" style="width:35%;" datatype="*" placeholder="验证码" nullmsg="请输入验证码"/>
                     <a class="yzm01" href="javascript:changeYzm()"><img id="yzm_image" src="" width="100px;" height="37px;"/></a>
                     <a class="yzm02" href="javascript:changeYzm()">看不清楚？换一张</a>
                     <span class="Validform_checktip Validform_wrong">

@@ -67,12 +67,6 @@ $(document).ready(function(){
   <#include "/touch/order_info_addr.ftl">
   
 <script type="text/javascript">
-<!--
-function selectAddr(tag,type){
-    $(tag).addClass("act").siblings().removeClass("act");
-    $("#addressId").attr("value",type)
-}
--->
 
 function selectDeliveryTyp(tag,type){
     $(tag).addClass("act").siblings(".choose").removeClass("act");
@@ -89,21 +83,25 @@ function selectDeliveryTyp(tag,type){
     }
 }
 </script>
-  <div class="dis_ways">
-    <p class="tit">配送方式</p>
-    <input type="hidden" id="postPrice" value="<#if postPrice??>${postPrice}<#else>0</#if>">
-    <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
-    <a href="javascript:;" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流<#if postPrice??><span style="font-size:0.15rem;line-height:0.58rem;">&nbsp;￥${postPrice?string("0.00")}</span></#if></a>
-    <#if post??>&emsp;&emsp;<span style="font-size:0.15rem;line-height:0.58rem;">${post!''}</span></#if>
-    <div class="clear"></div>
-    <a href="javascript:;" class="choose" onclick="selectDeliveryTyp($(this),1)">自提</a>
-    <#if addressList??>
+
+    <div class="dis_ways down_ways">
+    <p class="tit">配送方式<span></span></p>
+    <menu class="down">
+       <input type="hidden" id="postPrice" value="<#if postPrice??>${postPrice}<#else>0</#if>">
+        <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
+      <a href="javascript:void(0)" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流
+        <#if postPrice??><span style="font-size:0.15rem;line-height:0.58rem;">&nbsp;￥${postPrice?string("0.00")}</span></#if>
+        <#if post??>&emsp;&emsp;<span style="font-size:0.15rem;line-height:0.58rem;">${post!''}</span></#if>
+      </a>
+      <a href="javascript:void(0)" class="choose" onclick="selectDeliveryTyp($(this),1)">自提</a>
+      <#if addressList??>
         <select name="shipAddressId">
             <#list addressList as addr>
           <option value="${addr.id?c}">${addr.disctrict!''}${addr.detailAddress!''}</option>
             </#list>
         </select>
     </#if>
+    </menu>
   </div>
 <#--
   <div class="use_integral">
@@ -130,23 +128,28 @@ function selectType(tag,type)
      $(tag).addClass("act").siblings().removeClass("act"); 
 }
 </script>
-  <div class="pay_ways">
-    <p class="tit">选择支付方式</p>
-    <input type="hidden" value="0" name="payTypeId" id="payTypeId" datatype="n" nullmsg="请选择支付方式!">
-    <a href="javascript:void(0)" class="choose act" onclick="selectPayType($(this),0)" id="vir">余额支付</a>
-    <span>&emsp;&emsp;&emsp;余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</span>
-    <#--
-    <a href="javascript:void(0)" class="choose" id="server">快捷支付</a>
-    -->
-    <div class="clear"></div>
-    <menu>
-        <#if pay_type_list??>
+    
+    <div class="pay_ways down_ways">
+        <p class="tit">选择支付方式<span></span></p>
+        <div class="down">
+           <input type="hidden" value="0" name="payTypeId" id="payTypeId" datatype="n" nullmsg="请选择支付方式!">
+          <a href="javascript:void(0)" class="choose act" onclick="selectPayType($(this),0)" id="vir">余额支付</a>
+          <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
+          <div class="clear"></div>
+            <#if pay_type_list??>
             <#list pay_type_list as pay_type>
-              <a href="javascript:void(0)" onclick="selectType($(this),${pay_type.id?c})"><img src="${pay_type.coverImageUri!''}" width="90" /></a>
+              <a href="javascript:void(0)" class="choose" onclick="selectType($(this),${pay_type.id?c})"><img src="${pay_type.coverImageUri!''}" width="90" /></a>
             </#list>
         </#if>
-    </menu>
-  </div>
+        </div>
+      </div>
+      
+<script type="text/javascript">
+$(".down_ways .tit").click(function(){
+  $(this).toggleClass("on");
+  $(this).next(".down").slideToggle(100);
+})
+</script>
 
   <div class="pay_massege"><textarea placeholder="给商家留言" name="userMessage"></textarea></div>
 

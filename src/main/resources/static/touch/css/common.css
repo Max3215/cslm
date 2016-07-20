@@ -352,8 +352,8 @@ a,button,input{
 .add_consignee .sub{width: 100%;height: 0.8rem;background: #ff5b7d;color:#fff;text-align: center;line-height: 0.8rem;font-size: 0.32rem;}
 
 /*收货地址列表*/
-.address_list{background: #fff;}
-.address_list .part{display: block; width: 94%; height: auto; border-bottom: 1px solid #c0bfbf; padding: 10px 3%; color: #333333;/*background: url(../images/round.png) no-repeat 95% 20%;background-size:0.30rem;*/}
+/*.address_list{background: #fff;}
+.address_list .part{display: block; width: 94%; height: auto; border-bottom: 1px solid #c0bfbf; padding: 10px 3%; color: #333333;}
 .address_list .part p{font-size: 0.22rem;}
 .address_list .part p span{padding-left: 10%;}
 .address_list .part menu{overflow: hidden;position: absolute;top:0.1rem;right:5%;}
@@ -362,7 +362,31 @@ a,button,input{
 .address_list .part.act{background:#333333;color:#fff;}
 .address_list .part.act menu a{background: #ff5b7d;border-color:#ff5b7d;color:#fff;}
 
-.address_list .add_btn{padding-left: 0.54rem;background: url(../images/add_btn.png) no-repeat left center;background-size:0.42rem;display: block;height: 0.42rem;line-height: 0.42rem;width: 2rem;margin: 0.2rem auto 0;}
+.address_list .add_btn{padding-left: 0.54rem;background: url(../images/add_btn.png) no-repeat left 0.2rem;background-size:0.42rem;display: block;height: 0.42rem;line-height: 0.42rem;width: 2rem;margin: 0 auto;padding: 0.2rem 0 0.2rem 0.54rem;}*/
+
+
+
+
+.address_list{background: #fff url(../images/re_bg01.png) repeat-x left 0.09rem;border-top:1px solid #ccc;border-bottom:1px solid #ccc;padding:0.17rem 5% 0;background-size:auto 0.08rem;}
+.address_list .tit{height: 0.6rem;line-height: 0.6rem;color:#666;font-size: 0.24rem;border-bottom:1px solid #ccc;}
+.address_list .tit a:nth-child(2){display: block;font-size: 0.2rem;color:#999999;border:1px solid #999;height: 0.32rem;line-height: 0.33rem;padding:0 0.12rem;position: absolute;top:0.13rem;right:1.25rem;border-radius: 0.2rem;-webkit-border-radius: 0.2rem;}
+.address_list .tit a:nth-child(2).on{background: #ff5b7d;border-color:#ff5b7d;color:#fff;}
+.address_list .tit a:nth-child(3){display: block;width: 0.35rem;height: 0.34rem;position: absolute;top:0.13rem;right:0.6rem;background: url(../images/member_icon04.png) no-repeat;background-size:0.35rem 0.34rem;}
+.address_list .tit a:nth-child(4){display: block;width: 0.34rem;height: 0.35rem;position: absolute;top:0.13rem;right:0;background:url(../images/del.png) no-repeat;background-size:0.34rem 0.34rem;}
+
+.address_list p.name{height: 0.7rem;line-height: 0.7rem;font-size: 0.24rem;color:#000;border-bottom:1px dashed #d3d3d3;}
+.address_list p.add{line-height: 0.4rem;font-size: 0.24rem;color:#666;padding:0.2rem 0;}
+
+
+
+
+
+
+
+
+.add_btn_box{border-bottom: 1px solid #c0bfbf;background: #fff;padding:0.14rem 0;}
+.add_btn_box .add_btn{padding-left: 0.54rem;/*background: url(../images/add_btn.png) no-repeat left 0.2rem;background-size:0.42rem;*/display: block;height: 0.5rem;line-height: 0.5rem;width: 2rem;margin: 0 auto;text-align: center;background: #39bee9;color:#fff;padding: 0 0.1rem;font-size: 0.24rem;border-radius: 0.3rem;-webkit-border-radius: 0.3rem;}
+
 
 
 
@@ -502,23 +526,27 @@ a,button,input{
 
 
 /*订单确认*/
-.dis_ways{background: #fff;padding:0.18rem 4%;overflow: hidden;}
-.dis_ways .tit{font-size: 0.26rem;color:#333;height: 0.4rem;line-height: 0.4rem;}
+.dis_ways{background: #fff;padding:0 4%;overflow: hidden;}
+.dis_ways .tit{font-size: 0.26rem;color:#333;height: 0.4rem;line-height: 0.4rem;padding: 0.18rem 0;background: url(../images/arrow02.png) right center no-repeat;background-size: 0.24rem;}
+.dis_ways .tit.on{background: url(../images/arrow03.png) right center no-repeat;background-size: 0.24rem;}
 
-.dis_ways .choose{height: 20px; background: url(../images/round.png) no-repeat 0.24rem center; background-size: 16px; display: block; float: left; color: #333333; font-size: 0.24rem; line-height: 0.58rem; padding-left: 0.65rem; height: 100%;}
+.down_ways .tit span{color:#ff5b7d;position: absolute;top:0;right:8%;font-size: 0.22rem;line-height:0.4rem;top:0.18rem;}
+.dis_ways menu{padding: 0.18rem 0;border-top:1px solid #c0bfbf;display: none;overflow: hidden;}
+
+
+.dis_ways .choose{height: 20px; background: url(../images/round.png) no-repeat 0.24rem center; background-size: 16px; display: block; color: #333333; font-size: 0.24rem; line-height: 0.58rem; padding-left: 0.65rem; height: 100%;}
 .dis_ways .choose.act{background: url(../images/round_on.png) no-repeat 0.24rem center; background-size: 16px;}
-.dis_ways select{float:left;margin:0.12rem 0 0 0.3rem;}
+
+.dis_ways select{margin:0.12rem 0 0 0.3rem;position: absolute;bottom: 0.28rem;left:20%;}
 
 
-.use_integral{padding:0.18rem 0 0.18rem 1.6rem;background: #fff;border-top:1px solid #c0bfbf;}
-.use_integral span{font-size: 0.26rem;color:#333;position: absolute;top:0.18rem;left:4%; height: 0.4rem;line-height: 0.4rem;}
-.use_integral .text{width: 2rem;height: 0.4rem;background: #eeeeee;line-height: 0.4rem;text-indent: 0.1rem;float:left;}
-.use_integral .sub{width: 1.4rem;height: 0.4rem;background: #ff5b7d;text-align: center;line-height: 0.4rem;color:#fff;font-size: 0.24rem;border-radius: 3px;-webkit-border-radius: 3px;float:left;margin-left:0.14rem;display: block;}
-.use_integral p{font-size: 0.22rem;color:#999999;margin-top:0.12rem;}
 
+.pay_ways{background: #fff;padding:0 4%;border-top:1px solid #c0bfbf;}
+.pay_ways .tit{font-size: 0.26rem;color:#333;height: 0.4rem;line-height: 0.4rem;padding: 0.18rem 0;background: url(../images/arrow02.png) right center no-repeat;background-size: 0.24rem;}
+.pay_ways .tit.on{background: url(../images/arrow03.png) right center no-repeat;background-size: 0.24rem;}
 
-.pay_ways{background: #fff;padding:0.18rem 4%;border-top:1px solid #c0bfbf;}
-.pay_ways .tit{font-size: 0.26rem;color:#333;height: 0.4rem;line-height: 0.4rem;}
+.pay_ways .down{padding: 0.18rem 0;border-top:1px solid #c0bfbf;display: none;overflow: hidden;}
+
 .pay_ways .choose{height: 20px; background: url(../images/round.png) no-repeat 0.24rem center; background-size: 16px; display: block; float: left; color: #333333; font-size: 0.24rem; line-height: 0.58rem; padding-left: 0.65rem; height: 100%;}
 .pay_ways .choose.act{background: url(../images/round_on.png) no-repeat 0.24rem center; background-size: 16px;}
 .pay_ways span{padding-left: 0.12rem;color:#f53b3b;font-size: 0.20rem;line-height: 0.58rem;}
@@ -530,7 +558,19 @@ a,button,input{
     margin-bottom: 0.05rem;}
 .pay_ways menu a.act{ background: url(../images/round_on.png) no-repeat 0.24rem center;
     background-size: 16px;} 
-.pay_ways menu a img{border:1px solid #c0bfbf;display: block;}
+.pay_ways a img{border:1px solid #c0bfbf;display: block;}
+
+
+
+
+.use_integral{padding:0.18rem 0 0.18rem 1.6rem;background: #fff;border-top:1px solid #c0bfbf;}
+.use_integral span{font-size: 0.26rem;color:#333;position: absolute;top:0.18rem;left:4%; height: 0.4rem;line-height: 0.4rem;}
+.use_integral .text{width: 2rem;height: 0.4rem;background: #eeeeee;line-height: 0.4rem;text-indent: 0.1rem;float:left;}
+.use_integral .sub{width: 1.4rem;height: 0.4rem;background: #ff5b7d;text-align: center;line-height: 0.4rem;color:#fff;font-size: 0.24rem;border-radius: 3px;-webkit-border-radius: 3px;float:left;margin-left:0.14rem;display: block;}
+.use_integral p{font-size: 0.22rem;color:#999999;margin-top:0.12rem;}
+
+
+
 
 .pay_massege {background: #fff;padding:0 4%;border-top:1px solid #c0bfbf;border-bottom:1px solid #c0bfbf;}
 .pay_massege textarea{width: 100%;height: 1.2rem;border:none;}
@@ -620,6 +660,9 @@ a,button,input{
 
 .pro_foot{height: 0.78rem;position: fixed;left:0;bottom:0;z-index: 500;overflow: hidden;width: 100%;}
 .pro_foot a:nth-child(1){display: block;float:left;width: 20%;background: url(../images/star.png) no-repeat center center #333333;background-size:0.53rem;height: 100%;}
+.pro_foot a:nth-child(1).ed{background: url(../images/star01.png) no-repeat center center #333333;background-size:0.53rem;}
+
+
 .pro_foot a:nth-child(2){width: 40%;height: 0.78rem;line-height: 0.78rem;color:#fff;text-align: center;display: block;float:left;font-size: 0.32rem;background: #ff5b7d;}
 .pro_foot a:nth-child(3){width: 40%;height: 0.78rem;line-height: 0.78rem;color:#fff;text-align: center;display: block;float:left;font-size: 0.32rem;background: #39bee9;}
 

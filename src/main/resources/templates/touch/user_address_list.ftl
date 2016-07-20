@@ -39,36 +39,20 @@ $(document).ready(function(){
 	<!-- 顶部 END -->
   
   <!-- 收货地址列表 -->
-  <section class="address_list">
-    <#if address_list??>
+  <#if address_list??>
         <#list address_list as address>
-            <#--
-            <a href="/touch/user/address/default?id=${address.id?c}"   class="<#if address.isDefaultAddress?? && address.isDefaultAddress>act</#if>">
-             --> 
-             <div class="part <#if address.isDefaultAddress?? && address.isDefaultAddress>act</#if>">
-             <#if address.isDefaultAddress?? && address.isDefaultAddress>
-             <a style="color:#fff" href="/touch/user/address/default?id=${address.id?c}">
-             <p>姓名：${address.receiverName!''}<span>邮编：${address.postcode!''}</span></p>
-              <p>手机号码：${address.receiverMobile!''}</p>
-              <p>省市：${address.province!''}${address.city!''}${address.disctrict!''}</p>
-              <p>详细地址：${address.detailAddress!''}</p>
-              </a>
-              <#else>
-              <a href="/touch/user/address/default?id=${address.id?c}">
-                 <p>姓名：${address.receiverName!''}<span>邮编：${address.postcode!''}</span></p>
-                  <p>手机号码：${address.receiverMobile!''}</p>
-                  <p>省市：${address.province!''}${address.city!''}${address.disctrict!''}</p>
-                  <p>详细地址：${address.detailAddress!''}</p>
-                  </a>
-              </#if>
-            <menu>
-                <a href="/touch/user/address/update?id=${address.id?c}">修改</a>
-                <a href="/touch/user/address/delete?id=${address.id?c}">删除</a>
-              <menu>
-              </div>
-         </#list>
-    </#if>
-  </section>
+          <section class="address_list">
+            <div class="tit">
+              <p>收货人信息</p>
+              <a href="/touch/user/address/default?id=${address.id?c}" <#if address.isDefaultAddress?? && address.isDefaultAddress>class="on"</#if>>默认</a>
+              <a href="/touch/user/address/update?id=${address.id?c}"></a>
+              <a href="/touch/user/address/delete?id=${address.id?c}"></a>
+            </div>
+            <p class="name">${address.receiverName!''}&nbsp;&nbsp;&nbsp;&nbsp;${address.receiverMobile!''}</p>
+            <p class="add">${address.province!''}${address.city!''}${address.disctrict!''}${address.detailAddress!''}</p>
+          </section>
+        </#list>
+  </#if>
   <a href="/touch/user/address/update" class="add_address_btn">添加新地址</a>
   <div style="height:1rem;"></div>
   <!-- 收货地址列表 END -->

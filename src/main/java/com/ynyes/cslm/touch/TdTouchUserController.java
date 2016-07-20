@@ -185,7 +185,7 @@ public class TdTouchUserController {
         {
         	map.addAttribute("total_unreceived",total_unreceived);
         }
-        Long total_finished = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,6);
+        Long total_finished = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,5);
         if(null != total_finished && total_finished>0L)
         {
         	map.addAttribute("total_finished",total_finished);
@@ -1074,22 +1074,23 @@ public class TdTouchUserController {
             res.put("message", "请先登录");
             return res;
         }
-        res.put("code", 0);
-        
         if (null == disgId) {
-            res.put("message", "参数错误");
-            return res;
+        	res.put("message", "参数错误");
+        	return res;
         }
+        
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
+        
+        if (null == distributorGoods) {
+        	res.put("message", "商品不存在");
+        	return res;
+        }
+        
+        res.put("code", 0);
 
+        TdUserCollect collect = tdUserCollectService.findByUsernameAndDistributorId(username,disgId,1);
         // 没有收藏
-        if (null == tdUserCollectService.findByUsernameAndDistributorId(username,
-                disgId,1)) {
-            TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disgId);
-
-            if (null == distributorGoods) {
-                res.put("message", "商品不存在");
-                return res;
-            }
+        if (null == collect) {
             TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
             
             if (null == goods.getTotalCollects())
@@ -1101,7 +1102,7 @@ public class TdTouchUserController {
             
             tdGoodsService.save(goods);
 
-            TdUserCollect collect = new TdUserCollect();
+            collect = new TdUserCollect();
 
             collect.setUsername(username);
             collect.setDistributorId(distributorGoods.getId());
@@ -1114,12 +1115,12 @@ public class TdTouchUserController {
 
             tdUserCollectService.save(collect);
 
-            res.put("message", "添加成功");
-
             return res;
+        }else{
+        	tdUserCollectService.delete(collect);
+        	res.put("message", "");
         }
 
-        res.put("message", "您已收藏了该商品");
 
         return res;
     }
@@ -2142,6 +2143,7 @@ public class TdTouchUserController {
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
         map.addAttribute("user", user);
+        map.addAttribute("type", type);
         
         if (null != user)
         {
@@ -2153,7 +2155,6 @@ public class TdTouchUserController {
                 {
                     if (null != id)
                     {
-                        map.addAttribute("type", type);
                         for (TdShippingAddress add : addressList)
                         {
                             if (add.getId().equals(id))
@@ -2175,6 +2176,11 @@ public class TdTouchUserController {
                                 addressList.remove(id);
                                 user.setShippingAddressList(addressList);
                                 tdShippingAddressService.delete(add);
+                                
+                                if(null != type && !"".equals(type))
+                                {
+                                	return "redirect:/touch/order/info";
+                                }
                                 return "redirect:/touch/user/address/list";
                             }
                         }

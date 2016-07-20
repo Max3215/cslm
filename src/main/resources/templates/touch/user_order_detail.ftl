@@ -69,6 +69,7 @@
 		<li>实付总额：<span style="color:#d64532;">￥<#if order??>${order.totalPrice?string("0.00")}</#if></span></li>
 		
 	</ul>
+	<div style="height:0.88rem;"></div>
 <section class="comfooter tabfix">
         <menu>
             <a class="a1" href="/touch/disout">平台首页</a>

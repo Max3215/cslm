@@ -62,11 +62,10 @@ function addCollect(goodsId)
         dataType: "json",
         success:function(res){
             
-            alert(res.message);
-            
             // 需登录
             if (res.code==1)
             {
+            	alert(res.message);
                 setTimeout(function(){
                     window.location.href = "/login";
                 }, 1000); 

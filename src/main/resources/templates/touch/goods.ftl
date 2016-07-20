@@ -37,16 +37,10 @@ function addCollect(goodsId)
         data:{"disgId": goodsId},
         dataType: "json",
         success:function(res){
-           //  if(res.code==0){
-            //    $("#addCollect").removeClass("pro_share");
-           //     $("#addCollect").addClass("pro_share1");
-           //     
-           // }
-            alert(res.message);
-            
             // 需登录
             if (res.code==1)
             {
+                alert(res.message);
                 setTimeout(function(){
                     window.location.href = "/touch/login";
                 }, 1000); 
@@ -270,7 +264,7 @@ function proGoods(dId){
   <!-- 底部 -->
   <div style="height:0.78rem;"></div>
   <section class="pro_foot">
-    <a href="javascript:addCollect(${dis_goods.id?c})"></a>
+    <a href="javascript:addCollect(${dis_goods.id?c})" <#if collect??>class="ed"</#if> onclick="$(this).toggleClass('ed')"></a>
     <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
        <a href="javascript:proGoods(${dis_goods.id?c});" target="_blank" title="立即购买" >立即预购</a>
    <#else>

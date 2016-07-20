@@ -822,7 +822,7 @@
                 <input type="button" id="btnPayment" value="确认付款" class="btn">
                 <input type="button" id="btnCancel" value="取消订单" class="btn green">
             <#elseif order.statusId==3>
-                <input type="button" id="btnPaymentLeft" value="等待发货" class="btn">
+                <input type="button" id="btnPaymentLeft" value="待发货" class="btn">
             <#elseif order.statusId==4>
                 <input type="button" id="btnService" value="待收货" class="btn green">
             <#elseif order.statusId==5>

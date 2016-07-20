@@ -444,8 +444,10 @@
 .MagnifierImg{position: absolute;top:0; left: 0;}
 
 .proinfo_left .share{padding-top: 20px;line-height: 43px;float: left;}
-.proinfo_left .love{display: block;float: right;height: 18px;line-height: 18px;padding-left: 30px;background: url(../images/love.png) no-repeat left 20px;color:#424957;padding-top: 20px;}
+.proinfo_left .love{display: block;float: right;height: 18px;line-height: 18px;padding-left: 30px;background: url(../images/xin.png) no-repeat left 20px;color:#424957;padding-top: 20px;}
 .proinfo_left .love:hover{color:#ff5b7d;}
+
+.proinfo_left .love.ed{background: url(../images/xin01.png) no-repeat left 20px;}
 
 
 .proinfo_right{width:645px;float: right;}

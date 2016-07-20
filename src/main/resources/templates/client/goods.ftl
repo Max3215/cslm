@@ -197,7 +197,7 @@ function proGoods(did)
 				<#--
 				<div class="share">点击分享：</div>
 				-->
-				<#if dis_goods??><a href="javascript:addCollect(${dis_goods.id?c})" class="love" title="收藏商品">收藏商品</a></#if>
+				<a href="javascript:addCollect(${dis_goods.id?c})" id="collect" class="love <#if collect??>ed</#if>" onclick="$(this).toggleClass('ed')" title="收藏商品">收藏商品</a>
 			</section>
 			<section class="proinfo_right">
 				<h2>${dis_goods.goodsTitle!''}</h2>
@@ -309,7 +309,7 @@ function proGoods(did)
                 <p>&nbsp;  </p>
                 <p class="num"><#if distributor.postPrice??>本店（${distributor.title!''}）配送费<span style="color:#ff5b7d">￥${distributor.postPrice?string('0.00')}</span>&nbsp;</#if>
                     <#if distributor.maxPostPrice??>满<span style="color:#ff5b7d">￥${distributor.maxPostPrice?string('0.00')}</span>&nbsp;包邮</#if></p>
-                 <p ><span style="color:#ff5b7d"><#if distributor.postInfo??>*${distributor.postInfo!''}</#if></span></p>
+                 <p ><span style="color:#ff5b7d"><#if distributor.postInfo??>${distributor.postInfo!''}</#if></span></p>
 				<div class="buy_btn">
 					<div class="clear"></div>
 					<#if dis_goods??>

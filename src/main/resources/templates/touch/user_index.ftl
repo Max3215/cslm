@@ -64,13 +64,13 @@ $(document).ready(function(){
         </a>
         <a href="/touch/user/order/list/4">
             <#if total_unreceived??><i>${total_unreceived!'0'}</i></#if>
-          <img src="/touch/images/order03.png" />
+          <img src="/touch/images/order05.png" />
           <span>待收货</span>
         </a>
-        <a href="/touch/user/order/list/6">
+        <a href="/touch/user/order/list/5">
            <#if total_finished??><i>${total_finished!'0'}</i></#if>
-          <img src="/touch/images/order04.png" />
-          <span>已完成</span>
+          <img src="/touch/images/order03.png" />
+          <span>待评价</span>
         </a>
       </menu>
     </div>
