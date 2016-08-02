@@ -30,4 +30,6 @@ public class Constants {
     public static final String METHOD_POST = "POST";
     
     public static final String PAY_BUTTON_NAME = "到支付宝支付";
+    
+    public static final String KEY_SHOW_URL = "show_url";
 }

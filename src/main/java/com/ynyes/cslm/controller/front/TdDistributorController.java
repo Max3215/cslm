@@ -1978,9 +1978,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 		supplyAll(listId, listChkId, username);
 		
 		if(null == providerId){
-			return "redirect:/distributor/supply/list/?page="+page+"&keywords="+keywords;
+			return "redirect:/distributor/supply/list?page="+page+"&keywords="+keywords;
 		}else{
-			return "redirect:/distributor/goods/sale/?page="+page+"&providerId="+providerId+"&keywords="+keywords;
+			return "redirect:/distributor/supply/list?page="+page+"&providerId="+providerId+"&keywords="+keywords;
 		}
 	}
 	

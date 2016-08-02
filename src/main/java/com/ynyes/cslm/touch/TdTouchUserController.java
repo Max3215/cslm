@@ -1708,13 +1708,13 @@ public class TdTouchUserController {
         }
         
         if (null == goodsId || null == orderId) {
-        	return "/client/error_404";
+        	return "/touch/error_404";
 		}
         tdCommonService.setHeader(map, req);
         
         TdOrderGoods tdOrderGoods = tdOrderGoodsService.findOne(goodsId);
         if (null == tdOrderGoods) {
-			return "/client/error_404";
+			return "/touch/error_404";
 		}
         map.addAttribute("tdOrderGoods", tdOrderGoods);
         map.addAttribute("orderId", orderId);

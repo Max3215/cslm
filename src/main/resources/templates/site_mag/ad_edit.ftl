@@ -87,7 +87,7 @@ $(function () {
             <div class="rule-single-select">
                 <select name="distributorId"  sucmsg=" " datatype="n" nullmsg="请选择！" class="Validform_error" style="display: none;">
                     <option value="">请选择超市...</option>
-                    <option value="0" <#if distributorId?? && distributorId ==0 >selected="selected"</#if>>平台广告</option>
+                    <option value="0" <#if ad?? && ad.distributorId?? && ad.distributorId ==0 >selected="selected"</#if>>平台广告</option>
                     <#if dis_list??>
                         <#list dis_list as d>
                             <option value="${d.id?c!""}" <#if ad?? && ad.distributorId?? && ad.distributorId==d.id>selected="selected"</#if>>${d.title!""}</option>

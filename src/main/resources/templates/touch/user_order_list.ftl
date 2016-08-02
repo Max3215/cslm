@@ -127,7 +127,7 @@ function orderReceive(id)
            <menu>
                 <a href="/touch/user/cancel/direct?id=${order.id?c}" onClick="cancelConfirm()" id="">取消订单</a>
                 <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
-                <a href="/order/dopay/${order.id?c}" class="cur">去付款</a>
+                <a href="/touch/order/dopay/${order.id?c}" class="cur">去付款</a>
            </menu>
       <#break>
       <#case 3>

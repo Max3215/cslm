@@ -26,25 +26,6 @@ $(document).ready(function(){
     $('#goods-menu').refresh(url,"#goods-menu",0);
 });
 
-  //  var pageIdx = 1;
-  //  function loadMore()
-  //  {
-  //      $.ajax({
-  //          type:"post",
-  //          url:"/touch/findNew?page=" + pageIdx,
-  //          success:function(data){
-  //              if ("" == data)
-  //              {
-  //                  $("#a-more").css("display", "none");
-  //              }
-  //              else
-  //              {
-  //                  $("#goods-menu").append(data);
-  //                  pageIdx++;
-  //              }
-  //          }
-  //      });
-  //  }
 
 </script>
 </head>

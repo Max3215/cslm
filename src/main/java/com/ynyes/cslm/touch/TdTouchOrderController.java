@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -1242,10 +1243,15 @@ public class TdTouchOrderController {
     }
     
     @RequestMapping(value = "/dopay/{orderId}")
-    public String payOrder(@PathVariable Long orderId, ModelMap map,
+    public String payOrder(@PathVariable Long orderId, ModelMap map,Device device,
             HttpServletRequest req) {
         String username = (String) req.getSession().getAttribute("username");
 
+        String type = "";
+        if (device.isMobile() || device.isTablet()) {
+        	type = "m";
+        }
+        
         if (null == username) {
             return "redirect:/touch/login";
         }
@@ -1262,38 +1268,15 @@ public class TdTouchOrderController {
             return "/touch/error_404";
         }
 
-        // 根据订单类型来判断支付时间是否过期
-//        if (order.getTypeId().equals(3L)) { // 抢拍 订单提交后30分钟内
-//            Date cur = new Date();
-//            long temp = cur.getTime() - order.getOrderTime().getTime();
-//            // System.out.println(temp);
-//            if (temp > 1000 * 60 * 30) {
-//                return "/touch/overtime";
-//            }
-//        } else if (order.getTypeId().equals(4L) || order.getTypeId().equals(5L)) { // 团购
-//                                                                                   // 
-//            Date cur = new Date();
-//            long temp = 0L;
-//           
-//            TdGoods tdGoods = tdGoodsService.findOne(order.getOrderGoodsList().get(0).getGoodsId());
-//            if (null != tdGoods) {
-//				if (order.getTypeId().equals(4L)) {
-//					temp = cur.getTime() - tdGoods.getGroupSaleStopTime().getTime();
-//				}else if (order.getTypeId().equals(5L)) {
-//					temp = cur.getTime() - tdGoods.getGroupSaleHundredStopTime().getTime();
-//				}
-//				if (temp > 0) {
-//                    return "/client/overtime";
-//                }
-//			}
-//        } else { // 普通 订单提交后24小时内
-//            Date cur = new Date();
-//            long temp = cur.getTime() - order.getOrderTime().getTime();
-//            if (temp > 1000 * 3600 * 24) {
-//                return "/touch/overtime";
-//            }
-//        }
-
+        // 判断订单是否过时 订单提交后24小时内
+		Date cur = new Date();
+		long temp = cur.getTime() - order.getOrderTime().getTime();
+		if (temp > 1000 * 3600 * 24) {
+			order.setSortId(7L);
+			tdOrderService.save(order);
+			return "/touch/overtime";
+		}
+     		
         // 待付款
         if (!order.getStatusId().equals(2L)) {
             return "/touch/error_404";
@@ -1323,7 +1306,7 @@ public class TdTouchOrderController {
                 payRecordId = leftPad(payRecordId, 6, "0");
             }
             req.setAttribute("payRecordId", payRecordId);
-
+            req.setAttribute("type", type);
             req.setAttribute("orderNumber", order.getOrderNumber());
 
             String payCode = payType.getCode();

@@ -61,7 +61,16 @@ public class PaymentChannelAlipay implements PaymentChannel {
     @Override
     public String getPayFormData(HttpServletRequest request) {
         Map<String, String> requestParameters = new HashMap<String, String>();
-        requestParameters.put(Constants.KEY_SERVICE, AlipayConfig.CREATE_TRADE_SERVICE);
+        
+        // 类型
+        String type = (String) request.getAttribute("type");
+        if(null != type){
+        	requestParameters.put(Constants.KEY_SERVICE, AlipayConfig.CREATE_MOBILE_SERVICE);
+        	requestParameters.put(Constants.KEY_SHOW_URL, "www.chinacslm.cc/touch");
+        }else{
+        	requestParameters.put(Constants.KEY_SERVICE, AlipayConfig.CREATE_TRADE_SERVICE);
+        }
+        
         requestParameters.put(Constants.KEY_PARTNER, AlipayConfig.PARTNER);
         requestParameters.put(Constants.KEY_CHARSET, AlipayConfig.CHARSET);
         String serverPath = getServerPath(request);

@@ -54,7 +54,7 @@ public class TdTouchListController {
 	        
 	        if (null == listStr || "".equals(listStr))
 	        {
-	            return "/client/error_404";
+	            return "/touch/error_404";
 	        }
 	        
 	        
@@ -390,7 +390,7 @@ public class TdTouchListController {
 	    public String goodsList(@PathVariable String listStr,int page, ModelMap map, HttpServletRequest req){
 	    	if (null == listStr || "".equals(listStr))
 	        {
-	            return "/client/error_404";
+	            return "/touch/error_404";
 	        }
 	        
 	        

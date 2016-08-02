@@ -1120,91 +1120,6 @@ public class TdOrderController extends AbstractPaytypeController {
 		return "/client/order_pay_form";
 	}
 
-	/**
-	 * 支付尾款
-	 * 
-	 * @param orderId
-	 * @param map
-	 * @param req
-	 * @return
-	 */
-	@RequestMapping(value = "/dopayleft/{orderId}")
-	public String payOrderLeft(@PathVariable Long orderId, ModelMap map, HttpServletRequest req) {
-		String username = (String) req.getSession().getAttribute("username");
-
-		if (null == username) {
-			return "redirect:/login";
-		}
-
-		tdCommonService.setHeader(map, req);
-
-		if (null == orderId) {
-			return "/client/error_404";
-		}
-
-		TdOrder order = tdOrderService.findOne(orderId);
-
-		if (null == order) {
-			return "/client/error_404";
-		}
-
-		// 待付尾款
-		if (!order.getStatusId().equals(3L)) {
-			return "/client/error_404";
-		}
-
-		// String amount = order.getTotalLeftPrice().toString();
-		// req.setAttribute("totalPrice", amount);
-
-		String payForm = "";
-
-//		Long payId = order.getPayTypeId();
-//		TdPayType payType = tdPayTypeService.findOne(payId);
-		// if (payType != null) {
-		// TdPayRecord record = new TdPayRecord();
-		// record.setCreateTime(new Date());
-		// record.setOrderId(order.getId());
-		// record.setPayTypeId(payType.getId());
-		// record.setStatusCode(1);
-		// record.setCreateTime(new Date());
-		// record = payRecordService.save(record);
-		//
-		// String payRecordId = record.getId().toString();
-		// int recordLength = payRecordId.length();
-		// if (recordLength > 6) {
-		// payRecordId = payRecordId.substring(recordLength - 6);
-		// } else {
-		// payRecordId = leftPad(payRecordId, 6, "0");
-		// }
-		// req.setAttribute("payRecordId", payRecordId);
-		//
-		// req.setAttribute("orderNumber", order.getOrderNumber());
-		//
-		// String payCode = payType.getCode();
-		// if (PAYMENT_ALI.equals(payCode)) {
-		// payForm = payChannelAlipay.getPayFormData(req);
-		// map.addAttribute("charset", AlipayConfig.CHARSET);
-		// } else if (CEBPayConfig.INTER_B2C_BANK_CONFIG.keySet().contains(
-		// payCode)) {
-		// req.setAttribute("payMethod", payCode);
-		// payForm = payChannelCEB.getPayFormData(req);
-		// map.addAttribute("charset", "GBK");
-		// } else {
-		// // 其他目前未实现的支付方式
-		// return "/client/error_404";
-		// }
-		// } else {
-		// return "/client/error_404";
-		// }
-
-		order.setPayTime(new Date());
-
-		tdOrderService.save(order);
-
-		map.addAttribute("payForm", payForm);
-
-		return "/client/order_pay_form";
-	}
 
 	@RequestMapping(value = "/pay/success")
 	public String paySuccess(ModelMap map, HttpServletRequest req) {
@@ -1240,15 +1155,6 @@ public class TdOrderController extends AbstractPaytypeController {
 		PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
 		paymentChannelAlipay.doResponse(req, resp);
 	}
-
-	/*
-	 * 
-	 */
-	// @RequestMapping(value = "/pay/notify_cebpay")
-	// public void payNotifyCEBPay(ModelMap map, HttpServletRequest req,
-	// HttpServletResponse resp) {
-	// payChannelCEB.doResponse(req, resp);
-	// }
 
 	/*
 	 * 
@@ -1290,7 +1196,7 @@ public class TdOrderController extends AbstractPaytypeController {
 		boolean verify_result = AlipayNotify.verify(params);
 
 		tdCommonService.setHeader(map, req);
-
+		
 		if (orderNo.contains("CS") || orderNo.contains("PF") || orderNo.contains("FX") || orderNo.contains("USE")) {
 			TdCash cash = tdCashService.findByCashNumber(orderNo);
 			// if(null == cash){

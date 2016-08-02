@@ -200,6 +200,7 @@ $(document).ready(function(){
                  </#list>
             </#if>
         </menu>
+        <div id="banner_num"></div>
 	</section>
 
 	<!--左边楼层浮动-->

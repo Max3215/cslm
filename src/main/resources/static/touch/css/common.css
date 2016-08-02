@@ -393,8 +393,8 @@ a,button,input{
 .add_address_btn{display: block;width: 100%;height: 1rem;background: #ff5b7d;color:#fff;text-align: center;line-height: 1rem;font-size: 0.28rem;position: fixed;left:0;bottom:0.87rem;}
 
 /*我的积分*/
-.my_integral .total{background: #fff;padding:0.2rem 4%;color:#333333;font-size: 0.26rem;}
-.my_integral .total span{display: block;font-size: 0.48rem;color:#ff5b7d;padding:0.15rem 0 0 0.94rem;}
+.my_integral .total{background: #fff;padding:0.2rem 4%;color:#333333;font-size: 0.26rem;text-align: center;}
+.my_integral .total span{display: block;font-size: 0.3rem;color:#fff;background: #ff5b7d;width: 70%;height: 0.7rem;line-height: 0.7rem;margin:0.2rem auto 0;border-radius: 5px;-webkit-border-radius: 5px;}
 .my_integral .change{margin-top:0.16rem;background: #fff;border-top:1px solid #dddddd;border-bottom:1px solid #dddddd;padding:0.16rem 0 0.43rem 0.3rem;}
 .my_integral .change p:nth-child(1){font-size: 0.26rem;color:#333333;padding-bottom:0.38rem;}
 .my_integral .change p:nth-child(2){font-size: 0.22rem;color:#999999;padding-bottom:0.08rem;padding-left: 0.96rem;}
@@ -402,7 +402,7 @@ a,button,input{
 .my_integral .change .sub{width: 1.78rem;height:0.5rem;background: #fe5f73;color:#fff;text-align: center;line-height: 0.5rem;font-size: 0.26rem;border-radius: 3px;-webkit-border-radius: 3px;display: block;margin:0.3rem 0 0 0.96rem;}
 
 .my_integral .detail{padding:0.22rem 4%;}
-.my_integral .detail p{font-size: 0.26rem; color: #333333; padding-bottom: 0.15rem;}
+.my_integral .detail p{font-size: 0.26rem; color: #333333; padding-bottom: 0.15rem;text-align: center;}
 .my_integral .detail table{width: 100%;}
 .my_integral .detail th{height:0.6rem;background: #999999;color:#fff;text-align: center;line-height: 0.6rem;font-size: 0.24rem;}
 .my_integral .detail td{height:0.6rem;line-height: 0.6rem;background: #fff;text-align: center;border-bottom:1px solid #dddddd;color:#333;font-size: 0.2rem;}
@@ -839,24 +839,25 @@ a,button,input{
 
 
 
+/*add 7.20*/
+
+.sub_order_success{text-align: center;padding-top: 1.8rem;}
+.sub_order_success h3{font-size: 0.36rem;color:#333333;margin-bottom: 0.6rem;}
+.sub_order_success p{font-size: 0.24rem;color:#999999;line-height: 0.48rem;}
+.sub_order_success p span{color:#ff5b7d;}
 
 
+.sub_order_success .btns{text-align: center;line-height: 0.6rem;margin-top: 0.2rem;}
+.sub_order_success .btns a{display: inline-block;height: 0.6rem;color:#fff;font-size: 0.24rem;padding:0 0.22rem;}
+.sub_order_success .btns span{display: inline-block;width: 1.5rem;text-align: center;font-size: 0.24rem;color:#999;}
+
+.sub_order_success .btns a:first-child{background: #ff5b7d;}
+.sub_order_success .btns a:last-child{background: #39bee9;}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.pay_overtime{padding-top:4.4rem;background: url(../images/overtime.png) center 1.58rem no-repeat;background-size: 2.2rem;}
+.pay_overtime h3{font-size: 0.36rem;color:#333333;text-align: center;}
+.pay_overtime .operate{height: 0.6rem;line-height: 0.6rem;color:#999999;font-size: 0.24rem;text-align: center;margin-top: 0.36rem;}
+.pay_overtime .operate a{color:#999;}
+.pay_overtime .operate a:first-child{display: inline-block;width: 1.4rem;height: 0.6rem;background: #ff5b7d;text-align: center;line-height: 0.6rem;color:#fff;margin: 0 0.22rem;}
 

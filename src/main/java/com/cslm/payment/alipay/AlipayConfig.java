@@ -22,7 +22,11 @@ public class AlipayConfig {
     // 签名方式
     public static String SIGN_TYPE = "MD5";
     
+    // 即时到账
     public static final String CREATE_TRADE_SERVICE = "create_direct_pay_by_user";
+    
+    // 手机网站支付
+    public static final String CREATE_MOBILE_SERVICE = "alipay.wap.create.direct.pay.by.user";
     // 纯担保交易
 //    public static final String CREATE_TRADE_SERVICE = "create_partner_trade_by_buyer"
     

@@ -45,6 +45,12 @@ public class TdDistributorService {
     {
         if (null != id)
         {
+        	// 删除超市所有商品
+        	TdDistributor distributor = this.findOne(id);
+        	if(null != distributor){
+        		List<TdDistributorGoods> goodsList = distributor.getGoodsList();
+        		tdDistributorGoodsService.delete(goodsList);
+        	}
             repository.delete(id);
         }
     }

@@ -521,12 +521,12 @@ public class TdManagerOrderController {
 	      Page<TdOrder> tdOrderPage = null;
 	      if (__EVENTTARGET.equalsIgnoreCase("export"))
 	      {
-	    	  tdOrderService.findAll(statusId,payId, start, end, keywords, page, size);
+	    	  tdOrderPage = tdOrderService.findAll(statusId,payId, start, end, keywords, page, size);
 	      }
 	      else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
 	      {
-	            tdOrderService.findAll(statusId,payId, start, end, keywords, page, Integer.MAX_VALUE);
-	        }
+	    	  tdOrderPage = tdOrderService.findAll(statusId,payId, start, end, keywords, page, Integer.MAX_VALUE);
+	      }
 			
 			if (ImportData(tdOrderPage, row, cell, sheet)) {
 				download(wb, exportUrl, resp);
