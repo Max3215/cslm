@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if productCategory??>${productCategory.title!''}-</#if>超市联盟</title>
+<title><#if productCategory??>${productCategory.title!''}-</#if>联超商城</title>
 <meta name="keywords" content="<#if productCategory??>${productCategory.seoKeywords!''}</#if>" />
 <meta name="description" content="<#if productCategory??>${productCategory.seoDescription!''}</#if>" />
 <meta name="copyright" content="<#if site??>${site.copyright!''}</#if>" /> 
@@ -61,7 +61,7 @@ var pageIdx = 0;
 		<p><#if productCategory??>${productCategory.title!''}</#if></p>
 		-->
 		<div class="modify_branch">
-          <a href="javascript:void(0)" onclick="$('.infp_eject').fadeIn(300)"><#if distributorTitle??>${distributorTitle!''}<#else>超市联盟</#if></a>     
+          <a href="javascript:void(0)" onclick="$('.infp_eject').fadeIn(300)"><#if distributorTitle??>${distributorTitle!''}<#else>联超商城店铺选择</#if></a>     
         </div>
         <div class="infp_eject" style="display: none;" id="shopList">
            <#include "/touch/shop_list.ftl" />
@@ -157,7 +157,7 @@ var pageIdx = 0;
     line-height:40px;
     height:40px;
     margin:20px auto 30px;}
-</sctyle>
+</style>
   <!-- 底部 -->
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">

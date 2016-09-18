@@ -16,7 +16,7 @@
                             <input type="hidden" name="listId" id="listId" value="${pgoods.id?c}">
                         </td>
                         <td>
-                            <a href="" target="_blank"  class="pic"><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
+                            <a href="javascript:;" target="_blank"  class="pic"><strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;">${pgoods.goodsTitle!''}</p>
                              </a> 
                         </td>
@@ -25,7 +25,18 @@
                         <td>${pgoods.shopReturnRation?string('0.00')}</td>
                         <td>${pgoods.leftNumber!'0'}</td>
                         <td>
+                            <#assign isSale = false>
+                            <#if goodsList??>
+                            <#list goodsList.content as dg>
+                                <#if dg.goodsId == pgoods.goodsId >
+                                    <#assign isSale = true>
+                                    <p><a href="javascript:;" style="color: #ff5b7d">超市已存在</a></p>        
+                                </#if>
+                             </#list>
+                             </#if>
+                             <#if isSale == false>
                             <p><a href="javascript:supply(${pgoods.id?c});">我要代理</a></p>
+                            </#if>
                             <p><a href="javascript:collect(${pgoods.id?c});">收藏</a></p>
                             </td>
                       </tr>
@@ -72,6 +83,9 @@ function supply(goodsId){
         dataType : "json",
         success:function(data){
             alert(data.msg);
+            if(data.code ==0 ){
+                window.location.reload();
+            }
         }
     })
 }

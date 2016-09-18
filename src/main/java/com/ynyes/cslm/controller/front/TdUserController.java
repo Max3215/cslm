@@ -173,13 +173,13 @@ public class TdUserController extends AbstractPaytypeController{
                 .findByUsernameOrderByVisitTimeDesc(username, 0,
                         ClientConstant.pageSize));
         map.addAttribute("total_unpayed",
-                tdOrderService.countByUsernameAndTypeIdAndStatusId(username,0, 2));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 2));
         map.addAttribute("total_undelivered",
-                tdOrderService.countByUsernameAndTypeIdAndStatusId(username,0, 3));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 3));
         map.addAttribute("total_unreceived",
-                tdOrderService.countByUsernameAndTypeIdAndStatusId(username,0, 4));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 4));
         map.addAttribute("total_finished",
-                tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,6));
+                tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 6));
         //热卖商品
         map.addAttribute("hot_goods_page",tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0, ClientConstant.pageSize));
         //推荐商品
@@ -377,147 +377,6 @@ public class TdUserController extends AbstractPaytypeController{
                 }
             }
         }
-//        if (timeId.equals(0)) {
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndSearch(
-//                            username,0, keywords, page, ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdOrderByIdDesc(username,0, page,
-//                            ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndSearch(username,
-//                                    0,statusId, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndStatusId(
-//                            username,0, statusId, page, ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(1)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -1);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                    0,time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username, 0,time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,0, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                   0, statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(3)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -3);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                   0, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username,0, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,0, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                    0,statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(6)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -6);// 月份减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                    0,time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username,0, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,0, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                   0, statusId, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        } else if (timeId.equals(12)) {
-//            Date cur = new Date();
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.YEAR, -1);// 减一
-//            Date time = calendar.getTime();
-//
-//            if (statusId.equals(0)) {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndTimeAfterAndSearch(username,
-//                                    0,time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService.findByUsernameAndTypeIdAndTimeAfter(
-//                            username,0, time, page, ClientConstant.pageSize);
-//                }
-//            } else {
-//                if (null != keywords && !keywords.isEmpty()) {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfterAndSearch(
-//                                    username,0, statusId, time, keywords, page,
-//                                    ClientConstant.pageSize);
-//                } else {
-//                    orderPage = tdOrderService
-//                            .findByUsernameAndTypeIdAndStatusIdAndTimeAfter(username,
-//                                    statusId,0, time, page,
-//                                    ClientConstant.pageSize);
-//                }
-//            }
-//        }
 
         map.addAttribute("order_page", orderPage);
 
@@ -1004,6 +863,29 @@ public class TdUserController extends AbstractPaytypeController{
 
         return "/client/user_return_list";
     }
+    
+    /**
+     * 退货详情
+     * 
+     */
+    @RequestMapping("/user/return/detail")
+    public String returnDetail(Long id,HttpServletRequest req,ModelMap map)
+    {
+    	String username = (String) req.getSession().getAttribute("username");
+	    
+	     if (null == username)
+	     {
+	     return "redirect:/login";
+	     }
+	    
+	     tdCommonService.setHeader(map, req);
+	     TdUserReturn userreturn = tdUserReturnService.findOne(id);
+	     
+	     map.addAttribute("return", userreturn);
+	     map.addAttribute("shop", TdDistributorService.findOne(userreturn.getShopId()));
+    	
+	     return "/client/user_return_detail";
+    }
 
     /**
      * 用户投诉
@@ -1110,7 +992,7 @@ public class TdUserController extends AbstractPaytypeController{
     @RequestMapping(value = "/user/comment/add", method=RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> commentAdd(HttpServletRequest req,
-            TdUserComment tdComment, Long orderId, Long ogId,Long quantity, String code,
+            TdUserComment tdComment, Long orderId,Long ogId,
             ModelMap map) {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
@@ -1130,18 +1012,78 @@ public class TdUserController extends AbstractPaytypeController{
         TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(tdComment.getGoodsId());
 
         if (null == distributorGoods) {
-            res.put("message", "评论的商品不存在！");
-            return res;
+        	res.put("message", "评论的商品不存在！");
+        	return res;
         }
-        
+        TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
+        if (null == goods) {
+        	res.put("message", "评论的商品不存在！");
+        	return res;
+        }
+
 
         tdComment.setCommentTime(new Date());
-        tdComment.setGoodsCoverImageUri(distributorGoods.getCoverImageUri());
-        tdComment.setGoodsTitle(distributorGoods.getGoodsTitle());
+        tdComment.setGoodsCoverImageUri(goods.getCoverImageUri());
+        tdComment.setGoodsTitle(goods.getTitle());
         tdComment.setIsReplied(false);
         tdComment.setNegativeNumber(0L);
         tdComment.setPositiveNumber(0L);
         tdComment.setUsername(username);
+        
+        tdComment = tdUserCommentService.save(tdComment);
+        
+        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+
+        if (null != orderId) {
+            TdOrder tdOrder = tdOrderService.findOne(orderId);
+
+            if (null != tdOrder) {
+                tdComment.setOrderNumber(tdOrder.getOrderNumber());
+                tdComment.setDiysiteId(tdOrder.getShopId());
+                
+                List<TdOrderGoods> ogList = tdOrder.getOrderGoodsList();
+
+                for (TdOrderGoods og : ogList) {
+                    if (og.getId().equals(ogId)) {
+                        og.setIsCommented(true);
+                        og.setCommentId(tdComment.getId());
+                        tdOrder = tdOrderService.save(tdOrder);
+                        break;
+                    }
+                }
+
+                // 判断订单是否完成
+                boolean allIsCommented = true;
+                for (TdOrderGoods og : tdOrder.getOrderGoodsList()) {
+                    if (null == og.getIsCommented() || !og.getIsCommented()) {
+                        allIsCommented = false;
+                        break;
+                    }
+                }
+
+                if (allIsCommented) {
+                    tdOrder.setStatusId(6L);
+                    tdOrder = tdOrderService.save(tdOrder);
+                }
+            }
+        }
+
+
+        if (null != user) {
+            tdComment.setUserHeadUri(user.getHeadImageUri());
+        }
+
+        tdComment.setStatusId(0L);
+
+        tdComment = tdUserCommentService.save(tdComment);
+
+        if (null == goods.getTotalComments()) {
+            goods.setTotalComments(1L);
+        } else {
+            goods.setTotalComments(goods.getTotalComments() + 1L);
+        }
+        tdGoodsService.save(goods);
+        
         
 
         res.put("code", 0);
@@ -1814,7 +1756,8 @@ public class TdUserController extends AbstractPaytypeController{
     
     @RequestMapping(value="/user/drwa2",method=RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> userDrwa(String card,Double price,String payPassword,
+    public Map<String,Object> userDrwa(String card,Double price,
+    			String payPassword,String bank,String name,
     			HttpServletRequest req){
     	Map<String,Object> res = new HashMap<>();
     	res.put("code", 0);
@@ -1827,6 +1770,11 @@ public class TdUserController extends AbstractPaytypeController{
     	}
     	
     	TdUser user = tdUserService.findByUsername(username);
+    	if(null == user)
+    	{
+    		res.put("msg", "参数错误");
+    		return res;
+    	}
     	
     	if(null == price)
     	{
@@ -1839,40 +1787,42 @@ public class TdUserController extends AbstractPaytypeController{
     		return res;
     	}
     	
+    	if(null == user.getVirtualMoney() || user.getVirtualMoney() < price ){
+    		res.put("msg", "账户余额不足");
+    		return res;
+    	}
+    	
     	if(null == payPassword || !payPassword.equalsIgnoreCase(user.getPayPassword()))
     	{
     		res.put("msg", "密码错误");
     		return res;
     	}
     	
-    	if(null != user)
-    	{
-    		Date current = new Date();
-        	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        	String curStr = sdf.format(current);
-        	Random random = new Random();
-        	
-    		
-    		TdCash cash = new TdCash();
-    		
-    		cash.setCard(card);
-    		cash.setPrice(price);
-    		cash.setCreateTime(new Date());
-    		cash.setCashNumber("USE"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
-    		cash.setShopTitle(user.getRealName());
-    		cash.setUsername(username);
-    		cash.setShopType(4L);
-    		cash.setType(2L);
-    		cash.setStatus(1L);
-    		
-    		tdCashService.save(cash);
-    		res.put("msg", "提交成功");
-    		res.put("code", 1);
-    		return res;
-    	}
+		Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
     	
-    	res.put("msg", "参数错误");
-    	return res;
+		
+		TdCash cash = new TdCash();
+		
+		cash.setCard(card);
+		cash.setPrice(price);
+		cash.setBank(bank);
+		cash.setName(name);
+		cash.setCreateTime(new Date());
+		cash.setCashNumber("USE"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+		cash.setShopTitle(user.getRealName());
+		cash.setUsername(username);
+		cash.setShopType(4L);
+		cash.setType(2L);
+		cash.setStatus(1L);
+		
+		tdCashService.save(cash);
+		res.put("msg", "提交成功");
+		res.put("code", 1);
+		return res;
+    	
     }
     
     /**

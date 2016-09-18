@@ -184,7 +184,18 @@ DD_belatedPNG.fix('.,img,background');
                         <td class="tb01"><span id="code${goods.id?c}">${goods.code!''}</span></td>
                         <td class="tb02"><p>￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></p></td>
                         <td>
-                          <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">选择批发</a></p>
+                            <#assign isSale = false>
+                            <#if provider_list??>
+                            <#list provider_list.content  as pg>
+                                <#if pg.goodsId == goods.id>
+                                    <#assign isSale =true>
+                                        <p><a href="javascript:;" style="color: #ff5b7d">已批发</a></p>
+                                </#if>
+                             </#list>
+                             </#if>
+                             <#if isSale ==false>
+                                  <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">选择批发</a></p>
+                             </#if>
                          </td>
                       </tr>
                 </#list>

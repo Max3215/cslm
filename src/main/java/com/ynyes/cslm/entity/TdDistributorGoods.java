@@ -146,31 +146,54 @@ public class TdDistributorGoods {
     private String unit;
     
     // 首页推荐
+    @Column
     private Boolean isRecommendIndex;
+    @Column
+    private Date isRecommendIndexTime;
+    
+    // 分类推荐
+    @Column
+    private Boolean isRecommendType;
+    @Column
+    private Date isRecommendTypeTime;
+    
+    // 触屏类别
+    @Column
+    private Boolean isTouchRecommendType;
+    @Column
+    private Date isTouchRecommendTypeTime;
+    
+    // 触屏热卖
+    @Column
+    private Boolean isTouchHot;
+    @Column
+    private Date isTouchHotTime;
     
     // 平台推荐
     @Column
     private Boolean isSetRecommend;
+    @Column
+    private Date isSetRecommendTime;
     
     // 平台分类推荐
     @Column
-    private Boolean isRecommendType;
-    
-    // 触屏平台热卖
-    @Column
-    private Boolean isTouchHot;
-    
-    // 分类推荐
-    @Column
     private Boolean isRecommendCategory;
+    @Column
+    private Date isRecommendCategoryTime;
     
-//    // 商品邮费
-//    @Column
-//    private Double postPrice;
-//    
-//    // 满额免
-//    @Column
-//    private Double maxPostPrice;
+    // 平台触屏类别
+    @Column
+    private Boolean isSetRecommendType;
+    @Column
+    private Date isSetRecommendTypeTime;
+    
+    // 平台触屏热卖
+    @Column
+    private Boolean isSetTouchHot;
+    @Column
+    private Date isSetTouchHotTime;
+    
+    
     
 	public Long getId() {
 		return id;
@@ -420,12 +443,12 @@ public class TdDistributorGoods {
 		this.isRecommendIndex = isRecommendIndex;
 	}
 
-	public Boolean getIsSetRecommend() {
-		return isSetRecommend;
+	public Date getIsRecommendIndexTime() {
+		return isRecommendIndexTime;
 	}
 
-	public void setIsSetRecommend(Boolean isSetRecommend) {
-		this.isSetRecommend = isSetRecommend;
+	public void setIsRecommendIndexTime(Date isRecommendIndexTime) {
+		this.isRecommendIndexTime = isRecommendIndexTime;
 	}
 
 	public Boolean getIsRecommendType() {
@@ -436,12 +459,60 @@ public class TdDistributorGoods {
 		this.isRecommendType = isRecommendType;
 	}
 
+	public Date getIsRecommendTypeTime() {
+		return isRecommendTypeTime;
+	}
+
+	public void setIsRecommendTypeTime(Date isRecommendTypeTime) {
+		this.isRecommendTypeTime = isRecommendTypeTime;
+	}
+
+	public Boolean getIsTouchRecommendType() {
+		return isTouchRecommendType;
+	}
+
+	public void setIsTouchRecommendType(Boolean isTouchRecommendType) {
+		this.isTouchRecommendType = isTouchRecommendType;
+	}
+
+	public Date getIsTouchRecommendTypeTime() {
+		return isTouchRecommendTypeTime;
+	}
+
+	public void setIsTouchRecommendTypeTime(Date isTouchRecommendTypeTime) {
+		this.isTouchRecommendTypeTime = isTouchRecommendTypeTime;
+	}
+
 	public Boolean getIsTouchHot() {
 		return isTouchHot;
 	}
 
 	public void setIsTouchHot(Boolean isTouchHot) {
 		this.isTouchHot = isTouchHot;
+	}
+
+	public Date getIsTouchHotTime() {
+		return isTouchHotTime;
+	}
+
+	public void setIsTouchHotTime(Date isTouchHotTime) {
+		this.isTouchHotTime = isTouchHotTime;
+	}
+
+	public Boolean getIsSetRecommend() {
+		return isSetRecommend;
+	}
+
+	public void setIsSetRecommend(Boolean isSetRecommend) {
+		this.isSetRecommend = isSetRecommend;
+	}
+
+	public Date getIsSetRecommendTime() {
+		return isSetRecommendTime;
+	}
+
+	public void setIsSetRecommendTime(Date isSetRecommendTime) {
+		this.isSetRecommendTime = isSetRecommendTime;
 	}
 
 	public Boolean getIsRecommendCategory() {
@@ -451,24 +522,47 @@ public class TdDistributorGoods {
 	public void setIsRecommendCategory(Boolean isRecommendCategory) {
 		this.isRecommendCategory = isRecommendCategory;
 	}
-	
-	
-//
-//	public Double getPostPrice() {
-//		return postPrice;
-//	}
-//
-//	public void setPostPrice(Double postPrice) {
-//		this.postPrice = postPrice;
-//	}
-//
-//	public Double getMaxPostPrice() {
-//		return maxPostPrice;
-//	}
-//
-//	public void setMaxPostPrice(Double maxPostPrice) {
-//		this.maxPostPrice = maxPostPrice;
-//	}
+
+	public Date getIsRecommendCategoryTime() {
+		return isRecommendCategoryTime;
+	}
+
+	public void setIsRecommendCategoryTime(Date isRecommendCategoryTime) {
+		this.isRecommendCategoryTime = isRecommendCategoryTime;
+	}
+
+	public Boolean getIsSetRecommendType() {
+		return isSetRecommendType;
+	}
+
+	public void setIsSetRecommendType(Boolean isSetRecommendType) {
+		this.isSetRecommendType = isSetRecommendType;
+	}
+
+	public Date getIsSetRecommendTypeTime() {
+		return isSetRecommendTypeTime;
+	}
+
+	public void setIsSetRecommendTypeTime(Date isSetRecommendTypeTime) {
+		this.isSetRecommendTypeTime = isSetRecommendTypeTime;
+	}
+
+	public Boolean getIsSetTouchHot() {
+		return isSetTouchHot;
+	}
+
+	public void setIsSetTouchHot(Boolean isSetTouchHot) {
+		this.isSetTouchHot = isSetTouchHot;
+	}
+
+	public Date getIsSetTouchHotTime() {
+		return isSetTouchHotTime;
+	}
+
+	public void setIsSetTouchHotTime(Date isSetTouchHotTime) {
+		this.isSetTouchHotTime = isSetTouchHotTime;
+	}
+
 
 
 	

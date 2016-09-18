@@ -312,6 +312,7 @@ public interface TdDistributorGoodsRepo extends
 		Page<TdDistributorGoods> findByIsOnSaleTrueAndIsTouchHotTrueOrderByOnSaleTimeDesc(Pageable page);
 		
 		List<TdDistributorGoods> findByProviderIdAndGoodsIdAndIsDistributionTrue(Long proId,Long goodsId);
+		List<TdDistributorGoods> findByProviderId(Long proId);
 		
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=true order by g.onSaleTime desc")
 		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueOrderByOnSaleTime(Long distributorId,Pageable page);

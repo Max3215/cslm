@@ -25,7 +25,8 @@ $(document).ready(function(){
             if(data.code==1)
             {
                  $('.sub_form').css('display','none');
-                  window.location.href="/supply/goods/list/${isDistribution?c}?page=${page?c}&dir=${dir!'0'}<#if categoryId??>&categoryId=${categoryId?c}</#if>"
+                //  window.location.href="/supply/goods/list/${isDistribution?c}?page=${page?c}&dir=${dir!'0'}<#if categoryId??>&categoryId=${categoryId?c}</#if>"
+                window.location.reload();
             }
         }
     });
@@ -63,6 +64,7 @@ function editPrice(dgId,page){
     var subTitle = $("#subTitle"+dgId).val();
     var code = $("#code"+dgId).val();
     var unit = $("#unit"+dgId).val();
+    var marketPrice = $("#marketPrice"+dgId).val();
     var outFactoryPrice = $("#price"+dgId).html();
     var shopReturnRation = $("#ration"+dgId).html();
     var leftNumber = $("#number"+dgId).html();
@@ -73,6 +75,7 @@ function editPrice(dgId,page){
     $("#subTitle").attr("value",subTitle);
     $("#code").attr("value",code);
     $("#unit").attr("value",unit);
+    $("#marketPrice").attr("value",marketPrice);
     $("#outFactoryPrice").attr("value",outFactoryPrice);
     $("#shopReturnRation").attr("value",shopReturnRation);
     $("#leftNumber").attr("value",leftNumber);
@@ -187,6 +190,10 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th>*编码：</th>
           <td><input type="text" class="add_width" name="code" id="code" datatype="*" sucmsg=" "></td>
+        </tr>
+        <tr>
+          <th>商品原价：</th>
+          <td><input type="text"  name="goodsMarketPrice" id="marketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" "></td>
         </tr>
          <tr>
           <th>*商品售价：</th>

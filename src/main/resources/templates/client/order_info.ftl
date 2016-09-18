@@ -54,28 +54,63 @@ $(document).ready(function(){
     }); 
     
   $("#delive_post").click(function(){
-        <#assign price=0.00>
-        <#assign postprice=0.00>
         <#if postPrice??>
-            <#assign postprice=postPrice>
-            <#assign price=totalPrice+postPrice>
+             $("#post_price").val(${postPrice})
         <#else>
-            <#assign price=totalPrice>
+            $("#post_price").val('0');
         </#if>
-       $("#postprice").html(${postprice?string('0.00')})
-       $("#totalPrice").html(${price?string('0.00')}) 
+     subPrice();
   }) 
   
   $("#delive_u").click(function(){
-        <#assign price=0.00>
-        <#assign postprice=0.00>
-        <#assign price=totalPrice>
-       
-       $("#postprice").html(${postprice?string('0.00')})
-       $("#totalPrice").html(${price?string('0.00')}) 
+       $("#post_price").val('0');
+      subPrice();
   })  
   
 })
+
+function checkNumber(){
+   var registerSharePoints = ${site.registerSharePoints?c!'1'}; // 兑换比
+   var totalPoints = ${user.totalPoints?c!'0'}; // 可使用积分
+   var pointUse = parseFloat($("#pointUse").val());
+   var goodsPrice = ${totalPrice?string('0.00')};
+   var totalUse = registerSharePoints*goodsPrice;
+
+    if (pointUse==''|| pointUse=='0' || isNaN(pointUse)) 
+    {
+        $("#pointUse").val(0);
+        $("#totalUse").val(0);
+        subPrice();
+        return ;
+    }
+
+   if (pointUse > totalPoints){
+        alert("积分不足")
+        $("#pointUse").val(0);
+        $("#totalUse").val(0);
+        subPrice();
+        return ;
+   }
+   if(pointUse > totalUse){
+        alert("最多可使用"+totalUse+"积分")
+        $("#pointUse").val(0);
+        $("#totalUse").val(0);
+        subPrice();
+        return ;
+   }
+   $("#totalUse").val(pointUse/registerSharePoints);
+   subPrice();
+}
+    
+function subPrice(){
+    var postPrice = parseFloat($("#post_price").val());
+    var totalUse = parseFloat($("#totalUse").val());
+    var totalPrice = parseFloat(${totalPrice})
+    
+    $("#postprice").html(postPrice.toFixed(2))
+    $("#pointprice").html(totalUse.toFixed(2))
+    $("#totalPrice").html((totalPrice+postPrice-totalUse).toFixed(2));
+}
 </script>
 </head>
 
@@ -83,7 +118,144 @@ $(document).ready(function(){
 
     <!--  顶部  -->
     <#include "/client/common_header.ftl" />
+   <style type="text/css">
+        .win_out{
+    position:fixed;
+    overflow: hidden;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 999999999999999999;
+    background: url(/client/images/win_outbd.png);
+}
+.win_out dl{
+    background: #39BEE9;
+    margin: auto;
+    width: 450px;
+    height:140px;
+    border-radius: 10px;
+    margin-top: 260px;
+}
+.win_out dt{
+    float: left;
+    width: 100%;
+}
+.win_out dt span{
+    float: left;
+    width: 50%;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    color: #333333;
+}
+.win_out dd{
+    float: left;
+    width: 90%;
+    padding:0 5%;
+}
+.win_out dd input{
+    float: left;
+    width: 70%;
+    padding-left: 6%;
+    height: 30px;
+    border: #DDDDDD 1px solid;
+  //  color: #999999;
+    font-size: 16px;
+}
+.win_out dd div{
+    overflow: hidden;
+    margin-top: 20px;
+}
+.win_out dd label{
+    display: block;
+    float: left;
+    width: 90px;
+    line-height: 32px;
+    text-align: center;
+}
+.win_out dd .btn{
+    width: 60px;
+    background: #f79100;
+    color: white;
+    font-size: 18px;
+    border-bottom: none;
+    outline: none;
+    height: 40px;
+}
+.win_out dd span{
+    width: 60px;
+    background: #f79100;
+    color: white;
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    height: 30px;
+    line-height:30px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+.win_out dd .submit{
+    width: 60px;
+    background: #f79100;
+    color: white;
+    font-size: 18px;
+    display: block;
+    text-align: center;
+    height: 30px;
+    line-height:30px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border:none;
+    padding:0px;
+}
+    </style>
+<script src="/client/js/Rich_Lee.js"></script>
+<script type="text/javascript">
+function win_show(){
+    var oUt = rich('.win_out')[0];
+    oUt.style.display = 'block';
+};
+
+function win_hide(){
+    var oUt = rich('.win_out')[0];
+    $("#payPwd").val('');
+    oUt.style.display = 'none';
+};
+ 
+function checkPassword(){
+     var paypwd=$("#payPwd").val();
+      $.ajax({
+            url : "/order/check/password",
+            type : 'post',
+            data : {"paypwd" : paypwd},
+            success : function(data){
+                if(data.code == 0){
+                    alert(data.msg);
+                    return;
+                }else{
+                    $("#form1").submit();
+                }
+           }
+     })
+} 
     
+</script>
+  <div class="win_out" style="display: none;">
+        <dl>    
+            <dt>
+
+            </dt>
+            <dd>
+                <div>
+                    <label>支付密码：</label>
+                    <input class="text" id="payPwd" type="password" name="payPassword"  value="" />
+                </div>
+                <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="button" name="password" onclick="checkPassword();" value="确定"  />
+                <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+            </dd>
+        </dl>
+    </div> 
 <div class="clear20"></div>
 
 <div class="main">
@@ -181,6 +353,7 @@ $(document).ready(function(){
             </select>
             </#if>
         </div>
+        <input type="hidden" value="<#if postPrice??>${postPrice?string('0.00')}<#else>0</#if>" id="post_price">
     </div>
     <!-- 配送方式 END -->      
       
@@ -190,7 +363,7 @@ $(document).ready(function(){
     <section class="paybox">
         <h3>选择支付方式</h3>
         <div class="pay_balance">
-            <input type="radio" datatype="n" value="0" name="payTypeId" nullmsg="请选择支付方式!"/>余额支付
+            <input type="radio" datatype="n" value="0" onclick="showPwdBtn()" checked="checked" name="payTypeId" nullmsg="请选择支付方式!"/>余额支付
             <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
           </div>
 
@@ -199,26 +372,39 @@ $(document).ready(function(){
               <ul>
               <#if pay_type_list_third??>
                 <#list pay_type_list_third as pay_type>
-                <li><input type="radio" value="${pay_type.id?c}" name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="${pay_type.coverImageUri!''}" width="148px"></li>
+                <li><input type="radio" value="${pay_type.id?c}" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="${pay_type.coverImageUri!''}" width="148px"></li>
                 </#list>
             </#if>
               </ul>
               <div class="clear"></div>
            </div>
-        <#--
-        <#if pay_type_list_third??>
-           <#list pay_type_list_third as pay_type>
-               <div class="pay_style">
-                    <input type="radio" name="payTypeId" value="${pay_type.id?c}" datatype="n"/>
-                     <span><img src="${pay_type.coverImageUri}" width="148" /></span>
-               </div>
-            </#list>
-        </#if>
-        <div class="clear"></div>
-        -->
     </section>
+     <script>
+       function showPwdBtn(){
+            $("#btn_sub").css("display","none");
+            $("#btn_show").css("display","block");
+       }
+     function showSub(){
+            $("#btn_sub").css("display","block");
+            $("#btn_show").css("display","none");
+       }
+     
+  
+    </script>
     <div class="clear h20"></div>
     <div class="clear h20"></div>
+    
+     <!-- add 积分抵扣 -->
+    <div class="use_integral">
+      <p class="fl fs18">积分抵扣</p>
+      <input type="text" class="text" name="pointUse"  value="0"  onblur="checkNumber()" onfocus="if(value==''||value=='0') {value='0'}" onkeyup="value=value.replace(/[^0-9]/g,'')" id="pointUse"/>
+      <input type="hidden" value="${site.registerSharePoints?c!'1'}" id="points">
+      <input type="hidden" value="${user.totalPoints?c!'0'}" id="totalPoints">
+      <input type="hidden" value="0" id="totalUse">
+      <p class="notice">可使用积分总额：${user.totalPoints!'0'}&nbsp;&nbsp;&nbsp;&nbsp;<span>*</span>${site.registerSharePoints!'1'}积分可抵消1元</p>
+    </div>
+   
+    <!-- add -->
     <div class="clear h20"></div>
     
     <h3 class="car_tit">给商家留言：</h3>
@@ -236,15 +422,18 @@ $(document).ready(function(){
         <#assign price=totalPrice>
     </#if>
     
-    
     <div class="car_btn">
         <a class="ml20 fc" href="javascript:history.go(-1);">返回上一页</a>
-       <#-- <span>&emsp;&emsp;&emsp;商品总额：<b class="red fs18">￥${totalPrice?string('0.00')}</b>
-                &emsp; &emsp;&emsp;&emsp;&emsp;应付总额：<b class="red fs18">￥${price?string('0.00')}</b></span>-->
-         <span>&emsp;&emsp;&emsp;商品总额：￥<b class="red fs18" id="goodsPrice">${totalPrice?string('0.00')}</b>&emsp;<b>＋</b>
-                &emsp; 邮费：￥<b class="red fs18" id="postprice"><#if postprice??>${postprice?string('0.00')}</#if></b>&emsp;&emsp;<b>＝</b>&emsp;&emsp;
+         <span>&emsp;&emsp;&emsp;商品总额：￥<b class="red fs18" id="goodsPrice">${totalPrice?string('0.00')}</b>&nbsp;<b>＋</b>
+                &nbsp; 邮费：￥<b class="red fs18" id="postprice"><#if postprice??>${postprice?string('0.00')}</#if></b>&nbsp;
+                <b>-</b>
+                &nbsp; 积分抵消：￥<b class="red fs18" id="pointprice">0.00</b>
+                <b>＝</b>
+                &emsp;&emsp;
                 应付总额：￥<b class="red fs18" id="totalPrice">${price?string('0.00')}</b></span>
-        <input class="sub" type="submit" value="提交订单" />
+                
+        <input class="sub" type="submit" id="btn_sub" value="提交订单" style="display:none;"/>
+        <input class="sub" type="button" id="btn_show" onclick="win_show()"  value="提交订单" />
     </div>
     <div class="clear"></div> 
     </form>

@@ -2273,6 +2273,9 @@ public class TdGoodsService {
         	{
         		for (TdDistributorGoods tdDistributorGoods : disGoodslist) {
 					tdDistributorGoods.setCoverImageUri(e.getCoverImageUri());
+					tdDistributorGoods.setGoodsTitle(e.getTitle());
+					tdDistributorGoods.setCategoryId(e.getCategoryId());
+					tdDistributorGoods.setCategoryIdTree(e.getCategoryIdTree());
 				}
         	}
         	// 同步更新超市商品封面
@@ -2282,6 +2285,9 @@ public class TdGoodsService {
         	if(null != proGoodslist && proGoodslist.size()> 0){
         		for (TdProviderGoods tdProviderGoods : proGoodslist) {
 					tdProviderGoods.setGoodsCoverImageUri(e.getCoverImageUri());
+					tdProviderGoods.setGoodsTitle(e.getTitle());
+					tdProviderGoods.setCategoryId(e.getCategoryId());
+					tdProviderGoods.setCategoryIdTree(e.getCategoryIdTree());
 				}
         	}
         	// 同步更新批发、分销商品封面图片

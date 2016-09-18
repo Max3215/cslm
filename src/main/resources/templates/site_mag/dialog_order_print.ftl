@@ -37,13 +37,37 @@
 </div>
     <div id="content">
         <table width="800" border="0" align="center" cellpadding="3" cellspacing="0" style="font-size: 12px; font-family: '微软雅黑'; background: #fff;">
-            <tbody><tr>
+            <tbody>
+            <tr>
                 <td width="346" height="50" style="font-size: 20px;">
                     商品订单</td>
-                <td width="216">订单号：${order.orderNumber!''}<br>
-                    日&nbsp;&nbsp; 期：${order.orderTime?string("yyyy-MM-dd")}</td>
-                <td width="220">操&nbsp;作&nbsp;人：管理员<br>
+                <td width="216">操&nbsp;作&nbsp;人：管理员</td>
+                <td width="220">
                     打印时间：${now?string("yyyy-MM-dd HH:mm:ss")}</td>
+            </tr>
+            <tr>
+                <td width="346">
+                   订单号：${order.orderNumber!''}</td>
+                <td width="216">
+                    状&nbsp;&nbsp; 态：<#if order.statusId??>
+                        <#if 1==order.statusId>
+                           待确认订单
+                        <#elseif 2==order.statusId>
+                            待付款订单
+                        <#elseif 3==order.statusId>
+                            待发货订单
+                        <#elseif 4==order.statusId>
+                            待收货订单
+                        <#elseif 5==order.statusId>
+                            待评价订单
+                        <#elseif 6==order.statusId>
+                            已完成订单
+                        <#elseif 7==order.statusId>
+                            已取消订单
+                        </#if>
+                    </#if></td>
+                <td width="220">
+                    下单时间：${order.orderTime?string("yyyy-MM-dd HH:mm:ss")}</td>
             </tr>
             <tr>
                 <td colspan="3" style="padding: 10px 0; border-top: 1px solid #000;">
@@ -115,12 +139,12 @@
                     <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" style="border-top: 1px solid #000; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
                         <tbody>
                             <tr>
-                            <td width="40%"></td>
-                            <td align="center">商品金额：￥${order.totalGoodsPrice?string("0.00")}
+                            <td width="20%"></td>
+                            <td align="right">商品金额：￥${order.totalGoodsPrice?string("0.00")}
                                  <#if order.postPrice??>  + 配送费：￥${order.postPrice?string("0.00")}</#if>
                               <#--      + 支付手续费：￥${order.payTypeFee?string("0.00")}
-                          -->      
-                                = 订单总额：${order.totalPrice?string("0.00")}
+                          -->   
+                                = 订单总额：${order.totalPrice?string("0.00")}（使用积分： <#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if>）
                                 </td>
                             </tr>
                     </tbody></table>

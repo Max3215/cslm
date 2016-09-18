@@ -32,23 +32,6 @@ $(document).ready(function(){
      alert("${msg!''}");
     </#if>
 
-
- // $(".address_list a").click(function(){
- //   $(this).addClass("act").siblings().removeClass("act");
- // })
-
-//  $(".dis_ways .choose").click(function(){
-//    $(this).addClass("act").siblings(".choose").removeClass("act");
-//  })
-
-//  $(".pay_ways .choose").click(function(){
-//    $(this).addClass("act").siblings(".choose").removeClass("act");
-//  })
-
- // $(".pay_ways menu a").click(function(){
- //   $(this).addClass("act").siblings().removeClass("act");
-//  })
-
 });
 </script>
 </head>
@@ -72,22 +55,28 @@ function selectDeliveryTyp(tag,type){
     $(tag).addClass("act").siblings(".choose").removeClass("act");
     $("#deliveryType").attr("value",type)
     
-    var postPrice = parseFloat($("#postPrice").val());
+    var postPrice = 0;
+    <#if postPrice??>
+        postPrice = ${postPrice};
+    </#if>
     var price = parseFloat($("#price").val());
     
     if(type==0)
     {
-        $("#totalPrice").html(price+postPrice);
+        //$("#totalPrice").html(price+postPrice);
+        $("#postPrice").val(postPrice);
     }else{
-        $("#totalPrice").html(price);
+        //$("#totalPrice").html(price);
+        $("#postPrice").val(0);
     }
+    subPrice();
 }
 </script>
 
     <div class="dis_ways down_ways">
     <p class="tit">配送方式<span></span></p>
     <menu class="down">
-       <input type="hidden" id="postPrice" value="<#if postPrice??>${postPrice}<#else>0</#if>">
+       <input type="hidden" id="postPrice" value="0">
         <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
       <a href="javascript:void(0)" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流
         <#if postPrice??><span style="font-size:0.15rem;line-height:0.58rem;">&nbsp;￥${postPrice?string("0.00")}</span></#if>
@@ -103,21 +92,14 @@ function selectDeliveryTyp(tag,type){
     </#if>
     </menu>
   </div>
-<#--
-  <div class="use_integral">
-    <span>积分抵扣</span>
-    <input type="text" class="text" />
-    <input type="submit" class="sub" value="抵扣" />
-    <div class="clear"></div>
-    <p>积分总额：45000&nbsp;&nbsp;&nbsp;&nbsp;100积分兑换1元</p>
-  </div>
--->
+
 <script type="text/javascript">
 function selectPayType(tag,type)
 {
     $(tag).addClass("act").siblings(".choose").removeClass("act");
     $(".pay_ways menu a").removeClass("act");
     $("#payTypeId").attr("value",type);
+    showPwdBtn();
 }
 
 function selectType(tag,type)
@@ -126,7 +108,17 @@ function selectType(tag,type)
      $("#server").addClass("act");
      $("#payTypeId").attr("value",type);
      $(tag).addClass("act").siblings().removeClass("act"); 
+     showSub();
 }
+
+function showPwdBtn(){
+        $("#btn_sub").css("display","none");
+        $("#btn_show").css("display","block");
+   }
+function showSub(){
+        $("#btn_sub").css("display","block");
+        $("#btn_show").css("display","none");
+   }
 </script>
     
     <div class="pay_ways down_ways">
@@ -149,8 +141,52 @@ $(".down_ways .tit").click(function(){
   $(this).toggleClass("on");
   $(this).next(".down").slideToggle(100);
 })
-</script>
 
+function checkNumber()
+{
+   var registerSharePoints = ${site.registerSharePoints?c!'1'}; // 兑换比
+   var totalPoints = ${user.totalPoints?c!'0'}; // 可使用积分
+   var pointUse = parseFloat($("#pointUse").val());
+   var goodsPrice = ${totalPrice?string('0.00')};
+   var totalUse = registerSharePoints*goodsPrice;
+
+    if (pointUse==''|| pointUse=='0' || isNaN(pointUse)) 
+    {
+        $("#pointUse").val(0);
+        return ;
+    }
+
+   if (pointUse > totalPoints){
+        alert("积分不足")
+        $("#pointUse").val(0);
+        return ;
+   }
+   if(pointUse > totalUse){
+        alert("最多可使用"+totalUse+"积分")
+        $("#pointUse").val(0);
+        return ;
+   }
+   $("#totalUse").val(pointUse/registerSharePoints);
+   subPrice();
+}
+
+function subPrice(){
+    var postPrice = parseFloat($("#postPrice").val());
+    var totalUse = parseFloat($("#totalUse").val());
+    var totalPrice = parseFloat(${totalPrice})
+    
+    $("#totalPrice").html((totalPrice+postPrice-totalUse).toFixed(2));
+}
+</script>
+    
+    <div class="use_integral">
+        <span>积分抵扣</span>
+        <input type="text" class="text" name="pointUse"  value="0"  onblur="checkNumber()" onfocus="if(value==''||value=='0') {value='0'}" onkeyup="value=value.replace(/[^0-9]/g,'')" id="pointUse"/>
+        <div class="clear"></div>
+        <input type="hidden" value="0" id="totalUse">
+        <p>可使用积分总额：${user.totalPoints!'0'}&nbsp;&nbsp;&nbsp;&nbsp;${site.registerSharePoints!'1'}积分兑换1元</p>
+     </div>
+    
   <div class="pay_massege"><textarea placeholder="给商家留言" name="userMessage"></textarea></div>
 
   <section class="order_list" style="margin-bottom:0.4rem;border:none;">
@@ -182,7 +218,8 @@ $(".down_ways .tit").click(function(){
   <section class="cart_foot">
     <input type="hidden" value="<#if totalPrice??>${totalPrice}</#if>" id="price">
     <p>总金额：￥<span id="totalPrice">${price?string('0.00')}</span>元</p>
-    <a href="javascript:;" id="btn_sub" class="btn">确定</a>
+    <a href="javascript:;" id="btn_show" onclick="showPwd();" class="btn">确定</a>
+    <a href="javascript:;" id="btn_sub" class="btn" style="display:none;">确定</a>
   </section>
   <!-- 购物车确认 END -->
 </form>
@@ -197,6 +234,42 @@ $(".down_ways .tit").click(function(){
       </menu>
   </section>
   <!-- 底部 END -->
+ <script>
+ function showPwd(){
+    $("#pwd_div").css("display","block");
+ }
+ function hidePwd(){
+    $("#payPwd").val('');
+    $("#pwd_div").css("display","none");
+ }
+ 
+ function checkPassword(){
+     var paypwd=$("#payPwd").val();
+      $.ajax({
+            url : "/order/check/password",
+            type : 'post',
+            data : {"paypwd" : paypwd},
+            success : function(data){
+                if(data.code == 0){
+                    alert(data.msg);
+                    return;
+                }else{
+                    $("#form1").submit();
+                }
+           }
+     })
+} 
+ </script> 
   
+  <aside class="pay_password" style="display:none;" id="pwd_div">
+    <div class="con">
+      <p class="tit">填写支付密码</p>
+      <input type="password" class="text" id="payPwd"/>
+      <menu class="btns">
+        <a href="javascript:;" onclick="checkPassword();">确定</a>
+        <a href="javascript:void(0)" onclick="hidePwd();">取消</a>
+      </menu>
+    </div>
+  </aside>
 </body>
 </html>

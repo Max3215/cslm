@@ -27,6 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -139,13 +140,13 @@ public class TdProviderController extends AbstractPaytypeController{
 		{
 			return "redirect:/login";
 		}
+		tdCommonService.setHeader(map, req);
 		TdProvider provider = tdProviderService.findByUsername(username);
 		if(null == provider)
 		{
-			return "error_404";
+			return "/client/error_404";
 		}
 		map.addAttribute("provider",provider);
-		tdCommonService.setHeader(map, req);
 		
 		map.addAttribute("total_undelivered", 
 				tdOrderService.countByShopIdAndTypeIdAndStatusId(provider.getId(), 1, 3));
@@ -286,6 +287,7 @@ public class TdProviderController extends AbstractPaytypeController{
 	public String orderDetail(Long id,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("provider");
+		tdCommonService.setHeader(map, req);
 		if(null == username)
 		{
 			return "redirect:/login";
@@ -294,30 +296,11 @@ public class TdProviderController extends AbstractPaytypeController{
 		{
 			return "/client/error_404";
 		}
-		tdCommonService.setHeader(map, req);
 		map.addAttribute("provider", tdProviderService.findByUsername(username));
 		map.addAttribute("order",tdOrderService.findOne(id));
 		return "/client/provider_order_detail";
 	}
-	
-//	@RequestMapping(value="/disOrder")
-//	public String disOrderDetail(Long id,HttpServletRequest req,ModelMap map)
-//	{
-//		String username = (String)req.getSession().getAttribute("provider");
-//		if(null == username)
-//		{
-//			return "redirect:/login";
-//		}
-//		if(null == id)
-//		{
-//			return "/client/error_404";
-//		}
-//		tdCommonService.setHeader(map, req);
-//		map.addAttribute("provider", tdProviderService.findByUsername(username));
-//		map.addAttribute("order",tdOrderService.findOne(id));
-//		return "/client/provider_disorder_detail";
-//	}
-	
+
 	
 	@RequestMapping(value="/order/param/edit")
 	@ResponseBody
@@ -584,28 +567,7 @@ public class TdProviderController extends AbstractPaytypeController{
 		
 		if(null ==categoryId || categoryId==0)
 		{
-//			if("isDistribution".equalsIgnoreCase(isDistribution))
-//			{
-//				if(null == keywords){
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),true, page, ClientConstant.pageSize));
-//				}else{
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, true, page, ClientConstant.pageSize));
-//				}
-//			}
-//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-//			{
-//				if(null == keywords){
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.findByProviderIdAndIsDistribution(provider.getId(),false, page, ClientConstant.pageSize));
-//				}else{
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.searchAndProviderIdAndIsDistribution(provider.getId(), keywords, false, page, ClientConstant.pageSize));
-//				}
-//			}
-//			else
-//			{
+
 				if(null == keywords || "".equals(keywords)){
 					if(null == dir || dir ==0){
 						map.addAttribute("provider_goods_page",
@@ -633,53 +595,31 @@ public class TdProviderController extends AbstractPaytypeController{
 		}
 		else
 		{
-//			if("isDistribution".equalsIgnoreCase(isDistribution))
-//			{
-//				if(null == keywords){
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, true, page, ClientConstant.pageSize));
-//				}else{
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, true, page, ClientConstant.pageSize));
-//				}
-//			}
-//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-//			{
-//				if(null == keywords){
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsDistribution(provider.getId(), categoryId, false, page, ClientConstant.pageSize));
-//				}else{
-//					map.addAttribute("provider_goods_page",
-//							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndIsDistribution(provider.getId(), keywords, categoryId, false, page, ClientConstant.pageSize));
-//				}
-//			}
-//			else
-//			{
-				if(null == keywords || "".equals(keywords)){
-					if(null == dir || dir == 0){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSale(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
-					}else if(1== dir){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
-					}else{
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
-					}
+//			
+			if(null == keywords || "".equals(keywords)){
+				if(null == dir || dir == 0){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSale(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+				}else if(1== dir){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
 				}else{
-					if(null == dir || 0 ==dir){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
-					}else if(1== dir){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
-					}else{
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
-					}
-					
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
 				}
-//			}
+			}else{
+				if(null == dir || 0 ==dir){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+				}else if(1== dir){
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+				}else{
+					map.addAttribute("provider_goods_page",
+							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+				}
+				
+			}
 		}
 		
 		return "/client/provider_goods";
@@ -696,6 +636,7 @@ public class TdProviderController extends AbstractPaytypeController{
 		{
 			return "redirect:/login";
 		}
+		tdCommonService.setHeader(map, req);
 		if(null == pgId)
 		{
 			return "/client/error_404";
@@ -779,6 +720,7 @@ public class TdProviderController extends AbstractPaytypeController{
 		{
 			return "redirect:/login";
 		}
+		tdCommonService.setHeader(map, req);
 		if(null == pgId)
 		{
 			return "/client/error_404";
@@ -842,10 +784,15 @@ public class TdProviderController extends AbstractPaytypeController{
 			page = 0;
 		}
 		
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
 		map.addAttribute("page", page);
 		map.addAttribute("categoryId",categoryId);
 		map.addAttribute("keywords",keywords);
 		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
+		
+		PageRequest pageRequest = new PageRequest(0, Integer.MAX_VALUE);
+		map.addAttribute("provider_list", tdProviderGoodsService.findAll(provider.getId(), categoryId, keywords, null, null, pageRequest));
 		
 		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
@@ -1146,6 +1093,7 @@ public class TdProviderController extends AbstractPaytypeController{
      */
     @RequestMapping(value="/order/sum")
     public String sumOrderGoods(String startTime,String endTime,
+    		Long statusId,
     		String eventTarget,HttpServletResponse resp,
     		HttpServletRequest req,ModelMap map) throws ParseException
     {
@@ -1161,6 +1109,10 @@ public class TdProviderController extends AbstractPaytypeController{
     	{
     		return "redirect:/login";
     	}
+    	if(null == statusId)
+		{
+			statusId = 0L;
+		}
     	
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date start = null;
@@ -1175,7 +1127,7 @@ public class TdProviderController extends AbstractPaytypeController{
 			end = sdf.parse(endTime);
 		}
 		
-		List<TdOrder> list = tdOrderService.searchOrderGoods(provider.getId(),null,1L,start, end);
+		List<TdOrder> list = tdOrderService.searchOrderGoods(provider.getId(),null,"pro",statusId,start, end);
 		List<TdCountSale> countList = tdOrderService.sumOrderGoods(provider.getId(),1L,list);
 		
 		String excelUrl=null;
@@ -1237,6 +1189,7 @@ public class TdProviderController extends AbstractPaytypeController{
 		map.addAttribute("saleList", countList);
 		map.addAttribute("startTime", start);
 		map.addAttribute("endTime", end);
+		map.addAttribute("status_id", statusId);
 		
 		return "/client/provider_sale";
     }
@@ -1368,7 +1321,8 @@ public class TdProviderController extends AbstractPaytypeController{
     
     @RequestMapping(value="/drwa2",method=RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> userDrwa(String card,Double price,String payPassword,
+    public Map<String,Object> userDrwa(String card,Double price,
+    		String payPassword,String bank,String name,
     			HttpServletRequest req){
     	Map<String,Object> res = new HashMap<>();
     	res.put("code", 0);
@@ -1381,6 +1335,11 @@ public class TdProviderController extends AbstractPaytypeController{
     	}
     	
     	TdProvider provider = tdProviderService.findByUsername(username);
+    	if(null == provider)
+		{
+			res.put("msg", "参数错误");
+			return res;
+    	}
     	
     	if(null == price)
     	{
@@ -1393,40 +1352,42 @@ public class TdProviderController extends AbstractPaytypeController{
     		return res;
     	}
     	
+    	if(null == provider.getVirtualMoney() || price > provider.getVirtualMoney()){
+    		res.put("msg", "账户余额不足");
+    		return res;
+    	}
+    	
     	if(null == payPassword || !payPassword.equalsIgnoreCase(provider.getPayPassword()))
     	{
     		res.put("msg", "密码错误");
     		return res;
     	}
     	
-    	if(null != provider)
-    	{
-    		Date current = new Date();
-        	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        	String curStr = sdf.format(current);
-        	Random random = new Random();
-        	
-    		
-    		TdCash cash = new TdCash();
-    		
-    		cash.setCard(card);
-    		cash.setPrice(price);
-    		cash.setCreateTime(new Date());
-    		cash.setCashNumber("PF"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
-    		cash.setShopTitle(provider.getTitle());
-    		cash.setUsername(username);
-    		cash.setShopType(2L);
-    		cash.setType(2L);
-    		cash.setStatus(1L);
-    		
-    		tdCashService.save(cash);
-    		res.put("msg", "提交成功");
-    		res.put("code", 1);
-    		return res;
-    	}
+		Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
     	
-    	res.put("msg", "参数错误");
-    	return res;
+		
+		TdCash cash = new TdCash();
+		
+		cash.setCard(card);
+		cash.setPrice(price);
+		cash.setBank(bank);
+		cash.setName(name);
+		cash.setCreateTime(new Date());
+		cash.setCashNumber("PF"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+		cash.setShopTitle(provider.getTitle());
+		cash.setUsername(username);
+		cash.setShopType(2L);
+		cash.setType(2L);
+		cash.setStatus(1L);
+		
+		tdCashService.save(cash);
+		res.put("msg", "提交成功");
+		res.put("code", 1);
+		return res;
+    	
     }
 	
 	@RequestMapping(value = "/edit/ImgUrl", method = RequestMethod.POST)

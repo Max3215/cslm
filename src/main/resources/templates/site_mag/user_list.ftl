@@ -83,6 +83,7 @@ var theForm = document.forms['form1'];
     <th width="12%">手机号</th>
     <th width="8%">最近登录</th>
     <th width="8%">积分</th>
+    <th width="8%">余额</th>
     <th width="6%">状态</th>
     <th width="6%">操作</th>
   </tr>
@@ -119,8 +120,8 @@ var theForm = document.forms['form1'];
                 <td align="center">${user.email!""}</td>
                 <td align="center">${user.mobile!""}</td>
                 <td align="center">${user.lastLoginTime!""}</td>
-                <td align="center">${user.totalPoints!""}                    
-                </td>
+                <td align="center">${user.totalPoints!""}</td>
+                <td align="center"><#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0.00</#if></td>
                 <td align="center"><#if user.statusId??><#if user.statusId==0>待审核<#elseif user.statusId==1>正常</#if></#if></td>
                 <td align="center">
                     <a href="/Verwalter/user/edit?id=${user.id?c}&roleId=${roleId!""}">修改</a> | 

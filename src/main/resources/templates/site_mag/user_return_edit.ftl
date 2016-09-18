@@ -94,10 +94,12 @@
     <dd>
       <div class="rule-multi-radio multi-radio">
         <span style="display: none;">
-            <input type="radio" name="statusId" value="1" <#if user_return?? && user_return.statusId?? && user_return.statusId==1>checked="checked"</#if>>
-            <label>已审核</label>
             <input type="radio" name="statusId" value="0" <#if !user_return?? || !user_return.statusId?? || user_return.statusId==0>checked="checked"</#if>>
             <label>待审核</label>
+            <input type="radio" name="statusId" value="1" <#if user_return?? && user_return.statusId?? && user_return.statusId==1>checked="checked"</#if>>
+            <label>同意</label>
+            <input type="radio" name="statusId" value="2" <#if user_return?? && user_return.statusId?? && user_return.statusId==2>checked="checked"</#if>>
+            <label>拒绝</label>
         </span>
       </div>
     </dd>

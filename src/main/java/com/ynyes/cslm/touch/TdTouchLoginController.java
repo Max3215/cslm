@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdUserService;
+import com.ynyes.cslm.util.CookieUtil;
 
 @Controller
 public class TdTouchLoginController {
@@ -87,7 +90,7 @@ public class TdTouchLoginController {
 	    public Map<String, Object> login(String username, 
 	                String password, 
 	                String code, 
-	                HttpServletRequest request) {
+	                HttpServletRequest request,HttpServletResponse response) {
 	        Map<String, Object> res = new HashMap<String, Object>();
 	        String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
 	        
@@ -126,6 +129,7 @@ public class TdTouchLoginController {
 	            
 	            request.getSession().setAttribute("username", username);
 	            request.getSession().setAttribute("usermobile", user.getMobile());
+	            CookieUtil.saveCookie(user, response);
 	            res.put("code", 0);
 	            return res;
 	        }
@@ -150,6 +154,13 @@ public class TdTouchLoginController {
 	             
 	            request.getSession().setAttribute("username", user.getUsername());
 	            request.getSession().setAttribute("usermobile", user.getMobile());
+	            
+//	            Cookie cookie = new Cookie("username", user.getUsername()); 
+////	            URLEncoder.encode("cookie的value值","utf-8");
+//	            cookie.setMaxAge(60*60*24*10);
+//	            response.addCookie(cookie);
+	            CookieUtil.saveCookie(user, response);
+	            
 	            res.put("code", 0);
 	            return res;
 			}else{
@@ -210,8 +221,8 @@ public class TdTouchLoginController {
 	     * @return 返回手机端主页
 	     */
 	    @RequestMapping("/touch/logout")
-		public String logOut(HttpServletRequest request) {
-//			request.getSession().invalidate();	
+		public String logOut(HttpServletRequest request,HttpServletResponse response) {
+	    	CookieUtil.clearCookie(response);
 	    	request.getSession().removeAttribute("username");
 			return "redirect:/touch";
 		}

@@ -230,13 +230,14 @@ function confirmCopy(id)
             <h1><span><a href="/Verwalter/goods/edit?cid=${cid!""}&mid=${mid!""}&id=${content.id?c}&__VIEWSTATE=${__VIEWSTATE!""}">${content.title!""}</a></span></h1>
             <div class="remark">${content.subTitle!""}</div>
             <div class="tools">
-                
+                <#if tdManagerRole?? && tdManagerRole.id != 4>
                 <a title="上架/下架" class="hot <#if content.isOnSale?? && content.isOnSale>selected</#if>" href="javascript:__doPostBack('btnOnSale','${content.id?c}')"></a>
-                <a title="改价" class="change" href="javascript:showDialogChangePrice('${content.id?c}')"></a>
-                <a title="改价记录" class="record" href="javascript:showDialogPriceLog('${content.id?c}')"></a>
+                </#if>
                 <input name="listSortId" type="text" value="${content.sortId!""}" class="sort" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)));">
               
               <#--
+                <a title="改价" class="change" href="javascript:showDialogChangePrice('${content.id?c}')"></a>
+                <a title="改价记录" class="record" href="javascript:showDialogPriceLog('${content.id?c}')"></a>
               <a title="设置评论" class="msg selected" href="javascript:__doPostBack('rptList2$ctl01$lbtnIsMsg','')"></a>
               <a title="设置置顶" class="top" href="javascript:__doPostBack('rptList2$ctl01$lbtnIsTop','')"></a>
               <a title="设置推荐" class="red" href="javascript:__doPostBack('rptList2$ctl01$lbtnIsRed','')"></a>

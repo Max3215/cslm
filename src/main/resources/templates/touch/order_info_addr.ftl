@@ -17,8 +17,8 @@
           <a href="/touch/user/address/update?id=${address.id?c}&type=order"></a>
           <a href="/touch/user/address/delete?id=${address.id?c}&type=order"></a>
         </div>
-        <p class="name">段华昌&nbsp;&nbsp;&nbsp;&nbsp;18787015223</p>
-        <p class="add">云南省昆明市西山区人民西路121号云南省昆明市西山区人民西路121号</p>
+        <p class="name">${address.receiverName!''}&nbsp;&nbsp;&nbsp;&nbsp;${address.receiverMobile!''}</p>
+        <p class="add">${address.province!''}${address.city!''}${address.disctrict!''}${address.detailAddress!''}</p>
     </section>
 </#list>
 </#if>

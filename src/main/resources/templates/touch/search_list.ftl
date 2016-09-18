@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if productCategory??>${productCategory.title!''}-</#if>超市联盟</title>
+<title><#if productCategory??>${productCategory.title!''}-</#if>联超商城</title>
 <meta name="keywords" content="<#if productCategory??>${productCategory.seoKeywords!''}</#if>" />
 <meta name="description" content="<#if productCategory??>${productCategory.seoDescription!''}</#if>" />
 <meta name="copyright" content="<#if site??>${site.copyright!''}</#if>" /> 
@@ -101,7 +101,7 @@ $(document).ready(function(){
     line-height:40px;
     height:40px;
     margin:20px auto 30px;}
-</sctyle>
+</style>
   <!-- 底部 -->
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">

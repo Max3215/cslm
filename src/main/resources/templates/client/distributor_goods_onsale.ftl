@@ -30,7 +30,8 @@ $(document).ready(function(){
             if(data.code==1)
             {
                  $('.sub_form').css('display','none');
-                 window.location.href="/distributor/goods/onsale"
+                // window.location.href="/distributor/goods/onsale"
+                window.location.reload();
             }
         }
     });
@@ -203,7 +204,23 @@ DD_belatedPNG.fix('.,img,background');
                         <td class="tb01">${goods.code!''}</td>
                         <td class="tb02"><p>￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span>/${goods.promotion!''}</p></td>
                         <td>
-                          <p><a onclick="editgoods(${goods.id?c});">编辑上架</a></p>
+                            <#assign isSale = false>
+                           <#if dis_goods_list??>
+                           <#list dis_goods_list.content as dg>
+                                <#if dg.goodsId == goods.id>
+                                    <#if dg.isDistribution?? && dg.isDistribution==true>
+                                        <p><a href="javascript:;" style="color: #75d2f0;">已代理</a></p>
+                                        <#assign isSale = true>
+                                    <#else>
+                                        <#assign isSale = true>
+                                        <p><a href="javascript:;" style="color: #ff5b7d;">已上架</a></p>
+                                    </#if>
+                               </#if> 
+                            </#list>
+                            </#if>
+                            <#if isSale == false>
+                            <p><a onclick="editgoods(${goods.id?c});">编辑上架</a></p>
+                            </#if>
                          </td>
                       </tr>
                 </#list>

@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.leftPad;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -23,11 +26,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
+import com.ynyes.cslm.service.TdCashService;
+import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -61,7 +68,11 @@ public class TdManagerProviderController {
     @Autowired
     TdPayRecordService tdPayRecordService;
     
+    @Autowired
+    TdDistributorGoodsService tdDistributorGoodsService;
     
+    @Autowired
+    TdCashService tdCashService;
     
     @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
     @ResponseBody
@@ -251,7 +262,8 @@ public class TdManagerProviderController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String curStr = sdf.format(current);
         Random random = new Random();
-    	
+    	String number = "CZ" + curStr + leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+        
     	TdPayRecord record = new TdPayRecord();
         record.setCont("平台充值");
         record.setCreateTime(new Date());
@@ -259,11 +271,46 @@ public class TdManagerProviderController {
         record.setProviderTitle(provider.getTitle());
         record.setStatusCode(1);
         record.setProvice(data);
-        record.setOrderNumber("CZ" + curStr
-                + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
+        record.setOrderNumber(number);
         
         tdPayRecordService.save(record);
     	
+     // 记录平台支出
+        record = new TdPayRecord();
+        record.setCont("手动给"+provider.getTitle()+"充值");
+        record.setCreateTime(new Date());
+        record.setDistributorTitle(provider.getTitle());
+        record.setOrderNumber(number);
+        record.setStatusCode(1);
+        record.setType(1L); // 类型 区分平台记录
+        
+        record.setProvice(data); // 订单总额
+        record.setPostPrice(0.0); // 邮费
+        record.setAliPrice(0.0);	// 第三方费
+        record.setServicePrice(0.0);	// 平台费
+        record.setTotalGoodsPrice(data); // 商品总价
+        // 
+        record.setRealPrice(data);
+        
+        tdPayRecordService.save(record);
+        
+     // 充值记录
+        TdCash cash = new TdCash();
+    	cash.setCashNumber("平台代充："+number);
+    	cash.setShopTitle(provider.getTitle());
+    	cash.setUsername(provider.getUsername());
+    	cash.setCreateTime(new Date());
+    	cash.setPrice(data); // 金额
+    	if (provider.getType() ==1) {
+    		cash.setShopType(2L); // 类型-批发商
+		}else {
+			cash.setShopType(3L); // 类型-分销商
+		}
+    	cash.setType(1L); // 类型-充值
+    	cash.setStatus(2L); // 状态 完成
+    	
+    	tdCashService.save(cash);
+        
         tdManagerLogService.addLog("add", "手动给"+provider.getTitle()+"充值"+data, req);
         
         res.put("code", 0);
@@ -311,7 +358,7 @@ public class TdManagerProviderController {
     @RequestMapping(value="/goods/list")
     public String goodsList(Integer page,Integer size,
             String distribution, String __EVENTTARGET,
-            String audit,Long providerId,
+            String onSale,Long providerId,
             String __EVENTARGUMENT, String __VIEWSTATE, String keywords,
             Long[] listId, Integer[] listChkId, Long[] listSortId,
             ModelMap map, HttpServletRequest req){
@@ -359,7 +406,7 @@ public class TdManagerProviderController {
         map.addAttribute("provider_list", tdProviderService.findAll());
        
         Boolean isDistribution = null;
-        Boolean isAudit = null;
+        Boolean isOnSale = null;
         
         if("isDistribution".equalsIgnoreCase(distribution)) // 分销
 		{
@@ -369,17 +416,17 @@ public class TdManagerProviderController {
 		{
 			isDistribution = false;
 		}
-        if("isAudit".equalsIgnoreCase(audit))	// 已审核
+        if("isOnSale".equalsIgnoreCase(onSale))	// 已审核
 		{
-        	isAudit = true;
+        	isOnSale = true;
 		}
-        else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
+        else if("isNotOnSale".equalsIgnoreCase(onSale)) // 未审核
 		{
-        	isAudit = false;
+        	isOnSale = false;
 		}
         
-        PageRequest pageRequest = new PageRequest(page, size);
-        map.addAttribute("content_page", tdProviderGoodsService.findAll(providerId, null, keywords, isDistribution, isAudit, pageRequest));
+        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+        map.addAttribute("content_page", tdProviderGoodsService.findAll(providerId, null, keywords, isDistribution, isOnSale, pageRequest));
         
         // 参数注回
         map.addAttribute("page", page);
@@ -389,7 +436,7 @@ public class TdManagerProviderController {
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         map.addAttribute("providerId", providerId);
-        map.addAttribute("audit", audit);
+        map.addAttribute("onSale", onSale);
         map.addAttribute("distribution", distribution);
         
     	return "/site_mag/provider_goods_list";
@@ -427,6 +474,36 @@ public class TdManagerProviderController {
             return "redirect:/Verwalter/login";
         }
         tdProviderGoodsService.save(tdProviderGoods);
+        
+        TdProvider provider = tdProviderService.findOne(tdProviderGoods.getProId());
+        if(null != provider){
+        	List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),tdProviderGoods.getGoodsId());
+        	
+        	if(null != tdProviderGoods.getIsDistribution() &&  tdProviderGoods.getIsDistribution() ==true){
+        		if(null != list && list.size() >0){
+        			for (TdDistributorGoods tdDistributorGoods : list) {
+        				if(null != tdDistributorGoods)
+        				{
+        					tdDistributorGoods.setGoodsPrice(tdProviderGoods.getOutFactoryPrice());
+        					tdDistributorGoods.setSubGoodsTitle(tdProviderGoods.getSubGoodsTitle());
+        					tdDistributorGoods.setLeftNumber(tdProviderGoods.getLeftNumber());
+        					tdDistributorGoods.setUnit(tdProviderGoods.getUnit());
+        					tdDistributorGoods.setGoodsMarketPrice(tdProviderGoods.getGoodsMarketPrice());
+        					
+        					tdDistributorGoodsService.save(tdDistributorGoods);
+        				}
+        			}
+        		}
+        		
+        	}else if(null != tdProviderGoods.getIsDistribution() &&  tdProviderGoods.getIsDistribution() ==false){
+        		// 取消分销后 超市商品库删除分销商品
+        		if(null != list && list.size() >0){
+        			for (TdDistributorGoods tdDistributorGoods : list) {
+        				tdDistributorGoodsService.delete(tdDistributorGoods);
+        			}
+        		}
+        	}
+        }
         
         tdManagerLogService.addLog("edit", "用户修改"+tdProviderGoods.getProviderTitle()+"商品："+tdProviderGoods.getGoodsTitle(), req);
         

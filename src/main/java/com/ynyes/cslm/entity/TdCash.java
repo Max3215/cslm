@@ -50,6 +50,14 @@ public class TdCash {
 	@Column
 	private String card;
 	
+	// 银行名称
+	@Column
+	private String bank;
+	
+	// 姓名
+	@Column
+	private String name;
+	
 	// 会员类型 1-超市  2-批发商  3-分销商  4-会员
 	@Column
 	private Long shopType;
@@ -116,6 +124,22 @@ public class TdCash {
 
 	public void setCard(String card) {
 		this.card = card;
+	}
+	
+	public String getBank() {
+		return bank;
+	}
+
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getShopType() {

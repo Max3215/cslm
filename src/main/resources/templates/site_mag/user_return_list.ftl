@@ -56,7 +56,8 @@ var theForm = document.forms['form1'];
         <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)" style="display: none;">
             <option <#if !statusId??>selected="selected"</#if> value="">所有状态</option>
             <option <#if statusId?? && statusId==0>selected="selected"</#if> value="0">待审核</option>
-            <option <#if statusId?? && statusId==1>selected="selected"</#if> value="1">已审核</option>
+            <option <#if statusId?? && statusId==1>selected="selected"</#if> value="1">已批准</option>
+            <option <#if statusId?? && statusId==2>selected="selected"</#if> value="2">未通过</option>
         </select>
         </div>
       </div>
@@ -107,11 +108,7 @@ var theForm = document.forms['form1'];
                 <td align="center">${return.reason!""}</td>
                 <td align="center">${return.returnTime!""}</td>
                 <td align="center">
-                    <#if return.statusId?? && return.statusId==0>
-                        待审核
-                    <#elseif return.statusId?? && return.statusId==1>
-                        已审核
-                    </#if>
+                    <#if return.statusId==0>待审核<#elseif return.statusId=1>已批准<#else>未通过</#if>
                 </td>
                 <td align="center">
                     <a href="/Verwalter/user/return/edit?id=${return.id?c}&statusId=${statusId!""}">配置</a>

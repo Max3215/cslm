@@ -130,10 +130,10 @@ function __doPostBack(eventTarget, eventArgument) {
             </select>
         </div>
         <div class="rule-single-select">
-            <select name="audit" onchange="javascript:setTimeout(__doPostBack('audit',''), 0)">
-                <option value="">审核状态</option>
-                <option value="isAudit" <#if audit?? && audit=="isAudit">selected="selected"</#if>>批发中</option>
-                <option value="isNotAudit" <#if audit?? && audit=="isNotAudit">selected="selected"</#if>>待审核</option>
+            <select name="onSale" onchange="javascript:setTimeout(__doPostBack('onSale',''), 0)">
+                <option value="">批发状态</option>
+                <option value="isOnSale" <#if onSale?? && onSale=="isOnSale">selected="selected"</#if>>批发中</option>
+                <option value="isNotOnSale" <#if onSale?? && onSale=="isNotOnSale">selected="selected"</#if>>未批发</option>
             </select>
         </div>
         <div class="rule-single-select">
@@ -143,15 +143,6 @@ function __doPostBack(eventTarget, eventArgument) {
                 <option value="isNotDistribution" <#if distribution?? && distribution=="isNotDistribution">selected="selected"</#if>>未分销</option>
             </select>
         </div>
-        <!--
-        <div class="rule-single-select">
-            <select name="saleType" onchange="javascript:setTimeout(__doPostBack('saleType',''), 0)">
-                <option value="">所有</option>
-                <option value="flashSale" <#if saleType?? && saleType=="flashSale">selected="selected"</#if>>抢拍</option>
-                <option value="groupSale" <#if saleType?? && saleType=="groupSale">selected="selected"</#if>>团购</option>
-            </select>
-        </div>
-        -->
       </div>
     </div>
     <div class="r-list">

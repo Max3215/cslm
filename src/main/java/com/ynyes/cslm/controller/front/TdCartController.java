@@ -63,7 +63,7 @@ public class TdCartController {
      */
     @RequestMapping(value = "/cart/init")
     public String addCart(Long id, Long quantity, String zhid, Integer m,
-            HttpServletRequest req) {
+            HttpServletRequest req,ModelMap map) {
         // 是否已登录
         boolean isLoggedIn = true;
 
@@ -82,7 +82,7 @@ public class TdCartController {
     		req.getSession().setAttribute("distributorTitle", distributor.getTitle());
         }
         
-        
+        tdCommonService.setHeader(map, req);
         if(null == distributor)
         {
         	return "/client/error_404";

@@ -1183,3 +1183,21 @@ menu.leftpart a { display:inline-block; white-space:nowrap; font-size:12px; marg
 .login_dl {width: 100%; background: #fefefe; padding-top: 30px; border: 1px solid #d5dbdb; }
 
 .login_dl i {position: absolute; left: 80px; top: -10px; }
+
+
+
+/*积分抵扣*/
+.use_integral{overflow: hidden;height: 44px;line-height: 44px;padding:20px 0;}
+.use_integral .text{display: block;width: 428px;height: 42px;background: #ededed;border:1px solid #dddddd;float:left;margin-left: 20px;text-indent: 14px;}
+.use_integral .notice{float:left;margin-left: 30px;color:#999;}
+.use_integral .notice span{color:#ff5a7c;}
+
+
+
+
+
+
+
+
+
+

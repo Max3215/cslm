@@ -13,7 +13,42 @@
 <title>404</title>
 
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
+<link href="/client/css/main.css" rel="stylesheet" type="text/css">
 
+<script src="/client/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/client/js/common.js"></script>
+<script src="/client/js/jquery.cityselect.js"></script>
+<script src="/client/js/jquery.diysiteselect.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#add").citySelect({
+    nodata:"none",
+    prov: "云南",
+    required:false
+    });
+
+
+    $(".click_a").click(function(){
+        if($(this).next().is(":visible")==false){
+            $(this).next().slideDown(300);
+        }else{
+            $(this).next().slideUp(300);
+        }
+    });//选择超市下拉效果
+
+    navDownList("nav_down","li",".nav_show");
+    menuDownList("mainnavdown","#nav_down",".a2","sel");
+ //   bannerCartoon("n_banner_box","a","n_banner_num",300,5000,"","");
+
+    $(".float_box .ewm").hover(function(){
+        $(this).next().show();
+    },function(){
+        $(this).next().hide();
+    })
+})
+
+
+</script>
 <style type="text/css">
 	.error_box{background: #38bfe9;height: 500px;}
 	.error_box .con{padding-left: 580px;color:#fff;height: 500px;background: url(/client/images/error.png) no-repeat 302px center;}
@@ -28,7 +63,7 @@
 </head>
 
 <body>
-	
+	<#include "/client/common_header.ftl" />
 	<div class="error_box">
 		<div class="main">
 			<div class="con">
@@ -41,6 +76,6 @@
 			</div>
 		</div>
 	</div>
-
+ <#include "/client/common_footer.ftl" />
 </body>
 </html>

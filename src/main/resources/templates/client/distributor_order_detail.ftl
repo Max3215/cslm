@@ -239,8 +239,10 @@ DD_belatedPNG.fix('.,img,background');
                 <th>支付明细</th>
                 <td>
                     支付总额：<font color="#ff1000">￥<#if order??>${order.totalPrice?string("0.00")}</#if></font>
-                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     运费：<font color="#ff1000">￥<#if order.postPrice??>${order.postPrice?string("0.00")}<#else>0</#if></font>
+                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                    使用积分：<font color="#ff1000"><#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if></font>
                 </td>
             </tr>
             <tr>

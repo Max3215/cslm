@@ -27,7 +27,9 @@
                 <a href="/supply/disOrder/list">我的分销单</a>
                 <a href="/supply/goods/list/1">分销中商品</a>
                 <a href="/supply/goods/list/0">仓库中商品</a>
+                <#--
                 <a href="/supply/goods/audit">待审核商品</a>
+                -->
                 <a href="/supply/goods/distribution">选择分销商品</a>
                 <a href="/supply/order/sum">销售统计</a>
               </div>

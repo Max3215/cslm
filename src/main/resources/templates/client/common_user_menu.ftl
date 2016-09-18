@@ -1,5 +1,5 @@
  <div class="mymember_head">
-        <h2><a href="/">超市联盟</a></h2>
+        <h2><a href="/">联超商城</a></h2>
         <div class="mymember_head_part">
             <a class="a001" href="/user">
                 <#if user.realName??>${user.realName}<#elseif user.nickname??>${user.nickname}<#else>${user.username}</#if>

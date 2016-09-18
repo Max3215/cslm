@@ -72,6 +72,7 @@ $(function () {
             <span class="Validform_checktip">*显示的广告数量</span>
         </dd>
     </dl>
+    <#--
     <dl>
         <dt>价格</dt>
         <dd>
@@ -79,6 +80,7 @@ $(function () {
             <span class="Validform_checktip">元/月</span>
         </dd>
     </dl>
+    -->
     <dl>
         <dt>宽度</dt>
         <dd>

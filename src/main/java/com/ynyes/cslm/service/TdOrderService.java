@@ -20,10 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 
 import com.ynyes.cslm.entity.TdCountSale;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdPayRecord;
+import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
+import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.repository.TdOrderRepo;
 import com.ynyes.cslm.util.Restrictions;
 import com.ynyes.cslm.util.Criteria;
@@ -49,6 +53,18 @@ public class TdOrderService {
     
     @Autowired
     TdCountSaleService tdCountSaleService;
+    
+    @Autowired
+    TdDistributorService tdDistributorService;
+    
+    @Autowired
+    TdProviderService tdProviderService;
+    
+    @Autowired
+    TdSettingService tdSettingService;
+    
+    @Autowired
+    TdPayRecordService tdPayRecordService;
     
     /**
      * 删除
@@ -198,9 +214,9 @@ public class TdOrderService {
         return repository.findByUsernameAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(username, statusId, time, keywords, pageRequest);
     }
     
-    public Long countByUsernameAndTypeIdAndStatusId(String username,long typeId, long statusId)
+    public Long countByUsernameAndTypeIdAndStatusId(String username, long statusId)
     {
-        return repository.countByUsernameAndTypeIdAndStatusId(username,typeId ,statusId);
+        return repository.countByUsernameAndStatusId(username,statusId);
     }
     
     /**
@@ -220,58 +236,6 @@ public class TdOrderService {
         
         return (List<TdOrder>) repository.save(entities);
     }
-    /**
-	 * @author lichong
-	 * @注释：
-	 */
-//    public Page<TdOrder> findByDiysitename(String diysitename, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleOrderByIdDesc(diysitename, pageRequest);
-//    }
-//    public Page<TdOrder> findByDiysitenameAndSearch(String diysitename, String keywords, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleAndOrderNumberContainingOrderByIdDesc(diysitename, keywords, pageRequest);
-//    }
-//    public Page<TdOrder> findByDiysitenameAndStatusIdAndSearch(String diysitename, long statusId, String keywords, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleAndStatusIdAndOrderNumberContainingOrderByIdDesc(diysitename, statusId, keywords, pageRequest);
-//    }
-//    public Page<TdOrder> findByDiysitenameAndStatusId(String diysitename, long statusId, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleAndStatusIdOrderByIdDesc(diysitename, statusId, pageRequest);
-//    }
-//    public Page<TdOrder> findByDiysitenameAndTimeAfter(String diysitename, Date time, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleAndOrderTimeAfterOrderByIdDesc(diysitename, time, pageRequest);
-//    }
-//    public Page<TdOrder> findByDiysitenameAndTimeAfterAndSearch(String diysitename, Date time, String keywords, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(diysitename, time, keywords, pageRequest);
-//    }
-//    public Page<TdOrder> findByDiysitenameAndStatusIdAndTimeAfterAndSearch(String diysitename, long statusId, Date time, String keywords, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(diysitename, statusId, time, keywords, pageRequest);
-//    }
-//    public Page<TdOrder> findByDiysitenameAndStatusIdAndTimeAfter(String diysitename, long statusId, Date time, int page, int size)
-//    {
-//        PageRequest pageRequest = new PageRequest(page, size);
-//        
-//        return repository.findByshopTitleAndStatusIdAndOrderTimeAfterOrderByIdDesc(diysitename, statusId, time, pageRequest);
-//    }
     
     /**
 	 * @author lc
@@ -609,7 +573,7 @@ public class TdOrderService {
     																						keywords, statusId, typeId, time, pageRequest);
     }
     
-    public List<TdOrder> searchOrderGoods(Long shopId,Long providerId, Long type, Date begin, Date end
+    public List<TdOrder> searchOrderGoods(Long shopId,Long providerId, String type,Long statusId, Date begin, Date end
     		//,int page,
 			//int size
     		) {
@@ -617,7 +581,7 @@ public class TdOrderService {
 		Criteria<TdOrder> c = new Criteria<>();
 		if(null != shopId)
 		{
-			c.add(Restrictions.eq("shopId", providerId, true));
+			c.add(Restrictions.eq("shopId", shopId, true));
 		}
 		if(null != providerId)
 		{
@@ -625,7 +589,16 @@ public class TdOrderService {
 		}
 		if(null != type)
 		{
-			c.add(Restrictions.eq("typeId", type, true));
+			if("dis".equals(type)){
+				c.add(Restrictions.or(Restrictions.eq("typeId", 0L, true),Restrictions.eq("typeId", 2L, true)));
+			}else if("pro".equals(type)){
+				Restrictions.eq("typeId", 1L, true);
+			}else if("supply".equals(type)){
+				Restrictions.eq("typeId", 2, true);
+			}
+		}
+		if(null != statusId && statusId != 0){
+			c.add(Restrictions.eq("statusId", statusId, true));
 		}
 		if (begin != null) {
 			c.add(Restrictions.gte("orderTime", begin, true));
@@ -715,7 +688,128 @@ public class TdOrderService {
     	
     }
     
-    
+    public void addVir(TdOrder tdOrder) {
+		Double price = 0.0; // 交易总金额
+		Double postPrice = 0.0; // 物流费
+		Double aliPrice = 0.0; // 第三方使用费
+		Double servicePrice = 0.0; // 平台服务费
+		Double totalGoodsPrice = 0.0; // 商品总额
+		Double realPrice = 0.0; // 商家实际收入
+		Double turnPrice = 0.0; // 分销单超市返利
+
+		price += tdOrder.getTotalPrice();
+		postPrice += tdOrder.getPostPrice();
+		aliPrice += tdOrder.getAliPrice();
+		servicePrice += tdOrder.getTrainService();
+		totalGoodsPrice += tdOrder.getTotalGoodsPrice();
+
+		// 添加商家余额及交易记录
+		if (0 == tdOrder.getTypeId()) {
+
+			TdDistributor distributor = tdDistributorService.findOne(tdOrder.getShopId());
+			if (null != distributor) {
+				// 超市普通销售单实际收入： 交易总额-第三方使用费-平台服务费=实际收入
+				realPrice += price - aliPrice - servicePrice;
+
+				distributor.setVirtualMoney(distributor.getVirtualMoney() + realPrice);
+				tdDistributorService.save(distributor);
+
+				TdPayRecord record = new TdPayRecord();
+				record.setCont("订单销售款");
+				record.setCreateTime(new Date());
+				record.setDistributorId(distributor.getId());
+				record.setDistributorTitle(distributor.getTitle());
+				record.setOrderId(tdOrder.getId());
+				record.setOrderNumber(tdOrder.getOrderNumber());
+				record.setStatusCode(1);
+				record.setProvice(price); // 交易总额
+				record.setTotalGoodsPrice(totalGoodsPrice); // 商品总额
+				record.setPostPrice(postPrice); // 邮费
+				record.setAliPrice(aliPrice); // 第三方使用费
+				record.setServicePrice(servicePrice); // 平台服务费
+				record.setRealPrice(realPrice); // 实际收入
+
+				tdPayRecordService.save(record);
+			}
+		} else if (2 == tdOrder.getTypeId()) {
+			TdDistributor distributor = tdDistributorService.findOne(tdOrder.getShopId());
+			TdProvider provider = tdProviderService.findOne(tdOrder.getProviderId());
+
+			turnPrice = tdOrder.getTotalLeftPrice();
+			if (null != distributor) {
+
+				distributor.setVirtualMoney(distributor.getVirtualMoney() + turnPrice); // 超市分销单收入为分销返利额
+				tdDistributorService.save(distributor);
+
+				TdPayRecord record = new TdPayRecord();
+				record.setCont("代售获利");
+				record.setCreateTime(new Date());
+				record.setDistributorId(distributor.getId());
+				record.setDistributorTitle(distributor.getTitle());
+				record.setOrderId(tdOrder.getId());
+				record.setOrderNumber(tdOrder.getOrderNumber());
+				record.setStatusCode(1);
+				record.setProvice(price); // 订单总额
+				record.setTurnPrice(turnPrice); // 超市返利
+				record.setRealPrice(turnPrice); // 超市实际收入
+				tdPayRecordService.save(record);
+			}
+			if (null != provider) {
+				// 分销商实际收入：商品总额-第三方使用费-邮费-超市返利-平台费
+				realPrice += price - aliPrice - postPrice - turnPrice - servicePrice;
+
+				provider.setVirtualMoney(provider.getVirtualMoney() + realPrice);
+
+				TdPayRecord record = new TdPayRecord();
+				record.setCont("分销收款");
+				record.setCreateTime(new Date());
+				record.setDistributorTitle(distributor.getTitle());
+				record.setProviderId(provider.getId());
+				record.setProviderTitle(provider.getTitle());
+				record.setOrderId(tdOrder.getId());
+				record.setOrderNumber(tdOrder.getOrderNumber());
+				record.setStatusCode(1);
+
+				record.setProvice(price); // 订单总额
+				record.setPostPrice(postPrice); // 邮费
+				record.setAliPrice(aliPrice); // 第三方费
+				record.setServicePrice(servicePrice); // 平台费
+				record.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
+				record.setTurnPrice(turnPrice); // 超市返利
+				record.setRealPrice(realPrice); // 实际获利
+				tdPayRecordService.save(record);
+			}
+		}
+
+		TdSetting setting = tdSettingService.findTopBy();
+		if (null != setting.getVirtualMoney()) {
+			setting.setVirtualMoney(setting.getVirtualMoney() + servicePrice + aliPrice);
+		} else {
+			setting.setVirtualMoney(servicePrice + aliPrice);
+		}
+		tdSettingService.save(setting); // 更新平台虚拟余额
+
+		// 记录平台收益
+		TdPayRecord record = new TdPayRecord();
+		record.setCont("商家销售抽取");
+		record.setCreateTime(new Date());
+		record.setDistributorTitle(tdOrder.getShopTitle());
+		record.setOrderId(tdOrder.getId());
+		record.setOrderNumber(tdOrder.getOrderNumber());
+		record.setStatusCode(1);
+		record.setType(1L); // 类型 区分平台记录
+
+		record.setProvice(price); // 订单总额
+		record.setPostPrice(postPrice); // 邮费
+		record.setAliPrice(aliPrice); // 第三方费
+		record.setServicePrice(servicePrice); // 平台费
+		record.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
+		record.setTurnPrice(turnPrice); // 超市返利
+		// 实际获利 =平台服务费+第三方费
+		record.setRealPrice(servicePrice + aliPrice);
+
+		tdPayRecordService.save(record);
+	}
     
     
     

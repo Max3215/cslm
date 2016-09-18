@@ -63,17 +63,16 @@ var theForm = document.forms['form1'];
         </select>
         </div>
       </div>
-      <#--
       <div class="menu-list">
         <div class="rule-single-select single-select">
         <select name="status" onchange="javascript:setTimeout(__doPostBack('status',''), 0)" style="display: none;">
             <option <#if !status??>selected="selected"</#if> value="">所有状态</option>
-            <option <#if status?? && status==1>selected="selected"</#if> value="1">未完成</option>
+            <option <#if status?? && status==1>selected="selected"</#if> value="1">新提交</option>
             <option <#if status?? && status==2>selected="selected"</#if> value="2">已完成</option>
+            <option <#if status?? && status==3>selected="selected"</#if> value="3">未通过</option>
         </select>
         </div>
       </div>
-      -->
       <div class="menu-list">
         <div class="rule-single-select single-select">
         <select name="type" onchange="javascript:setTimeout(__doPostBack('type',''), 0)" style="display: none;">
@@ -108,16 +107,17 @@ var theForm = document.forms['form1'];
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
   <tbody>
   <tr class="odd_bg">
-    <th >选择</th>
-    <th  width="16%">单号</th>
+    <th width="5%">选择</th>
+    <th  width="11%">单号</th>
     <th  width="10%">名称</th>
     <th  width="8%">账号</th>
     <th  width="12%">提交时间</th>
     <th width="8%">金额</th>
-    <th width="18%">卡号（仅提现）</th>
+    <th width="15%">卡号（仅提现）</th>
     <th width="8%">会员类型</th>
     <th width="9%">类型</th>
     <th width="7%">状态</th>
+    <th width="7%">操作</th>
   </tr>
 
     <#if cash_page??>
@@ -159,11 +159,14 @@ var theForm = document.forms['form1'];
                 </td>
                 <td align="center">
                     <#if cash.status?? && cash.status==1>
-                        未完成
+                        新提交
                     <#elseif cash.status?? && cash.status==2>
                         已完成
+                    <#else>
+                        未通过
                     </#if>
                 </td>
+                <td align="center"><a href="/Verwalter/setting/cash/edit?id=${cash.id?c}">详情</a></td>
             </tr>
         </#list>
     </#if>

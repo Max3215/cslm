@@ -159,6 +159,13 @@ public class TdDistributorService {
         return repository.findByTitleContainingOrderBySortIdAsc(keywords, pageRequest);
     }
     
+    public Page<TdDistributor> searchAllAndIsEnableTrueOrderBySortIdAsc(String keywords, int page, int size)
+    {
+        PageRequest pageRequest = new PageRequest(page, size);
+        
+        return repository.findByTitleContainingAndIsEnableTrueOrderBySortIdAsc(keywords, pageRequest);
+    }
+    
     /**
      * 保存
      * 

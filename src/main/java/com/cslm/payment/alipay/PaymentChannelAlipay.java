@@ -66,14 +66,16 @@ public class PaymentChannelAlipay implements PaymentChannel {
         String type = (String) request.getAttribute("type");
         if(null != type){
         	requestParameters.put(Constants.KEY_SERVICE, AlipayConfig.CREATE_MOBILE_SERVICE);
-        	requestParameters.put(Constants.KEY_SHOW_URL, "www.chinacslm.cc/touch");
+        	requestParameters.put(Constants.KEY_SHOW_URL, "http://www.chinacslm.cc/touch/");
         }else{
         	requestParameters.put(Constants.KEY_SERVICE, AlipayConfig.CREATE_TRADE_SERVICE);
         }
         
         requestParameters.put(Constants.KEY_PARTNER, AlipayConfig.PARTNER);
         requestParameters.put(Constants.KEY_CHARSET, AlipayConfig.CHARSET);
-        String serverPath = getServerPath(request);
+//        String serverPath = getServerPath(request);
+//        String serverPath =  "http://www.chinacslm.cc/";
+        String serverPath =  "http://116.55.233.141:8018/";
         requestParameters.put(Constants.KEY_NOTIFY_URL, serverPath + "order/pay/notify_alipay");
         requestParameters.put(Constants.KEY_RETURN_URL, serverPath + "order/pay/result_alipay");
        
@@ -141,7 +143,7 @@ public class PaymentChannelAlipay implements PaymentChannel {
 
         // 支付宝交易号
         String trade_no = null;
-
+        System.err.println("Max:支付宝异步通知");
         // 交易状态
         String trade_status = null;
         try {
@@ -175,8 +177,11 @@ public class PaymentChannelAlipay implements PaymentChannel {
                 				"AlipayNotify:{%s}支付宝订单已经生成,用户未付款!",
                 				orderNo));
                 	}else if (OrderStatus.WAIT_SEND_GOODS.equals(trade_status)) {
-                		paymentLogger.info(String.format("AlipayNotify:{%s}用户已经付款给支付宝,系统自动发货!",
-                				orderNo));
+                		paymentLogger.info(String.format("AlipayNotify:{%s}用户已经付款给支付宝,系统自动发货!",orderNo));
+                		
+                		// 充值完成
+                		tdCashService.afterCash(cash);
+                		
                 	}else if (OrderStatus.WAIT_ONFIRM_GOODS.equals(trade_status)) {
                 		paymentLogger.info(String.format("AlipayNotify:{%s}等待买家确认收货!", 
                 				orderNo));
@@ -186,6 +191,7 @@ public class PaymentChannelAlipay implements PaymentChannel {
                 	} else {
                 		paymentLogger.info(String.format("AlipayNotify:{%s}订单中途取消,支付失败S", orderNo));
                 		cash.setStatus(3L);
+                		tdCashService.save(cash);
                 	}
                 }else{
                 	TdOrder order = orderService.findByOrderNumber(orderNo);
@@ -214,7 +220,9 @@ public class PaymentChannelAlipay implements PaymentChannel {
                 		if(order != null && (order.getStatusId() == 2 || order.getStatusId() == 8)) {
                 			order.setStatusId(3l);
                 			order.setPayTime(new Date());
-                			orderService.save(order);
+                			order = orderService.save(order);
+                			orderService.addVir(order);
+                			
                 		}
                 		
                 		if(!payRecords.isEmpty()) {
@@ -261,7 +269,7 @@ public class PaymentChannelAlipay implements PaymentChannel {
                 		// 交易中途结束
                 		paymentLogger.info(String.format("AlipayNotify:{%s}订单中途取消,支付失败S", orderNo));
                 		if(order != null && (order.getStatusId() != 8)) {
-                			order.setStatusId(8l);
+                			order.setStatusId(7l);
                 			order.setCancelTime(new Date());
                 			orderService.save(order);
                 		}

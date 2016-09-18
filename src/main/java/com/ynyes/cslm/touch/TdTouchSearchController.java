@@ -16,6 +16,7 @@ import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
+import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdKeywordsService;
 import com.ynyes.cslm.service.TdProductCategoryService;
@@ -44,13 +45,16 @@ public class TdTouchSearchController {
 	    
 	    @Autowired
 	    private TdDistributorGoodsService tdDistributorGoodsService;
+	    
+	    @Autowired
+	    private TdDistributorService tdDistributorService;
 
 	    /**
 	     * 搜索
 	     * 
 	     */
 	    @RequestMapping(value = "/search", method = RequestMethod.GET)
-	    public String list(String keywords, Integer page, Integer st, Integer sd,
+	    public String list(String keywords,String type, Integer page, Integer st, Integer sd,
 	            HttpServletRequest req, ModelMap map) {
 	    	
             tdCommonService.setHeader(map, req);
@@ -69,6 +73,11 @@ public class TdTouchSearchController {
 	            sd = 0;
 	        }
 
+	        if(null != type && "店铺".equals(type)){
+	        	map.addAttribute("distributorList", tdDistributorService.searchAllAndIsEnableTrueOrderBySortIdAsc(keywords, page, ClientConstant.pageSize));
+	        	return "/touch/distributor_list";
+	        }
+	        
 	        if (null != keywords) {
 	            TdKeywords key = tdKeywordsService.findByTitle(keywords);
 

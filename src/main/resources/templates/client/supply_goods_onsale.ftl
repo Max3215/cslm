@@ -116,6 +116,7 @@ function subDisGoods(){
         success:function(data){
             $('.sub_form').css('display','none');
             alert(data.msg);
+            window.location.reload();
         }
     })
     
@@ -203,7 +204,18 @@ DD_belatedPNG.fix('.,img,background');
                         <td class="tb01"><span id="code${goods.id?c}">${goods.code!''}</span></td>
                         <td class="tb02"><p>￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></p></td>
                         <td>
-                          <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">我要分销</a></p>
+                            <#assign isSale = false>
+                            <#if sypply_List??>
+                            <#list sypply_List.content  as sg>
+                                <#if sg.goodsId == goods.id>
+                                    <#assign isSale =true>
+                                        <p><a href="javascript:;" style="color: #ff5b7d">已分销</a></p>
+                                </#if>
+                             </#list>
+                             </#if>
+                             <#if isSale ==false>
+                                <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">我要分销</a></p>
+                             </#if>
                          </td>
                       </tr>
                 </#list>

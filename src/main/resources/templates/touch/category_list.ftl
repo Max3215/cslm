@@ -53,7 +53,7 @@ $(document).ready(function(){
               			<div class="show">
               				<#list ("second_level_"+item_index+"_cat_list")?eval as secondLevelItem>
                   				<dl>
-                  					<dt>${secondLevelItem.title!''}</dt>
+                  					<dt><a href="/touch/list/${secondLevelItem.id?c}">${secondLevelItem.title!''}</a></dt>
                   					<#if ("third_level_"+item_index+secondLevelItem_index+"_cat_list")?eval?? >
                                         <#list ("third_level_"+item_index+secondLevelItem_index+"_cat_list")?eval as thirdLevelItem>
                           					<dd><a href="/touch/list/${thirdLevelItem.id?c}">${thirdLevelItem.title!''}</a></dd>

@@ -40,7 +40,7 @@ public interface TdOrderRepo extends
     
     Page<TdOrder> findByUsernameAndStatusIdAndOrderTimeAfterAndOrderNumberContainingOrderByIdDesc(String username, Long statusId, Date time, String keywords, Pageable page);
   
-    Long countByUsernameAndTypeIdAndStatusId(String username,Long typeId, Long statusId);
+    Long countByUsernameAndStatusId(String username, Long statusId);
     
     TdOrder findByOrderNumber(String orderNumber);
     

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdPayRecord;
@@ -32,6 +33,7 @@ import com.ynyes.cslm.entity.TdUserConsult;
 import com.ynyes.cslm.entity.TdUserLevel;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
+import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdManagerLogService;
@@ -103,6 +105,9 @@ public class TdManagerUserController {
     
     @Autowired
     TdDistributorService tdDistributorService;
+    
+    @Autowired
+    TdCashService tdCashService;
     
     @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
     @ResponseBody
@@ -363,7 +368,7 @@ public class TdManagerUserController {
                     
                  // 记录平台支出
                     record = new TdPayRecord();
-                    record.setCont("手动充值支出");
+                    record.setCont("手动给会员"+tdUser.getUsername()+"充值");
                     record.setCreateTime(new Date());
                     record.setUsername(tdUser.getUsername());
                     record.setOrderNumber(number);
@@ -381,6 +386,20 @@ public class TdManagerUserController {
                     tdPayRecordService.save(record);
                     
                     tdManagerLogService.addLog("add", "手动给会员"+tdUser.getUsername()+"充值"+data, req);
+                    
+                    // 添加会员充值记录
+                	
+                	TdCash cash = new TdCash();
+                	cash.setCashNumber("平台充值:"+number);
+                	cash.setShopTitle(tdUser.getRealName());
+                	cash.setUsername(tdUser.getUsername());
+                	cash.setCreateTime(new Date());
+                	cash.setPrice(virtualMoney); // 金额
+                	cash.setShopType(4L); // 类型-会员
+                	cash.setType(1L); // 类型-充值
+                	cash.setStatus(2L); // 状态 完成
+                	
+                	tdCashService.save(cash);
                     
                     res.put("code", 0);
         			return res;
@@ -424,6 +443,7 @@ public class TdManagerUserController {
         if (null == tdUser.getId())
         {
             tdManagerLogService.addLog("add", "修改会员"+tdUser.getUsername(), req);
+            tdUser = tdUserService.addNewUser(tdUser.getUsername(), tdUser.getPassword(), tdUser.getMobile(), tdUser.getEmail(), null);
         }
         else
         {

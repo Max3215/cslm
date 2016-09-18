@@ -224,7 +224,7 @@ $(function () {
   </dl>
   <dl>
     <dt>手机号码</dt>
-    <dd><input name="mobile" type="text" value="<#if user??>${user.mobile!""}</#if>" class="input normal" ignore="ignore" ajaxurl="/Verwalter/user/check/mobile<#if user??>?id=${user.id?c}</#if>" datatype="m" sucmsg=" " ></dd>
+    <dd><input name="mobile" type="text" value="<#if user??>${user.mobile!""}</#if>" class="input normal" ignore="ignore" ajaxurl="/Verwalter/user/check/mobile<#if user??>?id=${user.id?c}</#if>" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" sucmsg=" " ></dd>
   </dl>
   <dl>
     <dt>用户余额</dt>

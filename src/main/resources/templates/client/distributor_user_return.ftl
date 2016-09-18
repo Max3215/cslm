@@ -42,8 +42,8 @@ $(document).ready(function(){
 })
 
 function returnEdit(id){
-    var dialog = $.dialog.confirm('操作提示信息：<br />确定已处理此次退货？', function () {
-        var postData = { "id": id};
+    var dialog = $.dialog.confirm('操作提示信息：<br />默认通过此次退货？', function () {
+        var postData = { "id": id,"statusId":1};
         //发送AJAX请求
         sendAjaxUrl(dialog, postData, "/distributor/return/param/edit");
         return false;
@@ -101,9 +101,9 @@ DD_belatedPNG.fix('.,img,background');
                 <th width="60">价格*数量</th>
                 <th width="120">订单号</th>
                 <th width="120">用户名</th>
-                <th width="120">联系电话</th>
                 <th width="120">申请时间</th>
                 <th width="50">状态</th>
+                <th width="50">操作</th>
             </tr>
             <#if return_page??>
                 <#list return_page.content as return>
@@ -117,15 +117,13 @@ DD_belatedPNG.fix('.,img,background');
                       <td>${return.goodsPrice?string('0.00')}*${return.returnNumber!''}</td>
                       <td>${return.orderNumber!''}</td>
                       <td class="td003">${return.username!''}</td>
-                      <td class="td003">${return.telephone!''}</td>
                       <td class="td003">${return.returnTime!''}</td>
                       <td >
                             <#if return.statusId==0>
-                            <a href="javascript:returnEdit(${return.id?c});">处理退货</a>
-                            <#else>
-                            已处理
-                            </#if>     
+                            <a href="javascript:returnEdit(${return.id?c});">未处理</a>
+                            <#elseif return.statusId=1>已批准<#else>未通过</#if>     
                        </td>
+                       <td><a href="/distributor/user/returnDetail?id=${return.id?c}">详情</a></td>
                     </tr>
                 </#list>
             </#if>

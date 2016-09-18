@@ -30,8 +30,18 @@ public class TdProviderGoodsService {
 	@Autowired
 	private TdProviderGoodsRepo repository;
 	
+	@Autowired
+	private TdDistributorGoodsService tdDistributorGoodsService;
+	
 	public void delete(Long id)
 	{
+		if(null != id ){
+			TdProviderGoods tdProviderGoods = repository.findOne(id);
+			if(null != tdProviderGoods && null != tdProviderGoods.getIsDistribution() && tdProviderGoods.getIsDistribution() == true){
+				List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(tdProviderGoods.getProId(),tdProviderGoods.getGoodsId());
+				tdDistributorGoodsService.delete(list);
+			}
+		}
 		repository.delete(id);
 	}
 	
@@ -47,6 +57,12 @@ public class TdProviderGoodsService {
 	{
 		if(null != e)
 		{
+			for (TdProviderGoods tdProviderGoods : e) {
+				if(null != tdProviderGoods && null != tdProviderGoods.getIsDistribution() && tdProviderGoods.getIsDistribution() == true){
+					List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(tdProviderGoods.getProId(),tdProviderGoods.getGoodsId());
+					tdDistributorGoodsService.delete(list);
+				}
+			}
 			repository.delete(e);
 		}
 	}
@@ -234,12 +250,12 @@ public class TdProviderGoodsService {
 		if(null == providerId){
 			return null;
 		}
-		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
+		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.ASC, "id"));
 		
 		return repository.findByProviderIdAndIsDistributionAndIsAudit(providerId, isDistribution, isAudit, pageRequest);
 	}
 	
-	public Page<TdProviderGoods> findAll(Long providerId,Long categoryId,String keywords,Boolean isDistribution,Boolean isAudit,PageRequest pageRequest)
+	public Page<TdProviderGoods> findAll(Long providerId,Long categoryId,String keywords,Boolean isDistribution,Boolean isOnSale,PageRequest pageRequest)
 	{
 		Criteria<TdProviderGoods> c = new Criteria<>();
 		if(null != providerId)
@@ -255,9 +271,9 @@ public class TdProviderGoodsService {
 		{
 			c.add(Restrictions.eq("isDistribution", isDistribution, true));
 		}
-		if(null != isAudit)
+		if(null != isOnSale)
 		{
-			c.add(Restrictions.eq("isAudit", isAudit, true));
+			c.add(Restrictions.eq("isOnSale", isOnSale, true));
 		}
 		if(null != categoryId)
 		{

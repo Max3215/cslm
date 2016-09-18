@@ -1,6 +1,7 @@
 package com.ynyes.cslm.controller.management;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdParameter;
+import com.ynyes.cslm.entity.TdParameterCategory;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdParameterCategoryService;
 import com.ynyes.cslm.service.TdParameterService;
@@ -139,7 +141,9 @@ public class TdManagerParameterController {
         map.addAttribute("page", page);
         map.addAttribute("size", size);
         
-        map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+//        map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+        List<TdParameterCategory> parameCategoryList = tdParameterCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("parameter_category_list", parameCategoryList);
         
         
         if (null != keywords && !keywords.isEmpty())
@@ -155,6 +159,20 @@ public class TdManagerParameterController {
             else
             {
                 map.addAttribute("parameter_page", tdParameterService.findByCategoryTreeContainingOrderBySortIdAsc(categoryId, page, size));
+                
+                TdParameterCategory category = tdParameterCategoryService.findOne(categoryId);
+                if(null != parameCategoryList && parameCategoryList.size() > 0)
+                {
+                	for (TdParameterCategory tdParameterCategory : parameCategoryList) {
+                		if(null != category && category.getParentTree().contains("["+tdParameterCategory.getId()+"]"))
+                		{
+                			List<TdParameterCategory> cateList = tdParameterCategoryService.findByParentIdOyderBySortIdAsc(tdParameterCategory.getId());
+                			map.addAttribute("category_list", cateList);
+                			
+                		}
+                	}
+                }
+                map.addAttribute("category", category);
             }
         }
         

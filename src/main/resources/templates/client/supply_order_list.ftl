@@ -69,6 +69,12 @@ DD_belatedPNG.fix('.,img,background');
             function __doPostBack(eventTarget, eventArgument) {
                 if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
                     theForm.eventTarget.value = eventTarget;
+                    if(eventTarget=='page'){
+                        theForm.page.value = eventArgument;
+                    }else{
+                        theForm.page.value = 0;
+                        theForm.eventTarget.value = eventTarget;
+                    }
                     theForm.submit();
                 }
             }

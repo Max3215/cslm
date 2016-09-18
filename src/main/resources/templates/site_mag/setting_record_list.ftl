@@ -76,10 +76,11 @@ var theForm = document.forms['form1'];
     <th width="8%">选择</th>
     <th align="center">记录时间</th>
     <th align="center" >单号</th>
-    <th align="center" width="15%">服务费</th>
-    <th align="center" width="10%">物流费</th>
+    <th align="center" >商家</th>
+    <th align="center" width="8%">服务费</th>
+    <th align="center" width="8%">物流费</th>
     <th align="center" width="8%">第三方使用费</th>
-    <th align="center" width="15%">商品总额</th>
+    <th align="center" width="8%">商品总额</th>
     <th width="8%">订单总金额</th>
     <th width="6%">实际入账/支出</th>
     <th>说明</th>
@@ -96,6 +97,7 @@ var theForm = document.forms['form1'];
                 </td>
                 <td align="center">${re.createTime?string('yyyy-MM-dd')}</td>
                 <td align="center">${re.orderNumber!''}</td>
+                <td align="center">${re.distributorTitle!''}</td>
                 <td align="center"><#if re.servicePrice??>${re.servicePrice?string('0.00')}<#else>0.00</#if></td>
                 <td align="center"><#if re.postPrice??>${re.postPrice?string('0.00')}<#else>0.00</#if></td>
                 <td align="center"><#if re.aliPrice??>${re.aliPrice?string('0.00')}<#else>0.00</#if></td>

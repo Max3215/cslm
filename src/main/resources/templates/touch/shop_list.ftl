@@ -10,16 +10,20 @@ var lat =0;
       lng = r.point.lng;
       lat = r.point.lat;
       
-      <#if !index?? >
+  <#if lng?? && lat??>
+        <#if !index??>
+        distance(${lng},${lat});
+        </#if>
+  <#else>
       distance(lng,lat);
-      </#if>
+   </#if>
      
     }
     else {
       alert('failed'+this.getStatus());
     }        
   },{enableHighAccuracy: true})
-
+    
 
 function distance(lng,lat){
     
@@ -64,19 +68,19 @@ function chooseDistributor(disId){
         <dl>
             <dt>附近商家:</dt>
         </dl>
-      <#if shop_list?? && shop_list?size gt 0>
-          <#list shop_list as shop>
-                <dl>
-                    <dd><a href="javascript:;" onclick="chooseDistributor(${shop.id?c});">${shop.title!''}</a></dd>
-                </dl>
+        <dl>
+           <#if shop_list?? && shop_list?size gt 0>
+           <#list shop_list as shop>
+                <dd><a href="javascript:;" onclick="chooseDistributor(${shop.id?c});">${shop.title!''}</a></dd>
            </#list>
-       <#elseif more_list??>
-            <#list more_list as shop>
-                <dl>
-                    <dd><a href="javascript:;" onclick="chooseDistributor(${shop.id?c});">${shop.title!''}</a></dd>
-                </dl>
+           </#if>
+           <#--
+           <#if more_list??>
+           <#list more_list as shop>
+                <dd><a href="javascript:;" onclick="chooseDistributor(${shop.id?c});">${shop.title!''}</a></dd>
            </#list>
-       </#if>
+           </#if>
+           -->
     </div>
 </div>
 

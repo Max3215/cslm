@@ -3,6 +3,7 @@ package com.ynyes.cslm.touch;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,6 +41,7 @@ import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.Cnvter;
+import com.ynyes.cslm.util.CookieUtil;
 import com.ynyes.cslm.util.SiteMagConstant;
 
 @Controller
@@ -71,13 +75,25 @@ public class TdTouchIndexController {
     private TdSettingService tdSettingService;
 
     @RequestMapping
-    public String index(HttpServletRequest req, ModelMap map, String username, Integer app) {
+    public String index(HttpServletRequest req, ModelMap map, HttpServletResponse response, Integer app) {
     	
     	tdCommonService.setHeader(map, req);
-    	if (null != username) {
-    		req.getSession().setAttribute("username", username);
-		}
     	
+    	String username = (String) req.getSession().getAttribute("username");
+    	Double lng = (Double)req.getSession().getAttribute("lng");
+    	Double lat = (Double)req.getSession().getAttribute("lat");
+    	
+    	if(null == username ){
+    		try {
+    			CookieUtil.readCookieAndLogon(req, response);
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		} 
+    	}
+    	
+    	if(null != lng && null != lat){
+    		tdCommonService.mapdistance(lng, lat, req, map);
+    	}
     	
     	// 超市快讯
         List<TdArticleCategory> catList = tdArticleCategoryService
@@ -104,21 +120,23 @@ public class TdTouchIndexController {
                  }
              }
          	
-         	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberDesc(distributorId,true, 0, 40));
+//         	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberDesc(distributorId,true, 0, 40));
+         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAll(distributorId, "isTouchHot", null, 0, 40));
+         	
          	// 一级分类
-             List<TdProductCategory> topCatList = tdProductCategoryService
-                     .findByParentIdIsNullOrderBySortIdAsc();
+             List<TdProductCategory> topCatList = tdProductCategoryService .findByParentIdIsNullOrderBySortIdAsc();
              if (null != topCatList && topCatList.size() > 0) {
                  map.addAttribute("top_category_list", topCatList);
 
-                 for (int i = 0; i < topCatList.size(); i++) {
-                     TdProductCategory topCat = topCatList.get(i);
-
-                     if (null != topCat) {
-                         map.addAttribute( "top_cat_goods_page" + i,
-                         		tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributorId, topCat.getId(), true, 0, 10));
-                     }
-                 }
+                 map.addAttribute("category_recommend_page", tdDistributorGoodsService.findAll(distributorId, "isTouchRecommendType", null, 0, 12));
+//                 for (int i = 0; i < topCatList.size(); i++) {
+//                     TdProductCategory topCat = topCatList.get(i);
+//
+//                     if (null != topCat) {
+//                         map.addAttribute( "top_cat_goods_page" + i,
+//                         		tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributorId, topCat.getId(), true, 0, 10));
+//                     }
+//                 }
              }
              
              // 首页新品广告
@@ -171,22 +189,24 @@ public class TdTouchIndexController {
          			
          		}
          	}
-         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIsOnSaleTrueAndIsTouchHotTrueOrderByOnSaleTimeDesc(0, 40));
-         	
+//         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIsOnSaleTrueAndIsTouchHotTrueOrderByOnSaleTimeDesc(0, 40));
+         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAll(null, "isSetTouchHot", null, 0, 40));
+         			
          	// 一级分类
              List<TdProductCategory> topCatList = tdProductCategoryService
                      .findByParentIdIsNullOrderBySortIdAsc();
              if (null != topCatList && topCatList.size() > 0) {
                  map.addAttribute("top_category_list", topCatList);
 
-                 for (int i = 0; i < topCatList.size(); i++) {
-                     TdProductCategory topCat = topCatList.get(i);
-
-                     if (null != topCat) {
-                         map.addAttribute( "top_cat_goods_page" + i,
-                         		tdDistributorGoodsService.findByCategoryIdAndIsOnSale(topCat.getId(), true, 0, 10));
-                     }
-                 }
+                 map.addAttribute("category_recommend_page", tdDistributorGoodsService.findAll(null, "isSetRecommendType", null, 0, 12));
+//                 for (int i = 0; i < topCatList.size(); i++) {
+//                     TdProductCategory topCat = topCatList.get(i);
+//
+//                     if (null != topCat) {
+//                         map.addAttribute( "top_cat_goods_page" + i,
+//                         		tdDistributorGoodsService.findByCategoryIdAndIsOnSale(topCat.getId(), true, 0, 10));
+//                     }
+//                 }
              }
          	
           // 新品推荐
@@ -301,79 +321,32 @@ public class TdTouchIndexController {
     @RequestMapping(value="/distance",method = RequestMethod.POST)
     public String mapdistance(Double lng,Double lat,HttpServletRequest req,ModelMap map){
 
-    	Map<String,Double> inmap = new HashMap<>();
-    	Map<String,Double> moremap = new HashMap<>();
-    	List<TdDistributor> disList = tdDistributorService.findByIsEnableTrue();
-    	
-    	if(null != disList)
-    	{
-    		for (TdDistributor tdDistributor : disList) {
-				if(null != tdDistributor.getLatitude() && null != tdDistributor.getLongitude())
-				{
-					double d = Cnvter.getDistance(lng, lat, tdDistributor.getLongitude(), tdDistributor.getLatitude());
-					
-					if(d < 5*1000){
-						inmap.put(tdDistributor.getId()+"", d);
-					}else{
-						moremap.put(tdDistributor.getId()+"", d);
-					}
-				}
-			}
-    	}
-    	 
-    	List<Long> ids = new ArrayList<>(); // 定义一个list存范围内Id
-    	List<Long> outhers = new ArrayList<>(); // 定义一个list存范围外id
-    	
-    	ValueComparator bvc =  new ValueComparator(inmap);  
-    	TreeMap<String,Double> sorted_map = new TreeMap<String,Double>(bvc);  
-    	sorted_map.putAll(inmap);
-    	Set<String> set = sorted_map.keySet();
-    	for (String string : set) {
-			ids.add(Long.parseLong(string));
-		}
-    	
-    	ValueComparator mbvc =  new ValueComparator(moremap);
-    	TreeMap<String,Double> more_map = new TreeMap<String,Double>(mbvc); 
-    	more_map.putAll(moremap);
-    	Set<String> more = more_map.keySet();
-    	for (String str : more) {
-			outhers.add(Long.parseLong(str));
-    	}
-    	
-    	map.addAttribute("shop_list", tdDistributorService.findAll(ids));
-    	map.addAttribute("more_list", tdDistributorService.findAll(outhers));
-    	map.addAttribute("index", true);
+    	tdCommonService.mapdistance(lng, lat, req, map);
     	
     	return "/touch/shop_list";
     }
     
     
-    /**
-     * map 按value值排序
-     * @author Max
-     *
-     */
-    class ValueComparator implements Comparator<String> {  
-  	  
-        Map<String, Double> base;  
-        public ValueComparator(Map<String, Double> map) {  
-            this.base = map;  
-        }  
-      
-	    public int compare(String a, String b) {  
-	        if (base.get(a) <= base.get(b)) {  
-	            return -1;  
-	        } else {  
-	            return 1;  
-	        } 
-	    }  
-    } 
-    
-    
-    // 扫二维码下载Android apk
+    // 扫进入二维码下载页面
     @RequestMapping(value="/download/android/apk")    
     public String getApk1(HttpServletRequest req, ModelMap map, HttpServletResponse resp){
     	
+    	tdCommonService.setHeader(map, req);
+    	
+    	// 首页新品广告
+        TdAdType adType = tdAdTypeService.findByTitle("下载页面展示");
+
+        if (null != adType) {
+            map.addAttribute("down_ad_list", tdAdService
+                    .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
+        }
+    	
+    	return "/touch/down";
+    }
+    
+    // 安卓下载
+    @RequestMapping(value="/download")
+    public String download(HttpServletRequest req,ModelMap map,HttpServletResponse resp){
     	String url = SiteMagConstant.apkPath;
     	
     	TdSetting tdSetting = tdSettingService.findTopBy();
@@ -384,7 +357,6 @@ public class TdTouchIndexController {
 		}    	
     	return null ;
     }
-    
     
     public Boolean download(String filename, String exportUrl, HttpServletResponse resp){
         

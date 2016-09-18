@@ -107,28 +107,28 @@ public class TdUserReturnService {
     
     public Page<TdUserReturn> findAllOrderBySortIdAsc(int page, int size)
     {
-        PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.ASC, "returnTime"));
+        PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "returnTime"));
         
         return repository.findAll(pageRequest);
     }
     
     public Page<TdUserReturn> findByStatusIdOrderBySortIdAsc(Long statusId, int page, int size)
     {
-        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.ASC, "returnTime"));
+        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "returnTime"));
         
         return repository.findByStatusIdOrderBySortIdAsc(statusId, pageRequest);
     }
     
     public Page<TdUserReturn> searchAndFindByStatusIdOrderBySortIdAsc(String keywords, Long statusId, int page, int size)
     {
-        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.ASC, "returnTime"));
+        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "returnTime"));
         
         return repository.findByUsernameContainingAndStatusIdOrGoodsTitleContainingAndStatusIdOrOrderNumberContainingAndStatusIdOrderBySortIdAsc(keywords, statusId, keywords, statusId, keywords, statusId, pageRequest);
     }
     
     public Page<TdUserReturn> searchAndOrderBySortIdAsc(String keywords, int page, int size)
     {
-        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.ASC, "returnTime"));
+        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "returnTime"));
         
         return repository.findByUsernameContainingOrGoodsTitleContainingOrOrderNumberContainingOrderBySortIdAsc(keywords, keywords, keywords, pageRequest);
     }

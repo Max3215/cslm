@@ -69,7 +69,6 @@ public class Application extends SpringBootServletInitializer implements Command
                 List<TdOrder> orderList = tdOrderService.findByStatusId(5L);
                 
                 Date now = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 if(null != orderList && orderList.size() > 0)
                 {
                 	for (TdOrder order : orderList) {
@@ -91,6 +90,29 @@ public class Application extends SpringBootServletInitializer implements Command
 					}
                 }
                 
+                List<TdOrder> payOrderList = tdOrderService.findByStatusId(2L);
+                if(null != payOrderList && payOrderList.size() > 0)
+                {
+                	for (TdOrder order : payOrderList) {
+						if(null != order  && null != order.getOrderTime())
+						{
+							Calendar calendar = Calendar.getInstance();
+            				calendar.setTime(order.getOrderTime());
+            				calendar.add(Calendar.MONTH,+1 );
+            				
+            				Date receiveTime = calendar.getTime();
+            				// 一个月未付款的订单自动取消
+            				if(now.getTime() > receiveTime.getTime())
+            				{
+            					order.setStatusId(7L);
+            					tdOrderService.save(order);
+            				}
+						}
+					}
+                }
+                
+                
+                // 查找超市商品，库存为0设置下架
                 List<TdDistributorGoods> list = tdDistributorGoodsService.findByIsOnSaleAndLeftNumber();
                 if(null != list  && list.size() > 0 ){
                 	for (TdDistributorGoods goods : list) {

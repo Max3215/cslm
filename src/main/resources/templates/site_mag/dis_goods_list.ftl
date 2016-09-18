@@ -119,6 +119,9 @@ function __doPostBack(eventTarget, eventArgument) {
                 <option value="isNotOnSale" <#if onsale?? && onsale=="isNotOnSale">selected="selected"</#if>>下架</option>
             </select>
         </div>
+        
+       
+        <!--
         <div class="rule-single-select">
             <select name="audit" onchange="javascript:setTimeout(__doPostBack('audit',''), 0)">
                 <option value="">审核状态</option>
@@ -126,8 +129,6 @@ function __doPostBack(eventTarget, eventArgument) {
                 <option value="isNotAudit" <#if audit?? && audit=="isNotAudit">selected="selected"</#if>>待审核</option>
             </select>
         </div>
-       
-        <!--
         <div class="rule-single-select">
             <select name="saleType" onchange="javascript:setTimeout(__doPostBack('saleType',''), 0)">
                 <option value="">所有</option>

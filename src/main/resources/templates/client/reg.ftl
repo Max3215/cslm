@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
+<title><#if site??>${site.seoTitle!''}-</#if>联超商城</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -70,7 +70,7 @@ function checkwindowhide()
 <iframe class="thickframe" id="" marginwidth="0" marginheight="0" frameborder="0" scrolling="no" style="display:none"></iframe>
 <div  id="tanchuangbackgroud"></div>
 <div class="thickbox" id="tanchuang" style="width: 924px; height: 500px; left: 50%; top: 88px; display:none;margin-left:-462px;">
-    <div class="thicktitle" id="" style="width:922"><span>超市联盟注册协议</span></div>
+    <div class="thicktitle" id="" style="width:922"><span>联超商城注册协议</span></div>
     <div class="thickcon" id="" style="width: 922px; height: 450px; padding-left: 0px; padding-right: 0px; border-left-width: 1px; border-right-width: 1px;">
         <div class=" regist-2013">
             <div class="regist-bor">
@@ -234,7 +234,7 @@ function checkwindowhide()
                 <div class="clear h15"></div>
                 <p class="pb10">
                 <input type="checkbox" checked="checked" id="isCheck" />
-                <span>我已阅读并同意<a href="javascript:checkwindowshow();">《超市联盟用户协议》</a></span>
+                <span>我已阅读并同意<a href="javascript:checkwindowshow();">《联超商城用户协议》</a></span>
                 <span class="absolute-r">已有账号？<a href="/login">点击登录</a></span>
                 </p>
                 <input type="submit" class="sub" id="btn_reg" value="注册" />

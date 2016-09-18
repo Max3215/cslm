@@ -202,10 +202,12 @@ function __doPostBack(eventTarget, eventArgument) {
             </td>
             <td>
               <div class="btn-tools">
+              <#if tdManagerRole?? && tdManagerRole.id != 4>
                 <a title="上架/下架" class="hot <#if content.isOnSale?? && content.isOnSale>selected</#if>" href="javascript:__doPostBack('btnOnSale','${content.id?c}')"></a>
+              </#if>  
+                <#--
                 <a title="改价" class="change" href="javascript:showDialogChangePrice('${content.id?c}')"></a>
                 <a title="改价记录" class="record" href="javascript:showDialogPriceLog('${content.id?c}')"></a>
-                <#--
                 <a id="rptList1_ctl01_lbtnIsTop" title="设置置顶" class="top" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsTop','')"></a>
                 <a id="rptList1_ctl01_lbtnIsRed" title="设置推荐" class="red" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsRed','')"></a>
                 <a id="rptList1_ctl01_lbtnIsHot" title="设置热门" class="hot" href="javascript:__doPostBack('rptList1$ctl01$lbtnIsHot','')"></a>

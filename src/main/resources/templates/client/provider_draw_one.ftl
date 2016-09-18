@@ -60,7 +60,15 @@ DD_belatedPNG.fix('.,img,background');
       <table>
         <tr>
           <th>输入银行卡号：</th>
-          <td><input type="text" name="card" class="text long" placeholder="请输入您的银行卡号" datatype="/^(\d{16}|\d{19})$/" errormsg="请输入正确的银行卡号" sucmsg=" " nullmsg="请输入账号"/></td>
+          <td><input type="text" name="card" class="text long" placeholder="请输入您的银行卡号" datatype="/^(\d{16}|\d{19})$/" errormsg="请输入正确的银行卡号" sucmsg=" " nullmsg="请输入账号"/>&nbsp;<lable style="color:red;">*</lable></td>
+        </tr>
+        <tr>
+          <th>开户行：</th>
+          <td><input type="text" name="bank" class="text short" placeholder="请输入开户行" datatype="*" errormsg="请输入开户行" sucmsg=" " nullmsg="请输入开户行"/>&nbsp;<lable style="color:red;">*</lable></td>
+        </tr>
+        <tr>
+          <th>开户姓名：</th>
+          <td><input type="text" name="name" class="text short" placeholder="请输入账号姓名" datatype="*2-6" errormsg="请输入姓名" sucmsg=" " nullmsg="请输入姓名"/>&nbsp;<lable style="color:red;">*</lable></td>
         </tr>
         <tr>
           <th>提现金额：</th>
@@ -72,7 +80,7 @@ DD_belatedPNG.fix('.,img,background');
         </tr>
         <tr>
           <th></th>
-          <td><span style="color:red;">*每次提现最小金额100元</span></td>
+          <td><span style="color:red;">*每次提现最小金额100元，提交前请仔细核对信息是否有误</span></td>
         </tr>
         <tr>
           <th></th>

@@ -265,14 +265,14 @@ $(function () {
         <dl>
             <dt>市场价</dt>
             <dd>
-                <input id="goodsMarketPrice" readonly="readonly"  name="goodsMarketPrice" type="text" value="<#if providerGoods?? && providerGoods.goodsMarketPrice??>${providerGoods.goodsMarketPrice?string("0.##")}<#else>0</#if>" class="input normal" >
+                <input id="goodsMarketPrice" readonly="readonly"  name="goodsMarketPrice" type="text" value="<#if providerGoods?? && providerGoods.goodsMarketPrice??>${providerGoods.goodsMarketPrice?string("0.00")}<#else>0</#if>" class="input normal" >
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl> 
         <dl>
             <dt>批发价</dt>
             <dd>
-                <input id="outFactoryPrice" readonly="readonly"  name="outFactoryPrice" type="text" value="<#if providerGoods?? && providerGoods.outFactoryPrice??>${providerGoods.outFactoryPrice?string("0.##")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
+                <input id="outFactoryPrice" readonly="readonly"  name="outFactoryPrice" type="text" value="<#if providerGoods?? && providerGoods.outFactoryPrice??>${providerGoods.outFactoryPrice?string("0.00")}<#else>0</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" ">
                 <span class="Validform_checktip">*商品供货价</span>
             </dd>
         </dl> 
@@ -286,21 +286,6 @@ $(function () {
                         <label>批发中</label>
                         <input type="radio" name="isOnSale" value="0" <#if providerGoods?? && providerGoods.inOnSale?? && providerGoods.isOnSale==false>checked="checked"</#if> >
                         <label>未批发</label>
-                    </span>
-                </div>
-            </dd>
-        </dl>
-        </#if>
-        <#if providerGoods.isAudit??>
-        <dl>
-            <dt>审核状态</dt>
-            <dd>
-                <div class="rule-multi-radio multi-radio">
-                    <span>
-                        <input type="radio" name="isAudit" value="1" <#if providerGoods?? || providerGoods.isAudit==true>checked="checked"</#if> >
-                        <label>已审核</label>
-                        <input type="radio" name="isAudit" value="0" <#if providerGoods?? && providerGoods.isAudit?? && providerGoods.isAudit==false>checked="checked"</#if> >
-                        <label>待审核</label>
                     </span>
                 </div>
             </dd>

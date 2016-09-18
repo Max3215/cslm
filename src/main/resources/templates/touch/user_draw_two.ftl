@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
+<title><#if site??>${site.seoTitle!''}-</#if>联超商城</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -65,6 +65,8 @@ function subDraw(){
   <section class="with_money">
     <form action="/touch/user/draw3" id="form" method="post">
       	<input type="hidden" value="${card!''}" name="card" />
+      	<input type="hidden" value="${bank!''}" name="bank" />
+      	<input type="hidden" value="${name!''}" name="name" />
       	<input type="hidden" value="${price?string('0.00')}" name="price" />
       	<input type="hidden" value="${user.payPassword!''}" id="payPwd" />
       	<p>提现金额<span>¥${price?string('0.00')}</span></p>
@@ -73,5 +75,16 @@ function subDraw(){
   	</form>
   </section>
   
+  <!-- 底部 -->
+  <div style="height:0.88rem;"></div>
+  <section class="comfooter tabfix">
+        <menu>
+            <a class="a1" href="/touch/disout">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
+  <!-- 底部 END -->
 </body>
 </html>

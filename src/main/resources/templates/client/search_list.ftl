@@ -8,7 +8,7 @@
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
 <![endif]-->
-<title><#if productCategory??>${productCategory.seoTitle!''}-</#if>超市联盟</title>
+<title><#if productCategory??>${productCategory.seoTitle!''}-</#if>联超商城</title>
 <link href="/client/images/cslm.ico" rel="shortcut icon">
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">

@@ -11,7 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdCash;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdOrder;
+import com.ynyes.cslm.entity.TdPayRecord;
+import com.ynyes.cslm.entity.TdProvider;
+import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.repository.TdCashRepo;
 import com.ynyes.cslm.util.Criteria;
 import com.ynyes.cslm.util.Restrictions;
@@ -29,7 +34,20 @@ public class TdCashService {
 	@Autowired
 	private TdCashRepo repository;
 	
-	
+	@Autowired
+    TdProviderService tdProviderService;
+    
+    @Autowired
+    TdSettingService tdSettingService;
+    
+    @Autowired
+    TdPayRecordService tdPayRecordService;
+    
+    @Autowired
+    TdDistributorService tdDistributorService;
+    
+    @Autowired
+    TdUserService tdUserService;
 	
 	public TdCash save(TdCash e){
 		if(null == e){
@@ -70,7 +88,7 @@ public class TdCashService {
 		return repository.findAll(pageRequest);
 	}
 	
-	public Page<TdCash> findAll(Long shopType,Long type,Date startTime,Date endTime,int page,int size){
+	public Page<TdCash> findAll(Long shopType,Long type,Long  status,Date startTime,Date endTime,int page,int size){
 		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "createTime"));
     	Criteria<TdCash> c = new Criteria<>();
     	
@@ -90,10 +108,130 @@ public class TdCashService {
     	if(null != endTime){
     		c.add(Restrictions.lte("createTime", endTime, true));
     	}
+    	if(null != status){
+    		c.add(Restrictions.eq("status", status, true));
+    	}
 		
     	return repository.findAll(c,pageRequest);
 	}
 
+	public void afterCash(TdCash cash) {
+		if (null != cash) {
+			TdPayRecord record = new TdPayRecord();
+
+			if (cash.getCashNumber().contains("CS") && cash.getShopType() == 1) // 超市充值
+			{
+				TdDistributor distributor = tdDistributorService.findbyUsername(cash.getUsername());
+				if (null != distributor) {
+					if (null != distributor) {
+
+						distributor.setVirtualMoney(distributor.getVirtualMoney() + cash.getPrice());
+						tdDistributorService.save(distributor);
+
+						record.setCont("商家充值");
+						record.setCreateTime(new Date());
+						record.setDistributorId(distributor.getId());
+						record.setDistributorTitle(distributor.getTitle());
+						// record.setOrderId(cash.getId());
+						record.setOrderNumber(cash.getCashNumber());
+						record.setStatusCode(1);
+
+						record.setProvice(cash.getPrice()); // 订单总额
+						record.setPostPrice(0.00); // 邮费
+						record.setAliPrice(0.00); // 第三方费
+						record.setServicePrice(0.00); // 平台费
+						record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+						record.setTurnPrice(0.00); // 超市返利
+						record.setRealPrice(cash.getPrice()); // 实际获利
+						tdPayRecordService.save(record);
+
+					}
+				}
+			} else if (cash.getCashNumber().contains("USE") && cash.getShopType() == 4) {
+				TdUser user = tdUserService.findByUsername(cash.getUsername());
+				if (null != user) {
+					user.setVirtualMoney(user.getVirtualMoney() + cash.getPrice());
+					tdUserService.save(user);
+
+					record.setType(2L);
+
+					record.setCont("会员充值");
+					record.setCreateTime(new Date());
+					// record.setDistributorId(distributor.getId());
+					// record.setDistributorTitle(distributor.getTitle());
+					// record.setOrderId(cash.getId());
+					record.setOrderNumber(cash.getCashNumber());
+					record.setStatusCode(1);
+					record.setUsername(cash.getUsername());
+
+					record.setProvice(cash.getPrice()); // 订单总额
+					record.setPostPrice(0.00); // 邮费
+					record.setAliPrice(0.00); // 第三方费
+					record.setServicePrice(0.00); // 平台费
+					record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+					record.setTurnPrice(0.00); // 超市返利
+					record.setRealPrice(cash.getPrice()); // 实际获利
+					tdPayRecordService.save(record);
+				}
+			} else {
+				TdProvider provider = tdProviderService.findByUsername(cash.getUsername());
+				if (null != provider) {
+
+					provider.setVirtualMoney(provider.getVirtualMoney() + cash.getPrice());
+
+					record.setCont("商家充值");
+					record.setCreateTime(new Date());
+					// record.setDistributorId(distributor.getId());
+					// record.setDistributorTitle(distributor.getTitle());
+					record.setProviderId(provider.getId());
+					record.setProviderTitle(provider.getTitle());
+					// record.setOrderId(tdOrder.getId());
+					record.setOrderNumber(cash.getCashNumber());
+					record.setStatusCode(1);
+
+					record.setProvice(cash.getPrice()); // 订单总额
+					record.setPostPrice(0.00); // 邮费
+					record.setAliPrice(0.00); // 第三方费
+					record.setServicePrice(0.00); // 平台费
+					record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+					record.setTurnPrice(0.00); // 超市返利
+					record.setRealPrice(cash.getPrice()); // 实际获利
+					tdPayRecordService.save(record);
+				}
+			}
+
+			// 平台支出
+			TdSetting setting = tdSettingService.findTopBy();
+			if (null != setting.getVirtualMoney()) {
+				setting.setVirtualMoney(setting.getVirtualMoney() - cash.getPrice());
+			}
+			tdSettingService.save(setting); // 更新平台虚拟余额
+
+			// 记录平台收益
+			record = new TdPayRecord();
+			record.setCont("商家充值");
+			record.setCreateTime(new Date());
+			record.setDistributorTitle(cash.getShopTitle());
+			// record.setOrderId(tdOrder.getId());
+			record.setOrderNumber(cash.getCashNumber());
+			record.setStatusCode(1);
+			record.setType(1L); // 类型 区分平台记录
+
+			record.setProvice(cash.getPrice()); // 订单总额
+			record.setPostPrice(0.00); // 邮费
+			record.setAliPrice(0.00); // 第三方费
+			record.setServicePrice(0.00); // 平台费
+			record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
+			record.setTurnPrice(0.00); // 超市返利
+			record.setRealPrice(cash.getPrice());
+
+			tdPayRecordService.save(record);
+
+			cash.setStatus(2L); // 已完成
+			repository.save(cash);
+		}
+
+	}
 	
 	
 }

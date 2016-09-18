@@ -8,8 +8,8 @@
         <#list cart_goods_list as cg>
             <li>
                 <a href="javascript:;" onclick="toggleSelect(${cg.id?c});"  class="choose <#if cg.isSelected?? && cg.isSelected>sel<#else><#assign allChecked=false ></#if>"></a>
-                <a href="/touch/goods/${cg.distributorGoodsId!''}" class="pic"><img src="${cg.goodsCoverImageUri!''}" /></a>
-                <a href="/touch/goods/${cg.distributorGoodsId!''}" class="name">${cg.goodsTitle!''}</a>
+                <a href="/touch/goods/${cg.distributorGoodsId?c!''}" class="pic"><img src="${cg.goodsCoverImageUri!''}" /></a>
+                <a href="/touch/goods/${cg.distributorGoodsId?c!''}" class="name">${cg.goodsTitle!''}</a>
                 <p>价格：￥${cg.price?string("0.00")}</p>
                 <div class="num">
                   <a href="javascript:minusNum(${cg.id?c})" class="aj">-</a>

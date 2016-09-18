@@ -71,6 +71,18 @@ function __doPostBack(eventTarget, eventArgument) {
         theForm.submit();
     }
 }
+
+function search(type){
+    if(null != type && type=="oneCat")
+    {
+        $("#categoryId").attr("value",$("#oneCat").val());
+    }else if(null != type && type=="twoCat")
+    {
+       $("#categoryId").attr("value",$("#twoCat").val());
+    }
+
+    __doPostBack('category',0);
+}
 </script>
 
 <!--导航栏-->
@@ -92,14 +104,27 @@ function __doPostBack(eventTarget, eventArgument) {
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>
+      <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
       
       <div class="menu-list">
         <div class="rule-single-select">
-            <select name="categoryId" onchange="javascript:setTimeout(__doPostBack('categoryId', ''), 0)">
-                <option <#if !categoryId??>selected="selected"</#if> value="">所有类别</option>
+            <select id="oneCat" onchange="javascript:search('oneCat')">
+                <option  value="">所有类别</option>
                 <#if parameter_category_list??>
                     <#list parameter_category_list as c>
-                        <option value="${c.id?c!""}" <#if categoryId?? && c.id==categoryId>selected="selected"</#if> ><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                        <option value="${c.id?c!""}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if> >${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
+      </div>
+      <div class="menu-list">
+        <div class="rule-single-select">
+            <select id="twoCat" onchange="javascript:search('twoCat')">
+                <option selected="selected" value="">所有类别</option>
+                <#if category_list??>
+                    <#list category_list as c>
+                        <option value="${c.id?c!""}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if> >${c.title!""}</option>
                     </#list>
                 </#if>
             </select>

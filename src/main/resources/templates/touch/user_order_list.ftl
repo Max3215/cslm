@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
+<title><#if site??>${site.seoTitle!''}-</#if>联超商城</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -20,11 +20,12 @@
 
 <script src="/touch/js/message.js"></script>
 <link href="/touch/css/message.css" rel="stylesheet" type="text/css" />
-
+<script src="/touch/js/search.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
-
+    var url = '/touch/user/order/list_more/<#if status_id??>${status_id}<#else>0</#if>';
+    $('#order_list').refresh(url,"#order_list",0);
 });
 
 function cancelConfirm() {
@@ -73,13 +74,14 @@ function orderReceive(id)
         });
 }
 
+
 </script>
 </head>
 
 <body>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="javascript:history.go(-1);" class="back"></a>
+		<a href="/touch/user" class="back"></a>
 		<p>我的订单</p>
 		<a href="/touch" class="c_home"></a>
 	</header>
@@ -95,9 +97,10 @@ function orderReceive(id)
   </menu>
   <div style="height:0.8rem;"></div>
 
+    <div  id="order_list">
   <#if order_page??>
     <#list order_page.content as order>
-  <section class="order_list">
+  <section class="order_list" id="order_list">
     <ul>
       <a href="/touch/user/order?id=${order.id?c}"> <p class="number">订单号：${order.orderNumber!''}</p></a>
       <#list order.orderGoodsList as og>
@@ -172,6 +175,7 @@ function orderReceive(id)
   </section>
    </#list>
    </#if>
+   </div>
   <!-- 我的订单 END -->
 
   <!-- 底部 -->

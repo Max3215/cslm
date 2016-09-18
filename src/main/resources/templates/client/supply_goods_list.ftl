@@ -16,7 +16,7 @@
                 <#if dg.isDistribution>      
                       <tr id="tr_1424195166">
                         <td width=10>
-                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index?c}" class="check""/>
+                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index?c}" class="check"/>
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
@@ -26,6 +26,7 @@
                              <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" /> 
                              <input type="hidden" value="${dg.code!''}" id="code${dg.id?c}" />
                              <input type="hidden" value="${dg.unit!''}" id="unit${dg.id?c}" />
+                             <input type="hidden" value="<#if dg.goodsMarketPrice??>${dg.goodsMarketPrice?string('0.00')}</#if>" id="marketPrice${dg.id?c}">
                         </td>
                         <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
                         <td class="tb02"><span id="ration${dg.id?c}">${dg.shopReturnRation!'0'}</span></td>
@@ -38,7 +39,7 @@
                  <#else>
                        <tr id="tr_1424195166">
                         <td width=10>
-                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index?c}" class="check""/>
+                            <input id="yu_1424195166" name="listChkId" type="checkbox" value="${dg_index?c}" class="check"/>
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
@@ -48,6 +49,7 @@
                              <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" /> 
                              <input type="hidden" value="${dg.code!''}" id="code${dg.id?c}" />
                              <input type="hidden" value="${dg.unit!''}" id="unit${dg.id?c}" />
+                             <input type="hidden" value="<#if dg.goodsMarketPrice??>${dg.goodsMarketPrice?string('0.00')}</#if>" id="marketPrice${dg.id?c}">
                         </td>
                         <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
                         <td class="tb02"><span id="ration${dg.id?c}">${dg.shopReturnRation!'0'}</span></td>

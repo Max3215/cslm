@@ -1,21 +1,25 @@
 package com.ynyes.cslm.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.aspectj.lang.annotation.Around;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
-import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.util.Cnvter;
 
 @Service
 public class TdCommonService {
@@ -176,39 +180,10 @@ public class TdCommonService {
 	    }
         
 
-//        List<TdArticleCategory> level0HelpList = tdArticleCategoryService
-//                .findByMenuIdAndParentId(helpId, 0L);
-//
-//        map.addAttribute("help_level0_cat_list", level0HelpList);
-//
-//        if (null != level0HelpList) {
-//
-//            for (int i = 0; i < level0HelpList.size() && i < 4; i++) {
-//                TdArticleCategory articleCat = level0HelpList.get(i);
-//                map.addAttribute("help_" + i + "_cat_list",
-//                        tdArticleCategoryService.findByMenuIdAndParentId(
-//                                helpId, articleCat.getId()));
-//            }
-//        }
-
         // 友情链接
         map.addAttribute("site_link_list",
                 tdSiteLinkService.findByIsEnableTrue());
         
-//        map.addAttribute("dis_list", tdDistributorService.findByProvince("云南"));
-//        
-//        List<TdDistributor> list = tdDistributorService.findByProvince("云南");
-//        
-//        for (int i = 0; i < list.size(); i++) {
-//			System.err.println(list.get(i).getProvince());
-//			System.err.println(list.get(i).getCity());
-//			System.err.println(list.get(i).getDisctrict());
-//			System.err.println("---------------");
-//		}
-        
-//        //团购留言     
-//        List<TdDemand> tdDemand = tdDemandService.findByStatusIdAndIsShowable();
-//        map.addAttribute("demand_list",tdDemand);
         
         //全部超市
         List<TdDistributor> dis_list = tdDistributorService.findByIsEnableTrue();
@@ -257,4 +232,86 @@ public class TdCommonService {
         
         }
     }
+    
+    public void mapdistance(Double lng,Double lat,HttpServletRequest req,ModelMap map){
+
+    	Map<String,Double> inmap = new HashMap<>();
+//    	Map<String,Double> moremap = new HashMap<>();
+    	List<TdDistributor> disList = tdDistributorService.findByIsEnableTrue();
+    	
+    	if(null == disList)
+    	{
+    		return;
+    	}
+    	for (TdDistributor tdDistributor : disList) {
+    		if(null != tdDistributor.getLatitude() && null != tdDistributor.getLongitude())
+    		{
+    			double d = Cnvter.getDistance(lng, lat, tdDistributor.getLongitude(), tdDistributor.getLatitude());
+    			
+//					if(d < 5*1000){
+    			inmap.put(tdDistributor.getId()+"", d);
+//					}else{
+//						moremap.put(tdDistributor.getId()+"", d);
+//					}
+    		}
+    	}
+    	 
+    	List<Long> ids = new ArrayList<>(); // 定义一个list存范围内Id
+    //	List<Long> outhers = new ArrayList<>(); // 定义一个list存范围外id
+    	
+    	ValueComparator bvc =  new ValueComparator(inmap);  
+    	TreeMap<String,Double> sorted_map = new TreeMap<String,Double>(bvc);  
+    	sorted_map.putAll(inmap);
+    	Set<String> set = sorted_map.keySet();
+    	for (String string : set) {
+			ids.add(Long.parseLong(string));
+		}
+    	
+//    	ValueComparator mbvc =  new ValueComparator(moremap);
+//    	TreeMap<String,Double> more_map = new TreeMap<String,Double>(mbvc); 
+//    	more_map.putAll(moremap);
+//    	Set<String> more = more_map.keySet();
+//    	for (String str : more) {
+//			outhers.add(Long.parseLong(str));
+//    	}
+    	List<TdDistributor> shopList = new ArrayList<>();
+    	
+    	for (Long id : ids) {
+			for (TdDistributor tdDistributor : disList) {
+				if(tdDistributor.getId() == id){
+					shopList.add(tdDistributor);
+				}
+			}
+		}
+    	
+//    	map.addAttribute("shop_list", tdDistributorService.findAll(ids));
+    	map.addAttribute("shop_list",shopList);
+//    	map.addAttribute("more_list", tdDistributorService.findAll(outhers));
+    	map.addAttribute("index", true);
+    	
+    	req.getSession().setAttribute("lng", lng);
+    	req.getSession().setAttribute("lat", lat);
+    	
+    }
+    
+    /**
+     * map 按value值排序
+     * @author Max
+     *
+     */
+    class ValueComparator implements Comparator<String> {  
+  	  
+        Map<String, Double> base;  
+        public ValueComparator(Map<String, Double> map) {  
+            this.base = map;  
+        }  
+      
+	    public int compare(String a, String b) {  
+	        if (base.get(a) <= base.get(b)) {  
+	            return -1;  
+	        } else {  
+	            return 1;  
+	        } 
+	    }  
+    } 
 }

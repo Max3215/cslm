@@ -24,6 +24,8 @@ public interface TdDistributorRepo extends
 {
     Page<TdDistributor> findByTitleContainingOrderBySortIdAsc(String keywords, Pageable page);
     
+    Page<TdDistributor> findByTitleContainingAndIsEnableTrueOrderBySortIdAsc(String keywords, Pageable page);
+    
     List<TdDistributor> findByIsEnableTrue();
     
     List<TdDistributor> findByCityAndIsEnableTrueOrderBySortIdAsc(String city);

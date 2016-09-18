@@ -532,6 +532,7 @@ public class TdManagerGoodsController {
             		
             	}
             }
+            map.addAttribute("category", category);
         }
 
         map.addAttribute("content_page", goodsPage);
@@ -543,7 +544,6 @@ public class TdManagerGoodsController {
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
-        map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
         map.addAttribute("property", property);
         map.addAttribute("saleType", saleType);
 
@@ -788,7 +788,7 @@ public class TdManagerGoodsController {
             newGoods.setSiteId(tdGoods.getSiteId());
             newGoods.setSiteTitle(tdGoods.getSiteTitle());
             
-            List<TdGoodsParameter> paramList = tdGoods.getParamList();
+//            List<TdGoodsParameter> paramList = tdGoods.getParamList();
             
 //            if (null != paramList && paramList.size() > 0)
 //            {

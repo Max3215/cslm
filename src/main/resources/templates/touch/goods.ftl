@@ -188,7 +188,15 @@ function proGoods(dId){
       <h3>${dis_goods.goodsTitle!''}</h3>
       <p class="f_tit">${dis_goods.subGoodsTitle!''}</p>
       <p class="num">商品编号：${goods.code!''}&nbsp;&nbsp;&nbsp;&nbsp;商品品牌：${goods.brandTitle!''}</p>
-      <p class="price">￥<#if dis_goods??>${dis_goods.goodsPrice?string('0.00')}</#if><span>￥<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#else>${goods.marketPrice?string("0.00")}</#if></span></p>
+      <p class="price">￥<#if dis_goods??>${dis_goods.goodsPrice?string('0.00')}</#if><#if dis_goods.unit??><label style="font-size: 0.3rem;color: #999">/${dis_goods.unit!''}</label></#if><span>￥<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#else>${goods.marketPrice?string("0.00")}</#if></span></p>
+       
+       <div class="buy_number" >
+          <p class="fl">购买数量（库存${dis_goods.leftNumber?c!'0'}）</p>
+            <a id="id-minus" href="javascript:addNum();">+</a>
+            <input class="text" type="text" id="quantity" value="1" onfocus="if(value=='1'||value=='0') {value='1'}" onblur="checkNumber(this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
+            <a id="id-plus"  href="javascript:minusNum();">-</a>
+            <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">
+        </div>
        
         <div class="sc_shop">
             <p>商品来源：</p>
@@ -205,15 +213,44 @@ function proGoods(dId){
        </div>
        </#if>
     </div>
+    <#--
     <a href="javascript:void(0)" class="choose" onclick="$('.pro_eject').fadeIn(300);">选择   数量</a>
+    -->
+    
   </section>
   <!-- 商品信息 END -->
+<script>
+function checkNumber(num)
+{
+    if (num==''|| num=='0') 
+    {
+        $("#quantity").val(1);
+        return ;
+    }
+    // 验证手动输入数量库存
+    $.ajax({
+            type: "get",
+            url: "/goods/incart",
+            data: {"id":${dis_goods.id?c},"quantity":num},
+            success: function (data) { 
+                if(data.code== 0 ){
+                    alert(data.msg);
+                    $("#quantity").val(1);
+                    return;
+                }else{
+                    $("#quantity").val(num);
+                    $("#addCart").attr("href", "/touch/cart/init?id=${dis_goods.id?c}&quantity=" +num);
+                }
+            }
+        });
+}
 
+</script>
   <!-- 选择商品参数弹出 -->
-  <aside class="pro_eject">
+   <#--<aside class="pro_eject">
     <div class="part">
       <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
-      <#--
+     
       <dl>
         <dt>商品来源：</dt>
         <dd>${dis_goods.distributorTitle!''}</dd>
@@ -222,7 +259,7 @@ function proGoods(dId){
         <dt>邮费说明</dt>
         <dd>邮费：${distributor.postPrice?string('0.00')}元/满${distributor.maxPostPrice?string('0.00')}包邮</dd>
       </dl>
-      -->
+      
       <div class="number" style="margin-top: 0.7em;">
         <span>购买数量（库存：${dis_goods.leftNumber?c!'0'}）</span>
         <a id="id-minus" href="javascript:addNum();">+</a>
@@ -231,7 +268,7 @@ function proGoods(dId){
         <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">
       </div>
     </div>
-  </aside>
+  </aside>-->
   <!-- 选择商品参数弹出 END -->
 
   <!-- 详情和评价 -->

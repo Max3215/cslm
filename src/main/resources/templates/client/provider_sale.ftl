@@ -60,18 +60,25 @@ DD_belatedPNG.fix('.,img,background');
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
           <h3>已售的商品</h3>
-          <form action ="/provider/order/sum" >
-              <input class="mysub" type="submit" value="查询" />
-              <p class="fr pl10 c3">时间&nbsp;&nbsp;
-                    <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+          <form action ="/provider/order/sum" method="POST" id="form1">
+              
+              &nbsp; 时间&nbsp;&nbsp;
+                    <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
                                     &nbsp;&nbsp;至&nbsp;&nbsp;
-                    <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
-               </p>
+                    <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                <select name="statusId" onchange="javascript:__doPostBack('statusId',0);" >
+                    <option value="" <#if !status_id?? || status_id==0>selected="selected"</#if>>所有状态</option>
+                    <option value="3" <#if status_id==3>selected="selected"</#if>>待发货</option>
+                    <option value="4" <#if status_id==4>selected="selected"</#if>>待收货</option>
+                    <option value="6" <#if status_id==6>selected="selected"</#if>>已完成</option>
+                </select>
+               <#--
               <div class="clear"></div>
           </form>
           <form action ="/provider/order/sum" method="POST" id="form1">
             <input type="hidden" name="startTime"  value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" />
             <input type="hidden" name="endTime"  value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" />
+            -->
             <input type="hidden" name="eventTarget" value="" id="eventTarget">
                 <script type="text/javascript">
                     var theForm = document.forms['form1'];
@@ -86,6 +93,7 @@ DD_belatedPNG.fix('.,img,background');
                     }
                 </script>
               <input class="mysub" type="button" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
+              <input class="mysub" type="submit" value="查询" />
             </form>
         </div>
         <table>

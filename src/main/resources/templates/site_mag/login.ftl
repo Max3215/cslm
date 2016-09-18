@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>管理员登录</title>
+<link href="/mag/style/cslm.ico" rel="shortcut icon">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript">

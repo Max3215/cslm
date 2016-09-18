@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.repository.TdProviderRepo;
@@ -30,6 +31,9 @@ public class TdProviderService {
     
     @Autowired
     TdProviderGoodsService tdProviderGoodsService;
+    
+    @Autowired
+    TdDistributorGoodsService tdDistributorGoodsService;
     /**
      * 删除
      * 
@@ -39,6 +43,13 @@ public class TdProviderService {
     {
         if (null != id)
         {
+        	Page<TdProviderGoods> goodsPage = tdProviderGoodsService.findByProviderId(id, 0, Integer.MAX_VALUE);
+        	
+        	// 删除批发商品
+        	if(null != goodsPage && null != goodsPage.getContent()){
+        		tdProviderGoodsService.delete(goodsPage.getContent());
+        	}
+        	
             repository.delete(id);
         }
     }

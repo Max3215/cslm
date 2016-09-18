@@ -208,20 +208,34 @@ a,button,input{
 
 
 .com_top .news{display: block;width: 0.49rem;height:0.52rem;background: url(../images/top02.png) no-repeat;background-size:0.49rem 0.52rem;position: absolute;right:4%;top:0.18rem;}
+
+.com_top .coll{display: block;width: 0.53rem;height:0.50rem;background: url(../images/star02.png) no-repeat;background-size:100%;position: absolute;right:4%;top:0.18rem;}
+
 .com_top .search_box{width: 60%;height:0.5rem;background: #fff url(../images/search_btn.png) no-repeat 10px center;background-size:0.32rem; margin:0.2rem auto 0;border-radius: 5px;-webkit-border-radius: 5px;}
 .com_top .search_box .text{height: 0.5rem;line-height: 0.5rem;font-size: 0.2rem;display: block;margin-left:0.55rem;}
 .com_top p{text-align: center;color:#fff;font-size: 0.36rem;line-height: 0.88rem;}
 
 
 
-.bannerbox .search{width: 92%;margin:0 auto;height:0.5rem;background: #fff;border-radius: 4px;position: absolute;left:4%;top:0.15rem;z-index: 20;}
+.search_box{width: 78%;margin:0.2rem auto;height:0.5rem;background: #fff;border-radius: 4px;z-index: 20;padding-left: 14%;}
+.search_box .select{position: absolute; top: 0; left: 0; height: 0.5rem; line-height: 0.5rem; width: 14%;}
+.search_box .select .on{display: block; font-size: 0.2rem; padding-right: 0.2rem; height: 0.5rem; line-height: 0.5rem; text-align: center; background: url(../images/arrow06.png) no-repeat right center; background-size: 0.16rem 0.11rem;}
 
-.bannerbox .search .text{width: 85%;height:0.5rem;line-height: 0.5rem;text-indent: 5px;font-size: 0.2rem;}
-.bannerbox .search .sub{display: block;width:15%;height: 0.5rem;position: absolute;top:0;right:0;background: url(../images/search_btn.png) no-repeat center center;background-size:0.32rem 0.31rem;}
+.search_box menu{position: absolute;left:0;top:0.5rem;background: #333;width:100%;display: none;border-radius: 4px;}
+.search_box menu a{display: block;height: 0.5rem;line-height: 0.5rem;color:#fff;font-size: 0.2rem;text-align: center;border-bottom: 1px solid #fff;}
+.search_box menu a:last-child{border-bottom: none;}
+
+
+.search_box .text{width: 85%;height:0.5rem;line-height: 0.5rem;text-indent: 5px;font-size: 0.2rem;}
+.search_box .sub{display: block;width:15%;height: 0.5rem;position: absolute;top:0;right:0;background: url(../images/search_btn.png) no-repeat center center;background-size:0.32rem 0.31rem;}
+
+
+
+
 
 .index_enter{background: #fff;width: 100%;border-bottom:1px solid #c0bfbf;}
 .index_enter a{display: table-cell;text-align: center;padding:0.15rem 0;}
-.index_enter a img{width: 55%;}
+.index_enter a img{width: 40%;}
 .index_enter p{font-size: 0.22rem;color:#999999;}
 
 
@@ -237,14 +251,28 @@ a,button,input{
 .new_arrivals .right_pic menu a:nth-child(2){margin-left:0.05rem;}
 
 
-.news_flash{width: 92%;margin:0.16rem auto;}
+/*.news_flash{width: 92%;margin:0.16rem auto;}
 .news_flash .top img{width: 100%;display: block;}
 .news_flash .top{border:1px solid #dddddd;border-bottom:none;}
 
 .news_flash menu{background: #fff;padding:0.1rem 0.2rem;border:1px solid #dddddd;}
 .news_flash menu a{display: block;height: 0.6rem;line-height: 0.6rem;border-bottom:1px solid #dddddd;font-size: 0.22rem;color:#333333;}
 .news_flash menu a:last-child{border:none;}
-.news_flash .more_btn{display: block;height: 0.6rem;line-height: 0.6rem;border:1px solid #dddddd;font-size: 0.22rem;color:#333333;text-align: center;margin-top:0.08rem;background: #fff;}
+.news_flash .more_btn{display: block;height: 0.6rem;line-height: 0.6rem;border:1px solid #dddddd;font-size: 0.22rem;color:#333333;text-align: center;margin-top:0.08rem;background: #fff;}*/
+
+.sm_news{height: 1.1rem;overflow: hidden;margin-top: 0.16rem;border-top:1px solid #cccccc;border-bottom: 1px solid #cccccc;background: #fff;}
+.sm_news .pic{display: block;float: left;width: 1.5rem;height: 1.1rem;}
+.sm_news .pic img{width: 1.5rem;height: 1.1rem;}
+
+.sm_news .slide{width: 58%;padding-left: 0.16rem;float:left;height: 0.8rem;margin-top: 0.16rem;border-right:1px solid #cccccc;}
+.sm_news .slide a{display: block;padding-left: 0.32rem;background: url(../images/news_round.png) no-repeat left center;background-size: 0.22rem;font-size: 0.2rem;line-height: 0.4rem;height: 0.4rem;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;width: 88%;}
+.sm_news .more{display: block;float:left;width: 0.62rem;height: 0.34rem;border:1px solid #4c0877;color:#4c0877;text-align: center;line-height: 0.34rem;font-weight: bold;font-size: 0.2rem;border-radius: 3px;-webkit-border-radius: 3px;margin:0.4rem 0 0 0.14rem;}
+
+
+
+
+
+
 
 
 .index_part{background: #fff;margin-top:0.16rem;}
@@ -332,7 +360,7 @@ a,button,input{
 .m_order .o_menu a{text-align: center;display: table-cell;padding:0.18rem 0;}
 .m_order .o_menu a img{height: 0.45rem;}
 .m_order .o_menu a span{display: block;font-size: 0.22rem;color:#393939;margin-top:0.03rem;}
-.m_order .o_menu a i{display: block; width: 15px; height: 15px; background: #dc071b; position: absolute; top: 4px; left: 57%; font-size: 0.12rem; font-style: normal; text-align: center; line-height: 16px; color: #fff; border-radius: 50%; -webkit-border-radius: 50%;z-index: 2;}
+.m_order .o_menu a i{display: block; width: 15px; height: 15px; background: #dc071b; position: absolute; top:8px; left: 57%; font-size: 0.12rem; font-style: normal; text-align: center; line-height: 16px; color: #fff; border-radius: 50%; -webkit-border-radius: 50%;z-index: 2;}
 
 .m_other{margin-top:0.16rem;margin-bottom: 50px;}
 .m_other a{display: block;height: 0.6rem;border-bottom:1px solid #c0bebf;padding:0.14rem 0.37rem;line-height: 0.6rem;background: #fefafa;}
@@ -477,6 +505,8 @@ a,button,input{
 .order_list li .info{float: left; width: 70%; margin-left: 5%;}
 .order_list li .info a{display: block;font-size: 0.22rem;color:#252525;min-height: 0.47rem;}
 .order_list li .info p{font-size: 0.2rem;color:#999999;}
+.order_list li .info .sqth{display: block;width: 1.4rem;height: 0.4rem;text-align: center;line-height: 0.44rem;background: #fff;color:#ff5b7d;border:1px solid #ff5b7d;border-radius: 3px;-webkit-border-radius: 3px;position: absolute;right:0;bottom: 0;font-size: 0.24rem;}
+
 
 .order_list .btns{height: 0.6rem;width: 100%;}
 .order_list .btns span{font-size: 0.28rem;color:#ff5b7d;padding-left:0.24rem;line-height: 0.6rem;}
@@ -486,6 +516,9 @@ a,button,input{
 
 .order_list .number{height: 0.5rem;background: #D8D8D8;line-height: 0.5rem;color:#333;font-size: 0.24rem;padding-left: 4%;}
 .order_list .number span{position: absolute;top:0;right:4%;z-index: 2;font-size: 0.2rem;}
+
+
+
 
 
 /*注册和登录*/
@@ -645,6 +678,13 @@ a,button,input{
 /*
 .pro_info .choose{display: block;height: 0.58rem;line-height: 0.58rem;color:#999999;font-size: 0.24rem;background: url(../images/arrow04.png) no-repeat right center;background-size:auto 0.22rem;width: 90%;margin-left:3%;}
 */
+
+.pro_info .buy_number{height: 0.48rem;line-height: 0.48rem;background: #fff;margin-top: 0.18rem; border-bottom: 1px solid #c0bfbf;padding:0.12rem 3%;font-size: 0.24rem;}
+.pro_info .buy_number a{display: block; width: 0.6rem; height: 0.5rem; background: #d2d2d2; float: right; text-align: center; line-height: 0.5rem; color: #000; font-size: 0.34rem;}
+.pro_info .buy_number .text{width: 0.68rem; height: 0.47rem; background: #fff; text-align: center; line-height: 0.46rem; border: 0.02rem solid #d2d2d2; float: right;}
+
+
+
 .pro_eject{width: 100%;height: 100%;background: url(../images/darkbg.png) repeat;position: fixed;left:0;top:0;z-index: 200;display:none;}
 .pro_eject .part{background: #eeeeee;position:absolute;left:0;bottom:0.78rem;width: 100%;padding-bottom: 1rem;}
 .pro_eject .part .close{display: block;width: 0.6rem;height: 0.6rem;background: url(../images/close.png) no-repeat;position: absolute;top:-0.3rem;right:0.42rem;background-size: 0.6rem;z-index: 2;}
@@ -860,4 +900,78 @@ a,button,input{
 .pay_overtime .operate{height: 0.6rem;line-height: 0.6rem;color:#999999;font-size: 0.24rem;text-align: center;margin-top: 0.36rem;}
 .pay_overtime .operate a{color:#999;}
 .pay_overtime .operate a:first-child{display: inline-block;width: 1.4rem;height: 0.6rem;background: #ff5b7d;text-align: center;line-height: 0.6rem;color:#fff;margin: 0 0.22rem;}
+
+
+
+
+/*8.24 申请退货*/
+
+.thpro_info{overflow: hidden; width: 90%; padding: 0.32rem 5%; border-bottom: 1px solid #eeeeee;background: #fff;}
+.thpro_info .pic{display: block; width: 25%; float: left;}
+.thpro_info .pic img{width: 100%;border:1px solid #c0bfbf;}
+.thpro_info .info{float: left; width: 70%; margin-left: 5%;}
+.thpro_info .info a{display: block;font-size: 0.22rem;color:#252525;min-height: 0.47rem;}
+.thpro_info .info p{font-size: 0.2rem;color:#999999;}
+
+
+.thdescribe{padding:0.1rem 4%;background: #fff;margin-top: 0.2rem;border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
+.thdescribe p{color:#333;font-size: 0.24rem;margin-bottom: 0.1rem;}
+.thdescribe p span{color: #ff5b7d;}
+.thdescribe textarea{width: 98%;height: 1.5rem;outline: none;border:1px solid #eee;padding:1%;font-size: 0.24rem;}
+
+.mer_info{padding:0.1rem 4%;background: #fff;margin-top: 0.2rem;border-top:1px solid #ddd;color:#333;font-size: 0.24rem;line-height: 0.5rem;border-top:1px solid #ddd;}
+
+.contact_number{height: 0.8rem;line-height: 0.8rem;background: #fff;border-top:1px solid #ddd;border-bottom:1px solid #ddd;margin-top: 0.2rem;padding:0 4%;overflow: hidden;}
+.contact_number p{color:#333;font-size: 0.24rem;float:left;}
+.contact_number p span{color: #ff5b7d;}
+.contact_number .text{float:right;height: 0.8rem;line-height: 0.8rem;font-size: 0.24rem;width: 78%;}
+
+.sqth_btn{padding:0.6rem 4% 0;}
+.sqth_btn .sub{display: block;width: 100%;height: 0.8rem;text-align: center;line-height: 0.8rem;color:#fff;font-size: 0.32rem;background: #ff5b7d;border-radius: 3px;-webkit-border-radius: 3px;}
+
+
+
+/*9.5 支付密码弹窗*/
+.pay_password{width: 100%;height: 100%;position: fixed;left:0;top:0;z-index: 200;background:rgba(0,0,0,0.6);/*display: none;*/}
+.pay_password .con{width: 72%;background: #fff;padding:0 4%;position: absolute;left:50%;margin-left: -40%;top:20%;}
+.pay_password .tit{text-align: center;font-size: 0.24rem;text-align: center;height: 0.6rem;line-height: 0.6rem;}
+.pay_password .text{height: 0.6rem;line-height: 0.6rem;border:1px solid #ddd;width: 100%;text-indent: 0.2rem;}
+.pay_password .btns{overflow: hidden;margin: 0.3rem 0;}
+.pay_password .btns a{display: block;width: 48%;height: 0.6rem;text-align: center;line-height: 0.6rem;color:#fff;font-size: 0.24rem;}
+.pay_password .btns a:nth-child(odd){float:left;background: #39bee9;}
+.pay_password .btns a:nth-child(even){float:right;background: #ff5b7d;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -274,14 +274,15 @@ public class TdLoginController {
 	@RequestMapping(value = "/login/retrieve_step2", method = RequestMethod.POST)
 	public String Step3(String username,String password, HttpServletRequest req, ModelMap map){
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		tdCommonService.setHeader(map, req);
 		if (null != password) {
 			user.setPassword(password);
 			tdUserService.save(user);
-			tdCommonService.setHeader(map, req);
 			req.getSession().setAttribute("username", user.getUsername());
 			req.getSession().setAttribute("usermobile", user.getMobile());
 			return "/client/user_retrieve_step3";
 		}
+		
 		return "/client/error_404";
 	}
 	

@@ -68,7 +68,8 @@ function editPrice(dgId,page){
     var goodsTitle = $("#title"+dgId).html();
     var subTitle = $("#subTitle"+dgId).val();
     var unit = $("#unit"+dgId).val();
-    var code = $("#code"+dgId).val();
+    var code = $("#code"+dgId).val(); 
+    var marketPrice = $("#marketPrice"+dgId).val();
     var goodsPrice = $("#price"+dgId).html();
     var leftNumber = $("#number"+dgId).html();
     
@@ -76,6 +77,7 @@ function editPrice(dgId,page){
     $("#page").attr("value",page);
     $("#goodsTitle").attr("value",goodsTitle);
     $("#subGoodsTitle").attr("value",subTitle);
+    $("#marketPrice").attr("value",marketPrice);
     $("#goodsPrice").attr("value",goodsPrice);
     $("#leftNumber").attr("value",leftNumber);
     $("#unit").attr("value",unit);
@@ -273,6 +275,10 @@ DD_belatedPNG.fix('.,img,background');
         <tr>
           <th>商品编码：</th>
           <td ><input type="text" class="add_width" name="code" id="code" ></td>
+        </tr>
+        <tr>
+          <th>*实体店价：</th>
+          <td><input type="text" name="goodsMarketPrice" id="marketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请正确输入" nullmsg="请输入价格"></td>
         </tr>
          <tr>
           <th>*特惠价：</th>

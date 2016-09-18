@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
+<title><#if site??>${site.seoTitle!''}-</#if>联超商城</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -64,13 +64,17 @@ $(document).ready(function(){
         </a>
         <a href="/touch/user/order/list/4">
             <#if total_unreceived??><i>${total_unreceived!'0'}</i></#if>
-          <img src="/touch/images/order05.png" />
+          <img src="/touch/images/order03.png" />
           <span>待收货</span>
         </a>
         <a href="/touch/user/order/list/5">
            <#if total_finished??><i>${total_finished!'0'}</i></#if>
-          <img src="/touch/images/order03.png" />
+          <img src="/touch/images/order04.png" />
           <span>待评价</span>
+        </a>
+        <a href="/touch/user/return/list">
+          <img src="images/order06.png" />
+          <span>退货</span>
         </a>
       </menu>
     </div>

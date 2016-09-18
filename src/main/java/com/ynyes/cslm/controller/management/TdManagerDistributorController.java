@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -97,383 +100,13 @@ public class TdManagerDistributorController {
         
         Page<TdDistributorGoods> goodsPage = null;
         
-        if(null == distributorId) // 未选择超市
-        {
-        	if(null == categoryId)	// 未选择分类
-        	{
-        		if("isOnSale".equalsIgnoreCase(onsale)) // 上架 
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsOnSaleAndIsAudit(true,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsOnSaleAndIsAudit(keywords, true,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsOnSaleAndIsAudit(true,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsOnSaleAndIsAudit(keywords, true, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsOnSale(true,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsOnSale(keywords, true, page, size);
-    					}
-    				}
-        		}	// -----------上架  END ----------------
-        		else if("isNotOnSale".equalsIgnoreCase(onsale))	 // 下架
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsOnSaleAndIsAudit(false,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsOnSaleAndIsAudit(keywords, false,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsOnSaleAndIsAudit(false,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsOnSaleAndIsAudit(keywords, false, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsOnSale(false,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsOnSale(keywords, false, page, size);
-    					}
-    				}
-        		} //------------- 下架→是否分销  END ----------------------
-        		else // 未选上下架	
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsAudit( true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsAudit(keywords,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByIsAudit(  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndIsAudit(keywords,  false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findAll(page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchDistributorGoods(keywords, page, size);
-    					}
-    				}
-        		} //------- 未选是否上架→ END ---------------------------
-        	}	// ---------- 未选分类 END  ---------------------
-        	else	// 选择分类
-        	{
-        		if("isOnSale".equalsIgnoreCase(onsale)) // 上架 
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsOnSaleAndIsAudit(categoryId,true,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsOnSaleAndIsAudit(categoryId,keywords, true,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsOnSaleAndIsAudit(categoryId,true,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsOnSaleAndIsAudit(categoryId,keywords, true, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsOnSale(categoryId,true,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsOnSale(categoryId,keywords, true, page, size);
-    					}
-    				}
-        		}	// -----------上架  END ----------------
-        		else if("isNotOnSale".equalsIgnoreCase(onsale))	 // 下架
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsOnSaleAndIsAudit(categoryId,false,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsOnSaleAndIsAudit(categoryId,keywords, false,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsOnSaleAndIsAudit(categoryId,false,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsOnSaleAndIsAudit(categoryId,keywords, false, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsOnSale(categoryId,false,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsOnSale(categoryId,keywords, false, page, size);
-    					}
-    				}
-        		} //------------- 下架  END ----------------------
-        		else // 未选上下架	
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsAudit(categoryId, true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsAudit(categoryId,keywords,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryIdAndIsAudit( categoryId, false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryIdAndIsAudit(categoryId,keywords,  false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByCategoryId(categoryId, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndCategoryId(categoryId, keywords, page, size);
-    					}
-    				}
-        		}
-        	} // ----- 选择分类 END ----------------------
-        }
-        else // 选择超市----------------- start ------------------------
-        {
-        	if(null == categoryId)	// 未选择分类
-        	{
-        		if("isOnSale".equalsIgnoreCase(onsale)) // 上架 
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsOnSaleAndIsAudit(distributorId,true,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleAndIsAudit(distributorId,keywords, true,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsOnSaleAndIsAudit(distributorId,true,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleAndIsAudit(distributorId,keywords, true, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsOnSale(distributorId,true,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsOnSale(distributorId,keywords, true, page, size);
-    					}
-    				}
-        		}	// -----------  超市 上架  END ----------------
-        		else if("isNotOnSale".equalsIgnoreCase(onsale))	 // 下架
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsOnSaleAndIsAudit(distributorId,false,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleAndIsAudit(distributorId,keywords, false,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsOnSaleAndIsAudit(distributorId,false,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsOnSaleAndIsAudit(distributorId,keywords, false, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsOnSale(distributorId,false,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsOnSale(distributorId,keywords, false, page, size);
-    					}
-    				}
-        		} //-------------  超市 下架  END ----------------------
-        		else // 未选上下架	
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsAudit(distributorId, true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsAudit(distributorId,keywords,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndIsAudit(distributorId,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndIsAudit(distributorId,keywords,  false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorId(distributorId, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorId(distributorId, keywords, page, size);
-    					}
-    				}
-        		} //------- 超市 未选是否上架→ END ---------------------------
-        	}	// ---------- 超市 未选分类 END  ---------------------
-        	else	// 超市 选择分类
-        	{
-        		if("isOnSale".equalsIgnoreCase(onsale)) // 上架 
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,true,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,keywords, true,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,true,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,keywords, true, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributorId,categoryId,true,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSale(distributorId,categoryId,keywords, true, page, size);
-    					}
-    				}
-        		}	// ----------- 超市 分类 上架  END ----------------
-        		else if("isNotOnSale".equalsIgnoreCase(onsale))	 // 下架
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,false,  true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,keywords, false,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,false,  false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSaleAndIsAudit(distributorId,categoryId,keywords, false, false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributorId,categoryId,false,  page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsOnSale(distributorId,categoryId,keywords, false, page, size);
-    					}
-    				}
-        		} //------------- 超市 分类 下架  END ----------------------
-        		else // 未选上下架	
-        		{
-    				if("isAudit".equalsIgnoreCase(audit))	// 审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsAudit(distributorId,categoryId, true, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsAudit(distributorId,categoryId,keywords,  true, page, size);
-    					}
-    				}
-    				else if("isNotAudit".equalsIgnoreCase(audit)) // 未审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsAudit(distributorId, categoryId, false, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryIdAndIsAudit(distributorId,categoryId,keywords,  false, page, size);
-    					}
-    				}
-    				else //未选是否审核
-    				{
-    					if(null == keywords || "".equalsIgnoreCase(keywords))
-    					{
-    						goodsPage = tdDistributorGoodsService.findByDistributorIdAndCategoryId(distributorId,categoryId, page, size);
-    					}else{
-    						goodsPage = tdDistributorGoodsService.searchAndDistributorIdAndCategoryId(distributorId,categoryId, keywords, page, size);
-    					}
-    				}
-        		} // ------- 超市  分类 END  ----------------
-        	} // ------  超市==分类   END  ----------------------- 
+        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "onSaleTime"));
+        if("isOnSale".equalsIgnoreCase(onsale)){
+			goodsPage = tdDistributorGoodsService.findAll(distributorId, true, categoryId, keywords, pageRequest);
+        }else if("isNotOnSale".equalsIgnoreCase(onsale)){
+        	goodsPage = tdDistributorGoodsService.findAll(distributorId, false, categoryId, keywords, pageRequest);
+        }else{
+        	goodsPage = tdDistributorGoodsService.findAll(distributorId, null, categoryId, keywords, pageRequest);
         }
         
         map.addAttribute("content_page", goodsPage);
@@ -520,8 +153,8 @@ public class TdManagerDistributorController {
 	
 	@RequestMapping(value="/goods/save")
     public String save(TdDistributorGoods tdDistributorGoods,
-    		Boolean isRecommendIndex,Boolean isSetRecommend,
-    		Boolean isRecommendType,Boolean isTouchHot,
+    		Boolean isSetRecommend,Boolean isRecommendCategory,
+    		Boolean isSetRecommendType,Boolean isSetTouchHot,
     		String __EVENTTARGET, String __EVENTARGUMENT, String __VIEWSTATE,
     		HttpServletRequest req,ModelMap map){
     	String username = (String) req.getSession().getAttribute("manager");
@@ -535,28 +168,30 @@ public class TdManagerDistributorController {
         }
         
         // 推荐类型
-        if(null != isRecommendIndex && isRecommendIndex){
-        	tdDistributorGoods.setIsRecommendIndex(true);
-        }else{
-        	tdDistributorGoods.setIsRecommendIndex(false);
-        }
-        
         if(null != isSetRecommend && isSetRecommend){
         	tdDistributorGoods.setIsSetRecommend(true);
+        	tdDistributorGoods.setIsSetRecommendTime(new Date());
         }else{
         	tdDistributorGoods.setIsSetRecommend(false);
         }
         
-        if(null != isRecommendType && isRecommendType){
-        	tdDistributorGoods.setIsRecommendType(true);
+        if(null != isRecommendCategory && isRecommendCategory){
+        	tdDistributorGoods.setIsRecommendCategory(true);
+        	tdDistributorGoods.setIsRecommendCategoryTime(new Date());
         }else{
-        	tdDistributorGoods.setIsRecommendType(false);
+        	tdDistributorGoods.setIsRecommendIndex(false);
         }
-        
-        if(null != isTouchHot && isTouchHot){
-        	tdDistributorGoods.setIsTouchHot(true);
+        if(null != isSetRecommendType && isSetRecommendType){
+        	tdDistributorGoods.setIsSetRecommendType(true);
+        	tdDistributorGoods.setIsSetRecommendTypeTime(new Date());
         }else{
-        	tdDistributorGoods.setIsTouchHot(false);
+        	tdDistributorGoods.setIsSetRecommendType(false);
+        }
+        if(null != isSetTouchHot && isSetTouchHot){
+        	tdDistributorGoods.setIsSetTouchHot(true);
+        	tdDistributorGoods.setIsSetTouchHotTime(new Date());
+        }else{
+        	tdDistributorGoods.setIsSetTouchHot(false);
         }
         
     	tdManagerLogService.addLog("edit", "用户修改"+tdDistributorGoods.getDistributorTitle()+"商品："+tdDistributorGoods.getGoodsTitle(), req);

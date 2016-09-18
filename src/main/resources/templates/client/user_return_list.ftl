@@ -81,10 +81,10 @@ DD_belatedPNG.fix('.,img,background');
                 <th colspan="2">商品信息</th>
                 <th width="60">退换数量</th>
                 <th width="120">订单号</th>
-                <th width="120">用户名</th>
                 <th width="120">联系电话</th>
                 <th width="120">申请时间</th>
                 <th width="50">状态</th>
+                <th width="50">操作</th>
             </tr>
             <#if return_page??>
                 <#list return_page.content as return>
@@ -97,10 +97,10 @@ DD_belatedPNG.fix('.,img,background');
                       </td>
                       <td>${return.returnNumber!''}</td>
                       <td>${return.orderNumber!''}</td>
-                      <td class="td003">${return.username!''}</td>
                       <td class="td003">${return.telephone!''}</td>
                       <td class="td003">${return.returnTime!''}</td>
-                      <td class="td003"><#if return.statusId==0>待审核<#else>已审核</#if></td>
+                      <td class="td003"><#if return.statusId==0>待审核<#elseif return.statusId=1>已批准<#else>未通过</#if></td>
+                      <td class=""><a href="/user/return/detail?id=${return.id?c}">详情</a></td>
                     </tr>
                 </#list>
             </#if>

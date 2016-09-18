@@ -266,6 +266,12 @@ $(function () {
             </dd>
         </dl>
         <dl>
+            <dt>归属商家</dt>
+            <dd>
+                <span><#if goods??>${goods.distributorTitle!""}</#if></span>
+            </dd>
+        </dl>
+        <dl>
             <dt>编码</dt>
             <dd>
                 <input id="code"  name="code" type="text" value="<#if goods?? && goods.code??>${goods.code!''}</#if>" class="input normal" >
@@ -304,18 +310,19 @@ $(function () {
             <dd>
                 <div class="rule-multi-checkbox multi-checkbox">
                     <span>
-                        <input id="cblItem_0" type="checkbox" name="isRecommendIndex" <#if goods?? && goods.isRecommendIndex?? && goods.isRecommendIndex==true>checked="checked"</#if>>
+                        <input id="cblItem_0" type="checkbox" name="isSetRecommend" <#if goods?? && goods.isSetRecommend?? && goods.isSetRecommend==true>checked="checked"</#if>>
                         <label for="cblItem_0">首页推荐</label>
-                        <input id="cblItem_1" type="checkbox" name="isSetRecommend" <#if goods?? && goods.isSetRecommend?? && goods.isSetRecommend==true>checked="checked"</#if>>
-                        <label for="cblItem_1">平台推荐</label>
-                        <input id="cblItem_1" type="checkbox" name="isRecommendType" <#if goods?? && goods.isRecommendType?? && goods.isRecommendType==true>checked="checked"</#if>>
+                        <input id="cblItem_1" type="checkbox" name="isRecommendCategory" <#if goods?? && goods.isRecommendCategory?? && goods.isRecommendCategory==true>checked="checked"</#if>>
                         <label for="cblItem_1">分类推荐</label>
-                        <input id="cblItem_1" type="checkbox" name="isTouchHot" <#if goods?? && goods.isTouchHot?? && goods.isTouchHot==true>checked="checked"</#if>>
+                        <input id="cblItem_1" type="checkbox" name="isSetRecommendType" <#if goods?? && goods.isSetRecommendType?? && goods.isSetRecommendType==true>checked="checked"</#if>>
+                        <label for="cblItem_1">触屏分类</label>
+                        <input id="cblItem_1" type="checkbox" name="isSetTouchHot" <#if goods?? && goods.isSetTouchHot?? && goods.isSetTouchHot==true>checked="checked"</#if>>
                         <label for="cblItem_1">触屏首页热卖</label>
                     </span>
                 </div>
             </dd>
         </dl>
+        <#--
         <#if goods.isAudit??>
         <dl>
             <dt>审核状态</dt>
@@ -331,6 +338,7 @@ $(function () {
             </dd>
         </dl>
         </#if>
+        -->
         <#if goods.isDistribution??>
         <dl>
             <dt>分销状态</dt>
@@ -346,6 +354,7 @@ $(function () {
             </dd>
         </dl>
         </#if>
+        <#--
         <dl>
             <dt>赠送积分</dt>
             <dd>
@@ -353,6 +362,7 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>封面图片</dt>
             <dd>

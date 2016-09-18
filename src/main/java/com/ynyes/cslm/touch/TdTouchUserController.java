@@ -32,13 +32,11 @@ import com.cslm.payment.alipay.AlipayConfig;
 import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCoupon;
-import com.ynyes.cslm.entity.TdCouponType;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
-import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
@@ -137,15 +135,6 @@ public class TdTouchUserController {
     @Autowired
     private TdDistributorService tdDistributorService;
     
-//    @Autowired
-//    private TdUserComplainService tdUserComplainService;
-//    
-//    @Autowired
-//    private TdRedEnvelopeService tdRedEnvelopeService;
-//    
-//    @Autowired
-//    private TdRedEnvelopeTypeService tdRedEnvelopeTypeService;
-    
     @Autowired
     private TdCouponTypeService tdCouponTypeService;
     
@@ -170,22 +159,22 @@ public class TdTouchUserController {
         
         map.addAttribute("user", tdUser);
         
-        Long total_unpayed = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,2);
+        Long total_unpayed = tdOrderService.countByUsernameAndTypeIdAndStatusId(username,2);
         if(null != total_unpayed && total_unpayed >0L)
         {
         	map.addAttribute("total_unpayed",total_unpayed);
         }
-        Long total_undelivered = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,3);
+        Long total_undelivered = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 3);
         if(null != total_undelivered && total_undelivered>0L)
         {
         	map.addAttribute("total_undelivered",total_undelivered);
         }
-        Long total_unreceived = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,4);
+        Long total_unreceived = tdOrderService.countByUsernameAndTypeIdAndStatusId(username,4);
         if(null != total_unpayed && total_unreceived>0L)
         {
         	map.addAttribute("total_unreceived",total_unreceived);
         }
-        Long total_finished = tdOrderService.countByUsernameAndTypeIdAndStatusId(username, 0,5);
+        Long total_finished = tdOrderService.countByUsernameAndTypeIdAndStatusId(username,5);
         if(null != total_finished && total_finished>0L)
         {
         	map.addAttribute("total_finished",total_finished);
@@ -415,34 +404,19 @@ public class TdTouchUserController {
     @RequestMapping(value = "/user/order/list/{statusId}")
     public String orderList(@PathVariable Integer statusId, 
                         Integer page,
-                        String keywords,
-                        Integer timeId,
                         HttpServletRequest req, 
-                        String username, Integer app,
+                       Integer app,
                         ModelMap map){
-    	if (null == username) {
-    		username = (String) req.getSession().getAttribute("username");
-            if (null == username)
-            {
-                return "redirect:/touch/login";
-            }
-		}
-    	req.getSession().setAttribute("username", username);
-//        if (null == username)
-//        {
-//            return "redirect:/touch/login";
-//        }
-        
+		String username = (String) req.getSession().getAttribute("username");
+        if (null == username)
+        {
+            return "redirect:/touch/login";
+        }
         tdCommonService.setHeader(map, req);
         
         if (null == page)
         {
             page = 0;
-        }
-        
-        if (null == timeId)
-        {
-            timeId = 0;
         }
         
         if (null == statusId)
@@ -454,29 +428,17 @@ public class TdTouchUserController {
         
         map.addAttribute("user", tdUser);
         map.addAttribute("status_id", statusId);
-        map.addAttribute("time_id", timeId);
          
         Page<TdOrder> orderPage = null;
         
         
         if (statusId.equals(0)) {
-            if (null != keywords && !keywords.isEmpty()) {
-                orderPage = tdOrderService.findByUsernameAndSearch(
-                        username, keywords, page, ClientConstant.pageSize);
-            } else {
+            
                 orderPage = tdOrderService.findByUsername(username, page,
                         ClientConstant.pageSize);
-            }
         } else {
-            if (null != keywords && !keywords.isEmpty()) {
-                orderPage = tdOrderService
-                        .findByUsernameAndStatusIdAndSearch(username,
-                                statusId, keywords, page,
-                                ClientConstant.pageSize);
-            } else {
                 orderPage = tdOrderService.findByUsernameAndStatusId(
                         username, statusId, page, ClientConstant.pageSize);
-            }
         }
         
         map.addAttribute("order_page", orderPage);
@@ -496,23 +458,18 @@ public class TdTouchUserController {
    
     
     
-    @RequestMapping(value = "/user/order/list/more/{statusId}")
+    @RequestMapping(value = "/user/order/list_more/{statusId}")
     public String orderListmore(@PathVariable Integer statusId, 
                         Integer page,
-                        String keywords,
-                        Integer timeId, String username,
+                        
                         HttpServletRequest req, Integer app,
                         ModelMap map){
-    	if (null == username) {
-    		username = (String) req.getSession().getAttribute("username");
-            if (null == username)
-            {
-                return "redirect:/touch/login";
-            }
-		}
-        
-        tdCommonService.setHeader(map, req);
-        
+    	String username = (String) req.getSession().getAttribute("username");
+        if (null == username)
+        {
+            return "redirect:/touch/login";
+        }
+
         if (null == page)
         {
             page = 0;
@@ -523,38 +480,18 @@ public class TdTouchUserController {
             statusId = 0;
         }
         
-       TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-        
-        map.addAttribute("user", tdUser);
         map.addAttribute("status_id", statusId);       
          
         Page<TdOrder> orderPage = null;
         
         
-        if (statusId.equals(0))
-            {
-                if (null != keywords && !keywords.isEmpty())
-                {
-                    //orderPage = tdOrderService.findByUsernameAndSearch(username, keywords, page, ClientConstant.pageSize);
-//                    orderPage = tdOrderService.findByUsernameAndStatusIdNotAndSearch(username, 8L, keywords, page, ClientConstant.pageSize);
-                }
-                else
-                {
-                    //orderPage = tdOrderService.findByUsername(username, page, ClientConstant.pageSize);
-//                	orderPage = tdOrderService.findByUsernameAndStatusIdNot(username, 8L, page, ClientConstant.pageSize);
-                }
-            }
-            else
-            {
-                if (null != keywords && !keywords.isEmpty())
-                {
-                    orderPage = tdOrderService.findByUsernameAndStatusIdAndSearch(username, statusId, keywords, page, ClientConstant.pageSize);
-                }
-                else
-                {
-                    orderPage = tdOrderService.findByUsernameAndStatusId(username, statusId, page, ClientConstant.pageSize);
-                }
-        }       
+        if (statusId.equals(0)) {
+		        orderPage = tdOrderService.findByUsername(username, page,
+		                ClientConstant.pageSize);
+		} else {
+		        orderPage = tdOrderService.findByUsernameAndStatusId(
+		                username, statusId, page, ClientConstant.pageSize);
+		}
         
         map.addAttribute("order_page", orderPage);
         
@@ -617,63 +554,55 @@ public class TdTouchUserController {
     }
     
     @RequestMapping(value = "/user/return/list")
-    public String returnList(HttpServletRequest req, 
-    					Integer timeId,
-                        Integer page,
-                        String keywords, String username, Integer app,
-                        ModelMap map){
-    	if (null == username) {
-    		username = (String) req.getSession().getAttribute("username");
-            if (null == username)
-            {
-                return "redirect:/touch/login";
-            }
-		}
-        
-        tdCommonService.setHeader(map, req);
-        
-        if (null == timeId)
-        {
-            timeId = 0;
+    public String returnList(HttpServletRequest req, Integer page,
+             ModelMap map) {
+        String username = (String) req.getSession().getAttribute("username");
+
+        if (null == username) {
+            return "redirect:/login";
         }
-        
-        if (null == page)
-        {
+
+        tdCommonService.setHeader(map, req);
+
+        if (null == page) {
             page = 0;
         }
-       
+
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-        
+
         map.addAttribute("user", tdUser);
-        map.addAttribute("time_id", timeId);
-         
-        Page<TdOrder> orderPage = null;
-        
-        
-        if (null != keywords && !keywords.isEmpty())
-        {
-//              orderPage = tdOrderService.findByUsernameAndOrderNumberAndStatusIdOrUsernameAndOrderNumberAndStatusIdOrUsernameAndOrderNumberAndStatusId( username, keywords,4L,username, keywords,5L,username, keywords,6L,page, ClientConstant.pageSize);
-        }
-        else
-        {
-//              orderPage = tdOrderService.findByUsernameAndStatusIdOrUsernameAndStatusIdOrUsernameAndStatusIdOrderByIdDesc(username,4L,username,5L,username,6L,page, ClientConstant.pageSize);
-        }
-                                                  
-        map.addAttribute("return_page", orderPage);
-        map.addAttribute("keywords", keywords);
-        
-      //判断是否为app链接
-        if (null == app) {
-   			Integer isApp = (Integer) req.getSession().getAttribute("app");
-   	        if (null != isApp) {
-   	        	map.addAttribute("app", isApp);
-   			}
-		}else {
-			map.addAttribute("app", app);
-		}
-        
+
+        Page<TdUserReturn> returnPage = tdUserReturnService.findByUsername(username, page,
+                    ClientConstant.pageSize);
+
+        map.addAttribute("return_page", returnPage);
+
         return "/touch/user_return_list";
     }
+    
+    @RequestMapping(value = "/user/return/list_more")
+    public String returnListMore(HttpServletRequest req, Integer page,
+             ModelMap map) {
+        String username = (String) req.getSession().getAttribute("username");
+
+        if (null == username) {
+            return "redirect:/login";
+        }
+
+        tdCommonService.setHeader(map, req);
+
+        if (null == page) {
+            page = 0;
+        }
+
+        Page<TdUserReturn> returnPage = tdUserReturnService.findByUsername(username, page,
+                    ClientConstant.pageSize);
+
+        map.addAttribute("return_page", returnPage);
+
+        return "/touch/user_return_more";
+    }
+    
     /**
      * 取消订单
      * @author  
@@ -761,41 +690,6 @@ public class TdTouchUserController {
         return "/touch/user_cancel_detail";
     }
     
-//    /**
-//     * 订单取消申请
-//     */
-//    @RequestMapping(value = "/user/cancel/edit")
-//    public String cancelEdit(Long id, 
-//                        HttpServletRequest req, String username, Integer app,
-//                        ModelMap map){
-//    	if (null == username) {
-//    		username = (String) req.getSession().getAttribute("username");
-//            if (null == username)
-//            {
-//                return "redirect:/touch/login";
-//            }
-//		}
-//
-//        tdCommonService.setHeader(map, req);
-//        
-//        TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-//        
-//        map.addAttribute("user", tdUser);
-//                
-//        //猜你喜欢  
-//        List<TdUserRecentVisit> lastVisitList = tdUserRecentVisitService.findByUsernameOrderByVisitCountDesc(username);
-//        if (0 == lastVisitList.size())
-//        {
-////	        	
-//	        	map.addAttribute("orderId", id);
-//	        	map.addAttribute("statusId", statusId);
-//	            map.addAttribute("order", order);
-//	            return "/client/user_cancel_edit";
-//	        }
-//        
-//        return "/touch/error_404";
-//    }
- 
     @RequestMapping(value = "/user/cancel/save", method=RequestMethod.POST)
     public String cancelSave(HttpServletRequest req, 
                         Long id, // 订单ID
@@ -1455,59 +1349,38 @@ public class TdTouchUserController {
     }
     
     @RequestMapping(value = "/user/return/{orderId}")
-    public String userReturn(HttpServletRequest req, 
-                        @PathVariable Long orderId,
-                        Long id, // 商品ID
-                        String method, Integer app,
-                        ModelMap map){
+    public String userReturn(HttpServletRequest req,
+            @PathVariable Long orderId, Long id, // 商品ID
+            String method, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
-        
-        if (null == username)
-        {
+
+        if (null == username) {
             return "redirect:/touch/login";
         }
-        
+
         tdCommonService.setHeader(map, req);
-        
-        
-        
+
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-        
+
         map.addAttribute("user", tdUser);
-        map.addAttribute("telephone", tdUser.getMobile());
-        
-      //判断是否为app链接
-        if (null == app) {
-   			Integer isApp = (Integer) req.getSession().getAttribute("app");
-   	        if (null != isApp) {
-   	        	map.addAttribute("app", isApp);
-   			}
-		}else {
-			map.addAttribute("app", app);
-		}
-        
-        if (null != orderId)
-        {
+
+        if (null != orderId) {
             TdOrder tdOrder = tdOrderService.findOne(orderId);
             map.addAttribute("order", tdOrder);
-            
-            if (null != tdOrder && null != id)
-            {
-                for (TdOrderGoods tog : tdOrder.getOrderGoodsList())
-                {
-                    if (tog.getId().equals(id))
-                    {
+//            if(null !=tdOrder.getTypeId() && tdOrder.getTypeId() ==0)
+//            {
+            	map.addAttribute("shop", tdDistributorService.findOne(tdOrder.getShopId()));
+//            }
+
+            if (null != tdOrder && null != id) {
+                for (TdOrderGoods tog : tdOrder.getOrderGoodsList()) {
+                    if (tog.getId().equals(id)) {
                         // 已经退换货
-                        if (null != tog.getIsReturnApplied() && tog.getIsReturnApplied())
-                        {
+                        if (null != tog.getIsReturnApplied()
+                                && tog.getIsReturnApplied()) {
                             map.addAttribute("has_returned", true);
-                            String orderNumber = tdOrder.getOrderNumber();
-//                            TdUserReturn userReturn = tdUserReturnService.findByUsernameAndOrderNumberAndGoodsId(username, orderNumber, tog.getGoodsId());
-//                            map.addAttribute("return", userReturn);
                         }
 
-                        map.addAttribute("goodsId",tog.getGoodsId());
-                        map.addAttribute("orderId",orderId);
                         map.addAttribute("order_goods", tog);
 
                         return "/touch/user_return_edit";
@@ -1515,71 +1388,69 @@ public class TdTouchUserController {
                 }
             }
         }
-        
-        return "/touch/user_return_list";
+
+        return "redirect:/touch/user/order?id="+orderId;
     }
     
-    @RequestMapping(value = "/user/return/save", method=RequestMethod.POST)
-    public String returnSave(HttpServletRequest req, 
-    					Boolean isReturn,
-                        Long goodsId,
-                        Long id, // 订单ID
-                        String reason,
-                        String telephone,
-                        ModelMap map){
+    @RequestMapping(value = "/user/return/save", method = RequestMethod.POST)
+    public String returnSave(HttpServletRequest req, Long goodsId, Long id, // 订单ID
+            Long shopId,String shopTitle, String reason, String telephone, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
-        
-        if (null == username)
-        {
+
+        if (null == username) {
             return "redirect:/touch/login";
         }
-        
+
         tdCommonService.setHeader(map, req);
-              
-        if (null != id && null != goodsId)
-        {
+
+        if (null != id && null != goodsId) {
             TdOrder order = tdOrderService.findOne(id);
-            
-            if (null != order)
-            {
-                for (TdOrderGoods tog : order.getOrderGoodsList())
-                {
-                    if (goodsId.equals(tog.getGoodsId()))
-                    {
-                        TdUserReturn tdReturn = new TdUserReturn();
-                        
-                        tdReturn.setIsReturn(isReturn); 
-                        
-                        // 用户
-                        tdReturn.setUsername(username);
-                        tdReturn.setTelephone(telephone);;
-                        
-                        // 退货订单商品
-                        tdReturn.setOrderNumber(order.getOrderNumber());
-                        tdReturn.setGoodsId(goodsId);
-                        tdReturn.setGoodsTitle(tog.getGoodsTitle());
-                        tdReturn.setGoodsPrice(tog.getPrice());
-                        tdReturn.setGoodsCoverImageUri(tog.getGoodsCoverImageUri());
-                        
-                        // 退货时间及原因
-                        tdReturn.setReason(reason);
-                        tdReturn.setReturnTime(new Date());
-                        
-                        tdReturn.setStatusId(0L);
-                        tdReturn.setReturnNumber(1L);
-                        
-                        // 保存
-                        tdUserReturnService.save(tdReturn);
-                        
-                        // 该商品已经退换货
-                        tog.setIsReturnApplied(true);
-                        tdOrderGoodsService.save(tog);
+
+            if (null != order) {
+                for (TdOrderGoods tog : order.getOrderGoodsList()) {
+                    if (goodsId.equals(tog.getGoodsId())) {
+                    	if(null != tog.getIsReturnApplied() && tog.getIsReturnApplied() == false)
+                    	{
+                    		TdUserReturn tdReturn = new TdUserReturn();
+                    		
+                    		tdReturn.setIsReturn(true);
+                    		
+                    		// 用户
+                    		tdReturn.setUsername(username);
+                    		
+                    		tdReturn.setTelephone(telephone);
+                    		tdReturn.setShopId(shopId);
+                    		tdReturn.setShopTitle(shopTitle);
+                    		
+                    		// 退货订单商品
+                    		tdReturn.setOrderNumber(order.getOrderNumber());
+                    		tdReturn.setGoodsId(goodsId);
+                    		tdReturn.setGoodsTitle(tog.getGoodsTitle());
+                    		tdReturn.setGoodsPrice(tog.getPrice());
+                    		tdReturn.setGoodsCoverImageUri(tog
+                    				.getGoodsCoverImageUri());
+                    		
+                    		// 退货时间及原因
+                    		tdReturn.setReason(reason);
+                    		tdReturn.setReturnTime(new Date());
+                    		
+                    		tdReturn.setType(1L);
+                    		tdReturn.setStatusId(0L);
+                    		tdReturn.setReturnNumber(tog.getQuantity());
+                    		
+                    		// 保存
+                    		tdUserReturnService.save(tdReturn);
+                    		
+                    		// 该商品已经退换货
+                    		tog.setIsReturnApplied(true);
+                    		tdOrderGoodsService.save(tog);
+                    	}
                         break;
                     }
                 }
             }
         }
-        
+
         return "redirect:/touch/user/return/list";
     }
     
@@ -1587,7 +1458,7 @@ public class TdTouchUserController {
     @RequestMapping(value = "/user/comment/add", method=RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> commentAdd(HttpServletRequest req,
-    		TdUserComment tdComment, Long orderId, Long ogId,Long quantity, String code,
+    		TdUserComment tdComment, Long orderId, Long ogId,
             ModelMap map) {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
@@ -1605,13 +1476,18 @@ public class TdTouchUserController {
             return res;
         }
 
-        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(ogId);
-        TdGoods goods = tdGoodsService.findOne(tdComment.getGoodsId());
-
-        if (null == goods) {
-            res.put("message", "评论的商品不存在！");
-            return res;
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(tdComment.getGoodsId());
+        
+        if (null == distributorGoods) {
+        	res.put("message", "评论的商品不存在！");
+        	return res;
         }
+        TdGoods goods = tdGoodsService.findOne(distributorGoods.getGoodsId());
+        if (null == goods) {
+        	res.put("message", "评论的商品不存在！");
+        	return res;
+        }
+
 
         tdComment.setCommentTime(new Date());
         tdComment.setGoodsCoverImageUri(goods.getCoverImageUri());
@@ -1625,8 +1501,6 @@ public class TdTouchUserController {
         
         TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 
-//        tdComment.setShowPictures(uris);
-        
         if (null != orderId) {
             TdOrder tdOrder = tdOrderService.findOne(orderId);
 
@@ -1675,6 +1549,7 @@ public class TdTouchUserController {
         } else {
             goods.setTotalComments(goods.getTotalComments() + 1L);
         }
+        tdGoodsService.save(goods);
 
         res.put("code", 0);
 
@@ -2598,6 +2473,7 @@ public class TdTouchUserController {
     	
     	req.setAttribute("orderNumber", cash.getCashNumber());
     	req.setAttribute("totalPrice",cash.getPrice().toString());
+    	req.setAttribute("type", "m");
     	
     	PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
         String payForm = paymentChannelAlipay.getPayFormData(req);
@@ -2649,6 +2525,7 @@ public class TdTouchUserController {
     
     @RequestMapping(value="/user/draw2",method=RequestMethod.POST)
     public String draw2(String card,Double price,
+    			String bank,String name,
     			HttpServletRequest req,ModelMap map)
     {
     	String username = (String)req.getSession().getAttribute("username");
@@ -2661,12 +2538,16 @@ public class TdTouchUserController {
     	map.addAttribute("user", tdUserService.findByUsername(username));
     	map.addAttribute("card", card);
     	map.addAttribute("price", price);
+    	map.addAttribute("bank", bank);
+    	map.addAttribute("name", name);
     	
     	return "/touch/user_draw_two";
     }
     
     @RequestMapping(value="/user/draw3",method = RequestMethod.POST)
-    public String draw3(String card,Double price,HttpServletRequest req,ModelMap map)
+    public String draw3(String card,Double price,
+    		String bank,String name,
+    		HttpServletRequest req,ModelMap map)
     {
     	String username = (String)req.getSession().getAttribute("username");
     	if(null == username)
@@ -2692,6 +2573,8 @@ public class TdTouchUserController {
 		TdCash cash = new TdCash();
 		
 		cash.setCard(card);
+		cash.setBank(bank);
+		cash.setName(name);
 		cash.setPrice(price);
 		cash.setCreateTime(new Date());
 		cash.setCashNumber("USE"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));

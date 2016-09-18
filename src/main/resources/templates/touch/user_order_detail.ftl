@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
+<title><#if site??>${site.seoTitle!''}-</#if>联超商城</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -33,6 +33,7 @@
   	<ul class="order_detail">
 		<li>订单日期：<span><#if order??>${order.orderTime?string('yyyy-MM-dd')}</#if></span></li>
 		<li>订单总价：<span>￥<#if order??>${order.totalPrice?string("0.00")}</#if></span></li>
+		<li>使用积分：<span><#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if></span></li>
 		<li>订单编号：<span><#if order??>${order.orderNumber!''}</#if></span></li>
 		<li>支付方式：<span>${order.payTypeTitle!""}</span></li>
 		<li>配送方式：<span><#if order?? && order.deliveryMethod?? && order.deliveryMethod==1>门店自提：${order.shipAddress!''}<#else>送货上门</#if></span></li>
@@ -54,6 +55,9 @@
                       <a href="/touch/goods/${og.goodsId?c}">${og.goodsTitle!''}</a>
                       <p>价格：￥${og.price?string('0.00')}</p>
                       <p>数量：${og.quantity!'0'}</p>
+                      <#if order.statusId==5 && og.isReturnApplied?? && og.isReturnApplied== false>
+                      <a href="/touch/user/return/${order.id?c}?id=${og.id?c}" class="sqth">申请退货</a>
+                      </#if>
                     </div>
                     <div class="clear"></div>  
               </li>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Language" content="zh-CN">
-<title><#if site??>${site.seoTitle!''}-</#if>超市联盟</title>
+<title><#if site??>${site.seoTitle!''}-</#if>联超商城</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -17,7 +17,7 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
-
+<script type="text/javascript" src="/touch/js/jquery.SuperSlide.2.1.1.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	indexBanner("box","sum",300,5000,"num");//Banner
@@ -32,24 +32,26 @@ $(document).ready(function(){
 	<header class="com_top">
         <a href="javascript:;" class="home"></a>
         <div class="branch">
-            <a href="javascript:void(0)" onclick="$('.infp_eject').fadeIn(300)"><#if distributorTitle??>${distributorTitle!''}<#else>超市联盟</#if></a>     
+            <a href="javascript:void(0)" onclick="$('.infp_eject').fadeIn(300)"><#if distributorTitle??>${distributorTitle!''}<#else>联超商城店铺选择</#if></a>     
         </div>
     <div class="infp_eject" style="display: none;" id="shopList">
        <#include "/touch/shop_list.ftl" />
     </div>
-        <a href="javascript:;" class=""></a>
+        <a href="/touch/user/collect/list/1" class="coll"></a>
     </header>
     <div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
   
   <!-- banner -->
   <section id="box" class="bannerbox">
+    <#--
   	<div class="search">
   	     <form action="/touch/search">
   		<input type="text" class="text" name="keywords" placeholder="请搜索关键字" />
   		<input type="submit" class="sub" value=" " />
   		</form>
   	</div>
+  	-->
     <ul id="sum" class="bannersum">
         <#if banner_ad_list??>
             <#list banner_ad_list as item>
@@ -60,6 +62,36 @@ $(document).ready(function(){
     <div class="clear"></div>
   </section>
   <!-- banner END -->
+
+     <!-- 搜索框 -->
+    <form action="/touch/search">
+    <div class="search_box">
+        <div class="select">
+          <a class="on" href="javascript:void(0);" onclick="shopDown(this)">商品</a>
+          <input type="hidden" name="type" id="type" value="商品" />
+          <menu>
+            <a href="javascript:void(0);" onclick="shopCheck(this)">商品</a>
+            <a href="javascript:void(0);" onclick="shopCheck(this)">店铺</a>
+          </menu>
+        </div>
+        <input type="text" class="text" name="keywords" placeholder="请搜索关键字" />
+        <input type="submit" class="sub" value=" " />
+    </div>
+    </form>
+  <script type="text/javascript">
+    function shopDown(obj){
+      var _box = $(obj).parent().find("menu");
+      _box.slideToggle(200);
+    }
+
+    function shopCheck(obj){
+      var _str = $(obj).html();
+      var _box = $(obj).parent().parent().find(".on");
+      _box.html(_str);
+      $("#type").attr("value",_str);
+      $(obj).parent().slideUp(200);
+    }
+  </script>
 
   <!-- 入口菜单 -->
   <section class="tabfix index_enter">
@@ -93,6 +125,31 @@ $(document).ready(function(){
   	</nav>
   </section>
   <!-- 入口菜单 END -->
+   
+   <!-- 超市快讯 -->
+   <#if news_page?? && news_page.content?size gt 0>
+  <section class="sm_news">
+    <#if news_ad_list??>
+        <#list news_ad_list as ad>
+            <#if ad_index ==0>
+            <a href="javascript:;" class="pic"><img src="${ad.fileUri!''}" /></a>
+            </#if>
+        </#list>
+    </#if>
+    <div class="slide">
+      <menu>
+        <#list news_page.content as news>
+        <a href="/touch/info/content/${news.id?c}?mid=10">${news.title!''}</a>
+        </#list>
+      </menu>
+    </div>
+    <a href="/touch/info/list/10" class="more">更多</a>
+  </section>
+  <script type="text/javascript">
+    jQuery(".sm_news").slide({mainCell:".slide menu",autoPage:true,effect:"top",autoPlay:true,vis:2});
+   </script>
+   </#if>
+   <!-- END -->
 
   <!-- 新品推荐广告位 -->
   <section class="new_arrivals">
@@ -116,26 +173,8 @@ $(document).ready(function(){
   		</menu>
   	</div>
   </section>
+  
   <!-- 新品推荐广告位 END -->
-
-  <!-- 超市快讯 -->
-  <#if news_page?? && news_page.content?size gt 0>
-  <section class="news_flash">
-    <#if news_ad_list??>
-        <#list news_ad_list as ad>
-              	<p class="top"><img src="${ad.fileUri!''}" /></p>
-        </#list>
-    </#if>
-  	<menu>
-  	    
-  	    <#list news_page.content as news>
-      		<a href="/touch/info/content/${news.id?c}?mid=10">${news.title!''}</a>
-  	    </#list>
-  	</menu>
-  	<a href="/touch/info/list/10" class="more_btn">查看更多>></a>
-  </section>
-    </#if>
-  <!-- 超市快讯 END -->
 
   <!-- 楼层part -->
   <section class="index_part">
@@ -152,6 +191,7 @@ $(document).ready(function(){
          </#if>
   	</div>
   	<menu>
+  	     <#--
   	     <#if top_cat_goods_page0?? && top_cat_goods_page0.content?size gt 0 >
       	    <#list top_cat_goods_page0.content as item>
                  <#if item_index lt 4 > 
@@ -161,6 +201,18 @@ $(document).ready(function(){
               			<p>¥ ${item.goodsPrice?string('0.00')}</p>
               		</a>
           		</#if>
+            </#list>
+         </#if>
+         -->
+         <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
+            <#list category_recommend_page.content as item>
+                 <#if item_index lt 4 > 
+                    <a href="/touch/goods/${item.id?c!''}">
+                        <img src="${item.coverImageUri!''}" />
+                        <p>${item.goodsTitle!''}</p>
+                        <p>¥ ${item.goodsPrice?string('0.00')}</p>
+                    </a>
+                </#if>
             </#list>
          </#if>
   	</menu>
@@ -182,6 +234,7 @@ $(document).ready(function(){
          </#if>
   	</div>
   	<menu>
+  	 <#--
   	 <#if top_cat_goods_page2?? && top_cat_goods_page2.content?size gt 0 >
         <#list top_cat_goods_page2.content as item>
              <#if item_index lt 4 > 
@@ -193,6 +246,18 @@ $(document).ready(function(){
             </#if>
         </#list>
      </#if>
+     -->
+     <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
+            <#list category_recommend_page.content as item>
+                 <#if item_index gt 3 && item_index lt 8 > 
+                    <a href="/touch/goods/${item.id?c!''}">
+                        <img src="${item.coverImageUri!''}" />
+                        <p>${item.goodsTitle!''}</p>
+                        <p>¥ ${item.goodsPrice?string('0.00')}</p>
+                    </a>
+                </#if>
+            </#list>
+         </#if>
   	</menu>
   </section>
   <!-- 楼层part END -->
@@ -212,6 +277,7 @@ $(document).ready(function(){
          </#if>
   	</div>
   	<menu>
+  	     <#--
   	     <#if top_cat_goods_page5?? && top_cat_goods_page5.content?size gt 0 >
             <#list top_cat_goods_page5.content as item>
                  <#if item_index lt 4 > 
@@ -223,10 +289,22 @@ $(document).ready(function(){
                 </#if>
             </#list>
          </#if>
+         -->
+         <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
+            <#list category_recommend_page.content as item>
+                 <#if item_index gt 7 && item_index lt 12> 
+                    <a href="/touch/goods/${item.id?c!''}">
+                        <img src="${item.coverImageUri!''}" />
+                        <p>${item.goodsTitle!''}</p>
+                        <p>¥ ${item.goodsPrice?string('0.00')}</p>
+                    </a>
+                </#if>
+            </#list>
+         </#if>
   	</menu>
   </section>
   <!-- 楼层part END -->
-
+  
   <!-- 热卖商品 -->
   <section class="pro_hot">
     <#if DISTRIBUTOR_ID??>

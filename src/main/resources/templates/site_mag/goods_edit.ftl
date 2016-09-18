@@ -1048,7 +1048,9 @@ function del_goods_comb(obj) {
     <!--工具栏-->
     <div class="page-footer">
         <div class="btn-list">
+            <#if !goods?? || (tdManagerRole?? && tdManagerRole.id != 4)>
             <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn">
+            </#if>
             <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);">
         </div>
         <div class="clear">

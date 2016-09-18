@@ -175,7 +175,7 @@ $(function () {
         <dl>
             <dt>虚拟账户余额</dt>
             <dd>
-                <input name="virtualAccount" type="text" <#if setting?? && setting.virtualMoney??>value="${setting.virtualMoney!'0'}" </#if> class="input normal" datatype="*0-20" sucmsg=" ">
+                <input name="virtualMoney" type="text" <#if setting?? && setting.virtualMoney??>value="${setting.virtualMoney!'0'}" </#if> class="input normal" datatype="*0-20" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
@@ -322,6 +322,20 @@ $(function () {
                 <span class="Validform_checktip">支持HTML</span>
             </dd>
         </dl>
+        <dl>
+            <dt>应用简介</dt>
+            <dd>
+                <textarea name="bottomLogoUri2" rows="2" cols="20" class="input" datatype="*0-255" sucmsg=" "><#if setting??>${setting.bottomLogoUri2!""}</#if></textarea>
+                <span class="Validform_checktip">*应用关键字</span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>应用描述</dt>
+            <dd>
+                <textarea name="bottomLogoUri1" rows="2" cols="20" class="input" datatype="*0-255" sucmsg=" "><#if setting??>${setting.bottomLogoUri1!""}</#if></textarea>
+                <span class="Validform_checktip">*下载页面应用描述</span>
+            </dd>
+        </dl>
         <#--add 2015-7-28 17:46:12 mdj
         <dl>
             <dt>底部图标1</dt>
@@ -429,14 +443,14 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
-        <#--
         <dl>
-            <dt>分享注册奖励粮草</dt>
+            <dt>积分抵现比例</dt>
             <dd>
-                <input name="registerSharePoints" type="text" value="<#if setting??>${setting.registerSharePoints!"20"}<#else>20</#if>" class="input normal" datatype="n" sucmsg=" ">
-                <span class="Validform_checktip"></span>
+                <input name="registerSharePoints" type="text" value="<#if setting??>${setting.registerSharePoints!"10"}<#else>10</#if>" class="input normal" datatype="n" sucmsg=" ">
+                <span class="Validform_checktip">下单时可使用积分抵现比例，如10积分抵现1元则此处填“10”，不填则默认为1:1</span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>分享商品奖励粮草</dt>
             <dd>

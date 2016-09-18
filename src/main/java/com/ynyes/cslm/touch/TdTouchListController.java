@@ -25,6 +25,7 @@ import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdParameterService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.util.ClientConstant;
+import com.ynyes.cslm.util.CookieUtil;
 
 @Controller
 @RequestMapping("/touch")
@@ -57,6 +58,12 @@ public class TdTouchListController {
 	            return "/touch/error_404";
 	        }
 	        
+	        Double lng = (Double)req.getSession().getAttribute("lng");
+	    	Double lat = (Double)req.getSession().getAttribute("lat");
+	    	
+	    	if(null != lng && null != lat){
+	    		tdCommonService.mapdistance(lng, lat, req, map);
+	    	}
 	        
 	        // 排序字段个数
 	         int totalSorts = 3;

@@ -146,7 +146,17 @@
 
 
 .nav_down li a{color:#252525;}
+/**
 .nav_down li .list{display: block;width: 100px;height: 25px;overflow: hidden;float:left;}
+*/
+.nav_down li .list {
+    display: block;
+    width: 100px;
+    height: 25px;
+    overflow: hidden;
+    float: left;
+    font-size: 14px;
+}
 .nav_down li span{float: right; margin-right: 21px;} 
 .nav_down li:hover{background: url(../images/nav01.png) no-repeat 0 0px;color:#fff;}
 .nav_down li:hover .list{color:#fff;}

@@ -611,7 +611,7 @@
                                     <td style="text-align: left; white-space: normal;">
                                         ${goods.goodsTitle!""} 
                                     </td>
-                                    <td>${goods.price?string("#.00")}<#if goods.unit??>${goods.unit!''}</#if></td>
+                                    <td>${goods.price?string("#.00")}<#if goods.unit??>/${goods.unit!''}</#if></td>
                                     <td>${goods.quantity!""}</td>
                                     <td>${(goods.price*goods.quantity)?string("#.00")}</td>
                                 </tr>
@@ -672,6 +672,13 @@
                         </th>
                         <td>
                             ${order.totalPrice?string("0.00")}元</td>
+                    </tr>
+                    <tr>
+                        <th>
+                            使用积分
+                        </th>
+                        <td>
+                           <#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if></td>
                     </tr>
                     <tr>
                         <th>

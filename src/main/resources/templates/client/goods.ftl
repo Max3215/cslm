@@ -60,7 +60,6 @@ function stripscript(s) {
 function addNum(){
     var q = parseInt($("#quantity").val());
     var ln = parseInt($("#leftNumber").val());
-    console.debug(ln)
  //   <#if dis_goods?? && dis_goods.leftNumber??>
         if (q < ${dis_goods.leftNumber?c!'0'})
         {
