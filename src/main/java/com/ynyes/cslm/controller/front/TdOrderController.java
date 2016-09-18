@@ -1152,44 +1152,16 @@ public class TdOrderController extends AbstractPaytypeController {
 				map.addAttribute("total_price", order.getTotalPrice());
 				map.addAttribute("order", order); // Max
 
-//				String sa = "appid=" + tdWeiXinPayService.getAppid() + "&mch_id=" + tdWeiXinPayService.getMch_id() + "&nonce_str="
-//						+ tdWeiXinPayService.getRandomStringByLength(32) + "&product_id=" + order.getId()
-//						+ "&time_stamp=" + System.currentTimeMillis() / 1000;
-//
-//				String sign = MD5.MD5Encode(sa + "&key=3835866f1646adc0f0b99ffb49788b30").toUpperCase();
-
 				 WxPayReturnData res = this.tdWeiXinPayService.unifiedOrder("支付订单" + 
 						 	order.getOrderNumber(), order.getOrderNumber(), null, 
 		        (int)Math.round(order.getTotalPrice().doubleValue() * 100.0D), "NATIVE");
 
 		      if (("SUCCESS".equalsIgnoreCase(res.getReturn_code())) && 
 		    		  ("SUCCESS".equalsIgnoreCase(res.getResult_code()))) {
-		            
-//				String appid = this.tdWeiXinPayService.getAppid();
-//		        String partnerid = this.tdWeiXinPayService.getMch_id();
-//		        String prepayid = res.getPrepay_id();
-//		        String packageval = "Sign=WXPay";
-//		        String noncestr = this.tdWeiXinPayService.getRandomStringByLength(32);
-//		        long timestamp = System.currentTimeMillis() / 1000L;
-//
-//		        SortedMap<Object,Object> parameters = new TreeMap<Object, Object>();
-//		        parameters.put("appid", appid);
-//		        parameters.put("partnerid", partnerid);
-//		        parameters.put("prepayid", prepayid);
-//		        parameters.put("package", packageval);
-//		        parameters.put("noncestr", noncestr);
-//		        parameters.put("timestamp", Long.valueOf(timestamp));
-		        
-		        String code_url = res.getCode_url();
-		        
-		        System.err.println(code_url);
-		        req.getSession().setAttribute("WXPAYURLSESSEION", code_url);
+			        String code_url = res.getCode_url();
+			        
+			        req.getSession().setAttribute("WXPAYURLSESSEION", code_url);
 
-//		        String sign = this.tdWeiXinPayService.createSign(parameters);
-		        
-//				System.out.print("Sharon: weixin://wxpay/bizpayurl?" + sa + "&sign=" + sign + "\n");
-
-//				req.getSession().setAttribute("WXPAYURLSESSEION", "weixin://wxpay/bizpayurl?" + sa + "&sign=" + sign);
 				return "/client/order_pay_wx";
 		      }else{
 		    	  return "/client/order_pay_failed";
@@ -1212,26 +1184,9 @@ public class TdOrderController extends AbstractPaytypeController {
 	}
 	
 
-//	@RequestMapping(value = "/pay/success")
-//	public String paySuccess(ModelMap map, HttpServletRequest req) {
-		// String username = (String) req.getSession().getAttribute("username");
-		//
-		// if (null == username) {
-		// return "redirect:/login";
-		// }
-
-//		tdCommonService.setHeader(map, req);
-//
-//		return "/client/order_pay_success";
-//	}
 
 	@RequestMapping(value = "/pay/notify")
 	public String payNotify(ModelMap map, HttpServletRequest req) {
-		// String username = (String) req.getSession().getAttribute("username");
-		//
-		// if (null == username) {
-		// return "redirect:/login";
-		// }
 
 		tdCommonService.setHeader(map, req);
 

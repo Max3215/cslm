@@ -165,6 +165,7 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>虚拟账号</dt>
             <dd>
@@ -172,10 +173,11 @@ $(function () {
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
+        -->
         <dl>
             <dt>虚拟账户余额</dt>
             <dd>
-                <input name="virtualMoney" type="text" <#if setting?? && setting.virtualMoney??>value="${setting.virtualMoney!'0'}" </#if> class="input normal" datatype="*0-20" sucmsg=" ">
+                <input name="virtualMoney" type="text" <#if setting?? && setting.virtualMoney??>value="${setting.virtualMoney?string('0.00')!'0'}" </#if> class="input normal" datatype="*0-20" sucmsg=" ">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>
@@ -198,6 +200,7 @@ $(function () {
                 <div class="photo-list thumb_wxImgUrl_show"></div>
             </dd>
         </dl>
+        <#--
         <dl>
             <dt>微博二维码</dt>
             <dd>
@@ -207,7 +210,7 @@ $(function () {
                 <div class="photo-list thumb_iOsImgUrl_show"></div>
             </dd>
         </dl>
-        <#--
+        -->
         <dl>
             <dt>安卓App二维码</dt>
             <dd>
@@ -217,7 +220,6 @@ $(function () {
                 <div class="photo-list thumb_androidImgUrl_show"></div>
             </dd>
         </dl>
-        -->
         <dl>
             <dt>安卓App文件</dt>
             <dd>

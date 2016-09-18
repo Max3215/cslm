@@ -5,7 +5,7 @@
         <a href="/user/collect/list" class="col" title="收藏"></a>
         <a href="/user/recent/list" class="history" title="浏览记录"></a>
         <a  class="ewm" title=""></a>
-        <div class="ewm_show"><img src="${site.wxQrCode!''}"></div>
+        <div class="ewm_show"><img src="${site.androidQrCode!''}"></div>
         <a href="javascript:void(0)" class="service"></a>
             <div class="show_kefu">
                 <a href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>javascript:;</#if>" title="在线咨询" id="floatqq" target="_blank"">售前1</a>

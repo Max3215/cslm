@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,23 +21,17 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDemand;
-import com.ynyes.cslm.entity.TdDistributor;
-import com.ynyes.cslm.entity.TdManager;
-import com.ynyes.cslm.entity.TdManagerRole;
-import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdPayRecord;
-import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdServiceItem;
 import com.ynyes.cslm.entity.TdSetting;
-import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserSuggestion;
 import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdDemandService;
@@ -524,14 +517,15 @@ public class TdManagerSettingController {
     @ModelAttribute
     public void getModel(@RequestParam(value = "id", required = false) Long id,
                             @RequestParam(value = "serviceItemId", required = false) Long serviceItemId,
-                            ModelMap map) {
+                            Model model) {
+    	System.err.println(id);
         if (null != id) {
-            map.addAttribute("tdSetting", tdSettingService.findOne(id));
+        	model.addAttribute("tdSetting", tdSettingService.findOne(id));
         }
         
         if (null != serviceItemId) {
             TdServiceItem serviceItem = tdServiceItemService.findOne(serviceItemId);
-            map.addAttribute("tdServiceItem", serviceItem);
+            model.addAttribute("tdServiceItem", serviceItem);
         }
     } 
     
