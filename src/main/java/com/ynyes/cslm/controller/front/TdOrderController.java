@@ -3,7 +3,6 @@ package com.ynyes.cslm.controller.front;
 import static org.apache.commons.lang3.StringUtils.leftPad;
 
 import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,10 +13,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.midi.SysexMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
@@ -33,16 +33,13 @@ import com.cslm.payment.alipay.AlipayConfig;
 import com.cslm.payment.alipay.Constants;
 import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.cslm.payment.alipay.core.AlipayNotify;
+import com.ynyes.cslm.dao.MD5;
+import com.ynyes.cslm.dao.WxPayReturnData;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdCash;
-import com.ynyes.cslm.entity.TdCoupon;
-import com.ynyes.cslm.entity.TdCouponType;
-import com.ynyes.cslm.entity.TdDeliveryType;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
-import com.ynyes.cslm.entity.TdGoodsCombination;
-import com.ynyes.cslm.entity.TdGoodsDto;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
@@ -57,11 +54,9 @@ import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdCouponService;
-import com.ynyes.cslm.service.TdCouponTypeService;
 import com.ynyes.cslm.service.TdDeliveryTypeService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
-import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
@@ -73,6 +68,8 @@ import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
+import com.ynyes.cslm.service.TdWeiXinPayService;
+import com.ynyes.cslm.util.QRCodeUtils;
 
 import net.sf.json.JSONObject;
 
@@ -85,6 +82,7 @@ import net.sf.json.JSONObject;
 public class TdOrderController extends AbstractPaytypeController {
 
 	private static final String PAYMENT_ALI = "ALI";
+	private static final String PAYMENT_WX = "WX";
 
 	@Autowired
 	private TdCartGoodsService tdCartGoodsService;
@@ -142,6 +140,9 @@ public class TdOrderController extends AbstractPaytypeController {
 	
 	@Autowired
 	private TdUserPointService tdUserPointService;
+	
+	@Autowired
+	private TdWeiXinPayService tdWeiXinPayService;
 
 	// @Autowired
 	// private PaymentChannelCEB payChannelCEB;
@@ -1146,11 +1147,58 @@ public class TdOrderController extends AbstractPaytypeController {
 				PaymentChannelAlipay paymentChannelAlipay = new PaymentChannelAlipay();
 				payForm = paymentChannelAlipay.getPayFormData(req);
 				map.addAttribute("charset", AlipayConfig.CHARSET);
-			} else {
+			}else if(PAYMENT_WX.equals(payCode)){
+				map.addAttribute("order_number", order.getOrderNumber());
+				map.addAttribute("total_price", order.getTotalPrice());
+				map.addAttribute("order", order); // Max
+
+//				String sa = "appid=" + tdWeiXinPayService.getAppid() + "&mch_id=" + tdWeiXinPayService.getMch_id() + "&nonce_str="
+//						+ tdWeiXinPayService.getRandomStringByLength(32) + "&product_id=" + order.getId()
+//						+ "&time_stamp=" + System.currentTimeMillis() / 1000;
+//
+//				String sign = MD5.MD5Encode(sa + "&key=3835866f1646adc0f0b99ffb49788b30").toUpperCase();
+
+				 WxPayReturnData res = this.tdWeiXinPayService.unifiedOrder("支付订单" + 
+						 	order.getOrderNumber(), order.getOrderNumber(), null, 
+		        (int)Math.round(order.getTotalPrice().doubleValue() * 100.0D), "NATIVE");
+
+		      if (("SUCCESS".equalsIgnoreCase(res.getReturn_code())) && 
+		    		  ("SUCCESS".equalsIgnoreCase(res.getResult_code()))) {
+		            
+//				String appid = this.tdWeiXinPayService.getAppid();
+//		        String partnerid = this.tdWeiXinPayService.getMch_id();
+//		        String prepayid = res.getPrepay_id();
+//		        String packageval = "Sign=WXPay";
+//		        String noncestr = this.tdWeiXinPayService.getRandomStringByLength(32);
+//		        long timestamp = System.currentTimeMillis() / 1000L;
+//
+//		        SortedMap<Object,Object> parameters = new TreeMap<Object, Object>();
+//		        parameters.put("appid", appid);
+//		        parameters.put("partnerid", partnerid);
+//		        parameters.put("prepayid", prepayid);
+//		        parameters.put("package", packageval);
+//		        parameters.put("noncestr", noncestr);
+//		        parameters.put("timestamp", Long.valueOf(timestamp));
+		        
+		        String code_url = res.getCode_url();
+		        
+		        System.err.println(code_url);
+		        req.getSession().setAttribute("WXPAYURLSESSEION", code_url);
+
+//		        String sign = this.tdWeiXinPayService.createSign(parameters);
+		        
+//				System.out.print("Sharon: weixin://wxpay/bizpayurl?" + sa + "&sign=" + sign + "\n");
+
+//				req.getSession().setAttribute("WXPAYURLSESSEION", "weixin://wxpay/bizpayurl?" + sa + "&sign=" + sign);
+				return "/client/order_pay_wx";
+		      }else{
+		    	  return "/client/order_pay_failed";
+		      }
+		   } else {
 				// 其他目前未实现的支付方式
 				return "/client/error_404";
 			}
-		} else {
+		} else {         
 			return "/client/error_404";
 		}
 
@@ -1162,20 +1210,20 @@ public class TdOrderController extends AbstractPaytypeController {
 
 		return "/client/order_pay_form";
 	}
+	
 
-
-	@RequestMapping(value = "/pay/success")
-	public String paySuccess(ModelMap map, HttpServletRequest req) {
+//	@RequestMapping(value = "/pay/success")
+//	public String paySuccess(ModelMap map, HttpServletRequest req) {
 		// String username = (String) req.getSession().getAttribute("username");
 		//
 		// if (null == username) {
 		// return "redirect:/login";
 		// }
 
-		tdCommonService.setHeader(map, req);
-
-		return "/client/order_pay_success";
-	}
+//		tdCommonService.setHeader(map, req);
+//
+//		return "/client/order_pay_success";
+//	}
 
 	@RequestMapping(value = "/pay/notify")
 	public String payNotify(ModelMap map, HttpServletRequest req) {
@@ -1346,85 +1394,46 @@ public class TdOrderController extends AbstractPaytypeController {
 		return "/client/order_pay_failed";
 	}
 
-	/*
-	 * 
-	 */
-	@RequestMapping(value = "/change_paymethod", method = { RequestMethod.POST })
-	public @ResponseBody Map<String, String> changePaymentMethod(Long orderId, Long paymentMethodId, ModelMap map,
-			HttpServletRequest req) {
-		String username = (String) req.getSession().getAttribute("username");
-		Map<String, String> result = new HashMap<String, String>();
-		result.put("status", "F");
-		if (null == username) {
-			result.put("message", "请先登录！");
-			return result;
+	
+	@RequestMapping(value = "/payqrcode", method = RequestMethod.GET)
+	public void verify(HttpServletResponse response, HttpServletRequest request) {
+		response.setContentType("image/jpeg");
+		response.setHeader("Pragma", "No-cache");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setDateHeader("Expire", 0);
+
+		QRCodeUtils qr = new QRCodeUtils();
+		String url = (String) request.getSession().getAttribute("WXPAYURLSESSEION");
+		qr.getQRCode(url, 300, response);
+	}
+	@RequestMapping(value = "/remind", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> remind(Long id, HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("code", 1);
+		if (null != id) {
+			TdOrder order = tdOrderService.findOne(id);
+			if (null != order) {
+				if (order.getStatusId().equals(3L)) {
+					res.put("code", 0);
+				}
+			}
 		}
 
-		if (null == orderId) {
-			result.put("message", "订单Id非法！");
-			return result;
-		}
-
-		if (null == paymentMethodId) {
-			result.put("message", "支付方式非法！");
-			return result;
-		}
-
-		TdOrder order = tdOrderService.findOne(orderId);
-
-		if (null == order) {
-			result.put("message", "不存在的订单信息！");
-			return result;
-		}
-
-		TdPayType payType = tdPayTypeService.findOne(paymentMethodId);
-		if (null == payType) {
-			result.put("message", "不存在的支付方式信息！");
-			return result;
-		}
-
-		if (!order.getStatusId().equals(2L) && !order.getStatusId().equals(3L)) {
-			result.put("message", "订单不能修改支付方式！");
-			return result;
-		}
-
-		if (payType.getIsEnable()) {
-			result.put("message", "所选的支付方式暂不支持，请选择其他支付方式！");
-		}
-
-		Double payTypeFee = payType.getFee();
-		payTypeFee = payTypeFee == null ? 0.0 : payTypeFee;
-
-		double goodPrice = order.getTotalGoodsPrice();
-		Double deliverTypeFee = order.getDeliverTypeFee();
-		deliverTypeFee = deliverTypeFee == null ? 0.0 : deliverTypeFee;
-		/*
-		 * 订单金额=商品总额+支付手续费+运费-优惠券金额-积分抵扣金额 优惠券金额+积分抵扣金额=商品总额+支付手续费+运费-订单金额
-		 */
-		Double orgPayTypeFee = order.getPayTypeFee();
-		orgPayTypeFee = orgPayTypeFee == null ? 0.0 : orgPayTypeFee;
-		double couponAndPointsFee = goodPrice + orgPayTypeFee + deliverTypeFee - order.getTotalPrice();
-
-		/*
-		 * 按百分比收取手续费,手续费重新计算(商品总额*百分比)
-		 */
-		if (payType.getIsFeeCountByPecentage()) {
-			payTypeFee = goodPrice * payTypeFee / 100;
-		}
-
-		order.setTotalPrice(goodPrice + payTypeFee + deliverTypeFee - couponAndPointsFee);
-		order.setPayTypeFee(payTypeFee);
-		order.setPayTypeId(payType.getId());
-		order.setPayTypeTitle(payType.getTitle());
-		order.setIsOnlinePay(payType.getIsOnlinePay());
-
-		tdOrderService.save(order);
-
-		result.put("status", "S");
-		result.put("message", "订单支付方式修改成功！");
-		return result;
+		return res;
 	}
 
+	@RequestMapping(value = "/pay/success")
+	public String paySuccess(Long orderId, ModelMap map, HttpServletRequest req) {
+
+		tdCommonService.setHeader(map, req);
+		if (null != orderId) {
+			map.addAttribute("order", tdOrderService.findOne(orderId));
+		}
+
+		return "/client/order_pay_success";
+
+	}
 	/**
 	 * 订单支付成功后步骤
 	 * 
