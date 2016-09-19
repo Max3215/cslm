@@ -393,7 +393,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 		TdProvider provider = tdProviderService.findByUsername(username);
 		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(provider.getId(), goodsId);
 		TdGoods goods = tdGoodsService.findOne(goodsId);
-		System.err.println(subTitle);
+		
 		if(null == proGoods)
 		{
 			proGoods=new TdProviderGoods();

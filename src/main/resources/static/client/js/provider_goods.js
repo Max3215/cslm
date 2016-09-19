@@ -24,13 +24,27 @@ function goodsOnSale(type,pgId,page){
 }
 
 //超市中心删除商品
-function deleteGoods(type,pgId,page){
+function deleteGoods(pgId){
     $.ajax({
-        url : "/provider/goods/delete/"+pgId,
-        data : {"type":type,"page":page},
+        url : "/provider/goods/delete",
+        data : {"pgId":pgId},
         type :"post",
-        success:function(res){
-            $("#dis_goods_table").html(res);
+        success:function(data){
+        	if(data.code==1){
+        		alert(data.msg);
+        	}else{
+        		 window.location.reload();
+        	}
         }
     })
 }
+//function deleteGoods(type,pgId,page){
+//    $.ajax({
+//        url : "/provider/goods/delete/"+pgId,
+//        data : {"type":type,"page":page},
+//        type :"post",
+//        success:function(res){
+//            $("#dis_goods_table").html(res);
+//        }
+//    })
+//}

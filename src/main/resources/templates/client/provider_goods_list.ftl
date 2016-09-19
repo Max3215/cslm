@@ -50,7 +50,7 @@
                         <td>
                                 <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page})">继续批发</a></p>
                                 <p><a href="javascript:showSubForm(${dg.id?c},${page})">编辑信息</a></p>
-                                <p><a href="javascript:deleteGoods(false,${dg.id?c},${page})">删除</a></p>
+                                <p><a href="javascript:deleteGoods(${dg.id?c})">删除</a></p>
                       </tr>
                  </#if>
             </#list>

@@ -98,6 +98,7 @@ function subDisGoods(){
         success:function(data){
             $('.sub_form').css('display','none');
             alert(data.msg);
+            window.location.reload();
         }
     })
     

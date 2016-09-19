@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProviderGoods;
@@ -592,7 +591,24 @@ public class TdProviderGoodsService {
 		return repository.findByGoodsId(goodsId); 
 	}
 	
-	
+	public Page<TdProviderGoods> findAll(Long proId,Boolean isOnSale,Long catId,String keyword,PageRequest pageRequest){
+		Criteria<TdProviderGoods> c = new Criteria<>();
+		
+		if(null != proId){
+			c.add(Restrictions.eq("proId", proId, true));
+		}
+		if(null != catId && catId != 0L){
+			c.add(Restrictions.like("categoryIdTree", "%[" + catId + "]%", true));
+		}
+		if(null != keyword && !"".equals(keyword.trim())){
+			c.add(Restrictions.or(Restrictions.like("goodsTitle", keyword, true),Restrictions.like("code", keyword, true)));
+		}
+		if(null != isOnSale){
+			c.add(Restrictions.eq("isOnSale", isOnSale, true));
+		}
+		
+		return repository.findAll(c,pageRequest);
+	}
 	
 	
 }

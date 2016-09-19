@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.naming.directory.DirContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +29,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -565,62 +568,72 @@ public class TdProviderController extends AbstractPaytypeController{
 		}// 所有该批发商有的分类
 		map.addAttribute("category_list",category_list);
 		
-		if(null ==categoryId || categoryId==0)
-		{
-
-				if(null == keywords || "".equals(keywords)){
-					if(null == dir || dir ==0){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),isSale,page,ClientConstant.pageSize));
-					}else if(1== dir){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.findByProviderIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(),isSale,page,ClientConstant.pageSize));
-					}else{
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.findByProviderIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(),isSale,page,ClientConstant.pageSize));
-					}
-				}else{
-					if(null == dir || dir ==0){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSale(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
-					}else if(1==dir){
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
-					}else{
-						map.addAttribute("provider_goods_page",
-								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
-					}
-				}
+		PageRequest pageRequest =null;
+		if(null == dir || dir ==0){
+			pageRequest = new PageRequest(page, ClientConstant.pageSize);
+		}else if(1== dir){
+			pageRequest = new PageRequest(page, ClientConstant.pageSize, new Sort(Direction.DESC, "leftNumber"));
+		}else{
+			pageRequest = new PageRequest(page, ClientConstant.pageSize, new Sort(Direction.ASC, "leftNumber"));
+		}
+		map.addAttribute("provider_goods_page",tdProviderGoodsService.findAll(provider.getId(),isSale, categoryId, keywords, pageRequest));
+		
+//		if(null ==categoryId || categoryId==0)
+//		{
+//
+//				if(null == keywords || "".equals(keywords)){
+//					if(null == dir || dir ==0){
+//						map.addAttribute("provider_goods_page",
+//								tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),isSale,page,ClientConstant.pageSize));
+//					}else if(1== dir){
+//						map.addAttribute("provider_goods_page",
+//								tdProviderGoodsService.findByProviderIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(),isSale,page,ClientConstant.pageSize));
+//					}else{
+//						map.addAttribute("provider_goods_page",
+//								tdProviderGoodsService.findByProviderIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(),isSale,page,ClientConstant.pageSize));
+//					}
+//				}else{
+//					if(null == dir || dir ==0){
+//						map.addAttribute("provider_goods_page",
+//								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSale(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
+//					}else if(1==dir){
+//						map.addAttribute("provider_goods_page",
+//								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
+//					}else{
+//						map.addAttribute("provider_goods_page",
+//								tdProviderGoodsService.searchAndProviderIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), keywords, isSale,page, ClientConstant.pageSize));
+//					}
+//				}
+////			}
+//		}
+//		else
+//		{
+////			
+//			if(null == keywords || "".equals(keywords)){
+//				if(null == dir || dir == 0){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSale(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+//				}else if(1== dir){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+//				}else{
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
+//				}
+//			}else{
+//				if(null == dir || 0 ==dir){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+//				}else if(1== dir){
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+//				}else{
+//					map.addAttribute("provider_goods_page",
+//							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
+//				}
+//				
 //			}
-		}
-		else
-		{
-//			
-			if(null == keywords || "".equals(keywords)){
-				if(null == dir || dir == 0){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSale(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
-				}else if(1== dir){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
-				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.findByProviderIdAndCategoryIdAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId,isSale, page, ClientConstant.pageSize));
-				}
-			}else{
-				if(null == dir || 0 ==dir){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSale(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
-				}else if(1== dir){
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberDesc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
-				}else{
-					map.addAttribute("provider_goods_page",
-							tdProviderGoodsService.searchAndProviderIdAndCategoryIdAndKeywordsAndIsOnSaleOrderByLeftNumberAsc(provider.getId(), categoryId, keywords,isSale, page, ClientConstant.pageSize));
-				}
-				
-			}
-		}
+//		}
 		
 		return "/client/provider_goods";
 	}
@@ -711,32 +724,43 @@ public class TdProviderController extends AbstractPaytypeController{
 	}
 	
 	// 删除
-	@RequestMapping(value="/goods/delete/{pgId}")
-	public String deleteGoods(@PathVariable Long pgId,
-			Boolean type,Integer page,
+	@RequestMapping(value="/goods/delete")
+	@ResponseBody
+	public Map<String,Object> deleteGoods(Long pgId,
+//			Boolean type,Integer page,
 			HttpServletRequest req,ModelMap map){
 		String username = (String)req.getSession().getAttribute("provider");
+		Map<String,Object> res = new HashMap<>();
+		
+		res.put("code",1);
+		
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg", "登录超时");
+			return res;
 		}
-		tdCommonService.setHeader(map, req);
-		if(null == pgId)
+//		tdCommonService.setHeader(map, req);
+		if(null != pgId)
 		{
-			return "/client/error_404";
+//			return "/client/error_404";
+			tdProviderGoodsService.delete(pgId);
+			res.put("code", 0);
+			
 		}
-		if(null == page)
-		{
-			page = 0;
-		}
+		res.put("msg", "参数错误");
+		return res;
+//		if(null == page)
+//		{
+//			page = 0;
+//		}
 		
-		tdProviderGoodsService.delete(pgId);
-		TdProvider provider = tdProviderService.findByUsername(username);
-		map.addAttribute("provider_goods_page",
-				tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),type, page, ClientConstant.pageSize));
+//		TdProvider provider = tdProviderService.findByUsername(username);
+//		map.addAttribute("provider_goods_page",
+//				tdProviderGoodsService.findByProviderIdAndIsOnSale(provider.getId(),type, page, ClientConstant.pageSize));
+//		map.addAttribute("isOnSale", type);
+//		map.addAttribute("page", page);
 		
-		
-		return "/client/provider_goods_list";
+//		return "/client/provider_goods_list";
 	}
 	
 	@RequestMapping(value="/goods/checkAll/{type}")
@@ -877,7 +901,6 @@ public class TdProviderController extends AbstractPaytypeController{
 			proGoods.setGoodsId(goods.getId());
 			proGoods.setGoodsTitle(goodsTitle);
 			proGoods.setSubGoodsTitle(subTitle);
-			proGoods.setSubGoodsTitle(goods.getSubTitle());
 			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
 			proGoods.setOutFactoryPrice(outFactoryPrice);
 			proGoods.setGoodsMarketPrice(marketPrice);

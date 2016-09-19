@@ -94,10 +94,10 @@ DD_belatedPNG.fix('.,img,background');
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
                     <h3><#if isOnSale?? && isOnSale>批发中的商品<#else>仓库中的商品</#if></h3>
-                      <form action="/provider/goods/list/${isOnSale?c}" id="form1">
+                      <form action="/provider/goods/list/${isOnSale?c}" id="form1" method="post">
                             <input type="hidden" value="${dir!'0'}" name="dir">
                             <input class="mysub" type="submit" value="查询" />
-                            <input class="mytext" type="text"  value="${keywords!''}" id="keywords"/>
+                            <input class="mytext" type="text"  value="${keywords!''}" id="keywords" name="keywords"/>
                             <select  id="categoryId" name="categoryId" class="myselect" onchange="searchGoods()">
                                 <option value="">请选择类别...</option>
                                 <#if category_list??>
