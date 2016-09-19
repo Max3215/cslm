@@ -591,8 +591,10 @@ a,button,input{
     margin-bottom: 0.05rem;}
 .pay_ways menu a.act{ background: url(../images/round_on.png) no-repeat 0.24rem center;
     background-size: 16px;} 
+.pay_ways a img{display: block;}
+/**
 .pay_ways a img{border:1px solid #c0bfbf;display: block;}
-
+*/
 
 
 

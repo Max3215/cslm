@@ -72,13 +72,19 @@ DD_belatedPNG.fix('.,img,background');
       <p class="p2">充值金额：<input type="text" id="provice" name="provice" class="text" />&nbsp;&nbsp;元&emsp;&emsp;</p>
       <div class="h10"></div>
       <p class="p1">选择支付银行</p>
-          <#if pay_type_list_third??>
+          <li>
+            <input type="radio" value="1" name="payTypeId" datatype="n" nullmsg="请选择支付方式!">
+            <img src="/client/images/ali.png" width="160" height="40">
+        </li>
+        <#--
+        <#if pay_type_list_third??>
                 <#list pay_type_list_third as pay_type>
                 <li>
-                <input type="radio" value="${pay_type.id?c}" name="payTypeId" datatype="n" nullmsg="请选择支付方式!">
-                <img src="${pay_type.coverImageUri!''}" width="160" height="40"></li>
+                    <input type="radio" value="${pay_type.id?c}" name="payTypeId" datatype="n" nullmsg="请选择支付方式!">
+                    <img src="${pay_type.coverImageUri!''}" width="160" height="40">
+                </li>
                 </#list>
-            </#if>
+            </#if>-->
       <div class="clear"></div>
       <a href="javascript:topup();" class="recharge_btn">立即充值</a>
 

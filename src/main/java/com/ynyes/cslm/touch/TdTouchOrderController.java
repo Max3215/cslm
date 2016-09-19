@@ -1389,23 +1389,27 @@ public class TdTouchOrderController {
         return "/touch/order_pay_form";
     }
     
-	@RequestMapping("/pay/weixin")
-	public String wxPay(Long orderId,HttpServletRequest req,ModelMap map,HttpServletResponse resp){
+	@RequestMapping("/weixin/pay")
+	@ResponseBody
+	public Map<String,Object> wxPay(Long orderId,HttpServletRequest req,ModelMap map,HttpServletResponse resp){
+		Map<String,Object> res = new HashMap<>();
+		res.put("code", 0);
+		
 		TdOrder order = tdOrderService.findOne(orderId);
 		if(null == order){
-       	  	return "/touch/error_404";
+       	  res.put("message", "参数错误");	
 		}
 		
-		 WxPayReturnData res = this.tdWeiXinPayService.unifiedOrder("支付订单" + 
+		 WxPayReturnData wx = this.tdWeiXinPayService.unifiedOrder("支付订单" + 
 				 	order.getOrderNumber(), order.getOrderNumber(), null, 
         (int)Math.round(order.getTotalPrice().doubleValue() * 100.0D), "APP");
 
-      if (("SUCCESS".equalsIgnoreCase(res.getReturn_code())) && 
-    		  ("SUCCESS".equalsIgnoreCase(res.getResult_code()))) {
+      if (("SUCCESS".equalsIgnoreCase(wx.getReturn_code())) && 
+    		  ("SUCCESS".equalsIgnoreCase(wx.getResult_code()))) {
             
 		String appid = this.tdWeiXinPayService.getAppid();
         String partnerid = this.tdWeiXinPayService.getMch_id();
-        String prepayid = res.getPrepay_id();
+        String prepayid = wx.getPrepay_id();
         String packageval = "Sign=WXPay";
         String noncestr = this.tdWeiXinPayService.getRandomStringByLength(32);
         long timestamp = System.currentTimeMillis() / 1000L;
@@ -1420,27 +1424,40 @@ public class TdTouchOrderController {
 
         String sign = this.tdWeiXinPayService.createSign(parameters);
 
-        String wxpay = "{\"appid\":\""+appid+"\",\"partnerid\":\""+partnerid+"\",\"prepayid\":\""+prepayid
-        		+"\",\"packageval\":\"Sign=WXPay\",\"noncestr\":\""+noncestr+"\",\"timestamp\":\""+timestamp+"\",\"sign\":\""+sign+"\"}";
+        res.put("appid", appid);
+        res.put("partnerid", partnerid);
+        res.put("prepayid", prepayid);
+        res.put("packageval", packageval);
+        res.put("noncestr", noncestr);
+        res.put("timestamp", timestamp);
+        res.put("sign", sign);
         
-        resp.setCharacterEncoding("UTF-8");  
-		resp.setContentType("text/html; charset=utf-8");  
-		PrintWriter out = null;  
-		try {  
-		    out = resp.getWriter();  
-		    out.append(wxpay);  
-		} catch (IOException e) {  
-		    e.printStackTrace();  
-		} finally {  
-		    if (out != null) {  
-		        out.close();  
-		    }  
-		} 
+        res.put("code", 1);
+        return res;
+//        String wxpay = "{\"appid\":\""+appid+"\",\"partnerid\":\""+partnerid+"\",\"prepayid\":\""+prepayid
+//        		+"\",\"packageval\":\"Sign=WXPay\",\"noncestr\":\""+noncestr+"\",\"timestamp\":\""+timestamp+"\",\"sign\":\""+sign+"\"}";
+//        
+//        resp.setCharacterEncoding("UTF-8");  
+//		resp.setContentType("text/html; charset=utf-8");  
+//		
+//		PrintWriter out = null;  
+//		try {  
+//		    out = resp.getWriter();  
+//		    out.append(wxpay);  
+//		} catch (IOException e) {  
+//		    e.printStackTrace();  
+//		} finally {  
+//		    if (out != null) {  
+//		        out.close();  
+//		    }  
+//		} 
       }else{
-    	  map.addAttribute("order", order);
-    	  return "/touch/order_pay_failed";
+//    	  map.addAttribute("order", order);
+//    	  return "/touch/order_pay_failed";
+    	  res.put("message", "支付失败");
       }
-      return "/touch/order_pay_failed";
+//      return "/touch/order_pay_failed";
+      return res;
 	}
     
     @RequestMapping(value = "/pay/notify")

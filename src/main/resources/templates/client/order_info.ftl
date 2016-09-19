@@ -370,11 +370,14 @@ function checkPassword(){
           <p class="alipay_tit">快捷支付</p>
           <div class="alipay">
               <ul>
+              <li><input type="radio" value="1" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="/client/images/ali.png" width="148px"></li>
+              <li><input type="radio" value="2" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="/client/images/wx.png" width="148px"></li>
+              <#--
               <#if pay_type_list_third??>
                 <#list pay_type_list_third as pay_type>
                 <li><input type="radio" value="${pay_type.id?c}" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="${pay_type.coverImageUri!''}" width="148px"></li>
                 </#list>
-            </#if>
+            </#if>-->
               </ul>
               <div class="clear"></div>
            </div>

@@ -35,15 +35,15 @@ function topup(){
             });
         return;
     }else{
-       // if(price > 50000 || price < 10){
-       //     ct.alert({
-       //         text: "充值金额必须在10~50000之间",
-       //         type: "alert"
-       //     });
-       //     return;
-      //  }else{
+        if(price > 50000 || price < 10){
+            ct.alert({
+                text: "充值金额必须在10~50000之间",
+                type: "alert"
+            });
+            return;
+        }else{
             $("#form1").submit();
-       // }
+        }
     }
 }
 </script>

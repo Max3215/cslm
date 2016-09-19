@@ -128,11 +128,16 @@ function showSub(){
           <a href="javascript:void(0)" class="choose act" onclick="selectPayType($(this),0)" id="vir">余额支付</a>
           <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
           <div class="clear"></div>
+            <a href="javascript:void(0)" class="choose" onclick="selectType($(this),1)"><img src="/client/images/ali.png" style=" height: 0.65rem;" /></a>
+            
+            <a href="javascript:void(0)" class="choose" onclick="selectType($(this),2)"><img src="/client/images/wx.png" width="90" /></a>
+            <#--
             <#if pay_type_list??>
             <#list pay_type_list as pay_type>
               <a href="javascript:void(0)" class="choose" onclick="selectType($(this),${pay_type.id?c})"><img src="${pay_type.coverImageUri!''}" width="90" /></a>
             </#list>
-        </#if>
+            </#if>
+            -->
         </div>
       </div>
       
