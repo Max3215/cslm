@@ -1280,8 +1280,8 @@ public class TdTouchOrderController {
         return "/touch/order_success";
     }
 
-    @RequestMapping(value = "/pay/success")
-    public String paySuccess(ModelMap map, HttpServletRequest req) {
+    @RequestMapping(value = "/weixinpay/return")
+    public String paySuccess(Long orderId,int code,ModelMap map, HttpServletRequest req) {
 
         tdCommonService.setHeader(map, req);
 
@@ -1290,19 +1290,25 @@ public class TdTouchOrderController {
         if (null != isApp) {
         	map.addAttribute("app", isApp);
 		}
-        
-        return "/touch/order_pay_success";
+        if(null != orderId){
+        	map.addAttribute("order", tdOrderService.findOne(orderId));
+        	if(code ==1){
+        		return "/touch/order_pay_success";
+        	}
+        }
+        return "/touch/order_pay_failed";
     }
     
     @RequestMapping(value = "/dopay/{orderId}")
     public String payOrder(@PathVariable Long orderId, ModelMap map,Device device,
             HttpServletRequest req,HttpServletResponse resp) {
         String username = (String) req.getSession().getAttribute("username");
-
-        String type = "";
-        if (device.isMobile() || device.isTablet()) {
-        	type = "m";
-        }
+//        Integer  app = (Integer)req.getSession().getAttribute("app");
+        
+        String type = "m";
+//        if (device.isMobile() || device.isTablet() || null != app) {
+//        	type = "m";
+//        }
         
         if (null == username) {
             return "redirect:/touch/login";
@@ -1368,7 +1374,7 @@ public class TdTouchOrderController {
 
             }else if ("WX".equalsIgnoreCase(payType.getCode())) {
             
-            	return "redirect:/touch/order/pay/weixin?orderId="+orderId;
+            	return "redirect:/touch/order/pay/weixin?orderId="+orderId+"&app=1";
             }
 //            }else{
 //            	  map.addAttribute("order", order);
@@ -1387,6 +1393,29 @@ public class TdTouchOrderController {
         map.addAttribute("payForm", payForm);
 
         return "/touch/order_pay_form";
+    }
+    
+    @RequestMapping("/pay/weixin")
+    public String order(Long orderId,Integer app,HttpServletRequest req,ModelMap map){
+         
+         tdCommonService.setHeader(map, req);
+         
+         if (null != orderId)
+         {
+             map.addAttribute("order", tdOrderService.findOne(orderId));
+         }
+         
+       //判断是否为app链接
+         if (null == app) {
+    			Integer isApp = (Integer) req.getSession().getAttribute("app");
+    	        if (null != isApp) {
+    	        	map.addAttribute("app", isApp);
+    			}
+ 		}else {
+ 			map.addAttribute("app", app);
+ 		}
+         
+         return "/touch/user_order_detail";
     }
     
 	@RequestMapping("/weixin/pay")
@@ -1482,15 +1511,6 @@ public class TdTouchOrderController {
     	PaymentChannelAlipay payChannelAlipay = new PaymentChannelAlipay();
         payChannelAlipay.doResponse(req, resp);
     }
-
-    /*
-     * 
-     */
-//    @RequestMapping(value = "/pay/notify_cebpay")
-//    public void payNotifyCEBPay(ModelMap map, HttpServletRequest req,
-//            HttpServletResponse resp) {
-//        payChannelCEB.doResponse(req, resp);
-//    }
   
     
     @RequestMapping(value={"/pay/result/wx"}, method=RequestMethod.POST)
@@ -1560,6 +1580,7 @@ public class TdTouchOrderController {
 
       return null;
     }
+    
     
     /**
      * 订单支付成功后步骤

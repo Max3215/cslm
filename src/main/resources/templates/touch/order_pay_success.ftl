@@ -23,7 +23,7 @@
 <body>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="javascript:history.go(-1);" class="back"></a>
+		<a href="/touch/user/order/list/0" class="back"></a>
 		<p>支付成功</p>
 		<a href="/touch" class="c_home"></a>
 	</header>

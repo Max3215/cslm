@@ -130,7 +130,9 @@ function showSub(){
           <div class="clear"></div>
             <a href="javascript:void(0)" class="choose" onclick="selectType($(this),1)"><img src="/client/images/ali.png" style=" height: 0.65rem;" /></a>
             
+            <#if app?? && app ==1>
             <a href="javascript:void(0)" class="choose" onclick="selectType($(this),2)"><img src="/client/images/wx.png" width="90" /></a>
+            </#if>
             <#--
             <#if pay_type_list??>
             <#list pay_type_list as pay_type>

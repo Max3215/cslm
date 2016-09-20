@@ -26,7 +26,7 @@ $(document).ready(function(){
 
 <body>
 <header class="com_top">
-        <a href="javascript:history.go(-1);" class="back"></a>
+        <a href="/touch/user/order/list/0" class="back"></a>
         <p>支付失败</p>
         <a href="/touch" class="c_home"></a>
     </header>
@@ -43,6 +43,14 @@ $(document).ready(function(){
   </div>
 </section>
 
-
+<div style="height:0.88rem;"></div>
+    <section class="comfooter tabfix">
+        <menu>
+            <a class="a1" href="/touch/disout">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+       </menu>
+    </section>
 </body>
 </html>

@@ -13,10 +13,10 @@
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
 <meta content="telephone=no" name="format-detection">
 
-<link href="css/common.css" rel="stylesheet" type="text/css" />
+<link href="/touch/css/common.css" rel="stylesheet" type="text/css" />
 
-<script src="js/jquery-1.9.1.min.js"></script>
-<script src="js/common.js"></script>
+<script src="/touch/js/jquery-1.9.1.min.js"></script>
+<script src="/touch/js/common.js"></script>
 <script type="text/javascript">
 
 </script>
