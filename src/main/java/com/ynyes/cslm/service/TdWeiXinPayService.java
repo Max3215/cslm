@@ -30,8 +30,8 @@ public class TdWeiXinPayService
 
   private final String mch_id = "1386963202"; //1386963202 
 
-  private final String notify_url = "http://116.55.233.141:8018/touch/order/pay/result/wx";
-//  private final String notify_url = "http://www.chinacslm.cc/touch/order/pay/result/wx";
+//  private final String notify_url = "http://116.55.233.141:8018/touch/order/pay/result/wx";
+  private final String notify_url = "http://www.chinacslm.cc/touch/order/pay/result/wx";
 
   private final String key = "chaoshilianmeng201609140928byMax";//chaoshilianmeng201609140928byMax
 

@@ -1505,12 +1505,12 @@ public class TdTouchOrderController {
     /*
      * 
      */
-    @RequestMapping(value = "/pay/notify_alipay")
-    public void payNotifyAlipay(ModelMap map, HttpServletRequest req,
-            HttpServletResponse resp) {
-    	PaymentChannelAlipay payChannelAlipay = new PaymentChannelAlipay();
-        payChannelAlipay.doResponse(req, resp);
-    }
+//    @RequestMapping(value = "/pay/notify_alipay")
+//    public void payNotifyAlipay(ModelMap map, HttpServletRequest req,
+//            HttpServletResponse resp) {
+//    	PaymentChannelAlipay payChannelAlipay = new PaymentChannelAlipay();
+//        payChannelAlipay.doResponse(req, resp);
+//    }
   
     
     @RequestMapping(value={"/pay/result/wx"}, method=RequestMethod.POST)
@@ -1551,6 +1551,7 @@ public class TdTouchOrderController {
               if (order != null) {
 
             	order.setStatusId(3L);
+            	tdOrderService.save(order);
                 tdOrderService.addVir(order);
               }
 

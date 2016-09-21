@@ -1,14 +1,10 @@
 package com.ynyes.cslm.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.naming.directory.DirContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
 
 import com.ynyes.cslm.entity.TdCountSale;
 import com.ynyes.cslm.entity.TdDistributor;
@@ -29,8 +24,8 @@ import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.repository.TdOrderRepo;
-import com.ynyes.cslm.util.Restrictions;
 import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdOrder 服务类

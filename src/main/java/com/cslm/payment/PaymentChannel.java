@@ -15,5 +15,5 @@ public interface PaymentChannel {
     /*
      * 通知接收处理
      */
-    public void doResponse(HttpServletRequest request, HttpServletResponse resp);
+//    public void doResponse(HttpServletRequest request, HttpServletResponse resp);
 }
