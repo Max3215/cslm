@@ -102,8 +102,8 @@ DD_belatedPNG.fix('.,img,background');
                             </td>
                             </tr>
                             <#if item.isCommented?? && item.isCommented>
-                                <#if ("comment_" + order.id + "_" + item.id)?eval??>
-                                <#assign comt=("comment_" + order.id + "_" + item.id)?eval>
+                                <#if ("comment_" + order.id?c + "_" + item.id?c)?eval??>
+                                <#assign comt=("comment_" + order.id?c + "_" + item.id?c)?eval>
                                     <tr id="comment-tr${order_index}${item_index}" class="mymember_evabox">
                                          <td class="td004" colspan="4">
                                             <div class="pb20 lh25">

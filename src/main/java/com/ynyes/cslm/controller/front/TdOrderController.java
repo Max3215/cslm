@@ -1208,14 +1208,16 @@ public class TdOrderController extends AbstractPaytypeController {
 	 private static final String OUT_TRADE_NO_PARA = "out_trade_no";
 	    private static final String ORDER_NO_TB_PARA = "trade_no";
 	    private static final String ORDER_STATUS_PARA = "trade_status";
-	// 买家已在支付宝交易管理中产生了交易记录，但没有付款
-     public static String WAIT_PAY = "WAIT_BUYER_PAY";
-     // 买家已在支付宝交易管理中产生了交易记录且付款成功，但卖家没有发货
-     public static String WAIT_SEND_GOODS = "WAIT_SELLER_SEND_GOODS";
-     // 卖家已经发了货，但买家还没有做确认收货的操作
-     public static String WAIT_ONFIRM_GOODS = "WAIT_BUYER_CONFIRM_GOODS";
-     // 买家已经确认收货，这笔交易完成
-     public static String FINISHED = "TRADE_FINISHED";
+	// 交易完成
+     public static String TRADE_FINISHED = "TRADE_FINISHED";
+     // 支付成功
+     public static String TRADE_SUCCESS = "TRADE_SUCCESS";
+     // 交易创建
+     public static String WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
+     // 交易关闭
+     public static String TRADE_CLOSED = "TRADE_CLOSED";
+     // 等待付款
+     public static String TRADE_PENDING ="TRADE_PENDING";
 	 
 	@RequestMapping(value = "/pay/notify_alipay")
 	public void payNotifyAlipay(ModelMap map, HttpServletRequest req, HttpServletResponse resp) {
@@ -1277,52 +1279,29 @@ public class TdOrderController extends AbstractPaytypeController {
                 if(orderNo.contains("CS") || orderNo.contains("PF") || orderNo.contains("FX") ||orderNo.contains("USE"))
                 {
                 	TdCash cash = tdCashService.findByCashNumber(orderNo);
-                	if (WAIT_PAY.equals(trade_status)) {
-                		paymentLogger.info(String.format(
-                				"AlipayNotify:{%s}支付宝订单已经生成,用户未付款!",
-                				orderNo));
-                	}else if (WAIT_SEND_GOODS.equals(trade_status)) {
-                		paymentLogger.info(String.format("AlipayNotify:{%s}用户已经付款给支付宝,系统自动发货!",orderNo));
+                	if (TRADE_FINISHED.equals(trade_status)) {
+                		paymentLogger.info(String.format("AlipayNotify:{%s}交易完成",orderNo));
+                		 out.println("success");// 请不要修改或删除
                 		
+                	}else if (TRADE_SUCCESS.equals(trade_status)) {
+                		paymentLogger.info(String.format("AlipayNotify:{%s}用户交易成功!",orderNo));
                 		// 充值完成
                 		tdCashService.afterCash(cash);
-                		
-                	}else if (WAIT_ONFIRM_GOODS.equals(trade_status)) {
-                		paymentLogger.info(String.format("AlipayNotify:{%s}等待买家确认收货!", 
-                				orderNo));
-                	}else if (FINISHED.equals(trade_status)) {
-                		paymentLogger.info(String.format("AlipayNotify:{%s}用户确认收货完毕,支付款入帐门订单成功!", 
-                				orderNo));
+                		out.println("success");// 请不要修改或删除
                 	} else {
-                		paymentLogger.info(String.format("AlipayNotify:{%s}订单中途取消,支付失败S", orderNo));
-                		cash.setStatus(3L);
-                		tdCashService.save(cash);
+                		paymentLogger.info(String.format("AlipayNotify:{%s}在指定时间段内未支付时关闭的交易；S", orderNo));
+//                		cash.setStatus(3L);
+//                		tdCashService.save(cash);
+                		
                 	}
                 }else{
-                	System.err.println("Max:tdOrderService--"+tdOrderService);
                 	TdOrder order = tdOrderService.findByOrderNumber(orderNo);
                 	List<TdPayRecord> payRecords = payRecordService.getAllByOrderId(order.getId());
-                	if (WAIT_PAY.equals(trade_status)) {
-                		// 该判断表示买家已在支付宝交易管理中产生了交易记录，但没有付款
+                	
+                	System.err.println("Max:支付宝异步通知："+trade_status);
+                	if (TRADE_SUCCESS.equals(trade_status)) {
+                		paymentLogger.info(String.format("AlipayNotify:{%s}用户已经付款给支付宝",orderNo));
                 		
-                		// 判断该笔订单是否在商户网站中已经做过处理
-                		// 如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                		// 如果有做过处理，不执行商户的业务程序
-                		paymentLogger.info(String.format(
-                				"AlipayNotify:{%s}支付宝订单已经生成,用户未付款!",
-                				orderNo));
-                		if(order != null && order.getStatusId() == 1) {
-                			order.setStatusId(2l);
-                			tdOrderService.save(order);
-                		}
-                	} else if (WAIT_SEND_GOODS.equals(trade_status)) {
-                		// 该判断表示买家已在支付宝交易管理中产生了交易记录且付款成功，但卖家没有发货
-                		
-                		// 判断该笔订单是否在商户网站中已经做过处理
-                		// 如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                		// 如果有做过处理，不执行商户的业务程序
-                		paymentLogger.info(String.format("AlipayNotify:{%s}用户已经付款给支付宝,系统自动发货!",
-                				orderNo));
                 		if(order != null && (order.getStatusId() == 2 || order.getStatusId() == 8)) {
                 			order.setStatusId(3l);
                 			order.setPayTime(new Date());
@@ -1345,50 +1324,22 @@ public class TdOrderController extends AbstractPaytypeController {
                 		}
                 		
                 		sendConfirmGoods(FIRST_TIME, trade_no);
-                	} else if (WAIT_ONFIRM_GOODS.equals(trade_status)) {
-                		// 该判断表示卖家已经发了货，但买家还没有做确认收货的操作
                 		
-                		// 判断该笔订单是否在商户网站中已经做过处理
-                		// 如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                		// 如果有做过处理，不执行商户的业务程序
-                		paymentLogger.info(String.format("AlipayNotify:{%s}等待买家确认收货!", 
+                		out.println("success");// 触发通知
+                		 
+                	} else if (TRADE_FINISHED.equals(trade_status)) {
+                		// 
+                		paymentLogger.info(String.format("AlipayNotify:{%s}交易完成!", 
                 				orderNo));
-                		if(order != null && (order.getStatusId() == 3 || order.getStatusId() == 8)) {
-                			order.setStatusId(4l);
-                			order.setDeliveryTime(new Date());
-                			tdOrderService.save(order);
-                		}
-                	} else if (FINISHED.equals(trade_status)) {
-                		// 该判断表示买家已经确认收货，这笔交易完成
+                		out.println("success");// 触发通知
+                	} else if (TRADE_CLOSED.equals(trade_status)) {
                 		
-                		// 判断该笔订单是否在商户网站中已经做过处理
-                		// 如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
-                		// 如果有做过处理，不执行商户的业务程序
-                		paymentLogger.info(String.format("AlipayNotify:{%s}用户确认收货完毕,支付款入帐门订单成功!", 
+                		paymentLogger.info(String.format("AlipayNotify:{%s}其他状态，未触发通知!", 
                 				orderNo));
-                		if(order != null && (order.getStatusId() == 4 || order.getStatusId() == 8)) {
-                			order.setStatusId(5l);
-                			order.setFinishTime(new Date());
-                			tdOrderService.save(order);
-                		}
-                	} else {
-                		// 交易中途结束
-                		paymentLogger.info(String.format("AlipayNotify:{%s}订单中途取消,支付失败S", orderNo));
-                		if(order != null && (order.getStatusId() != 8)) {
-                			order.setStatusId(7l);
-                			order.setCancelTime(new Date());
-                			tdOrderService.save(order);
-                		}
                 		
-                		if(!payRecords.isEmpty()) {
-                			for(TdPayRecord record : payRecords) {
-                				record.setStatusCode(3);
-                			}
-                			payRecordService.save(payRecords);
-                		}
                 	}
                 }
-                out.println("success");// 请不要修改或删除
+               
             } else {// 验证失败
                 paymentLogger.info("AlipayNotify:Rejected!");
                 out.println("fail");

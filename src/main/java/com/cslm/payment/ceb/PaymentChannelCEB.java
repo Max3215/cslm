@@ -109,108 +109,108 @@ public class PaymentChannelCEB implements PaymentChannel{
         return formData.toString();
     }
 
-    @Override
-    public void doResponse(HttpServletRequest request, HttpServletResponse resp) {
-        String plainData = request.getParameter("Plain");
-        String signature = request.getParameter("Signature");
-        String notifyObject = "";
-        paymentLogger.info("PaymentChannelCEB->>Receive:Plain:" + plainData);
-        paymentLogger.info("PaymentChannelCEB->>Receive:Signature:" + signature);
-        PrintWriter out;
-        try {
-            out = resp.getWriter();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        
-        try {
-            if(merchantVerifyPayGate_ABA(signature, plainData)) {
-                paymentLogger.info("PaymentChannelCEB->>Receive:Accepted!");
-                if(plainData.endsWith(FIELD_SEPARATOR)) {
-                    notifyObject = plainData.substring(0, plainData.length() - 3);
-                }
-                notifyObject = notifyObject.replaceAll("=", "\":\"").replaceAll(FIELD_SEPARATOR_REG, "\",\"");
-                notifyObject = "{\"" + notifyObject + "\"}";
-                JSONObject paymentResult = JSONObject.fromObject(notifyObject);
-                String merchantId = paymentResult.getString("merchantId");
-                String orderId = paymentResult.getString("orderId");
-                String transDateTime = paymentResult.getString("transDateTime");
-                String procStatus = "1";
-                String serverURL = PaymentUtil.getServerPath(request);
-                StringBuilder responsePlainData = new StringBuilder();
-                responsePlainData.append("merchantId=").append(merchantId).append(FIELD_SEPARATOR)
-                .append("orderId=").append(orderId).append(FIELD_SEPARATOR)
-                .append("transDateTime=").append(transDateTime).append(FIELD_SEPARATOR)
-                .append("procStatus=").append(procStatus).append(FIELD_SEPARATOR)
-                .append("merURL2=").append(serverURL).append("order/pay/result_cebpay");
-                
-                String responsePlain = responsePlainData.toString();
-                String responseSignature = merchantSignData_ABA(responsePlain);
-                paymentLogger.info("PaymentChannelCEB->>Response:Plain:" + responsePlain);
-                paymentLogger.info("PaymentChannelCEB->>Response:Signature:" + responseSignature);
-                StringBuilder responseContents = new StringBuilder();
-                responseContents.append("Plain=").append(responsePlain)
-                .append("\n").append("Signature=").append(responseSignature);
-                out.print(responseContents.toString());
-                
-                String payResult = paymentResult.getString("respCode");
-                orderId = orderId == null ? "" : 
-                    orderId.substring(0, orderId.length() - 6);
-
-                TdOrder order = orderService.findByOrderNumber(orderId);
-                List<TdPayRecord> payRecords = payRecordService.getAllByOrderId(order.getId());
-                
-                Long status = order.getStatusId();
-                if(SUCCESSED.equals(payResult) || "".equals(payResult)) {
-                    //支付成功
-                    if(status.equals(Long.valueOf(1l)) 
-                            || status.equals(Long.valueOf(2l)) 
-                            || status.equals(Long.valueOf(8l))) {
-                        order.setStatusId(3l);
-                        order.setPayTime(new Date());
-                    }
-                    
-                    if(!payRecords.isEmpty()) {
-                        int i = 0;
-                        for(TdPayRecord record : payRecords) {
-                            if(i == 0) {
-                                record.setStatusCode(2);
-                            } else {
-                                record.setStatusCode(3);
-                            }
-                            i++;
-                        }
-                        payRecordService.save(payRecords);
-                    }
-                } else {
-                    if(status.equals(Long.valueOf(1l)) 
-                            || status.equals(Long.valueOf(8l))) {
-                        order.setStatusId(8l);
-                        order.setCancelTime(new Date());
-                    }
-                    
-                    if(!payRecords.isEmpty()) {
-                        int i = 0;
-                        for(TdPayRecord record : payRecords) {
-                            if(i == 0) {
-                                record.setStatusCode(2);
-                            } else {
-                                record.setStatusCode(3);
-                            }
-                            i++;
-                        }
-                        payRecordService.save(payRecords);
-                    }
-                }
-                orderService.save(order);
-            } else {
-                paymentLogger.info("PaymentChannelCEB->>Receive:Rejected!");
-            }
-        } catch (Exception e) {
-        } finally {
-            out.close();
-        }
-    }
+//    @Override
+//    public void doResponse(HttpServletRequest request, HttpServletResponse resp) {
+//        String plainData = request.getParameter("Plain");
+//        String signature = request.getParameter("Signature");
+//        String notifyObject = "";
+//        paymentLogger.info("PaymentChannelCEB->>Receive:Plain:" + plainData);
+//        paymentLogger.info("PaymentChannelCEB->>Receive:Signature:" + signature);
+//        PrintWriter out;
+//        try {
+//            out = resp.getWriter();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//        
+//        try {
+//            if(merchantVerifyPayGate_ABA(signature, plainData)) {
+//                paymentLogger.info("PaymentChannelCEB->>Receive:Accepted!");
+//                if(plainData.endsWith(FIELD_SEPARATOR)) {
+//                    notifyObject = plainData.substring(0, plainData.length() - 3);
+//                }
+//                notifyObject = notifyObject.replaceAll("=", "\":\"").replaceAll(FIELD_SEPARATOR_REG, "\",\"");
+//                notifyObject = "{\"" + notifyObject + "\"}";
+//                JSONObject paymentResult = JSONObject.fromObject(notifyObject);
+//                String merchantId = paymentResult.getString("merchantId");
+//                String orderId = paymentResult.getString("orderId");
+//                String transDateTime = paymentResult.getString("transDateTime");
+//                String procStatus = "1";
+//                String serverURL = PaymentUtil.getServerPath(request);
+//                StringBuilder responsePlainData = new StringBuilder();
+//                responsePlainData.append("merchantId=").append(merchantId).append(FIELD_SEPARATOR)
+//                .append("orderId=").append(orderId).append(FIELD_SEPARATOR)
+//                .append("transDateTime=").append(transDateTime).append(FIELD_SEPARATOR)
+//                .append("procStatus=").append(procStatus).append(FIELD_SEPARATOR)
+//                .append("merURL2=").append(serverURL).append("order/pay/result_cebpay");
+//                
+//                String responsePlain = responsePlainData.toString();
+//                String responseSignature = merchantSignData_ABA(responsePlain);
+//                paymentLogger.info("PaymentChannelCEB->>Response:Plain:" + responsePlain);
+//                paymentLogger.info("PaymentChannelCEB->>Response:Signature:" + responseSignature);
+//                StringBuilder responseContents = new StringBuilder();
+//                responseContents.append("Plain=").append(responsePlain)
+//                .append("\n").append("Signature=").append(responseSignature);
+//                out.print(responseContents.toString());
+//                
+//                String payResult = paymentResult.getString("respCode");
+//                orderId = orderId == null ? "" : 
+//                    orderId.substring(0, orderId.length() - 6);
+//
+//                TdOrder order = orderService.findByOrderNumber(orderId);
+//                List<TdPayRecord> payRecords = payRecordService.getAllByOrderId(order.getId());
+//                
+//                Long status = order.getStatusId();
+//                if(SUCCESSED.equals(payResult) || "".equals(payResult)) {
+//                    //支付成功
+//                    if(status.equals(Long.valueOf(1l)) 
+//                            || status.equals(Long.valueOf(2l)) 
+//                            || status.equals(Long.valueOf(8l))) {
+//                        order.setStatusId(3l);
+//                        order.setPayTime(new Date());
+//                    }
+//                    
+//                    if(!payRecords.isEmpty()) {
+//                        int i = 0;
+//                        for(TdPayRecord record : payRecords) {
+//                            if(i == 0) {
+//                                record.setStatusCode(2);
+//                            } else {
+//                                record.setStatusCode(3);
+//                            }
+//                            i++;
+//                        }
+//                        payRecordService.save(payRecords);
+//                    }
+//                } else {
+//                    if(status.equals(Long.valueOf(1l)) 
+//                            || status.equals(Long.valueOf(8l))) {
+//                        order.setStatusId(8l);
+//                        order.setCancelTime(new Date());
+//                    }
+//                    
+//                    if(!payRecords.isEmpty()) {
+//                        int i = 0;
+//                        for(TdPayRecord record : payRecords) {
+//                            if(i == 0) {
+//                                record.setStatusCode(2);
+//                            } else {
+//                                record.setStatusCode(3);
+//                            }
+//                            i++;
+//                        }
+//                        payRecordService.save(payRecords);
+//                    }
+//                }
+//                orderService.save(order);
+//            } else {
+//                paymentLogger.info("PaymentChannelCEB->>Receive:Rejected!");
+//            }
+//        } catch (Exception e) {
+//        } finally {
+//            out.close();
+//        }
+//    }
 
 }

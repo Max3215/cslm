@@ -1546,17 +1546,13 @@ public class TdTouchOrderController {
             String tradeNo = reData.getOut_trade_no();
 
             if (tradeNo != null) {
-              TdOrder order = this.tdOrderService.findByOrderNumber(tradeNo);
-
-              if (order != null) {
-
-            	order.setStatusId(3L);
-            	tdOrderService.save(order);
-                tdOrderService.addVir(order);
-              }
-
+		        TdOrder order = this.tdOrderService.findByOrderNumber(tradeNo);
+		        if (order != null) {
+		        	order.setStatusId(3L);
+			        tdOrderService.save(order);
+			        tdOrderService.addVir(order);
+		        }
             }
-
           }
 
           WxPaySendData data = new WxPaySendData();
@@ -1564,8 +1560,7 @@ public class TdTouchOrderController {
           data.setReturn_code("SUCCESS");
           data.setReturn_msg("OK");
 
-          XStream xs = new XStream(new DomDriver("UTF-8", 
-            new XmlFriendlyNameCoder("-_", "_")));
+          XStream xs = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
           xs.alias("xml", WxPaySendData.class);
 
           String xmlSend = xs.toXML(data);
