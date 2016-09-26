@@ -795,6 +795,13 @@ public class TdUserController extends AbstractPaytypeController{
                         tdReturn.setType(1L);
                         tdReturn.setStatusId(0L);
                         tdReturn.setReturnNumber(tog.getQuantity());
+                        
+                        if(order.getTypeId() ==0L){
+                        	tdReturn.setTurnType(1);
+                        }else if(order.getTypeId() ==2L){
+                        	tdReturn.setTurnType(2);
+                        	tdReturn.setSupplyId(order.getProviderId());
+                        }
 
                         // 保存
                         tdUserReturnService.save(tdReturn);

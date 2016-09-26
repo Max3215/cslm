@@ -181,7 +181,7 @@ DD_belatedPNG.fix('.,img,background');
             <li>
                 <#if collect_page?? >
                     <#list collect_page.content as item>
-                        <a class="mymember_gzlist" href="/goods/${item.distributorId!''}" target="_blank">
+                        <a class="mymember_gzlist" href="/goods/${item.distributorId?c!''}" target="_blank">
                             <img src="${item.goodsCoverImageUri!''}" alt="${item.goodsTitle!''}"  width="180px" height="180px"/>
                             <p>${item.goodsTitle!''}</p>
                             <h6>￥${item.goodsSalePrice?string('0.00')}</h6>

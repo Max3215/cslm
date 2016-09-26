@@ -27,7 +27,7 @@ $(document).ready(function(){
 </head>
 
 <body>
-<div id="allmap" style="display:none"></div>
+
 	<!-- 顶部 -->
 	<header class="com_top">
         <a href="javascript:;" class="home"></a>

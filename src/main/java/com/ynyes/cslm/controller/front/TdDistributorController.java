@@ -28,6 +28,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.bouncycastle.openssl.PEMReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -2891,73 +2892,136 @@ public class TdDistributorController extends AbstractPaytypeController{
 					e.setHandleDetail(handleDetail);
 					tdUserReturnService.save(e);
 					
-//					if(null != distributor.getVirtualMoney()&&  distributor.getVirtualMoney() > e.getGoodsPrice())
-//					{
-//						distributor.setVirtualMoney(distributor.getVirtualMoney()-e.getGoodsPrice());
-//		        		tdDistributorService.save(distributor);
-//		        		
-//		        		
-//		        		TdUser user = tdUserService.findByUsername(e.getUsername());
-//		                if(null != user)
-//		                {
-//		                	if(null != user.getVirtualMoney())
-//		                	{
-//		                		user.setVirtualMoney(user.getVirtualMoney()+e.getGoodsPrice());
-//		                	}else{
-//		                		user.setVirtualMoney(e.getGoodsPrice());
-//		                	}
-//		                }
-//		                tdUserService.save(user);
-//		                
-//		                
-//		             // 添加会员虚拟账户金额记录
-//		            	TdPayRecord record = new TdPayRecord();
-//		            	
-//		            	record.setAliPrice(0.0);
-//		            	record.setPostPrice(0.0);
-//		            	record.setRealPrice(e.getGoodsPrice());
-//		            	record.setTotalGoodsPrice(e.getGoodsPrice());
-//		            	record.setServicePrice(0.0);
-//		            	record.setProvice(e.getGoodsPrice());
-//		            	record.setOrderNumber(e.getOrderNumber());
-//		            	record.setCreateTime(new Date());
-//		            	record.setUsername(user.getUsername());
-//		            	record.setType(2L);
-//		            	record.setCont("退货返款");
-//		            	record.setDistributorTitle(e.getShopTitle());
-//		            	record.setStatusCode(1);
-//		            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
-//		            	
-//		            	record = new TdPayRecord();
-//		            	
-//		            	record.setAliPrice(0.0);
-//		            	record.setPostPrice(0.0);
-//		            	record.setRealPrice(e.getGoodsPrice());
-//		            	record.setTotalGoodsPrice(e.getGoodsPrice());
-//		            	record.setServicePrice(0.0);
-//		            	record.setProvice(e.getGoodsPrice());
-//		            	record.setOrderNumber(e.getOrderNumber());
-//		            	record.setCreateTime(new Date());
-//		            	record.setCont("用户退货返款");
-//		            	record.setDistributorId(e.getShopId());
-//		            	record.setDistributorTitle(e.getShopTitle());
-//		            	record.setStatusCode(1);
-//		            	tdPayRecordService.save(record); // 保存会员虚拟账户记录
-		        		
-		            	res.put("message", "已处理此次退货！");
-		            	res.put("code", 0);
-		            	return res;
-//					}else{
-//						res.put("message", "账户余额不足");
-//						return res;
-//					}
+					// 普通商品退
+					if(null == e.getTurnType() || e.getTurnType() ==1 ){
+						// 同意退
+						if(statusId == 1){
+							if(null != distributor.getVirtualMoney()&&  distributor.getVirtualMoney() > e.getGoodsPrice()*e.getReturnNumber())
+							{
+								turnGoods(e, distributor);
+							}else{
+								res.put("message", "账户余额不足");
+								return res;
+							}
+						}
+					}
+					else // 分销商品退
+					{
+						if(statusId ==1){
+							Integer trunCode = supplyReutrn(e, distributor);
+							if(trunCode ==0){
+								res.put("message", "商品已删除");
+								return res;
+							}else if(trunCode ==1){
+								res.put("message", "分销商已不存在");
+								return res;
+							}else if(trunCode ==2){
+								res.put("message", "账户余额不足");
+								return res;
+							}else if(trunCode ==3){
+								
+							}
+						}
+					}
 					
+					
+	            	res.put("message", "已处理此次退货！");
+	            	res.put("code", 0);
+	            	return res;
 				}
 			}
 		}
 		res.put("message", "参数错误！");
     	return res;
     }
+    
+    /**
+     * 分销商品退货，超市同意退，退回超市提取的代售提成给分销商，交由分销商处理
+     * 返回值：0 商品已删除，  1，商家以删除， 
+     * 		   2，超市余额不足以退给分销商提成  3，超市处理成功
+     * 
+     */
+    public Integer supplyReutrn(TdUserReturn userRturn,TdDistributor distributor){
+    	
+    	// 查找超市商品记录
+    	TdDistributorGoods goods = tdDistributorGoodsService.findOne(userRturn.getGoodsId());
+    	if(null == goods){
+    		return 0;
+    	}
+    	
+    	// 超市分销商商品记录
+    	TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(userRturn.getSupplyId(), goods.getGoodsId());
+    	TdProvider supply = tdProviderService.findOne(userRturn.getSupplyId());
+    	if(null == supply){
+    		return 1;
+    	}
+    	if(null == providerGoods){
+    		return 0;
+    	}
+    	
+    	Double turnRation =0.0;  // 返利比
+    	Double trunPrice =0.0; // 退货额
+    	Double rationPrice = 0.0;  // 超市应退提成
+    	
+    	turnRation =providerGoods.getShopReturnRation();
+    	trunPrice = userRturn.getGoodsPrice() * userRturn.getReturnNumber();
+    	rationPrice = trunPrice * turnRation;
+    	
+    	if(null == distributor.getVirtualMoney() || distributor.getVirtualMoney() < rationPrice){
+    		return 2;
+    	}
+    	
+    	// 超市扣除提成
+    	distributor.setVirtualMoney(distributor.getVirtualMoney() - rationPrice);
+    	tdDistributorService.save(distributor);
+    	
+    	// 分销商获取提成
+    	supply.setVirtualMoney(supply.getVirtualMoney() + rationPrice);
+    	tdProviderService.save(supply);
+    	
+    	
+    	 // 添加超市虚拟账户退货提成记录
+    	TdPayRecord record = new TdPayRecord();
+    	
+    	record.setAliPrice(0.0);
+    	record.setPostPrice(0.0);
+    	record.setRealPrice(rationPrice);
+    	record.setTotalGoodsPrice(rationPrice);
+    	record.setServicePrice(0.0);
+    	record.setProvice(userRturn.getGoodsPrice());
+    	record.setOrderNumber(userRturn.getOrderNumber());
+    	record.setCreateTime(new Date());
+    	record.setDistributorId(userRturn.getShopId());
+    	record.setType(1L);
+    	record.setCont("同意分销商品退货退还代售提成");
+    	record.setDistributorTitle(userRturn.getShopTitle());
+    	record.setStatusCode(1);
+    	
+    	tdPayRecordService.save(record); 
+    	
+    	record = new TdPayRecord();
+    	
+    	record.setCont("超市同意用户退货退还返利");
+		record.setCreateTime(new Date());
+		record.setDistributorTitle(distributor.getTitle());
+		record.setProviderId(supply.getId());
+		record.setProviderTitle(supply.getTitle());
+		record.setOrderNumber(userRturn.getOrderNumber());
+		record.setStatusCode(1);
+
+		record.setProvice(rationPrice); // 订单总额
+		record.setPostPrice(0.0); // 邮费
+		record.setAliPrice(0.0); // 第三方费
+		record.setServicePrice(0.0); // 平台费
+		record.setTotalGoodsPrice(rationPrice); // 商品总价
+		record.setTurnPrice(0.0); // 超市返利
+		record.setRealPrice(rationPrice); // 实际获利
+    	tdPayRecordService.save(record); // 保存超市退款记录
+    	
+    	
+    	return 3;
+    }
+    
     
     @RequestMapping(value="/order/return")
     public String orderReturn(HttpServletRequest req,ModelMap map){
@@ -3812,6 +3876,73 @@ public class TdDistributorController extends AbstractPaytypeController{
     	
     	return "/client/common_distributor_list";
     }
+    
+    /**
+     * 超市同意普通商品退货，
+     * 退还商品货款，扣除超市相应余额
+     */
+    public void turnGoods(TdUserReturn userRturn,TdDistributor tdDistributor){
+    	if(null != tdDistributor.getVirtualMoney()&&  tdDistributor.getVirtualMoney() > userRturn.getGoodsPrice())
+		{
+    		Double turnPrice =0.0; // 退款金额
+    		
+    		turnPrice = userRturn.getGoodsPrice()*userRturn.getReturnNumber();
+    		
+    		// 扣除超市余额
+    		tdDistributor.setVirtualMoney(tdDistributor.getVirtualMoney()- turnPrice);
+        	tdDistributorService.save(tdDistributor);
+        		
+        		
+    		TdUser user = tdUserService.findByUsername(userRturn.getUsername());
+            if(null != user)
+            {
+            	if(null != user.getVirtualMoney())
+            	{
+            		user.setVirtualMoney(user.getVirtualMoney()+turnPrice);
+            	}else{
+            		user.setVirtualMoney(turnPrice);
+            	}
+            }
+            
+            tdUserService.save(user);
+                
+                
+             // 添加会员虚拟账户金额记录
+        	TdPayRecord record = new TdPayRecord();
+        	
+        	record.setAliPrice(0.0);
+        	record.setPostPrice(0.0);
+        	record.setRealPrice(userRturn.getGoodsPrice());
+        	record.setTotalGoodsPrice(userRturn.getGoodsPrice());
+        	record.setServicePrice(0.0);
+        	record.setProvice(userRturn.getGoodsPrice());
+        	record.setOrderNumber(userRturn.getOrderNumber());
+        	record.setCreateTime(new Date());
+        	record.setUsername(user.getUsername());
+        	record.setType(2L);
+        	record.setCont("退货返款");
+        	record.setDistributorTitle(userRturn.getShopTitle());
+        	record.setStatusCode(1);
+        	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+        	
+        	record = new TdPayRecord();
+        	
+        	record.setAliPrice(0.0);
+        	record.setPostPrice(0.0);
+        	record.setRealPrice(userRturn.getGoodsPrice());
+        	record.setTotalGoodsPrice(userRturn.getGoodsPrice());
+        	record.setServicePrice(0.0);
+        	record.setProvice(userRturn.getGoodsPrice());
+        	record.setOrderNumber(userRturn.getOrderNumber());
+        	record.setCreateTime(new Date());
+        	record.setCont("用户退货返款");
+        	record.setDistributorId(userRturn.getShopId());
+        	record.setDistributorTitle(userRturn.getShopTitle());
+        	record.setStatusCode(1);
+        	tdPayRecordService.save(record); // 保存超市退款记录
+		}
+    }
+    
     
  // 添加会员积分
  	public void addUserPoint(TdOrder order,String username){

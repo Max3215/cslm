@@ -105,9 +105,22 @@ public class TdUserReturn {
     @Column
     private Long distributorId;
     
-    // 退货类型 1为会员退货  2为超市退货
+    // 退货类型 1为会员退货  2为超市退货 
     @Column
     private Long type;
+    
+    // 退货类型  1，普通商品退   2，分销商品退
+    @Column
+    private Integer turnType;
+    
+    // 分销商ID
+    @Column
+    private Long supplyId;
+    
+    // 分销商处理详情
+    @Column
+    private String suppDetail;
+    
 
     public Long getId() {
         return id;
@@ -283,6 +296,30 @@ public class TdUserReturn {
 
 	public void setDistributorId(Long distributorId) {
 		this.distributorId = distributorId;
+	}
+
+	public Integer getTurnType() {
+		return turnType;
+	}
+
+	public void setTurnType(Integer turnType) {
+		this.turnType = turnType;
+	}
+
+	public Long getSupplyId() {
+		return supplyId;
+	}
+
+	public void setSupplyId(Long supplyId) {
+		this.supplyId = supplyId;
+	}
+
+	public String getSuppDetail() {
+		return suppDetail;
+	}
+
+	public void setSuppDetail(String suppDetail) {
+		this.suppDetail = suppDetail;
 	}
     
 	

@@ -82,6 +82,7 @@ public class TdTouchIndexController {
     	String username = (String) req.getSession().getAttribute("username");
     	Double lng = (Double)req.getSession().getAttribute("lng");
     	Double lat = (Double)req.getSession().getAttribute("lat");
+    	Boolean isIOS = (Boolean)req.getSession().getAttribute("isIOS");
     	
     	if(null == username ){
     		try {
@@ -91,8 +92,13 @@ public class TdTouchIndexController {
     		} 
     	}
     	
-    	if(null != lng && null != lat){
-    		tdCommonService.mapdistance(lng, lat, req, map);
+    	if(null != isIOS && isIOS ==true){
+    		map.addAttribute("shop_list",tdDistributorService.findByIsEnableTrue());
+    		map.addAttribute("index", true);
+    	}else{
+    		if(null != lng && null != lat){
+    			tdCommonService.mapdistance(lng, lat, req, map);
+    		}
     	}
     	
     	// 超市快讯
@@ -253,6 +259,9 @@ public class TdTouchIndexController {
         if (null != app) {
         	map.addAttribute("app", app);
         	req.getSession().setAttribute("app", app);
+        	if(app == 1){
+        		req.getSession().setAttribute("isIOS", true);
+        	}
 		}
         
         

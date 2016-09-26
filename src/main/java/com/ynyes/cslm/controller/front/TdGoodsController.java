@@ -101,7 +101,7 @@ public class TdGoodsController {
         if (null == dgId) {
             return "/client/error_404";
         }
-        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(dgId);
+        TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByIdAndIsInSaleTrue(dgId);
         if(null == distributorGoods)
         {
         	return "/client/error_404";
