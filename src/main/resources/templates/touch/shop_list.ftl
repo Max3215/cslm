@@ -1,33 +1,4 @@
-<#if !isIOS?? ||　isIOS !=true>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ZBClgucj8qbtCxOFFd003zZ"></script>
-
 <script type="text/javascript">
-var lng =0;
-var lat =0;
-  // 百度地图API功能
-  var map = new BMap.Map("allmap");
-  
-  var geolocation = new BMap.Geolocation();
-  geolocation.getCurrentPosition(function(r){
-    if(this.getStatus() == BMAP_STATUS_SUCCESS){
-      lng = r.point.lng;
-      lat = r.point.lat;
-      
-  <#if lng?? && lat??>
-        <#if !index??>
-        distance(${lng},${lat});
-        </#if>
-  <#else>
-      distance(lng,lat);
-   </#if>
-     
-    }
-    else {
-      alert('failed'+this.getStatus());
-    }        
-  },{enableHighAccuracy: true})
-    
-
 function distance(lng,lat){
     
     $.ajax({
@@ -40,6 +11,12 @@ function distance(lng,lat){
     })
 }
 
+function postStr(lng,lat){
+    $("#lng").attr("value",lng);
+    $("#lat").attr("value",lat);
+    alert("赋值："+lng+":"+lat);
+     return true;
+ }
 
 function chooseDistributor(disId){
     $.ajax({
@@ -61,10 +38,10 @@ function chooseDistributor(disId){
         }
     })
 }
-
-
 </script>
-</#if>
+
+<input type="hidden" name="lng" id="lng" value=""/>
+<input type="hidden" name="lat" id="lat" value=""/>
 <div class="show_list">
     <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
     <div style="height:100%;overflow:auto;">
@@ -110,3 +87,48 @@ function chooseDistributor(disId){
     </div>
 </div>
 -->
+<#if isIOS?? && isIOS ==true>
+<script type="text/javascript">
+//$(document).ready(function(){
+//    <#if lng?? && lat??>
+//        <#if !index??>
+//        alert("加载店铺"+lng+":"+lat);
+//        distance(${lng},${lat});
+//        </#if>
+//  <#else>
+//    var lng = $("#lng").val();
+//    var lat = $("#lat").val();
+//    alert("首次加载店铺"+lng+":"+lat);
+//     distance(lng,lat);
+//   </#if>
+//}); 
+</script>
+<#else>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ZBClgucj8qbtCxOFFd003zZ"></script>
+<script type="text/javascript">
+var lng =0;
+var lat =0;
+  // 百度地图API功能
+  var map = new BMap.Map("allmap");
+  
+  var geolocation = new BMap.Geolocation();
+  geolocation.getCurrentPosition(function(r){
+    if(this.getStatus() == BMAP_STATUS_SUCCESS){
+      lng = r.point.lng;
+      lat = r.point.lat;
+      
+  <#if lng?? && lat??>
+        <#if !index??>
+        distance(${lng},${lat});
+        </#if>
+  <#else>
+      distance(lng,lat);
+   </#if>
+     
+    }
+    else {
+      alert('failed'+this.getStatus());
+    }        
+  },{enableHighAccuracy: true})
+</script>
+</#if>

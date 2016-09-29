@@ -2,6 +2,7 @@
     <section class="cart_list">
       <ul>
         <#assign allChecked=true >
+        <#assign isChecked=false >
         <#assign totalGoods=0>
         <#assign totalPrice=0>
         
@@ -20,6 +21,7 @@
                 <div class="clear"></div>
               </li>
               <#if cg.isSelected>
+                <#assign isChecked=true >
                 <#assign totalGoods=totalGoods+cg.quantity>
                 <#assign totalPrice=totalPrice+cg.price*cg.quantity>
               </#if>
@@ -35,7 +37,11 @@
   <#--   <a href="javascript:void(0)" class="choose <#if allChecked>" onclick="$(this).toggleClass('sel');">全选</a>
    <a href="#" class="del">删除选中的商品</a>-->
     <p>合计：<span>¥<#if cart_goods_list??>${totalPrice?string("0.00")}</#if></span></p>
-    <a href="javascript:goNext(${totalGoods!0});" class="btn">去结算</a>
+    <#if isChecked>
+    <a href="/touch/order/info" class="btn">去结算</a>
+    <#else>
+    <a href="javascript:;" onclick="showMsg()" class="btn">去结算</a>
+    </#if>
   </section>
 <#else>
      <section class="cart_empty">

@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -92,7 +93,7 @@ public class TdTouchIndexController {
     		} 
     	}
     	
-    	if(null != isIOS && isIOS ==true){
+    	if((null != app && 1== app) || (null != isIOS && isIOS ==true)){
     		map.addAttribute("shop_list",tdDistributorService.findByIsEnableTrue());
     		map.addAttribute("index", true);
     	}else{
@@ -367,12 +368,50 @@ public class TdTouchIndexController {
     	return null ;
     }
     
+    // android 版本更新
+    @RequestMapping(value="/android/update")
+    @ResponseBody
+    public Map<String, Object> androidupdate(ModelMap map,
+			  								HttpServletRequest req){
+    	Map<String, Object> res = new HashMap<String, Object>();
+        
+        res.put("code", 1);
+
+        TdSetting tdSetting = tdSettingService.findTopBy();
+        
+        if (null != tdSetting.getAndroidVersion()) {
+			res.put("version", tdSetting.getAndroidVersion());
+		}
+        if (null != tdSetting.getAndroidUrl()) {
+        	res.put("downloadUrl", "/android/apk/"+ tdSetting.getAndroidUrl());
+		}
+        res.put("des", tdSetting.getUpdateinfo());
+        res.put("time", tdSetting.getUpdataTime());
+               
+        res.put("code", 0);
+        
+        return res;
+    }
+    
+    // 获取Android apk
+    @RequestMapping(value="/android/apk/{filename}")    
+    public String getApk(@PathVariable String filename, HttpServletRequest req, ModelMap map, HttpServletResponse resp){
+    	
+    	String url = SiteMagConstant.apkPath;
+    	
+    	if (download(filename+".apk", url, resp)) {
+			return null;
+		}    	
+    	return null ;
+    }
+    
     public Boolean download(String filename, String exportUrl, HttpServletResponse resp){
         
       	 OutputStream os;
   		 try {
   				os = resp.getOutputStream();
-  				File file = new File(exportUrl + filename);   				
+  				File file = new File(exportUrl + filename);  
+  				
                if (file.exists())
                    {
                      try {

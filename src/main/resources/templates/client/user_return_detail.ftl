@@ -82,7 +82,23 @@ DD_belatedPNG.fix('.,img,background');
                     </td>
                     <td>￥<#if return.goodsPrice??>${return.goodsPrice?string('0.00')}<#else>0</#if></td>                  
                     <td><p>${return.returnNumber!''}</p></td>
-                    <td><#if return.statusId==0>待审核<#elseif return.statusId=1>已批准<#else>未通过</#if></td>
+                    <td>
+                        <#if return.turnType?? && return.turnType ==2>
+                            <#switch return.statusId>
+                                <#case 0>超市审核中<#break>
+                                <#case 1>分销商审核中<#break>
+                                <#case 2>超市已拒绝<#break>
+                                <#case 3>已同意<#break>
+                                <#case 4>已拒绝<#break>
+                            </#switch>
+                            <#else>
+                                <#switch return.statusId>
+                                    <#case 0>新提交<#break>
+                                    <#case 1>已同意<#break>
+                                    <#case 2>已拒绝<#break>
+                                </#switch>
+                            </#if>
+                      </td>
                 </tr>
                 
             </table>
@@ -99,7 +115,6 @@ DD_belatedPNG.fix('.,img,background');
                             <b style="top:4px;">商家信息：</b>
                             <span style="line-height:26px;">${shop.title!''}</span>
                           </div>
-
                           <div class="mymember_eva_div">
                             <b style="top:4px;">商家地址：</b>
                             <span style="line-height:26px;">${shop.address!''}</span>
@@ -108,19 +123,49 @@ DD_belatedPNG.fix('.,img,background');
                             <b style="top:4px;">商家电话：</b>
                             <span style="line-height:26px;">${shop.serviceTele!''}</span>
                           </div>
+                          <#if return.turnType?? && return.turnType ==2>
+                          <div class="mymember_eva_div">
+                            <b style="top:4px;">分销商：</b>
+                            <span style="line-height:26px;">${supply.title!''}</span>
+                          </div>
+                          <div class="mymember_eva_div">
+                            <b style="top:4px;width: 90px;">分销商电话：</b>
+                            <span style="line-height:26px;">${supply.mobile!''}</span>
+                          </div>
+                          </#if>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">退货说明：</b>
                             <span style="line-height:26px;color:red;">${return.reason!'无'}</span>
                           </div>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">当前状态：</b>
-                            <span style="line-height:26px;color:red;"><#if return.statusId==0>待审核<#elseif return.statusId=1>已批准<#else>未通过</#if></span>
+                            <#if return.turnType?? && return.turnType ==2>
+                                <#switch return.statusId>
+                                    <#case 0>超市审核中<#break>
+                                    <#case 1><span style="line-height:26px;color:#3ae01d;">分销商审核中</span><#break>
+                                    <#case 2><span style="line-height:26px;color:red;">超市已拒绝</span><#break>
+                                    <#case 3><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                                    <#case 4><span style="line-height:26px;color:red;">已拒绝</span><#break>
+                                </#switch>
+                            <#else>
+                                <#switch return.statusId>
+                                    <#case 0>新提交<#break>
+                                    <#case 1><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                                    <#case 2><span style="line-height:26px;color:red;">已拒绝</span><#break>
+                                </#switch>
+                            </#if>
                           </div>
 
                           <#if return.handleDetail?? >
                           <div class="mymember_eva_div">
-                            <b>处理说明：</b>
-                            <textarea disabled="disabled">${return.handleDetail!''}</textarea>
+                            <b style="top:4px;">超市意见：</b>
+                            <span style="line-height:26px;">${return.handleDetail!'无'}</span>
+                          </div>
+                          </#if>
+                          <#if return.turnType?? && return.turnType ==2>
+                          <div class="mymember_eva_div">
+                            <b style="top:4px; width: 90px;">分销商意见：</b>
+                            <span style="line-height:26px;">${return.suppDetail!'无'}</span>
                           </div>
                           </#if>
                             <#--

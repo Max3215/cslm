@@ -17,9 +17,6 @@
 <script src="/client/js/jquery.diysiteselect.js"></script>
 
 <!--  后台文件  -->
-<link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
-<script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
-<script type="text/javascript" src="/mag/js/layout.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -41,35 +38,6 @@ $(document).ready(function(){
     })
 })
 
-function returnEdit(id){
-    var dialog = $.dialog.confirm('操作提示信息：<br />默认通过此次退货？', function () {
-        var postData = { "id": id,"statusId":1};
-        //发送AJAX请求
-        sendAjaxUrl(dialog, postData, "/distributor/return/param/edit");
-        return false;
-    });
-}
-
-function sendAjaxUrl(winObj, postData, sendUrl) {
-        $.ajax({
-            type: "post",
-            url: sendUrl,
-            data: postData,
-            dataType: "json",
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
-            },
-            success: function (data) {
-            
-                if (data.code == 0) {
-                    winObj.close();
-                    $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
-                } else {
-                    $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
-                }
-            }
-        });
-    }
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -119,9 +87,21 @@ DD_belatedPNG.fix('.,img,background');
                       <td class="td003">${return.username!''}</td>
                       <td class="td003">${return.returnTime!''}</td>
                       <td >
-                            <#if return.statusId==0>
-                            <a href="javascript:returnEdit(${return.id?c});">未处理</a>
-                            <#elseif return.statusId=1>已批准<#else>未通过</#if>     
+                            <#if return.turnType?? && return.turnType ==2>
+                            <#switch return.statusId>
+                                <#case 0>新提交<#break>
+                                <#case 1>已同意<#break>
+                                <#case 2>已拒绝<#break>
+                                <#case 3>分销商已同意<#break>
+                                <#case 4>分销商已拒绝<#break>
+                            </#switch>
+                            <#else>
+                                <#switch return.statusId>
+                                    <#case 0>新提交<#break>
+                                    <#case 1>已同意<#break>
+                                    <#case 2>已拒绝<#break>
+                                </#switch>
+                            </#if>
                        </td>
                        <td><a href="/distributor/user/returnDetail?id=${return.id?c}">详情</a></td>
                     </tr>

@@ -155,6 +155,11 @@ function delCartItem(id)
         }
     });
 }
+function showMsg()
+{
+	
+    alert("请在选择购买的商品左侧点击○确认！");
+}
 
 function goNext(goodsNum)
 {

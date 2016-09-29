@@ -54,7 +54,23 @@ $(document).ready(function(){
           </li>
         </ul>
         <div class="btns">
-          <span><#if return.statusId==0>待审核<#elseif return.statusId=1>已批准<#else>未通过</#if></span>
+          <span>
+           <#if return.turnType?? && return.turnType ==2>
+                <#switch return.statusId>
+                    <#case 0>超市审核中<#break>
+                    <#case 1>分销商审核中<#break>
+                    <#case 2>超市已拒绝<#break>
+                    <#case 3>已同意<#break>
+                    <#case 4>已拒绝<#break>
+                </#switch>
+            <#else>
+                <#switch return.statusId>
+                    <#case 0>新提交<#break>
+                    <#case 1>已同意<#break>
+                    <#case 2><已拒绝<#break>
+                </#switch>
+            </#if>
+          </span>
         </div>
     </section>
     </#list>

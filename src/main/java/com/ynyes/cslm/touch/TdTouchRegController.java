@@ -42,6 +42,7 @@ public class TdTouchRegController {
     public String regquick(Integer errCode, 
     				  Integer shareId, String mobile,
     				  HttpServletRequest request,
+    				  Integer app,
     				  ModelMap map) {
         String username = (String) request.getSession().getAttribute("username");
 //        if (null != shareId)
@@ -58,31 +59,28 @@ public class TdTouchRegController {
         	map.addAttribute("app", isApp);
 		}
         
-        if (null == username) {
-            if (null != errCode)
+        if (null != errCode)
+        {
+            if(errCode.equals(1))
             {
-                if(errCode.equals(1))
-                {
-                	map.addAttribute("error","验证码错误");
-                }
-                else if (errCode.equals(2))
-                {
-                    map.addAttribute("error", "用户名已存在");
-                }
-                else if (errCode.equals(3))
-                {
-                    map.addAttribute("error", "短信验证码错误");
-                }
-                else if (errCode.equals(4))
-                {
-                    map.addAttribute("error", "手机号已存在");
-                }
-                map.addAttribute("errCode", errCode);
-                map.addAttribute("mobile", mobile);
-            }           
+            	map.addAttribute("error","验证码错误");
+            }
+            else if (errCode.equals(2))
+            {
+                map.addAttribute("error", "用户名已存在");
+            }
+            else if (errCode.equals(3))
+            {
+                map.addAttribute("error", "短信验证码错误");
+            }
+            else if (errCode.equals(4))
+            {
+                map.addAttribute("error", "手机号已存在");
+            }
+            map.addAttribute("errCode", errCode);
+            map.addAttribute("mobile", mobile);
+        }           
             return "/touch/reg";
-        }
-        return "redirect:/touch/user";
     }
     
     @RequestMapping(value="/touch/reg",method=RequestMethod.POST)

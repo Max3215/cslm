@@ -38,14 +38,14 @@ public class TdManagerLoginController {
             return "/site_mag/login";
         }
         
-        if (username.equalsIgnoreCase("tdadmin") && password.equals("admin888"))
-        {
-            request.getSession().setAttribute("manager", username);
-            tdManagerLogService.addLog("login", "用户登录", request);
-            return "redirect:/Verwalter";
-        }
-        else
-        {
+//        if (username.equalsIgnoreCase("tdadmin") && password.equals("admin888"))
+//        {
+//            request.getSession().setAttribute("manager", username);
+//            tdManagerLogService.addLog("login", "用户登录", request);
+//            return "redirect:/Verwalter";
+//        }
+//        else
+//        {
             TdManager manager = tdManagerService.findByUsernameAndIsEnableTrue(username);
             
             if (null != manager)
@@ -79,7 +79,7 @@ public class TdManagerLoginController {
             
             map.addAttribute("error", "用户不存在或密码错误");
             return "/site_mag/login";
-        }   
+//        }   
     }
     
     @RequestMapping(value="/logout")

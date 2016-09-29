@@ -50,7 +50,7 @@ public class TdTouchCartController {
     private TdUserService tdUserService;
 
     @RequestMapping(value = "/touch/cart/init")
-    public String addCart(Long id, Long quantity, String zhid, Integer m,
+    public String addCart(Long id, Long quantity, String zhid, Integer m,Integer app,
             HttpServletRequest req,ModelMap map) {
 
 //      // 是否已登录
@@ -149,7 +149,7 @@ public class TdTouchCartController {
     }
     
     @RequestMapping(value = "/touch/cart")
-    public String cart(HttpServletRequest req, ModelMap map) {
+    public String cart(Integer app,HttpServletRequest req, ModelMap map) {
 
         String username = (String) req.getSession().getAttribute("username");
 

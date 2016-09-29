@@ -47,8 +47,8 @@ public class TdTouchListController {
 	    @Autowired
 	    private TdDistributorGoodsService tdDistributorGoodsService;
 	    
-	    @Autowired
-	    private TdDistributorService tdDistributorService;
+//	    @Autowired
+//	    private TdDistributorService tdDistributorService;
 	    
 	    // 组成：typeID-brandIndex-[paramIndex]-[排序字段]-[销量排序标志]-[价格排序标志]-[上架时间排序标志]-[页号]_[价格低值]-[价格高值]
 	    //新组成：typeID-brandIndex-[paramIndex]-[排序字段]-[销量排序标志]-[价格排序标志]-[上架时间排序标志]-[人气]-[评价]-[页号]_[价格低值]-[价格高值]
@@ -64,16 +64,16 @@ public class TdTouchListController {
 	        
 	        Double lng = (Double)req.getSession().getAttribute("lng");
 	    	Double lat = (Double)req.getSession().getAttribute("lat");
-	    	Boolean isIOS = (Boolean)req.getSession().getAttribute("isIOS");
+//	    	Boolean isIOS = (Boolean)req.getSession().getAttribute("isIOS");
 	    	
-	    	if(null != isIOS && isIOS ==true){
-	    		map.addAttribute("shop_list",tdDistributorService.findByIsEnableTrue());
-	    		map.addAttribute("index", true);
-	    	}else{
+//	    	if(null != isIOS && isIOS ==true){
+//	    		map.addAttribute("shop_list",tdDistributorService.findByIsEnableTrue());
+//	    		map.addAttribute("index", true);
+//	    	}else{
 	    		if(null != lng && null != lat){
 	    			tdCommonService.mapdistance(lng, lat, req, map);
 	    		}
-	    	}
+//	    	}
 	        
 	        // 排序字段个数
 	         int totalSorts = 3;

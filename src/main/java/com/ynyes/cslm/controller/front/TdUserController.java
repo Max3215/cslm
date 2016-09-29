@@ -53,6 +53,7 @@ import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdPayRecordService;
+import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
 import com.ynyes.cslm.service.TdUserCollectService;
@@ -145,6 +146,9 @@ public class TdUserController extends AbstractPaytypeController{
     
     @Autowired
     private TdCashService tdCashService;
+    
+    @Autowired
+    private TdProviderService tdProviderService;
 
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, ModelMap map) {
@@ -888,8 +892,15 @@ public class TdUserController extends AbstractPaytypeController{
 	     tdCommonService.setHeader(map, req);
 	     TdUserReturn userreturn = tdUserReturnService.findOne(id);
 	     
-	     map.addAttribute("return", userreturn);
-	     map.addAttribute("shop", TdDistributorService.findOne(userreturn.getShopId()));
+	     if(null != userreturn){
+	    	 map.addAttribute("return", userreturn);
+	    	 map.addAttribute("shop", TdDistributorService.findOne(userreturn.getShopId()));
+	    	 
+	    	 if(null != userreturn.getTurnType() && userreturn.getTurnType() ==2){
+	    		 map.addAttribute("supply", tdProviderService.findOne(userreturn.getSupplyId()));
+	    	 }
+	     }
+	     
     	
 	     return "/client/user_return_detail";
     }

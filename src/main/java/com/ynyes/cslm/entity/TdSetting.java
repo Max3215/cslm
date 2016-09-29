@@ -1,10 +1,16 @@
 package com.ynyes.cslm.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -181,6 +187,17 @@ public class TdSetting {
     // 底部Logo图片3跳转
     @Column
     private String bottomLogoLink3;
+    // 安卓版本
+    @Column
+    private Integer androidVersion;
+    // 更新内容
+    @Column
+    private String updateinfo;
+    // 更新时间
+    @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updataTime;
 
     public Long getId() {
         return id;
@@ -517,6 +534,30 @@ public class TdSetting {
 
 	public void setAndroidUrl(String androidUrl) {
 		this.androidUrl = androidUrl;
+	}
+
+	public Integer getAndroidVersion() {
+		return androidVersion;
+	}
+
+	public void setAndroidVersion(Integer androidVersion) {
+		this.androidVersion = androidVersion;
+	}
+
+	public String getUpdateinfo() {
+		return updateinfo;
+	}
+
+	public void setUpdateinfo(String updateinfo) {
+		this.updateinfo = updateinfo;
+	}
+
+	public Date getUpdataTime() {
+		return updataTime;
+	}
+
+	public void setUpdataTime(Date updataTime) {
+		this.updataTime = updataTime;
 	}
 	
 	

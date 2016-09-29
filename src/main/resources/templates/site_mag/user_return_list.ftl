@@ -56,8 +56,10 @@ var theForm = document.forms['form1'];
         <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)" style="display: none;">
             <option <#if !statusId??>selected="selected"</#if> value="">所有状态</option>
             <option <#if statusId?? && statusId==0>selected="selected"</#if> value="0">待审核</option>
-            <option <#if statusId?? && statusId==1>selected="selected"</#if> value="1">已批准</option>
-            <option <#if statusId?? && statusId==2>selected="selected"</#if> value="2">未通过</option>
+            <option <#if statusId?? && statusId==1>selected="selected"</#if> value="1">超市已批准</option>
+            <option <#if statusId?? && statusId==2>selected="selected"</#if> value="2">超市未通过</option>
+            <option <#if statusId?? && statusId==3>selected="selected"</#if> value="3">分销商已通过</option>
+            <option <#if statusId?? && statusId==4>selected="selected"</#if> value="4">分销商未通过</option>
         </select>
         </div>
       </div>
@@ -108,10 +110,24 @@ var theForm = document.forms['form1'];
                 <td align="center">${return.reason!""}</td>
                 <td align="center">${return.returnTime!""}</td>
                 <td align="center">
-                    <#if return.statusId==0>待审核<#elseif return.statusId=1>已批准<#else>未通过</#if>
+                    <#if return.turnType?? && return.turnType ==2>
+                        <#switch return.statusId>
+                            <#case 0>新提交<#break>
+                            <#case 1><span style="line-height:26px;color:#3ae01d;">超市已同意</span><#break>
+                            <#case 2><span style="line-height:26px;color:red;">超市已拒绝</span><#break>
+                            <#case 3><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                            <#case 4><span style="line-height:26px;color:red;">已拒绝</span><#break>
+                        </#switch>
+                    <#else>
+                        <#switch return.statusId>
+                            <#case 0>新提交<#break>
+                            <#case 1><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                            <#case 2><span style="line-height:26px;color:red;">已拒绝</span><#break>
+                        </#switch>
+                    </#if>
                 </td>
                 <td align="center">
-                    <a href="/Verwalter/user/return/edit?id=${return.id?c}&statusId=${statusId!""}">配置</a>
+                    <a href="/Verwalter/user/return/edit?id=${return.id?c}&statusId=${statusId!""}">详情</a>
                 </td>
             </tr>
         </#list>

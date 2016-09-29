@@ -130,7 +130,7 @@ function showSub(){
           <div class="clear"></div>
             <a href="javascript:void(0)" class="choose" onclick="selectType($(this),1)"><img src="/client/images/ali.png" style=" height: 0.65rem;" /></a>
             
-            <#if app?? && app ==1>
+            <#if app?? >
             <a href="javascript:void(0)" class="choose" onclick="selectType($(this),2)"><img src="/client/images/wx.png" style=" height: 0.65rem;" /></a>
             </#if>
             <#--

@@ -38,6 +38,7 @@ import com.ynyes.cslm.service.TdDemandService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdPayRecordService;
+import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
 import com.ynyes.cslm.service.TdUserCollectService;
@@ -108,6 +109,9 @@ public class TdManagerUserController {
     
     @Autowired
     TdCashService tdCashService;
+    
+    @Autowired
+    TdProviderService tdProviderService;
     
     @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
     @ResponseBody
@@ -704,7 +708,12 @@ public class TdManagerUserController {
         if (null != id)
         {
             map.addAttribute("userReturnId", id);
-            map.addAttribute("user_return", tdUserReturnService.findOne(id));
+            TdUserReturn userReturn = tdUserReturnService.findOne(id);
+            map.addAttribute("user_return",userReturn);
+            
+            if(null != userReturn.getTurnType() && userReturn.getTurnType() ==2){
+	    		 map.addAttribute("supply", tdProviderService.findOne(userReturn.getSupplyId()));
+	    	 }
         }
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);

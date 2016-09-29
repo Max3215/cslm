@@ -55,6 +55,7 @@ import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
+import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
 import com.ynyes.cslm.service.TdCashService;
@@ -69,6 +70,7 @@ import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdUserPointService;
+import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.SiteMagConstant;
@@ -127,6 +129,9 @@ public class TdSupplyController extends AbstractPaytypeController{
 	
 	@Autowired
 	private TdCashService tdCashService;
+	
+	@Autowired
+	private TdUserReturnService tdUserReturnService;
 	
 	@RequestMapping(value="/index")
 	public String Index(HttpServletRequest req,ModelMap map)
@@ -1380,6 +1385,162 @@ public class TdSupplyController extends AbstractPaytypeController{
         tdProviderService.save(provider);
         res.put("code", 0);
     	return res;
+    }
+	
+	@RequestMapping("/user/return")
+	public String userReturn(Integer page,HttpServletRequest req,ModelMap map){
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username){
+			return "redirect:/login;";
+		}
+		
+		tdCommonService.setHeader(map, req);
+		
+		TdProvider supply = tdProviderService.findByUsername(username);
+		if(null == supply){
+			return "/client/error_404";
+		}
+		
+		if(null == page){
+			page = 0;
+		}
+		
+		PageRequest pageRequest = new PageRequest(page, ClientConstant.pageSize);
+		
+		map.addAttribute("turn_page", tdUserReturnService.findAll(supply.getId(), 2, pageRequest));
+		
+		return "/client/supply_return_list";
+	}
+	
+	@RequestMapping("/return/detail")
+	public String returnDetail(Long id,HttpServletRequest req,ModelMap map){
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username){
+			return "redirect:/login;";
+		}
+		tdCommonService.setHeader(map, req);
+		
+		if(null == id){
+			return "/client/error_404";
+		}
+		
+		map.addAttribute("userRturn", tdUserReturnService.findOne(id));
+		return "/client/supply_return_detail";
+	}
+	
+	@RequestMapping(value="/return/param/edit")
+    @ResponseBody
+    public Map<String,Object> returnedit(Long id,
+    		Long statusId,String suppDetail,
+    		HttpServletRequest req){
+    	Map<String,Object> res =new HashMap<>();
+    	res.put("code",1);
+		String username = (String)req.getSession().getAttribute("supply");
+		
+		if (null == username)
+        {
+            res.put("message", "登录超时！");
+            return res;
+        }
+		
+		TdProvider supply = tdProviderService.findByUsername(username);
+		
+		if(null != supply)
+		{
+			if(null != id)
+			{
+				TdUserReturn e = tdUserReturnService.findOne(id);
+				if(null != e && e.getStatusId()==1)
+				{
+					e.setStatusId(statusId);
+					e.setSuppDetail(suppDetail);
+					tdUserReturnService.save(e);
+					
+					if(statusId ==3){
+						if(null != supply.getVirtualMoney()&&  supply.getVirtualMoney() > e.getGoodsPrice()*e.getReturnNumber())
+						{
+							turnGoods(e, supply);
+						}else{
+							res.put("message", "账户余额不足");
+							return res;
+						}
+					}
+					
+	            	res.put("message", "已处理此次退货！");
+	            	res.put("code", 0);
+	            	return res;
+				}
+			}
+		}
+		res.put("message", "参数错误！");
+    	return res;
+    }
+	
+	/**
+     * 分销商同意普通商品退货，
+     * 退还商品货款，扣除超市相应余额
+     */
+    public void turnGoods(TdUserReturn userRturn,TdProvider supply){
+    	Double turnPrice =0.0; // 退款金额
+    	
+    	turnPrice = userRturn.getGoodsPrice()*userRturn.getReturnNumber();
+    	if(null != supply.getVirtualMoney()&&  supply.getVirtualMoney() > turnPrice)
+		{
+    		
+    		// 扣除超市余额
+    		supply.setVirtualMoney(supply.getVirtualMoney()- turnPrice);
+        	tdProviderService.save(supply);
+        		
+        		
+    		TdUser user = tdUserService.findByUsername(userRturn.getUsername());
+            if(null != user)
+            {
+            	if(null != user.getVirtualMoney())
+            	{
+            		user.setVirtualMoney(user.getVirtualMoney()+turnPrice);
+            	}else{
+            		user.setVirtualMoney(turnPrice);
+            	}
+            }
+            
+            tdUserService.save(user);
+                
+                
+             // 添加会员虚拟账户金额记录
+        	TdPayRecord record = new TdPayRecord();
+        	
+        	record.setAliPrice(0.0);
+        	record.setPostPrice(0.0);
+        	record.setRealPrice(turnPrice);
+        	record.setTotalGoodsPrice(turnPrice);
+        	record.setServicePrice(0.0);
+        	record.setProvice(userRturn.getGoodsPrice());
+        	record.setOrderNumber(userRturn.getOrderNumber());
+        	record.setCreateTime(new Date());
+        	record.setUsername(user.getUsername());
+        	record.setType(2L);
+        	record.setCont("退货返款");
+        	record.setDistributorTitle(userRturn.getShopTitle());
+        	record.setStatusCode(1);
+        	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+        	
+        	record = new TdPayRecord();
+        	
+        	record.setAliPrice(0.0);
+        	record.setPostPrice(0.0);
+        	record.setServicePrice(0.0);
+        	record.setRealPrice(turnPrice);
+        	record.setTotalGoodsPrice(turnPrice);
+        	record.setProvice(userRturn.getGoodsPrice());
+        	record.setOrderNumber(userRturn.getOrderNumber());
+        	record.setCreateTime(new Date());
+        	record.setCont("用户退货返款");
+        	record.setDistributorTitle(userRturn.getShopTitle());
+        	record.setProviderId(supply.getId());
+    		record.setProviderTitle(supply.getTitle());
+        	record.setStatusCode(1);
+        	tdPayRecordService.save(record); // 保存超市退款记录
+		}
     }
 	
 	public void ChangeAll(Boolean isDistribution,Long[] ids,Integer[] chkIds)

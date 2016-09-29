@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 
 function editReturn(id,statusId){
-    var dialog = $.dialog.confirm('操作提示信息：<br />确定已处理此次退货？', function () {
+    var dialog = $.dialog.confirm('操作注意事项：<br />1，普通商品退货同意则会退货商品总额。<br />2，分销商品同意退货则会退回代售提成。<br />确定继续处理此次退货？', function () {
         var handleDetail = document.getElementById("handleDetail").value;
         var postData = { "id": id,"statusId":statusId,"handleDetail":handleDetail};
         //发送AJAX请求
@@ -109,17 +109,33 @@ DD_belatedPNG.fix('.,img,background');
                     <td>
                         <ul class="list-proinfo" id="removeTheSingleGife">
                             <li class="fore1 oh">
-                                <a href="/goods/${return.goodsId?c!''}" target="_blank" class="fl">
+                                <a  class="fl">
                                     <img height="50" width="50" title="" src="${return.goodsCoverImageUri!''}" alt="${return.goodsTitle!''}">
                                 </a>
-                                <div class="p-info fl ml10" style="width: 240px;height: 40px;overflow: hidden;"><a href="/goods/${return.goodsId?c!''}" target="_blank">${return.goodsTitle!''}</a>
+                                <div class="p-info fl ml10" style="width: 240px;height: 40px;overflow: hidden;"><a >${return.goodsTitle!''}</a>
                                 </div>
                             </li>
                         </ul>
                     </td>
                     <td>￥<#if return.goodsPrice??>${return.goodsPrice?string('0.00')}<#else>0</#if></td>                  
                     <td><p>${return.returnNumber!''}</p></td>
-                    <td><#if return.statusId==0>待审核<#else>已审核</#if></td>
+                    <td>
+                        <#if return.turnType?? && return.turnType ==2>
+                            <#switch return.statusId>
+                                <#case 0>新提交<#break>
+                                <#case 1>已同意<#break>
+                                <#case 2>已拒绝<#break>
+                                <#case 3>分销商已同意<#break>
+                                <#case 4>分销商已拒绝<#break>
+                            </#switch>
+                        <#else>
+                            <#switch return.statusId>
+                                <#case 0>新提交<#break>
+                                <#case 1>已同意<#break>
+                                <#case 2>已拒绝<#break>
+                            </#switch>
+                        </#if>
+                    </td>
                 </tr>
                 
             </table>
@@ -151,7 +167,21 @@ DD_belatedPNG.fix('.,img,background');
                           </div>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">当前状态：</b>
-                            <span style="line-height:26px;color:red;"><#if return.statusId==0>待审核<#elseif return.statusId=1>已批准<#else>未通过</#if></span>
+                                <#if return.turnType?? && return.turnType ==2>
+                                <#switch return.statusId>
+                                    <#case 0>新提交<#break>
+                                    <#case 1><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                                    <#case 2><span style="line-height:26px;color:red;">已拒绝</span><#break>
+                                    <#case 3><span style="line-height:26px;color:#3ae01d;">分销商已同意</span><#break>
+                                    <#case 4><span style="line-height:26px;color:red;">分销商已拒绝</span><#break>
+                                </#switch>
+                            <#else>
+                                <#switch return.statusId>
+                                    <#case 0>新提交<#break>
+                                    <#case 1><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                                    <#case 2><span style="line-height:26px;color:red;">已拒绝</span><#break>
+                                </#switch>
+                            </#if>
                           </div>
 
                           <div class="mymember_eva_div">

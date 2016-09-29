@@ -165,7 +165,7 @@ public class TdTouchOrderController {
     
     
     @RequestMapping(value = "/info")
-    public String orderInfo(Long code, HttpServletRequest req, HttpServletResponse resp,
+    public String orderInfo(Long code,Integer app, HttpServletRequest req, HttpServletResponse resp,
             ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 
@@ -364,6 +364,7 @@ public class TdTouchOrderController {
             Long deliveryType, // 配送方式
             Long shipAddressId, // 自提点Id
             String type,
+            Integer app,
             HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
        
@@ -1070,7 +1071,7 @@ public class TdTouchOrderController {
      * @return
      */
     @RequestMapping(value="/byNow/{dGoodsId}")
-    public String ByNow(@PathVariable Long dGoodsId,Long quantity, HttpServletRequest req, ModelMap map){
+    public String ByNow(@PathVariable Long dGoodsId,Long quantity,Integer app, HttpServletRequest req, ModelMap map){
     	String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
@@ -1138,7 +1139,7 @@ public class TdTouchOrderController {
      * 
      */
     @RequestMapping(value = "/proGoods/{dGoodsId}")
-	public String distributionGoods(@PathVariable Long dGoodsId, Long quantity, HttpServletRequest req, ModelMap map) {
+	public String distributionGoods(@PathVariable Long dGoodsId, Long quantity,Integer app, HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {

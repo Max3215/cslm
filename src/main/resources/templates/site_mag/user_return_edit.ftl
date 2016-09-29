@@ -65,6 +65,12 @@
     <dt>相关商家</dt>
     <dd><#if user_return??>${user_return.shopTitle!""}</#if></dd>
   </dl>
+  <#if user_return.turnType?? && user_return.turnType ==2>
+  <dl>
+    <dt>相关商家</dt>
+    <dd><#if supply??>${supply.title!""}</#if></dd>
+  </dl>
+  </#if>
   <dl>
     <dt>商品名称</dt>
     <dd><#if user_return??>${user_return.goodsTitle!""}</#if></dd>
@@ -93,23 +99,54 @@
     <dt>审核状态</dt>
     <dd>
       <div class="rule-multi-radio multi-radio">
+          <#if user_return.turnType?? && user_return.turnType ==2>
+            <#switch user_return.statusId>
+                <#case 0>超市审核中<#break>
+                <#case 1><span style="line-height:26px;color:#3ae01d;">分销商审核中</span><#break>
+                <#case 2><span style="line-height:26px;color:red;">超市已拒绝</span><#break>
+                <#case 3><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                <#case 4><span style="line-height:26px;color:red;">已拒绝</span><#break>
+            </#switch>
+        <#else>
+            <#switch user_return.statusId>
+                <#case 0>新提交<#break>
+                <#case 1><span style="line-height:26px;color:#3ae01d;">已同意</span><#break>
+                <#case 2><span style="line-height:26px;color:red;">已拒绝</span><#break>
+            </#switch>
+        </#if>
+        <#--
         <span style="display: none;">
             <input type="radio" name="statusId" value="0" <#if !user_return?? || !user_return.statusId?? || user_return.statusId==0>checked="checked"</#if>>
             <label>待审核</label>
             <input type="radio" name="statusId" value="1" <#if user_return?? && user_return.statusId?? && user_return.statusId==1>checked="checked"</#if>>
-            <label>同意</label>
+            <label>超市同意</label>
             <input type="radio" name="statusId" value="2" <#if user_return?? && user_return.statusId?? && user_return.statusId==2>checked="checked"</#if>>
-            <label>拒绝</label>
+            <label>超市拒绝</label>
+            <#if user_return.turnType?? && user_return.turnType ==2>
+                <input type="radio" name="statusId" value="3" <#if user_return?? && user_return.statusId?? && user_return.statusId==3>checked="checked"</#if>>
+                <label>分销商同意</label>
+                <input type="radio" name="statusId" value="4" <#if user_return?? && user_return.statusId?? && user_return.statusId==4>checked="checked"</#if>>
+                <label>分销商拒绝</label>
+            </#if>
         </span>
+        -->
       </div>
     </dd>
   </dl>
   <dl>
-    <dt>处理记录</dt>
+    <dt>超市意见</dt>
     <dd>
       <textarea name="handleDetail" rows="2" cols="20" class="input normal"><#if user_return??>${user_return.handleDetail!""}</#if></textarea>
     </dd>
   </dl>
+  <#if user_return.turnType?? && user_return.turnType ==2>
+  <dl>
+    <dt>分销商意见</dt>
+    <dd>
+      <textarea name="suppDetail" rows="2" cols="20" class="input normal"><#if user_return??>${user_return.suppDetail!""}</#if></textarea>
+    </dd>
+  </dl>
+  </#if>
 </div>
 <!--/内容-->
 

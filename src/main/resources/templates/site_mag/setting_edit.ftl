@@ -212,7 +212,7 @@ $(function () {
         </dl>
         -->
         <dl>
-            <dt>安卓App二维码</dt>
+            <dt>下载二维码</dt>
             <dd>
                 <input id="androidImgUrl" name="androidQrCode" type="text" datatype="*0-255" value="<#if setting??>${setting.androidQrCode!""}</#if>" class="input normal upload-path">
                 <div class="upload-box upload-img"></div>
@@ -224,6 +224,19 @@ $(function () {
             <dt>安卓App文件</dt>
             <dd>
                 <input id="androidImgUrl" name="androidUrl" type="text" datatype="*0-255" value="<#if setting??>${setting.androidUrl!""}</#if>" class="input normal">
+            </dd>
+        </dl>
+       
+        <dl>
+            <dt>安卓版本</dt>
+            <dd>
+                <input  name="androidVersion" type="text" datatype="n" value="<#if setting??>${setting.androidVersion!"2"}</#if>" class="input normal">
+            </dd>
+        </dl>
+        <dl>
+            <dt>安卓更新时间</dt>
+            <dd>
+                <input name="updataTime" type="text" value="<#if setting??>${setting.updataTime!""}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',lang:'zh-cn'})" datatype="/^\s*$|^\d{4}\-\d{1,2}\-\d{1,2}\s{1}(\d{1,2}:){2}\d{1,2}$/" errormsg="请选择正确的日期" sucmsg=" ">
             </dd>
         </dl>
         <dl>
@@ -293,6 +306,13 @@ $(function () {
             <dt>网站备案号</dt>
             <dd>
                 <input name="icpNumber" type="text" value="<#if setting??>${setting.icpNumber!""}</#if>" class="input normal" datatype="n0-100" sucmsg=" ">
+                <span class="Validform_checktip"></span>
+            </dd>
+        </dl>
+        <dl>
+            <dt>安卓更新说明</dt>
+            <dd>
+                <textarea name="updateinfo" rows="2" cols="20" class="input" datatype="*0-255" sucmsg=" "><#if setting??>${setting.updateinfo!""}</#if></textarea>
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>

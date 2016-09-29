@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.repository.TdUserReturnRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdUserReturn 服务类
@@ -162,5 +164,18 @@ public class TdUserReturnService {
     {
         
         return (List<TdUserReturn>) repository.save(entities);
+    }
+    
+    public Page<TdUserReturn> findAll(Long supplyId,Integer turnType,PageRequest pageRequest){
+    	Criteria<TdUserReturn> c = new Criteria<>();
+    	
+    	if(null != supplyId){
+    		c.add(Restrictions.eq("supplyId", supplyId, true));
+    	}
+    	if(null != turnType){
+    		c.add(Restrictions.eq("turnType", turnType, true));
+    	}
+    	
+    	return repository.findAll(c, pageRequest);
     }
 }
