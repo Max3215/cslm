@@ -93,14 +93,14 @@ public class TdTouchIndexController {
     		} 
     	}
     	
-    	if((null != app && 1== app) || (null != isIOS && isIOS ==true)){
-    		map.addAttribute("shop_list",tdDistributorService.findByIsEnableTrue());
-    		map.addAttribute("index", true);
-    	}else{
+//    	if((null != app && 1== app) || (null != isIOS && isIOS ==true)){
+//    		map.addAttribute("shop_list",tdDistributorService.findByIsEnableTrue());
+//    		map.addAttribute("index", true);
+//    	}else{
     		if(null != lng && null != lat){
     			tdCommonService.mapdistance(lng, lat, req, map);
     		}
-    	}
+//    	}
     	
     	// 超市快讯
         List<TdArticleCategory> catList = tdArticleCategoryService

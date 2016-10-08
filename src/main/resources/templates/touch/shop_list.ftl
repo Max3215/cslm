@@ -64,6 +64,7 @@ function chooseDistributor(disId){
     </div>
 </div>
 <div id="allmap" style="display:none"></div>
+<input type="hidden" id="getcont" />
 <!--
 <div class="show_list">
     <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
@@ -89,19 +90,23 @@ function chooseDistributor(disId){
 -->
 <#if isIOS?? && isIOS ==true>
 <script type="text/javascript">
-//$(document).ready(function(){
-//    <#if lng?? && lat??>
-//        <#if !index??>
-//        alert("加载店铺"+lng+":"+lat);
-//        distance(${lng},${lat});
-//        </#if>
-//  <#else>
-//    var lng = $("#lng").val();
-//    var lat = $("#lat").val();
-//    alert("首次加载店铺"+lng+":"+lat);
-//     distance(lng,lat);
-//   </#if>
-//}); 
+$(function(){
+    $("#getcont").click(getContacts());
+})
+
+function getContacts(){
+    
+   document.location = "getContacts";
+ }
+ 
+    // lng经度   lat纬度 
+function postContactsios(lng,lat) {
+     if (lng != "" && lat != "") {
+            // 根据经纬度查询店铺
+          distance(lng,lat);
+     }
+     return true;
+ }
 </script>
 <#else>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ZBClgucj8qbtCxOFFd003zZ"></script>
@@ -119,7 +124,7 @@ var lat =0;
       
   <#if lng?? && lat??>
         <#if !index??>
-        distance(${lng},${lat});
+    //    distance(${lng},${lat});
         </#if>
   <#else>
       distance(lng,lat);
