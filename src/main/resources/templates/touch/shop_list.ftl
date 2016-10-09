@@ -11,12 +11,11 @@ function distance(lng,lat){
     })
 }
 
-function postStr(lng,lat){
-    $("#lng").attr("value",lng);
-    $("#lat").attr("value",lat);
-    alert("赋值："+lng+":"+lat);
-     return true;
- }
+//function postStr(lng,lat){
+//    $("#lng").attr("value",lng);
+//    $("#lat").attr("value",lat);
+//     return true;
+// }
 
 function chooseDistributor(disId){
     $.ajax({
@@ -90,6 +89,7 @@ function chooseDistributor(disId){
 -->
 <#if isIOS?? && isIOS ==true>
 <script type="text/javascript">
+<#if !index??>
 $(function(){
     $("#getcont").click(getContacts());
 })
@@ -100,13 +100,14 @@ function getContacts(){
  }
  
     // lng经度   lat纬度 
-function postContactsios(lng,lat) {
+function postStr(lng,lat) {
      if (lng != "" && lat != "") {
             // 根据经纬度查询店铺
           distance(lng,lat);
      }
      return true;
  }
+ </#if>
 </script>
 <#else>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5ZBClgucj8qbtCxOFFd003zZ"></script>
