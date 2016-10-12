@@ -121,6 +121,9 @@ public class TdUserReturn {
     @Column
     private String suppDetail;
     
+    // 实际退还金额
+    @Column
+    private Double realPrice;
 
     public Long getId() {
         return id;
@@ -320,6 +323,14 @@ public class TdUserReturn {
 
 	public void setSuppDetail(String suppDetail) {
 		this.suppDetail = suppDetail;
+	}
+
+	public Double getRealPrice() {
+		return realPrice;
+	}
+
+	public void setRealPrice(Double realPrice) {
+		this.realPrice = realPrice;
 	}
     
 	

@@ -1361,6 +1361,13 @@ public class TdSupplyController extends AbstractPaytypeController{
 		cash.setStatus(1L);
 		
 		tdCashService.save(cash);
+		
+		// 新加银行卡信息记录
+		supply.setBankCardCode(card);
+		supply.setBankTitle(bank);
+		supply.setBankName(name);
+		tdProviderService.save(supply);
+		
 		res.put("msg", "提交成功");
 		res.put("code", 1);
 		return res;
@@ -1431,7 +1438,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 	@RequestMapping(value="/return/param/edit")
     @ResponseBody
     public Map<String,Object> returnedit(Long id,
-    		Long statusId,String suppDetail,
+    		Long statusId,String suppDetail,Double realPrice,
     		HttpServletRequest req){
     	Map<String,Object> res =new HashMap<>();
     	res.put("code",1);
@@ -1454,7 +1461,8 @@ public class TdSupplyController extends AbstractPaytypeController{
 				{
 					e.setStatusId(statusId);
 					e.setSuppDetail(suppDetail);
-					tdUserReturnService.save(e);
+					e.setRealPrice(realPrice);
+					e = tdUserReturnService.save(e);
 					
 					if(statusId ==3){
 						if(null != supply.getVirtualMoney()&&  supply.getVirtualMoney() > e.getGoodsPrice()*e.getReturnNumber())
@@ -1483,7 +1491,7 @@ public class TdSupplyController extends AbstractPaytypeController{
     public void turnGoods(TdUserReturn userRturn,TdProvider supply){
     	Double turnPrice =0.0; // 退款金额
     	
-    	turnPrice = userRturn.getGoodsPrice()*userRturn.getReturnNumber();
+    	turnPrice = userRturn.getRealPrice();
     	if(null != supply.getVirtualMoney()&&  supply.getVirtualMoney() > turnPrice)
 		{
     		

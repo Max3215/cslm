@@ -958,6 +958,42 @@ public class TdManagerGoodsController {
     	}
     	return "/site_mag/two_cat";
     }
+    
+    @RequestMapping(value="/check", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, String> userCheckForm(String param, Long id) {
+        Map<String, String> res = new HashMap<String, String>();
+        
+        res.put("status", "n");
+        
+        
+//        if (null == param || param.isEmpty())
+//        {
+//            res.put("info", "该字段不能为空");
+//            return res;
+//        }
+    	if (null == id)
+        {
+            if (null != tdGoodsService.findByCode(param))
+            {
+                res.put("info", "已存在同编号商品");
+                return res;
+            }
+        }
+        else
+        {
+            if (null != tdGoodsService.findByCodeAndIdNot(param, id))
+            {
+                res.put("info", "已存在同编号商品");
+                return res;
+            }
+        }
+        
+        
+        res.put("status", "y");
+        
+        return res;
+    }
 
     @ModelAttribute
     public void getModel(@RequestParam(value = "id", required = false) Long id,

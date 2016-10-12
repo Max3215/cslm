@@ -79,7 +79,8 @@ DD_belatedPNG.fix('.,img,background');
         <table align="left">
             <tr class="mymember_infotab_tit01">
                 <th colspan="2">商品信息</th>
-                <th width="60">退换数量</th>
+                <th width="60">价格*数量</th>
+                <th width="60">退款</th>
                 <th width="120">订单号</th>
                 <th width="120">联系电话</th>
                 <th width="120">申请时间</th>
@@ -95,7 +96,8 @@ DD_belatedPNG.fix('.,img,background');
                       <td class="td002">
                         <a href="/goods/${return.goodsId?c!''}">${return.goodsTitle!''}</a>
                       </td>
-                      <td>${return.returnNumber!''}</td>
+                      <td>${return.goodsPrice?string('0.00')}*${return.returnNumber!''}</td>
+                      <td><#if return.realPrice??>${return.realPrice?string('0.00')}</#if></td>
                       <td>${return.orderNumber!''}</td>
                       <td class="td003">${return.telephone!''}</td>
                       <td class="td003">${return.returnTime!''}</td>

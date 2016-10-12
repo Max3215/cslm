@@ -2593,6 +2593,12 @@ public class TdTouchUserController {
 		
 		cash = tdCashService.save(cash);
     	
+		// 新加银行卡信息记录
+		user.setBankCardCode(card);
+		user.setBankTitle(bank);
+		user.setBankName(name);
+		tdUserService.save(user);
+		
     	map.addAttribute("cash", cash);
     	
     	return "/touch/user_draw_end";

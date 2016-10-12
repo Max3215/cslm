@@ -1407,6 +1407,13 @@ public class TdProviderController extends AbstractPaytypeController{
 		cash.setStatus(1L);
 		
 		tdCashService.save(cash);
+		
+		// 新加银行卡信息记录
+		provider.setBankCardCode(card);
+		provider.setBankTitle(bank);
+		provider.setBankName(name);
+		tdProviderService.save(provider);
+				
 		res.put("msg", "提交成功");
 		res.put("code", 1);
 		return res;

@@ -2128,6 +2128,7 @@ public class TdDistributorController extends AbstractPaytypeController{
             	cartGoods.setProviderId(tdProviderGoodsService.findProviderId(providerGoods.getId()));
             	cartGoods.setIsSelected(true);
             	cartGoods.setPrice(providerGoods.getOutFactoryPrice());
+            	cartGoods.setGoodsSubTitle(providerGoods.getSubGoodsTitle());
             	if(quantity>providerGoods.getLeftNumber())
             	{
             		cartGoods.setQuantity(providerGoods.getLeftNumber());
@@ -2410,7 +2411,7 @@ public class TdDistributorController extends AbstractPaytypeController{
         		 orderGoods.setGoodsId(providerGoods.getGoodsId());
         		 orderGoods.setGoodsCoverImageUri(providerGoods.getGoodsCoverImageUri());
         		 orderGoods.setGoodsTitle(providerGoods.getGoodsTitle());
-        		 orderGoods.setGoodsSubTitle(providerGoods.getSubGoodsTitle());
+        		 orderGoods.setGoodsSubTitle(cartGoods.getGoodsSubTitle());
         		 orderGoods.setGoodsCode(providerGoods.getCode());
         		 orderGoods.setSaleTime(new Date());
         		 
@@ -2868,7 +2869,7 @@ public class TdDistributorController extends AbstractPaytypeController{
     @RequestMapping(value="/return/param/edit")
     @ResponseBody
     public Map<String,Object> returnedit(Long id,
-    		Long statusId,String handleDetail,
+    		Long statusId,String handleDetail,Double realPrice,
     		HttpServletRequest req){
     	Map<String,Object> res =new HashMap<>();
     	res.put("code",1);
@@ -2890,7 +2891,8 @@ public class TdDistributorController extends AbstractPaytypeController{
 				{
 					e.setStatusId(statusId);
 					e.setHandleDetail(handleDetail);
-					tdUserReturnService.save(e);
+					e.setRealPrice(realPrice);
+					e = tdUserReturnService.save(e);
 					
 					// 普通商品退
 					if(null == e.getTurnType() || e.getTurnType() ==1 ){
@@ -2923,7 +2925,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 							}
 						}
 					}
-					
 					
 	            	res.put("message", "已处理此次退货！");
 	            	res.put("code", 0);
@@ -3395,6 +3396,13 @@ public class TdDistributorController extends AbstractPaytypeController{
 		cash.setStatus(1L);
 		
 		tdCashService.save(cash);
+		
+		// 新加银行卡信息记录
+		distributor.setBankCardCode(card);
+		distributor.setBankTitle(bank);
+		distributor.setBankName(name);
+		tdDistributorService.save(distributor);
+				
 		res.put("msg", "提交成功");
 		res.put("code", 1);
 		return res;
@@ -3796,7 +3804,7 @@ public class TdDistributorController extends AbstractPaytypeController{
     public void turnGoods(TdUserReturn userRturn,TdDistributor tdDistributor){
     	Double turnPrice =0.0; // 退款金额
     	
-    	turnPrice = userRturn.getGoodsPrice()*userRturn.getReturnNumber();
+    	turnPrice = userRturn.getRealPrice();
     	if(null != tdDistributor.getVirtualMoney()&&  tdDistributor.getVirtualMoney() > turnPrice)
 		{
     		
@@ -3884,7 +3892,7 @@ public class TdDistributorController extends AbstractPaytypeController{
     	Double rationPrice = 0.0;  // 超市应退提成
     	
     	turnRation =providerGoods.getShopReturnRation();
-    	trunPrice = userRturn.getGoodsPrice() * userRturn.getReturnNumber();
+    	trunPrice = userRturn.getRealPrice();
     	rationPrice = trunPrice * turnRation;
     	
     	if(null == distributor.getVirtualMoney() || distributor.getVirtualMoney() < rationPrice){

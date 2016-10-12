@@ -29,7 +29,7 @@
                     <input type="hidden" id="providerTitle${pgoods.id?c}" value="${pgoods.providerTitle!''}">
                     <tr>
                         <td colspan="2">
-                            <a href="" target="_blank" class="pic" title="${pgoods.goodsTitle!''}">
+                            <a  class="pic" title="${pgoods.goodsTitle!''}">
                                 <strong><img width="80" height="80" src="${pgoods.goodsCoverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="goodsTitle${pgoods.id?c}">${pgoods.goodsTitle!''}</p>
                              </a> 

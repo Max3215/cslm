@@ -96,6 +96,7 @@ public class TdManagerParameterCategoryController {
     public String setting(String __EVENTTARGET,
                           String __EVENTARGUMENT,
                           String __VIEWSTATE,
+                          Long parentId,
                           Long[] listId,Long id,
                           Integer[] listChkId,
                           Long[] listSortId,
@@ -122,17 +123,25 @@ public class TdManagerParameterCategoryController {
             }
         }
         
+        map.addAttribute("category_list", tdParameterCategoryService.findByParentIdIsNullOrderBySortIdAsc());
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         map.addAttribute("id", id);
         map.addAttribute("keywords", keywords);
+        map.addAttribute("parentid", parentId);
         
         if(null == keywords || keywords.isEmpty()){
-        	map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+        	if(null != parentId){
+        		map.addAttribute("parameter", tdParameterCategoryService.findOne(parentId));
+        		map.addAttribute("parameter_category_list", tdParameterCategoryService.findByParentId(parentId));
+        	}else{
+        		map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+        	}
         }else{
         	map.addAttribute("parameter_category_list", tdParameterCategoryService.searchAll(keywords));
         }
+        
         
         return "/site_mag/parameter_category_list";
     }

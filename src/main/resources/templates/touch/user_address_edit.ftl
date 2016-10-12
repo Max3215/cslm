@@ -74,7 +74,7 @@ $(document).ready(function(){
           <select class="fl prov" name="province" datatype="*"></select>
           <select class="fr city" name="city" datatype="*"></select>
           <div class="clear"></div>
-          <select style="width:100%;" class="dist" datatype="*" name="disctrict"></select>
+          <select style="width:100%;" class="dist"  name="disctrict"></select>
           <p>详细地址</p>
           <textarea name="detailAddress"><#if address??>${address.detailAddress!''}</#if></textarea>
     </div>

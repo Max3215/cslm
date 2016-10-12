@@ -31,7 +31,7 @@ $(document).ready(function(){
 <body>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="javascript:history.go(-1);" class="back"></a>
+		<a href="/touch/user" class="back"></a>
 		<p>收货地址</p>
 		<a href="/touch" class="c_home"></a>
 	</header>

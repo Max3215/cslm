@@ -110,7 +110,11 @@ DD_belatedPNG.fix('.,img,background');
                             <b style="top:4px;">订单编号：</b>
                             <span style="line-height:26px;">${return.orderNumber!''}</span>
                           </div>
-
+						  <div class="mymember_eva_div">
+                            <b style="top:4px;">退还金额：</b>
+                            <span style="line-height:26px;color:red;"><#if return.realPrice??>${return.realPrice?string('0.00')}</#if></span>
+                          </div>
+						  
                           <div class="mymember_eva_div">
                             <b style="top:4px;">商家信息：</b>
                             <span style="line-height:26px;">${shop.title!''}</span>
@@ -133,10 +137,6 @@ DD_belatedPNG.fix('.,img,background');
                             <span style="line-height:26px;">${supply.mobile!''}</span>
                           </div>
                           </#if>
-                          <div class="mymember_eva_div">
-                            <b style="top:4px;">退货说明：</b>
-                            <span style="line-height:26px;color:red;">${return.reason!'无'}</span>
-                          </div>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">当前状态：</b>
                             <#if return.turnType?? && return.turnType ==2>

@@ -67,8 +67,9 @@ DD_belatedPNG.fix('.,img,background');
             <tr class="mymember_infotab_tit01">
                 <th colspan="2">商品信息</th>
                 <th width="60">价格*数量</th>
+                <th width="60">退款</th>
                 <th width="120">订单号</th>
-                <th width="120">用户名</th>
+                <th width="90">用户名</th>
                 <th width="120">申请时间</th>
                 <th width="50">状态</th>
                 <th width="50">操作</th>
@@ -83,6 +84,7 @@ DD_belatedPNG.fix('.,img,background');
                         <a>${return.goodsTitle!''}</a>
                       </td>
                       <td>${return.goodsPrice?string('0.00')}*${return.returnNumber!''}</td>
+                      <td><#if return.realPrice??>${return.realPrice?string('0.00')}</#if></td>
                       <td>${return.orderNumber!''}</td>
                       <td class="td003">${return.username!''}</td>
                       <td class="td003">${return.returnTime!''}</td>

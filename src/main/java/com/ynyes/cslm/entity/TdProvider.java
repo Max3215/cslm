@@ -102,6 +102,18 @@ public class TdProvider {
     @Column(scale=2)
     private Double aliRation;
     
+    // 银行卡号
+    @Column
+    private String bankCardCode;
+    
+    // 银行卡名称
+    @Column
+    private String bankTitle;
+    
+    // 银行卡开户名
+    @Column
+    private String bankName;
+    
     
     public Long getId() {
         return id;
@@ -261,6 +273,30 @@ public class TdProvider {
 
 	public void setAliRation(Double aliRation) {
 		this.aliRation = aliRation;
+	}
+
+	public String getBankCardCode() {
+		return bankCardCode;
+	}
+
+	public void setBankCardCode(String bankCardCode) {
+		this.bankCardCode = bankCardCode;
+	}
+
+	public String getBankTitle() {
+		return bankTitle;
+	}
+
+	public void setBankTitle(String bankTitle) {
+		this.bankTitle = bankTitle;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
 	}
 
     

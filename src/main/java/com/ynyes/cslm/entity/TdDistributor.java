@@ -158,6 +158,18 @@ public class TdDistributor {
     @Column
     private String postInfo;
     
+    // 分销商银行卡号
+    @Column
+    private String bankCardCode;
+    
+    // 分销商银行卡名称
+    @Column
+    private String bankTitle;
+    
+    // 新加银行卡开户名
+    @Column
+    private String bankName;
+    
     
     public Long getId() {
         return id;
@@ -429,6 +441,30 @@ public class TdDistributor {
 
 	public void setPostInfo(String postInfo) {
 		this.postInfo = postInfo;
+	}
+
+	public String getBankCardCode() {
+		return bankCardCode;
+	}
+
+	public void setBankCardCode(String bankCardCode) {
+		this.bankCardCode = bankCardCode;
+	}
+
+	public String getBankTitle() {
+		return bankTitle;
+	}
+
+	public void setBankTitle(String bankTitle) {
+		this.bankTitle = bankTitle;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
 	}
 
 	

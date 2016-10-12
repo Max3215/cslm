@@ -45,7 +45,16 @@ $(document).ready(function(){
 function editReturn(id,statusId){
     var dialog = $.dialog.confirm('操作注意事项：<br />1，普通商品退货同意则会退货商品总额。<br />2，分销商品同意退货则会退回代售提成。<br />确定继续处理此次退货？', function () {
         var handleDetail = document.getElementById("handleDetail").value;
-        var postData = { "id": id,"statusId":statusId,"handleDetail":handleDetail};
+        var realPrice = document.getElementById("realPrice").value;
+        
+        var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+	    if(undefined == realPrice || ""==realPrice || !reg.test(realPrice))
+	    {
+	         $.dialog.alert('错误提示：请正确输入退还金额', function () { }, dialog);
+	        return ;
+	    }
+        
+        var postData = { "id": id,"statusId":statusId,"handleDetail":handleDetail,"realPrice":realPrice};
         //发送AJAX请求
         
         sendAjaxUrl(dialog, postData, "/distributor/return/param/edit");
@@ -147,6 +156,17 @@ DD_belatedPNG.fix('.,img,background');
                             <b style="top:4px;">订单编号：</b>
                             <span style="line-height:26px;">${return.orderNumber!''}</span>
                           </div>
+                          <#if return.turnType?? && return.turnType ==2>
+                          <div class="mymember_eva_div">
+                            <b style="top:4px;">退还金额：</b>
+                            <span style="line-height:26px;color:red;">￥<#if return.realPrice??>${return.realPrice?string('0.00')}</#if></span>
+                          </div>
+                          <#else>
+                          <div class="mymember_eva_div">
+                            <b style="top:4px;">退还金额：</b>
+                            <input style="line-height:26px;height:26px;border:1px solid #ccc;text-indent:4px;" id="realPrice" value="<#if return.realPrice??>${return.realPrice?string('0.00')}</#if>" />￥
+                          </div>
+                          </#if>
 
                           <div class="mymember_eva_div">
                             <b style="top:4px;">会员账号：</b>

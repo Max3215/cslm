@@ -82,9 +82,9 @@ function draw(){
   
   <section class="withdraw recharge_money">
     <form id="form1" action="/touch/user/draw2"  method="post">
-  	<div class="number">到账卡号<input type="text" class="text" id="card" name="card" placeholder="请输入卡号" /></div>
-  	<div class="number">开户银行<input type="text" class="text" id="bank" name="bank" placeholder="请输入开户行" /></div>
-  	<div class="number">开户姓名<input type="text" class="text" id="name" name="name" placeholder="请输入开户姓名" /></div>
+  	<div class="number">到账卡号<input type="text" value="<#if user??>${user.bankCardCode!''}</#if>" class="text" id="card" name="card" placeholder="请输入卡号" /></div>
+  	<div class="number">开户银行<input type="text" value="<#if user??>${user.bankTitle!''}</#if>" class="text" id="bank" name="bank" placeholder="请输入开户行" /></div>
+  	<div class="number">开户姓名<input type="text" value="<#if user??>${user.bankName!''}</#if>" class="text" id="name" name="name" placeholder="请输入开户姓名" /></div>
   	<div class="money">
   		<h3>提现金额<input type="text" id="price" name="price"  class="text" onkeyup="value=value.replace(/[^0-9]/g,'.')" placeholder="请输入提现金额" /></h3>
   		<p>余额 ¥<span id="money"><#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0.00</#if></span></p>

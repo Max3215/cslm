@@ -35,6 +35,9 @@ public class TdCartGoods {
     // 商品标题
     private String goodsTitle;
     
+    @Column
+    private String goodsSubTitle;
+    
     // 商品封面
     private String goodsCoverImageUri;
     
@@ -194,6 +197,14 @@ public class TdCartGoods {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public String getGoodsSubTitle() {
+		return goodsSubTitle;
+	}
+
+	public void setGoodsSubTitle(String goodsSubTitle) {
+		this.goodsSubTitle = goodsSubTitle;
 	}
 
 	

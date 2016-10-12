@@ -800,6 +800,9 @@ public class TdUserController extends AbstractPaytypeController{
                         tdReturn.setStatusId(0L);
                         tdReturn.setReturnNumber(tog.getQuantity());
                         
+                        // 实际退还金额
+                        tdReturn.setRealPrice(tog.getQuantity()*tog.getPrice());
+                        
                         if(order.getTypeId() ==0L){
                         	tdReturn.setTurnType(1);
                         }else if(order.getTypeId() ==2L){
@@ -1494,7 +1497,7 @@ public class TdUserController extends AbstractPaytypeController{
 
     @RequestMapping(value = "/user/info", method = RequestMethod.POST)
     public String userInfo(HttpServletRequest req, String realName,String nickname, String sex,
-            String email, String mobile, ModelMap map) {
+            String email, String mobile,String identity ,String homeAddress, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 
         if (null == username) {
@@ -1515,6 +1518,10 @@ public class TdUserController extends AbstractPaytypeController{
             user.setSex(sex);
             user.setEmail(email);
             user.setMobile(mobile);
+            // 10-12新加
+            user.setHomeAddress(homeAddress);
+            user.setIdentity(identity);
+            
             user = tdUserService.save(user);
         }
 
@@ -1837,6 +1844,13 @@ public class TdUserController extends AbstractPaytypeController{
 		cash.setStatus(1L);
 		
 		tdCashService.save(cash);
+		
+		// 新加银行卡信息记录
+		user.setBankCardCode(card);
+		user.setBankTitle(bank);
+		user.setBankName(name);
+		tdUserService.save(user);
+		
 		res.put("msg", "提交成功");
 		res.put("code", 1);
 		return res;

@@ -98,6 +98,10 @@ public class TdUser {
 	@Column
 	private String identity;
 	
+	// 家庭住址
+	@Column
+	private String homeAddress;
+	
 	// 手机号码
 	@Column
 	private String mobile;
@@ -201,6 +205,10 @@ public class TdUser {
     // 分销商银行卡名称
     @Column
     private String bankTitle;
+    
+    // 新加银行卡开户名
+    @Column
+    private String bankName;
     
     // 分销商银行卡已审核
     @Column
@@ -338,7 +346,15 @@ public class TdUser {
         this.identity = identity;
     }
 
-    public String getMobile() {
+    public String getHomeAddress() {
+		return homeAddress;
+	}
+
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
+	}
+
+	public String getMobile() {
         return mobile;
     }
 
@@ -537,8 +553,16 @@ public class TdUser {
     public void setBankTitle(String bankTitle) {
         this.bankTitle = bankTitle;
     }
+    
+    public String getBankName() {
+		return bankName;
+	}
 
-    public Boolean getIsBankCardVerified() {
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public Boolean getIsBankCardVerified() {
         return isBankCardVerified;
     }
 

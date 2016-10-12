@@ -233,4 +233,8 @@ public interface TdGoodsRepo extends
     
     //热销
     Page<TdGoods> findByIsHotTrueAndIsOnSaleTrueOrderByIdDesc(Pageable page);
+    
+    TdGoods findByCode(String code);
+    TdGoods findByCodeAndAndIdNot(String code,Long id);
+    
 }
