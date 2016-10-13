@@ -23,6 +23,7 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.repository.TdOrderRepo;
 import com.ynyes.cslm.util.Criteria;
 import com.ynyes.cslm.util.Restrictions;
@@ -60,6 +61,9 @@ public class TdOrderService {
     
     @Autowired
     TdPayRecordService tdPayRecordService;
+    
+    @Autowired
+    TdUserService tdUserService;
     
     /**
      * 删除
@@ -804,6 +808,17 @@ public class TdOrderService {
 		record.setRealPrice(servicePrice + aliPrice);
 
 		tdPayRecordService.save(record);
+		
+		TdUser user = tdUserService.findByUsername(tdOrder.getUsername());
+		
+		if(null != user){
+			if(null == user.getTotalSpendCash()){
+				user.setTotalSpendCash(price);
+			}else{
+				user.setTotalSpendCash(user.getTotalSpendCash() + price);
+			}
+			tdUserService.save(user);
+		}
 	}
     
     

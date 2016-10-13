@@ -16,6 +16,8 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserLevel;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.repository.TdUserRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdUser 服务类
@@ -448,4 +450,17 @@ public class TdUserService {
         
         return (List<TdUser>) repository.save(entities);
     }
+    
+    public Page<TdUser> findAll(String keywords,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "lastLoginTime"));
+    	Criteria<TdUser> c = new Criteria<TdUser>();
+    	
+    	if(null != keywords && !"".equals(keywords)){
+    		c.add(Restrictions.or(Restrictions.like("username", keywords, true),Restrictions.like("mobile", keywords, true)));
+    	}
+    	
+    	return repository.findAll(c, pageRequest);
+    }
+    
+    
 }

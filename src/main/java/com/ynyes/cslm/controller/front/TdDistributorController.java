@@ -1977,7 +1977,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 	@RequestMapping(value="/goods/list")
 	public String inGoodslist(String keywords,Integer page,
 			Long providerId,String isDistribution,
-			Long categoryId,String type,
+			Long categoryId,String excel,
 			HttpServletRequest req,ModelMap map,
 			HttpServletResponse resp)
 	{
@@ -2053,8 +2053,7 @@ public class TdDistributorController extends AbstractPaytypeController{
             }
             map.addAttribute("category", category);
        }
-		System.err.println(type+"------");
-		if(null != type && !"".equals(type)){
+		if(null != excel && !"".equals(excel)){
 			/**
 			 *  导出表格
 			 */
@@ -4282,7 +4281,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 				row.createCell((short) 6).setCellValue(providerGoods.getUnit());
 				row.createCell((short) 7).setCellValue(StringUtils.scale(providerGoods.getOutFactoryPrice()));
 				row.createCell((short) 8).setCellValue(StringUtils.scale(providerGoods.getGoodsMarketPrice()));
-				row.createCell((short) 6).setCellValue(providerGoods.getLeftNumber());
+				row.createCell((short) 9).setCellValue(providerGoods.getLeftNumber());
 			}
 		}
 		return true;

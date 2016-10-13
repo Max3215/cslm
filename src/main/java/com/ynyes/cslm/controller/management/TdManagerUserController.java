@@ -9,7 +9,13 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
@@ -50,7 +57,9 @@ import com.ynyes.cslm.service.TdUserRecentVisitService;
 import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.service.TdUserSuggestionService;
+import com.ynyes.cslm.util.FileDownUtils;
 import com.ynyes.cslm.util.SiteMagConstant;
+import com.ynyes.cslm.util.StringUtils;
 
 /**
  * 后台用户管理控制器
@@ -180,11 +189,14 @@ public class TdManagerUserController {
                           Long[] listId,
                           Integer[] listChkId,
                           ModelMap map,
-                          HttpServletRequest req){
+                          HttpServletRequest req,
+                          HttpServletResponse resp){
         String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
             return "redirect:/Verwalter/login";
         }
+        
+        String exportUrl ="";
         if (null != __EVENTTARGET)
         {
             if (__EVENTTARGET.equalsIgnoreCase("btnPage"))
@@ -198,6 +210,11 @@ public class TdManagerUserController {
             {
                 btnDelete("user", listId, listChkId);
                 tdManagerLogService.addLog("delete", "删除用户", req);
+            }
+            else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+            {
+            	System.err.println("导出会员");
+            	exportUrl = SiteMagConstant.backupPath;
             }
         }
         
@@ -224,32 +241,91 @@ public class TdManagerUserController {
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
-        Page<TdUser> userPage = null;
+        Page<TdUser> userPage = tdUserService.findAll(keywords, page, size);
         
-        if (null == roleId)
-        {
-            if (null == keywords || "".equalsIgnoreCase(keywords))
-            {
-                userPage = tdUserService.findAllOrderBySortIdAsc(page, size);
-            }
-            else
-            {
-                userPage = tdUserService.searchAndOrderByIdDesc(keywords, page, size);
-            }
-        }
-        else
-        {
-            if (null == keywords || "".equalsIgnoreCase(keywords))
-            {
-                userPage = tdUserService.findByRoleIdOrderByIdDesc(roleId, page, size);
-            }
-            else
-            {
-                userPage = tdUserService.searchAndFindByRoleIdOrderByIdDesc(keywords, roleId, page, size);
-            }
-        }
+        
+//        if (null == roleId)
+//        {
+//            if (null == keywords || "".equalsIgnoreCase(keywords))
+//            {
+//                userPage = tdUserService.findAllOrderBySortIdAsc(page, size);
+//            }
+//            else
+//            {
+//                userPage = tdUserService.searchAndOrderByIdDesc(keywords, page, size);
+//            }
+//        }
+//        else
+//        {
+//            if (null == keywords || "".equalsIgnoreCase(keywords))
+//            {
+//                userPage = tdUserService.findByRoleIdOrderByIdDesc(roleId, page, size);
+//            }
+//            else
+//            {
+//                userPage = tdUserService.searchAndFindByRoleIdOrderByIdDesc(keywords, roleId, page, size);
+//            }
+//        }
         
         map.addAttribute("user_page", userPage);
+        
+        if(null != exportUrl && !"".equals(exportUrl)){
+        	// 第一步，创建一个webbook，对应一个Excel文件  
+  	      HSSFWorkbook wb = new HSSFWorkbook();  
+  	      // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
+  	      HSSFSheet sheet = wb.createSheet("user");  
+  	      // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+  	      HSSFRow row = sheet.createRow((int) 0);  
+  	      // 第四步，创建单元格，并设置值表头 设置表头居中  
+  	      HSSFCellStyle style = wb.createCellStyle();  
+  	      style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+  	      
+  	      HSSFCell cell = row.createCell((short) 0);  
+  	      cell.setCellValue("会员ID");  
+  	      cell.setCellStyle(style);  
+  	      cell = row.createCell((short) 1);  
+  	      cell.setCellValue("会员账号");  
+  	      cell.setCellStyle(style);  
+  	      cell = row.createCell((short) 2);  
+  	      cell.setCellValue("姓名");  
+  	      cell.setCellStyle(style);  
+  	      cell = row.createCell((short) 3);  
+  	      cell.setCellValue("昵称");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 4);  
+  	      cell.setCellValue("性别");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 5);  
+  	      cell.setCellValue("注册时间");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 6);  
+  	      cell.setCellValue("身份证号");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 7);  
+	      cell.setCellValue("手机号");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 8);  
+  	      cell.setCellValue("邮箱");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 9);  
+	      cell.setCellValue("家庭地址");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 10);  
+  	      cell.setCellValue("积分");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 11);  
+	      cell.setCellValue("余额");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 12);  
+  	      cell.setCellValue("累计消费金额");  
+  	      cell.setCellStyle(style);
+  	      
+  	      userPage = tdUserService.findAll(keywords, page, Integer.MAX_VALUE);
+  			
+  			if (ImportData(userPage, row, cell, sheet)) {
+  				FileDownUtils.download("user", wb, exportUrl, resp);
+  			}                          	                          
+        }
         
         return "/site_mag/user_list";
     }
@@ -1271,5 +1347,35 @@ public class TdManagerUserController {
                 }
             }
         }
+    }
+    
+    
+    @SuppressWarnings("deprecation")
+	public boolean ImportData(Page<TdUser> userPage, HSSFRow row, HSSFCell cell, HSSFSheet sheet){
+    	if(null != userPage && userPage.getContent().size() > 0){
+    		for (int i = 0; i < userPage.getContent().size(); i++)  
+    		{  
+    			row = sheet.createRow((int) i + 1);  
+    			TdUser user = userPage.getContent().get(i); 
+    			
+    			// 第四步，创建单元格，并设置值  
+    			row.createCell((short) 0).setCellValue(user.getId());  
+    			row.createCell((short) 1).setCellValue(user.getUsername());  
+    			row.createCell((short) 2).setCellValue(user.getRealName());
+    			row.createCell((short) 3).setCellValue(user.getNickname());
+    			row.createCell((short) 4).setCellValue(user.getSex());
+    			cell = row.createCell((short) 5);  
+    			cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(user.getRegisterTime()));                                
+    			row.createCell((short) 6).setCellValue(user.getIdentity());
+    			row.createCell((short) 7).setCellValue(user.getMobile());
+    			row.createCell((short) 8).setCellValue(user.getEmail());
+    			row.createCell((short) 9).setCellValue(user.getHomeAddress());
+    			row.createCell((short) 10).setCellValue(user.getTotalPoints());
+    			row.createCell((short) 11).setCellValue(StringUtils.scale(user.getVirtualMoney()));
+    			row.createCell((short) 12).setCellValue(StringUtils.scale(user.getTotalSpendCash()));
+    			
+    		} 
+    	}
+    	return true;
     }
 }

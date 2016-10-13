@@ -3,7 +3,7 @@
         <form action="/distributor/goods/list" id="form" method="post">
         <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
         <input type="hidden" name="page" id="page" value="" />
-        <input type="hidden" name="type" id="type"  />
+        <input type="hidden" name="excel" id="excel" value="" />
         <input class="mysub" type="button" onclick="searchGoods('')" value="查询" />
         <input class="mytext" style="width: 200px;" type="text" name="keywords" value="${keywords!''}" id="keywords"/>
         <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods('');">
@@ -41,9 +41,7 @@
         
         </form>
         <div class="clear"></div>
-        <#--
         <input class="mysub" type="button" onclick="searchGoods('excel')" value="导出" />
-        -->
     </div>
     <table>
             <tr class="mymember_infotab_tit01">
@@ -151,6 +149,7 @@ function showSub(pid)
     $('.sub_form').css('display','block');
 }
 function searchGoods(type){
+	console.debug(type);
 	if(null != type && type=="oneCat")
     {
         $("#categoryId").val($("#oneCat").val());
@@ -162,8 +161,9 @@ function searchGoods(type){
         $("#categoryId").val($("#category").val());
     }else if(null != type && type=="excel")
     {
-        $("#type").attr("value","excel");
+        $("#excel").attr("value","excel");
     }
+    console.debug($("#excel").val())
     $("#form").submit();
 }  
     

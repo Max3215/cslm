@@ -152,7 +152,7 @@ DD_belatedPNG.fix('.,img,background');
                           </div>
 					      <div class="mymember_eva_div">
                             <b style="top:4px;">退还金额：￥</b>
-                            <input style="line-height:26px;height:26px;border:1px solid #ccc;text-indent:4px;" id="realPrice" value="<#if return.realPrice??>${return.realPrice?string('0.00')}</#if>" />
+                            <input style="line-height:26px;height:26px;border:1px solid #ccc;text-indent:4px;" id="realPrice" value="<#if userRturn.realPrice??>${userRturn.realPrice?string('0.00')}</#if>" />
                           </div>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">会员账号：</b>
