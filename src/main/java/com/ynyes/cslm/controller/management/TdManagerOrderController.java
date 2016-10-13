@@ -762,6 +762,7 @@ public class TdManagerOrderController {
     @RequestMapping(value="/diy_site/edit",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> diySiteEdit(Long diysiteId,
+    		String type,
     		Double data,HttpServletRequest req)
     {
     	Map<String,Object> res = new HashMap<>();
@@ -781,45 +782,69 @@ public class TdManagerOrderController {
     	}
     	
     	TdDistributor distributor = TdDistributorService.findOne(diysiteId);
-    	if(null != distributor.getVirtualMoney())
-    	{
-    		distributor.setVirtualMoney(distributor.getVirtualMoney()+data);
-    	}else{
-    		distributor.setVirtualMoney(data);
+    	if("add".equals(type)){
+	    	if(null != distributor.getVirtualMoney())
+	    	{
+	    		distributor.setVirtualMoney(distributor.getVirtualMoney()+data);
+	    	}else{
+	    		distributor.setVirtualMoney(data);
+	    	}
+    	}else if("del".equals(type)){
+    		if(null == distributor.getVirtualMoney() || distributor.getVirtualMoney() < data){
+    			res.put("msg","账号余额不足");
+    			return res;
+    		}
+    		distributor.setVirtualMoney(distributor.getVirtualMoney()-data);
     	}
-    	
     	TdDistributorService.save(distributor);
+    	
+    	TdPayRecord record = new TdPayRecord();
     	
     	Date current = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String curStr = sdf.format(current);
         Random random = new Random();
-        
-    	TdPayRecord record = new TdPayRecord();
-        record.setCont("平台充值");
+        String number="";
+        if("add".equals(type)){
+	        number = "CZ" + curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+	        record.setCont("平台充值");
+        }else if("del".equals(type)){
+        	number = "K" + curStr + leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+        	record.setCont("平台扣款");
+        }
         record.setCreateTime(new Date());
         record.setDistributorId(distributor.getId());
         record.setDistributorTitle(distributor.getTitle());
         record.setStatusCode(1);
         record.setProvice(data);
-        String number = "CZ" + curStr
-        	+ leftPad(Integer.toString(random.nextInt(999)), 3, "0");
         record.setOrderNumber(number);
         tdPayRecordService.save(record);
         
         TdSetting setting = tdSettingService.findTopBy();
- 		
- 		if( null != setting.getVirtualMoney())
-        {
-        	setting.setVirtualMoney(setting.getVirtualMoney()-data);
-        }else{
-        	setting.setVirtualMoney(0-data);
+        if("add".equals(type)){
+			if( null != setting.getVirtualMoney())
+		    {
+		    	setting.setVirtualMoney(setting.getVirtualMoney()-data);
+		    }else{
+		    	setting.setVirtualMoney(0-data);
+		    }
+        }else if("del".equals(type)){
+        	if( null != setting.getVirtualMoney())
+		    {
+		    	setting.setVirtualMoney(setting.getVirtualMoney()+data);
+		    }else{
+		    	setting.setVirtualMoney(data);
+		    }
         }
         tdSettingService.save(setting); // 更新平台虚拟余额
         
      // 记录平台支出
         record = new TdPayRecord();
-        record.setCont("手动给"+distributor.getTitle()+"充值");
+        if("add".equals(type)){
+        	record.setCont("手动给"+distributor.getTitle()+"充值");
+        }else if("del".equals(type)){
+        	record.setCont("手动给"+distributor.getTitle()+"扣款");
+        }
         record.setCreateTime(new Date());
         record.setDistributorTitle(distributor.getTitle());
         record.setOrderNumber(number);
@@ -837,20 +862,22 @@ public class TdManagerOrderController {
         tdPayRecordService.save(record);
         
         // 充值记录
-        TdCash cash = new TdCash();
-    	cash.setCashNumber("平台代充："+number);
-    	cash.setShopTitle(distributor.getTitle());
-    	cash.setUsername(distributor.getUsername());
-    	cash.setCreateTime(new Date());
-    	cash.setPrice(data); // 金额
-    	cash.setShopType(1L); // 类型-超市
-    	cash.setType(1L); // 类型-充值
-    	cash.setStatus(2L); // 状态 完成
-    	
-    	tdCashService.save(cash);
+        if("add".equals(type)){
+	        TdCash cash = new TdCash();
+	    	cash.setCashNumber("平台代充："+number);
+	    	cash.setShopTitle(distributor.getTitle());
+	    	cash.setUsername(distributor.getUsername());
+	    	cash.setCreateTime(new Date());
+	    	cash.setPrice(data); // 金额
+	    	cash.setShopType(1L); // 类型-超市
+	    	cash.setType(1L); // 类型-充值
+	    	cash.setStatus(2L); // 状态 完成
+	    	
+	    	tdCashService.save(cash);
+	        
+	        tdManagerLogService.addLog("add", "手动给"+distributor.getTitle()+"充值"+data, req);
+        }
         
-        tdManagerLogService.addLog("add", "手动给"+distributor.getTitle()+"充值"+data, req);
-    	
         res.put("code", 0);
         res.put("message", "充值成功！");
     	return res;

@@ -397,7 +397,7 @@ public class TdManagerUserController {
         			return res;
         		}
     		}
-        	else if(type.equalsIgnoreCase("virtualMoney")) // 充值
+        	else if(type.equalsIgnoreCase("virtualMoneyAdd")) // 充值
         	{
         		if(null != virtualMoney)
         		{
@@ -480,6 +480,81 @@ public class TdManagerUserController {
                 	cash.setStatus(2L); // 状态 完成
                 	
                 	tdCashService.save(cash);
+                    
+                    res.put("code", 0);
+        			return res;
+        		}
+        	}
+        	else if(type.equalsIgnoreCase("virtualMoneyDel")) // 充值
+        	{
+        		if(null != virtualMoney)
+        		{
+        			if(null == tdUser.getVirtualMoney())
+        			{
+        				res.put("msg", "余额不足");
+        				return res;
+        			}else{
+        				tdUser.setVirtualMoney(tdUser.getVirtualMoney()-virtualMoney);
+        			}
+        			tdUserService.save(tdUser);
+        			
+        			Date current = new Date();
+        	        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        	        String curStr = sdf.format(current);
+        	        Random random = new Random();
+        	        
+        			// 添加会员虚拟账户金额记录
+                	TdPayRecord record = new TdPayRecord();
+                	
+                	record.setAliPrice(0.0);
+                	record.setPostPrice(0.0);
+                	record.setRealPrice(virtualMoney);
+                	record.setTotalGoodsPrice(virtualMoney);
+                	record.setServicePrice(0.0);
+                	record.setProvice(virtualMoney);
+                	
+                	String number = "K" + curStr
+                        	+ leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+                        record.setOrderNumber(number);
+                        
+                	record.setCreateTime(new Date());
+                	record.setUsername(tdUser.getUsername());
+                	record.setType(2L);
+                	record.setCont("平台扣款");
+                	record.setStatusCode(1);
+                	
+                	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+                	
+                	TdSetting setting = tdSettingService.findTopBy();
+             		
+             		if( null != setting.getVirtualMoney())
+                    {
+                    	setting.setVirtualMoney(setting.getVirtualMoney()+virtualMoney);
+                    }else{
+                    	setting.setVirtualMoney(virtualMoney);
+                    }
+                    tdSettingService.save(setting); // 更新平台虚拟余额
+                    
+                 // 记录平台支出
+                    record = new TdPayRecord();
+                    record.setCont("手动给会员"+tdUser.getUsername()+"扣款");
+                    record.setCreateTime(new Date());
+                    record.setUsername(tdUser.getUsername());
+                    record.setOrderNumber(number);
+                    record.setStatusCode(1);
+                    record.setType(1L); // 类型 区分平台记录
+                    
+                    record.setProvice(virtualMoney); // 订单总额
+                    record.setPostPrice(0.0); // 邮费
+                    record.setAliPrice(0.0);	// 第三方费
+                    record.setServicePrice(0.0);	// 平台费
+                    record.setTotalGoodsPrice(virtualMoney); // 商品总价
+                    // 
+                    record.setRealPrice(virtualMoney);
+                    
+                    tdPayRecordService.save(record);
+                    
+                    tdManagerLogService.addLog("add", "手动给会员"+tdUser.getUsername()+"扣款"+data, req);
                     
                     res.put("code", 0);
         			return res;
@@ -1364,13 +1439,17 @@ public class TdManagerUserController {
     			row.createCell((short) 2).setCellValue(user.getRealName());
     			row.createCell((short) 3).setCellValue(user.getNickname());
     			row.createCell((short) 4).setCellValue(user.getSex());
-    			cell = row.createCell((short) 5);  
-    			cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(user.getRegisterTime()));                                
+    			if(null != user.getRegisterTime()){
+    				cell = row.createCell((short) 5);  
+    				cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(user.getRegisterTime()));                                
+    			}
     			row.createCell((short) 6).setCellValue(user.getIdentity());
     			row.createCell((short) 7).setCellValue(user.getMobile());
     			row.createCell((short) 8).setCellValue(user.getEmail());
     			row.createCell((short) 9).setCellValue(user.getHomeAddress());
-    			row.createCell((short) 10).setCellValue(user.getTotalPoints());
+    			if(null != user.getTotalPoints()){
+    				row.createCell((short) 10).setCellValue(user.getTotalPoints());
+    			}
     			row.createCell((short) 11).setCellValue(StringUtils.scale(user.getVirtualMoney()));
     			row.createCell((short) 12).setCellValue(StringUtils.scale(user.getTotalSpendCash()));
     			

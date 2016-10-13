@@ -27,7 +27,7 @@
                         </td>
                         <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
                         <td class="tb02"><span id="code${dg.id?c}">${dg.code!''}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber?c!"0"}</span></td>
                         <td>
                                 <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page})">取消批发</a></p>
                                 <p><a href="javascript:showSubForm(${dg.id?c},${page})">编辑信息</a></p>
@@ -46,7 +46,7 @@
                         </td>
                         <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
                         <td class="tb02"><span id="code${dg.id?c}">${dg.code!''}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber?c!''}</span></td>
                         <td>
                                 <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page})">继续批发</a></p>
                                 <p><a href="javascript:showSubForm(${dg.id?c},${page})">编辑信息</a></p>

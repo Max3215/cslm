@@ -16,7 +16,8 @@
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 $(function () {
-      $("#btnEditRemark").click(function () { EditOrderRemark(); }); 
+      $("#btnEditRemark").click(function () { addVirtualMoney(); }); 
+      $("#btnEditMoney").click(function () { delVirtualMoney(); }); 
 
     //初始化表单验证
     $("#form1").initValidform();
@@ -63,29 +64,54 @@ $(function () {
 });
 
 // 充值
-    function EditOrderRemark() {
-        var dialog = $.dialog({
-            title: '输入充值金额：',
-            content: '<input id="orderRemark" name="txtOrderRemark"  class="input"></input>',
-            min: false,
-            max: false,
-            lock: true,
-            ok: function () {
-                var mon = $("#orderRemark", parent.document).val();
-                var num = /^\d+(\.\d{2})?$/;
-                if (mon == "" || !num.test(mon)) {
-                    $.dialog.alert('对不起，输入的金额有误！', function () { }, dialog);
-                    return false;
-                }
-                var diysiteId = $.trim($("#diysiteId").val());
-                var postData = { "diysiteId": diysiteId,  "data": mon };
-                //发送AJAX请求
-                sendAjaxUrl(dialog, postData, "/Verwalter/order/diy_site/edit");
+function addVirtualMoney() {
+    var dialog = $.dialog({
+        title: '输入充值金额：',
+        content: '<input id="orderRemark" name="txtOrderRemark"  class="input"></input>',
+        min: false,
+        max: false,
+        lock: true,
+        ok: function () {
+            var mon = $("#orderRemark", parent.document).val();
+            var num = /^\d+(\.\d{2})?$/;
+            if (mon == "" || !num.test(mon)) {
+                $.dialog.alert('对不起，输入的金额有误！', function () { }, dialog);
                 return false;
-            },
-            cancel: true
-        });
-    }
+            }
+            var diysiteId = $.trim($("#diysiteId").val());
+            var postData = { "diysiteId": diysiteId,  "data": mon ,"type":"add"};
+            //发送AJAX请求
+            sendAjaxUrl(dialog, postData, "/Verwalter/order/diy_site/edit");
+            return false;
+        },
+        cancel: true
+    });
+}
+
+function delVirtualMoney() {
+    var dialog = $.dialog({
+        title: '输入扣款金额：',
+        content: '<input id="virtualMoney" name="txtOrderRemark"  class="input"></input>',
+        min: false,
+        max: false,
+        lock: true,
+        ok: function () {
+            var mon = $("#virtualMoney", parent.document).val();
+            var num = /^\d+(\.\d{2})?$/;
+            if (mon == "" || !num.test(mon)) {
+                $.dialog.alert('对不起，输入的金额有误！', function () { }, dialog);
+                return false;
+            }
+            var diysiteId = $.trim($("#diysiteId").val());
+            var postData = { "diysiteId": diysiteId,  "data": mon ,"type":"del"};
+            //发送AJAX请求
+            sendAjaxUrl(dialog, postData, "/Verwalter/order/diy_site/edit");
+            return false;
+        },
+        cancel: true
+    });
+}
+
    //发送AJAX请求
     function sendAjaxUrl(winObj, postData, sendUrl) {
         $.ajax({
@@ -188,7 +214,11 @@ $(function () {
     <dt>虚拟账号余额</dt>
     <dd>
         <input name="virtualMoney" type="text" value="<#if diy_site?? && diy_site.virtualMoney??>${diy_site.virtualMoney?string("0.00")}<#else>0</#if>" <#if diy_site?? && diy_site.virtualMoney??>readonly="readonly"</#if> class="input normal" sucmsg=" "> 
-        <span class="Validform_checktip">*账号余额</span><#if diy_site??>&emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a></#if>
+        <span class="Validform_checktip">*账号余额</span>
+        <#if diy_site??>
+        &emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a>
+        &emsp;&emsp;&emsp;<a id="btnEditMoney" style="color:red">扣款</a>
+        </#if>
     </dd>
   </dl>
   <dl>

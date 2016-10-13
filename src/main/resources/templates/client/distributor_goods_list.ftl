@@ -32,7 +32,7 @@
                         </td>
                         <td class="tb01">${dg.code!''}</td>
                         <td class="tb02"><p>￥<span id="price${dg.id?c}"><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></p></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber?c!'0'}</span></td>
                         <td>
                             <p>PC：<a href="javascript:recommed(${dg.id?c},${page},'cat');" <#if dg.isRecommendType?? &&dg.isRecommendType ==true>style="color:#ff5b7d"</#if>>分类</a>
                                 &nbsp;/&nbsp;
@@ -63,7 +63,7 @@
                         </td>
                         <td class="tb01">${dg.code!''}</td>
                         <td class="tb02"><p><#if dg.goodsPrice??>￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></p></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber!'0'}</span></td>
+                        <td><span id="number${dg.id?c}">${dg.leftNumber?c!'0'}</span></td>
                         <td>
                             <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page?c});">上架</a></p>
                             <p><a href="javascript:editPrice(${dg.id?c},${page?c});">修改信息</a></p>

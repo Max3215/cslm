@@ -40,6 +40,7 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
+import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdGoodsService;
@@ -48,6 +49,7 @@ import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
+import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.FileDownUtils;
 import com.ynyes.cslm.util.SiteMagConstant;
@@ -86,6 +88,9 @@ public class TdManagerProviderController {
     
     @Autowired
     TdGoodsService tdGoodsService;
+    
+    @Autowired
+    TdSettingService tdSettingService;
     
     @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
     @ResponseBody
@@ -244,6 +249,7 @@ public class TdManagerProviderController {
     @RequestMapping(value="/virtualMoney/edit",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> diySiteEdit(Long id,
+    		String type, 
     		Double data,HttpServletRequest req)
     {
     	Map<String,Object> res = new HashMap<>();
@@ -263,22 +269,37 @@ public class TdManagerProviderController {
     	}
     	
     	TdProvider provider = tdProviderService.findOne(id);
-    	if(null != provider.getVirtualMoney())
-    	{
-    		provider.setVirtualMoney(provider.getVirtualMoney()+data);
-    	}else{
-    		provider.setVirtualMoney(data);
+    	if("add".equals(type)){
+    		if(null != provider.getVirtualMoney())
+    		{
+    			provider.setVirtualMoney(provider.getVirtualMoney()+data);
+    		}else{
+    			provider.setVirtualMoney(data);
+    		}
+    	}else if("del".equals(type)){
+    		if(null == provider.getVirtualMoney() || provider.getVirtualMoney() < data){
+    			res.put("msg","账号余额不足");
+    			return res;
+    		}
+    		provider.setVirtualMoney(provider.getVirtualMoney()-data);
     	}
         tdProviderService.save(provider);
+        
+        TdPayRecord record = new TdPayRecord();
         
         Date current = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String curStr = sdf.format(current);
         Random random = new Random();
-    	String number = "CZ" + curStr + leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+        String number="";
+        if("add".equals(type)){
+        	number = "CZ" + curStr + leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+        	record.setCont("平台充值");
+        }else if("del".equals(type)){
+        	number = "K" + curStr + leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+        	record.setCont("平台扣款");
+        }
         
-    	TdPayRecord record = new TdPayRecord();
-        record.setCont("平台充值");
         record.setCreateTime(new Date());
         record.setProviderId(id);
         record.setProviderTitle(provider.getTitle());
@@ -288,9 +309,31 @@ public class TdManagerProviderController {
         
         tdPayRecordService.save(record);
     	
-     // 记录平台支出
+        TdSetting setting = tdSettingService.findTopBy();
+        if("add".equals(type)){
+	 		if( null != setting.getVirtualMoney())
+	        {
+	        	setting.setVirtualMoney(setting.getVirtualMoney()-data);
+	        }else{
+	        	setting.setVirtualMoney(0-data);
+	        }
+        }else if("del".equals(type)){
+        	if( null != setting.getVirtualMoney())
+	        {
+	        	setting.setVirtualMoney(setting.getVirtualMoney()+data);
+	        }else{
+	        	setting.setVirtualMoney(data);
+	        }
+        }
+        tdSettingService.save(setting); // 更新平台虚拟余额
+        
+        // 记录平台支出
         record = new TdPayRecord();
-        record.setCont("手动给"+provider.getTitle()+"充值");
+        if("add".equals(type)){
+        	record.setCont("手动给"+provider.getTitle()+"充值");
+        }else if("del".equals(type)){
+        	record.setCont("手动给"+provider.getTitle()+"扣款");
+        }
         record.setCreateTime(new Date());
         record.setDistributorTitle(provider.getTitle());
         record.setOrderNumber(number);
@@ -307,27 +350,28 @@ public class TdManagerProviderController {
         
         tdPayRecordService.save(record);
         
-     // 充值记录
-        TdCash cash = new TdCash();
-    	cash.setCashNumber("平台代充："+number);
-    	cash.setShopTitle(provider.getTitle());
-    	cash.setUsername(provider.getUsername());
-    	cash.setCreateTime(new Date());
-    	cash.setPrice(data); // 金额
-    	if (provider.getType() ==1) {
-    		cash.setShopType(2L); // 类型-批发商
-		}else {
-			cash.setShopType(3L); // 类型-分销商
-		}
-    	cash.setType(1L); // 类型-充值
-    	cash.setStatus(2L); // 状态 完成
-    	
-    	tdCashService.save(cash);
-        
-        tdManagerLogService.addLog("add", "手动给"+provider.getTitle()+"充值"+data, req);
-        
+        // 充值记录
+        if("add".equals(type)){
+	        TdCash cash = new TdCash();
+	    	cash.setCashNumber("平台代充："+number);
+	    	cash.setShopTitle(provider.getTitle());
+	    	cash.setUsername(provider.getUsername());
+	    	cash.setCreateTime(new Date());
+	    	cash.setPrice(data); // 金额
+	    	if (provider.getType() ==1) {
+	    		cash.setShopType(2L); // 类型-批发商
+			}else {
+				cash.setShopType(3L); // 类型-分销商
+			}
+	    	cash.setType(1L); // 类型-充值
+	    	cash.setStatus(2L); // 状态 完成
+	    	
+	    	tdCashService.save(cash);
+	        
+	        tdManagerLogService.addLog("add", "手动给"+provider.getTitle()+"充值"+data, req);
+        }
         res.put("code", 0);
-        res.put("message", "充值成功！");
+        res.put("message", "操作成功！");
     	return res;
     }
     
@@ -411,7 +455,7 @@ public class TdManagerProviderController {
                 break;
             case "exportAll":
             	exportUrl = SiteMagConstant.backupPath;
-                tdManagerLogService.addLog("edit", "用户导出超市商品", req);
+                tdManagerLogService.addLog("edit", "用户导出商家商品", req);
                 break;
             case "btnPage":
                 if (null != __EVENTARGUMENT) {
