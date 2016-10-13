@@ -1,9 +1,12 @@
     <div class="mymember_order_search"> 
         <h3>批发商的商品</h3>
-        <form action="/distributor/goods/list" id="form">
-        <input class="mysub" type="submit" value="查询" />
-        <input class="mytext" type="text" name="keywords" value="${keywords!''}" id="keywords"/>
-        <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods()">
+        <form action="/distributor/goods/list" id="form" method="post">
+        <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
+        <input type="hidden" name="page" id="page" value="" />
+        <input type="hidden" name="type" id="type"  />
+        <input class="mysub" type="button" onclick="searchGoods('')" value="查询" />
+        <input class="mytext" style="width: 200px;" type="text" name="keywords" value="${keywords!''}" id="keywords"/>
+        <select  id="providerId" name="providerId" class="myselect" onchange="searchGoods('');">
             <option value="">选择批发商</option>
             <#if provider_list??>
                 <#list provider_list as c>
@@ -11,8 +14,36 @@
                 </#list>
             </#if>
         </select>
+        <select class="myselect" style="width: 130px;" id="oneCat" onchange="searchGoods('oneCat');">
+            <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
+            <#if category_list??>
+                <#list category_list as c>
+                    <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                </#list>
+            </#if>
+        </select>
+         <select class="myselect" style="width: 130px;" id="twoCat" onchange="searchGoods('twoCat','');">
+            <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
+            <#if cateList??>
+                <#list cateList as c>
+                    <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                </#list>
+            </#if>
+        </select>
+         <select class="myselect" style="width: 130px;" id="category" onchange="searchGoods('categoryId');">
+            <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
+            <#if categoryList??>
+                <#list categoryList as c>
+                    <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                </#list>
+            </#if>
+        </select>
+        
         </form>
         <div class="clear"></div>
+        <#--
+        <input class="mysub" type="button" onclick="searchGoods('excel')" value="导出" />
+        -->
     </div>
     <table>
             <tr class="mymember_infotab_tit01">
@@ -58,7 +89,7 @@
                             <#if page == proGoods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/list?keywords=${keywords!''}&page=${page-1}&providerId=${providerId!''}">${page}</a>
+                                <a href="javascript:;" onclick="searchGoodPage(${page-1})">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -119,8 +150,20 @@ function showSub(pid)
     
     $('.sub_form').css('display','block');
 }
- 
-function searchGoods(){
+function searchGoods(type){
+	if(null != type && type=="oneCat")
+    {
+        $("#categoryId").val($("#oneCat").val());
+    }else if(null != type && type=="twoCat")
+    {
+       $("#categoryId").val($("#twoCat").val());
+    }else if(null != type && type=="categoryId")
+    {
+        $("#categoryId").val($("#category").val());
+    }else if(null != type && type=="excel")
+    {
+        $("#type").attr("value","excel");
+    }
     $("#form").submit();
 }  
     

@@ -2719,7 +2719,8 @@ public class TdTouchUserController {
         	tdSuggestion.setMail("");
         	tdSuggestion.setMobile("");
         }
-
+        
+        tdSuggestion.setStatus(1);
         tdUserSuggestionService.save(tdSuggestion);
         res.put("code", 0);
         res.put("msg", "提交成功");

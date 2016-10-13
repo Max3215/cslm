@@ -1977,7 +1977,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 	@RequestMapping(value="/goods/list")
 	public String inGoodslist(String keywords,Integer page,
 			Long providerId,String isDistribution,
-			HttpServletRequest req,ModelMap map)
+			Long categoryId,String type,
+			HttpServletRequest req,ModelMap map,
+			HttpServletResponse resp)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
@@ -2000,75 +2002,124 @@ public class TdDistributorController extends AbstractPaytypeController{
 		map.addAttribute("page", page);
 //		map.addAttribute("distribution", isDistribution);
 		map.addAttribute("providerId", providerId);
+		map.addAttribute("categoryId", categoryId);
 		
-		if(null == providerId)
-		{
-//			if("isDistribution".equalsIgnoreCase(isDistribution))
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
+		map.addAttribute("categoryList", categortList);
+		
+		PageRequest pageRequest = new PageRequest(page, 10,new Sort(Direction.DESC, "id"));
+		
+		map.addAttribute("proGoods_page",tdProviderGoodsService.findAll(providerId, true, categoryId, keywords, pageRequest));
+		
+//		if(null == providerId)
+//		{
+//			if(null == keywords)
 //			{
-//				if(null == keywords)
-//				{
-//					map.addAttribute("proGoods_page",
-//							tdProviderGoodsService.findByIsDistributionTrueAndIsAuditTrue(page, 10));
-//				}else{
-//					map.addAttribute("proGoods_page", 
-//							tdProviderGoodsService.searchAndIsDistributionTrueAndIsAuditTrue(keywords, page, 10));
-//				}
+//				map.addAttribute("proGoods_page",
+//						tdProviderGoodsService.findByIsOnSaleTrue(page, 10));
+//				
+//			}else{
+//				map.addAttribute("proGoods_page", 
+//						tdProviderGoodsService.searchAndIsOnSaleTrue(keywords, page, 10));
 //			}
-//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-//			{	
-//				if(null == keywords){
-//					map.addAttribute("proGoods_page",
-//							tdProviderGoodsService.findByIsDistributionFalseAndIsAuditTrue(page, 10));
-//				}else{
-//					map.addAttribute("proGoods_page",
-//							tdProviderGoodsService.searchAndIsDistributionFalseAndIsAuditTrue(keywords, page, 10));
-//				}
+//		}
+//		else
+//		{
+//			if(null == keywords){
+//				map.addAttribute("proGoods_page",
+//						tdProviderGoodsService.findByProviderIdAndIsOnSale(providerId,true, page, 10));
+//			}else{
+//				map.addAttribute("proGoods_page",
+//						tdProviderGoodsService.searchAndProviderIdAndIsOnSale(providerId, keywords, true, page, 10));
 //			}
-//			else
-//			{
-				if(null == keywords)
-				{
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByIsOnSaleTrue(page, 10));
-					
-				}else{
-					map.addAttribute("proGoods_page", 
-							tdProviderGoodsService.searchAndIsOnSaleTrue(keywords, page, 10));
-				}
-//			}
-		}
-		else
-		{
-//			if("isDistribution".equalsIgnoreCase(isDistribution))
-//			{
-//				if(null == keywords){
-//					map.addAttribute("proGoods_page",
-//							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,true, true, page, 10));
-//				}else{
-//					map.addAttribute("proGoods_page",
-//							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, true, true, keywords, page, 10));
-//				}
-//			}
-//			else if("isNotDistribution".equalsIgnoreCase(isDistribution))
-//			{
-//				if(null == keywords){
-//					map.addAttribute("proGoods_page",
-//							tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(providerId,false, true, page, 10));
-//				}else{
-//					map.addAttribute("proGoods_page",
-//							tdProviderGoodsService.searchAndProviderIdAndIsDistributionAndIsAudit(providerId, false, true, keywords, page, 10));
-//				}
-//			}
-//			else
-//			{
-				if(null == keywords){
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.findByProviderIdAndIsOnSale(providerId,true, page, 10));
-				}else{
-					map.addAttribute("proGoods_page",
-							tdProviderGoodsService.searchAndProviderIdAndIsOnSale(providerId, keywords, true, page, 10));
-				}
-//			}
+//		}
+		if(null != categoryId){
+       	 TdProductCategory category = tdProductCategoryService.findOne(categoryId);
+            for (TdProductCategory tdProductCategory : categortList) {
+            	
+            	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
+            	{
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		map.addAttribute("cateList", cateList);
+            		
+            		for (TdProductCategory productCategory : cateList) {
+            			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
+            			{
+            				map.addAttribute("category_list", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            			}
+            		}
+            		
+            	}
+            }
+            map.addAttribute("category", category);
+       }
+		System.err.println(type+"------");
+		if(null != type && !"".equals(type)){
+			/**
+			 *  导出表格
+			 */
+			// 创建一个webbook 对于一个Excel
+			HSSFWorkbook wb = new HSSFWorkbook();
+			// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+			HSSFSheet sheet = wb.createSheet("goods"); 
+			// 设置每个单元格宽度根据字多少自适应
+			sheet.autoSizeColumn(1);
+			// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+	        HSSFRow row = sheet.createRow((int) 0);
+	        // 创建单元格，并设置值表头 设置表头居中 
+	        HSSFCellStyle style = wb.createCellStyle();  
+	        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+	        
+	        HSSFCell cell = row.createCell((short) 0);  
+	        cell.setCellValue("供应商名称");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 1);  
+	        cell.setCellValue("商品名称");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 2);  
+	        cell.setCellValue("商品副标题");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 3);  
+	        cell.setCellValue("编码");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 4);  
+	        cell.setCellValue("所属分类");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 5);  
+	        cell.setCellValue("品牌");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 6);  
+	        cell.setCellValue("销售单位");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 7);  
+	        cell.setCellValue("批发价");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 8);  
+	        cell.setCellValue("原价");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 9);  
+	        cell.setCellValue("商家库存");  
+	        cell.setCellStyle(style); 
+	        
+	        String excelUrl=SiteMagConstant.backupPath;
+	        
+			pageRequest = new PageRequest(page, Integer.MAX_VALUE,new Sort(Direction.DESC, "id"));
+			
+        	Page<TdProviderGoods> goods_page =tdProviderGoodsService.findAll(providerId, true, categoryId, keywords, pageRequest);
+        	
+        	if(providerGoodsImport(goods_page,row,cell,sheet))
+        	{
+        		download(wb,"goods", excelUrl, resp);
+        	}
 		}
 		
 		return "/client/distributor_ingoods";
@@ -4203,6 +4254,36 @@ public class TdDistributorController extends AbstractPaytypeController{
 			row.createCell((short) 3).setCellValue(countSale.getQuantity());
 			row.createCell((short) 4).setCellValue(StringUtils.scale(countSale.getPrice()));
 			row.createCell((short) 5).setCellValue(StringUtils.scale(countSale.getTotalPrice()));
+		}
+		return true;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public Boolean providerGoodsImport(Page<TdProviderGoods> goodsPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+	{
+		if(null != goodsPage && goodsPage.getContent().size() >0){
+			for (int i = 0; i < goodsPage.getContent().size(); i++) {
+				row = sheet.createRow((int)i+1);
+				TdProviderGoods providerGoods = goodsPage.getContent().get(i);
+				
+				row.createCell((short) 0).setCellValue(providerGoods.getProviderTitle());
+				row.createCell((short) 1).setCellValue(providerGoods.getGoodsTitle());
+				row.createCell((short) 2).setCellValue(providerGoods.getSubGoodsTitle());
+				row.createCell((short) 3).setCellValue(providerGoods.getCode());
+				
+				TdProductCategory category = tdProductCategoryService.findOne(providerGoods.getCategoryId());
+				if(null != category){
+					row.createCell((short) 4).setCellValue(category.getTitle());
+				}
+				TdGoods goods = tdGoodsService.findOne(providerGoods.getGoodsId());
+				if(null != goods){
+					row.createCell((short) 5).setCellValue(goods.getBrandTitle());
+				}
+				row.createCell((short) 6).setCellValue(providerGoods.getUnit());
+				row.createCell((short) 7).setCellValue(StringUtils.scale(providerGoods.getOutFactoryPrice()));
+				row.createCell((short) 8).setCellValue(StringUtils.scale(providerGoods.getGoodsMarketPrice()));
+				row.createCell((short) 6).setCellValue(providerGoods.getLeftNumber());
+			}
 		}
 		return true;
 	}

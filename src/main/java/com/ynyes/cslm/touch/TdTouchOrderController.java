@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jasper.tagplugins.jstl.core.Url;
+import org.apache.solr.common.util.Hash;
 import org.eclipse.jetty.util.UrlEncoded;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
@@ -1300,6 +1301,51 @@ public class TdTouchOrderController {
         return "/touch/order_pay_failed";
     }
     
+//    @RequestMapping(value="/paymethod",method=RequestMethod.POST)
+//    @ResponseBody
+//    public Map<String,Object> paymethod(Long orderId,HttpServletRequest req){
+//    	Map<String,Object> res = new HashMap<String, Object>();
+//    	res.put("code", 1);
+//    	
+//    	String username = (String) req.getSession().getAttribute("username");
+//    	if(null == username){
+//    		res.put("msg", "登录超时");
+//    		return res;
+//    	}
+//    	if(null == orderId){
+//    		res.put("msg", "参数错误");
+//    		return res;
+//    	}
+//    	
+//    	TdOrder order = tdOrderService.findOne(orderId);
+//    	
+//    	if(null == order){
+//    		res.put("msg", "订单异常");
+//    		return res;
+//    	}
+//    	 // 判断订单是否过时 订单提交后24小时内
+//		Date cur = new Date();
+//		long temp = cur.getTime() - order.getOrderTime().getTime();
+//		if (temp > 1000 * 3600 * 24) {
+//			order.setSortId(7L);
+//			tdOrderService.save(order);
+//			res.put("msg", "支付时间已过");
+//			return res;
+//		}
+//		TdPayType payType = tdPayTypeService.findOne(order.getPayTypeId());
+//		String payCode ="";
+//		if(null != payType){
+//			payCode=payType.getCode();
+//		}
+//		if (PAYMENT_ALI.equals(payCode)) {
+//			res.put("code", 2);
+//        }else if (PAYMENT_WX.equalsIgnoreCase(payType.getCode())) {
+//        	res.put(key, value)
+//        }
+//    	
+//    	return res;
+//    }
+    
     @RequestMapping(value = "/dopay/{orderId}")
     public String payOrder(@PathVariable Long orderId, ModelMap map,Device device,
             HttpServletRequest req,HttpServletResponse resp) {
@@ -1373,9 +1419,9 @@ public class TdTouchOrderController {
             	PaymentChannelAlipay payChannelAlipay = new PaymentChannelAlipay();
                 payForm = payChannelAlipay.getPayFormData(req);
 
-            }else if ("WX".equalsIgnoreCase(payType.getCode())) {
+            }else if (PAYMENT_WX.equalsIgnoreCase(payType.getCode())) {
             
-            	return "redirect:/touch/order/pay/weixin?orderId="+orderId+"&app=1";
+            	return "redirect:/touch/order/pay/weixin?orderId="+orderId;
             }
 //            }else{
 //            	  map.addAttribute("order", order);
@@ -1397,7 +1443,7 @@ public class TdTouchOrderController {
     }
     
     @RequestMapping("/pay/weixin")
-    public String order(Long orderId,Integer app,HttpServletRequest req,ModelMap map){
+    public String order(Long orderId,HttpServletRequest req,ModelMap map){
          
          tdCommonService.setHeader(map, req);
          
@@ -1406,15 +1452,15 @@ public class TdTouchOrderController {
              map.addAttribute("order", tdOrderService.findOne(orderId));
          }
          
-       //判断是否为app链接
-         if (null == app) {
-    			Integer isApp = (Integer) req.getSession().getAttribute("app");
-    	        if (null != isApp) {
-    	        	map.addAttribute("app", isApp);
-    			}
- 		}else {
- 			map.addAttribute("app", app);
- 		}
+//       //判断是否为app链接
+//         if (null == app) {
+//    			Integer isApp = (Integer) req.getSession().getAttribute("app");
+//    	        if (null != isApp) {
+//    	        	map.addAttribute("app", isApp);
+//    			}
+// 		}else {
+// 			map.addAttribute("app", app);
+// 		}
          
          return "/touch/user_order_detail";
     }
@@ -1464,23 +1510,6 @@ public class TdTouchOrderController {
         
         res.put("code", 1);
         return res;
-//        String wxpay = "{\"appid\":\""+appid+"\",\"partnerid\":\""+partnerid+"\",\"prepayid\":\""+prepayid
-//        		+"\",\"packageval\":\"Sign=WXPay\",\"noncestr\":\""+noncestr+"\",\"timestamp\":\""+timestamp+"\",\"sign\":\""+sign+"\"}";
-//        
-//        resp.setCharacterEncoding("UTF-8");  
-//		resp.setContentType("text/html; charset=utf-8");  
-//		
-//		PrintWriter out = null;  
-//		try {  
-//		    out = resp.getWriter();  
-//		    out.append(wxpay);  
-//		} catch (IOException e) {  
-//		    e.printStackTrace();  
-//		} finally {  
-//		    if (out != null) {  
-//		        out.close();  
-//		    }  
-//		} 
       }else{
 //    	  map.addAttribute("order", order);
 //    	  return "/touch/order_pay_failed";
