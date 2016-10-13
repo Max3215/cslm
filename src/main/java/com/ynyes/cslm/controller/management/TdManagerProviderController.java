@@ -10,7 +10,13 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,17 +37,21 @@ import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
+import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
+import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.util.ClientConstant;
+import com.ynyes.cslm.util.FileDownUtils;
 import com.ynyes.cslm.util.SiteMagConstant;
+import com.ynyes.cslm.util.StringUtils;
 
 /**
  * 后台用户管理控制器
@@ -73,6 +83,9 @@ public class TdManagerProviderController {
     
     @Autowired
     TdCashService tdCashService;
+    
+    @Autowired
+    TdGoodsService tdGoodsService;
     
     @RequestMapping(value="/check/{type}", method = RequestMethod.POST)
     @ResponseBody
@@ -356,12 +369,19 @@ public class TdManagerProviderController {
     }
     
     @RequestMapping(value="/goods/list")
-    public String goodsList(Integer page,Integer size,
-            String distribution, String __EVENTTARGET,
-            String onSale,Long providerId,
-            String __EVENTARGUMENT, String __VIEWSTATE, String keywords,
-            Long[] listId, Integer[] listChkId, Long[] listSortId,
-            ModelMap map, HttpServletRequest req){
+    public String goodsList(Integer page,
+    				Integer size,
+					String distribution, 
+					String onSale,
+					Long providerId,
+					Long categoryId,
+					String __EVENTTARGET,
+					String __EVENTARGUMENT,
+					String __VIEWSTATE, 
+					String keywords,
+					Long[] listId, Integer[] listChkId, Long[] listSortId,
+					ModelMap map,
+					HttpServletRequest req,HttpServletResponse resp){
     	String username = (String) req.getSession().getAttribute("manager");
     	if (null == username) {
             return "redirect:/Verwalter/login";
@@ -378,23 +398,21 @@ public class TdManagerProviderController {
         if (null != keywords) {
             keywords = keywords.trim();
         }
+        String exportUrl="";
         if (null != __EVENTTARGET) {
             switch (__EVENTTARGET) {
             case "lbtnViewTxt":
             case "lbtnViewImg":
                 __VIEWSTATE = __EVENTTARGET;
                 break;
-
-            case "btnSave":
-//                btnSave(listId, listSortId, username);
-                tdManagerLogService.addLog("edit", "用户修改商品", req);
-                break;
-
             case "btnDelete":
                 btnGoodsDelete(listId, listChkId);
                 tdManagerLogService.addLog("delete", "用户删除商品", req);
                 break;
-
+            case "exportAll":
+            	exportUrl = SiteMagConstant.backupPath;
+                tdManagerLogService.addLog("edit", "用户导出超市商品", req);
+                break;
             case "btnPage":
                 if (null != __EVENTARGUMENT) {
                     page = Integer.parseInt(__EVENTARGUMENT);
@@ -404,7 +422,8 @@ public class TdManagerProviderController {
         }
         
         map.addAttribute("provider_list", tdProviderService.findAll());
-       
+        map.addAttribute("category_list", tdProductCategoryService.findAll());
+        
         Boolean isDistribution = null;
         Boolean isOnSale = null;
         
@@ -426,7 +445,67 @@ public class TdManagerProviderController {
 		}
         
         PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
-        map.addAttribute("content_page", tdProviderGoodsService.findAll(providerId, null, keywords, isDistribution, isOnSale, pageRequest));
+        map.addAttribute("content_page", tdProviderGoodsService.findAll(providerId, categoryId, keywords, isDistribution, isOnSale, pageRequest));
+        
+        if(null != exportUrl && !"".equals(exportUrl)){
+    		  pageRequest = new PageRequest(page, Integer.MAX_VALUE,new Sort(Direction.DESC, "id"));
+            
+            	// 第一步，创建一个webbook，对应一个Excel文件  
+		      HSSFWorkbook wb = new HSSFWorkbook();  
+		      // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
+		      HSSFSheet sheet = wb.createSheet("goods");  
+		      // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+		      HSSFRow row = sheet.createRow((int) 0);  
+		      // 第四步，创建单元格，并设置值表头 设置表头居中  
+		      HSSFCellStyle style = wb.createCellStyle();  
+		      style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+		      
+		      HSSFCell cell = row.createCell((short) 0);  
+		        cell.setCellValue("供应商名称");  
+		        cell.setCellStyle(style); 
+		        
+		        cell = row.createCell((short) 1);  
+		        cell.setCellValue("商品名称");  
+		        cell.setCellStyle(style); 
+		        
+		        cell = row.createCell((short) 2);  
+		        cell.setCellValue("商品副标题");  
+		        cell.setCellStyle(style); 
+		        
+		        cell = row.createCell((short) 3);  
+		        cell.setCellValue("编码");  
+		        cell.setCellStyle(style);
+		        
+		        cell = row.createCell((short) 4);  
+		        cell.setCellValue("所属分类");  
+		        cell.setCellStyle(style);
+		        
+		        cell = row.createCell((short) 5);  
+		        cell.setCellValue("品牌");  
+		        cell.setCellStyle(style); 
+		        
+		        cell = row.createCell((short) 6);  
+		        cell.setCellValue("销售单位");  
+		        cell.setCellStyle(style); 
+		        
+		        cell = row.createCell((short) 7);  
+		        cell.setCellValue("批发价");  
+		        cell.setCellStyle(style); 
+		        
+		        cell = row.createCell((short) 8);  
+		        cell.setCellValue("原价");  
+		        cell.setCellStyle(style); 
+		        
+		        cell = row.createCell((short) 9);  
+		        cell.setCellValue("商家库存");  
+		        cell.setCellStyle(style); 
+		      
+		      Page<TdProviderGoods> goodsPage = tdProviderGoodsService.findAll(providerId, categoryId, keywords, isDistribution, isOnSale, pageRequest);
+			if (providerGoodsImport(goodsPage, row, cell, sheet)) {
+				FileDownUtils.download("goods", wb, exportUrl, resp);
+			} 
+        }
+        
         
         // 参数注回
         map.addAttribute("page", page);
@@ -582,4 +661,34 @@ public class TdManagerProviderController {
             }
         }
     }
+    
+    @SuppressWarnings("deprecation")
+	public Boolean providerGoodsImport(Page<TdProviderGoods> goodsPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+	{
+		if(null != goodsPage && goodsPage.getContent().size() >0){
+			for (int i = 0; i < goodsPage.getContent().size(); i++) {
+				row = sheet.createRow((int)i+1);
+				TdProviderGoods providerGoods = goodsPage.getContent().get(i);
+				
+				row.createCell((short) 0).setCellValue(providerGoods.getProviderTitle());
+				row.createCell((short) 1).setCellValue(providerGoods.getGoodsTitle());
+				row.createCell((short) 2).setCellValue(providerGoods.getSubGoodsTitle());
+				row.createCell((short) 3).setCellValue(providerGoods.getCode());
+				
+				TdProductCategory category = tdProductCategoryService.findOne(providerGoods.getCategoryId());
+				if(null != category){
+					row.createCell((short) 4).setCellValue(category.getTitle());
+				}
+				TdGoods goods = tdGoodsService.findOne(providerGoods.getGoodsId());
+				if(null != goods){
+					row.createCell((short) 5).setCellValue(goods.getBrandTitle());
+				}
+				row.createCell((short) 6).setCellValue(providerGoods.getUnit());
+				row.createCell((short) 7).setCellValue(StringUtils.scale(providerGoods.getOutFactoryPrice()));
+				row.createCell((short) 8).setCellValue(StringUtils.scale(providerGoods.getGoodsMarketPrice()));
+				row.createCell((short) 9).setCellValue(providerGoods.getLeftNumber());
+			}
+		}
+		return true;
+	}
 }

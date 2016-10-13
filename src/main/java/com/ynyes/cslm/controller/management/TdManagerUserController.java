@@ -213,8 +213,8 @@ public class TdManagerUserController {
             }
             else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
             {
-            	System.err.println("导出会员");
             	exportUrl = SiteMagConstant.backupPath;
+            	tdManagerLogService.addLog("edit", "导出会员", req);
             }
         }
         
