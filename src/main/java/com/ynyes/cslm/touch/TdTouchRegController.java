@@ -43,6 +43,7 @@ public class TdTouchRegController {
     				  Integer shareId, String mobile,
     				  HttpServletRequest request,
     				  Integer app,
+    				  Long goodsId,
     				  ModelMap map) {
         String username = (String) request.getSession().getAttribute("username");
 //        if (null != shareId)
@@ -52,6 +53,8 @@ public class TdTouchRegController {
         
         // 基本信息
         tdCommonService.setHeader(map, request);
+        
+        map.addAttribute("goodsId", goodsId);
         
       //判断是否为app链接
         Integer isApp = (Integer) request.getSession().getAttribute("app");
@@ -88,6 +91,7 @@ public class TdTouchRegController {
                 String mobile,
                 String password,
 //                Long shareId,
+                Long goodsId,
                 HttpServletRequest request){
 //        String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
 //        String smsCodeSave = (String) request.getSession().getAttribute("SMSCODE");
@@ -144,11 +148,11 @@ public class TdTouchRegController {
         {
             if (null == shareId)
             {
-                return "redirect:/touch/reg?errCode=2";
+                return "redirect:/touch/reg?errCode=2&goodsId="+goodsId;
             }
             else
             {
-                return "redirect:/touch/reg?errCode=2&shareId=" + shareId;
+                return "redirect:/touch/reg?errCode=2&shareId=" + shareId+"&goodsId="+goodsId;
             }
         }
         
@@ -158,11 +162,11 @@ public class TdTouchRegController {
         {
             if (null == shareId)
             {
-                return "redirect:/touch/reg?errCode=4";
+                return "redirect:/touch/reg?errCode=4&goodsId="+goodsId;
             }
             else
             {
-                return "redirect:/touch/reg?errCode=4&shareId=" + shareId;
+                return "redirect:/touch/reg?errCode=4&shareId=" + shareId+"&goodsId="+goodsId;
             }
         }
         
@@ -172,11 +176,11 @@ public class TdTouchRegController {
         {
             if (null == shareId)
             {
-                return "redirect:/touch/reg?errCode=3";
+                return "redirect:/touch/reg?errCode=3&goodsId="+goodsId;
             }
             else
             {
-                return "redirect:/touch/reg?errCode=3&shareId=" + shareId;
+                return "redirect:/touch/reg?errCode=3&shareId=" + shareId+"&goodsId="+goodsId;
             }
         }
         
@@ -185,6 +189,9 @@ public class TdTouchRegController {
         request.getSession().setAttribute("username", username);
         
         String referer = (String) request.getAttribute("referer");
+        if(null != goodsId){
+        	return "redirect:/touch/goods/"+goodsId;
+        }
         
         if (null != request.getAttribute("referer"))
         {

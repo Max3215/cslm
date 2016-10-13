@@ -46,6 +46,7 @@ $(document).ready(function(){
   <!-- 注册 -->
   <section class="modify_mm">
     <form action="/touch/reg" method="post" id="form1">
+    	<input type="hidden" value="<#if goodsId??>${goodsId?c}</#if>" name="goodsId"/>
          <p style="color: #F00">${error!''}</p>
         <div>
             <input type="text" name="username" class="text" placeholder="请输入账号" ajaxurl="/reg/check/username" datatype="s6-12">

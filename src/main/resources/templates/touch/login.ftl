@@ -109,7 +109,7 @@ function changeYzm(){
     </p>
     <input type="submit" class="sub" value="登录" id="btn_login"/>
     <p class="login_a">
-      <a href="/touch/reg">注册账号</a>
+      <a href="/touch/reg<#if goodsId??>?goodsId=${goodsId?c}</#if>">注册账号</a>
       <a href="/touch/login/password_retrieve">忘记密码？</a>
     </p>
   </section>

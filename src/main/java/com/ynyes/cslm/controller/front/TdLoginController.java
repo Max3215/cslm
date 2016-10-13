@@ -51,13 +51,15 @@ public class TdLoginController {
 	private TdDistributorService tdDistributorService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(HttpServletRequest req, ModelMap map) {
+	public String login(Long goodsId,HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 
 		String referer = req.getHeader("referer");
 		
 		// 基本信息
 		tdCommonService.setHeader(map, req);
+		
+		map.addAttribute("goodsId", goodsId);
 
 		if (null == username) {
 			return "/client/login";

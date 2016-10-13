@@ -99,7 +99,7 @@ DD_belatedPNG.fix('.,img,background');
           </tr>
           <tr>
             <th>身份证号：</th>
-            <td><input class="mytext" type="text" name="identity"  value="${user.identity!''}"/></td>
+            <td><input class="mytext" type="text" name="identity" datatype="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/"  value="${user.identity!''}"/></td>
           </tr>
           <tr>
             <th>家庭住址：</th>

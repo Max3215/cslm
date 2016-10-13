@@ -93,7 +93,7 @@ public class TdRegController {
     }
     
     @RequestMapping("/reg")
-    public String reg(Integer errCode, Integer shareId,String name,String carCode, HttpServletRequest request, ModelMap map) {
+    public String reg(Integer errCode,Long goodsId, Integer shareId,String name,String carCode, HttpServletRequest request, ModelMap map) {
         String username = (String) request.getSession().getAttribute("username");
         
         if (null != shareId)
@@ -103,7 +103,7 @@ public class TdRegController {
         // 基本信息
         tdCommonService.setHeader(map, request);
         
-        
+        map.addAttribute("goodsId", goodsId);
         if (null == username) {
             if (null != errCode)
             {
@@ -150,21 +150,22 @@ public class TdRegController {
                 String smsCode,
                 String code,
                 String carCode,
+                Long goodsId,
                 HttpServletRequest request){
         String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
         
         if (!codeBack.equalsIgnoreCase(code))
         {
-                return "redirect:/reg?errCode=1&name= "+username+"&carCode="+carCode;
+                return "redirect:/reg?errCode=1&name= "+username+"&carCode="+carCode+"&goodsId="+goodsId;
         }
         
         
         
-       TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
         
+       TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
         if (null == user)
         {
-                return "redirect:/reg?errCode=3";
+                return "redirect:/reg?errCode=3&goodsId="+goodsId;
         }
         
         user = tdUserService.save(user);
@@ -184,7 +185,9 @@ public class TdRegController {
 //        {
 //            return "redirect:/user";
 //        }
-        
+        if(null != goodsId){
+        	return "redirect:/goods/"+goodsId;
+        }
         return "redirect:/";
     }
     

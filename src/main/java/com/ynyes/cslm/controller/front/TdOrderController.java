@@ -1600,7 +1600,7 @@ public class TdOrderController extends AbstractPaytypeController {
 		String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
-			return "redirect:/login";
+			return "redirect:/login?goodsId="+dGoodsId;
 		}
 		if (null == quantity) {
 			quantity = 1L;
@@ -1660,7 +1660,7 @@ public class TdOrderController extends AbstractPaytypeController {
 		String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
-			return "redirect:/login";
+			return "redirect:/login?goodsId="+dGoodsId;
 		}
 
 		tdCommonService.setHeader(map, req);

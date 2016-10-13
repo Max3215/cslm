@@ -2631,7 +2631,8 @@ public class TdTouchUserController {
     @RequestMapping(value="/user/account/save/{type}",method=RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> accountSave(@PathVariable String type,
-    									String realName,String email,
+    									String realName,String nickname,
+    									String email,String identity,String homeAddress,
     									String mobile,String password,
     									String newPwd,String payPassword,
     									String newPayPwd,HttpServletRequest req){
@@ -2674,6 +2675,9 @@ public class TdTouchUserController {
     			} 
     		}else{
     			user.setRealName(realName);
+    			user.setNickname(nickname);
+    			user.setIdentity(identity);
+    			user.setHomeAddress(homeAddress);
     		}
     		tdUserService.save(user);
     		res.put("msg", "修改成功");

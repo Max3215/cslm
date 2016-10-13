@@ -1076,7 +1076,7 @@ public class TdTouchOrderController {
     	String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
-			return "redirect:/touch/login";
+			return "redirect:/touch/login?goodsId="+dGoodsId;
 		}
 		if(null== quantity){
 			quantity = 1L;
@@ -1144,7 +1144,7 @@ public class TdTouchOrderController {
 		String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
-			return "redirect:/touch/login";
+			return "redirect:/touch/login?goodsId="+dGoodsId;
 		}
 
 		if (null == dGoodsId) {

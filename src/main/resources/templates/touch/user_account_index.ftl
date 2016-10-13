@@ -38,7 +38,7 @@ $(document).ready(function(){
   <section class="user_safe">
     <p class="user">账户名称<span>${user.username!''}</span></p>
     <menu>
-      <a href="/touch/user/account/edit/name">真实姓名<span>${user.realName!''}</span></a>
+      <a href="/touch/user/account/edit/name">账号信息<span>${user.realName!''}</span></a>
       <a href="/touch/user/account/edit/email">邮箱<span>${user.email!'未添加'}</span></a>
       <a href="/touch/user/account/edit/mobile">手机<span>${user.mobile!''}</span></a>
     </menu>
@@ -49,5 +49,17 @@ $(document).ready(function(){
   </section>
   <!-- 账户安全 END -->
   
+  
+  <!-- 底部 -->
+  <div style="height:0.88rem;"></div>
+  <section class="comfooter tabfix">
+    	<menu>
+	        <a class="a1" href="/touch/disout">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
+  <!-- 底部 END -->
 </body>
 </html>

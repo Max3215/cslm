@@ -195,6 +195,7 @@ function checkwindowhide()
   </div>
 </header>
     <form id="form1" method="post" action="/reg">
+    	<input type="hidden" name="goodsId" value="<#if goodsId??>${goodsId?c}</#if>">
         <div class="logingbg">
              <section class="loginbox">
                 <div>

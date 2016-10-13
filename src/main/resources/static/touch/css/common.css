@@ -826,6 +826,11 @@ a,button,input{
 .public_modify .edit2 .text{height: 0.78rem;line-height: 0.78rem;font-size: 0.22rem;margin-left:0.2rem;color:#999999;width: 3.9rem;}
 .public_modify .edit2 a{display: block;width: 0.3rem;height: 0.3rem;background: url(../images/s_close.png) no-repeat;background-size:0.3rem;position: absolute;top:0.24rem;right:0.44rem;}
 
+.public_modify .edit3{margin-top:0.2rem;background: #fff;height: 0.78rem;line-height: 0.78rem;padding-left: 0.25rem;border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
+.public_modify .edit3 span{font-size: 0.25rem;color:#333;font-weight: bold;}
+.public_modify .edit3 .text{height: 0.78rem;line-height: 0.78rem;font-size: 0.22rem;margin-left:0.2rem;color:#999999;width: 3.9rem;}
+.public_modify .edit3 a{display: block;width: 0.3rem;height: 0.3rem;background: url(../images/s_close.png) no-repeat;background-size:0.3rem;position: absolute;top:0.24rem;right:0.44rem;}
+
 /** 新加END   */
 
 

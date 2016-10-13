@@ -221,7 +221,7 @@ function chooseMoreShow(){
     <p class="pb10">
       <input id="rmbUser" type="checkbox" />
       <span>记住密码</span>
-      <span class="absolute-r"><a href="/login/password_retrieve">忘记密码</a> | <a href="/reg">免费注册</a></span>
+      <span class="absolute-r"><a href="/login/password_retrieve">忘记密码</a> | <a href="/reg<#if goodsId??>?goodsId=${goodsId?c}</#if>">免费注册</a></span>
     </p>
     <div class="clear h40"></div>
     <input type="submit" class="sub" id="btn_login" value="登录" />
