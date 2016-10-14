@@ -4284,7 +4284,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		return true;
 	}
 	
-	// 销售单
+	// 交易記錄
 		@SuppressWarnings("deprecation")
 		public Boolean payRecordImportData(Page<TdPayRecord> recordPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
 		{

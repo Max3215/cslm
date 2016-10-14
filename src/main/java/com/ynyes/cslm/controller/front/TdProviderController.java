@@ -74,6 +74,7 @@ import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
+import com.ynyes.cslm.util.FileDownUtils;
 import com.ynyes.cslm.util.SiteMagConstant;
 import com.ynyes.cslm.util.StringUtils;
 
@@ -935,29 +936,123 @@ public class TdProviderController extends AbstractPaytypeController{
 	
 	 /**
      * 交易记录
+	 * @throws ParseException 
      * 
      */
     @RequestMapping(value="/pay/record")
-    public String payRecord(Integer page,String cont, HttpServletRequest req,ModelMap map){
+    public String payRecord(Integer page,
+    		String cont,
+    		String startTime,
+			String endTime,
+			String eventTarget,
+			String eventArgument,
+			HttpServletRequest req,HttpServletResponse resp,
+			ModelMap map) throws ParseException{
     	String username = (String)req.getSession().getAttribute("provider");
     	if (null == username) {
             return "redirect:/login";
         }
+    	
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date start = null;
+		Date end = null ;
+		
+		if(null != startTime && !"".equals(startTime.trim()))
+		{
+			start = sdf.parse(startTime);
+		}
+		if(null != endTime && !"".equals(endTime.trim()))
+		{
+			end = sdf.parse(endTime);
+		}
+		
+		String exportUrl ="";
+		if(null != eventTarget){
+			if(eventTarget.equalsIgnoreCase("excel")){
+				exportUrl = SiteMagConstant.backupPath;
+			}else if (eventTarget.equalsIgnoreCase("btnPage"))
+			{
+				if (null != eventArgument)
+				{
+					page = Integer.parseInt(eventArgument);
+				} 
+			}
+		}
     	if(null == page ){
     		page = 0;
     	}
     	map.addAttribute("page", page);
+    	map.addAttribute("cont", cont);
+    	map.addAttribute("startTime", start);
+    	map.addAttribute("endTime", end);
     	
     	tdCommonService.setHeader(map, req);
     	
     	TdProvider provider = tdProviderService.findByUsername(username);
-    	if(null == cont || "".equals(cont)){
-    		map.addAttribute("pay_record_page",
-    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
-    	}else{
-    		map.addAttribute("pay_record_page",
-    				tdPayRecordService.searchByProviderId(provider.getId(),cont, page, ClientConstant.pageSize));
+    	map.addAttribute("pay_record_page",tdPayRecordService.findAll("pro", provider.getId(), cont, start, end, page, ClientConstant.pageSize));
+//    	if(null == cont || "".equals(cont)){
+//    		map.addAttribute("pay_record_page",
+//    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
+//    	}else{
+//    		map.addAttribute("pay_record_page",
+//    				tdPayRecordService.searchByProviderId(provider.getId(),cont, page, ClientConstant.pageSize));
+//    	}
+    	if(null != exportUrl && !"".equals(exportUrl)){
+    		/**
+			 * 导出表格
+			 */
+			// 创建一个webbook 对于一个Excel
+			HSSFWorkbook wb = new HSSFWorkbook();
+			// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+			HSSFSheet sheet = wb.createSheet("payRecord"); 
+			// 设置每个单元格宽度根据字多少自适应
+			sheet.autoSizeColumn(1);
+			// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+	        HSSFRow row = sheet.createRow((int) 0);
+	        // 创建单元格，并设置值表头 设置表头居中 
+	        HSSFCellStyle style = wb.createCellStyle();  
+	        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+	        
+	        HSSFCell cell = row.createCell((short) 0);  
+	        cell.setCellValue("订单编号");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 1);  
+	        cell.setCellValue("商家");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 2);  
+	        cell.setCellValue("服务费");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 3);  
+	        cell.setCellValue("物流费");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 4);  
+	        cell.setCellValue("商品总额");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 5);  
+	        cell.setCellValue("实际金额");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 6);  
+	        cell.setCellValue("交易时间");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 7);  
+	        cell.setCellValue("交易类型");  
+	        cell.setCellStyle(style); 
+	        
+        	Page<TdPayRecord> record_Page = tdPayRecordService.findAll("pro", provider.getId(), cont, start, end, page, Integer.MAX_VALUE);
+        	
+			if(payRecordImportData(record_Page,row,cell,sheet))
+        	{
+        		FileDownUtils.download("payRecord", wb, exportUrl, resp);
+        	}
     	}
+    	
     	return "/client/provider_record";
     }
     
@@ -1514,6 +1609,27 @@ public class TdProviderController extends AbstractPaytypeController{
 		return true;
 	}
 	
+	// 交易記錄
+	@SuppressWarnings("deprecation")
+	public Boolean payRecordImportData(Page<TdPayRecord> recordPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+	{
+		if(null != recordPage && recordPage.getContent().size() > 0){
+			for (int i = 0; i < recordPage.getContent().size(); i++) {
+				row = sheet.createRow((int)i+1);
+				TdPayRecord record = recordPage.getContent().get(i);
+				// 获取用户信息
+				row.createCell((short) 0).setCellValue(record.getOrderNumber());
+				row.createCell((short) 1).setCellValue(record.getProviderTitle());
+				row.createCell((short) 2).setCellValue(StringUtils.scale(record.getServicePrice()));
+				row.createCell((short) 3).setCellValue(StringUtils.scale(record.getPostPrice()));
+				row.createCell((short) 4).setCellValue(StringUtils.scale(record.getTotalGoodsPrice()));
+				row.createCell((short) 5).setCellValue(StringUtils.scale(record.getRealPrice()));
+				row.createCell((short) 6).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(record.getCreateTime()));
+				row.createCell((short) 7).setCellValue(record.getCont());
+			}
+		}
+		return true;
+	}
 	public Boolean download(HSSFWorkbook wb,String name, String exportUrl, HttpServletResponse resp){
 	   	 try  
 	        {  
