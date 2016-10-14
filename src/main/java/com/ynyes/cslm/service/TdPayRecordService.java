@@ -151,4 +151,30 @@ public class TdPayRecordService {
     	return repository.findAll(c, pageRequest);
     }
     
+    public Page<TdPayRecord> findAll(String selectType,Long shipId,String count,Date startTime,Date endTime,int page,int size)
+    {
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
+    	Criteria<TdPayRecord> c = new Criteria<>();
+    	if(null != selectType){
+    		if("dis".equalsIgnoreCase(selectType)){
+    			c.add(Restrictions.eq("distributorId", shipId, true));
+    		}else if("pro".equalsIgnoreCase(selectType)){
+    			c.add(Restrictions.eq("providerId", shipId, true));
+    		}
+    	}
+    	if(null != count && !"".equalsIgnoreCase(count)){
+    		c.add(Restrictions.like("cont", count, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("createTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("createTime", endTime, true));
+    	}
+    	
+    	return repository.findAll(c, pageRequest);
+    }
+    
 }

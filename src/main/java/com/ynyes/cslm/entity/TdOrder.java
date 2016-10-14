@@ -272,6 +272,10 @@ public class TdOrder {
     // 自提点联系方式
     @Column
     private String shipMobile;
+//    
+    // 自提点ID
+    @Column
+    private Long shipAddressId;
     
     
     
@@ -754,6 +758,14 @@ public class TdOrder {
 
 	public void setPostPrice(Double postPrice) {
 		this.postPrice = postPrice;
+	}
+
+	public Long getShipAddressId() {
+		return shipAddressId;
+	}
+
+	public void setShipAddressId(Long shipAddressId) {
+		this.shipAddressId = shipAddressId;
 	}
 	
 	

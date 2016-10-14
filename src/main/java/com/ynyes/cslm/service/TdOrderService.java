@@ -572,11 +572,13 @@ public class TdOrderService {
     																						keywords, statusId, typeId, time, pageRequest);
     }
     
-    public List<TdOrder> searchOrderGoods(Long shopId,Long providerId, String type,Long statusId, Date begin, Date end
-    		//,int page,
-			//int size
+    public List<TdOrder> searchOrderGoods(Long shopId,
+    		Long providerId, 
+    		Long shipAddressId,
+    		String type,
+    		Long statusId, 
+    		Date begin, Date end
     		) {
-	//	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "orderTime"));
 		Criteria<TdOrder> c = new Criteria<>();
 		if(null != shopId)
 		{
@@ -585,6 +587,9 @@ public class TdOrderService {
 		if(null != providerId)
 		{
 			c.add(Restrictions.eq("providerId", providerId, true));
+		}
+		if(null != shipAddressId){
+			c.add(Restrictions.eq("shipAddressId", shipAddressId, true));
 		}
 		if(null != type)
 		{
@@ -605,6 +610,7 @@ public class TdOrderService {
 		if (end != null) {
 			c.add(Restrictions.lte("orderTime", end, true));
 		}
+		
 		return repository.findAll(c);
 	}
     

@@ -1105,7 +1105,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 			end = sdf.parse(endTime);
 		}
 		
-		List<TdOrder> list = tdOrderService.searchOrderGoods(null, supply.getId(),"supply",statusId,start, end);
+		List<TdOrder> list = tdOrderService.searchOrderGoods(null, supply.getId(),null,"supply",statusId,start, end);
 		List<TdCountSale> countList = tdOrderService.sumOrderGoods(supply.getId(),2L,list);
 		
 		String excelUrl=null;

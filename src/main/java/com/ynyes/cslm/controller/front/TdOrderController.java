@@ -653,6 +653,7 @@ public class TdOrderController extends AbstractPaytypeController {
 							tdOrder.setShipMobile(shippingAddress.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(shippingAddress.getReceiverName());
 							tdOrder.setDeliveryPerson(appenAddress(shippingAddress).toString());
+							tdOrder.setShipAddressId(shipAddressId);
 						}
 					} 
 					else if (list.size() > 1) // 多家超市
@@ -671,8 +672,8 @@ public class TdOrderController extends AbstractPaytypeController {
 							tdOrder.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
 							tdOrder.setShipMobile(newShipping.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(newShipping.getReceiverName());
-							
 							tdOrder.setDeliveryPerson(appenAddress(newShipping).toString());
+							tdOrder.setShipAddressId(newShipping.getId());
 						} else {
 							tdOrder.setShippingAddress(newAddress.toString()); // 超市地址
 							tdOrder.setShipAddressTitle(distributor.getTitle()); // 超市名称
@@ -852,6 +853,7 @@ public class TdOrderController extends AbstractPaytypeController {
 							order.setShipAddress(appenAddress(shippingAddress).toString()); // 添加自提点地址
 							order.setShipMobile(shippingAddress.getReceiverMobile()); // 添加自提点联系方式
 							order.setShipAddressTitle(shippingAddress.getReceiverName());
+							order.setShipAddressId(shippingAddress.getId());
 						}
 					} 
 					else if (list.size() > 1) // 多家超市
@@ -870,6 +872,7 @@ public class TdOrderController extends AbstractPaytypeController {
 							order.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
 							order.setShipMobile(newShipping.getReceiverMobile()); // 添加自提点联系方式
 							order.setShipAddressTitle(newShipping.getReceiverName());
+							order.setShipAddressId(newShipping.getId());
 						} else {
 							// 超市未设置自提点 取超市地址
 							StringBuffer newAddress = new StringBuffer();

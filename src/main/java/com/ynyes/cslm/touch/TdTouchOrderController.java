@@ -689,6 +689,7 @@ public class TdTouchOrderController {
 							tdOrder.setShipAddress(appenAddress(shippingAddress).toString()); // 添加自提点地址
 							tdOrder.setShipMobile(shippingAddress.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(shippingAddress.getReceiverName());
+							tdOrder.setShipAddressId(shipAddressId);
 						}
 					} 
 					else if (list.size() > 1) // 多家超市
@@ -708,6 +709,7 @@ public class TdTouchOrderController {
 							tdOrder.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
 							tdOrder.setShipMobile(newShipping.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(newShipping.getReceiverName());
+							tdOrder.setShipAddressId(newShipping.getId());
 						} else {
 							// 超市未设置自提点 取超市地址
 							StringBuffer newAddress = new StringBuffer();
@@ -904,6 +906,7 @@ public class TdTouchOrderController {
 							order.setShipAddress(appenAddress(shippingAddress).toString()); // 添加自提点地址
 							order.setShipMobile(shippingAddress.getReceiverMobile()); // 添加自提点联系方式
 							order.setShipAddressTitle(shippingAddress.getReceiverName());
+							order.setShipAddressId(shipAddressId);
 						}
 					}
 					else if (list.size() > 1) // 多家超市
@@ -923,6 +926,7 @@ public class TdTouchOrderController {
 							order.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
 							order.setShipMobile(newShipping.getReceiverMobile()); // 添加自提点联系方式
 							order.setShipAddressTitle(newShipping.getReceiverName());
+							order.setShipAddressId(newShipping.getId());
 						} else {
 							// 超市未设置自提点 取超市地址
 							StringBuffer newAddress = new StringBuffer();
