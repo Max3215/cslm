@@ -55,6 +55,7 @@ import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
@@ -137,6 +138,9 @@ public class TdTouchUserController {
     
     @Autowired
     private TdCouponTypeService tdCouponTypeService;
+    
+    @Autowired
+    private TdPayRecordService tdPayRecordService;
     
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, String username, ModelMap map) {
@@ -844,6 +848,39 @@ public class TdTouchUserController {
         if(type==1)
         {
         	return "/touch/user_collect_list";
+        }else{
+        	return "/touch/user_collect_shop";
+        }
+    }
+    
+    @RequestMapping(value = "/user/collect/list/{type}/more")
+    public String collectListMore(@PathVariable Integer type,
+    					HttpServletRequest req, 
+                        Integer page,
+                        ModelMap map){
+		String username = (String) req.getSession().getAttribute("username");
+        if (null == username)
+        {
+            return "redirect:/touch/login";
+        }
+        
+        if (null == page)
+        {
+            page = 0;
+        }
+        
+        
+        if(null == type){
+        	type = 1;
+        }
+        
+        map.addAttribute("type", type);
+        
+        map.addAttribute("collect_page", tdUserCollectService.findByUsername(username,type, page, ClientConstant.pageSize));
+        
+        if(type==1)
+        {
+        	return "/touch/user_collect_more";
         }else{
         	return "/touch/user_collect_shop";
         }
@@ -2424,7 +2461,35 @@ public class TdTouchUserController {
     			return "/touch/user_account_index";
     		}
     	}
+    	
+    	map.addAttribute("virtualPage", tdPayRecordService.findByUsername(username, 2L, 0, ClientConstant.pageSize));
+    	
+    	
     	return "/touch/user_account";
+    }
+    
+    /**
+     * 加载更多。。。
+     * virtualPage 交易记录
+     * point 积分
+     * @return
+     */
+    @RequestMapping(value="/user/search/more/{type}")
+    public String searchMore(@PathVariable String type,Integer page,
+    		HttpServletRequest req,ModelMap map){
+    	String username = (String) req.getSession().getAttribute("username");
+    	
+    	if(null == page){
+    		page =0;
+    	}
+    	
+    	if("virtualPage".equals(type)){
+    		map.addAttribute("virtualPage", tdPayRecordService.findByUsername(username, 2L, page, ClientConstant.pageSize));
+    		return "/touch/user_account__more";
+    	}else if("point".equals(type)){
+    		map.addAttribute("point_page", tdUserPointService.findByUsername(username, page,ClientConstant.pageSize));
+    	}
+    	return "/touch/user_point_more";
     }
     
     /**

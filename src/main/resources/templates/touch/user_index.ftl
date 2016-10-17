@@ -74,7 +74,7 @@ $(document).ready(function(){
         </a>
         <a href="/touch/user/return/list">
           <img src="images/order06.png" />
-          <span>退货</span>
+          <span>退货列表</span>
         </a>
       </menu>
     </div>

@@ -180,13 +180,24 @@ DD_belatedPNG.fix('.,img,background');
                 <td><#if order??>${order.orderNumber!''}</#if></td>
             </tr>
             <tr>
+                <th width="100">商家</th>
+                <td><#if order??>${order.shopTitle!''}</#if></td>
+            </tr>
+            <#if order.typeId?? && order.typeId ==2>
+            <tr>
+                <th width="100">分销商家</th>
+                <td><#if order??>${order.providerTitle!''}</#if></td>
+            </tr>
+            </#if>
+            <tr>
                 <th>支付明细</th>
                 <td>
                     支付总额：<font color="#ff1000">￥<#if order??>${order.totalPrice?string("0.00")}</#if></font>
                     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     运费：<font color="#ff1000">￥<#if order.postPrice??>${order.postPrice?string("0.00")}<#else>0</#if></font>
-                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+              <#--      &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     使用积分：<font color="#ff1000"><#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if></font>
+                    -->
                 </td>
             </tr>
             <tr>

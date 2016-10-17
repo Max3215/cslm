@@ -17,10 +17,13 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/search.js"></script>
 <script type="text/javascript">
+var pageIdx = 0;
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
-
+	var url = window.location.href+"/more";
+    $('#collect_page').refresh(url,"#collect_page",0);	
 });
 
 </script>
@@ -42,27 +45,27 @@ $(document).ready(function(){
   <div style="height:0.61rem;"></div>
   <!-- 我的收藏 -->
   <section class="collection_list">
-    <ul>
+    <ul id="collect_page">
     <#assign allChecked=true >
     <#if collect_page??>
         <#list collect_page.content as cg>
         <#if cg.isSelect?? && cg.isSelect == false>
             <#assign allChecked=false >
         </#if>     
-      <li>
-        <a href="/touch/user/collect/select?id=${cg.id?c}" class="choose <#if cg.isSelect?? && cg.isSelect==true>sel</#if>" ></a>
-        <a href="/touch/goods/${cg.distributorId?c}" class="pic"><img src="${cg.goodsCoverImageUri!''}" /></a>
-        <a href="/touch/goods/${cg.distributorId?c}" class="name">${cg.goodsTitle!''}</a>
-        <p>价格：￥${cg.goodsSalePrice?string("0.00")}</p>
-        <a href="/touch/user/collect/del?id=${cg.distributorId?c!''}" class="btn">取消收藏</a>
-        <div class="clear"></div>
-      </li>
+	      <li>
+	        <a href="/touch/user/collect/select?id=${cg.id?c}" class="choose <#if cg.isSelect?? && cg.isSelect==true>sel</#if>" ></a>
+	        <a href="/touch/goods/${cg.distributorId?c}" class="pic"><img src="${cg.goodsCoverImageUri!''}" /></a>
+	        <a href="/touch/goods/${cg.distributorId?c}" class="name">${cg.goodsTitle!''}</a>
+	        <p>价格：￥${cg.goodsSalePrice?string("0.00")}</p>
+	        <a href="/touch/user/collect/del?id=${cg.distributorId?c!''}" class="btn">取消收藏</a>
+	        <div class="clear"></div>
+	      </li>
         </#list>
      <#else>
-    <div>
-        <p style="text-align:center">您还没有收藏商品哦！</p>
-        <p style="text-align:center"><a class="blue" href="/touch/">马上去购物>>  </a></p>
-    </div>
+	    <div>
+	        <p style="text-align:center">您还没有收藏商品哦！</p>
+	        <p style="text-align:center"><a class="blue" href="/touch/">马上去购物>>  </a></p>
+	    </div>
     </#if>
     </ul>
     <a href="/touch/user/collect/selectAll" class="all_choose <#if allChecked ==true>sel</#if>">全选</a>

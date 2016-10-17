@@ -454,7 +454,10 @@ public class TdOrderService {
     		c.add(Restrictions.lte("orderTime", endTime, true));
     	}
     	if(null != keywords && !keywords.isEmpty()){
-    		c.add(Restrictions.or(Restrictions.like("orderNumber", keywords, true),Restrictions.like("username", keywords, true)));
+    		c.add(Restrictions.or(Restrictions.like("orderNumber", keywords, true),
+    							  Restrictions.like("username", keywords, true),
+    							  Restrictions.like("shopTitle", keywords, true),
+    							  Restrictions.like("providerTitle", keywords, true)));
     	}
     	
     	return repository.findAll(c,pageRequest);

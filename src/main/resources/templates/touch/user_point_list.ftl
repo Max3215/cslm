@@ -17,10 +17,12 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/search.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
-
+	var url = "/touch/user/search/more/point";
+    $('#point_page').refresh(url,"#point_page",0);
 });
 </script>
 </head>
@@ -40,7 +42,7 @@ $(document).ready(function(){
     <p class="total">总积分<span><#if user?? && user.totalPoints??>${user.totalPoints!'0'}<#else>0</#if></span></p>
     <div class="detail">
       <p>积分明细</p>
-      <table>
+      <table id="point_page">
         <tr>
           <th>日期</th>
           <th>积分变化</th>

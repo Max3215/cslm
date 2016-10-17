@@ -75,7 +75,7 @@ function selectDeliveryTyp(tag,type){
 
     <div class="dis_ways down_ways">
     <p class="tit">配送方式<span></span></p>
-    <menu class="down">
+    <menu class="down" style="display: block;">
        <input type="hidden" id="postPrice" value="0">
         <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
       <a href="javascript:void(0)" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流
@@ -123,7 +123,7 @@ function showSub(){
     
     <div class="pay_ways down_ways">
         <p class="tit">选择支付方式<span></span></p>
-        <div class="down">
+        <div class="down" style="display: block;">
            <input type="hidden" value="0" name="payTypeId" id="payTypeId" datatype="n" nullmsg="请选择支付方式!">
           <a href="javascript:void(0)" class="choose act" onclick="selectPayType($(this),0)" id="vir">余额支付</a>
           <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
@@ -185,7 +185,7 @@ function subPrice(){
     $("#totalPrice").html((totalPrice+postPrice-totalUse).toFixed(2));
 }
 </script>
-    
+    <#--
     <div class="use_integral">
         <span>积分抵扣</span>
         <input type="text" class="text" name="pointUse"  value="0"  onblur="checkNumber()" onfocus="if(value==''||value=='0') {value='0'}" onkeyup="value=value.replace(/[^0-9]/g,'')" id="pointUse"/>
@@ -193,7 +193,7 @@ function subPrice(){
         <input type="hidden" value="0" id="totalUse">
         <p>可使用积分总额：${user.totalPoints!'0'}&nbsp;&nbsp;&nbsp;&nbsp;${site.registerSharePoints!'1'}积分兑换1元</p>
      </div>
-    
+    -->
   <div class="pay_massege"><textarea placeholder="给商家留言" name="userMessage"></textarea></div>
 
   <section class="order_list" style="margin-bottom:0.4rem;border:none;">

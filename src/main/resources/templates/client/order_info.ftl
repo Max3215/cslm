@@ -398,6 +398,7 @@ function checkPassword(){
     <div class="clear h20"></div>
     
      <!-- add 积分抵扣 -->
+     <#--
     <div class="use_integral">
       <p class="fl fs18">积分抵扣</p>
       <input type="text" class="text" name="pointUse"  value="0"  onblur="checkNumber()" onfocus="if(value==''||value=='0') {value='0'}" onkeyup="value=value.replace(/[^0-9]/g,'')" id="pointUse"/>
@@ -406,7 +407,7 @@ function checkPassword(){
       <input type="hidden" value="0" id="totalUse">
       <p class="notice">可使用积分总额：${user.totalPoints!'0'}&nbsp;&nbsp;&nbsp;&nbsp;<span>*</span>${site.registerSharePoints!'1'}积分可抵消1元</p>
     </div>
-   
+   -->
     <!-- add -->
     <div class="clear h20"></div>
     

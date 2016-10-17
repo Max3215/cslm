@@ -159,7 +159,10 @@ DD_belatedPNG.fix('.,img,background');
                           <#if return.turnType?? && return.turnType ==2>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">退还金额：</b>
-                            <span style="line-height:26px;color:red;">￥<#if return.realPrice??>${return.realPrice?string('0.00')}</#if></span>
+                            <#assign real_price =0.0>
+                            <#assign  real_price= return.goodsPrice* return.returnNumber>
+                            <input type="hidden" id="realPrice" value="<#if return.realPrice??>${return.realPrice?string('0.00')}<#else>${real_price?string('0.00')}</#if>" />
+                            <span style="line-height:26px;color:red;">￥<#if return.realPrice??>${return.realPrice?string('0.00')}<#else>${real_price?string('0.00')}</#if></span>
                           </div>
                           <#else>
                           <div class="mymember_eva_div">

@@ -679,8 +679,7 @@ public class TdUserController extends AbstractPaytypeController{
 
         map.addAttribute("user", tdUser);
 
-        map.addAttribute("point_page", tdUserPointService.findByUsername(username, page,
-                ClientConstant.pageSize));
+        map.addAttribute("point_page", tdUserPointService.findByUsername(username, page,ClientConstant.pageSize));
 
         return "/client/user_point_list";
     }
@@ -710,6 +709,7 @@ public class TdUserController extends AbstractPaytypeController{
         
     	return "/client/user_virtual_list";
     }
+    
     
     
     @RequestMapping(value = "/user/return/{orderId}")

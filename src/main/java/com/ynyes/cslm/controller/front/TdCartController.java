@@ -110,8 +110,7 @@ public class TdCartController {
                 List<TdCartGoods> oldCartGoodsList = null;
                 
                 // 购物车是否已有该商品
-                oldCartGoodsList = tdCartGoodsService
-                                .findByGoodsIdAndUsername(goods.getId(), username);
+                oldCartGoodsList = tdCartGoodsService.findByGoodsIdAndUsername(goods.getId(), username);
                 
                 // 有多项，则在第一项上数量进行相加
                 if (null != oldCartGoodsList && oldCartGoodsList.size() > 0) {
@@ -138,7 +137,6 @@ public class TdCartController {
                     cartGoods.setDistributorTitle(distributor.getTitle());
                     cartGoods.setDistributorGoodsId(goods.getId());
                     cartGoods.setDistributorId(tdDistributorGoodsService.findDistributorId(id));
-            		cartGoods.setDistributorTitle(goods.getDistributorTitle());
             		cartGoods.setProviderId(goods.getProviderId());
             		cartGoods.setProviderTite(goods.getProviderTitle());
             		cartGoods.setUnit(goods.getUnit());
