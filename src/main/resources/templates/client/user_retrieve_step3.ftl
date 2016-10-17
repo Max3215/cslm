@@ -6,6 +6,7 @@
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
+<link href="/client/images/cslm.ico" rel="shortcut icon">
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
 <![endif]-->
@@ -58,14 +59,18 @@
         </p>
         <div class="clear"></div>
         
-        <form action="">
           <!-- 完成 -->
           <dl class="fondpassstep3">
-            <p class="fondpasssuc"><img src="/client/images/fondpassok.png">新密码设置成功<a style="color:#e8323d;"  href="/">返回首页</a></p>
+            <p class="fondpasssuc"><img src="/client/images/fondpassok.png">新密码设置成功
+            <#if type??>
+            <a style="color:#e8323d;"  href="/user/account">返回账号管理</a>
+            <#else>
+            <a style="color:#e8323d;"  href="/">返回首页</a>
+            </#if>
+            </p>
             <p class="fondpassnotice">为了您的账户安全，请牢记新密码~</p>
           </dl>
           <div class="clear h30"></div>
-        </form>
       </div>
     </div>
   </form>

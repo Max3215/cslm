@@ -77,27 +77,31 @@ $(document).ready(function(){
  }); 
 </script>
 <div class="win_out" style="display: none;">
-        <dl>    
+        <dl style="height:265px">    
             <dt>
 
             </dt>
             <dd>
                 <form action="/user/password" method="post" id="pas_form">
                     <input type="hidden" name="type" value="payPwd" id="type">
-                    <div>
+                    <div style="margin-top: 14px;">
                         <label>原密码：</label>
                         <input class="text" type="password" name="password"  value="" />
+                        <a href="/login/password_retrieve?type=paypwd" style="margin-left:90px;">找回密码</a>
                     </div>
-                    <div>
+                    <div style="margin-top: 14px;">
                         <label>新密码：</label>
                         <input class="text" type="password" name="newPassword"  value="" />
                     </div>
-                    <div>
+                    <div style="margin-top: 14px;">
                         <label>确认新密码：</label>
                         <input class="text" type="password" name="newPassword2" value="" />
                     </div>
-                        <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
-                        <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+                    <div style="margin-top: 14px;">   
+                          &emsp;&emsp;&emsp;*初始密码为初次登录密码
+                    </div>
+                        <input style="margin-top: 24px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
+                        <span style="margin-top: 24px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
                 </form>
             </dd>
         </dl>
@@ -115,7 +119,7 @@ $(document).ready(function(){
         <tr>
           <th width="150" rowspan="2"><a class="mymember_header p_left"><img src="${user.headImageUri!'/client/images/user_img.png'}" height="120px;" width="120px;"/></a></th>
           <td>账户名称：${user.username!''}</td>
-          <td><a href="javascript:;" onclick="win_show();" class="btn">修改密码</a></td>
+          <td><a href="javascript:;" onclick="win_show();" class="btn" style="width:100px;">修改支付密码</a></td>
         </tr>
         <tr>
           <td>账户余额：¥<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></td>

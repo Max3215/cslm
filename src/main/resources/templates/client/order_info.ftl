@@ -104,12 +104,12 @@ function checkNumber(){
     
 function subPrice(){
     var postPrice = parseFloat($("#post_price").val());
-    var totalUse = parseFloat($("#totalUse").val());
+   // var totalUse = parseFloat($("#totalUse").val());
     var totalPrice = parseFloat(${totalPrice})
     
     $("#postprice").html(postPrice.toFixed(2))
-    $("#pointprice").html(totalUse.toFixed(2))
-    $("#totalPrice").html((totalPrice+postPrice-totalUse).toFixed(2));
+ //   $("#pointprice").html(totalUse.toFixed(2))
+    $("#totalPrice").html((totalPrice+postPrice).toFixed(2));
 }
 </script>
 </head>
@@ -130,7 +130,7 @@ function subPrice(){
     background: url(/client/images/win_outbd.png);
 }
 .win_out dl{
-    background: #39BEE9;
+    background: #fff;
     margin: auto;
     width: 450px;
     height:140px;
@@ -251,9 +251,10 @@ function checkPassword(){
                     <label>支付密码：</label>
                     <input class="text" id="payPwd" type="password" name="payPassword"  value="" />
                 </div>
-                <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="button" name="password" onclick="checkPassword();" value="确定"  />
-                <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+                <input style="margin-top: 20px;float: left;margin-left: 30px;background: #ff5b7d;" class="submit" type="button" name="password" onclick="checkPassword();" value="确定"  />
+                <span style="margin-top: 20px;float: right;margin-right: 30px;background: #39bee9;" onclick="win_hide();">取消</span>
             </dd>
+            <dd><a href="/login/password_retrieve?type=paypwd" style="display:block;margin:10px 0 10px 28px;">忘记密码</a></dd>
         </dl>
     </div> 
 <div class="clear20"></div>
@@ -430,8 +431,9 @@ function checkPassword(){
         <a class="ml20 fc" href="javascript:history.go(-1);">返回上一页</a>
          <span>&emsp;&emsp;&emsp;商品总额：￥<b class="red fs18" id="goodsPrice">${totalPrice?string('0.00')}</b>&nbsp;<b>＋</b>
                 &nbsp; 邮费：￥<b class="red fs18" id="postprice"><#if postprice??>${postprice?string('0.00')}</#if></b>&nbsp;
-                <b>-</b>
+                <#--<b>-</b>
                 &nbsp; 积分抵消：￥<b class="red fs18" id="pointprice">0.00</b>
+                -->
                 <b>＝</b>
                 &emsp;&emsp;
                 应付总额：￥<b class="red fs18" id="totalPrice">${price?string('0.00')}</b></span>

@@ -60,16 +60,17 @@
         
         <input type="hidden" value="${username!''}" name="username">
         <input type="hidden" value="${mobile!''}" name="mobile">
+        <input type="hidden" value="${type!''}" name="type">
           <!-- 第二步 -->
           <dl class="fondpassstep2">
             <dd class="fpsitem">
               <span class="spsititle ib">设置新密码：</span>
-              <input type="password" class="fspass r3 bd" name="password" value="" placeholder="请输入新密码" datatype="s6-20">
+              <input type="password" class="fspass r3 bd" name="password" value=""  sucmsg=" " placeholder="请输入新密码" datatype="s6-20">
               <div class="clear"></div>
             </dd>
             <dd class="fpsitem">
               <span class="spsititle ib">确认密码：</span>
-              <input type="password" class="fspass r3 bd" value="" placeholder="请输入短信验证码" datatype="*" recheck="password">
+              <input type="password" class="fspass r3 bd" value=""  sucmsg=" " placeholder="请再次输入密码" datatype="*" recheck="password">
             	<div class="clear"></div>
             </dd>
             <div class="clear"></div>

@@ -73,19 +73,20 @@ $(document).ready(function(){
             <dd>
                 <form action="/distributor/edit/password" method="post" id="pas_form">
                     <input type="hidden" name="type" value="payPwd" id="type">
-                    <div>
+                    <div style="margin-top: 14px;">
                         <label>原密码：</label>
                         <input class="text" type="password" name="password"  value="" />
-                    </div>
-                    <div>
+                        <a href="/distributor/retrieve_step1" style="margin-left:90px;">找回密码</a>
+               		</div>	
+                	<div style="margin-top: 14px;">
                         <label>新密码：</label>
                         <input class="text" type="password" name="newPassword"  value="" />
                     </div>
-                    <div>
+                    <div style="margin-top: 14px;">
                         <label>确认新密码：</label>
                         <input class="text" type="password" name="newPassword2" value="" />
                     </div>
-                    <div>   
+                    <div style="margin-top: 14px;">   
                           &emsp;&emsp;&emsp;*初始密码为初次登录密码
                     </div>
                         <input style="margin-top: 24px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />

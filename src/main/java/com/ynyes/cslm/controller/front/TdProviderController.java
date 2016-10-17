@@ -19,6 +19,7 @@ import java.util.Random;
 import javax.naming.directory.DirContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -75,6 +76,7 @@ import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 import com.ynyes.cslm.util.FileDownUtils;
+import com.ynyes.cslm.util.SMSUtil;
 import com.ynyes.cslm.util.SiteMagConstant;
 import com.ynyes.cslm.util.StringUtils;
 
@@ -1536,6 +1538,126 @@ public class TdProviderController extends AbstractPaytypeController{
     }
 	
 	
+	/**
+     * 找回支付密码
+     * 第一步
+     */
+    @RequestMapping("/retrieve_step1")
+    public String retrieve1(String username,String mobile,Integer errCode,HttpServletRequest req,ModelMap map){
+    	String provider = (String)req.getSession().getAttribute("provider");
+    	if(null == provider)
+    	{
+    		return "redirect:/login";
+    	}
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("provider", tdProviderService.findByUsername(provider));
+    	
+    	if (null != errCode)
+	     {
+	         if (errCode.equals(1))
+	         {
+	             map.addAttribute("error", "验证码错误");
+	         }
+	         
+	         map.addAttribute("errCode", errCode);
+	     }
+		
+		map.addAttribute("username", username);
+		map.addAttribute("mobile", mobile);
+    	
+    	return "/client/provider_retrieve_one";
+    	
+    }
+    
+    /**
+     * 找回支付密码
+     * 第二步，账号、手机号验证码验证
+     */
+    @RequestMapping(value = "/retrieve_step2", method = RequestMethod.POST)
+	public String Step2(String username,String mobile,String smsCode,HttpServletRequest req, ModelMap map){
+    	String provider = (String)req.getSession().getAttribute("provider");
+    	if(null == provider)
+    	{
+    		return "redirect:/login";
+    	}
+    	if (null == smsCode) {
+			return "redirect:/provider/retrieve_step1?errCode=4&username="+username+"&mobile="+mobile;
+		}
+		String smsCodeSave = (String) req.getSession().getAttribute("SMSCODE");
+		if(null == smsCodeSave){
+			return "redirect:/provider/retrieve_step1?errCode=3&username="+username+"&mobile="+mobile;
+		}
+		
+		if (!smsCodeSave.equalsIgnoreCase(smsCode)) {
+			return "redirect:/provider/retrieve_step1?errCode=4&username="+username+"&mobile="+mobile;
+		}
+		tdCommonService.setHeader(map, req);
+		
+		map.addAttribute("provider", tdProviderService.findByUsername(provider));
+		map.addAttribute("username", username);
+		map.addAttribute("mobile", mobile);
+		
+		return "/client/provider_retrieve_two";
+	}
+    /**
+     * 找回支付密码
+     * 第三步，设置新密码
+     */
+   @RequestMapping(value = "/retrieve_step3", method = RequestMethod.POST)
+	public String Step3(String username,String payPassword, HttpServletRequest req, ModelMap map){
+	   TdProvider provider = tdProviderService.findByUsername(username);
+		tdCommonService.setHeader(map, req);
+		if (null != payPassword) {
+			provider.setPayPassword(payPassword);
+			tdProviderService.save(provider);
+			
+			return "/client/provider_retrieve_three";
+		}
+		
+		return "/client/error_404";
+	}
+	
+    /**
+     * 验证账号手机号，发送短信验证码
+     * 
+     */
+     @RequestMapping(value = "/smscode",method = RequestMethod.POST)
+     @ResponseBody
+     public Map<String, Object> smsCode(String username,String mobile, HttpServletResponse response, HttpServletRequest request) {
+     	HashMap<String, Object> map = new HashMap<>();
+     	map.put("code", 1);
+     	
+     	TdProvider provider =  tdProviderService.findByUsername(username);
+     	if(null == provider)
+     	{
+     			map.put("msg", "账号不存在");
+     			return map;
+     	}
+     	
+     	if(null == mobile || !mobile.equals(provider.getMobile())){
+     		map.put("msg", "账号和手机号不匹配");
+     		return map;
+     	}
+     	
+     	Random random = new Random();
+         
+         String smscode = String.format("%04d", random.nextInt(9999));
+         
+         HttpSession session = request.getSession();
+         
+         session.setAttribute("SMSCODE", smscode);
+         session.setMaxInactiveInterval(60*10*1000);
+         
+         map = SMSUtil.send(mobile, "73697" ,new String[]{smscode});
+         map.put("status", "0");
+         map.put("msg" ,"验证码发送成功!");
+         map.put("code", smscode);
+         return map;
+         
+     }
+    
+    
 	public void ChangeAll(Boolean isOnSale,Long[] ids,Integer[] chkIds)
 	{
 		if (null == ids || null == chkIds
