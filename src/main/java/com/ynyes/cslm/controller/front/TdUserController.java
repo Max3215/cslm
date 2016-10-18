@@ -753,7 +753,7 @@ public class TdUserController extends AbstractPaytypeController{
 		record.setCreateTime(new Date());
 		record.setUsername(username);
 		record.setType(2L);
-		record.setCont("积分兑换");
+		record.setCont("积分兑换充值");
 //		record.setDistributorTitle(distributor.getTitle());
 		record.setStatusCode(1);
 		tdPayRecordService.save(record);

@@ -4026,6 +4026,193 @@ public class TdDistributorController extends AbstractPaytypeController{
         
     }
     
+    /**
+     * 超市给会员转账
+     * @author Max
+     * 2016-10-18
+     * 
+     */
+    @RequestMapping("/transfer1")
+    public String transfer(HttpServletRequest req,ModelMap map){
+    	String distributor = (String)req.getSession().getAttribute("distributor");
+    	if(null == distributor)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(distributor));
+    	
+    	return "/client/distributor_transfer1";
+    }
+    
+    @RequestMapping(value="/transfer2",method=RequestMethod.POST)
+    public String transfer2(String username,Double price,HttpServletRequest req,ModelMap map){
+    	String distributor = (String)req.getSession().getAttribute("distributor");
+    	if(null == distributor)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(distributor));
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("name", username);
+    	map.addAttribute("price", price);
+    	
+    	return "/client/distributor_transfer2";
+    }
+    
+    @RequestMapping(value="/transfer3",method=RequestMethod.POST)
+    public String transfer3(String username,Double price,
+    					String payPwd,HttpServletRequest req,ModelMap map){
+    	String distributor = (String)req.getSession().getAttribute("distributor");
+    	if(null == distributor)
+    	{
+    		return "redirect:/login";
+    	}
+    	
+    	tdCommonService.setHeader(map, req);
+    	
+    	if(username == null || price == null){
+    		return "/client/error_404";
+    	}
+    	
+    	TdDistributor tdDistributor = tdDistributorService.findbyUsername(distributor);
+    	// 先扣除超市转账金额
+    	
+    	tdDistributor.setVirtualMoney(tdDistributor.getVirtualMoney()-price);
+    	tdDistributorService.save(tdDistributor);
+    	
+    	TdUser user = tdUserService.findByUsername(username);
+    	if(null != user){
+    		if(null == user.getVirtualMoney()){
+    			user.setVirtualMoney(price);
+    		}else{
+    			user.setVirtualMoney(user.getVirtualMoney() + price);
+    		}
+    	}
+    	
+    	
+    	Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
+    	String number = "Z"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+    	
+    	 // 添加会员虚拟账户金额记录
+    	TdPayRecord record = new TdPayRecord();
+    	
+    	record.setAliPrice(0.0);
+    	record.setPostPrice(0.0);
+    	record.setRealPrice(price);
+    	record.setTotalGoodsPrice(price);
+    	record.setServicePrice(0.0);
+    	record.setProvice(price);
+    	record.setOrderNumber(number);
+    	record.setCreateTime(new Date());
+    	record.setUsername(username);
+    	record.setType(2L);
+    	record.setCont("由"+tdDistributor.getTitle()+"转账");
+    	record.setDistributorTitle(tdDistributor.getTitle());
+    	record.setStatusCode(1);
+    	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+    	
+    	record = new TdPayRecord();
+    	
+    	record.setAliPrice(0.0);
+    	record.setPostPrice(0.0);
+    	record.setRealPrice(price);
+    	record.setTotalGoodsPrice(price);
+    	record.setServicePrice(0.0);
+    	record.setProvice(price);
+    	record.setOrderNumber(number);
+    	record.setCreateTime(new Date());
+    	record.setCont("向会员"+username+"转账扣款");
+    	record.setDistributorId(tdDistributor.getId());
+    	record.setDistributorTitle(tdDistributor.getTitle());
+    	record.setStatusCode(1);
+    	tdPayRecordService.save(record); // 保存超市扣款记录
+    	
+    	map.addAttribute("name", user.getUsername());
+    	map.addAttribute("price", price);
+    	map.addAttribute("number", number);
+    	map.addAttribute("distributor", tdDistributor);
+    	
+		return "/client/distributor_transfer3";
+    }
+    
+    /**
+     * 转账各项验证
+     * @return
+     */
+    @RequestMapping(value="/transferCheck",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> checkUser(String data,String type,HttpServletRequest req)
+    {
+    	Map<String,Object> res = new HashMap<String, Object>();
+    	res.put("code", 0);
+    	
+    	if(null != type){ // 转入账号验证
+    		if("username".equalsIgnoreCase(type)){
+    			TdUser user = tdUserService.findByUsername(data);
+    			if(null == user){
+    				user = tdUserService.findByMobile(data);
+    				if(null == user){
+    					res.put("msg", "输入的账号不存在，请仔细检查");
+    					return res;
+    				}
+    			}
+    			
+    			res.put("code", 1);
+    			res.put("user", user);
+    			return res;
+    		}else if("price".equalsIgnoreCase(type)){ // 转账金额验证
+    			 double sferPrice = Double.parseDouble(data);
+    			 String username = (String)req.getSession().getAttribute("distributor");
+    			 
+    			 if(null == username){
+    				 res.put("msg", "登录超时");
+    				 return res;
+    			 }
+    			 // 账号验证
+    			 TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    			 if(null == distributor){
+    				 res.put("msg", "账号异常");
+    				 return res;
+    			 }
+    			 // 余额验证
+    			 if(null == distributor.getVirtualMoney() || distributor.getVirtualMoney() < sferPrice){
+    				 res.put("msg", "当前账户余额不足");
+    				 return res;
+    			 }
+    			 res.put("code", 1);
+    		}else if("payPwd".equalsIgnoreCase(type)){
+    			String username = (String)req.getSession().getAttribute("distributor");
+   			 
+	   			 if(null == username){
+	   				 res.put("msg", "登录超时");
+	   				 return res;
+	   			 }
+	   			 // 账号验证
+	   			 TdDistributor distributor = tdDistributorService.findbyUsername(username);
+	   			 if(null == distributor){
+	   				 res.put("msg", "账号异常");
+	   				 return res;
+	   			 }
+	   			 if(null == distributor.getPayPassword() || !distributor.getPayPassword().equalsIgnoreCase(data)){
+	   				 res.put("msg", "支付密码错误");
+	   				 return res;
+	   			 }
+	   			 res.put("code", 1);
+    		}
+    		
+    	}
+    	return res;
+    }
+    
     // 批量删除广告
     public void adDelete(Long[] ids,Integer[] chkIds)
     {

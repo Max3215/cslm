@@ -111,8 +111,9 @@ $(document).ready(function(){
         </tr>
         <tr>
           <td>账户余额：¥${distributor.virtualMoney?string('0.00')}</td>
-          <td><a href="/distributor/topup1" class="btn">充值</a></td>
-          <td><a href="/distributor/draw1" class="btn">提现</a></td>
+          <td style="width: 12%;"><a href="/distributor/topup1" class="btn">充值</a></td>
+          <td style="width: 12%;"><a href="/distributor/draw1" class="btn">提现</a></td>
+          <td style="width: 12%;"><a href="/distributor/transfer1" class="btn">转账</a></td>
         </tr>
       </table>
     </div>
