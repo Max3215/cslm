@@ -34,11 +34,14 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdOrderGoods;
+import com.ynyes.cslm.entity.TdPayRecord;
+import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserComment;
 import com.ynyes.cslm.entity.TdUserConsult;
+import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserRecentVisit;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.entity.TdUserSuggestion;
@@ -54,6 +57,7 @@ import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProviderService;
+import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
 import com.ynyes.cslm.service.TdUserCollectService;
@@ -149,6 +153,9 @@ public class TdUserController extends AbstractPaytypeController{
     
     @Autowired
     private TdProviderService tdProviderService;
+    
+    @Autowired
+    private TdSettingService tdSettingService;
 
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, ModelMap map) {
@@ -685,6 +692,88 @@ public class TdUserController extends AbstractPaytypeController{
     }
     
     /**
+     * 积分换现
+     * @author Max
+     * 2016-10-18
+     */
+    @RequestMapping(value="/user/convert",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> convertPoint(Long point,HttpServletRequest req){
+    	Map<String,Object> res = new HashMap<String, Object>();
+    	res.put("code", 0);
+    	
+    	String username = (String)req.getSession().getAttribute("username");
+    	if(null == username){
+    		res.put("msg", "登录超时");
+    		return res;
+    	}
+    	
+    	TdUser user = tdUserService.findByUsername(username);
+    	if(null == user.getTotalPoints() || point > user.getTotalPoints()){
+    		res.put("msg", "积分不足");
+    		return res;
+    	}
+    	TdSetting setting = tdSettingService.findTopBy();
+    	
+    	Double convertPoint = 0.0;
+    	Long settingPoint = 10L;   // 积分兑换比
+    	
+    	if(null != setting.getRegisterSharePoints()){
+    		settingPoint = setting.getRegisterSharePoints();
+    	}
+    	
+    	convertPoint = (double)point/settingPoint;
+    	
+    	// 增加会员余额,扣除积分
+    	if(null == user.getVirtualMoney()){
+    		user.setVirtualMoney(convertPoint);
+    	}else{
+    		user.setVirtualMoney(user.getVirtualMoney() + convertPoint);
+    	}
+    	
+    	user.setTotalPoints(user.getTotalPoints() - point);
+    	tdUserService.save(user);
+    	
+    	// 添加会员虚拟账户金额记录
+		TdPayRecord record = new TdPayRecord();
+
+		Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
+    	String number = "DH"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+    	
+		record.setAliPrice(0.0);
+		record.setPostPrice(0.0);
+		record.setRealPrice(convertPoint);
+		record.setTotalGoodsPrice(convertPoint);
+		record.setServicePrice(0.0);
+		record.setProvice(convertPoint);
+		record.setOrderNumber(number);
+		record.setCreateTime(new Date());
+		record.setUsername(username);
+		record.setType(2L);
+		record.setCont("积分兑换");
+//		record.setDistributorTitle(distributor.getTitle());
+		record.setStatusCode(1);
+		tdPayRecordService.save(record);
+		
+		// 积分使用记录
+		TdUserPoint userPoint = new TdUserPoint();
+		 userPoint.setDetail("积分兑换余额");
+		 userPoint.setOrderNumber(number);
+		 userPoint.setPoint(point);
+		 userPoint.setPointTime(new Date());
+		 userPoint.setUsername(username);
+		 userPoint.setTotalPoint(user.getTotalPoints() - point);
+		 tdUserPointService.save(userPoint);
+    	
+		 res.put("code", 1);
+    	res.put("msg", "兑换成功");
+    	return res;
+    }
+    
+    /**
      * 虚拟账户记录
      * @author Max
      * 
@@ -1085,6 +1174,10 @@ public class TdUserController extends AbstractPaytypeController{
                 if (allIsCommented) {
                     tdOrder.setStatusId(6L);
                     tdOrder = tdOrderService.save(tdOrder);
+                    if(tdOrder.getTypeId() ==0 || tdOrder.getTypeId() ==2){
+                    	tdOrderService.addUserPoint(tdOrder,tdOrder.getUsername()); // 添加积分记录
+                    	tdUserService.addTotalSpend(tdOrder.getUsername(), tdOrder.getTotalPrice()); // 增加累计使用金额
+                    }
                 }
             }
         }

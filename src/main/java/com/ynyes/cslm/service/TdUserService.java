@@ -204,18 +204,18 @@ public class TdUserService {
         
         user.setTotalSpendCash(total + spend);
         
-        Long levelId = tdUserLevelService.getLevelId(user.getTotalSpendCash());
-        
-        if (null != levelId)
-        {
-            TdUserLevel level = tdUserLevelService.findByLevelId(levelId);
-            if (null != level)
-            {
-                user.setUserLevelId(level.getLevelId());
-                user.setUserLevelTitle(level.getTitle());
-            }
-        }
-        
+//        Long levelId = tdUserLevelService.getLevelId(user.getTotalSpendCash());
+//        
+//        if (null != levelId)
+//        {
+//            TdUserLevel level = tdUserLevelService.findByLevelId(levelId);
+//            if (null != level)
+//            {
+//                user.setUserLevelId(level.getLevelId());
+//                user.setUserLevelTitle(level.getTitle());
+//            }
+//        }
+//        
         return repository.save(user);
     }
     

@@ -155,18 +155,13 @@ function delCartItem(id)
         }
     });
 }
-function showMsg()
-{
-	
-    alert("请在选择购买的商品左侧点击○确认！");
-}
 
 function goNext(goodsNum)
 {
 	
     if (0==goodsNum)
     {
-        alert("请在选择购买的商品左侧点击○确认！");
+        alert("请至少选择一种商品!");
         return false;
     }
     window.location.href="/touch/order/info";

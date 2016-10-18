@@ -552,7 +552,8 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 .service .left_list menu a:hover,.service .left_list menu a.sel{background: #ff5b7d;color: white;}
 .service .left_list menu a:hover span,.service .left_list menu a.sel span{display: block;}
 
-.service .right_con{width: 1004px;border:1px solid #d5d3d3;padding: 30px;float: right;margin-top: 20px;}
+.service .right_con{width: 1004px;border:1px solid #d5d3d3;padding: 30px;float: right;margin-top: 20px;overflow: hidden;}
+.service .right_con img{max-width: 100%;}
 
 .photo-list ul li img{width:128px;height:128px;opacity:1;}
 
@@ -561,7 +562,7 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 /* -------------------------- 点击商品上架后弹出层 ------------------*/
 .sub_form{width: 500px;position: fixed;top:18%;left:35%;background: #fff;-moz-box-shadow: 0 0 6px #777;
   -webkit-box-shadow: 0 0 10px #777;
-  box-shadow: 0 0 10px #777;z-index: 10;display:none;}
+  box-shadow: 0 0 10px #777;z-index: 10;/*display:none;*/}
 .sub_form .tit{height: 40px;background: #ff5b7d;color:#fff;font-weight: bold;padding-left: 10px;line-height: 40px;}
 .sub_form .tit a{position: absolute;top:0;right:10px;color:#fff;font-size: 18px;display: block;width: 20px;text-align: center;}
 .sub_form .info_tab{padding: 25px;}
@@ -571,6 +572,58 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 .sub_form table td input{width: 100px;height: 30px;text-indent: 4px;}
 .sub_form table td input.add_width{width: 265px;}
 .sub_form table td input.sub{display: block;width: 200px;height: 40px;background: #39bee9;font-size: 16px;text-align: center;line-height: 40px;color:#fff;border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;-o-border-radius: 5px;-ms-border-radius: 5px;}
+
+
+
+/*10.12*/
+.add_specifications{}
+.add_specifications .list dl{width: 380px;margin-bottom: 20px;}
+.add_specifications .list dl dt{height: 36px;border-radius: 18px;-webkit-border-radius: 18px;line-height: 36px;cursor: pointer;background: url(../images/mymember/arrow01.jpg) no-repeat right 10px center #eeeeee;padding:0 30px 0 10px;overflow: hidden;color:#333333;}
+.add_specifications .list dl dt span{display: block;position: absolute;top:0;right:30px;width: 150px;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;color:#999999;text-align: right;}
+
+.add_specifications .list dl dd{padding:0px 10px 26px 10px;background: #eee;border-radius: 18px;-webkit-border-radius: 18px;display: none;margin-top: -36px;}
+.add_specifications .list dl dd .top{color:#333;line-height: 36px;}
+.add_specifications .list dl dd .top menu{position: absolute;top:0;right:0;}
+.add_specifications .list dl dd .top menu a{color:#333;font-weight: bold;padding-left: 8px;}
+.add_specifications .list dl dd .top menu a:first-child{color:#ff5b7d;}
+.add_specifications .list dl dd .top menu a:hover{text-decoration: underline;}
+.add_specifications .list dl dd .input .text{border:1px solid #cccccc;background: #fff;width: 100%;height: 34px;line-height: 34px;display: block;margin-top: 14px;color:#333;text-indent: 6px;}
+
+.add_specifications .btn .clickshowbtn{height: 34px;border:1px solid #ff5b7d;border-radius: 18px;-webkit-border-radius: 18px;padding-left: 30px;line-height: 34px;color:#ff5b7d;cursor: pointer;background: url(../images/add_btn.png) no-repeat 10px center;}
+.add_specifications .btn .clickshowbox{border:1px solid #ff5b7d;border-radius: 18px;-webkit-border-radius: 18px;padding:0px 10px 26px 10px;margin-top: -36px;display: none;background: #fff;}
+.add_specifications .btn .clickshowbox .top{padding-left: 30px;line-height: 34px;color:#ff5b7d;cursor: pointer;background: url(../images/add_btn.png) no-repeat 10px center;}
+.add_specifications .btn .clickshowbox .top a{position: absolute;top:0;right:12px;color:#ff5b7d;font-weight: bold;}
+.add_specifications .btn .clickshowbox .input .text{border:1px solid #cccccc;background: #fff;width: 100%;height: 34px;line-height: 34px;display: block;margin-top: 14px;color:#333;text-indent: 6px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

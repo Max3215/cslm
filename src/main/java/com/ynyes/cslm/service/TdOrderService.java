@@ -24,6 +24,7 @@ import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
+import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.repository.TdOrderRepo;
 import com.ynyes.cslm.util.Criteria;
 import com.ynyes.cslm.util.Restrictions;
@@ -64,6 +65,9 @@ public class TdOrderService {
     
     @Autowired
     TdUserService tdUserService;
+    
+    @Autowired
+    TdUserPointService tdUserPointService;
     
     /**
      * 删除
@@ -832,7 +836,36 @@ public class TdOrderService {
     
     
     
-    
+    // 添加会员积分
+  	public void addUserPoint(TdOrder order,String username){
+  		
+  		TdUser user = tdUserService.findByUsername(username);
+  		
+  		 // 添加积分使用记录
+  		 if (null != user) {
+  			 if (null == user.getTotalPoints())
+  			 {
+  				 user.setTotalPoints(0L);
+  				 user = tdUserService.save(user);
+  			 }
+  		
+  			 if(null != order.getTotalPrice()){
+ 				 Long turnPoint = Math.round(order.getTotalPrice());
+  				 
+ 				 TdUserPoint userPoint = new TdUserPoint();
+ 				 userPoint.setDetail("购买商品获得积分");
+ 				 userPoint.setOrderNumber(order.getOrderNumber());
+ 				 userPoint.setPoint(turnPoint);
+ 				 userPoint.setPointTime(new Date());
+ 				 userPoint.setUsername(username);
+ 				 userPoint.setTotalPoint(user.getTotalPoints() + turnPoint);
+ 				 tdUserPointService.save(userPoint);
+ 				 
+ 				 user.setTotalPoints(user.getTotalPoints() + turnPoint);
+ 				 tdUserService.save(user);
+ 			 }
+  		 }
+  	}
     
     
     

@@ -1001,18 +1001,54 @@ select{font-family: "微软雅黑";}
 
 
 
-/*商家回复退货*/
+/*10.17*/
+.transfer_money{}
+.transfer_money .tit{ display: block; height: 33px; background-color: #eee; line-height: 33px; margin-bottom: 40px;}
+.transfer_money .tit span{ position: relative; display: block; float: left; width: 33.333%; text-align: center; font-size: 14px; color: #999}
+.transfer_money .tit span img{ position: absolute; z-index: 2; right: -10px; top: 0;}
+.transfer_money .tit span.isok{ background-color: #ff5b7d; color: #fff;}
+
+
+.transfer_con{padding-left: 100px;}
+.transfer_con .top{font-size:18px;color:#333333;}
+.transfer_con .part{overflow: hidden;margin-top: 16px;}
+.transfer_con .part dt{float:left;height: 30px;line-height: 30px;font-size: 14px;color:#333333;width: 80px;}
+.transfer_con .part dd{float:left;}
+.transfer_con .part dd .text{width: 198px;height: 28px;line-height: 28px;border:1px solid #c0bfbf;text-indent: 8px;}
+.transfer_con .part dd label{display: block;margin-top: 6px;}
+.transfer_con .part dd label input{position: relative;top:2px;}
+.transfer_con .part dd .btn{display: block;width: 200px;height: 42px;background: #ff5b7d;text-align: center;line-height: 42px;color:#fff;font-size: 18px;border-radius: 4px;-webkit-border-radius: 4px;}
+
+.transfer_con .prompt{width: 580px;height: 130px;background: #eeeeee;border:1px solid #c0bfbf;margin-top: 40px;border-radius: 4px;-webkit-border-radius: 4px;padding:10px;line-height: 24px;color:#333333;}
+.transfer_con .prompt .top{font-size: 14px;color:#333333;}
+
+.transfer_con .box{margin-top: 24px;} 
+.transfer_con .box .text{width: 398px;height: 38px;border:1px solid #c0bfbf;}
+.transfer_con .box span{line-height: 40px;padding-left: 10px;font-size: 14px;color:#ff5b7d;}
+.transfer_con .confirm{display: block;width: 200px;height: 42px;text-align: center;line-height: 42px;color:#fff;font-size: 18px;background: #ff5b7d;margin-top: 20px;border-radius: 4px;-webkit-border-radius: 4px;}
+.transfer_con .confirm:hover{color:#fff;}
+
+
+.transfer_success{padding-left: 350px;background: url(../images/ture.png) no-repeat 310px top;padding-top: 8px;}
+.transfer_success .p1{font-size: 18px;color:#e8323d;margin-bottom:14px;}
+.transfer_success .p2{color:#333333;margin-bottom: 6px;}
+.transfer_success a{color:#39bee9;}
 
 
 
+.integral_show{overflow: hidden;margin-bottom: 18px;}
+.integral_show .fl{width: 300px;height: 170px;background: #fff;}
+.integral_show .fl p{padding-left: 30px;line-height: 44px;}
+.integral_show .fl p.p1{font-size: 18px;color:#333333;margin-top: 16px;}
+.integral_show .fl p.p2{font-weight: bold;color:#fe5f73;font-size: 40px;}
 
-
-
-
-
-
-
-
+.integral_show .fr{width: 664px;height: 170px;background: #fff;}
+.integral_show .fr .con{padding:20px 0 0 30px;}
+.integral_show .fr .con .p1{font-size: 18px;color:#fe5f73;margin-bottom: 20px;}
+/*.integral_show .fr .con .oh{height: 42px;}*/
+.integral_show .fr .con .oh .text{float: left;width: 224px;height: 40px;background: #eeeeee;border:1px solid #ececec;display: block;line-height: 40px;text-indent: 10px;}
+.integral_show .fr .con .oh a{display: block;float:left;margin-left: 40px;display: block; width: 134px; height: 42px; text-align: center; line-height: 42px; color: #fff; font-size: 18px; background: #ff5b7d; border-radius: 4px; -webkit-border-radius: 4px;}
+.integral_show .fr .con .p2{font-size: 12px;color:#999999;margin-top:8px;}
 
 
 

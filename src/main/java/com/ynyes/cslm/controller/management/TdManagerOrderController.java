@@ -1068,10 +1068,10 @@ public class TdManagerOrderController {
                     order.setFinishTime(new Date());
                     
                     if(order.getTypeId() ==0 || order.getTypeId() ==2){
-                    	addUserPoint(order,order.getUsername());
+                    	tdOrderService.addUserPoint(order,order.getUsername());
+                    	tdUserService.addTotalSpend(order.getUsername(), order.getTotalPrice());
                     }
                     
-                    tdUserService.addTotalSpend(order.getUsername(), order.getTotalPrice());
                 }
             }
             // 确认取消
@@ -1379,34 +1379,34 @@ public class TdManagerOrderController {
     }
     
     
-	// 添加会员积分
-	public void addUserPoint(TdOrder order,String username){
-		
-		TdUser user = tdUserService.findByUsername(username);
-		
-		 // 添加积分使用记录
-		 if (null != user) {
-			 if (null == user.getTotalPoints())
-			 {
-				 user.setTotalPoints(0L);
-				 user = tdUserService.save(user);
-			 }
-			 if(null != order.getPoints() && order.getPoints()!= 0L){
-				 
-				 TdUserPoint userPoint = new TdUserPoint();
-				 userPoint.setDetail("购买商品获得积分");
-				 userPoint.setOrderNumber(order.getOrderNumber());
-				 userPoint.setPoint(order.getPoints());
-				 userPoint.setPointTime(new Date());
-				 userPoint.setUsername(username);
-				 userPoint.setTotalPoint(user.getTotalPoints() + order.getPoints());
-				 tdUserPointService.save(userPoint);
-				 
-				 user.setTotalPoints(user.getTotalPoints() + order.getPoints());
-				 tdUserService.save(user);
-			 }
-		 }
-	}
+//	// 添加会员积分
+//	public void addUserPoint(TdOrder order,String username){
+//		
+//		TdUser user = tdUserService.findByUsername(username);
+//		
+//		 // 添加积分使用记录
+//		 if (null != user) {
+//			 if (null == user.getTotalPoints())
+//			 {
+//				 user.setTotalPoints(0L);
+//				 user = tdUserService.save(user);
+//			 }
+//			 if(null != order.getPoints() && order.getPoints()!= 0L){
+//				 
+//				 TdUserPoint userPoint = new TdUserPoint();
+//				 userPoint.setDetail("购买商品获得积分");
+//				 userPoint.setOrderNumber(order.getOrderNumber());
+//				 userPoint.setPoint(order.getPoints());
+//				 userPoint.setPointTime(new Date());
+//				 userPoint.setUsername(username);
+//				 userPoint.setTotalPoint(user.getTotalPoints() + order.getPoints());
+//				 tdUserPointService.save(userPoint);
+//				 
+//				 user.setTotalPoints(user.getTotalPoints() + order.getPoints());
+//				 tdUserService.save(user);
+//			 }
+//		 }
+//	}
     
 //    // 商家销售单记录
 //    public void addVir(TdOrder tdOrder)

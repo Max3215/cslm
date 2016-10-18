@@ -1511,8 +1511,10 @@ public class TdDistributorController extends AbstractPaytypeController{
             		order.setFinishTime(new Date());
             		
             		if(order.getTypeId() ==0 || order.getTypeId() ==2){
-                    	addUserPoint(order,order.getUsername());
+                    	tdOrderService.addUserPoint(order,order.getUsername());// 添加积分记录
+                    	tdUserService.addTotalSpend(order.getUsername(), order.getTotalPrice());// 增加累计使用金额
                     }
+            		
             	}
             }
            tdOrderService.save(order);
@@ -4216,34 +4218,35 @@ public class TdDistributorController extends AbstractPaytypeController{
     }
     
  // 添加会员积分
- 	public void addUserPoint(TdOrder order,String username){
- 		
- 		TdUser user = tdUserService.findByUsername(username);
- 		
- 		 // 添加积分使用记录
- 		 if (null != user) {
- 			 if (null == user.getTotalPoints())
- 			 {
- 				 user.setTotalPoints(0L);
- 				 user = tdUserService.save(user);
- 			 }
- 		
- 			 if(null != order.getPoints() && order.getPoints()!= 0L){
-				 
-				 TdUserPoint userPoint = new TdUserPoint();
-				 userPoint.setDetail("购买商品获得积分");
-				 userPoint.setOrderNumber(order.getOrderNumber());
-				 userPoint.setPoint(order.getPoints());
-				 userPoint.setPointTime(new Date());
-				 userPoint.setUsername(username);
-				 userPoint.setTotalPoint(user.getTotalPoints() + order.getPoints());
-				 tdUserPointService.save(userPoint);
-				 
-				 user.setTotalPoints(user.getTotalPoints() + order.getPoints());
-				 tdUserService.save(user);
-			 }
- 		 }
- 	}
+// 	public void addUserPoint(TdOrder order,String username){
+// 		
+// 		TdUser user = tdUserService.findByUsername(username);
+// 		
+// 		 // 添加积分使用记录
+// 		 if (null != user) {
+// 			 if (null == user.getTotalPoints())
+// 			 {
+// 				 user.setTotalPoints(0L);
+// 				 user = tdUserService.save(user);
+// 			 }
+// 		
+// 			 if(null != order.getTotalPrice()){
+//				 Long turnPoint = Math.round(order.getTotalPrice());
+// 				 
+//				 TdUserPoint userPoint = new TdUserPoint();
+//				 userPoint.setDetail("购买商品获得积分");
+//				 userPoint.setOrderNumber(order.getOrderNumber());
+//				 userPoint.setPoint(turnPoint);
+//				 userPoint.setPointTime(new Date());
+//				 userPoint.setUsername(username);
+//				 userPoint.setTotalPoint(user.getTotalPoints() + turnPoint);
+//				 tdUserPointService.save(userPoint);
+//				 
+//				 user.setTotalPoints(user.getTotalPoints() + turnPoint);
+//				 tdUserService.save(user);
+//			 }
+// 		 }
+// 	}
     
     // 批量上下架
 	public void onSaleAll(Boolean onsale,Long[] ids,Integer[] chkIds)
