@@ -1,6 +1,8 @@
 package com.ynyes.cslm.touch;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdDistributor;
@@ -64,6 +67,9 @@ public class TdTouchCartController {
         	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
         	distributor = tdDistributorService.findOne(distributorId);
         	
+        }else{
+        	Long distributorId = tdDistributorGoodsService.findDistributorId(id);
+    		distributor = tdDistributorService.findOne(distributorId);
         }
         if(null == distributor)
         {
@@ -133,10 +139,6 @@ public class TdTouchCartController {
         
         map.addAttribute("cart_goods_list", tdCartGoodsService.updateGoodsInfo(resList));
 
-//        if (null != shareId) {
-//        	map.addAttribute("shareId", shareId);
-//		}
-        
         tdCommonService.setHeader(map, req);
 
         //判断是否为app链接
@@ -278,8 +280,6 @@ public class TdTouchCartController {
          }
 
          if (null != id) {
-//             TdCartGoods cartGoods =tdCartGoodsService.findTopByGoodsIdAndUsername(id, username);
-//             TdDistributorGoods distributorGoods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), id);
         	 TdCartGoods cartGoods =tdCartGoodsService.findOne(id);
              TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(cartGoods.getDistributorGoodsId());
         	 
@@ -368,4 +368,84 @@ public class TdTouchCartController {
         
         return "/touch/cart_goods";
     }
+    
+    @RequestMapping(value="/touch/cart/incart",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object>  addCart(Long goodsId,HttpServletRequest req){
+    	Map<String,Object> res = new HashMap<String, Object>();
+    	res.put("code", 0);
+    	
+    	// 是否已登录
+        boolean isLoggedIn = true;
+
+        String username = (String) req.getSession().getAttribute("username");
+        
+        TdDistributor distributor = null;
+        if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
+        {
+        	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        	distributor = tdDistributorService.findOne(distributorId);
+        	
+        }else{
+        	Long distributorId = tdDistributorGoodsService.findDistributorId(goodsId);
+    		distributor = tdDistributorService.findOne(distributorId);
+        }
+        
+        if (null == username) {
+            isLoggedIn = false;
+            username = req.getSession().getId();
+        }
+        
+        Long  quantity = 1L;
+        
+        if (null != goodsId) {
+        	TdDistributorGoods goods = tdDistributorGoodsService.findOne(goodsId);
+            if (null != goods) {
+                
+                List<TdCartGoods> oldCartGoodsList = null;
+                
+                // 购物车是否已有该商品
+                oldCartGoodsList = tdCartGoodsService
+                                .findByGoodsIdAndUsername(goods.getId(), username);
+                
+                // 有多项，则在第一项上数量进行相加
+                if (null != oldCartGoodsList && oldCartGoodsList.size() > 0) {
+                    long oldQuantity = oldCartGoodsList.get(0).getQuantity();
+                    oldCartGoodsList.get(0).setQuantity(oldQuantity + quantity);
+                    tdCartGoodsService.save(oldCartGoodsList.get(0));
+                }
+                // 新增购物车项
+                else
+                {
+                    TdCartGoods cartGoods = new TdCartGoods();
+                    
+                    cartGoods.setIsLoggedIn(isLoggedIn);
+                    cartGoods.setUsername(username);
+    
+                    cartGoods.setIsSelected(false);
+                    cartGoods.setGoodsId(goods.getGoodsId());
+                    cartGoods.setDistributorId(distributor.getId());
+                    cartGoods.setDistributorTitle(distributor.getTitle());
+                    cartGoods.setDistributorGoodsId(goods.getId());
+            		cartGoods.setGoodsTitle(goods.getGoodsTitle());
+            		
+            		cartGoods.setDistributorId(tdDistributorGoodsService.findDistributorId(goodsId));
+            		cartGoods.setDistributorTitle(goods.getDistributorTitle());
+            		cartGoods.setProviderId(goods.getProviderId());
+            		cartGoods.setProviderTite(goods.getProviderTitle());
+                    cartGoods.setUnit(goods.getUnit());
+                    
+                    cartGoods.setQuantity(quantity);
+                    
+                    tdCartGoodsService.save(cartGoods);
+                }
+            }
+        }
+        
+        res.put("code", 1);
+    	return res;
+    }
+    
+    
+    
 }
