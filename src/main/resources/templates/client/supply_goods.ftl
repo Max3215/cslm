@@ -169,7 +169,7 @@ DD_belatedPNG.fix('.,img,background');
 <div class="clear"></div>
     <#include "/client/common_footer.ftl">
     
-    <aside class="sub_form">
+    <aside class="sub_form" style="display:none">
     <p class="tit">商品修改<a  onclick="$('.sub_form').css('display','none')">×</a></p>
     <form id="sub_form" action="/supply/goods/editOnSale" method="post">
     <div class="info_tab">

@@ -46,9 +46,10 @@ function editReturn(id,statusId){
     var dialog = $.dialog.confirm('操作注意事项：<br />1，普通商品退货同意则会退货商品总额。<br />2，分销商品同意退货则会退回代售提成。<br />确定继续处理此次退货？', function () {
         var handleDetail = document.getElementById("handleDetail").value;
         var realPrice = document.getElementById("realPrice").value;
+        var oldPrice = document.getElementById("oldPrice").value;
         
         var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
-	    if(undefined == realPrice || ""==realPrice || !reg.test(realPrice))
+	    if(undefined == realPrice || ""==realPrice || !reg.test(realPrice) || realPrice > oldPrice)
 	    {
 	         $.dialog.alert('错误提示：请正确输入退还金额', function () { }, dialog);
 	        return ;
@@ -156,11 +157,11 @@ DD_belatedPNG.fix('.,img,background');
                             <b style="top:4px;">订单编号：</b>
                             <span style="line-height:26px;">${return.orderNumber!''}</span>
                           </div>
+                        <#assign real_price =0.0>
+                        <#assign  real_price= return.goodsPrice* return.returnNumber>
                           <#if return.turnType?? && return.turnType ==2>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">退还金额：</b>
-                            <#assign real_price =0.0>
-                            <#assign  real_price= return.goodsPrice* return.returnNumber>
                             <input type="hidden" id="realPrice" value="<#if return.realPrice??>${return.realPrice?string('0.00')}<#else>${real_price?string('0.00')}</#if>" />
                             <span style="line-height:26px;color:red;">￥<#if return.realPrice??>${return.realPrice?string('0.00')}<#else>${real_price?string('0.00')}</#if></span>
                           </div>
@@ -170,7 +171,7 @@ DD_belatedPNG.fix('.,img,background');
                             <input style="line-height:26px;height:26px;border:1px solid #ccc;text-indent:4px;" id="realPrice" value="<#if return.realPrice??>${return.realPrice?string('0.00')}</#if>" />￥
                           </div>
                           </#if>
-
+							<input type="hidden" id="oldPrice" value="${real_price?string('0.00')}" />
                           <div class="mymember_eva_div">
                             <b style="top:4px;">会员账号：</b>
                             <span style="line-height:26px;">${return.username!''}</span>

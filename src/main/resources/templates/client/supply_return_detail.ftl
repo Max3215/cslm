@@ -46,9 +46,10 @@ function editReturn(id,statusId){
     var dialog = $.dialog.confirm('操作提示信息：<br />确定已处理此次退货？', function () {
         var handleDetail = document.getElementById("suppDetail").value;
         var realPrice = document.getElementById("realPrice").value;
+        var oldPrice = document.getElementById("oldPrice").value;
         
         var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
-	    if(undefined == realPrice || ""==realPrice || !reg.test(realPrice))
+	    if(undefined == realPrice || ""==realPrice || !reg.test(realPrice) || realPrice > oldPrice)
 	    {
 	        $.dialog.alert('错误提示：请正确输入退还金额', function () { }, dialog);
 	        return ;
@@ -151,10 +152,11 @@ DD_belatedPNG.fix('.,img,background');
                             <span style="line-height:26px;">${userRturn.orderNumber!''}</span>
                           </div>
 					      <div class="mymember_eva_div">
-                            <b style="top:4px;">退还金额：￥</b>
+                            <b style="top:4px;">退还金额：</b>
                             <#assign real_price =0.0>
-                            <#assign  real_price= return.goodsPrice* return.returnNumber>
-                            <input style="line-height:26px;height:26px;border:1px solid #ccc;text-indent:4px;" id="realPrice" value="<#if userRturn.realPrice??>${userRturn.realPrice?string('0.00')}<#else>${real_price?string('0.00')}</#if>" />
+                            <#assign  real_price = userRturn.goodsPrice * userRturn.returnNumber>
+                            <input type="hidden" id="oldPrice" value="${real_price?string('0.00')}" />
+                            <input style="line-height:26px;height:26px;border:1px solid #ccc;text-indent:4px;" id="realPrice" value="<#if userRturn.realPrice??>${userRturn.realPrice?string('0.00')}<#else>${real_price?string('0.00')}</#if>" />￥
                           </div>
                           <div class="mymember_eva_div">
                             <b style="top:4px;">会员账号：</b>

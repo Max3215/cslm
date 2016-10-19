@@ -1069,7 +1069,7 @@ public class TdManagerOrderController {
                     
                     if(order.getTypeId() ==0 || order.getTypeId() ==2){
                     	tdOrderService.addUserPoint(order,order.getUsername());
-                    	tdUserService.addTotalSpend(order.getUsername(), order.getTotalPrice());
+                    	tdUserService.addTotalSpend(order.getUsername(), order.getTotalGoodsPrice());
                     }
                     
                 }

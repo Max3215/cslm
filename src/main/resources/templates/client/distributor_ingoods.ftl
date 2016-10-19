@@ -219,7 +219,7 @@ $(document).ready(function(){
 </div>
 <!--mymember END-->
 
-     <aside class="sub_form">
+     <aside class="sub_form" style="display:none">
         <p class="tit">进货清单<a  onclick="$('.sub_form').css('display','none')">×</a></p>
         <div class="info_tab">
           <table>

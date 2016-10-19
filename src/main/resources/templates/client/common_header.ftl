@@ -2,7 +2,7 @@
         <div class="main">
             <h1>您好！欢迎光临<#if distributorTitle??>${distributorTitle!''}<#else>联超商城</#if>！</h1>
             <#if username??>
-                <a href="/user" target="_blank">${username}</a>
+                <a href="/user" >${username}</a>
                 <a href="/logout">退出</a>
             <#else>
                 <a href="/login" target="_blank">请登录</a>

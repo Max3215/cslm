@@ -22,17 +22,13 @@
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}">
-                            <input type="hidden" value="${dg.unit!''}" id="unit${dg.id?c}">
-                            <input type="hidden" value="${dg.code!''}" id="code${dg.id?c}">
-                            <input type="hidden" value="<#if dg.goodsMarketPrice??>${dg.goodsMarketPrice?string('0.00')}</#if>" id="marketPrice${dg.id?c}">
-                            <a href="" target="_blank" class="pic" title="${dg.goodsTitle!''}"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
+                            <a class="pic" title="${dg.goodsTitle!''}"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" >${dg.goodsTitle!''}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
-                        <td class="tb02"><p>￥<span id="price${dg.id?c}"><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></p></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber?c!'0'}</span></td>
+                        <td class="tb02"><p>￥<span ><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></p></td>
+                        <td><span >${dg.leftNumber?c!'0'}</span></td>
                         <td>
                             <p>PC：<a href="javascript:recommed(${dg.id?c},${page},'cat');" <#if dg.isRecommendType?? &&dg.isRecommendType ==true>style="color:#ff5b7d"</#if>>分类</a>
                                 &nbsp;/&nbsp;
@@ -42,7 +38,7 @@
                                 &nbsp;/&nbsp;
                                 <a href="javascript:recommed(${dg.id?c},${page},'hot');" <#if dg.isTouchHot?? &&dg.isTouchHot==true>style="color:#ff5b7d"</#if>>热卖</a>
                              </p>
-                            <p><a href="javascript:editPrice(${dg.id?c},${page?c});">修改信息</a></p>
+                            <p><a href="javascript:editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a href="javascript:deleteDisGoods(true,${dg.id?c},${page?c});">删除</a></p>
                        </td>
                       </tr>
@@ -53,20 +49,16 @@
                             <input type="hidden" name="listId" id="listId" value="${dg.id?c}">
                         </td>
                         <td>
-                            <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}">
-                            <input type="hidden"  value="${dg.unit!''}" id="unit${dg.id?c}">
-                            <input type="hidden"  value="${dg.code!''}" id="code${dg.id?c}">
-                            <input type="hidden" value="<#if dg.goodsMarketPrice??>${dg.goodsMarketPrice?string('0.00')}</#if>" id="marketPrice${dg.id?c}">
-                            <a href="" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle!''}</p>
+                            <a  class="pic"><strong><img width="80" height="80" src="${dg.coverImageUri!''}"  /></strong>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" >${dg.goodsTitle!''}</p>
                              </a> 
                         </td>
                         <td class="tb01">${dg.code!''}</td>
-                        <td class="tb02"><p><#if dg.goodsPrice??>￥<span id="price${dg.id?c}">${dg.goodsPrice?string('0.00')}<#else></#if></p></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber?c!'0'}</span></td>
+                        <td class="tb02"><p><#if dg.goodsPrice??>￥<span >${dg.goodsPrice?string('0.00')}<#else></#if></p></td>
+                        <td><span >${dg.leftNumber?c!'0'}</span></td>
                         <td>
                             <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page?c});">上架</a></p>
-                            <p><a href="javascript:editPrice(${dg.id?c},${page?c});">修改信息</a></p>
+                            <p><a href="javascript:editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
                             <p><a href="javascript:deleteDisGoods(false,${dg.id?c},${page?c});">删除</a></p></td>
                       </tr>
                  </#if>

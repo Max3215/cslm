@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <meta charset="utf-8">
-<title><#if site??>${site.seoTitle!''}-</#if>批发中心</title>
+<title><#if site??>${site.seoTitle!''}-</#if>超市中心</title>
 <meta name="keywords" content="${site.seoKeywords!''}">
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
@@ -21,6 +21,20 @@ $(document).ready(function(){
     $("#form1").Validform({
         tiptype: 3
     })
+    
+     $("#form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 $('.sub_form').css('display','none');
+                // window.location.href="/distributor/goods/onsale"
+                window.location.reload();
+            }
+        }
+    });
 
   $(".click_a").click(function(){
     if($(this).next().is(":visible")==false){
@@ -42,24 +56,24 @@ $(document).ready(function(){
 function editgoods(gid){
     $("#goodsId").attr("value",gid);
     var goodsTitle = $("#title"+gid).html();
+    var goodsPrice = $("#price"+gid).html();
     var subTitle = $("#subTitle"+gid).val();
-    var code = $("#code"+gid).html();
-    var marketPrice = $("#marketPrice"+gid).html();
+    var code = $("#code"+gid).val();
     
-    $("#marketPrice").attr("value",marketPrice);
-    $("#code").attr("value",code);
     $("#goodsTitle").attr("value",goodsTitle);
+    $("#goodsMarketPrice").attr("value",goodsPrice);
     $("#subTitle").attr("value",subTitle);
+    $("#code").attr("value",code);
     $('.sub_form').css('display','block');
 }
 
 function subDisGoods(){
     var goodsId = $("#goodsId").val();
     var goodsTitle = $("#goodsTitle").val();
-    var subTitle = $("#subTitle").val();
-    var outFactoryPrice = $("#outFactoryPrice").val();
-    var marketPrice = $("#marketPrice").val();
+    var goodsPrice = $("#goodsPrice").val();
     var leftNumber = $("#leftNumber").val();
+    var goodsMarketPrice = $("#goodsMarketPrice").val();
+    var unit = $("#unit").val();
     
     if(undefined == goodsTitle || ""==goodsTitle)
     {
@@ -67,19 +81,20 @@ function subDisGoods(){
         return;
     }
      var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
-    if(undefined == marketPrice || ""==marketPrice || !reg.test(marketPrice))
+    if(undefined == goodsMarketPrice || ""==goodsMarketPrice || !reg.test(goodsMarketPrice))
     {
         alert("请输入商品市场价");
         return ;
     }
     
-    if(undefined == outFactoryPrice || ""==outFactoryPrice || !reg.test(outFactoryPrice))
+    if(undefined == goodsPrice || ""==goodsPrice || !reg.test(goodsPrice))
     {
-        alert("请输入商品批发价");
+        alert("请输入商品销售价");
         return ;
     }
     
-    if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber))
+    
+    if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber)|| 0 >= leftNumber)
     {
         alert("请输入库存数量");
         return;
@@ -87,24 +102,24 @@ function subDisGoods(){
     
     $.ajax({
         type : "post",
-        url : "/provider/wholesaling",
+        url : "/distributor/goodsOnsale",
         data : {"goodsId":goodsId,
             "goodsTitle":goodsTitle,
-            "subTitle":subTitle,
-            "outFactoryPrice":outFactoryPrice,
-            "marketPrice":marketPrice,
-            "leftNumber":leftNumber},
+            "goodsPrice":goodsPrice,
+            "leftNumber":leftNumber,
+            "goodsMarketPrice":goodsMarketPrice,
+            "unit":unit},
         dataType : "json",
         success:function(data){
             $('.sub_form').css('display','none');
             alert(data.msg);
-            window.location.reload();
         }
     })
     
 }
+
 function search(type){
-     if(null != type && type=="oneCat")
+    if(null != type && type=="oneCat")
     {
         $("#categoryId").attr("value",$("#oneCat").val());
     }else if(null != type && type=="twoCat")
@@ -116,6 +131,7 @@ function search(type){
     }
     $("#form1").submit();
 }
+
 
 </script>
 <!--[if IE]>
@@ -133,17 +149,17 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_out">
   <div class="mymember_main">
   
-    <#include "/client/common_provider_menu.ftl">
+    <#include "/client/common_distributor_menu.ftl">
     
     <div class="mymember_mainbox">
       <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
-          <h3>平台的商品</h3>
-          <form action="/provider/goods/wholesaling" id="form1">
+          <h3>平台中的商品</h3>
+            <form action="/distributor/goods/onsale" id="form1">
               <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
               <input class="mysub" type="submit" value="查询"/>
               <input class="mytext" type="text"   value="${keywords!''}" name="keywords" id="keywords" />
-              <select id="oneCat" onchange="javascript:search('oneCat')">
+                 <select id="oneCat" onchange="javascript:search('oneCat')" >
                     <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                     <#if category_list??>
                         <#list category_list as c>
@@ -167,6 +183,8 @@ DD_belatedPNG.fix('.,img,background');
                         </#list>
                     </#if>
                 </select>
+                &nbsp;
+                <a href="/Verwalter" target="_blank" style="color: #ff5b7d">新增商品</a>
               </form>
           <div class="clear"></div>
         </div>
@@ -179,24 +197,30 @@ DD_belatedPNG.fix('.,img,background');
           </tr>
            <#if goods_page??>
                 <#list goods_page.content as goods>
+                    <input type="hidden" value="${goods.code!''}" id="code${goods.id?c}">
+                    <input type="hidden" value="${goods.subTitle!''}" id="subTitle${goods.id?c}">
                     <tr id="tr_1424195166">
-                        <input type="hidden" value="${goods.subTitle!''}" id="subTitle${goods.id?c}" />
-                        <td><a class="pic"><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
-                        <td class="tb01"><span id="code${goods.id?c}">${goods.code!''}</span></td>
-                        <td class="tb02"><p>￥<span id="marketPrice${goods.id?c}">${goods.marketPrice?string('0.00')}</span></p></td>
+                        <td><a class="pic" title="${goods.title!''}"><strong><img width="80" height="80" src="${goods.coverImageUri!''}"  /></strong><p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${goods.id?c}">${goods.title!''}</p></a> </td>
+                        <td class="tb01">${goods.code!''}</td>
+                        <td class="tb02"><p>￥<span id="price${goods.id?c}">${goods.marketPrice?string('0.00')}</span>/${goods.promotion!''}</p></td>
                         <td>
                             <#assign isSale = false>
-                            <#if provider_list??>
-                            <#list provider_list.content  as pg>
-                                <#if pg.goodsId == goods.id>
-                                    <#assign isSale =true>
-                                        <p><a href="javascript:;" style="color: #ff5b7d">已批发</a></p>
-                                </#if>
-                             </#list>
-                             </#if>
-                             <#if isSale ==false>
-                                  <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">选择批发</a></p>
-                             </#if>
+                           <#if dis_goods_list??>
+                           <#list dis_goods_list.content as dg>
+                                <#if dg.goodsId == goods.id>
+                                    <#if dg.isDistribution?? && dg.isDistribution==true>
+                                        <p><a href="javascript:;" style="color: #75d2f0;">已代理</a></p>
+                                        <#assign isSale = true>
+                                    <#else>
+                                        <#assign isSale = true>
+                                        <p><a href="javascript:;" style="color: #ff5b7d;">已上架</a></p>
+                                    </#if>
+                               </#if> 
+                            </#list>
+                            </#if>
+                            <#if isSale == false>
+                            <p><a onclick="editgoods(${goods.id?c});">编辑上架</a></p>
+                            </#if>
                          </td>
                       </tr>
                 </#list>
@@ -213,7 +237,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/provider/goods/wholesaling?page=${page-1}&keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>">${page}</a>
+                                <a href="/distributor/goods/onsale?page=${(page-1)?c}&keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -243,12 +267,12 @@ DD_belatedPNG.fix('.,img,background');
 
   <!-- 点击商品上架后弹出层 -->
   <aside class="sub_form" style="display:none">
-    <p class="tit">商品批发<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a>
-</p>
+    <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a></p>
     <div class="info_tab">
+    <form id ="form" action="/distributor/goodsOnsale" method="post">
       <table>
         <tr>
-           <p> 编辑批发价格和库存：</p>
+           <p> 编辑上架后的销售价格和库存：</p>
             <input type="hidden" id="goodsId" name="goodsId"/>
         </tr>
         <tr>
@@ -256,30 +280,35 @@ DD_belatedPNG.fix('.,img,background');
           <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
         </tr>
         <tr>
-          <th>*商品副标题：</th>
-          <td><input type="text" class="add_width" name="subTitle" id="subTitle" ></td>
+          <th>商品副标题：</th>
+          <td><input type="text" class="add_width" name="subGoodsTitle" id="subTitle" ></td>
         </tr>
         <tr>
           <th>商品编码：</th>
           <td><input type="text" class="add_width" name="code" id="code" readonly="readonly"></td>
         </tr>
          <tr>
-          <th>*商品市场价：</th>
-          <td><input type="text" name="goodsMarketPrice" id="marketPrice" ></td>
+          <th>*特惠价：</th>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
         </tr>
         <tr>
-          <th>*商品批发价：</th>
-          <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" ></td>
+          <th>*实体店价：</th>
+          <td><input type="text" name="goodsMarketPrice" id="goodsMarketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请输入正确的价格" nullmsg="请输入价格"></td>
+        </tr>
+        <tr>
+          <th>商品单位：</th>
+          <td><input type="text" name="unit" id="unit">不填则默认为平台设定单位</td>
         </tr>
          <tr>
           <th>*库存：</th>
-          <td><input type="text" name="leftNumber" id="leftNumber"></td>
+          <td><input type="text" name="leftNumber" datatype="n" id="leftNumber" datatype="n" sucmsg=" " nullmsg="请输入库存" errormsg="请输入正确的库存"></td>
         </tr>
         <tr>
           <th></th>
-          <td><input type="submit" class="sub" onclick="subDisGoods();" value="确认提交"></td>
+          <td><input type="submit" class="sub"  value="确认提交"></td>
         </tr>
       </table>
+      </form>
     </div>
   </aside>
 </body>

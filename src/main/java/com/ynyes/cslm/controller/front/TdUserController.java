@@ -1176,7 +1176,7 @@ public class TdUserController extends AbstractPaytypeController{
                     tdOrder = tdOrderService.save(tdOrder);
                     if(tdOrder.getTypeId() ==0 || tdOrder.getTypeId() ==2){
                     	tdOrderService.addUserPoint(tdOrder,tdOrder.getUsername()); // 添加积分记录
-                    	tdUserService.addTotalSpend(tdOrder.getUsername(), tdOrder.getTotalPrice()); // 增加累计使用金额
+                    	tdUserService.addTotalSpend(tdOrder.getUsername(), tdOrder.getTotalGoodsPrice()); // 增加累计使用金额
                     }
                 }
             }

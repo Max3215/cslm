@@ -167,7 +167,7 @@ DD_belatedPNG.fix('.,img,background');
     <#include "/client/common_footer.ftl">
     
     <!-- 点击商品上架后弹出层 -->
-  <aside class="sub_form">
+  <aside class="sub_form" style="display:none">
         <p class="tit">商品批发<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a></p>
         <form id="sub_form" action="/provider/goods/edit" method="post">
         <div class="info_tab">

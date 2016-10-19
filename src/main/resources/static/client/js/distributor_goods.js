@@ -215,3 +215,107 @@ function searchGoods(page){
 	var keywords = $("#keywords").val();
 	window.location.href="/distributor/goods/list?keywords="+keywords;
 }
+
+function editGoods(dis_goodsId,goodsId)
+{
+    $.ajax({
+        type:"post",
+        url:"/distributor/goods/detail",
+        data:{"dis_goodsId": dis_goodsId,"goodsId":goodsId},
+        success:function(data){
+        	$("#detail_div").html(data);
+        	$("#detail_div").css('display','block');
+        }
+    });
+}
+
+function searchSpecifica(goodsId,id){
+	var url = "/distributor/search/specifica";
+	var loadData = {"goodsId":goodsId,"id":id};
+	$("#specifica_div").load(url,loadData);
+}
+
+function saveSpecifict(){
+	var url = "/distributor/specifica/save";
+	var loadData = $("#spec_form").serializeArray();
+	
+	$.ajax({
+		url : url,
+		type : "post",
+		data : loadData,
+		success : function(data){
+			  if(data.code==1){
+				  searchSpecifica(data.goodsId,null)
+			  }else{
+				  layer.msg(data.msg, {icon: 2 ,time: 1000});
+			  }
+		}
+	})
+}
+function delSpecifica(goodsId,id){
+	$.ajax({
+		url : "/distributor/specifica/delete",
+		type : "post",
+		data : {"id":id},
+		success : function(data){
+			  if(data.code==1){
+				  searchSpecifica(goodsId,null)
+			  }else{
+				  layer.msg(data.msg, {icon: 2 ,time: 1000});
+			  }
+		}
+	})
+}
+
+function editSaveGoods(){
+	var url = "/distributor/goods/editOnSale";
+	
+	var dis_goodsId = $("#dis_goodsId").val();
+	var goodsId = $("#goodsId").val();
+    var subGoodsTitle = $("#subGoodsTitle").val();
+    var code = $("#code").val();
+    var goodsMarketPrice = $("#marketPrice").val();
+    var goodsPrice = $("#goodsPrice").val();
+    var unit = $("#unit").val();
+    var leftNumber = $("#leftNumber").val();
+    
+    var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+    var num = /^\+?[1-9][0-9]*$/;
+    if(undefined == goodsMarketPrice || ""==goodsMarketPrice || !reg.test(goodsMarketPrice))
+    {
+    	layer.msg('实体店价格式输入错误', {icon: 2 ,time: 1000});
+        return ;
+    }
+    if(undefined == goodsPrice || ""==goodsPrice || !reg.test(goodsPrice))
+    {
+    	layer.msg('销售价格式输入错误', {icon: 2 ,time: 1000});
+        return ;
+    }
+    if(undefined == leftNumber || ""==leftNumber || !num.test(leftNumber)){
+		layer.msg('请输入正确的库存', {icon: 2 ,time: 1000});
+	}
+	
+    $.ajax({
+    	url : url,
+    	type : "post",
+    	data : {"dis_goodsId":dis_goodsId,
+    			"goodsId":goodsId,
+    			"goodsPrice":goodsPrice,
+    			"goodsMarketPrice":goodsMarketPrice,
+    			"subGoodsTitle":subGoodsTitle,
+    			"code":code,
+    			"unit":unit,
+    			"leftNumber":leftNumber},
+		success : function(data){
+			  if(data.code==1){
+				  layer.msg(data.msg, {icon: 1 ,time: 1000});
+				  window.location.reload();
+			  }else{
+				  layer.msg(data.msg, {icon: 2 ,time: 1000});
+			  }
+		}
+    	
+    })
+	
+}
+

@@ -1575,6 +1575,10 @@ public class TdTouchUserController {
                 if (allIsCommented) {
                     tdOrder.setStatusId(6L);
                     tdOrder = tdOrderService.save(tdOrder);
+                    if(tdOrder.getTypeId() ==0 || tdOrder.getTypeId() ==2){
+                    	tdOrderService.addUserPoint(tdOrder,tdOrder.getUsername()); // 添加积分记录
+                    	tdUserService.addTotalSpend(tdOrder.getUsername(), tdOrder.getTotalGoodsPrice()); // 增加累计使用金额
+                    }
                 }
             }
         }

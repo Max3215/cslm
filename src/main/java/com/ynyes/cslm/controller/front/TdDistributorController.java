@@ -29,7 +29,6 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.bouncycastle.openssl.PEMReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -62,9 +61,9 @@ import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
-import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
@@ -85,6 +84,7 @@ import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdShippingAddressService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserCollectService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserReturnService;
@@ -168,6 +168,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 	
 	@Autowired
 	TdCashService tdCashService;
+	
+	@Autowired
+	TdSpecificatService tdSpecificatService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -788,6 +791,104 @@ public class TdDistributorController extends AbstractPaytypeController{
 	}
 	
 	/**
+	 * 超市商品详情
+	 * @author Max
+	 * 2016-10-19
+	 */
+	@RequestMapping(value="/goods/detail",method=RequestMethod.POST)
+	public String saleGoodsDetail(Long dis_goodsId,Long goodsId,HttpServletRequest req,ModelMap map){
+		
+		if(null != dis_goodsId){
+			TdDistributorGoods goods = tdDistributorGoodsService.findOne(dis_goodsId);
+			map.addAttribute("dis_goods", goods);
+			map.addAttribute("goodsId", goods.getGoodsId());
+		}else if(null != goodsId){
+			map.addAttribute("goods", tdGoodsService.findOne(goodsId));
+			map.addAttribute("goodsId", goodsId);
+		}
+		return "/client/distributor_goods_detail";
+	}
+	
+	/**
+	 * 根据ID查找商品规格
+	 * @author Max
+	 * 2016-10-19
+	 */
+	@RequestMapping(value="/search/specifica",method=RequestMethod.POST)
+	public String specificaSearch(Long goodsId,Long id,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null != goodsId && null != username){
+			map.addAttribute("goodsId", goodsId);
+			TdDistributor distributor = tdDistributorService.findbyUsername(username);
+			map.addAttribute("spec_list", tdSpecificatService.findByShopIdAndGoodsIdAndType(distributor.getId(),goodsId, 1));
+			if(null != id){
+				map.addAttribute("specifica", tdSpecificatService.findOne(id));
+			}
+		}
+		return "/client/distributor_goods_spec";
+	}
+	/**
+	 * 保存规格
+	 */
+	@RequestMapping(value="/specifica/save",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> specificaSave(TdSpecificat tdSpecificat,HttpServletRequest req,ModelMap map){
+		Map<String,Object> res = new HashMap<String, Object>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username){
+			res.put("msg", "登录超时");
+			return res;
+		}
+		if(null != tdSpecificat){
+			if(null == tdSpecificat.getSpecifict() || "".equals(tdSpecificat.getSpecifict().trim()) || null == tdSpecificat.getLeftNumber()){
+				res.put("msg", "规格填写错误");
+				return res;
+			}
+			if(null == tdSpecificat.getId()){
+				TdDistributor distributor = tdDistributorService.findbyUsername(username);
+				
+				tdSpecificat.setShopId(distributor.getId());//　设置超市id
+				tdSpecificat.setType(1); //设置类型-超市
+			}
+			tdSpecificatService.save(tdSpecificat);
+			res.put("code", 1);
+			res.put("goodsId", tdSpecificat.getGoodsId());
+		}else{
+			res.put("msg", "参数错误");
+		}
+		return res;
+	}
+	
+	/**
+	 * 删除规格
+	 * @author Max
+	 * 2016-10-19
+	 * 
+	 */
+	@RequestMapping(value="/specifica/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteSpecifica(Long id,HttpServletRequest req){
+		Map<String,Object> res = new HashMap<String, Object>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username){
+			res.put("msg", "登录超时");
+			return res;
+		}
+		if(null != id){
+			tdSpecificatService.delete(id);
+			res.put("code", 1);
+		}
+		
+		return res;
+	}
+	
+	
+	/**
 	 * 设置推荐
 	 * @author Max
 	 * 
@@ -987,29 +1088,25 @@ public class TdDistributorController extends AbstractPaytypeController{
 	
 	@RequestMapping(value="/goods/editOnSale",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> editOnSale(Long goodsId,
+	public Map<String,Object> editOnSale(
+					Long dis_goodsId,
+					Long goodsId,
 					Double goodsPrice,
 					Double goodsMarketPrice,
 					String subGoodsTitle,
 					String code,String unit,
-					Long leftNumber,Boolean type,
-					Integer page,HttpServletRequest req)
+					Long leftNumber,HttpServletRequest req)
 	{
 		Map<String,Object> res = new HashMap<>();
 		res.put("code", 0);
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
-			res.put("msg", "请重新登录!");
+			res.put("msg", "登录超时!");
 			return res;
 		}
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		if(null == distributor)
-		{
-			res.put("msg", "参数错误!");
-			return res;
-		}
-		if(null == goodsId)
 		{
 			res.put("msg", "参数错误!");
 			return res;
@@ -1020,12 +1117,38 @@ public class TdDistributorController extends AbstractPaytypeController{
 			return res;
 		}
 		
-		if(null == page )
-		{
-			page = 0;
-		}
-		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(goodsId);
+		TdDistributorGoods distributorGoods =null;
 		
+		// 判断是平台上架还是超市库编辑
+		if(null == dis_goodsId)
+		{
+			TdGoods goods = tdGoodsService.findOne(goodsId);
+			// 平台上架   新建数据
+			distributorGoods = new TdDistributorGoods();
+			distributorGoods.setDistributorTitle(distributor.getTitle());
+			distributorGoods.setGoodsId(goods.getId());
+			distributorGoods.setGoodsTitle(goods.getTitle());
+			distributorGoods.setBrandId(goods.getBrandId());
+			distributorGoods.setBrandTitle(goods.getBrandTitle());
+			distributorGoods.setCategoryId(goods.getCategoryId());
+			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
+			distributorGoods.setProductId(goods.getProductId());
+			distributorGoods.setSelectOneValue(goods.getSelectOneValue());
+			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());
+			distributorGoods.setSelectThreeValue(goods.getSelectThreeValue());
+			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
+			distributorGoods.setIsDistribution(false);
+			distributorGoods.setReturnPoints(goods.getReturnPoints());
+			distributorGoods.setParamValueCollect(goods.getParamValueCollect());
+			distributorGoods.setIsOnSale(true);
+			distributorGoods.setIsAudit(true);
+			distributorGoods.setOnSaleTime(new Date());
+			distributorGoods.setDisId(distributor.getId());
+			distributor.getGoodsList().add(distributorGoods);
+		}else{
+			// 超市编辑   查找原数据
+			distributorGoods = tdDistributorGoodsService.findOne(dis_goodsId);
+		}
 		
 		if(null != goodsPrice)
 		{
@@ -1040,19 +1163,10 @@ public class TdDistributorController extends AbstractPaytypeController{
 		distributorGoods.setUnit(unit);
 		distributorGoods.setCode(code);
 		
-		distributorGoods.setIsOnSale(true);
-		
 		tdDistributorGoodsService.save(distributorGoods);
 		
-		res.put("msg", "修改成功！");
-		if(type)
-		{
-			res.put("code", 1);
-		}
-		else
-		{
-			res.put("code", 2);
-		}
+		res.put("msg", "操作成功！");
+		res.put("code", 1);
 		return res;
 	}
 	
@@ -1512,7 +1626,7 @@ public class TdDistributorController extends AbstractPaytypeController{
             		
             		if(order.getTypeId() ==0 || order.getTypeId() ==2){
                     	tdOrderService.addUserPoint(order,order.getUsername());// 添加积分记录
-                    	tdUserService.addTotalSpend(order.getUsername(), order.getTotalPrice());// 增加累计使用金额
+                    	tdUserService.addTotalSpend(order.getUsername(), order.getTotalGoodsPrice());// 增加累计使用金额
                     }
             		
             	}
@@ -1742,9 +1856,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 		return res;
 	}
 	
-	
-	
-	
 	@RequestMapping(value="/goods/onsale")
 	public String saleGoods(Integer page,String keywords,Long categoryId,HttpServletRequest req,ModelMap map)
 	{
@@ -1820,102 +1931,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 		return "/client/distributor_goods_onsale";
 	}
 	
-	/**
-	 * 从平台选择商品上架到超市
-	 * @author libiao
-	 * 
-	 */
-	
-	@RequestMapping(value="/goodsOnsale", method=RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> goodsOnsale(Long goodsId,
-				String goodsTitle,
-				String subGoodsTitle,
-				Double goodsPrice,
-				Double goodsMarketPrice,
-				Long leftNumber,
-				String unit,
-				HttpServletRequest req)
-	{
-		Map<String,Object> res =new HashMap<>();
-		res.put("code", 0);
-		
-		String username =(String)req.getSession().getAttribute("distributor");
-		if(null ==username)
-		{
-			res.put("msg", "请先登录！");
-			return res;
-		}
-		if(null ==goodsId)
-		{
-			res.put("msg","选择的商品无效！");
-			return res;
-		}
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		TdGoods goods = tdGoodsService.findById(goodsId);
-		TdDistributorGoods disGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(),goodsId);
-		// 判断本超市是否已经存在该商品
-		if(null == disGoods)
-		{
-			TdDistributorGoods distributorGoods = new TdDistributorGoods();
-			distributorGoods.setDistributorTitle(distributor.getTitle());
-			distributorGoods.setGoodsId(goods.getId());
-			distributorGoods.setGoodsTitle(goodsTitle);
-			distributorGoods.setSubGoodsTitle(subGoodsTitle);
-			distributorGoods.setGoodsPrice(goodsPrice); // 销售价
-			distributorGoods.setBrandId(goods.getBrandId());
-			distributorGoods.setBrandTitle(goods.getBrandTitle());
-			distributorGoods.setCategoryId(goods.getCategoryId());
-			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
-			distributorGoods.setCode(goods.getCode());
-			distributorGoods.setProductId(goods.getProductId());
-			distributorGoods.setSelectOneValue(goods.getSelectOneValue());
-			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());
-			distributorGoods.setSelectThreeValue(goods.getSelectThreeValue());
-			distributorGoods.setCoverImageUri(goods.getCoverImageUri());
-			distributorGoods.setGoodsMarketPrice(goodsMarketPrice); // 市场价
-			distributorGoods.setIsDistribution(false);
-//			distributorGoods.setGoodsParamList(goods.getParamList());
-			distributorGoods.setReturnPoints(goods.getReturnPoints());
-			distributorGoods.setParamValueCollect(goods.getParamValueCollect());
-			distributorGoods.setIsOnSale(true);
-			distributorGoods.setIsAudit(true);
-			distributorGoods.setLeftNumber(leftNumber);
-			distributorGoods.setOnSaleTime(new Date());
-			if(null != unit || !"".equals(unit))
-			{
-				distributorGoods.setUnit(unit);
-			}else{
-				distributorGoods.setUnit(goods.getPromotion());
-			}
-			distributorGoods.setDisId(distributor.getId());
-			distributor.getGoodsList().add(distributorGoods);
-		}else{
-//			disGoods.setDisId(distributor.getId());
-//			disGoods.setIsAudit(true);
-//			disGoods.setOnSaleTime(new Date());
-//			disGoods.setGoodsTitle(goodsTitle);
-//			disGoods.setSubGoodsTitle(subGoodsTitle);
-//			disGoods.setLeftNumber(leftNumber);
-//			disGoods.setGoodsPrice(goodsPrice);// 销售价
-//			disGoods.setGoodsMarketPrice(goodsMarketPrice); // 市场价
-//			if(null != unit || !"".equals(unit))
-//			{
-//				disGoods.setUnit(unit);
-//			}else{
-//				disGoods.setUnit(goods.getPromotion());
-//			}
-//			distributor.getGoodsList().add(disGoods);
-			res.put("msg", "店铺已有该商品");
-			return res;
-		}
-
-		tdDistributorService.save(distributor);
-		
-		res.put("msg", "上架成功");
-		res.put("code", 1);
-		return res;
-	}
 	
 	/**
 	 * 选择分销商品

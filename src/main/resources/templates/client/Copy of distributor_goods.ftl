@@ -14,8 +14,28 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script src="/client/js/distributor_goods.js"></script>
+<script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+    $("#sub_form").Validform({
+        tiptype:4, 
+        ajaxPost:true,
+        callback:function(data){
+            alert(data.msg);
+            if(data.code==1)
+            {
+                 $('.sub_form').css('display','none');
+                 window.location.href="/distributor/goods/sale/1"
+            }
+            else if(data.code=2)
+            {
+                $('.sub_form').css('display','none');
+                window.location.href="/distributor/goods/sale/0"
+            }
+        }
+    });
+
+
     $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){
             $(this).next().slideDown(300);
@@ -26,7 +46,7 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-   // adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+ //   adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -36,7 +56,7 @@ $(document).ready(function(){
 });
 
 //上架/下架多个商品
-function deleteAll(){
+function onsaleAll(){
     $("#form").submit();
 }  
 
@@ -44,12 +64,59 @@ function searchSale(){
     $("#form1").submit();
 } 
 
-function deleteGoods(disId,page){
+function editPrice(dgId,page){
+    var goodsTitle = $("#title"+dgId).html();
+    var subTitle = $("#subTitle"+dgId).val();
+    var unit = $("#unit"+dgId).val();
+    var code = $("#code"+dgId).val(); 
+    var marketPrice = $("#marketPrice"+dgId).val();
+    var goodsPrice = $("#price"+dgId).html();
+    var leftNumber = $("#number"+dgId).html();
+    
+    $("#goodsId").attr("value",dgId);
+    $("#page").attr("value",page);
+    $("#goodsTitle").attr("value",goodsTitle);
+    $("#subGoodsTitle").attr("value",subTitle);
+    $("#marketPrice").attr("value",marketPrice);
+    $("#goodsPrice").attr("value",goodsPrice);
+    $("#leftNumber").attr("value",leftNumber);
+    $("#unit").attr("value",unit);
+    $("#code").attr("value",code);
+    $('.sub_form').css('display','block');
+}
+
+
+//超市中心商品上下架
+function editOnSale(){
+    var disId = $("#goodsId").val();
+    var page = $("#page").val();
+    var goodsTitle = $("#goodsTitle").val();
+    var goodsPrice = $("#goodsPrice").val();
+    var maxPostPrice = $("#maxPostPrice").val();
+    var postPrice = $("#postPrice").val();
+    
+    if(undefined == goodsTitle || ""==goodsTitle)
+    {
+        alert("请输入商品标题");
+        return;
+    }
+     var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
+    if(undefined == goodsPrice || ""==goodsPrice || !reg.test(goodsPrice))
+    {
+        alert("请输入商品销售价");
+        return ;
+    }
+
     $.ajax({
-        url : "/distributor/supply/delete/"+disId,
-        data : {"page":page},
-        type :"post",
-        success:function(res){
+        url : "/distributor/goods/editOnSale/"+disId,
+        data : {"goodsTitle":goodsTitle,
+                "goodsPrice":goodsPrice,
+                "postPrice":postPrice,
+                "maxPostPrice":maxPostPrice,
+                "page":page},
+        type : "post",
+       success:function(res){
+            $('.sub_form').css('display','none');
             $("#dis_goods_table").html(res);
         }
     })
@@ -68,7 +135,6 @@ function search(type){
     }
     $("#form1").submit();
 }
-
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -91,13 +157,14 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_mainbox">
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
-                    <h3>代理的商品</h3>
-                         <form action="/distributor/goods/supply" id="form1"> 
+                    <h3><#if isOnSale>出售中的商品<#else>仓库中的商品</#if></h3>
+                         <form action="/distributor/goods/sale/${isOnSale?c}" id="form1"> 
                           <input class="mysub" type="submit" value="查询" />
                           <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
                           <input class="mytext" type="text" name="keywords"  value="${keywords!''}" id="keywords" />
+                          <input type="hidden" name="dir" value="${sort!''}" id="sort"/>
                           <select id="oneCat" onchange="javascript:search('oneCat')" >
-                                <option value="">所有类别</option>
+                                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                                 <#if category_list??>
                                     <#list category_list as c>
                                         <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
@@ -105,7 +172,7 @@ DD_belatedPNG.fix('.,img,background');
                                 </#if>
                             </select>
                              <select id="twoCat" onchange="javascript:search('twoCat')">
-                                <option value="">所有类别</option>
+                                <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                                 <#if cateList??>
                                     <#list cateList as c>
                                         <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
@@ -113,7 +180,7 @@ DD_belatedPNG.fix('.,img,background');
                                 </#if>
                             </select>
                              <select id="category" onchange="javascript:search('categoryId')">
-                                <option  value="">所有类别</option>
+                                <option <#if categoryId??><#else>selected="selected"</#if> value="">所有类别</option>
                                 <#if categoryList??>
                                     <#list categoryList as c>
                                         <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
@@ -124,27 +191,33 @@ DD_belatedPNG.fix('.,img,background');
                           <select  id="categoryId" name="categoryId" class="myselect" onchange="searchSale()">
                                 <option value="">请选择类别...</option>
                                 <#if category_list??>
-                                    <#list category_list as ca>
-                                        <option value="${ca.id?c}" <#if categoryId?? && categoryId==ca.id>selected="selected"</#if>>${ca.title!""}</option>
+                                    <#list category_list as c>
+                                        <option value="${c.id?c}" <#if categoryId?? && categoryId==c.id>selected="selected"</#if>>${c.title!""}</option>
                                     </#list>
                                 </#if>
                             </select>
                             -->
                           </form>
+                          
                     <div class="clear"></div>
                 </div>
                 
-                <form action="/distributor/deleteAll" method="post" id="form">
-                <input type="hidden" name="categoryId" value="${categoryId!''}"/>
+                <form action="/distributor/onsaleAll/${isOnSale?c}" method="post" id="form">
+                <input type="hidden" name="categoryId" value="<#if categoryId??>${categoryId?c!''}</#if>"/>
                 <input type="hidden" name="keywords" value="${keywords!''}"/>
+                <input type="hidden" name="dir" value="${sort!''}" >
                 <div id="dis_goods_list">
-                    <#include "/client/distributor_goods_supply.ftl">
+                    <#include "/client/distributor_goods_list.ftl">
                 </div>
                 </form>
             <div class="myclear" style="height:10px;"></div>
 
             <div class="mymember_page">
-                    <a href="javascript:deleteAll();" class="fl">删除选中的商品</a>
+                <#if isOnSale>
+                    <a href="javascript:onsaleAll();"  class="fl">下架选中的商品</a>
+                <#else>
+                    <a href="javascript:onsaleAll();" class="fl">上架选中的商品</a>
+                </#if>
                 
                 <#if dis_goods_page??>
                 <#assign continueEnter=false>
@@ -154,7 +227,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == dis_goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/supply?page=${page-1}&keywords=${keywords!''}&categoryId=${categoryId!''}">${page}</a>
+                                <a href="/distributor/goods/sale/${isOnSale?c}?page=${(page-1)?c}&keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if><#if sort??>&dir=${sort}</#if>">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -180,29 +253,52 @@ DD_belatedPNG.fix('.,img,background');
     <#include "/client/common_footer.ftl">
     
     <!-- 点击商品上架后弹出层 -->
-  <aside class="sub_form" style="display:none">
+  <aside class="sub_form" style="display:none" id="detail_div">
     <p class="tit">商品上架<a  onclick="$('.sub_form').css('display','none')">×</a></p>
+    <form id="sub_form" action="/distributor/goods/editOnSale" method="post">
     <div class="info_tab">
+        <input type="hidden" name="type" value="${isOnSale?c}">
       <table>
         <tr>
-           <p> 编辑上架后的销售价格：</p>
+           <p> 编辑商品信息：</p>
             <input type="hidden" id="goodsId" name="goodsId"/>
             <input type="hidden" id="page" name="page"/>
         </tr>
         <tr>
           <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+          <td ><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
+        </tr>
+        <tr>
+          <th>*商品副标题：</th>
+          <td ><input type="text" class="add_width" name="subGoodsTitle" id="subGoodsTitle" ></td>
+        </tr>
+        <tr>
+          <th>商品编码：</th>
+          <td ><input type="text" class="add_width" name="code" id="code" ></td>
+        </tr>
+        <tr>
+          <th>*实体店价：</th>
+          <td><input type="text" name="goodsMarketPrice" id="marketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请正确输入" nullmsg="请输入价格"></td>
         </tr>
          <tr>
-          <th>*商品售价：</th>
-          <td><input type="text" name="goodsPrice" id="goodsPrice" ></td>
+          <th>*特惠价：</th>
+          <td><input type="text" name="goodsPrice" id="goodsPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " errormsg="请正确输入" nullmsg="请输入价格"></td>
+        </tr>
+        <tr>
+            <th>单位：</th>
+            <td><input type="text" name="unit" id="unit" ></td>
+        </tr>
+        <tr>
+          <th>*库存：</th>
+          <td ><input type="text" name="leftNumber" id="leftNumber" datatype="n" sucmsg=" " nullmsg="请输入库存" errormsg="请输入正确的库存"></td>
         </tr>
         <tr>
           <th></th>
-          <td><input type="submit" class="sub" onclick="editOnSale();" value="确认提交"></td>
+          <td><input type="submit" class="sub" value="确认提交"></td>
         </tr>
       </table>
     </div>
+    </form>
   </aside>
 </body>
 </html>
