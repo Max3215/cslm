@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsCombinationService;
 import com.ynyes.cslm.service.TdGoodsService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserService;
 
 /**
@@ -52,6 +54,9 @@ public class TdTouchCartController {
     @Autowired
     private TdUserService tdUserService;
 
+    @Autowired
+    private TdSpecificatService tdSpecificatService;
+    
     @RequestMapping(value = "/touch/cart/init")
     public String addCart(Long id, Long quantity, String zhid, Integer m,Integer app,
             HttpServletRequest req,ModelMap map) {
@@ -181,13 +186,12 @@ public class TdTouchCartController {
             for (TdCartGoods cg1 : cartUserGoodsList) 
             {
                 // 删除重复的商品
-                List<TdCartGoods> findList = tdCartGoodsService
-                        .findByGoodsIdAndUsername(cg1.getDistributorGoodsId(), username);
+            	List<TdCartGoods> cartGoods = tdCartGoodsService.findByUsernameAndDistributorGoodsIdAndSpecificaId(username, cg1.getDistributorGoodsId(), cg1.getSpecificaId());
 
-                if (null != findList && findList.size() > 1) 
-                {
-                    tdCartGoodsService.delete(findList.subList(1,findList.size()));
-                }
+            	 if (null != cartGoods && cartGoods.size() > 1) 
+                 {
+                     tdCartGoodsService.delete(cartGoods.subList(1,cartGoods.size()));
+                 }
             }
         }
 
@@ -281,13 +285,26 @@ public class TdTouchCartController {
 
          if (null != id) {
         	 TdCartGoods cartGoods =tdCartGoodsService.findOne(id);
-             TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(cartGoods.getDistributorGoodsId());
-        	 
+        	 Long leftNumber = 0L;
+ 			if(null != cartGoods.getSpecificaId()){
+ 				TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
+ 				if(null != specificat){
+ 					leftNumber = specificat.getLeftNumber();
+ 				}
+ 			}else{
+ 				TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByIdAndIsInSaleTrue(cartGoods.getDistributorGoodsId());
+ 				if(null != distributorGoods)
+     			{
+ 					leftNumber = distributorGoods.getLeftNumber();
+     			}
+ 			}
              if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                  long quantity = cartGoods.getQuantity();
                  
-                 if(quantity < distributorGoods.getLeftNumber()){
+                 if(quantity < leftNumber){
                  	cartGoods.setQuantity(quantity + 1);
+                 }else{
+                 	cartGoods.setQuantity(leftNumber);
                  }
                  tdCartGoodsService.save(cartGoods);
              }

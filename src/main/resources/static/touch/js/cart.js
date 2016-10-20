@@ -1,91 +1,3 @@
-/*$(document).ready(function(){
-
-    var toggleSelect = function()
-    {
-        $.ajax({
-            type:"post",
-            url:"/cart/toggleSelect",
-            data:{"id":$(this).attr("cgid")},
-            success:function(data){
-                $(".page-main").html(data);
-                
-                initClicks();
-            }
-        });
-    }
-    
-    var toggleAll = function()
-    {
-        $.ajax({
-            type:"post",
-            url:"/cart/toggleAll",
-            data:{"sid":$(this).attr("sid")},
-            success:function(data){
-                $(".page-main").html(data);
-                
-                initClicks();
-            }
-        });
-    }
-    
-    var numIncrease = function()
-    {
-        $.ajax({
-            type:"post",
-            url:"/cart/numberAdd",
-            data:{"id":$(this).attr("cgid")},
-            success:function(data){
-                $(".page-main").html(data);
-                
-                initClicks();
-            }
-        });
-    }
-    
-    var numDecrease = function()
-    {
-        $.ajax({
-            type:"post",
-            url:"/cart/numberMinus",
-            data:{"id":$(this).attr("cgid")},
-            success:function(data){
-                $(".page-main").html(data);
-                
-                initClicks();
-            }
-        });
-    }
-    
-    var delGoods = function()
-    {
-        $.ajax({
-            type:"post",
-            url:"/cart/del",
-            data:{"id":$(this).attr("cgid")},
-            success:function(data){
-                $(".page-main").html(data);
-                
-                initClicks();
-            }
-        });
-    }
-    
-    var initClicks = function(){
-        // 点击商品选择框
-        $(".duoxuank").click(toggleSelect);
-        // 点击全选
-        $("#all-select").click(toggleAll);
-        // 数量加1
-        $(".num_add").click(numIncrease);
-        // 数量减1
-        $(".num_minus").click(numDecrease);
-        // 点击删除
-        $(".gwc_delete").click(delGoods);
-    }
-    
-    initClicks();
-});
-*/
 
 // 点击复选框
 function toggleSelect(id)
@@ -145,15 +57,20 @@ function delCartItem(id)
     {
         return;
     }
-    
-    $.ajax({
-        type:"post",
-        url:"/touch/cart/del",
-        data:{"id": id},
-        success:function(data){
-            $("#main").html(data);
-        }
-    });
+    layer.confirm('确定要把此商品移除购物车？',{
+		btn: ['确定','取消'] //按钮
+	}, function(){
+		    $.ajax({
+		        type:"post",
+		        url:"/touch/cart/del",
+		        data:{"id": id},
+		        success:function(data){
+		            $("#main").html(data);
+		        }
+		    });
+    }, function(){
+		layer.closeAll();
+	});
 }
 
 function goNext(goodsNum)
@@ -161,8 +78,23 @@ function goNext(goodsNum)
 	
     if (0==goodsNum)
     {
-        alert("请至少选择一种商品!");
+    	layer.msg('请至少选择一种商品!', {icon: 2,time: 2000});
         return false;
     }
     window.location.href="/touch/order/info";
+}
+function chechQuantity(cid,quantity)
+{
+	$.ajax({
+        type:"post",
+        url:"/cart/changeQuantity",
+        data:{"id": cid,"quantity":quantity},
+        success:function(data){
+            if(data.code==1){
+            	window.location.reload();
+            }else{
+            	layer.alert(data.msg)
+            }
+        }
+    });
 }

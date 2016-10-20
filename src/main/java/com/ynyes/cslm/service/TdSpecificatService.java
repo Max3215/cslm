@@ -32,6 +32,10 @@ public class TdSpecificatService {
 		return null;
 	}
 	
+	public List<TdSpecificat> save(List<TdSpecificat> specList){
+		return (List<TdSpecificat>) repository.save(specList);
+	}
+	
 	public TdSpecificat findOne(Long id){
 		if(null != id){
 			return repository.findOne(id);
@@ -71,6 +75,14 @@ public class TdSpecificatService {
 	public List<TdSpecificat> findByShopIdAndGoodsIdAndType(Long shopId,Long goodsId,Integer type){
 		if(null != goodsId && null != type){
 			return repository.findByShopIdAndGoodsIdAndType(shopId,goodsId, type);
+		}
+		return null;
+	}
+	
+	// 根据原ID查找，主要用于分销商商品规格更新
+	public List<TdSpecificat> findByOldId(Long oldId){
+		if(null != oldId){
+			return repository.findByOldId(oldId);
 		}
 		return null;
 	}

@@ -84,7 +84,7 @@
                         <#list order.orderGoodsList as og>
                             <tr>
                                 <td  width="55%">
-                                    ${og.goodsTitle!''} ${og.goodsColor!''} ${og.goodsCapacity!''} ${og.goodsVersion!''}
+                                    ${og.goodsTitle!''} (${og.specName!''}) 
                                 </td>
                                 <td>${og.goodsCode!''}</td>
                                 <td align="center">${og.price?string("0.00")}<#if og.unit??>/${og.unit!''}</#if></td>

@@ -227,8 +227,9 @@ DD_belatedPNG.fix('.,img,background');
                 <td width="60" class="td001">
                     <a href="/goods/${og.goodsId?c}"><img src="${og.goodsCoverImageUri}" /></a>
                 </td>
-                <td width="40%">
+                <td width="40%" style="text-align: left;">
                     <a href="/goods/${og.goodsId?c}">${og.goodsTitle}</a>
+                    <#if og.specName??><p style="color:#999;">规格：${og.specName!''}</p></#if>
                 </td>
                 <td>
                     ${order.shippingName!''}

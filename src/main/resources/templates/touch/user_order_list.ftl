@@ -111,6 +111,7 @@ function weixinpay(orderId){
         <a href="/touch/goods/${og.goodsId?c}" class="pic"><img src="${og.goodsCoverImageUri!''}" /></a>
         <div class="info">
           <a href="/touch/goods/${og.goodsId?c}">${og.goodsTitle!''}</a>
+          <#if og.specName??><p>规格：${og.specName!''}</p></#if>
           <p>价格：￥${og.price?string('0.00')}</p>
           <p>数量：${og.quantity!'0'}</p>
         </div>

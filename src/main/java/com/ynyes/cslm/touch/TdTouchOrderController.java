@@ -5,11 +5,6 @@ import static org.apache.commons.lang3.StringUtils.leftPad;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,9 +23,6 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.jasper.tagplugins.jstl.core.Url;
-import org.apache.solr.common.util.Hash;
-import org.eclipse.jetty.util.UrlEncoded;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
@@ -59,6 +51,7 @@ import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCartGoodsService;
@@ -79,6 +72,7 @@ import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdShippingAddressService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
@@ -164,6 +158,8 @@ public class TdTouchOrderController {
     @Autowired
     private TdWeiXinPayService tdWeiXinPayService;
     
+    @Autowired
+	private TdSpecificatService tdSpecificatService;
     
     @RequestMapping(value = "/info")
     public String orderInfo(Long code,Integer app, HttpServletRequest req, HttpServletResponse resp,
@@ -409,7 +405,7 @@ public class TdTouchOrderController {
             }
         }
 
-        // 使用粮草
+        // 使用积分
         if (null != user.getTotalPoints()) {
         	if(null != pointUse)
         	{
@@ -513,6 +509,11 @@ public class TdTouchOrderController {
 
 				// 单位
 				orderGoods.setUnit(distributorGoods.getUnit());
+				
+				// 规格
+				orderGoods.setSpecId(cartGoods.getSpecificaId());
+				orderGoods.setSpecName(cartGoods.getSpecName());
+				
 				// 数量
 				long quantity = Math.min(cartGoods.getQuantity(), distributorGoods.getLeftNumber());
 
@@ -566,6 +567,19 @@ public class TdTouchOrderController {
 				if (!distributorGoods.getIsDistribution()) {
 					// 更新库存
 					Long leftNumber = distributorGoods.getLeftNumber();
+					
+					if(null != cartGoods.getSpecificaId()){
+						TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
+						if(null != specificat && null != specificat.getLeftNumber()){
+							if(specificat.getLeftNumber() >= quantity){
+								specificat.setLeftNumber(specificat.getLeftNumber()-quantity);
+							}else{
+								specificat.setLeftNumber(0L);
+							}
+							tdSpecificatService.save(specificat);
+						}
+					}
+					
 					if (leftNumber >= quantity) {
 						leftNumber = leftNumber - quantity;
 					}
@@ -574,6 +588,35 @@ public class TdTouchOrderController {
 						distributorGoods.setIsOnSale(false);
 					}
 				} else {
+					
+					if(null != cartGoods.getSpecificaId()){
+						TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
+						// 如果有规格
+						if(null != specificat && null != specificat.getOldId()){
+							// 更新分销商规格记录
+							TdSpecificat spec = tdSpecificatService.findOne(specificat.getOldId());
+							if(spec.getLeftNumber() >= quantity){
+								spec.setLeftNumber(spec.getLeftNumber()-quantity);
+							}else{
+								spec.setLeftNumber(0L);
+							}
+							tdSpecificatService.save(spec);
+							
+							// 更新代理商品规格
+							List<TdSpecificat> list = tdSpecificatService.findByOldId(specificat.getOldId());
+							if(null != list && list.size() > 0){
+								for (TdSpecificat tdSpecificat : list) {
+									if(tdSpecificat.getLeftNumber() >= quantity){
+										tdSpecificat.setLeftNumber(tdSpecificat.getLeftNumber()-quantity);
+									}else{
+										tdSpecificat.setLeftNumber(0L);
+									}
+								}
+								tdSpecificatService.save(list);
+							}
+						}
+					}
+					
 					TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(
 							distributorGoods.getProviderId(), distributorGoods.getGoodsId());
 					providerGoods.setLeftNumber(providerGoods.getLeftNumber() - quantity);

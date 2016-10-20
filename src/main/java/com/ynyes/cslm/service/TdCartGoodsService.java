@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.repository.TdCartGoodsRepo;
 
 /**
@@ -34,6 +35,9 @@ public class TdCartGoodsService {
     
     @Autowired
     TdDistributorService tdDistributorService;
+    
+    @Autowired
+    TdSpecificatService tdSpecificatService;
     /**
      * 删除
      * 
@@ -140,6 +144,9 @@ public class TdCartGoodsService {
     
     public List<TdCartGoods> findByUsername(String username)
     {
+    	if(null == username){
+    		return null;
+    	}
         return repository.findByUsernameOrderByIdDesc(username);
     }
     
@@ -160,11 +167,18 @@ public class TdCartGoodsService {
                 {
                     cartGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
                     cartGoods.setGoodsTitle(goods.getGoodsTitle());
+                    cartGoods.setUnit(goods.getUnit());
                     cartGoods.setPrice(goods.getGoodsPrice());
+                }
+                if(null != cartGoods.getSpecificaId()){
+                	TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
+                	if(null != specificat){
+                		cartGoods.setSpecName(specificat.getSpecifict());
+                	}
                 }
             }
         }
-        return cartGoodsList;
+        return (List<TdCartGoods>) repository.save(cartGoodsList);
     }
     
     public List<TdCartGoods> findByUsernameAndIsSelectedTrue(String username)
@@ -199,6 +213,16 @@ public class TdCartGoodsService {
     public List<Long> countByDistributorId(String username)
     {
     	return repository.findByUsernameAndIsSelectedTrue(username);
+    }
+    
+    public List<TdCartGoods> findByUsernameAndDistributorGoodsIdAndSpecificaId(String username,Long dis_goodsId,Long specId){
+    	if(null == username ||  null == dis_goodsId){
+    		return null;
+    	}
+    	if(null == specId){
+    		return repository.findByUsernameAndDistributorGoodsId(username, dis_goodsId);
+    	}
+    	return repository.findByUsernameAndDistributorGoodsIdAndSpecificaId(username, dis_goodsId, specId);
     }
     
 }

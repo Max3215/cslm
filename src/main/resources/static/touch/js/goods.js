@@ -1,27 +1,42 @@
-$(document).ready(function(){
-    // 点击tab
-    $(".stab").click(function(){
-        // tab特效切换
-        $(".stab").removeClass("sel");
-        $(this).addClass("sel");
-       
-        // tab页面切换
-        $(".php_z").css("display", "none");
-        $("#tab"+$(this).attr("tid")).css("display", "block");
-    });
-});
-
-// 收藏
+// 收藏商品
 function addCollect(goodsId)
 {
-    if (undefined == goodsId){return;}
+    if (undefined == goodsId)
+    {
+        return;
+    }
+    
     $.ajax({
         type:"post",
-        url:"/user/collect/add",
+        url:"/touch/user/collect/add",
         data:{"disgId": goodsId},
         dataType: "json",
         success:function(res){
             // 需登录
+            if (res.code==1){
+		    	layer.confirm(res.message,{
+		    		btn: ['确定','取消'] //按钮
+				}, function(){
+					window.location.href = "/touch/login?goodsId="+goodsId;
+				}, function(){
+					layer.closeAll();
+				});
+		    }
+        }
+    });
+}
+// 收藏店铺
+function collectShop(disId){
+    if(undefined == disId){
+        return ;
+    }
+    
+    $.ajax({
+        type:"post",
+        url:"/touch/user/collect/shop",
+        data:{"disId": disId},
+        dataType: "json",
+        success:function(res){
             if (res.code==1){
             	layer.confirm(res.message,{
             		btn: ['确定','取消'] //按钮
@@ -30,10 +45,14 @@ function addCollect(goodsId)
 				}, function(){
 					layer.closeAll();
 				});
+            }else{
+            	layer.msg(res.message,  {icon: 2,time: 2000});
             }
         }
     });
+    
 }
+
 // 选择规格
 function chooseSpec(tag,id){
 	$.ajax({
@@ -42,11 +61,11 @@ function chooseSpec(tag,id){
 		data : {"id":id},
 		success: function(data){
 			if(data.code ==1){
-				$(".choose  a").removeClass("sel");
-				$(tag).addClass("sel");
+				$(".part dl dd a").removeClass("act");
+				$(tag).addClass("act");
 				$("#specId").val(id);
 				
-				$("#left_label").html("库存"+data.num)
+				$("#left_font").html("（库存："+data.num+"）")
 				$("#leftNumber").val(data.num);
 				
 				var q = parseInt($("#quantity").val());
@@ -74,9 +93,6 @@ function addNum(){
         $("#quantity").val(ln);
     }
     
-//    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
-//    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
-//    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + $("#quantity").val());
 }
 // 减少商品数量
 function minusNum(){
@@ -86,9 +102,6 @@ function minusNum(){
         $("#quantity").val(q-1);
         $("#number").val(q-1);
     }
-//    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
-//    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
-//    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + $("#quantity").val());
 }
 
 // 手动输入数量
@@ -96,6 +109,9 @@ function checkNumber(num)
 {
 	var q = parseInt($("#quantity").val());
     var ln = parseInt($("#leftNumber").val());
+    if(undefined == q || ""==q || isNaN(q)){
+		quantity = 1;
+	}
     
     if (q < ln){
         $("#quantity").val(q+1);
@@ -112,7 +128,7 @@ function addCart(dis_id){
 	
 	if( "true" == isSpec){
 		if(undefined == specId || ""== specId){
-			layer.msg('请先选择规格',  {icon: 2,time: 2000});
+			$('.pro_eject').fadeIn(300);
 			return;
 		}
 	}
@@ -131,6 +147,9 @@ function addCart(dis_id){
 		success: function(data){
 			if(data.code ==1){
 				layer.msg(data.msg,  {icon: 6,time: 2000});
+				$('.pro_eject').fadeOut(300);
+				$("#specId").val('');
+				$(".part dl dd a").removeClass("act");
 			}else{
 				layer.msg(data.msg,  {icon: 2,time: 2000});
 			}
@@ -144,7 +163,7 @@ function byGoodsNow(dis_goodsId){
 	
 	if("true" == isSpec){
 		if(undefined == specId || ""== specId){
-			layer.msg('请先选择规格',  {icon: 2,time: 2000});
+			$('.pro_eject').fadeIn(300);
 			return;
 		}
 	}
@@ -165,12 +184,12 @@ function byGoodsNow(dis_goodsId){
 				layer.confirm(data.msg,{
             		btn: ['确定','取消'] //按钮
 				}, function(){
-					window.location.href = "/login?goodsId="+dis_goodsId;
+					window.location.href = "/touch/login?goodsId="+dis_goodsId;
 				}, function(){
 					layer.closeAll();
 				});
 			}else if(data.code ==2){
-				window.location.href = "/order/info";
+				window.location.href = "/touch/order/info";
 			}
 		}
 	})

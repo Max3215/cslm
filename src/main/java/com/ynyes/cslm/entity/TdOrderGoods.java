@@ -97,6 +97,14 @@ public class TdOrderGoods {
     // 单位
     @Column
     private String unit;
+    
+    // 商品规格ID
+    @Column
+    private Long specId;
+    
+    // 商品规格值
+    @Column
+    private String specName;
 
     public Long getId() {
         return id;
@@ -248,6 +256,22 @@ public class TdOrderGoods {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public Long getSpecId() {
+		return specId;
+	}
+
+	public void setSpecId(Long specId) {
+		this.specId = specId;
+	}
+
+	public String getSpecName() {
+		return specName;
+	}
+
+	public void setSpecName(String specName) {
+		this.specName = specName;
 	}
     
 }

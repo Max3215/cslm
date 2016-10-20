@@ -11,10 +11,11 @@
                 <a href="javascript:;" onclick="toggleSelect(${cg.id?c});"  class="choose <#if cg.isSelected?? && cg.isSelected>sel<#else><#assign allChecked=false ></#if>"></a>
                 <a href="/touch/goods/${cg.distributorGoodsId?c!''}" class="pic"><img src="${cg.goodsCoverImageUri!''}" /></a>
                 <a href="/touch/goods/${cg.distributorGoodsId?c!''}" class="name">${cg.goodsTitle!''}</a>
+                <#if cg.specName??><p style="color:#666;">${cg.specName!''}</p></#if>
                 <p>价格：￥${cg.price?string("0.00")}</p>
                 <div class="num">
                   <a href="javascript:minusNum(${cg.id?c})" class="aj">-</a>
-                  <input class="text" type="text" value="${cg.quantity!''}" />
+                  <input class="text" type="text" value="${cg.quantity!''}" onblur="chechQuantity(${cg.id?c},this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
                   <a href="javascript:addNum(${cg.id?c});" class="aj">+</a>
                   <a href="javascript:delCartItem(${cg.id?c});" class="del">删除</a>
                 </div>
@@ -37,11 +38,8 @@
   <#--   <a href="javascript:void(0)" class="choose <#if allChecked>" onclick="$(this).toggleClass('sel');">全选</a>
    <a href="#" class="del">删除选中的商品</a>-->
     <p>合计：<span>¥<#if cart_goods_list??>${totalPrice?string("0.00")}</#if></span></p>
-    <#if isChecked>
-    <a href="/touch/order/info" class="btn">去结算</a>
-    <#else>
-    <a href="javascript:;" onclick="showMsg()" class="btn">去结算</a>
-    </#if>
+    
+    <a  class="btn" onclick="javascript:goNext(${totalGoods!0});">去结算</a>
   </section>
 <#else>
      <section class="cart_empty">

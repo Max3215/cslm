@@ -33,7 +33,7 @@
     </tr>
      <tr>
       <th>库存：</th>
-      <td><input type="text" value="<#if dis_goods??>${dis_goods.leftNumber!'0'}</#if>" id="leftNumber" onkeyup="value=value.replace(/[^0-9]/g,'')"></td>
+      <td><input type="text" value="<#if dis_goods??>${dis_goods.leftNumber?c!'0'}</#if>" id="leftNumber" onkeyup="value=value.replace(/[^0-9]/g,'')"></td>
     </tr>
     <tr>
       <th><b class="fs14">规格</b></th>

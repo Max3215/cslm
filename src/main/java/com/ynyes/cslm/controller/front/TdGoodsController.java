@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdDistributor;
@@ -22,6 +23,7 @@ import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdProduct;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserConsult;
 import com.ynyes.cslm.entity.TdUserPoint;
@@ -33,6 +35,7 @@ import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProductService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserCollectService;
 import com.ynyes.cslm.service.TdUserCommentService;
 import com.ynyes.cslm.service.TdUserConsultService;
@@ -91,6 +94,9 @@ public class TdGoodsController {
     
     @Autowired
     private TdDistributorGoodsService tdDistributorGoodsService;
+    
+    @Autowired
+    private TdSpecificatService tdSpecificatService;
 
     @RequestMapping("/goods/{dgId}")
     public String product(@PathVariable Long dgId, Long shareId,
@@ -106,6 +112,8 @@ public class TdGoodsController {
         {
         	return "/client/error_404";
         }
+        
+        map.addAttribute("spec_list", tdSpecificatService.findByShopIdAndGoodsIdAndType(distributorGoods.getDisId(), distributorGoods.getGoodsId(), 1));
         
         Long goodsId = distributorGoods.getGoodsId();
         
@@ -187,6 +195,34 @@ public class TdGoodsController {
         	map.addAttribute("collect", true);
         }
         
+        TdProductCategory tdProductCategory = tdProductCategoryService
+                .findOne(goods.getCategoryId());
+
+        // 鑾峰彇璇ョ被鍨嬫墍鏈夌埗绫诲瀷
+        if (null != tdProductCategory) {
+            if (null != tdProductCategory.getParentTree()
+                    && !"".equals(tdProductCategory.getParentTree())) {
+                List<TdProductCategory> catList = new ArrayList<TdProductCategory>();
+
+                for (String cid : tdProductCategory.getParentTree().split(",")) {
+                    if (!"".equals(cid)) {
+                        // 鍘婚櫎鏂规嫭鍙�
+                        cid = cid.replace("[", "");
+                        cid = cid.replace("]", "");
+
+                        TdProductCategory tpc = tdProductCategoryService
+                                .findOne(Long.parseLong(cid));
+
+                        if (null != tpc) {
+                            catList.add(tpc);
+                        }
+                    }
+                }
+
+                map.addAttribute("category_tree_list", catList);
+            }
+        }
+        
         // 商品
         map.addAttribute("goods", goods);
 
@@ -215,253 +251,6 @@ public class TdGoodsController {
         map.addAttribute("total_collects",
                 tdUserCollectService.countByGoodsId(goods.getId()));
 
-        // 查找类型
-        TdProductCategory tdProductCategory = tdProductCategoryService
-                .findOne(goods.getCategoryId());
-
-        // 获取该类型所有父类型
-        if (null != tdProductCategory) {
-            if (null != tdProductCategory.getParentTree()
-                    && !"".equals(tdProductCategory.getParentTree())) {
-                List<TdProductCategory> catList = new ArrayList<TdProductCategory>();
-
-                for (String cid : tdProductCategory.getParentTree().split(",")) {
-                    if (!"".equals(cid)) {
-                        // 去除方括号
-                        cid = cid.replace("[", "");
-                        cid = cid.replace("]", "");
-
-                        TdProductCategory tpc = tdProductCategoryService
-                                .findOne(Long.parseLong(cid));
-
-                        if (null != tpc) {
-                            catList.add(tpc);
-                        }
-                    }
-                }
-
-                map.addAttribute("category_tree_list", catList);
-            }
-        }
-
-        // 获取商品的其他版本
-        if (null != distributorGoods.getProductId()) {
-            TdProduct product = tdProductService.findOne(goods.getProductId());
-
-            if (null != product) {
-                List<TdDistributorGoods> productGoodsList = tdDistributorGoodsService.
-                		findByDistributorIdAndProductIdAndIsOnSale(tdDistributorGoodsService.findDistributorId(dgId),product.getId());
-                
-                // 总的规格总类数量
-                int totalSelects = product.getTotalSelects();
-
-                List<String> selectOneList = new ArrayList<String>();
-                List<String> selectTwoList = new ArrayList<String>();
-                List<String> selectThreeList = new ArrayList<String>();
-
-                List<TdDistributorGoods> selectOneGoodsList = new ArrayList<TdDistributorGoods>();
-                List<TdDistributorGoods> selectTwoGoodsList = new ArrayList<TdDistributorGoods>();
-                List<TdDistributorGoods> selectThreeGoodsList = new ArrayList<TdDistributorGoods>();
-
-                String sOne = null;
-                String sTwo = null;
-                String sThree = null;
-
-                map.addAttribute("total_select", totalSelects);
-
-                switch (totalSelects) {
-                case 1:
-                    // 规格一的值
-                    sOne = goods.getSelectOneValue();
-                    
-                    if (null != sOne)
-                    {
-                        sOne = sOne.trim();
-                    }
-
-                    for (TdDistributorGoods pdtGoods : productGoodsList) {
-                        // 其他同类商品规格一的值
-                        String s1 = pdtGoods.getSelectOneValue().trim();
-
-                        // 规格值不同时加入展示列表
-                        if (!selectOneList.contains(s1)) {
-                            selectOneList.add(s1);
-                            selectOneGoodsList.add(pdtGoods);
-                        }
-                    }
-
-                    map.addAttribute("select_one_name",
-                            product.getSelectOneName());
-                    map.addAttribute("one_selected", sOne);
-                    map.addAttribute("select_one_goods_list",
-                            selectOneGoodsList);
-
-                    break;
-                case 2:
-                    // 规格一、 二的值
-                    sOne = goods.getSelectOneValue();
-                    
-                    if (null != sOne)
-                    {
-                        sOne = sOne.trim();
-                    }
-                    
-                    sTwo = goods.getSelectTwoValue();
-                    
-                    if (null != sTwo)
-                    {
-                        sTwo = sTwo.trim();
-                    }
-
-                    for (TdDistributorGoods pdtGoods : productGoodsList) {
-                        // 其他商品规格一、二的值
-                        String s1 = pdtGoods.getSelectOneValue().trim();
-                        String s2 = pdtGoods.getSelectTwoValue().trim();
-
-                        // 规格一不同商品
-                        if (!selectOneList.contains(s1)) {
-                            selectOneList.add(s1);
-                            selectOneGoodsList.add(pdtGoods);
-                        }
-
-                        // 规格二不同， 规格一相同的商品
-                        if (!selectTwoList.contains(s2)
-                                && sOne.equalsIgnoreCase(s1)) {
-                            selectTwoList.add(s2);
-                            selectTwoGoodsList.add(pdtGoods);
-                        }
-                    }
-
-                    map.addAttribute("select_one_name",
-                            product.getSelectOneName());
-                    map.addAttribute("select_two_name",
-                            product.getSelectTwoName());
-                    map.addAttribute("one_selected", sOne);
-                    map.addAttribute("two_selected", sTwo);
-                    map.addAttribute("select_one_goods_list",
-                            selectOneGoodsList);
-                    map.addAttribute("select_two_goods_list",
-                            selectTwoGoodsList);
-                    break;
-
-                case 3:
-                    // 规格一、二、三的值
-                    sOne = goods.getSelectOneValue();
-                    
-                    if (null != sOne)
-                    {
-                        sOne = sOne.trim();
-                    }
-                    
-                    sTwo = goods.getSelectTwoValue();
-                    
-                    if (null != sTwo)
-                    {
-                        sTwo = sTwo.trim();
-                    }
-                    
-                    sThree = goods.getSelectThreeValue();
-                    
-                    if (null != sThree)
-                    {
-                        sThree = sThree.trim();
-                    }
-
-                    for (TdDistributorGoods pdtGoods : productGoodsList) {
-                        // 其他商品规格一、二、三的值
-                        String s1 = pdtGoods.getSelectOneValue().trim();
-                        String s2 = pdtGoods.getSelectTwoValue().trim();
-                        String s3 = pdtGoods.getSelectThreeValue().trim();
-
-                        // 规格一不同商品
-                        if (!selectOneList.contains(s1)) 
-                        {
-                            selectOneList.add(s1);
-                            selectOneGoodsList.add(pdtGoods);
-                        }
-
-                        // 规格二不同， 规格一的商品
-                        if (!selectTwoList.contains(s2)
-                                && sOne.equalsIgnoreCase(s1)) {
-                            selectTwoList.add(s2);
-                            selectTwoGoodsList.add(pdtGoods);
-                        }
-
-                        // 规格三不同， 规格一、二相同的商品
-                        if (!selectThreeList.contains(s3)
-                                && sTwo.equalsIgnoreCase(s2)
-                                && sOne.equalsIgnoreCase(s1)) {
-                            selectThreeList.add(s3);
-                            selectThreeGoodsList.add(pdtGoods);
-                        }
-                    }
-
-                    map.addAttribute("select_one_name",
-                            product.getSelectOneName());
-                    map.addAttribute("select_two_name",
-                            product.getSelectTwoName());
-                    map.addAttribute("select_three_name",
-                            product.getSelectThreeName());
-                    map.addAttribute("one_selected", sOne);
-                    map.addAttribute("two_selected", sTwo);
-                    map.addAttribute("three_selected", sThree);
-                    map.addAttribute("select_one_goods_list",
-                            selectOneGoodsList);
-                    map.addAttribute("select_two_goods_list",
-                            selectTwoGoodsList);
-                    map.addAttribute("select_three_goods_list",
-                            selectThreeGoodsList);
-                    break;
-                }
-            }
-        }
-
-        // 分享时添加积分
-        if (null != shareId) {
-            TdUser sharedUser = tdUserService.findOne(shareId);
-            TdSetting setting = tdSettingService.findTopBy();
-
-            String clientIp = req.getRemoteHost();
-            String oldIp = (String) req.getSession().getAttribute("remote_ip");
-
-            // 不是来自同一个ip的访问，普通用户
-            if (!clientIp.equalsIgnoreCase(oldIp)
-                    && sharedUser.getRoleId().equals(0L)) {
-                req.getSession().setAttribute("remote_ip", clientIp);
-
-                if (null != sharedUser && null != setting) {
-                    if (null == sharedUser.getPointGetByShareGoods()) {
-                        sharedUser.setPointGetByShareGoods(0L);
-                    }
-
-                    if (null == setting.getGoodsShareLimits()) {
-                        setting.setGoodsShareLimits(50L); // 设定一个默认值
-                    }
-
-                    // 小于积分限额，进行积分
-                    if (sharedUser.getPointGetByShareGoods().compareTo(
-                            setting.getGoodsShareLimits()) < 0) {
-                        TdUserPoint point = new TdUserPoint();
-                        point.setDetail("分享商品获得积分");
-                        point.setPoint(setting.getGoodsSharePoints());
-                        point.setPointTime(new Date());
-                        point.setUsername(sharedUser.getUsername());
-
-                        if (null != sharedUser.getTotalPoints()) {
-                            point.setTotalPoint(sharedUser.getTotalPoints()
-                                    + point.getPoint());
-                        } else {
-                            point.setTotalPoint(point.getPoint());
-                        }
-
-                        point = tdUserPointService.save(point);
-
-                        sharedUser.setTotalPoints(point.getTotalPoint()); // 积分
-                        tdUserService.save(sharedUser);
-                    }
-                }
-            }
-        }
 
         map.addAttribute("server_ip", req.getLocalName());
         map.addAttribute("server_port", req.getLocalPort());
@@ -609,6 +398,25 @@ public class TdGoodsController {
     	}
     	
     	res.put("code", 1);
+    	return res;
+    }
+    
+    @RequestMapping(value="/goods/specifica",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> findSpec(Long id,HttpServletRequest req){
+    	Map<String,Object> res = new HashMap<String, Object>();
+    	res.put("code", 0);
+    	
+    	if(null != id){
+    		TdSpecificat specificat = tdSpecificatService.findOne(id);
+    		if(null != specificat){
+    			if(specificat.getLeftNumber() > 0 ){
+    				res.put("num", specificat.getLeftNumber());
+    				res.put("code", 1);
+    			}
+    		}
+    	}
+    	res.put("msg", "此规格已售完，请选择其它类型");
     	return res;
     }
 }

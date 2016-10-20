@@ -159,6 +159,7 @@ function subPrice(){
                     <a href="/touch/goods/${cg.distributorGoodsId?c}" class="pic"><img src="${cg.goodsCoverImageUri!''}"></a>
                     <div class="info">
                       <a href="/touch/goods/${cg.distributorGoodsId?c}">${cg.goodsTitle!''}</a>
+                      <p>规格：${cg.specName!''}</p>
                       <p>价格：￥${cg.price?string("0.00")}</p>
                       <p>数量：${cg.quantity!''}</p>
                     </div>
@@ -196,6 +197,7 @@ function subPrice(){
       </menu>
   </section>
   <!-- 底部 END -->
+  <script src="/layer/layer.js"></script>
  <script>
  function showPwd(){
     $("#pwd_div").css("display","block");
@@ -213,7 +215,7 @@ function subPrice(){
             data : {"paypwd" : paypwd},
             success : function(data){
                 if(data.code == 0){
-                    alert(data.msg);
+                    layer.msg(data.msg,  {icon: 2,time: 2000});
                     return;
                 }else{
                     $("#form1").submit();

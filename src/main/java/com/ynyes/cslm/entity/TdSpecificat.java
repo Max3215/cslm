@@ -33,6 +33,10 @@ public class TdSpecificat {
 	// 库存
 	@Column
 	private Long leftNumber;
+	
+	// 原规格ID
+	@Column
+	private Long oldId;
 
 	public Long getId() {
 		return id;
@@ -80,6 +84,14 @@ public class TdSpecificat {
 
 	public void setLeftNumber(Long leftNumber) {
 		this.leftNumber = leftNumber;
+	}
+
+	public Long getOldId() {
+		return oldId;
+	}
+
+	public void setOldId(Long oldId) {
+		this.oldId = oldId;
 	}
 	
 	

@@ -20,6 +20,7 @@
 <script type="text/javascript" src="/client/js/goods_comment_consult.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".click_a").click(function(){
@@ -39,93 +40,8 @@ $(document).ready(function(){
         $(this).next().hide();
     })
     
-    //调用方法
-//$("#quantity").keypress(function () {
-//    $("#quantity").val(stripscript($(this).val()));
-//    })
-})
-
-//替换特殊字符
-function stripscript(s) {
-    var pattern = new RegExp("[`~%!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）;—|{}【】‘；：”“'。，、？]")
-    var rs = "";
-    for (var i = 0; i < s.length; i++) {
-        rs = rs + s.substr(i, 1).replace(pattern, '');
-    }
-  
-    return rs;
-}
-
-
-function addNum(){
-    var q = parseInt($("#quantity").val());
-    var ln = parseInt($("#leftNumber").val());
- //   <#if dis_goods?? && dis_goods.leftNumber??>
-        if (q < ${dis_goods.leftNumber?c!'0'})
-        {
-            $("#quantity").val(q+1);
-        }
-        else
-        {
-            alert("已达到库存最大值");
-        }
-//   <#else>
-//        $("#quantity").val(q+1);
-//        $("#number").val(q+1);
-//  </#if>
-    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
-    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
-    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + $("#quantity").val());
-}
-
-<#-- 减少商品数量的方法 -->
-function minusNum(){
-    var q = parseInt($("#quantity").val());
-        
-    if (q > 1){
-        $("#quantity").val(q-1);
-        $("#number").val(q-1);
-    }
-    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
-    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + $("#quantity").val());
-    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + $("#quantity").val());
-}
-
-<!--  加入购物车   -->
-function cartInit(dId){
-    var quantity = document.getElementById("quantity").value;
-    if(quantity <= 0 || "" == quantity ){
-        return;
-    }
- <!--   var newTab=window.open('about:blank');-->
-    $.ajax({
-        type: "get",
-        url: "/goods/incart",
-        data: {"id":dId,"quantity":quantity},
-        success: function (data) { 
-            if(data.msg){
-                alert(data.msg);
-                return;
-            }
-            window.location.href="/cart/init?id="+dId+"&quantity="+quantity;
-        }
-    });
-}
-
-<!--  立即购买   -->
-function byNow(dId){
-    var quantity = document.getElementById("quantity").value;
-    var leftNumber = parseInt($("#leftNumber").val());
-    
-    if(quantity <= 0 || "" == quantity || quantity > leftNumber){
-        alert("请选择正确的数量");
-        return;
-    }
- //   window.open("/order/byNow/"+dId+"?quantity="+quantity);
-    window.location.href = "/order/byNow/"+dId+"?quantity="+quantity;
-}
 function showmsg(){
-    alert("库存不足！");
+    layer.alert("库存不足！");
     return;
 }
 
@@ -133,7 +49,6 @@ function proGoods(did)
 {
     var quantity = document.getElementById("quantity").value;
     
-    // window.location.href = "/order/proGoods/"+did+"?quantity="+quantity;
     window.open("/order/proGoods/"+did+"?quantity="+quantity);
 }
 
@@ -154,9 +69,9 @@ function proGoods(did)
                     <a href="/list/${item.id?c}" title="${item.title!''}" >${item.title!''}</a>
                 </#list> 
             </#if>
-            <#if goods??> 
+            <#if dis_goods??> 
                 &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-                <a href="/goods/${dis_goods.id?c}" title="${dis_goods.title!''}">${dis_goods.title!''}</a>
+                <a href="/goods/${dis_goods.id?c}" title="${dis_goods.goodsTitle!''}">${dis_goods.goodsTitle!''}</a>
             </#if>
         </p>
 	</section>
@@ -193,9 +108,6 @@ function proGoods(did)
 					</div>
 				</div>
 				<div class="clear"></div>
-				<#--
-				<div class="share">点击分享：</div>
-				-->
 				<a href="javascript:addCollect(${dis_goods.id?c})" id="collect" class="love <#if collect??>ed</#if>" onclick="$(this).toggleClass('ed')" title="收藏商品">收藏商品</a>
 			</section>
 			<section class="proinfo_right">
@@ -208,97 +120,26 @@ function proGoods(did)
 				</div>
 				
 				<!-- 参数开始   -->
-				<#if total_select??> 
-                    <#if 1==total_select>
-        				<menu class="choose">
-        					<span>${select_one_name!''}：</span>
-        					<#if select_one_goods_list??> 
-                                 <#list select_one_goods_list as item> 
-                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectOneValue}</a> 
-                                 </#list>
-                            </#if>
-        				</menu>
-                    <#elseif 2==total_select>
-                        <menu class="choose">
-                            <span>${select_one_name!''}：</span>
-                            <#if select_one_goods_list??> 
-                                 <#list select_one_goods_list as item> 
-                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectOneValue}</a> 
-                                 </#list>
-                            </#if>
-                        </menu>
-                        <menu class="choose">
-                            <span>${select_two_name!''}：</span>
-                            <#if select_two_goods_list??> 
-                                 <#list select_two_goods_list as item> 
-                                     <a <#if item.selectTwoValue==two_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectTwoValue}</a> 
-                                 </#list>
-                            </#if>
-                        </menu>
-                    <#elseif 3==total_select>
-                        <menu class="choose">
-                            <span>${select_one_name!''}：</span>
-                            <#if select_one_goods_list??> 
-                                 <#list select_one_goods_list as item> 
-                                     <a <#if item.selectOneValue==one_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectOneValue}</a> 
-                                 </#list>
-                            </#if>
-                        </menu>
-                        <menu class="choose">
-                            <span>${select_two_name!''}：</span>
-                            <#if select_two_goods_list??> 
-                                 <#list select_two_goods_list as item> 
-                                     <a <#if item.selectTwoValue==two_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectTwoValue}</a> 
-                                 </#list>
-                            </#if>
-                        </menu>
-                        <menu class="choose">
-                            <span>${select_three_name!''}：</span>
-                            <#if select_three_goods_list??> 
-                                 <#list select_three_goods_list as item> 
-                                     <a <#if item.selectThreeValue==three_selected>class="sel"</#if>href="/goods/${item.id?c}">${item.selectThreeValue}</a> 
-                                 </#list>
-                            </#if>
-                        </menu>
-                    </#if>
+				<#if spec_list?? && spec_list?size gt 0> 
+				<menu class="choose">
+					<span>规格 ：</span>
+                         <#list spec_list as item> 
+                             <a class="spec" onclick="chooseSpec($(this),${item.id?c})">${item.specifict!''}</a> 
+                         </#list>
+				</menu>
+				<input type="hidden" value="true" id="isSpec">
+				<#else>
+				<input type="hidden" value="false" id="isSpec">
                 </#if>
+                <input type="hidden" value="" id="specId">
 				<!--  参数结束    -->
-				<script>
-				function checkNumber(num)
-				{
-				    if (num==''|| num=='0') 
-				    {
-				        $("#quantity").val(1);
-				        return ;
-				    }
-				    // 验证手动输入数量库存
-				    $.ajax({
-                            type: "get",
-                            url: "/goods/incart",
-                            data: {"id":${dis_goods.id?c},"quantity":num},
-                            success: function (data) { 
-                                if(data.code== 0 ){
-                                    alert(data.msg);
-                                    $("#quantity").val(1);
-                                    return;
-                                }else{
-                                    $("#quantity").val(num);
-                                    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" +num);
-                                    $("#proGoods").attr("href", "/order/proGoods/${dis_goods.id?c}?quantity=" + num);
-                                    $("#buyNow").attr("href", "/order/byNow/${dis_goods.id?c}?quantity=" + num);
-                                }
-                            }
-                        });
-				}
-				
-				</script>
 				<p class="digital">
 					<#if dis_goods??>
 					<span>数量：</span>
-					<a id="id-minus" href="javascript:minusNum();">-</a>
+					<a id="id-minus" onclick="minusNum();">-</a>
 					<input class="text" type="text" id="quantity" value="1" onfocus="if(value=='1'||value=='0') {value='1'}" onblur="checkNumber(this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
-					<a id="id-plus" href="javascript:addNum();">+</a>
-					<label>库存${dis_goods.leftNumber!'0'}</label>
+					<a id="id-plus" onclick="addNum();">+</a>
+					<label id="left_label">库存${dis_goods.leftNumber!'0'}</label>
 					<input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">
 					<#else>
 					<lable sytle="color:red">*当前超市没有此商品，您可以选择其他超市继续购买</label>
@@ -314,15 +155,17 @@ function proGoods(did)
 					<#if dis_goods??>
 				          <#if dis_goods.leftNumber?? && dis_goods.leftNumber gt 0>
         					   <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
-        					       <a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car" id="proGoods">立即预购</a>
+        					       <#--<a href="/order/proGoods/${dis_goods.id?c}" target="_blank"  title="预购商品" class="car" id="proGoods">立即预购</a>-->
+        					       <a onclick="byGoodsNow(${dis_goods.id?c})" title="预购商品" class="car" id="proGoods">立即预购</a>
         					   <#else>
-            					   <a href="/order/byNow/${dis_goods.id?c}" id="buyNow" target="_blank" title="立即购买" class="buy">立即购买</a>
+            					   <#--<a href="/order/byNow/${dis_goods.id?c}" id="buyNow"  title="立即购买" class="buy">立即购买</a>-->
+            					   <a onclick="byGoodsNow(${dis_goods.id?c})" id="buyNow"  title="立即购买" class="buy">立即购买</a>
         					   </#if>
     					   <#else>
     					       <a href="javascript:; " onclick="showmsg();"  title="立即购买" class="buy">立即购买</a>
     					   </#if>
 					       <#if dis_goods.leftNumber?? && dis_goods.leftNumber gt 0>
-        					<a href="/cart/init?id=${dis_goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart">加入购物车</a>
+        					<a onclick="addCart(${dis_goods.id?c});" title="加入购物车" class="car" id="addCart">加入购物车</a>
         					<#else>
         					<a href="javascript:; " onclick="showmsg();"  title="加入购物车" class="car" id="addCart">加入购物车</a>
         					</#if>

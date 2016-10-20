@@ -18,6 +18,8 @@
 <script src="/client/js/jquery.cityselect.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 
+<script type="text/javascript" src="/client/js/goods.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	$(".click_a").click(function(){
@@ -126,18 +128,18 @@ $(document).ready(function(){
                             <p class="price">￥${goods.goodsPrice?string("#.##")}<span>原价：￥${goods.goodsMarketPrice?string("#.##")}</span></p>
                             <menu class="btn">
                                 <#if goods.leftNumber?? && goods.leftNumber gt 0>
-                                    <a href="/cart/init?id=${goods.id?c}" target="_blank" title="加入购物车" class="car" id="addCart"></a>
+                                    <a onclick="addCart(${goods.id?c});"  title="加入购物车" class="car" id="addCart"></a>
                                 <#else>
-                                    <a href="javascript:; " onclick="showmsg();"  title="加入购物车" class="car" id="addCart"></a>
+                                    <a  onclick="showmsg();"  title="加入购物车" class="car" id="addCart"></a>
                                 </#if>
                                 <#if goods.leftNumber?? && goods.leftNumber gt 0>
                                    <#if goods.isDistribution?? && goods.isDistribution == true>
-                                       <a href="/order/proGoods/${goods.id?c}" target="_blank"  title="预购商品" class="buy" id="proGoods">立即预购</a>
+                                       <a  onclick="byGoodsNow(${goods.id?c});"  title="预购商品" class="buy" id="proGoods">立即预购</a>
                                    <#else>
-                                       <a href="/order/byNow/${goods.id?c}" id="buyNow" target="_blank" title="立即购买" class="buy">立即购买</a>
+                                       <a  onclick="byGoodsNow(${goods.id?c});"  id="buyNow" title="立即购买" class="buy">立即购买</a>
                                    </#if>
                                <#else>
-                                   <a href="javascript:; " onclick="showmsg();"  title="立即购买" class="buy">立即购买</a>
+                                   <a onclick="showmsg();"  title="立即购买" class="buy">立即购买</a>
                                </#if>
                                 <div class="clear"></div>
                             </menu>

@@ -17,5 +17,7 @@ public interface TdSpecificatRepo extends
 	List<TdSpecificat> findByGoodsIdAndType(Long goodsId,Integer type);
 	
 	List<TdSpecificat> findByShopIdAndGoodsIdAndType(Long shopId,Long goodsId,Integer type);
+	
+	List<TdSpecificat> findByOldId(Long id);
 
 }

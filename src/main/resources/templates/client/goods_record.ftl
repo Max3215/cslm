@@ -15,7 +15,8 @@
                             <#list item.orderGoodsList as og>
                                     <#if og.goodsId?c == dis_goods.id?c>
                                         <tr>
-                                            <td>${item.username!''}</td>
+                                        	<#assign len = item.username?length>
+                                            <td>${item.username?substring(0,2)}****${item.username?substring(len-2,len)}</td>
                                             <td>${og.quantity!'0'}</td>
                                             <td>${item.orderTime!''}</td>
                                         </tr>

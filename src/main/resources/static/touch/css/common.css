@@ -539,7 +539,7 @@ a,button,input{
 .cart_list li a.choose.sel{background: url(../images/round_on.png) no-repeat center center; background-size: 18px;}
 .cart_list li a.pic{width: 30%; float: left;display: block;border:1px solid #c0bfbf;}
 .cart_list li a.pic img{width: 100%;display: block;}
-.cart_list li a.name{width: 66%; float: right;display: block;color:#252525;font-size: 0.22rem;}
+.cart_list li a.name{width: 66%; float: right;display: block;color:#252525;font-size: 0.22rem;height:0.4rem;overflow:hidden;white-space: nowrap;text-overflow:ellipsis;}
 .cart_list li p{font-size: 0.22rem;color:#ff5b7d;float:right;width: 66%;}
 .cart_list li .num{float:right;width: 66%;margin-top:0.18rem;}
 .cart_list li .num a.aj{float: left; display: block; width: 0.36rem; height: 0.36rem; line-height: 0.36rem; text-align: center; font-size: 1.5em; border: 1px solid #d2d2d2; color: #666666; background: #d2d2d2;font-size: 0.3rem;}
@@ -651,7 +651,7 @@ a,button,input{
     font-size: 0.4rem;
     color: #ff5b7d;
     padding-top: 0.2rem;
-    border-bottom: 1px solid #c0bfbf;
+    /*border-bottom: 1px solid #c0bfbf;*/
     padding-bottom: 0.2rem;
 }
 .pro_info .con .price span{color:#999999;font-size: 0.3rem;text-decoration: line-through;padding-left: 0.6rem;}
@@ -671,9 +671,10 @@ a,button,input{
     background-size: auto 0.22rem;
     width: 100%;
     /* margin-left: 3%; */
-    padding-left: 3%;
+    /*padding-left: 3%;*/
     margin-top: 0.18rem;
     border-top: 1px solid #c0bfbf;
+    border-bottom: 1px solid #c0bfbf;
 }
 /*
 .pro_info .choose{display: block;height: 0.58rem;line-height: 0.58rem;color:#999999;font-size: 0.24rem;background: url(../images/arrow04.png) no-repeat right center;background-size:auto 0.22rem;width: 90%;margin-left:3%;}
@@ -935,7 +936,16 @@ a,button,input{
 
 
 
-
+/* 支付密码弹窗 */
+/*9.5 支付密码弹窗*/
+.pay_password{width: 100%;height: 100%;position: fixed;left:0;top:0;z-index: 200;background:rgba(0,0,0,0.6);/*display: none;*/}
+.pay_password .con{width: 72%;background: #fff;padding:0 4%;position: absolute;left:50%;margin-left: -40%;top:20%;}
+.pay_password .tit{text-align: center;font-size: 0.24rem;text-align: center;height: 0.6rem;line-height: 0.6rem;}
+.pay_password .text{height: 0.6rem;line-height: 0.6rem;border:1px solid #ddd;width: 100%;text-indent: 0.2rem;}
+.pay_password .btns{overflow: hidden;margin: 0.3rem 0;}
+.pay_password .btns a{display: block;width: 48%;height: 0.6rem;text-align: center;line-height: 0.6rem;color:#fff;font-size: 0.24rem;}
+.pay_password .btns a:nth-child(odd){float:left;background: #39bee9;}
+.pay_password .btns a:nth-child(even){float:right;background: #ff5b7d;}
 
 /*10.13*/
 .cx_area{margin-top: 0.12rem;background: #fff;border-bottom: 1px solid #ddd;}

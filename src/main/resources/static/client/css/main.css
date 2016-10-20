@@ -471,7 +471,7 @@
 .proinfo_right .price p.lth{text-decoration: line-through;padding-top:6px;}
 .proinfo_right .choose{color:#878686;padding-bottom: 15px;border-bottom:1px solid #e4e4e4; margin:10px 0; }
 .proinfo_right .choose span{display: inline-block;_display:inline-block;padding:5px 0;}
-.proinfo_right .choose a{display: inline-block;color:#878686;padding:3px 10px;border:1px solid #fff;}
+.proinfo_right .choose a{display: inline-block;color:#878686;padding:3px 10px;border:1px solid #ddd;}
 .proinfo_right .choose a:hover,.proinfo_right .choose a.sel{border-color:#ff5b7d;}
 .proinfo_right .digital{color:#878686;padding-top: 20px;line-height: 30px;}
 .proinfo_right .digital label{padding-left: 10px;}

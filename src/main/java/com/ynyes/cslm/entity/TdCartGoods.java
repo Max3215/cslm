@@ -78,7 +78,14 @@ public class TdCartGoods {
     // 单位
     @Column
     private String unit;
+    
+    // 规格Id
+    @Column
+    private Long specificaId;
 
+    @Column
+    private String specName;
+    
     public Long getId() {
         return id;
     }
@@ -206,6 +213,23 @@ public class TdCartGoods {
 	public void setGoodsSubTitle(String goodsSubTitle) {
 		this.goodsSubTitle = goodsSubTitle;
 	}
+
+	public Long getSpecificaId() {
+		return specificaId;
+	}
+
+	public void setSpecificaId(Long specificaId) {
+		this.specificaId = specificaId;
+	}
+
+	public String getSpecName() {
+		return specName;
+	}
+
+	public void setSpecName(String specName) {
+		this.specName = specName;
+	}
+
 
 	
     
