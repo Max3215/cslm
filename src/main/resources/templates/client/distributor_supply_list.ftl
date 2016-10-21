@@ -14,6 +14,7 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script src="/client/js/distributor_goods.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".click_a").click(function(){
@@ -37,6 +38,7 @@ $(document).ready(function(){
 
 //上架/下架多个商品
 function deleteAll(){
+	
     $("#form").submit();
 }  
 
@@ -44,16 +46,6 @@ function searchSale(){
     $("#form1").submit();
 } 
 
-function deleteGoods(disId,page){
-    $.ajax({
-        url : "/distributor/supply/delete/"+disId,
-        data : {"page":page},
-        type :"post",
-        success:function(res){
-            $("#dis_goods_table").html(res);
-        }
-    })
-}
 
 function search(type){
     if(null != type && type=="oneCat")
@@ -120,16 +112,6 @@ DD_belatedPNG.fix('.,img,background');
                                     </#list>
                                 </#if>
                             </select>
-                          <#--
-                          <select  id="categoryId" name="categoryId" class="myselect" onchange="searchSale()">
-                                <option value="">请选择类别...</option>
-                                <#if category_list??>
-                                    <#list category_list as ca>
-                                        <option value="${ca.id?c}" <#if categoryId?? && categoryId==ca.id>selected="selected"</#if>>${ca.title!""}</option>
-                                    </#list>
-                                </#if>
-                            </select>
-                            -->
                           </form>
                     <div class="clear"></div>
                 </div>

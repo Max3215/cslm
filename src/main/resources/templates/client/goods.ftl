@@ -39,17 +39,10 @@ $(document).ready(function(){
     },function(){
         $(this).next().hide();
     })
-    
+ })   
 function showmsg(){
     layer.alert("库存不足！");
     return;
-}
-
-function proGoods(did)
-{
-    var quantity = document.getElementById("quantity").value;
-    
-    window.open("/order/proGoods/"+did+"?quantity="+quantity);
 }
 
 </script>

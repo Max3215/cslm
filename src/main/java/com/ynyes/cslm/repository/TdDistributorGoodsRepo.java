@@ -328,4 +328,6 @@ public interface TdDistributorGoodsRepo extends
 		Page<TdDistributorGoods> findByDisIdAndCategoryIdTreeContainingAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrue(Long disId,String categoryId, Long brandId, String paramStr, Pageable page);
 		
 		TdDistributorGoods findByIdAndIsOnSaleTrue(Long id);
+		
+		List<TdDistributorGoods> findByDisIdAndIsOnSaleTrue(Long disId);
 }

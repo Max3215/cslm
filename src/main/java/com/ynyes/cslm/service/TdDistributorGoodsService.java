@@ -91,10 +91,6 @@ public class TdDistributorGoodsService {
     {
     	return repository.findByDistributorIdAndGroupCategoryId(distributorId);
     }
-//    public List<Long> findByDistributorIdAndIsAudit(Long distributorId)
-//    {
-//    	return repository.findByDistributorIdAndIsAuditAndGroupCategoryId(distributorId);
-//    }
     
     
     public List<TdDistributorGoods> findByGoodsId(Long goodsId)
@@ -173,11 +169,6 @@ public class TdDistributorGoodsService {
 		return repository.findByUsernameAndIsOnSale(username,onsale, pageRequest);
 	}
     
-//    public Page<TdDistributorGoods> findByDistributorIdAndIsOnSale(Long disId,Boolean onsale ,int page ,int size)
-//	{
-//		PageRequest pageRequest = new PageRequest(page, size);
-//		return repository.findByDistributorIdAndIsOnSale(disId,onsale,pageRequest);
-//	}
     
     public TdDistributorGoods findOne(Long id)
     {
@@ -208,11 +199,6 @@ public class TdDistributorGoodsService {
     {
     	return repository.findByDistributorIdAndGoodsId(distributorId,goodsId);
     }
-    
-//    public TdDistributorGoods findByDistributorIdAndGoodsIdAndIsAudit(Long distributorId,Long goodsId)
-//    {
-//    	return repository.findByDistributorIdAndGoodsIdAndIsAudit(distributorId,goodsId,true);
-//    }
     
     public Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId,int page ,int size)
     {
@@ -264,24 +250,6 @@ public class TdDistributorGoodsService {
                         paramStr, pageRequest);
     }
     
-//    public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndGoodsPriceBetweenAndParamsLikeAndIsOnSaleTrue(
-//            long distributorId,long catId, long brandId, double priceLow, double priceHigh,
-//            List<String> paramValueList, Pageable pageRequest) {
-//        String paramStr = "%";
-//
-//        for (int i = 0; i < paramValueList.size(); i++) {
-//            String value = paramValueList.get(i);
-//            if (!"".equals(value)) {
-//                paramStr += value;
-//                paramStr += "%";
-//            }
-//        }
-//
-//        return repository
-//                .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrue(
-//                        distributorId,"[" + catId + "]", brandId, priceLow, priceHigh,
-//                        paramStr, pageRequest);
-//    }
     
     public Page<TdDistributorGoods> findByCategoryIdAndParamsLikeAndIsOnSaleTrue(
             long catId, List<String> paramValueList, Pageable pageRequest) {
@@ -302,24 +270,6 @@ public class TdDistributorGoodsService {
                         "[" + catId + "]", paramStr, pageRequest);
     }
     
-//    public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrue(
-//           long distributorId, long catId, List<String> paramValueList, Pageable pageRequest) {
-//        String paramStr = "%";
-//
-//        if (null != paramValueList) {
-//            for (int i = 0; i < paramValueList.size(); i++) {
-//                String value = paramValueList.get(i);
-//                if (!"".equals(value)) {
-//                    paramStr += value;
-//                    paramStr += "%";
-//                }
-//            }
-//        }
-//
-//        return repository
-//                .findByDistributorIdAndCategoryIdTreeLikeAndParamValueCollectLikeAndIsOnSaleTrue(
-//                       distributorId, "[" + catId + "]", paramStr, pageRequest);
-//    }
     
     public Page<TdDistributorGoods> findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
             long catId, long brandId,
@@ -338,24 +288,6 @@ public class TdDistributorGoodsService {
                 .findByCategoryIdTreeContainingAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrue(
                         "[" + catId + "]", brandId, paramStr, pageRequest);
     }
-    
-//    public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
-//            long distributorId, long catId, long brandId,
-//            List<String> paramValueList, Pageable pageRequest) {
-//        String paramStr = "%";
-//
-//        for (int i = 0; i < paramValueList.size(); i++) {
-//            String value = paramValueList.get(i);
-//            if (!"".equals(value)) {
-//                paramStr += value;
-//                paramStr += "%";
-//            }
-//        }
-//
-//        return repository
-//                .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrue(
-//                       distributorId, "[" + catId + "]", brandId, paramStr, pageRequest);
-//    }
     
     
     public Page<TdDistributorGoods> findByCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(Long catId, int page, int size)
@@ -1246,7 +1178,6 @@ public class TdDistributorGoodsService {
 	 */
 	public Page<TdDistributorGoods> searchAndDistributorIdAndIsOnSaleOrderBy(Long distributorId,String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
 	{
-//		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		if (null == keywords || null == sortName) {
             return null;
         }
@@ -1258,7 +1189,6 @@ public class TdDistributorGoodsService {
 	
 	public Page<TdDistributorGoods> searchGoodsAndIsOnSaleOrderBy(String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
 	{
-//		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		if (null == keywords || null == sortName) {
             return null;
         }
@@ -1333,6 +1263,13 @@ public class TdDistributorGoodsService {
 	       return repository .findByDisIdAndCategoryIdTreeContainingAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrue(
 	                       						disId,"[" + catId + "]", brandId, paramStr, pageable);
 	   }
+	
+	public List<TdDistributorGoods> findByDisIdAndIsOnSaleTrue(Long disId){
+		if(null != disId){
+			return repository.findByDisIdAndIsOnSaleTrue(disId);
+		}
+		return null;
+	}
 	
 	public Page<TdDistributorGoods> findByDisId(Long disId,Long catId,Long brandId,
 					Integer priceLow,Integer priceHigh,List<String> paramValueList,Pageable pageable)

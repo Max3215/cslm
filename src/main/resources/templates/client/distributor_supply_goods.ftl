@@ -35,7 +35,7 @@
                              </#list>
                              </#if>
                              <#if isSale == false>
-                            <p><a href="javascript:supply(${pgoods.id?c});">我要代理</a></p>
+                            <p><a onclick="supply(${pgoods.id?c});">我要代理</a></p>
                             </#if>
                             <p><a href="javascript:collect(${pgoods.id?c});">收藏</a></p>
                             </td>
@@ -75,19 +75,5 @@ function searchGoods(){
     $("#form").submit();
 }  
     
-function supply(goodsId){
-    $.ajax({
-        type : "post",
-        url : "/distributor/supply",
-        data : {"proGoodsId":goodsId},
-        dataType : "json",
-        success:function(data){
-            alert(data.msg);
-            if(data.code ==0 ){
-                window.location.reload();
-            }
-        }
-    })
-}
 </script>
         

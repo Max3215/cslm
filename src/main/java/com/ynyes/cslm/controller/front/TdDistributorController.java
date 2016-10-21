@@ -1948,29 +1948,23 @@ public class TdDistributorController extends AbstractPaytypeController{
     @ResponseBody
     public Map<String,Object> distributionGoods(Long proGoodsId,HttpServletRequest req){
     	Map<String,Object> res=new HashMap<>();
-    	res.put("code", 1);
+    	res.put("code", 0);
+    	
     	String username =(String)req.getSession().getAttribute("distributor");
 		if(null ==username)
 		{
-			res.put("msg", "请先登录！");
-			return res;
-		}
-		if(null ==proGoodsId)
-		{
-			res.put("msg","选择的商品无效！");
+			res.put("msg", "登录超时");
 			return res;
 		}
 		
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-    	TdProviderGoods pGoods = tdProviderGoodsService.findOne(proGoodsId);
-		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(),pGoods.getGoodsId());
-		if(null != distributorGoods)
+		if(null ==proGoodsId)
 		{
-			res.put("msg", "店铺已存在该商品");
+			res.put("msg","参数错误");
 			return res;
 		}
+		
 		supply(username, proGoodsId);
-		res.put("code", 0);
+		res.put("code", 1);
     	res.put("msg", "已成功分销");
 		
     	return res;
@@ -3230,7 +3224,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 	}
     
     @RequestMapping(value="/goods/supply", method= RequestMethod.GET)
-	public String supplyGoods(Long categoryId,String keywords, Integer page,HttpServletRequest req,ModelMap map)
+    public String supplyGoods(Long categoryId,String keywords, Integer page,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
@@ -3251,18 +3245,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 		map.addAttribute("categoryId", categoryId);
 		map.addAttribute("category", tdProductCategoryService.findOne(categoryId));
 		
-//		List<Long> list = tdDistributorGoodsService.findByDistributorIdAndIsAudit(distributor.getId());
-//		
-//		List<TdProductCategory> category_list = new ArrayList<>();
-//		
-//		if(null != list)
-//		{
-//			for (int i = 0; i < list.size(); i++) {
-//				category_list.add(tdProductCategoryService.findOne(Long.parseLong(list.get(i)+"")));
-//			}
-//		}// 所有该批发商有的分类
-//		map.addAttribute("category_list",category_list);
-//		map.addAttribute("category_list", tdProductCategoryService.findAll());
 		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
         map.addAttribute("category_list", categortList);
 		
@@ -3314,37 +3296,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 		return "/client/distributor_supply_list";
 	}
     
-    /**
-     * 删除分销商品
-     * 
-     */
-    @RequestMapping(value="/supply/delete/{disId}")
-	public String GoodsDelete(@PathVariable Long disId,Integer page, HttpServletRequest req,ModelMap map)
-	{
-		String username = (String)req.getSession().getAttribute("distributor");
-		if(null == username)
-		{
-			return "redirect:/login";
-		}
-		if(null == disId)
-		{
-			return "/client/error_404";
-		}
-		if(null == page )
-		{
-			page = 0;
-		}
-		
-		tdDistributorGoodsService.delete(disId);
-		
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		map.addAttribute("dis_goods_page",
-				tdDistributorGoodsService.findByDistributorIdAndIsDistributorAndIsAudit(distributor.getId(), true, true, page, ClientConstant.pageSize));
-		map.addAttribute("page",page);
-		map.addAttribute("distributor", distributor);
-		
-		return "/client/distributor_goods_supply";
-	}
     
     @RequestMapping(value="/deleteAll")
 	public String deleteAll(
@@ -4110,6 +4061,9 @@ public class TdDistributorController extends AbstractPaytypeController{
     	tdDistributorService.save(tdDistributor);
     	
     	TdUser user = tdUserService.findByUsername(username);
+    	if(null == user){
+    		user = tdUserService.findByMobile(username);
+    	}
     	if(null != user){
     		if(null == user.getVirtualMoney()){
     			user.setVirtualMoney(price);
@@ -4159,7 +4113,7 @@ public class TdDistributorController extends AbstractPaytypeController{
     	record.setStatusCode(1);
     	tdPayRecordService.save(record); // 保存超市扣款记录
     	
-    	map.addAttribute("name", user.getUsername());
+    	map.addAttribute("name", username);
     	map.addAttribute("price", price);
     	map.addAttribute("number", number);
     	map.addAttribute("distributor", tdDistributor);
@@ -4522,10 +4476,30 @@ public class TdDistributorController extends AbstractPaytypeController{
 	// 超市分销商品
 	public void supply(String username,Long goodsId)
 	{
+		TdProviderGoods pGoods = tdProviderGoodsService.findOne(goodsId);
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-    	TdProviderGoods pGoods = tdProviderGoodsService.findOne(goodsId);
-    	TdGoods goods = tdGoodsService.findOne(pGoods.getGoodsId());
-    	TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(),pGoods.getGoodsId());
+		TdGoods goods = tdGoodsService.findOne(pGoods.getGoodsId());
+		TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(),pGoods.getGoodsId());
+
+		if(null != pGoods){
+			// 查找代理商品的所有规格
+			List<TdSpecificat> specList = tdSpecificatService.findByShopIdAndGoodsIdAndType(pGoods.getProId(), pGoods.getGoodsId(), 3);
+			if(null != specList){
+				// 如果代理的商品有规格，复制一份规格信息作为超市用
+				for (TdSpecificat tdSpecificat : specList) {
+					TdSpecificat specificat = new TdSpecificat();
+					
+					specificat.setGoodsId(tdSpecificat.getGoodsId());
+					specificat.setSpecifict(tdSpecificat.getSpecifict());
+					specificat.setLeftNumber(tdSpecificat.getLeftNumber());
+					specificat.setOldId(tdSpecificat.getId());// 原规格ID， 删除时可使用
+					specificat.setShopId(distributor.getId());
+					specificat.setType(1);
+					tdSpecificatService.save(specificat);
+				}
+			}
+		}
+		
     	
     	if(null == distributorGoods)
     	{
@@ -4539,7 +4513,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			distributorGoods.setBrandTitle(goods.getBrandTitle());
 			distributorGoods.setCategoryId(goods.getCategoryId());
 			distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
-			distributorGoods.setCode(goods.getCode());
+			distributorGoods.setCode(pGoods.getCode());
 			distributorGoods.setProductId(goods.getProductId());
 			distributorGoods.setSelectOneValue(goods.getSelectOneValue());
 			distributorGoods.setSelectTwoValue(goods.getSelectTwoValue());

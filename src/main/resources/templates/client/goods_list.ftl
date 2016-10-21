@@ -58,22 +58,6 @@ function setprice() {
     location.href = url;
 }
 
-<!--  加入购物车   -->
-function cartInit(goodsId){
-   
-    $.ajax({
-        type: "get",
-        url: "/goods/incart",
-        data: {"id":goodsId},
-        success: function (data) { 
-            if(data.msg){
-                alert(data.msg);
-                return;
-            }
-            window.open("/cart/init?id="+goodsId);
-        }
-    });
-}
 
 </script>
 

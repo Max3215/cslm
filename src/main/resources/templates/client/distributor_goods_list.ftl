@@ -34,9 +34,12 @@
                                 &nbsp;/&nbsp;
                                 <a href="javascript:recommed(${dg.id?c},${page},'index');" <#if dg.isRecommendIndex?? &&dg.isRecommendIndex==true>style="color:#ff5b7d"</#if>>推荐</a>
                              </p>
-                             <p>触屏：<a href="javascript:recommed(${dg.id?c},${page},'touchcat');" <#if dg.isTouchRecommendType?? &&dg.isTouchRecommendType==true>style="color:#ff5b7d"</#if>>分类</a>
+                             <p>触屏：
+                             	<#--
+                             	<a href="javascript:recommed(${dg.id?c},${page},'touchcat');" <#if dg.isTouchRecommendType?? &&dg.isTouchRecommendType==true>style="color:#ff5b7d"</#if>>分类</a>
                                 &nbsp;/&nbsp;
-                                <a href="javascript:recommed(${dg.id?c},${page},'hot');" <#if dg.isTouchHot?? &&dg.isTouchHot==true>style="color:#ff5b7d"</#if>>热卖</a>
+                                -->
+                                <a href="javascript:recommed(${dg.id?c},${page},'hot');" <#if dg.isTouchHot?? &&dg.isTouchHot==true>style="color:#ff5b7d"</#if>>精品</a>
                              </p>
                             <p><a href="javascript:editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
                             <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a onclick="deleteDisGoods(${dg.id?c});">删除</a></p>

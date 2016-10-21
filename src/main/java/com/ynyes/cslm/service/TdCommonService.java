@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.util.Cnvter;
@@ -60,12 +61,11 @@ public class TdCommonService {
     @Autowired
     private TdAdService tdAdService;
     
-//    //团购 zhangji
-//    @Autowired
-//    private TdDemandService tdDemandService;
-    
     @Autowired
     private TdDistributorService tdDistributorService;
+    
+    @Autowired
+    private TdDistributorGoodsService tdDistributorGoodsService;
 
     public void setHeader(ModelMap map, HttpServletRequest req) {
         String username = (String) req.getSession().getAttribute("username");
@@ -93,65 +93,70 @@ public class TdCommonService {
         TdSetting setting = tdSettingService.findTopBy();
         
         // 统计访问量
-        if (null != setting && null == req.getSession().getAttribute("countedTotalVisits"))
-        {
-            req.getSession().setAttribute("countedTotalVisits", "yes");
-            if (null == setting.getTotalVisits())
-            {
-                setting.setTotalVisits(1L);
-            }
-            else
-            {
-                setting.setTotalVisits(setting.getTotalVisits() + 1L);
-            }
-            setting = tdSettingService.save(setting);
-        }
+//        if (null != setting && null == req.getSession().getAttribute("countedTotalVisits"))
+//        {
+//            req.getSession().setAttribute("countedTotalVisits", "yes");
+//            if (null == setting.getTotalVisits())
+//            {
+//                setting.setTotalVisits(1L);
+//            }
+//            else
+//            {
+//                setting.setTotalVisits(setting.getTotalVisits() + 1L);
+//            }
+//            setting = tdSettingService.save(setting);
+//        }
         
         // 统计在线人数
-        if (null != setting && null == req.getSession().getAttribute("countedTotalOnlines"))
-        {
-            req.getSession().setAttribute("countedTotalOnlines", "yes");
-            if (null == setting.getTotalOnlines())
-            {
-                setting.setTotalOnlines(1L);
-            }
-            else
-            {
-                setting.setTotalOnlines(setting.getTotalOnlines() + 1L);
-            }
-            setting = tdSettingService.save(setting);
-        }
+//        if (null != setting && null == req.getSession().getAttribute("countedTotalOnlines"))
+//        {
+//            req.getSession().setAttribute("countedTotalOnlines", "yes");
+//            if (null == setting.getTotalOnlines())
+//            {
+//                setting.setTotalOnlines(1L);
+//            }
+//            else
+//            {
+//                setting.setTotalOnlines(setting.getTotalOnlines() + 1L);
+//            }
+//            setting = tdSettingService.save(setting);
+//        }
 
         map.addAttribute("site", setting);
         map.addAttribute("keywords_list",
                 tdKeywordsService.findByIsEnableTrueOrderBySortIdAsc());
 
         // 全部商品分类，取三级
-        List<TdProductCategory> topCatList = tdProductCategoryService
-                .findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
-        map.addAttribute("top_cat_list", topCatList);
+        Long disId =(Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+        if(null == disId){
+        	List<TdProductCategory> topCatList = tdProductCategoryService .findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
+            map.addAttribute("top_cat_list", topCatList);
 
-        if (null != topCatList && topCatList.size() > 0) 
-        {
-            for (int i = 0; i < topCatList.size(); i++) 
+            if (null != topCatList && topCatList.size() > 0) 
             {
-                TdProductCategory topCat = topCatList.get(i);
-                List<TdProductCategory> secondLevelList = tdProductCategoryService
-                        .findByParentIdAndIsEnableTrueOrderBySortIdAsc(topCat.getId());
-                map.addAttribute("second_level_" + i + "_cat_list", secondLevelList);
-
-                if (null != secondLevelList && secondLevelList.size() > 0) 
+                for (int i = 0; i < topCatList.size(); i++) 
                 {
-                    for (int j=0; j<secondLevelList.size(); j++)
+                    TdProductCategory topCat = topCatList.get(i);
+                    List<TdProductCategory> secondLevelList = tdProductCategoryService
+                            .findByParentIdAndIsEnableTrueOrderBySortIdAsc(topCat.getId());
+                    map.addAttribute("second_level_" + i + "_cat_list", secondLevelList);
+
+                    if (null != secondLevelList && secondLevelList.size() > 0) 
                     {
-                        TdProductCategory secondLevelCat = secondLevelList.get(j);
-                        List<TdProductCategory> thirdLevelList = tdProductCategoryService
-                                .findByParentIdAndIsEnableTrueOrderBySortIdAsc(secondLevelCat.getId());
-                        map.addAttribute("third_level_" + i + j + "_cat_list", thirdLevelList);
+                        for (int j=0; j<secondLevelList.size(); j++)
+                        {
+                            TdProductCategory secondLevelCat = secondLevelList.get(j);
+                            List<TdProductCategory> thirdLevelList = tdProductCategoryService
+                                    .findByParentIdAndIsEnableTrueOrderBySortIdAsc(secondLevelCat.getId());
+                            map.addAttribute("third_level_" + i + j + "_cat_list", thirdLevelList);
+                        }
                     }
                 }
             }
+        }else{
+        	CategoryByDistributor(disId,map);
         }
+        
 
         // 导航菜单
         map.addAttribute("navi_item_list",
@@ -233,7 +238,60 @@ public class TdCommonService {
         }
     }
     
-    public void mapdistance(Double lng,Double lat,HttpServletRequest req,ModelMap map){
+    private void CategoryByDistributor(Long disId, ModelMap map) {
+
+    	// 查询所有商品出售中商品集合
+    	List<TdDistributorGoods> saleGoodsList = tdDistributorGoodsService.findByDisIdAndIsOnSaleTrue(disId);
+
+    	// 查询所有一级类别
+    	List<TdProductCategory> topCatList = tdProductCategoryService .findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
+    	
+    	List<TdProductCategory> categoryList = new ArrayList<TdProductCategory>();
+    	if(null != saleGoodsList){
+    		// 循环一级类别
+    		for (TdProductCategory tdProductCategory : topCatList) {
+				// 循环所有在售商品
+				for (TdDistributorGoods saleGoods : saleGoodsList) {
+    					// 如果新类别集合等于一级类别集合，表示所有类别都在售，不在继续循环
+					if(categoryList.size() < topCatList.size()){
+    					String catId = "["+tdProductCategory.getId()+"]";
+    					if(null != saleGoods.getCategoryIdTree() && saleGoods.getCategoryIdTree().contains(catId)){
+    						// 如果新集合没有此类别，则添加
+    						if(!categoryList.contains(tdProductCategory)){
+    							categoryList.add(tdProductCategory);
+    							continue;
+    						}
+    					}
+    				}
+    			}
+			}
+    	}
+    	
+        map.addAttribute("top_cat_list", categoryList);
+
+        if (null != categoryList && categoryList.size() > 0) 
+        {
+            for (int i = 0; i < categoryList.size(); i++) 
+            {
+                TdProductCategory topCat = topCatList.get(i);
+                List<TdProductCategory> secondLevelList = tdProductCategoryService
+                        .findByParentIdAndIsEnableTrueOrderBySortIdAsc(topCat.getId());
+                map.addAttribute("second_level_" + i + "_cat_list", secondLevelList);
+
+                if (null != secondLevelList && secondLevelList.size() > 0) 
+                {
+                    for (int j=0; j<secondLevelList.size(); j++)
+                    {
+                        TdProductCategory secondLevelCat = secondLevelList.get(j);
+                        List<TdProductCategory> thirdLevelList = tdProductCategoryService
+                                .findByParentIdAndIsEnableTrueOrderBySortIdAsc(secondLevelCat.getId());
+                        map.addAttribute("third_level_" + i + j + "_cat_list", thirdLevelList);
+                    }
+                }
+            }
+        }
+	}
+	public void mapdistance(Double lng,Double lat,HttpServletRequest req,ModelMap map){
 
     	Map<String,Double> inmap = new HashMap<>();
 //    	Map<String,Double> moremap = new HashMap<>();
