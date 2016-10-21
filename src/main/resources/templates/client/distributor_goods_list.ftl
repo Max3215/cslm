@@ -39,7 +39,7 @@
                                 <a href="javascript:recommed(${dg.id?c},${page},'hot');" <#if dg.isTouchHot?? &&dg.isTouchHot==true>style="color:#ff5b7d"</#if>>热卖</a>
                              </p>
                             <p><a href="javascript:editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
-                            <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a href="javascript:deleteDisGoods(true,${dg.id?c},${page?c});">删除</a></p>
+                            <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a onclick="deleteDisGoods(${dg.id?c});">删除</a></p>
                        </td>
                       </tr>
                  <#else>
@@ -59,7 +59,7 @@
                         <td>
                             <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page?c});">上架</a></p>
                             <p><a href="javascript:editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
-                            <p><a href="javascript:deleteDisGoods(false,${dg.id?c},${page?c});">删除</a></p></td>
+                            <p><a onclick="deleteDisGoods(${dg.id?c});">删除</a></p></td>
                       </tr>
                  </#if>
                  </#if>

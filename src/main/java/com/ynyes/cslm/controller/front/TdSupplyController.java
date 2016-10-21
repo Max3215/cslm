@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,14 +47,12 @@ import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
-import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
-import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUser;
-import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
@@ -70,6 +67,7 @@ import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
@@ -135,6 +133,9 @@ public class TdSupplyController extends AbstractPaytypeController{
 	
 	@Autowired
 	private TdUserReturnService tdUserReturnService;
+	
+	@Autowired
+	private TdSpecificatService tdSpecificatService;
 	
 	@RequestMapping(value="/index")
 	public String Index(HttpServletRequest req,ModelMap map)
@@ -374,78 +375,186 @@ public class TdSupplyController extends AbstractPaytypeController{
 		return "/client/supply_goods_onsale";
 	}
 	
+	/**
+     * 商品信息
+     * @author Max
+     * 2016-10-21
+     */
+   @RequestMapping(value="/goods/detail",method=RequestMethod.POST)
+	public String saleGoodsDetail(Long sup_id,Long goodsId,HttpServletRequest req,ModelMap map){
+		
+		if(null != sup_id){
+			TdProviderGoods goods = tdProviderGoodsService.findOne(sup_id);
+			map.addAttribute("sup_goods", goods);
+			map.addAttribute("goodsId", goods.getGoodsId());
+		}else if(null != goodsId){
+			map.addAttribute("goods", tdGoodsService.findOne(goodsId));
+			map.addAttribute("goodsId", goodsId);
+		}
+		return "/client/supply_goods_detail";
+	}
+   
+   /**
+	 * 根据ID查找商品规格
+	 * @author Max
+	 * 2016-10-21
+	 */
+	@RequestMapping(value="/search/specifica",method=RequestMethod.POST)
+	public String specificaSearch(Long goodsId,Long id,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null != goodsId && null != username){
+			map.addAttribute("goodsId", goodsId);
+			TdProvider tdProvider = tdProviderService.findByUsername(username);
+			map.addAttribute("spec_list", tdSpecificatService.findByShopIdAndGoodsIdAndType(tdProvider.getId(),goodsId, 3));
+			if(null != id){
+				map.addAttribute("specifica", tdSpecificatService.findOne(id));
+			}
+		}
+		return "/client/supply_goods_spec";
+	}
+	
+	/**
+	 * 保存规格
+	 * @author Max
+	 * 2016-10-21
+	 */
+	@RequestMapping(value="/specifica/save",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> specificaSave(TdSpecificat tdSpecificat,HttpServletRequest req,ModelMap map){
+		Map<String,Object> res = new HashMap<String, Object>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username){
+			res.put("msg", "登录超时");
+			return res;
+		}
+		if(null != tdSpecificat){
+			if(null == tdSpecificat.getSpecifict() || "".equals(tdSpecificat.getSpecifict().trim()) || null == tdSpecificat.getLeftNumber()){
+				res.put("msg", "规格填写错误");
+				return res;
+			}
+			if(null == tdSpecificat.getId()){
+				TdProvider supply = tdProviderService.findByUsername(username);
+				
+				tdSpecificat.setShopId(supply.getId());//　设置超市id
+				tdSpecificat.setType(3); //设置类型-分销商
+			}
+			tdSpecificatService.save(tdSpecificat);
+			res.put("code", 1);
+			res.put("goodsId", tdSpecificat.getGoodsId());
+		}else{
+			res.put("msg", "参数错误");
+		}
+		return res;
+	}
+	
+	/**
+	 * 删除规格
+	 * @author Max
+	 * 2016-10-21
+	 * 
+	 */
+	@RequestMapping(value="/specifica/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteSpecifica(Long id,HttpServletRequest req){
+		Map<String,Object> res = new HashMap<String, Object>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username){
+			res.put("msg", "登录超时");
+			return res;
+		}
+		if(null != id){
+			tdSpecificatService.delete(id);
+			res.put("code", 1);
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * 信息修改保存
+	 * @author Max
+	 * 2016-10-21
+	 */
 	@RequestMapping(value="/distribution",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> wholesaling(Long goodsId,
-			String goodsTitle,
-			String subTitle,
-			Double outFactoryPrice,
-			Double marketPrice,
+	public Map<String,Object> wholesaling(
+			Long sup_goodsId,
+			Long goodsId,
+			String subGoodsTitle,
+			Double goodsPrice,
+			Double goodsMarketPrice,
 			Double shopReturnRation,
 			Long leftNumber,
+			String code,
 			String unit,
 			HttpServletRequest req)
 	{
 		Map<String,Object> res =new HashMap<>();
+		res.put("code", 0);
+		
 		String username =(String)req.getSession().getAttribute("supply");
 		if(null == username )
 		{
-			res.put("msg", "请先登录！");
+			res.put("msg", "登录超时！");
 			return res;
 		}
-		if(null ==goodsId)
-		{
-			res.put("msg","选择的商品无效！");
-			return res;
-		}
-		TdProvider provider = tdProviderService.findByUsername(username);
-		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(provider.getId(), goodsId);
-		TdGoods goods = tdGoodsService.findOne(goodsId);
 		
-		if(null == proGoods)
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
+		if(null == provider){
+			res.put("msg", "参数错误!");
+			return res;
+		}
+		
+		if(null == leftNumber || leftNumber <=0)
 		{
-			proGoods=new TdProviderGoods();
-			proGoods.setGoodsId(goods.getId());
-			proGoods.setGoodsTitle(goodsTitle);
-			proGoods.setSubGoodsTitle(subTitle);
-			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
-			proGoods.setOutFactoryPrice(outFactoryPrice);
-			proGoods.setGoodsMarketPrice(marketPrice);
-			proGoods.setLeftNumber(leftNumber);
-			proGoods.setOnSaleTime(new Date());
-			proGoods.setCode(goods.getCode());
+			res.put("msg", "库存输入错误");
+			return res;
+		}
+		
+		TdProviderGoods tdProviderGoods =null;
+		
+		// 判断是选择分销还是修改信息
+		if(null == sup_goodsId){
+			TdGoods goods = tdGoodsService.findOne(goodsId);
 			
-			proGoods.setCategoryId(goods.getCategoryId());
-			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
-			proGoods.setUnit(goods.getSaleType());
-			proGoods.setShopReturnRation(shopReturnRation);
-			proGoods.setIsDistribution(true);
-			proGoods.setIsAudit(true);
-			proGoods.setUnit(unit);
-			proGoods.setProId(provider.getId());
+			tdProviderGoods = new TdProviderGoods();
+			
+			tdProviderGoods.setGoodsId(goods.getId());
+			tdProviderGoods.setGoodsTitle(goods.getTitle());
+			tdProviderGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
+			tdProviderGoods.setOnSaleTime(new Date());
+			tdProviderGoods.setCategoryId(goods.getCategoryId());
+			tdProviderGoods.setCategoryIdTree(goods.getCategoryIdTree());
+			
+			tdProviderGoods.setIsDistribution(true);
+			tdProviderGoods.setIsAudit(true);
+			tdProviderGoods.setProId(provider.getId());
+			
+		}else{
+			tdProviderGoods= tdProviderGoodsService.findOne(sup_goodsId);
 		}
-		else
-		{
-			proGoods.setGoodsTitle(goodsTitle);
-			proGoods.setSubGoodsTitle(subTitle);
-			proGoods.setLeftNumber(leftNumber);
-			proGoods.setOutFactoryPrice(outFactoryPrice);
-			proGoods.setGoodsMarketPrice(marketPrice);
-			proGoods.setOnSaleTime(new Date());
-			proGoods.setShopReturnRation(shopReturnRation);
-			proGoods.setCategoryId(goods.getCategoryId());
-			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
-			proGoods.setUnit(unit);
-			proGoods.setIsDistribution(true);
-			proGoods.setIsAudit(true);
-			proGoods.setProId(provider.getId());
-		}
-		proGoods.setProviderTitle(provider.getTitle());
-		provider.getGoodsList().add(proGoods);
+		
+		tdProviderGoods.setSubGoodsTitle(subGoodsTitle);
+		tdProviderGoods.setOutFactoryPrice(goodsPrice);
+		tdProviderGoods.setGoodsMarketPrice(goodsMarketPrice);
+		tdProviderGoods.setLeftNumber(leftNumber);
+		tdProviderGoods.setCode(code);
+		tdProviderGoods.setShopReturnRation(shopReturnRation);
+		tdProviderGoods.setUnit(unit);
+		
+		tdProviderGoods.setProviderTitle(provider.getTitle());
+		
+		provider.getGoodsList().add(tdProviderGoods);
 		tdProviderService.save(provider);
 		
-		res.put("msg", "分销商品成功");
-		
+		res.put("msg", "操作成功");
+		res.put("code",1);
 		return res;
 	}
 	
@@ -567,43 +676,42 @@ public class TdSupplyController extends AbstractPaytypeController{
 		return "/client/supply_goods_list";
 	}
 	
-	// 删除
-	@RequestMapping(value="/goods/delete/{pgId}")
-	public String deleteGoods(@PathVariable Long pgId,
-			Boolean type,Integer page,
+	/**
+	 * 删除分销商品
+	 * 
+	 */
+	@RequestMapping(value="/goods/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public  Map<String,Object> deleteGoods(Long pgId,
 			HttpServletRequest req,ModelMap map){
+		Map<String,Object> res  = new HashMap<String, Object>();
+		res.put("code", 0);
+		
 		String username = (String)req.getSession().getAttribute("supply");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg", "登录超时");
+			return res;
 		}
-		if(null == pgId)
+		if(null != pgId)
 		{
-			tdCommonService.setHeader(map, req);
-			return "/client/error_404";
+			TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+			if(null != providerGoods){
+				// 查找删除商品规格 
+				List<TdSpecificat> list = tdSpecificatService.findByShopIdAndGoodsIdAndType(providerGoods.getProId(), providerGoods.getGoodsId(), 3);
+				if(null != list){
+					tdSpecificatService.delete(list);
+				}
+				
+			}
+			tdProviderGoodsService.delete(pgId);
+			res.put("code", 1);
+			res.put("msg", "操作成功");
+		}else{
+			res.put("msg", "参数错误");
 		}
-		if(null == page)
-		{
-			page = 0;
-		}
-		TdProviderGoods goods = tdProviderGoodsService.findOne(pgId);
 		
-		TdProvider provider = tdProviderService.findByUsername(username);
-		
-//		List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),goods.getGoodsId());
-//		if(null != list && list.size() >0){
-//			for (TdDistributorGoods tdDistributorGoods : list) {
-//				tdDistributorGoodsService.delete(tdDistributorGoods);
-//			}
-//		}
-		
-		tdProviderGoodsService.delete(pgId);
-		
-		map.addAttribute("supply_goods_page",
-				tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),type,true, page, ClientConstant.pageSize));
-		map.addAttribute("page", page);
-		
-		return "/client/supply_goods_list";
+		return res;
 	}
 	
 	@RequestMapping(value="/goods/editOnSale",method=RequestMethod.POST)
@@ -1705,7 +1813,7 @@ public class TdSupplyController extends AbstractPaytypeController{
          return map;
          
      }
-	
+    
 	
 	/**
      * 分销商同意普通商品退货，

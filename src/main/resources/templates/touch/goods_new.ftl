@@ -20,6 +20,7 @@
 <script src="/touch/js/search.js"></script>
 
 <script src="/layer/layer.js"></script>
+<script src="/touch/js/goods.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
@@ -28,21 +29,6 @@ $(document).ready(function(){
     $('#goods-menu').refresh(url,"#goods-menu",0);
 });
 
-function addCart(goodsId){
-	$.ajax({
-        type: "post",
-        url: "/touch/cart/incart",
-        data: {"goodsId":goodsId},
-        success: function (data) { 
-			if(data.code==1){
-				layer.msg('加入购物车成功', {
-			    icon: 6
-			    ,time: 1000
-			  });
-			} 
-        }
-    });
-}
 </script>
 </head>
 

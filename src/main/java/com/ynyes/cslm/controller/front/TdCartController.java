@@ -473,6 +473,15 @@ public class TdCartController {
     			return res;
     		}
     	}
+    	
+    List<TdSpecificat> specList = tdSpecificatService.findByShopIdAndGoodsIdAndType(goods.getDisId(), goods.getGoodsId(), 1);
+      if(null != specList && specList.size() > 0){
+      	if(null == specId){
+      		res.put("msg", "请先选择规格");
+      		res.put("code", 0);
+      		return res;
+      	}
+      }
     	if (null != goods) {
             // 查找购物车是否已有此（规格）商品
     		List<TdCartGoods> cartList = tdCartGoodsService.findByUsernameAndDistributorGoodsIdAndSpecificaId(username, dis_id, specId);

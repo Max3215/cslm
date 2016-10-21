@@ -6,6 +6,7 @@
 <meta name="description" content="${site.seoDescription!''}">
 <meta name="copyright" content="${site.copyright!''}" />
 <link href="/client/images/cslm.ico" rel="shortcut icon">
+
 <link href="/client/css/common.css" rel="stylesheet" type="text/css">
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
 <link href="/client/css/mymember.css" rel="stylesheet" type="text/css" />
@@ -15,6 +16,9 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
 
+<script src="/client/js/supply_goods.js"></script>
+
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
      //初始化表单验证
@@ -39,88 +43,6 @@ $(document).ready(function(){
   
 })
 
-function editgoods(gid){
-    $("#goodsId").attr("value",gid);
-    var goodsTitle = $("#title"+gid).html();
-    var subTitle = $("#subTitle"+gid).val();
-    var unit = $("#unit"+gid).val();
-    var code = $("#code"+gid).html();
-    var marketPrice = $("#marketPrice"+gid).html();
-    
-    $("#code").attr("value",code);
-    $("#marketPrice").attr("value",marketPrice);
-    $("#goodsTitle").attr("value",goodsTitle);
-    $("#subTitle").attr("value",subTitle);
-    $("#unit").attr("value",unit);
-    $('.sub_form').css('display','block');
-}
-
-function subDisGoods(){
-    var goodsId = $("#goodsId").val();
-    var goodsTitle = $("#goodsTitle").val();
-    var subTitle = $("#subTitle").val();
-    var outFactoryPrice = $("#outFactoryPrice").val();
-    var marketPrice = $("#marketPrice").val();
-    var leftNumber = $("#leftNumber").val();
-    var shopReturnRation = $("#shopReturnRation").val();
-    var unit = $("#unit").val();
-    
-    if(undefined == goodsTitle || ""==goodsTitle)
-    {
-        alert("请输入商品标题");
-        return;
-    }
-     var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
-    if(undefined == marketPrice || ""==marketPrice || !reg.test(marketPrice))
-    {
-        alert("请输入商品市场价");
-        return ;
-    }
-    
-    if(undefined == outFactoryPrice || ""==outFactoryPrice || !reg.test(outFactoryPrice))
-    {
-        alert("请输入商品分销价");
-        return ;
-    }
-    
-    if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber))
-    {
-        alert("请输入库存数量");
-        return;
-    }
-    
-    if(undefined == shopReturnRation || ""==shopReturnRation || isNaN(shopReturnRation))
-    {
-        alert("请输入分销比例");
-        return;
-    }
-    
-    var ration = /(^[0]+(.[0-9]{2})?$)/;
-    if("" != shopReturnRation && !ration.test(shopReturnRation)){
-        alert("输入正确的分销比例，如0.01。。。");
-        return ;
-    }
-    
-    $.ajax({
-        type : "post",
-        url : "/supply/distribution",
-        data : {"goodsId":goodsId,
-            "goodsTitle":goodsTitle,
-            "subTitle":subTitle,
-            "outFactoryPrice":outFactoryPrice,
-            "marketPrice":marketPrice,
-            "leftNumber":leftNumber,
-            "unit":unit,
-            "shopReturnRation":shopReturnRation},
-        dataType : "json",
-        success:function(data){
-            $('.sub_form').css('display','none');
-            alert(data.msg);
-            window.location.reload();
-        }
-    })
-    
-}
 function search(type){
     if(null != type && type=="oneCat")
     {
@@ -214,7 +136,7 @@ DD_belatedPNG.fix('.,img,background');
                              </#list>
                              </#if>
                              <#if isSale ==false>
-                                <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">我要分销</a></p>
+                                <p><a  onclick="editGoods(null,${goods.id?c});">我要分销</a></p>
                              </#if>
                          </td>
                       </tr>
@@ -261,49 +183,8 @@ DD_belatedPNG.fix('.,img,background');
     <#include "/client/common_footer.ftl">
 
   <!-- 点击商品上架后弹出层 -->
-  <aside class="sub_form" style="display:none">
-    <p class="tit">商品分销<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a>
-</p>
-    <div class="info_tab">
-      <table>
-        <tr>
-           <p> 编辑分销价格和库存：</p>
-            <input type="hidden" id="goodsId" name="goodsId"/>
-        </tr>
-        <tr>
-          <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
-        </tr>
-        <tr>
-          <th>*商品副标题：</th>
-          <td><input type="text" class="add_width" name="subTitle" id="subTitle" ></td>
-        </tr>
-        <tr>
-          <th>商品编码：</th>
-          <td><input type="text" class="add_width" name="code" id="code" readonly="readonly"></td>
-        </tr>
-        <tr>
-          <th>商品市场价：</th>
-          <td><input type="text" name="marketPrice" id="marketPrice" ></td>
-        </tr>
-         <tr>
-          <th>*商品售价：</th>
-          <td><input type="text" name="outFactoryPrice" id="outFactoryPrice" >&emsp;单位：<input type="text" name="unit" id="unit"></td>
-        </tr>
-         <tr>
-          <th>*库存：</th>
-          <td><input type="text" name="leftNumber" id="leftNumber"></td>
-        </tr>
-         <tr>
-          <th>*分销比例：</th>
-          <td><input type="text" name="shopReturnRation" id="shopReturnRation"></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td><input type="submit" class="sub" onclick="subDisGoods();" value="确认提交"></td>
-        </tr>
-      </table>
-    </div>
+  <aside class="sub_form" style="display:none" id="detail_div">
+    	<#include "/client/supply_goods_detail.ftl">
   </aside>
 </body>
 </html>

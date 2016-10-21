@@ -52,6 +52,12 @@ public class TdSpecificatService {
 		}
 	}
 	
+	public void delete(List<TdSpecificat> specList){
+		if(null != specList){
+			repository.delete(specList);
+		}
+	}
+	
 	/**
 	 * 根据商品ID和类型删除
 	 */

@@ -32,15 +32,24 @@ function goodsOnSale(type,disId,page){
 }
 
 //超市中心删除商品
-function deleteDisGoods(type,disId,page){
-    $.ajax({
-        url : "/distributor/goods/delete/"+disId,
-        data : {"type":type,"page":page},
-        type :"post",
-        success:function(res){
-            $("#dis_goods_table").html(res);
-        }
-    })
+function deleteDisGoods(disId){
+	layer.confirm('确定要把此商品移除购物车？',{
+		btn: ['确定','取消'] //按钮
+		}, function(){
+			$.ajax({
+		        url : "/distributor/goods/delete",
+		        data : {"disId":disId},
+		        type :"post",
+		        success:function(data){
+		        	layer.msg(data.msg, {icon: 1 ,time: 1000});
+		        	if(data.code ==1 ){
+		        		window.location.reload();
+		        	}
+		        }
+		    })
+		}, function(){
+			layer.closeAll();
+		});
 }
 
 //超市中心选择批发商品

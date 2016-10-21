@@ -1105,6 +1105,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 			res.put("msg", "登录超时!");
 			return res;
 		}
+		
 		TdDistributor distributor = tdDistributorService.findbyUsername(username);
 		if(null == distributor)
 		{
@@ -1174,31 +1175,38 @@ public class TdDistributorController extends AbstractPaytypeController{
 	 * 超市中心删除商品
 	 * 
 	 */
-	@RequestMapping(value="/goods/delete/{disId}")
-	public String disGoodsDelete(@PathVariable Long disId,Boolean type,Integer page, HttpServletRequest req,ModelMap map)
+	@RequestMapping(value="/goods/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> disGoodsDelete(Long disId, HttpServletRequest req,ModelMap map)
 	{
+		Map<String,Object> res  = new HashMap<String, Object>();
+		res.put("code", 0);
+		
 		String username = (String)req.getSession().getAttribute("distributor");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg", "登录超时");
+			return res;
 		}
-		if(null == disId)
+		if(null != disId)
 		{
-			return "/client/error_404";
-		}
-		if(null == page )
-		{
-			page = 0;
+			TdDistributorGoods distributorGoods = tdDistributorGoodsService.findOne(disId);
+			if(null != distributorGoods){
+				// 查找删除商品规格 
+				List<TdSpecificat> list = tdSpecificatService.findByShopIdAndGoodsIdAndType(distributorGoods.getDisId(), distributorGoods.getGoodsId(), 1);
+				if(null != list){
+					tdSpecificatService.delete(list);
+				}
+				
+			}
+			tdDistributorGoodsService.delete(disId);
+			res.put("code", 1);
+			res.put("msg", "操作成功");
+		}else{
+			res.put("msg", "参数错误");
 		}
 		
-		tdDistributorGoodsService.delete(disId);
-		
-		TdDistributor distributor = tdDistributorService.findbyUsername(username);
-		map.addAttribute("dis_goods_page", tdDistributorGoodsService.findByIdAndIsOnSale(distributor.getId(), type, page, 10));
-		map.addAttribute("isOnSale", type);
-		map.addAttribute("page",page);
-		map.addAttribute("distributor",distributor);
-		return "/client/distributor_goods_list";
+		return res;
 	}
 	
 	/**

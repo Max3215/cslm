@@ -33,8 +33,8 @@
                         <td><span id="number${dg.id?c}">${dg.leftNumber?c}</span></td>
                         <td>
                                 <p><a href="javascript:goodsAudit(false,${dg.id?c},${page})">取消分销</a></p>
-                                <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
-                                <p><a href="javascript:deleteGoods(true,${dg.id?c},${page})">删除</a></p>
+                                <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
+                                <p><a onclick="deleteGoods(${dg.id?c})">删除</a></p>
                       </tr>
                  <#else>
                        <tr id="tr_1424195166">
@@ -56,7 +56,7 @@
                         <td><span id="number${dg.id?c}">${dg.leftNumber?c}</span></td>
                         <td>
                                 <p><a href="javascript:goodsAudit(true,${dg.id?c},${page})">上架分销</a></p>
-                                <p><a href="javascript:editPrice(${dg.id?c},${page});">修改信息</a></p>
+                               <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
                                 <p><a href="javascript:deleteGoods(false,${dg.id?c},${page})">删除</a></p>
                       </tr>
                  </#if>
