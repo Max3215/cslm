@@ -14,7 +14,9 @@
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
+
 <script src="/client/js/provider_goods.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     //初始化表单验证
@@ -58,20 +60,6 @@ function deleteCheck(){
 function searchGoods(){
     $("#form1").submit();
 }
-function IsNum(){
-    var num = $("#outFactoryPrice").val();
-    var reNum=/^\d*$/; 
-    if(reNum.test(num)){ 
-        return true; 
-    } else { 
-        if(num < 0) { 
-            alert("价格不能为负数！"); 
-         } else { 
-            alert("价格必须为数字！"); 
-         } 
-      return false;
-     }
- }
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -106,13 +94,6 @@ DD_belatedPNG.fix('.,img,background');
                                     </#list>
                                 </#if>
                             </select>
-                            <#--
-                            <select  id="isDistribution" name="isDistribution" class="myselect" onchange="searchGoods()">
-                               <option value="">是否分销</option>
-                                <option value="isDistribution" <#if distribution?? && distribution=="isDistribution">selected="selected"</#if>>分销</option>
-                                <option value="isNotDistribution" <#if distribution?? && distribution=="isNotDistribution">selected="selected"</#if>>未分销</option>
-                            </select>
-                            -->
                         </form>
                     <div class="clear"></div>
                 </div>
@@ -167,6 +148,10 @@ DD_belatedPNG.fix('.,img,background');
     <#include "/client/common_footer.ftl">
     
     <!-- 点击商品上架后弹出层 -->
+    <aside class="sub_form" style="display:none" id="detail_div">
+    	<#include "/client/provider_goods_detail.ftl">
+  	</aside>
+  	<#--
   <aside class="sub_form" style="display:none">
         <p class="tit">商品批发<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a></p>
         <form id="sub_form" action="/provider/goods/edit" method="post">
@@ -205,5 +190,6 @@ DD_belatedPNG.fix('.,img,background');
         </div>
         </form>
   </aside>
+  -->
 </body>
 </html>

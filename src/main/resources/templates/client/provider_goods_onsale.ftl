@@ -15,6 +15,8 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
 
+<script src="/client/js/provider_goods.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
      //初始化表单验证
@@ -38,71 +40,6 @@ $(document).ready(function(){
   })
   
 })
-
-function editgoods(gid){
-    $("#goodsId").attr("value",gid);
-    var goodsTitle = $("#title"+gid).html();
-    var subTitle = $("#subTitle"+gid).val();
-    var code = $("#code"+gid).html();
-    var marketPrice = $("#marketPrice"+gid).html();
-    
-    $("#marketPrice").attr("value",marketPrice);
-    $("#code").attr("value",code);
-    $("#goodsTitle").attr("value",goodsTitle);
-    $("#subTitle").attr("value",subTitle);
-    $('.sub_form').css('display','block');
-}
-
-function subDisGoods(){
-    var goodsId = $("#goodsId").val();
-    var goodsTitle = $("#goodsTitle").val();
-    var subTitle = $("#subTitle").val();
-    var outFactoryPrice = $("#outFactoryPrice").val();
-    var marketPrice = $("#marketPrice").val();
-    var leftNumber = $("#leftNumber").val();
-    
-    if(undefined == goodsTitle || ""==goodsTitle)
-    {
-        alert("请输入商品标题");
-        return;
-    }
-     var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
-    if(undefined == marketPrice || ""==marketPrice || !reg.test(marketPrice))
-    {
-        alert("请输入商品市场价");
-        return ;
-    }
-    
-    if(undefined == outFactoryPrice || ""==outFactoryPrice || !reg.test(outFactoryPrice))
-    {
-        alert("请输入商品批发价");
-        return ;
-    }
-    
-    if(undefined == leftNumber || ""==leftNumber || isNaN(leftNumber))
-    {
-        alert("请输入库存数量");
-        return;
-    }
-    
-    $.ajax({
-        type : "post",
-        url : "/provider/wholesaling",
-        data : {"goodsId":goodsId,
-            "goodsTitle":goodsTitle,
-            "subTitle":subTitle,
-            "outFactoryPrice":outFactoryPrice,
-            "marketPrice":marketPrice,
-            "leftNumber":leftNumber},
-        dataType : "json",
-        success:function(data){
-            $('.sub_form').css('display','none');
-            alert(data.msg);
-            window.location.reload();
-        }
-    })
-    
-}
 function search(type){
      if(null != type && type=="oneCat")
     {
@@ -195,7 +132,7 @@ DD_belatedPNG.fix('.,img,background');
                              </#list>
                              </#if>
                              <#if isSale ==false>
-                                  <p><a href="javascript:;"  onclick="editgoods(${goods.id?c});">选择批发</a></p>
+                                  <p><a  onclick="editGoods(null,${goods.id?c});">选择批发</a></p>
                              </#if>
                          </td>
                       </tr>
@@ -242,9 +179,12 @@ DD_belatedPNG.fix('.,img,background');
     <#include "/client/common_footer.ftl">
 
   <!-- 点击商品上架后弹出层 -->
+  <aside class="sub_form" style="display:none" id="detail_div">
+    	<#include "/client/provider_goods_detail.ftl">
+  </aside>
+  <#--
   <aside class="sub_form" style="display:none">
-    <p class="tit">商品批发<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a>
-</p>
+    <p class="tit">商品批发<a href="javascript:void(0);" onclick="$('.sub_form').css('display','none')">×</a></p>
     <div class="info_tab">
       <table>
         <tr>
@@ -282,5 +222,6 @@ DD_belatedPNG.fix('.,img,background');
       </table>
     </div>
   </aside>
+  -->
 </body>
 </html>

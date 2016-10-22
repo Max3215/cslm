@@ -55,7 +55,6 @@
              </tr>
             <#if proGoods_page??>
                 <#list proGoods_page.content as pgoods>
-                    <input type="hidden" id="providerTitle${pgoods.id?c}" value="${pgoods.providerTitle!''}">
                     <tr>
                         <td colspan="2">
                             <a  class="pic" title="${pgoods.goodsTitle!''}">
@@ -64,16 +63,14 @@
                              </a> 
                         </td>
                         <td><p style="text-align: left;margin:10px 0 10px 5px;max-height:60px;overflow:hidden;" id="subTitle${pgoods.id?c}">${pgoods.subGoodsTitle!''}</p></td>
-                        <td class="tb01"><span id="code${pgoods.id?c}">${pgoods.code!''}</span></td>
-                        <td class="tb02">￥<span id="outFactoryPrice${pgoods.id?c}">${pgoods.outFactoryPrice?string('0.00')}</span></td>
-                        <td><span id="number${pgoods.id?c}">${pgoods.leftNumber?c!'0'}</span></td>
+                        <td class="tb01"><span >${pgoods.code!''}</span></td>
+                        <td class="tb02">￥<span>${pgoods.outFactoryPrice?string('0.00')}</span></td>
+                        <td><span>${pgoods.leftNumber?c!'0'}</span></td>
                         <td>
-                            <p><a href="javascript:showSub(${pgoods.id?c});">添加</a></p>
+                            <p><a onclick="showProGoods(${pgoods.id?c});">添加</a></p>
                             <p><a href="javascript:collect(${pgoods.id?c});">收藏</a></p>
                         </td>
                   </tr>
-                  
-                    <input id="shopReturnRation${pgoods.id?c}" type="text" value="<#if pgoods.shopReturnRation??>${pgoods.shopReturnRation?string('0.00')}<#else>0</#if>" style="display:none">
                 </#list>
             </#if>
         </table>
@@ -127,27 +124,6 @@ function collect(pgId){
     
 }
 
-function showSub(pid)
-{
-    var leftNumber =parseInt($("#number"+pid).html());
-    if(undefined == leftNumber || leftNumber == 0){
-        alert("该商品已无存货！")
-        return;
-    }
-    var goodsTitle = $("#goodsTitle"+pid).html();
-    var subTitle = $("#subTitle"+pid).html();
-    var providerTitle = $("#providerTitle"+pid).val();
-    var outFactoryPrice = $("#outFactoryPrice"+pid).html();
-    
-    $("#goodsId").attr("value",pid);
-    $("#goodsTitle").attr("value",goodsTitle);
-    $("#subTitle").attr("value",subTitle);
-    $("#providerTitle").attr("value",providerTitle);
-    $("#outFactoryPrice").attr("value",outFactoryPrice);
-    $("#leftNumber").attr("value",leftNumber);
-    
-    $('.sub_form').css('display','block');
-}
 function searchGoods(type){
 	console.debug(type);
 	if(null != type && type=="oneCat")

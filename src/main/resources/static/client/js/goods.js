@@ -94,11 +94,10 @@ function minusNum(){
 // 手动输入数量
 function checkNumber(num)
 {
-	var q = parseInt($("#quantity").val());
     var ln = parseInt($("#leftNumber").val());
     
-    if (q < ln){
-        $("#quantity").val(q+1);
+    if (num < ln){
+        $("#quantity").val(num);
     }else{
     	layer.msg('已达到库存最大值',  {icon: 2,time: 2000});
         $("#quantity").val(ln);

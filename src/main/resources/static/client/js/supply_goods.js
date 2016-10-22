@@ -12,13 +12,18 @@ function selectAll(){
 
 
 //超市中心商品上下架
-function goodsAudit(type,pgId,page){
+function goodsAudit(type,pgId){
     $.ajax({
-        url : "/supply/goods/onsale/"+pgId,
-        data : {"type":type,"page":page},
+        url : "/supply/goods/onsale",
+        data : {"type":type,"pgId":pgId},
         type : "post",
-       success:function(res){
-            $("#dis_goods_table").html(res);
+       success:function(data){
+    	   if(data.code==1){
+ 			  layer.msg(data.msg, {icon: 1 ,time: 1000});
+ 			  window.location.reload();
+     	   }else{
+ 			  layer.msg(data.msg, {icon: 2 ,time: 1000});
+     	   }
         }
     })
 }

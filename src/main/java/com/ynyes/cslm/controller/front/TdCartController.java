@@ -474,27 +474,27 @@ public class TdCartController {
     		}
     	}
     	
-    List<TdSpecificat> specList = tdSpecificatService.findByShopIdAndGoodsIdAndType(goods.getDisId(), goods.getGoodsId(), 1);
-      if(null != specList && specList.size() > 0){
-      	if(null == specId){
-      		res.put("msg", "请先选择规格");
-      		res.put("code", 0);
-      		return res;
-      	}
-      }
-    	if (null != goods) {
-            // 查找购物车是否已有此（规格）商品
-    		List<TdCartGoods> cartList = tdCartGoodsService.findByUsernameAndDistributorGoodsIdAndSpecificaId(username, dis_id, specId);
+      	if (null != goods) {
+      		 List<TdSpecificat> specList = tdSpecificatService.findByShopIdAndGoodsIdAndType(goods.getDisId(), goods.getGoodsId(), 1);
+  	      	 if(null != specList && specList.size() > 0){
+  	      		 if(null == specId){
+  	      			 res.put("msg", "请先选择规格");
+  	      			 res.put("code", 0);
+  	      			 return res;
+  	      		 }
+  	      	 }
+  	      	 // 查找购物车是否已有此（规格）商品
+    		 List<TdCartGoods> cartList = tdCartGoodsService.findByUsernameAndDistributorGoodsIdAndSpecificaId(username, dis_id, specId);
     		
-    		Long goodsLeftNumber = goods.getLeftNumber(); // 商品库存
-    		if(null != specId){
+    		 Long goodsLeftNumber = goods.getLeftNumber(); // 商品库存
+    		 if(null != specId){
     			TdSpecificat specificat = tdSpecificatService.findOne(specId);
     			if(null != specificat){ // 如果有规格，取规格库存
     				goodsLeftNumber = specificat.getLeftNumber();
     			}
-    		}
+    		 }
     		
-    		if(null != cartList && cartList.size() != 0){
+    		 if(null != cartList && cartList.size() != 0){
     			
     			TdCartGoods tdCartGoods = cartList.get(0);
     			Long oldQuantity = tdCartGoods.getQuantity();
@@ -505,7 +505,7 @@ public class TdCartController {
                  	tdCartGoods.setQuantity(oldQuantity + quantity);
                  }
                  tdCartGoodsService.save(tdCartGoods);
-    		}else{
+    		 }else{
     			// 购物车没有此（规格）商品
     			TdCartGoods tdCartGoods = new TdCartGoods();
                 

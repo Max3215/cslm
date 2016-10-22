@@ -413,6 +413,7 @@ public class TdGoodsController {
     			if(specificat.getLeftNumber() > 0 ){
     				res.put("num", specificat.getLeftNumber());
     				res.put("code", 1);
+    				return res;
     			}
     		}
     	}

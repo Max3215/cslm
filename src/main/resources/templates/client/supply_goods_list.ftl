@@ -21,18 +21,14 @@
                         </td>
                         <td>
                             <a href="javascript:;" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.goodsCoverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;"><span id="title${dg.id?c}">${dg.goodsTitle}</span></p>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;"><span>${dg.goodsTitle}</span></p>
                              </a> 
-                             <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" /> 
-                             <input type="hidden" value="${dg.code!''}" id="code${dg.id?c}" />
-                             <input type="hidden" value="${dg.unit!''}" id="unit${dg.id?c}" />
-                             <input type="hidden" value="<#if dg.goodsMarketPrice??>${dg.goodsMarketPrice?string('0.00')}</#if>" id="marketPrice${dg.id?c}">
                         </td>
-                        <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
-                        <td class="tb02"><span id="ration${dg.id?c}">${dg.shopReturnRation!'0'}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber?c}</span></td>
+                        <td class="tb01">￥<span>${dg.outFactoryPrice?string('0.00')}</span></td>
+                        <td class="tb02"><span>${dg.shopReturnRation!'0'}</span></td>
+                        <td><span>${dg.leftNumber?c}</span></td>
                         <td>
-                                <p><a href="javascript:goodsAudit(false,${dg.id?c},${page})">取消分销</a></p>
+                                <p><a onclick="goodsAudit(false,${dg.id?c})">取消分销</a></p>
                                 <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
                                 <p><a onclick="deleteGoods(${dg.id?c})">删除</a></p>
                       </tr>
@@ -46,18 +42,14 @@
                             <a href="javascript:;" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.goodsCoverImageUri!''}"  /></strong>
                                 <p class="fr" style="width:170px;text-align:left;padding-top:20px;"><span id="title${dg.id?c}">${dg.goodsTitle}</span></p>
                              </a> 
-                             <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" /> 
-                             <input type="hidden" value="${dg.code!''}" id="code${dg.id?c}" />
-                             <input type="hidden" value="${dg.unit!''}" id="unit${dg.id?c}" />
-                             <input type="hidden" value="<#if dg.goodsMarketPrice??>${dg.goodsMarketPrice?string('0.00')}</#if>" id="marketPrice${dg.id?c}">
                         </td>
-                        <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
-                        <td class="tb02"><span id="ration${dg.id?c}">${dg.shopReturnRation!'0'}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber?c}</span></td>
+                        <td class="tb01">￥<span>${dg.outFactoryPrice?string('0.00')}</span></td>
+                        <td class="tb02"><span>${dg.shopReturnRation!'0'}</span></td>
+                        <td><span>${dg.leftNumber?c}</span></td>
                         <td>
-                                <p><a href="javascript:goodsAudit(true,${dg.id?c},${page})">上架分销</a></p>
+                                <p><a onclick="goodsAudit(true,${dg.id?c})">上架分销</a></p>
                                <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
-                                <p><a href="javascript:deleteGoods(false,${dg.id?c},${page})">删除</a></p>
+                                <p><a onclick="deleteGoods(${dg.id?c})">删除</a></p>
                       </tr>
                  </#if>
             </#list>

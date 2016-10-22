@@ -20,13 +20,18 @@ function selectAll(){
 
 
 //超市中心商品上下架
-function goodsOnSale(type,disId,page){
+function goodsOnSale(type,disId){
     $.ajax({
-        url : "/distributor/goods/onsale/"+disId,
-        data : {"type":type,"page":page},
+        url : "/distributor/goods/onsale",
+        data : {"type":type,"page":disId},
         type : "post",
-       success:function(res){
-            $("#dis_goods_table").html(res);
+       success:function(data){
+    	   if(data.code==1){
+  			  layer.msg(data.msg, {icon: 1 ,time: 1000});
+  			  window.location.reload();
+      	   }else{
+  			  layer.msg(data.msg, {icon: 2 ,time: 1000});
+      	   }
         }
     })
 }
@@ -52,31 +57,99 @@ function deleteDisGoods(disId){
 		});
 }
 
-//超市中心选择批发商品
-function addGoods(){
-	var goodsId = $("#goodsId").val();
-    var page = $("#page").val();
-    var leftNumber = parseInt($("#number"+goodsId).html());
-    var quantity = parseInt($("#quantity").val());
-    
-    if(undefined == leftNumber || leftNumber == 0 || leftNumber < quantity){
-    	alert("该商品存货不足！")
-    	return;
-    }
-    
-    $.ajax({
-        url : "/distributor/goods/addOne",
-        data : {"pgId":goodsId,"quantity":quantity},
-        type :"post",
-        success:function(res){
-            $("#cart_goodslist").html(res);
-            alert("添加成功")
-            $('.sub_form').css('display','none'); 
+// 购物车商品
+function searchCart(){
+	var url = "/distributor/search/cartGoods";
+	var loadData = null;
+	$("#cart_goodslist").load(url,loadData);
+}
+
+// 点击添加，加载批发商品信息
+function showProGoods(proId){
+	$.ajax({
+        type:"post",
+        url:"/distributor/proGoods",
+        data:{"proId": proId},
+        success:function(data){
+        	$("#detail_div").html(data);
+        	$("#detail_div").css('display','block');
         }
-    })
+    });
+}
+
+//选择规格
+function sheckSpec(tag,id){
+	$.ajax({
+		url : "/distributor/goods/specifica",
+		type : "post",
+		data : {"id":id},
+		success: function(data){
+			if(data.code ==1){
+				$(".info_tab  a").removeClass("sel");
+				$(tag).addClass("sel");
+				$("#specId").val(id);
+				
+				$("#left_label").html("库存"+data.num)
+				$("#quantity").attr("max",data.num);
+				$("#leftNumber").val(data.num);
+				
+				var q = parseInt($("#quantity").val());
+				if (q > data.num){
+			        layer.msg('已达到库存最大值',  {icon: 2,time: 2000});
+			        $("#quantity").val(data.num);
+			    }
+			}else{
+				layer.msg(data.msg,  {icon: 2,time: 2000});
+			}
+		}
+		
+	})
+}
+//手动输入数量
+function checkNumber(num)
+{
+    var ln = parseInt($("#leftNumber").val());
+    
+    if (num < ln){
+        $("#quantity").val(num);
+    }else{
+    	layer.msg('已达到库存最大值',  {icon: 2,time: 2000});
+        $("#quantity").val(ln);
+    }
 }
 
 
+function addGoods(pro_id){
+	var isSpec = $("#isSpec").val();
+    var specId = $("#specId").val();
+	var quantity = parseInt($("#quantity").val());
+	
+	if( "true" == isSpec){
+		if(undefined == specId || ""== specId){
+			layer.msg('请先选择规格',  {icon: 2,time: 2000});
+			return;
+		}
+	}
+	if(undefined == quantity || ""==quantity || isNaN(quantity)){
+		quantity = 1;
+	}
+    $.ajax({
+		url : "/distributor/goods/addOne",
+		type : "post",
+		data : {"pro_id":pro_id,
+				"isSpec":isSpec,
+				"specId":specId,
+				"quantity":quantity},
+		success: function(data){
+			if(data.code ==1){
+				layer.msg(data.msg,  {icon: 6,time: 2000});
+				searchCart();
+			}else{
+				layer.msg(data.msg,  {icon: 2,time: 2000});
+			}
+		}
+	});
+}
 
 //点击复选框
 function toggleSelect(id)
@@ -130,10 +203,8 @@ function minusNum(id)
     });
 }
 
-function changeNumber(id)
+function changeNumber(quantity,id)
 {
-	var quantity = $("#number"+id).val();
-	
 	var r = /^\+?[1-9][0-9]*$/;　
 	if( r.test(quantity)){
 		$.ajax({
@@ -141,14 +212,17 @@ function changeNumber(id)
 	        url:"/distributor/goods/changQuantity",
 	        data:{"id":id,"quantity":quantity},
 	        success:function(data){
-	            $("#cart_goodslist").html(data);
+	        	if(data.code==1){
+	        		searchCart();
+	            }else{
+	            	layer.alert(data.msg)
+	            }
 	        }
 	    });
 	}else{
-		alert("请正确输入数量！");
+		layer.alert("请正确输入数量！");
 		$("#submit").attr("disabled",true);
 	}
-	
 }
 
 function delCartItem(id)
@@ -174,7 +248,7 @@ function goNext(goodsNum)
 	
     if (0==goodsNum)
     {
-        alert("请至少选择一种商品!");
+    	layer.alert("请至少选择一种商品!");
         return false;
     }
     win_show(); 

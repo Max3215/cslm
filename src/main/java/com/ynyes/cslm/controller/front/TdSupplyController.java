@@ -43,7 +43,6 @@ import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCountSale;
-import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
@@ -625,55 +624,34 @@ public class TdSupplyController extends AbstractPaytypeController{
 	}
 	
 	//  分销、取消
-	@RequestMapping(value="/goods/onsale/{pgId}")
-	public String providerGoodsDelete(@PathVariable Long pgId,
-			Boolean type,Integer page,
+	@RequestMapping(value="/goods/onsale",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> providerGoodsDelete(Long pgId,
+			Boolean type,
 			HttpServletRequest req,ModelMap map)
 	{
+		Map<String,Object> res= new HashMap<String, Object>();
+		res.put("code",0);
+		
 		String username = (String)req.getSession().getAttribute("supply");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg","登录超时");
+			return res;
 		}
-		if(null == pgId)
+		if(null != pgId)
 		{
-			tdCommonService.setHeader(map, req);
-			return "/client/error_404";
-		}
-		if(null == page)
-		{
-			page = 0;
-		}
-		map.addAttribute("page", page);
-		map.addAttribute("type",type);
-		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
-		TdProvider provider = tdProviderService.findByUsername(username);
-		
-		if(type)
-		{
-			providerGoods.setIsDistribution(type);
-			tdProviderGoodsService.save(providerGoods);
-			map.addAttribute("isDistribution", false);
-			map.addAttribute("supply_goods_page",
-					tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),false,true, page, ClientConstant.pageSize));
-		}else{
-			// 取消分销后 超市商品库删除分销商品
-			List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),providerGoods.getGoodsId());
-			if(null != list && list.size() >0){
-				for (TdDistributorGoods tdDistributorGoods : list) {
-					tdDistributorGoodsService.delete(tdDistributorGoods);
-				}
+			TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+			if(null != type && null != providerGoods){
+				providerGoods.setIsDistribution(type);
+				tdProviderGoodsService.save(providerGoods);
+				res.put("code", 1);
+				res.put("msg", "操作成功");
+				return res;
 			}
-			
-			providerGoods.setIsDistribution(type);
-			tdProviderGoodsService.save(providerGoods);
-			map.addAttribute("isDistribution", true);
-			map.addAttribute("supply_goods_page",
-					tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),true,true, page, ClientConstant.pageSize));
 		}
-		
-		map.addAttribute("provider", provider);
-		return "/client/supply_goods_list";
+		res.put("msg","参数错误");
+		return res;
 	}
 	
 	/**

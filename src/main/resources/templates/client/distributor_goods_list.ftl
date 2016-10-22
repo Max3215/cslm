@@ -41,8 +41,8 @@
                                 -->
                                 <a href="javascript:recommed(${dg.id?c},${page},'hot');" <#if dg.isTouchHot?? &&dg.isTouchHot==true>style="color:#ff5b7d"</#if>>精品</a>
                              </p>
-                            <p><a href="javascript:editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
-                            <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page?c});">下架</a>&nbsp;/&nbsp;<a onclick="deleteDisGoods(${dg.id?c});">删除</a></p>
+                            <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
+                            <p><a onclick="goodsOnSale(false,${dg.id?c});">下架</a>&nbsp;/&nbsp;<a onclick="deleteDisGoods(${dg.id?c});">删除</a></p>
                        </td>
                       </tr>
                  <#else>
@@ -60,8 +60,8 @@
                         <td class="tb02"><p><#if dg.goodsPrice??>￥<span >${dg.goodsPrice?string('0.00')}<#else></#if></p></td>
                         <td><span >${dg.leftNumber?c!'0'}</span></td>
                         <td>
-                            <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page?c});">上架</a></p>
-                            <p><a href="javascript:editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
+                            <p><a onclick="goodsOnSale(true,${dg.id?c});">上架</a></p>
+                            <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
                             <p><a onclick="deleteDisGoods(${dg.id?c});">删除</a></p></td>
                       </tr>
                  </#if>
