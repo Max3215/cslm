@@ -147,7 +147,29 @@ $(document).ready(function(){
     </ul>
   </section>
   <!-- 详情和评价 END -->
-
+  
+	<#if rele_list?? && rele_list?size gt 0>
+  	<section class="product_list">
+  		<p class="top">关联商品</p>
+  	 	<ul id="goods-menu">
+            <#list rele_list as goods>
+            <#if goods_index lt 6>
+        		<li>
+			        <a href="/touch/goods/${goods.id?c}"><img src="${goods.coverImageUri!''}" /></a>
+			        <a href="/touch/goods/${goods.id?c}" class="name">${goods.goodsTitle!""}</a>
+			        <p class="price">¥ ${goods.goodsPrice?string("0.00")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
+			        <div class="bot">
+			        </div>
+		        </li>
+	        </#if>
+            </#list>
+  		</ul>
+  	</section>
+    </#if> 
+	<style>
+		.product_list{margin-top:0.1rem;}
+		.product_list .top{height:0.7rem;background:#fff;padding-left:4%;line-height:0.7rem;color:#ff5b7d;margin-bottom:0.1rem;}
+	</style>
   <!-- 底部 -->
   <div style="height:0.78rem;"></div>
   <section class="pro_foot">

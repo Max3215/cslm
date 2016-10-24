@@ -60,6 +60,10 @@ function search(type){
     }
     $("#form1").submit();
 }
+function goPage(page){
+	$("#page").val(page);
+	$("#form1").submit();
+}
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -83,11 +87,12 @@ DD_belatedPNG.fix('.,img,background');
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
                     <h3><#if isOnSale>出售中的商品<#else>仓库中的商品</#if></h3>
-                         <form action="/distributor/goods/sale/${isOnSale?c}" id="form1"> 
+                         <form action="/distributor/goods/sale/${isOnSale?c}" id="form1" > 
                           <input class="mysub" type="submit" value="查询" />
                           <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
                           <input class="mytext" type="text" name="keywords"  value="${keywords!''}" id="keywords" />
                           <input type="hidden" name="dir" value="${sort!''}" id="sort"/>
+                          <input type="hidden" name="page" value="" id="page"/>
                           <select id="oneCat" onchange="javascript:search('oneCat')" >
                                 <option <#if category??><#else>selected="selected"</#if> value="">所有类别</option>
                                 <#if category_list??>
@@ -142,7 +147,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == dis_goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/sale/${isOnSale?c}?page=${(page-1)?c}&keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if><#if sort??>&dir=${sort}</#if>">${page}</a>
+                                <a onclick="goPage(${(page-1)?c})">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

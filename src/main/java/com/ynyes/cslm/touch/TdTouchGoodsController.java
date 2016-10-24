@@ -168,6 +168,9 @@ public class TdTouchGoodsController {
         	map.addAttribute("collect", true);
         }
         
+        // 关联商品
+        map.addAttribute("rele_list", tdDistributorGoodsService.findRelevanceGoods(dgId));
+        
         // 商品
         map.addAttribute("goods", goods);
 

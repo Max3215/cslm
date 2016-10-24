@@ -378,6 +378,68 @@ function supply(goodsId){
             	layer.msg(data.msg, {icon: 2 ,time: 1000});
             }
         }
-    })
+    });
+}
+
+
+// 加载关联商品
+function searchRelevance(goodsId){
+	var url = "/distributor/search/relevance";
+	var loadData = {"goodsId":goodsId};
+	$("#rele_goodslist").load(url,loadData);
+}
+
+//加载出售中的商品
+function searchSaleGoods(t){
+	var url = "/distributor/search/saleGoods";
+	var loadData = null;
+	
+	if(t){
+		var goodsId=$("#goodsId").val();
+		loadData = {"goodsId":goodsId};
+	}else{
+		loadData = $("#good_form").serializeArray();
+	}
+	$("#good_form").load(url,loadData);
+}
+
+// 添加关联
+function addRelevance(goodsId1,goodsId2){
+	$.ajax({
+        type : "post",
+        url : "/distributor/relevance/add",
+        data : {"goodsId1":goodsId1,"goodsId2":goodsId2},
+        success:function(data){
+            if(data.code == 1 ){
+            	layer.msg(data.msg, {icon: 1 ,time: 2000});
+            	searchRelevance(goodsId1);
+            }else{
+            	layer.msg(data.msg, {icon: 2 ,time: 1000});
+            }
+        }
+    });
+}
+
+// 解除关联
+function deleteRelevance(goodsId1,goodsId2){
+	layer.confirm('确定要解除这两个商品的关联吗？',{
+		btn: ['确定','取消'] //按钮
+		}, function(){
+			$.ajax({
+		        url : "/distributor/relevance/delete",
+		        data : {"goodsId1":goodsId1,"goodsId2":goodsId2},
+		        type :"post",
+		        success:function(data){
+		        	if(data.code == 1 ){
+		            	layer.msg(data.msg, {icon: 1 ,time: 2000});
+		            	searchRelevance(goodsId1);
+		            }else{
+		            	layer.msg(data.msg, {icon: 2 ,time: 1000});
+		            }
+		        }
+		    })
+		}, function(){
+			layer.closeAll();
+		});
 }
 

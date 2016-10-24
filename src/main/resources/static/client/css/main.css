@@ -601,7 +601,7 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 .relation_pro .list a{display: block;float:left;width: 140px;margin:0 28px;}
 .relation_pro .list a img{width: 100%;}
 .relation_pro .list a .name{font-size: 14px;color:#333333;height: 40px;overflow: hidden;margin-top: 6px;}
-.relation_pro .list a .name:hover{color:#ff5b7d;text-decoration: underline;}
+.relation_pro .list a .name:hover{color:#ff5b7d;}
 .relation_pro .list a .price{font-weight: bold;font-size: 16px;color:#ff5b7d;text-align: center;margin-top: 4px;}
 
 

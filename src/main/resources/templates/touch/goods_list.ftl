@@ -123,13 +123,7 @@ $(document).ready(function(){
   	<ul id="goods-menu">
   	     <#if goods_page?? && goods_page.content?size gt 0>
             <#list goods_page.content as goods>
-                   <#-- <a href="/touch/goods/${goods.id?c}" class="a1">
-                        <img src="${goods.coverImageUri!''}"/>
-                        <p>${goods.goodsTitle!""}</p>
-                        <p >￥${goods.goodsPrice?string("#.##")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
-                    </a>
-                    -->
-            	<li>
+        		<li>
 			        <a href="/touch/goods/${goods.id?c}"><img src="${goods.coverImageUri!''}" /></a>
 			        <a href="/touch/goods/${goods.id?c}" class="name">${goods.goodsTitle!""}</a>
 			        <p class="price">¥ ${goods.goodsPrice?string("0.00")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
@@ -146,12 +140,7 @@ $(document).ready(function(){
           <#else>
           <div style="text-align: center; padding: 15px;">此类商品正在扩充中，敬请期待！</div>
         </#if> 
-  	</menu>
-  	<#--
-  	<#if goods_page?? && goods_page.content?size gt 0>
-   <a id="a-more" class="grey_more" href="javascript:loadMore();"><img src="/touch/images/load.png" /></a>
-   </#if>
-   -->
+  	</ul>
   </section>
   <!-- 商品类表 END -->
 <style>

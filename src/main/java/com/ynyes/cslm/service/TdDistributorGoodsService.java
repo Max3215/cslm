@@ -1,5 +1,6 @@
 package com.ynyes.cslm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoodsParameter;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProductCategory;
+import com.ynyes.cslm.entity.TdRelevance;
 import com.ynyes.cslm.repository.TdDistributorGoodsRepo;
 import com.ynyes.cslm.util.Criteria;
 import com.ynyes.cslm.util.Restrictions;
@@ -48,6 +50,9 @@ public class TdDistributorGoodsService {
 	
 	@Autowired
 	TdDistributorService tdDistributorService;
+	
+	@Autowired
+	TdRelevanceService tdRelevanceService;
 	
 	/**
 	 * 删除
@@ -1313,7 +1318,7 @@ public class TdDistributorGoodsService {
 	
 	
 	
-	public Page<TdDistributorGoods> findAll(Long disId,Boolean isOnsSale,Long catId,String keywords,PageRequest pageRequest)
+	public Page<TdDistributorGoods> findAll(Long disId,Boolean isOnsSale,Boolean isDistribution,Long catId,String keywords,PageRequest pageRequest)
 	{
 		Criteria<TdDistributorGoods> c = new Criteria<>();
 		if(null != disId)
@@ -1328,6 +1333,10 @@ public class TdDistributorGoodsService {
 		{
 			c.add(Restrictions.like("categoryIdTree", "[" + catId + "]", true));
 		}
+		if(null != isDistribution){
+			c.add(Restrictions.eq("isDistribution", isDistribution, true));
+		}
+		
 		if(null != keywords && !"".equals(keywords.trim()))
 		{
 			c.add(Restrictions.or(Restrictions.like("goodsTitle", keywords, true),Restrictions.like("code", keywords, true)));
@@ -1390,4 +1399,45 @@ public class TdDistributorGoodsService {
         return repository.findAll(c, pageRequest);
 	}
 	
+	/**
+	 * 查询商品关联的其他商品
+	 * @param goodsId
+	 * @return
+	 */
+	public List<TdDistributorGoods> findRelevanceGoods(Long goodsId){
+		if(null == goodsId){
+			return null;
+		}
+//		List<TdDistributorGoods> goodsList = new ArrayList<TdDistributorGoods>();
+		List<Long> idList = new ArrayList<Long>();
+		
+		// 查询商品作为主商品的关联记录
+		List<TdRelevance> reList = tdRelevanceService.findAll(goodsId, null);
+		if(null != reList){
+			for (TdRelevance tdRelevance : reList) {
+				idList.add(tdRelevance.getGoodsId2());
+			}
+		}
+		
+		// 商品作为被关联存在的关联记录
+		List<TdRelevance> subList = tdRelevanceService.findAll(null, goodsId);
+		if(null != subList){
+			for (TdRelevance tdRelevance : subList) {
+				//ID集合是否存在关联的主商品
+				if(!idList.contains(tdRelevance.getGoodsId1())){
+					idList.add(tdRelevance.getGoodsId1());
+				}
+			}
+		}
+		
+		return this.findIds(idList);
+	}
+	
+	
+	public List<TdDistributorGoods> findIds(List<Long> ids){
+		if(null != ids){
+			return (List<TdDistributorGoods>) repository.findAll(ids);
+		}
+		return null;
+	}
 }

@@ -169,6 +169,25 @@ function showmsg(){
 			<div class="clear"></div>
 		</div>
 
+		<!-- 关联商品 -->
+		<#if rele_list?? && rele_list?size gt 0>
+		<div class="relation_pro">
+			<p class="tit"><span>相关推荐</span></p>
+			<div class="list">
+				<#list rele_list as goods>
+				<#if goods_index lt 6>
+				<a href="/goods/${goods.id?c}">
+					<img src="${goods.coverImageUri!''}" />
+					<p class="name">${goods.goodsTitle!''}</p>
+					<p class="price">￥${goods.goodsPrice?string('0.00')}</p>
+				</a>
+				</#if>
+				</#list>
+			</div>
+		</div>
+		</#if>
+		<!-- 关联商品 end -->
+
 		<div class="info_box">
 			<div class="clear"></div>
 			<section class="info_left">

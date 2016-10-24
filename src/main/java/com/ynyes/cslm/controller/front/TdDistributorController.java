@@ -59,6 +59,7 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
+import com.ynyes.cslm.entity.TdRelevance;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdSpecificat;
@@ -82,6 +83,7 @@ import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
+import com.ynyes.cslm.service.TdRelevanceService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdSpecificatService;
@@ -171,6 +173,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 	
 	@Autowired
 	TdSpecificatService tdSpecificatService;
+	
+	@Autowired
+	TdRelevanceService tdRelevanceService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -723,7 +728,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 	 * 超市中心查看出售中/仓库中商品
 	 * 
 	 */
-	@RequestMapping(value="/goods/sale/{isSale}", method= RequestMethod.GET)
+	@RequestMapping(value="/goods/sale/{isSale}")
 	public String disGoodsSale(@PathVariable Boolean isSale,Integer dir,Long categoryId,String keywords, Integer page,HttpServletRequest req,ModelMap map)
 	{
 		String username = (String)req.getSession().getAttribute("distributor");
@@ -732,6 +737,8 @@ public class TdDistributorController extends AbstractPaytypeController{
 			return "redirect:/login";
 		}
 		tdCommonService.setHeader(map, req);
+		
+		
 		
 		if(null == page )
 		{
@@ -765,7 +772,7 @@ public class TdDistributorController extends AbstractPaytypeController{
         {
         	pageRequest = new PageRequest(page, 10);
         }
-        map.addAttribute("dis_goods_page",tdDistributorGoodsService.findAll(distributor.getId(), isSale, categoryId, keywords, pageRequest));
+        map.addAttribute("dis_goods_page",tdDistributorGoodsService.findAll(distributor.getId(), isSale,false, categoryId, keywords, pageRequest));
 		if(null != categoryId)
 		{
 			TdProductCategory category = tdProductCategoryService.findOne(categoryId);
@@ -789,6 +796,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		
 		return "/client/distributor_goods";
 	}
+	
 	
 	/**
 	 * 超市商品详情
@@ -970,7 +978,7 @@ public class TdDistributorController extends AbstractPaytypeController{
         {
         	pageRequest = new PageRequest(page, 10);
         }
-        map.addAttribute("dis_goods_page",tdDistributorGoodsService.findAll(distributor.getId(), true, categoryId, keywords, pageRequest));
+        map.addAttribute("dis_goods_page",tdDistributorGoodsService.findAll(distributor.getId(), true, false,categoryId, keywords, pageRequest));
 		
 		return "/client/distributor_goods_list";
 	}
@@ -1873,7 +1881,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		
 		PageRequest pageRequest = new PageRequest(0, Integer.MAX_VALUE);
 		
-		map.addAttribute("dis_goods_list", tdDistributorGoodsService.findAll(distributor.getId(),true, categoryId, keywords, pageRequest));
+		map.addAttribute("dis_goods_list", tdDistributorGoodsService.findAll(distributor.getId(),true, false,categoryId, keywords, pageRequest));
 		
 		map.addAttribute("page", page);
 		map.addAttribute("keywords",keywords);
@@ -3277,7 +3285,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		map.addAttribute("provider_list", tdProviderService.findByType(2L));
 		
 		PageRequest pageRequest = new PageRequest(0, Integer.MAX_VALUE);
-		map.addAttribute("goodsList", tdDistributorGoodsService.findAll(distributor.getId(), null, null , keywords, pageRequest));
+		map.addAttribute("goodsList", tdDistributorGoodsService.findAll(distributor.getId(), null, false,null , keywords, pageRequest));
 		
 		// 参数注回
 		map.addAttribute("keywords", keywords);
@@ -4276,6 +4284,153 @@ public class TdDistributorController extends AbstractPaytypeController{
     	return res;
     }
     
+    @RequestMapping(value="/relevance/list")
+	public String relevance(Long goodsId,
+			HttpServletRequest req,ModelMap map,
+			HttpServletResponse resp)
+	{
+		String username = (String)req.getSession().getAttribute("distributor");
+		if(null == username)
+		{
+			return "redirect:/login";
+		}
+		
+		map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
+		tdCommonService.setHeader(map, req);
+		map.addAttribute("goodsId", goodsId);
+		
+		return "/client/distributor_relevance";
+	}
+    /**
+     * 加载已关联商品
+     * @author Max
+     * 2016-10-24
+     */
+    @RequestMapping(value="/search/relevance",method=RequestMethod.POST)
+    public String relevanceGoods(Long goodsId,HttpServletRequest req,ModelMap map){
+    	if(null != goodsId){
+    		map.addAttribute("goodsId", goodsId);
+    		map.addAttribute("relevance_list", tdDistributorGoodsService.findRelevanceGoods(goodsId));
+    	}
+    	
+    	return "/client/distributor_relevance_list";
+    }
+    /**
+     *  加载出售中的商品
+     *  @author Max
+     *  2016-10-24
+     */
+    @RequestMapping(value="/search/saleGoods")
+    public String saleGoods(String keywords,Integer page,
+    			String isDistribution,Long goodsId,
+			Long categoryId,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	
+    	if(null == page)
+		{
+			page=0;
+		}
+		TdDistributor distributor = tdDistributorService.findbyUsername(username);
+		if(null != distributor){
+			PageRequest pageRequest = new PageRequest(page, 10,new Sort(Direction.DESC, "id"));
+			
+			map.addAttribute("sale_page",tdDistributorGoodsService.findAll(distributor.getId(), true, null,categoryId, keywords, pageRequest));
+			
+		}
+    	
+		// 参数注回
+		map.addAttribute("keywords", keywords);
+		map.addAttribute("page", page);
+		map.addAttribute("categoryId", categoryId);
+		map.addAttribute("goodsId", goodsId);
+		
+		List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullAndIsEnableTrueOrderBySortIdAsc();
+		map.addAttribute("categoryList", categortList);
+		
+		if(null != categoryId){
+       	 TdProductCategory category = tdProductCategoryService.findOne(categoryId);
+            for (TdProductCategory tdProductCategory : categortList) {
+            	
+            	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
+            	{
+            		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+            		map.addAttribute("cateList", cateList);
+            		
+            		for (TdProductCategory productCategory : cateList) {
+            			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
+            			{
+            				map.addAttribute("category_list", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+            			}
+            		}
+            		
+            	}
+            }
+            map.addAttribute("category", category);
+       }
+		return "/client/distributor_rele_goods";
+    }
+    
+    @RequestMapping(value="/relevance/{type}",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> paramRelevance(@PathVariable String type,
+    		Long goodsId1,// 商品ID
+    		Long goodsId2, // 关联商品ID
+    		Long id, // 关联记录ID
+    		HttpServletRequest req,ModelMap map){
+    	Map<String,Object> res = new HashMap<String, Object>();
+    	res.put("code", 0);
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username){
+    		res.put("msg", "登录超时");
+    		return res;
+    	}
+    	
+    	if(null != type){
+    		// 新增关联
+    		if("add".equalsIgnoreCase(type)){
+    			// 查询以商品ID为主，需关联商品ID为副的关联记录，
+    			List<TdRelevance> list = tdRelevanceService.findAll(goodsId1, goodsId2);
+    			if(null != list && list.size() > 0){
+    				res.put("msg", "此关联已存在");
+    				return res;
+    			}
+    			// 查询以商品ID为副，需关联商品Id为主的关联记录
+    			List<TdRelevance> reList = tdRelevanceService.findAll(goodsId2, goodsId1);
+    			if(null != reList && reList.size() > 0 ){
+    				res.put("msg", "此关联已存在");
+    				return res;
+    			}
+    			// 没有相关关联记录，保存新记录
+    			TdRelevance relevance = new TdRelevance();
+    			relevance.setGoodsId1(goodsId1); // 主ID
+    			relevance.setGoodsId2(goodsId2); // 副ID （关联商品ID）
+    			
+    			tdRelevanceService.save(relevance);
+    			res.put("msg", "关联成功");
+    			res.put("code", 1);
+    			return res;
+    		}else if("delete".equalsIgnoreCase(type)){
+    			List<TdRelevance> list = tdRelevanceService.findAll(goodsId1, goodsId2);
+    			if(null != list && list.size() > 0){
+    				// 删除已商品ID为主关联商品ID为副的关联
+    				tdRelevanceService.delete(list);
+    			}
+    			// 查询以商品ID为副，需关联商品Id为主的关联记录
+    			List<TdRelevance> reList = tdRelevanceService.findAll(goodsId2, goodsId1);
+    			if(null != reList && reList.size() > 0 ){
+    				// 删除已关联商品ID为主商品ID为副的关联
+    				tdRelevanceService.delete(reList);
+    			}
+    			res.put("msg", "已成功解除关联");
+    			res.put("code",1);
+    			return res;
+    		}
+    	}
+    	
+    	return res;
+    }
+    
+    
     // 批量删除广告
     public void adDelete(Long[] ids,Integer[] chkIds)
     {
@@ -4398,6 +4553,7 @@ public class TdDistributorController extends AbstractPaytypeController{
     	TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(userRturn.getSupplyId(), goods.getGoodsId());
     	TdProvider supply = tdProviderService.findOne(userRturn.getSupplyId());
     	if(null == supply){
+    		
     		return 1;
     	}
     	if(null == providerGoods){

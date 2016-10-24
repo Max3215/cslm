@@ -40,6 +40,8 @@
                                 &nbsp;/&nbsp;
                                 -->
                                 <a href="javascript:recommed(${dg.id?c},${page},'hot');" <#if dg.isTouchHot?? &&dg.isTouchHot==true>style="color:#ff5b7d"</#if>>精品</a>
+                                &nbsp;/&nbsp;
+                                <a href="/distributor/relevance/list?goodsId=${dg.id?c}" >关联其他</a>
                              </p>
                             <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>
                             <p><a onclick="goodsOnSale(false,${dg.id?c});">下架</a>&nbsp;/&nbsp;<a onclick="deleteDisGoods(${dg.id?c});">删除</a></p>
