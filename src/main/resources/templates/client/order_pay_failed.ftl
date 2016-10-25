@@ -45,20 +45,15 @@ $(document).ready(function(){
 <body>
 <#include "/client/common_header.ftl" />
   <div class="main">
-    <#if order??>
-    <h3>订单号:${order.orderNumber!''}</h3>
-    <h3>支付金额:${order.totalPrice?string('0.00')}</h3>
-    <h3>支付方式:${order.payTypeTitle!''}</h3>
-    </#if>
-    <h3>订单状态</h3>
-    <div class="clear h20"></div>
-    <div id="trans-status">
-        <div class="notice-title status-failed">
-            <img class="notice-icon" title="付款失败" src="/client/images/transfailed.png"></img>
-            <span class="notice-content"><#if order??>付款失败，或者支付结果验证失败，如果订单已经成功支付，请联系客服处理！<#else>找不到对应的订单！</#if></span>
-        </div>
-    </div>
-    <div class="clear h40"></div>
+  
+  <div class="car_success" style="background: url(/client/images/transfailed.png) no-repeat left center;">
+	    <p class="fc fs30 lh40 pb10">订单支付失败! </p>
+	    <p> 订单号：<a href="/user/order?id=${order.id?c}">${order.orderNumber!''}</a></p>
+	    <p> 支付方式：${order.payTypeTitle!''}</p>
+	    <p>应付金额￥${order.totalPrice?string('0.00')} <a class="blue" href="/order/dopay/${order.id?c}" target="_blank">点击支付</a></p>
+	    <p><#if order??>付款失败，或者支付结果验证失败，如果订单已经成功支付，请联系客服处理！<#else>找不到对应的订单！</#if></p>
+	</div>
+    <div class="clear"></div>
   </div>
 <#include "/client/common_footer.ftl" />
 </body>

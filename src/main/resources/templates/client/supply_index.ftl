@@ -173,7 +173,7 @@ DD_belatedPNG.fix('.,img,background');
       <li>账号：${supply.virtualAccount!''}</li>
       <li>电话：${supply.mobile!''}</li>
       <li>地址：${supply.address!''}</li>
-        <a href="/supply/edit" class="quit_btn" >修改信息</a><a href="/logout" class="quit_btn">退出登陆</a>
+        <a href="/supply/edit" class="quit_btn" >修改信息</a><a href="/logout" class="quit_btn">退出登录</a>
     </ul>
   </div>
 

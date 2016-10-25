@@ -204,6 +204,7 @@ function chooseMoreShow(){
   
     <p>请输入用户名</p>
     <input class="text" type="text" id="txt_loginId"/>
+    <div class="h20"></div>
     <p>请输入密码</p>
     <input class="text" type="password" id="txt_loginPwd"/>   
     <#-- 

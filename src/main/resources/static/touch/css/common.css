@@ -179,7 +179,8 @@ a,button,input{
 .com_top .back{display: block;width: 0.23rem;height: 0.4rem;background: url(../images/top04.png) no-repeat;background-size:0.23rem 0.4rem;position: absolute;left:4%;top:0.2rem;z-index: 10;}
 .com_top .c_home{display: block;width: 0.51rem;height:0.45rem;background: url(../images/top05.png) no-repeat;background-size:0.51rem 0.45rem;position: absolute;right:4%;top:0.18rem;}
 
-.com_top .branch{position: absolute;left:1rem;top:0.26rem;}
+.com_top .branch{position: absolute;left:1rem;top:0.26rem;    width: 66%;
+    overflow: hidden;}
 .com_top .branch a{font-size: 0.24rem;color:#fff;padding-right:0.4rem;background: url(../images/arrow01.png) no-repeat right center;background-size:0.21rem 0.11rem;line-height: 0.24rem;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;}
 
 .com_top .modify_branch{/*position: absolute;left:1rem;top:0;*/padding-left: 0.7rem;background: url(../images/top01.png) no-repeat left center;background-size: 0.52rem;height: 100%;line-height: 0.88rem;width: 45%;margin: 0 auto;overflow: hidden;}
@@ -236,7 +237,7 @@ a,button,input{
 .index_enter{background: #fff;width: 100%;border-bottom:1px solid #c0bfbf;}
 .index_enter a{display: table-cell;text-align: center;padding:0.15rem 0;}
 .index_enter a img{width: 70%;}
-.index_enter p{font-size: 0.22rem;color:#999999;}
+.index_enter p{font-size: 0.22rem;color:#666;}
 
 
 .new_arrivals{background: #fff;border-bottom:1px solid #c0bfbf;overflow: hidden;padding:0.18rem 0.2rem;max-width: 640px;margin:0.16rem auto 0;}
@@ -482,7 +483,8 @@ a,button,input{
 .collection_list li a.choose.sel{background: url(../images/round_on.png) no-repeat center center; background-size: 18px;}
 .collection_list li a.pic{width: 30%; float: left;display: block;border:1px solid #c0bfbf;}
 .collection_list li a.pic img{width: 100%;display: block;}
-.collection_list li a.name{width: 66%; float: right;display: block;color:#252525;font-size: 0.22rem;}
+.collection_list li a.name{width: 66%; float: right;display: block;color:#252525;font-size: 0.22rem;    height: 0.7rem;
+    overflow: hidden;}
 .collection_list li p{font-size: 0.22rem;color:#999999;float:right;width: 66%;}
 .collection_list li a.btn{width: 1.1rem; height: 0.4rem; font-size: 0.24rem; color: #000; background: #fefafa; border: 1px solid #c0bfbf; border-radius: 3px; -webkit-border-radius: 3px; line-height: 0.4rem; text-align: center; float: none; position: absolute; right: 3%; bottom: 10px;}
 

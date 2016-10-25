@@ -109,6 +109,9 @@ public class TdTouchLoginController {
 	        }
 	        
 	        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+	        if(null == user){
+	        	user = tdUserService.findByMobile(username);
+	        }
 	        
 	        if (null != user)
 	        {

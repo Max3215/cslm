@@ -125,7 +125,7 @@ DD_belatedPNG.fix('.,img,background');
                         </div>
                         <div class="mymember_eva_div">
                             <b><font>* </font>联系电话：</b>
-                            <input type="text" name="telephone" datatype="n8-20" errormsg="请输入正确的电话格式" />
+                            <input type="text" name="telephone" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" errormsg="请输入正确的电话格式" />
                             <span class="Validform_checktip">*联系电话</span>
                         </div>
                         

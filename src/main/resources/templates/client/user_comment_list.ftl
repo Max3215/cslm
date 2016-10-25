@@ -69,7 +69,7 @@ DD_belatedPNG.fix('.,img,background');
   <div class="mymember_mainbox">
         <div class="mymember_info">
             <div class="mymember_order_search">
-                <a class="a001" >商品评价/晒单</a>
+                <a class="a001" style="margin-right: 10px;">商品评价/晒单</a>
                 <select id="commentTypeSelect" onchange="javascript:commentJump();">
                     <option value="5" <#if statusId==5>selected="selected"</#if>>待评价订单</option>
                     <option value="6" <#if statusId==6>selected="selected"</#if>>已评价订单</option> 

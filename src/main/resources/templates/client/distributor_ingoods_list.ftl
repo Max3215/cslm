@@ -1,5 +1,5 @@
     <div class="mymember_order_search"> 
-        <h3>批发商的商品</h3>
+        <h3>批发商的商品<a onclick="searchGoods('excel')" style="float:none;border:none;" />商品导出</a></h3>
         <form action="/distributor/goods/list" id="form" method="post">
         <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
         <input type="hidden" name="page" id="page" value="" />
@@ -41,7 +41,7 @@
         
         </form>
         <div class="clear"></div>
-        <input class="mysub" type="button" onclick="searchGoods('excel')" value="导出" />
+        
     </div>
     <table>
             <tr class="mymember_infotab_tit01">
