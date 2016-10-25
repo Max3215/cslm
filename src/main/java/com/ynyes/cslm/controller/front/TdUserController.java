@@ -1695,6 +1695,7 @@ public class TdUserController extends AbstractPaytypeController{
 			}else if(type.equalsIgnoreCase("payPwd"))
 			{
 				user.setPayPassword(newPassword);
+				user.setIsUpdatePay(true);
 			}
 		}
 		

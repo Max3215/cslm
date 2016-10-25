@@ -226,6 +226,9 @@ public class TdUser {
     @Column
     private Long pointGetByShareGoods;
     
+    @Column
+    private Boolean isUpdatePay;
+    
     public Long getId() {
         return id;
     }
@@ -616,6 +619,14 @@ public class TdUser {
 
 	public void setPayPassword(String payPassword) {
 		this.payPassword = payPassword;
+	}
+
+	public Boolean getIsUpdatePay() {
+		return isUpdatePay;
+	}
+
+	public void setIsUpdatePay(Boolean isUpdatePay) {
+		this.isUpdatePay = isUpdatePay;
 	}
     
     

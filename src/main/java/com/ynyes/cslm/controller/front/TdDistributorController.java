@@ -1692,7 +1692,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 						if(null == distributorGoods && !distributor.getGoodsList().contains(distributorGoods))
 						{
 							TdGoods goods = tdGoodsService.findOne(tdOrderGoods.getGoodsId());
-//							tdProviderGoodsService.findByProviderIdAndGoodsId(, goodsId)
 							distributorGoods = new TdDistributorGoods();
 							
 							distributorGoods.setDistributorTitle(distributor.getTitle());

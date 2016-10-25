@@ -143,7 +143,7 @@ function clear3(){
                 </div>
                 <div class="edit2">
               		<span>身份证号：</span>
-              		<input type="text" class="text" value="${user.identity!''}" name="identity" placeholder="请输入身份证号" nullmsg="请输入身份证号" errormsg="身份证验证错误" datatype="/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/"/>
+              		<input type="text" class="text" value="${user.identity!''}" name="identity" placeholder="请输入身份证号" />
               		<a href="javascript:clear2();" ></a>
                 </div>
                 <div class="edit3">

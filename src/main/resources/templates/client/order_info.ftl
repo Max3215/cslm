@@ -254,7 +254,13 @@ function checkPassword(){
                 <input style="margin-top: 20px;float: left;margin-left: 30px;background: #ff5b7d;" class="submit" type="button" name="password" onclick="checkPassword();" value="确定"  />
                 <span style="margin-top: 20px;float: right;margin-right: 30px;background: #39bee9;" onclick="win_hide();">取消</span>
             </dd>
-            <dd><a href="/login/password_retrieve?type=paypwd" style="display:block;margin:10px 0 10px 28px;">忘记密码</a></dd>
+            <dd>
+            <#if user.isUpdatePay?? && user.isUpdatePay == true>
+            <a href="/login/password_retrieve?type=paypwd" style="display:block;margin:10px 0 10px 28px;">忘记密码</a>
+            <#else>
+            <a style="display:block;margin:10px 0 10px 28px;">*初始支付密码默认为注册登录密码</a>
+            </#if>
+            </dd>
         </dl>
     </div> 
 <div class="clear20"></div>

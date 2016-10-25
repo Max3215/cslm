@@ -112,7 +112,10 @@ public class TdLoginController {
 		// 普通会员登录
 		if(null == type || "user".equals(type)){
 			TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-			if (null != user) {
+			if (null == user) {
+				user = tdUserService.findByMobile(username);
+			}
+			if(null != user){
 				if (!user.getPassword().equals(password)) {
 					res.put("msg", "密码错误");
 					return res;
@@ -256,7 +259,7 @@ public class TdLoginController {
 	@RequestMapping(value = "/login/retrieve_step1", method = RequestMethod.POST)
 	public String Step2(String username,String mobile,String smsCode,String type,HttpServletRequest req, ModelMap map){
 		if (null == smsCode) {
-			return "redirect:/login/password_retrieve?errCode=4&username="+username+"&mobile="+mobile;
+			return "redirect:/login/password_retrieve?errCode=4&username="+username+"&mobile="+mobile+"&type="+type;
 		}
 		String smsCodeSave = (String) req.getSession().getAttribute("SMSCODE");
 		if(null == smsCodeSave){
@@ -282,6 +285,7 @@ public class TdLoginController {
 		if (null != password) {
 			if(null != type){
 				user.setPayPassword(password);
+				user.setIsUpdatePay(true);
 				map.addAttribute("type", type);
 			}else{
 				user.setPassword(password);

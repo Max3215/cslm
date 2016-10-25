@@ -2737,6 +2737,7 @@ public class TdTouchUserController {
     			}else{
     				if(null != payPassword && payPassword.equalsIgnoreCase(user.getPayPassword())){
         				user.setPayPassword(newPayPwd);
+        				user.setIsUpdatePay(true);
         			}else {
         				res.put("msg", "原密码错误");
         				return res;
