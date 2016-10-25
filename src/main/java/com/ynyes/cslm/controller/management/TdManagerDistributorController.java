@@ -127,11 +127,11 @@ public class TdManagerDistributorController {
         PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "onSaleTime"));
         
         if("isOnSale".equalsIgnoreCase(onsale)){
-			goodsPage = tdDistributorGoodsService.findAll(distributorId, true, categoryId, keywords, pageRequest);
+			goodsPage = tdDistributorGoodsService.findAll(distributorId, true,null, categoryId, keywords, pageRequest);
         }else if("isNotOnSale".equalsIgnoreCase(onsale)){
-        	goodsPage = tdDistributorGoodsService.findAll(distributorId, false, categoryId, keywords, pageRequest);
+        	goodsPage = tdDistributorGoodsService.findAll(distributorId, false,null, categoryId, keywords, pageRequest);
         }else{
-        	goodsPage = tdDistributorGoodsService.findAll(distributorId, null, categoryId, keywords, pageRequest);
+        	goodsPage = tdDistributorGoodsService.findAll(distributorId, null,null, categoryId, keywords, pageRequest);
         }
         
         map.addAttribute("content_page", goodsPage);
@@ -140,11 +140,11 @@ public class TdManagerDistributorController {
         	pageRequest = new PageRequest(page, Integer.MAX_VALUE,new Sort(Direction.DESC, "onSaleTime"));
             
             if("isOnSale".equalsIgnoreCase(onsale)){
-    			goodsPage = tdDistributorGoodsService.findAll(distributorId, true, categoryId, keywords, pageRequest);
+    			goodsPage = tdDistributorGoodsService.findAll(distributorId, true,null, categoryId, keywords, pageRequest);
             }else if("isNotOnSale".equalsIgnoreCase(onsale)){
-            	goodsPage = tdDistributorGoodsService.findAll(distributorId, false, categoryId, keywords, pageRequest);
+            	goodsPage = tdDistributorGoodsService.findAll(distributorId, false,null, categoryId, keywords, pageRequest);
             }else{
-            	goodsPage = tdDistributorGoodsService.findAll(distributorId, null, categoryId, keywords, pageRequest);
+            	goodsPage = tdDistributorGoodsService.findAll(distributorId, null,null, categoryId, keywords, pageRequest);
             }
             	// 第一步，创建一个webbook，对应一个Excel文件  
 		      HSSFWorkbook wb = new HSSFWorkbook();  

@@ -267,6 +267,30 @@ public class TdParameterCategoryService {
     	return resList;
     }
     
+    public List<TdParameterCategory> findByParentIdAll(Long parentId){
+    	List<TdParameterCategory> resList = new ArrayList<TdParameterCategory>();
+    	if(null != parentId)
+    	{
+            List<TdParameterCategory> childList = repository.findByParentIdOrderBySortIdAsc(parentId);
+            
+            if (null != childList && childList.size() > 0)
+            {
+                for (TdParameterCategory child : childList)
+                {
+                    resList.add(child);
+                    
+                    List<TdParameterCategory> grandChildList = repository.findByParentIdOrderBySortIdAsc(child.getId());
+                    
+                    if (null != grandChildList && grandChildList.size() > 0)
+                    {
+                        resList.addAll(grandChildList);
+                    }
+                }
+            }
+    	}
+    	return resList;
+    }
+    
     /**
      * 保存
      * 

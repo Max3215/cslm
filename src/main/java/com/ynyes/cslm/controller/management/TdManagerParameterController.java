@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.cassandra.thrift.cassandraConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -192,18 +193,50 @@ public class TdManagerParameterController {
         }
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
-        map.addAttribute("category_list", tdParameterCategoryService.findAll());
+//        map.addAttribute("category_list", tdParameterCategoryService.findAll());
+        List<TdParameterCategory> categoryList = tdParameterCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categoryList);
 
         if (null != id)
         {
-            map.addAttribute("parameter", tdParameterService.findOne(id));
+        	TdParameter parameter = tdParameterService.findOne(id);
+            map.addAttribute("parameter", parameter);
+            
+            for (TdParameterCategory tdParameterCategory : categoryList) {
+				if(null != parameter.getCategoryTree() && parameter.getCategoryTree().contains("["+tdParameterCategory.getId()+"]"))
+				{
+					List<TdParameterCategory> cateList = tdParameterCategoryService.findByParentIdAll(tdParameterCategory.getId());
+					if(null != cateList && cateList.size() > 0)
+					{
+						map.addAttribute("cateList", cateList);
+//						for (TdParameterCategory tdParameterCategory2 : cateList)
+//						{	
+//							if(null != parameter.getCategoryTree() && parameter.getCategoryTree().contains("["+tdParameterCategory2.getId()+"]"))
+//							{
+//								map.addAttribute("categoryList", tdParameterCategoryService.findByParentIdOyderBySortIdAsc(tdParameterCategory2.getId()));
+//							}
+//						}
+					}
+				}
+			}
         }
         
         return "/site_mag/parameter_edit";
     }
     
+    @RequestMapping(value="/category",method=RequestMethod.POST)
+    public String category(Long categoryId,String type,HttpServletRequest req,ModelMap map)
+    {
+    	if(null != categoryId)
+    	{
+			map.addAttribute("cateList", tdParameterCategoryService.findByParentIdAll(categoryId));
+    	}
+    	return "/site_mag/paramter_two_cat";
+    }
+    
     @RequestMapping(value="/save")
     public String orderEdit(TdParameter tdParameter,
+    					Long category,
                         String __VIEWSTATE,
                         ModelMap map,
                         HttpServletRequest req){
@@ -222,6 +255,9 @@ public class TdManagerParameterController {
         else
         {
         	tdManagerLogService.addLog("edit", "用户修改参数"+tdParameter.getTitle(), req);
+        }
+        if(null != category){
+        	tdParameter.setCategoryId(category);
         }
         
         tdParameterService.save(tdParameter);

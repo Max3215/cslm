@@ -130,7 +130,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#elseif order.statusId==2>
                     亲爱的客户，此订单还未支付，您可以<a href="/order/dopay/${order.id?c}" style="color: #F00;" target="_blank">去支付</a>
                 <#elseif order.statusId==3>
-                    亲爱的客户，您以成功支付，我们将尽快为您发货。
+                    亲爱的客户，您已成功支付，我们将尽快为您发货。
                 <#elseif order.statusId==4>
                     亲爱的客户，已经为您发货，请您&nbsp;<span><a style="color:#F00;" id="orderService">确认收货</a></span>。
                 <#elseif order.statusId==5>

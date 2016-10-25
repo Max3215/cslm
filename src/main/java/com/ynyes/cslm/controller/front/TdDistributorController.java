@@ -1686,9 +1686,10 @@ public class TdDistributorController extends AbstractPaytypeController{
 					List<TdOrderGoods> goodsList = order.getOrderGoodsList();
 					for (TdOrderGoods tdOrderGoods : goodsList) {
 						
+						
 						TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(), tdOrderGoods.getGoodsId());
 						
-						if(null == distributorGoods)
+						if(null == distributorGoods && !distributor.getGoodsList().contains(distributorGoods))
 						{
 							TdGoods goods = tdGoodsService.findOne(tdOrderGoods.getGoodsId());
 //							tdProviderGoodsService.findByProviderIdAndGoodsId(, goodsId)
@@ -1697,7 +1698,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 							distributorGoods.setDistributorTitle(distributor.getTitle());
 							distributorGoods.setGoodsId(goods.getId());
 							distributorGoods.setGoodsTitle(goods.getTitle());
-//							distributorGoods.setGoodsPrice();
+							distributorGoods.setSubGoodsTitle(goods.getSubTitle());
 							distributorGoods.setBrandId(goods.getBrandId());
 							distributorGoods.setBrandTitle(goods.getBrandTitle());
 							distributorGoods.setCategoryId(goods.getCategoryId());
@@ -1706,17 +1707,51 @@ public class TdDistributorController extends AbstractPaytypeController{
 							distributorGoods.setCoverImageUri(goods.getCoverImageUri());
 							distributorGoods.setGoodsMarketPrice(tdOrderGoods.getPrice());
 							distributorGoods.setIsDistribution(false);
-//						distributorGoods.setGoodsParamList(goods.getParamList());
 							distributorGoods.setReturnPoints(goods.getReturnPoints());
 							distributorGoods.setParamValueCollect(goods.getParamValueCollect());
 							distributorGoods.setIsOnSale(false);
 							distributorGoods.setLeftNumber(tdOrderGoods.getQuantity());
 							distributorGoods.setUnit(goods.getSaleType());
 							distributorGoods.setDisId(distributor.getId());
+							
+							distributorGoods = tdDistributorGoodsService.save(distributorGoods);
+							// 没有此商品，新加商品规格
+							if(null != tdOrderGoods.getSpecId()){
+								TdSpecificat specificat = tdSpecificatService.findOne(tdOrderGoods.getSpecId());
+								if(null != specificat){
+									TdSpecificat tdSpecificat = new TdSpecificat();
+									tdSpecificat.setGoodsId(goods.getId());
+									tdSpecificat.setLeftNumber(tdOrderGoods.getQuantity());
+									tdSpecificat.setOldId(specificat.getId());
+									tdSpecificat.setShopId(distributor.getId());
+									tdSpecificat.setType(1);
+									tdSpecificat.setSpecifict(specificat.getSpecifict());
+									tdSpecificatService.save(tdSpecificat);
+								}
+							}
 						}else{
 							distributorGoods.setDisId(distributor.getId());
 							distributorGoods.setLeftNumber(distributorGoods.getLeftNumber()+tdOrderGoods.getQuantity());
+							// 查看是否有此规格
+							if(null != tdOrderGoods.getSpecId()){
+								TdSpecificat specificat = tdSpecificatService.findByShopIdAndOldId(distributor.getId(), tdOrderGoods.getSpecId());
+								if(null != specificat){
+									// 在原规格基础上加库存
+									specificat.setLeftNumber(specificat.getLeftNumber()+tdOrderGoods.getQuantity());
+									tdSpecificatService.save(specificat);
+								}else{
+									TdSpecificat tdSpecificat = new TdSpecificat();
+									tdSpecificat.setGoodsId(tdOrderGoods.getGoodsId());
+									tdSpecificat.setLeftNumber(tdOrderGoods.getQuantity());
+									tdSpecificat.setOldId(tdOrderGoods.getSpecId());
+									tdSpecificat.setShopId(distributor.getId());
+									tdSpecificat.setType(1);
+									tdSpecificat.setSpecifict(tdOrderGoods.getSpecName());
+									tdSpecificatService.save(tdSpecificat);
+								}
+							}
 						}
+						
 						distributor.getGoodsList().add(distributorGoods);
 					}
 					distributor.setGoodsList(distributor.getGoodsList());

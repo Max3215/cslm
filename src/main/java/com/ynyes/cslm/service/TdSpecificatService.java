@@ -92,4 +92,11 @@ public class TdSpecificatService {
 		}
 		return null;
 	}
+	
+	public TdSpecificat findByShopIdAndOldId(Long shopId,Long id){
+		if(null == shopId || null == id){
+			return null;
+		}
+		return repository.findByShopIdAndOldId(shopId, id);
+	}
 }

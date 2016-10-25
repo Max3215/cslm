@@ -274,6 +274,13 @@ function findCh(){
     </dd>
   </dl>
   <dl>
+    <dt>显示图片1</dt>
+    <dd>
+      <input name="imgUrl1" type="text" value="<#if cat??>${cat.imgUrl1!""}</#if>" id="txtImgUrl" class="input normal upload-path">
+      <div class="upload-box upload-img"></div>
+    </dd>
+  </dl>
+  <dl>
     <dt>类别介绍</dt>
     <dd>
         <textarea name="content" class="editor-mini" style="visibility:hidden;" ><#if cat??>${cat.content!""}</#if></textarea>

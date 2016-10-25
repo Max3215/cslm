@@ -202,7 +202,7 @@ public class TdDistributorGoodsService {
     
     public TdDistributorGoods findByDistributorIdAndGoodsId(Long distributorId,Long goodsId)
     {
-    	return repository.findByDistributorIdAndGoodsId(distributorId,goodsId);
+    	return repository.findByDisIdAndGoodsId(distributorId,goodsId);
     }
     
     public Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId,int page ,int size)
