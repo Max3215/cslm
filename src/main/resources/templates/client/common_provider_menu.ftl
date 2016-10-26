@@ -4,7 +4,7 @@
             <img src="<#if site??>${site.logoUri!''}</#if>" />
         </a>
     </h2>
-    <div class="mymember_head_part">
+    <div class="mymember_head_part" style="overflow: hidden;">
       <a class="a001" href="/provider/index">批发中心</a>
     </div> 
     <div id="mymember_nav01" class="mymember_head_part">

@@ -4,8 +4,8 @@
             <img src="<#if site??>${site.logoUri!''}</#if>" />
         </a>
     </h2>
-    <div class="mymember_head_part">
-      <a class="a001" href="/supply/index">分销商品中心</a>
+    <div class="mymember_head_part" style="overflow: hidden;">
+      <a class="a001" href="/supply/index" >分销商品中心</a>
     </div> 
     <div id="mymember_nav01" class="mymember_head_part">
         <a class="a001 a002" onMouseOver="mymemberNavShow('mymember_navshow01','mymember_nav01')">设置</a>

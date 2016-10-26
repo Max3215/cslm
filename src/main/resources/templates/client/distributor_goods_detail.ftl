@@ -24,7 +24,7 @@
       <td><input type="text" name="goodsMarketPrice" value="<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#elseif goods??>${goods.marketPrice?string('0.00')}</#if>" id="marketPrice" ></td>
     </tr>
      <tr>
-      <th>*商品价格：</th>
+      <th>*商品售价：</th>
       <td><input type="text" value="<#if dis_goods?? && dis_goods.goodsPrice??>${dis_goods.goodsPrice?string('0.00')}</#if>" id="goodsPrice"></td>
     </tr>
      <tr>

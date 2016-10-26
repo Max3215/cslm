@@ -25,7 +25,7 @@
           <th>规格：</th>
           <td>
           		<#list specList as sp>
-          		<a onclick="sheckSpec($(this),${sp.id?c})">${sp.specifict!''}</a>
+          		<a class="type" onclick="sheckSpec($(this),${sp.id?c})">${sp.specifict!''}</a>
           		</#list>
           </td>
         </tr>
@@ -48,3 +48,11 @@
         </tr>
       </table>
 </div>
+<style>
+.sub_form table td .type{padding: 4px 10px;
+    border: 1px solid #ddd;
+    margin-right: 10px;color:#666;}
+.sub_form table td .type.sel{border-color:#ff5b7d;color:#ff5b7d;}
+</style>
+
+

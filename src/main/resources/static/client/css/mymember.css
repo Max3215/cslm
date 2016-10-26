@@ -46,7 +46,7 @@ select{font-family: "微软雅黑";}
 	padding:0 15px;
 	border-right:1px solid #c9c9c9;    max-width: 100px;
     height: 75px;
-    overflow: hidden;}
+    }
 .mymember_head_part a.a001 {
 	line-height:75px;
 	font-size:16px;
@@ -301,7 +301,7 @@ select{font-family: "微软雅黑";}
 .mymember_info02 td.td003 p,.mymember_info02 td.td003 a{color:#989898;}
 .mymember_info02 td.td003 a:hover{color:#ff8800;}
 .mymember_info02 td h4 {color:#ff1000;}
-.mymember_info02 td span,.mymember_info02 td p,.mymember_info02 td p a{position:static;color:red;}
+.mymember_info02 td span,.mymember_info02 td p,.mymember_info02 td p a{position:static;}
 
 /*.mymember_info02 td{display: block;}
 */

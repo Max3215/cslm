@@ -24,7 +24,7 @@
       <td><input type="text" name="goodsMarketPrice" value="<#if sup_goods?? && sup_goods.goodsMarketPrice??>${sup_goods.goodsMarketPrice?string('0.00')}<#elseif goods??>${goods.marketPrice?string('0.00')}</#if>" id="marketPrice" ></td>
     </tr>
      <tr>
-      <th>*商品售格：</th>
+      <th>*商品售价：</th>
       <td>
       <input type="text" value="<#if sup_goods?? && sup_goods.outFactoryPrice??>${sup_goods.outFactoryPrice?string('0.00')}</#if>" id="goodsPrice">
       &emsp;单位：<input type="text" value="<#if sup_goods??>${sup_goods.unit!''}<#elseif goods??>${goods.unit!''}</#if>" name="unit" id="unit"></td>

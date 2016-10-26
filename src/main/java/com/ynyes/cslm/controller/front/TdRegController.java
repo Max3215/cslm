@@ -149,20 +149,20 @@ public class TdRegController {
                 String email,
                 String smsCode,
                 String code,
-                String carCode,
+//                String carCode,
                 Long goodsId,
                 HttpServletRequest request){
         String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
         
         if (!codeBack.equalsIgnoreCase(code))
         {
-                return "redirect:/reg?errCode=1&name= "+username+"&carCode="+carCode+"&goodsId="+goodsId;
+                return "redirect:/reg?errCode=1&name= "+username+"&goodsId="+goodsId;
         }
         
         
         
         
-       TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
+       TdUser user = tdUserService.addNewUser(username, password, mobile, email, null);
         if (null == user)
         {
                 return "redirect:/reg?errCode=3&goodsId="+goodsId;

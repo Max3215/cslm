@@ -112,8 +112,8 @@ DD_belatedPNG.fix('.,img,background');
                         
                         <div class="mymember_eva_div">
                           <b><font>* </font>问题描述：</b>
-                          <textarea name="reason" datatype="*5-255" errormsg="问题描述必须大于5个字符，小于255个字符" ></textarea>
-                          <span class="Validform_checktip">*问题描述</span>
+                          <textarea name="reason" datatype="*5-255" placeholder="请在此对您遇到的问题进行描述" errormsg="问题描述必须大于5个字符，小于255个字符" nullmsg=" " sucmsg=" "></textarea>
+                          <span class="Validform_checktip"></span>
                         </div>
                         <div class="mymember_eva_div">
                             <b style="top:4px;">商家信息：</b>
@@ -125,8 +125,8 @@ DD_belatedPNG.fix('.,img,background');
                         </div>
                         <div class="mymember_eva_div">
                             <b><font>* </font>联系电话：</b>
-                            <input type="text" name="telephone" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" errormsg="请输入正确的电话格式" />
-                            <span class="Validform_checktip">*联系电话</span>
+                            <input type="text" name="telephone" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" nullmsg=" " errormsg="请输入正确的电话格式" sucmsg=" "/>
+                            <span class="Validform_checktip"></span>
                         </div>
                         
                         

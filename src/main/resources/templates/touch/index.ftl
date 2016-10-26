@@ -192,7 +192,7 @@ $(function(){
               		</a>-->
               		<a onclick="categoryGoods($(this),${item.id?c})" <#if item_index==0>class="cur" id="one_cat"</#if>>
 			          <img src="${item.imgUrl!''}">
-			          <img src="${item.imgUr1l!''}">
+			          <img src="${item.imgUrl1!''}">
 			          <p>${item.title!''}</p>
 			        </a>
             </#list>

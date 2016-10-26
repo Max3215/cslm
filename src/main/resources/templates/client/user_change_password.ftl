@@ -80,20 +80,20 @@ DD_belatedPNG.fix('.,img,background');
                   <tr>
                        <th>旧密码：</th>
                        <td>
-                            <input class="mytext" type="password" name="password" datatype="*" errormsg="原始密码不正确" recheck="__STATE"/>
+                            <input class="mytext" type="password" name="password" datatype="*" errormsg="原始密码不正确" sucmsg=" " recheck="__STATE"/>
                             <span class="Validform_checktip"></span>
                        </td>
                   </tr>
                   <tr>
                        <th>新密码：</th>
                        <td>
-                            <input class="mytext" type="password" name="newPassword" datatype="*6-18"/>
+                            <input class="mytext" type="password" name="newPassword" datatype="*6-18" sucmsg=" "/>
                             <span class="Validform_checktip"></span>
                        </td>
                   </tr>
                        <th>确认新密码：</th>
                        <td>
-                            <input class="mytext" type="password" name="newPassword2" datatype="*" recheck="newPassword"/>
+                            <input class="mytext" type="password" name="newPassword2" datatype="*" recheck="newPassword" sucmsg=" "/>
                             <span class="Validform_checktip"></span>
                        </td>
                   </tr>
