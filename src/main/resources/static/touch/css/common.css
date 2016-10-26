@@ -12,7 +12,7 @@ header, footer, nav, section, article, menu, aside {display:block;position:relat
 textarea { resize:none;font-family:"微软雅黑";font-size:0.25rem;}
 table { border-collapse:collapse;border-spacing:0;}
 th, td { text-align:left;}
-input {font-family:"微软雅黑";font-size:0.25rem;}
+input {font-family:"微软雅黑";font-size:0.25rem;border-radius: 0;-webkit-border-radius: 0;}
 input:focus {outline:none;}
 input.sub {cursor:pointer; background:none; border:none;-webkit-appearance:none;}
 input.text {background:none; border:none;}
@@ -972,7 +972,14 @@ a,button,input{
 .jp_recommen .tit:before{content: "";display: block;width: 0.06rem;height: 0.26rem;background: #ff5b7d;position: absolute;left:0;top:50%;margin-top: -0.13rem;}
 
 
-.jp_recommen .top{overflow: hidden;height: 1.1rem;}
+.jp_recommen .top{overflow: hidden;height: 1.1rem;width:100%;}
+.jp_recommen .top.float{overflow: hidden;
+    position: fixed;
+    left: 0;
+    top: 0.88rem;
+    background: #fff;
+    z-index: 100;}
+
 
 .jp_recommen .top menu a{float:left;text-align: center;padding-top: 0.12rem;color:#666666;border-right:1px solid #ddd;background: #fff;}
 .jp_recommen .top menu a img{width: 0.34rem;}

@@ -97,7 +97,7 @@ DD_belatedPNG.fix('.,img,background');
                         }
                     }
                 </script>
-              <input class="mysub" type="button" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
+              <input class="mysub" type="button" value="导出" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
               <input class="mysub" type="submit" value="查询" />
             </form>
         </div>

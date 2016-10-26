@@ -199,6 +199,22 @@ $(function(){
          </#if>
       </menu>
     </div>
+    <script>
+    $(document).ready(function(){
+	var _arr = $(".jp_recommen .top"),
+    	_arrtop = _arr.offset().top; 
+  	$(window).scroll(function () {
+     
+    	if($(window).scrollTop() > _arrtop) {
+      	_arr.addClass("float");
+	    }else {
+	      	_arr.removeClass("float");
+	    }
+  	});	  
+	 
+});
+    </script>
+    
 
     <menu class="list" id="cateGoods">
      
