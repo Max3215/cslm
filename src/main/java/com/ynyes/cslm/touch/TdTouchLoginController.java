@@ -34,7 +34,7 @@ public class TdTouchLoginController {
 	    private TdCommonService tdCommonService;
 
 	    @RequestMapping(value = "/touch/login", method = RequestMethod.GET)
-	    public String login(HttpServletRequest req, Long shareId,  ModelMap map) {
+	    public String login(HttpServletRequest req,Long goodsId, Long shareId,  ModelMap map) {
 	        String username = (String) req.getSession().getAttribute("username");
 
 	        String referer = req.getHeader("referer");
@@ -45,6 +45,7 @@ public class TdTouchLoginController {
 	        
 	        // 基本信息
 	        tdCommonService.setHeader(map, req);
+	        map.addAttribute("goodsId", goodsId);
 	        	      	        
 	        if (null == username) 
 	        {
@@ -108,6 +109,9 @@ public class TdTouchLoginController {
 	        }
 	        
 	        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+	        if(null == user){
+	        	user = tdUserService.findByMobile(username);
+	        }
 	        
 	        if (null != user)
 	        {

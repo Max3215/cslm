@@ -273,7 +273,7 @@ $(document).ready(function(){
                 <tr>
                     <th>纬度：</th>
                     <td>
-                      <input name="latitude" type="text" value="<#if distributor?? && distributor.longitude??>${distributor.longitude?string("#.######")}</#if>" class="mytext" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="请正确复制坐标" sucmsg=" ">
+                      <input name="latitude" type="text" value="<#if distributor?? && distributor.longitude??>${distributor.latitude?string("#.######")}</#if>" class="mytext" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="请正确复制坐标" sucmsg=" ">
                       <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
                       <span class="Validform_checktip"></span>
                     </td>

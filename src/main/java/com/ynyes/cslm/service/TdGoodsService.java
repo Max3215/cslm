@@ -2066,85 +2066,85 @@ public class TdGoodsService {
         return repository.findOne(id);
     }
 
-    /**
-     * 判断该商品是否正在进行秒杀
-     * 
-     * @param tdGoods
-     * @return
-     */
-    public boolean isFlashSaleTrue(TdGoods tdGoods) {
-        if (null == tdGoods) {
-            return false;
-        }
+//    /**
+//     * 判断该商品是否正在进行秒杀
+//     * 
+//     * @param tdGoods
+//     * @return
+//     */
+//    public boolean isFlashSaleTrue(TdGoods tdGoods) {
+//        if (null == tdGoods) {
+//            return false;
+//        }
+//
+//        Date curr = new Date();
+//
+//        if (null != tdGoods.getIsFlashSale() && tdGoods.getIsFlashSale()
+//                && null != tdGoods.getFlashSaleStartTime()
+//                && tdGoods.getFlashSaleStartTime().before(curr)
+//                && null != tdGoods.getFlashSaleStopTime()
+//                && tdGoods.getFlashSaleStopTime().after(curr)
+//                && null != tdGoods.getFlashSaleLeftNumber()
+//                && tdGoods.getFlashSaleLeftNumber().compareTo(0L) > 0) {
+//            return true;
+//        }
+//
+//        return false;
+//    }
 
-        Date curr = new Date();
+//    /**
+//     * 判断该商品是否正在进行十人团
+//     * 
+//     * @param tdGoods
+//     * @return
+//     */
+//    public boolean isGroupSaleTrue(TdGoods tdGoods) {
+//        if (null == tdGoods) {
+//            return false;
+//        }
+//
+//        Date curr = new Date();
+//
+//        if (null != tdGoods.getIsGroupSale() && tdGoods.getIsGroupSale()
+//                && null != tdGoods.getGroupSaleStartTime()
+//                && tdGoods.getGroupSaleStartTime().before(curr)
+//                && null != tdGoods.getGroupSaleStopTime()
+//                && tdGoods.getGroupSaleStopTime().after(curr)
+//                && null != tdGoods.getGroupSaleLeftNumber()
+//                && tdGoods.getGroupSaleLeftNumber().compareTo(0L) > 0) {
+//            return true;
+//        }
+//
+//        return false;
+//    }
 
-        if (null != tdGoods.getIsFlashSale() && tdGoods.getIsFlashSale()
-                && null != tdGoods.getFlashSaleStartTime()
-                && tdGoods.getFlashSaleStartTime().before(curr)
-                && null != tdGoods.getFlashSaleStopTime()
-                && tdGoods.getFlashSaleStopTime().after(curr)
-                && null != tdGoods.getFlashSaleLeftNumber()
-                && tdGoods.getFlashSaleLeftNumber().compareTo(0L) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 判断该商品是否正在进行十人团
-     * 
-     * @param tdGoods
-     * @return
-     */
-    public boolean isGroupSaleTrue(TdGoods tdGoods) {
-        if (null == tdGoods) {
-            return false;
-        }
-
-        Date curr = new Date();
-
-        if (null != tdGoods.getIsGroupSale() && tdGoods.getIsGroupSale()
-                && null != tdGoods.getGroupSaleStartTime()
-                && tdGoods.getGroupSaleStartTime().before(curr)
-                && null != tdGoods.getGroupSaleStopTime()
-                && tdGoods.getGroupSaleStopTime().after(curr)
-                && null != tdGoods.getGroupSaleLeftNumber()
-                && tdGoods.getGroupSaleLeftNumber().compareTo(0L) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 判断该商品是否正在进行百人团
-     * 
-     * @param tdGoods
-     *            商品
-     * @return
-     */
-    public boolean isGroupSaleHundredTrue(TdGoods tdGoods) {
-        if (null == tdGoods) {
-            return false;
-        }
-
-        Date curr = new Date();
-
-        if (null != tdGoods.getIsGroupSaleHundred()
-                && tdGoods.getIsGroupSaleHundred()
-                && null != tdGoods.getGroupSaleHundredStartTime()
-                && tdGoods.getGroupSaleHundredStartTime().before(curr)
-                && null != tdGoods.getGroupSaleHundredStopTime()
-                && tdGoods.getGroupSaleHundredStopTime().after(curr)
-                && null != tdGoods.getGroupSaleHundredLeftNumber()
-                && tdGoods.getGroupSaleHundredLeftNumber().compareTo(0L) > 0) {
-            return true;
-        }
-
-        return false;
-    }
+//    /**
+//     * 判断该商品是否正在进行百人团
+//     * 
+//     * @param tdGoods
+//     *            商品
+//     * @return
+//     */
+//    public boolean isGroupSaleHundredTrue(TdGoods tdGoods) {
+//        if (null == tdGoods) {
+//            return false;
+//        }
+//
+//        Date curr = new Date();
+//
+//        if (null != tdGoods.getIsGroupSaleHundred()
+//                && tdGoods.getIsGroupSaleHundred()
+//                && null != tdGoods.getGroupSaleHundredStartTime()
+//                && tdGoods.getGroupSaleHundredStartTime().before(curr)
+//                && null != tdGoods.getGroupSaleHundredStopTime()
+//                && tdGoods.getGroupSaleHundredStopTime().after(curr)
+//                && null != tdGoods.getGroupSaleHundredLeftNumber()
+//                && tdGoods.getGroupSaleHundredLeftNumber().compareTo(0L) > 0) {
+//            return true;
+//        }
+//
+//        return false;
+//    }
 
     public TdGoods save(TdGoods e)
     {
@@ -2306,40 +2306,54 @@ public class TdGoodsService {
      * @param goods
      * @return
      */
-    public Double getFlashPrice(TdGoods goods) {
-        if (null == goods) {
-            return null;
-        }
-
-        Double flashPrice = null;
-        Date curr = new Date();
-
-        if (null != goods.getIsFlashSale()
-                && null != goods.getFlashSaleStartTime()
-                && null != goods.getFlashSaleStopTime()
-                && null != goods.getFlashSalePrice() && goods.getIsFlashSale()
-                && goods.getFlashSaleStopTime().after(curr)
-                && goods.getFlashSaleStartTime().before(curr)) {
-            // 剩余毫秒数
-            long ts = goods.getFlashSaleStopTime().getTime() - curr.getTime();
-            // 总共毫秒数
-            long allts = goods.getFlashSaleStopTime().getTime()
-                    - goods.getFlashSaleStartTime().getTime();
-
-            flashPrice = goods.getFlashSalePrice() * ts / allts;
-
-            BigDecimal b = new BigDecimal(flashPrice);
-
-            flashPrice = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        }
-
-        return flashPrice;
-    }
+//    public Double getFlashPrice(TdGoods goods) {
+//        if (null == goods) {
+//            return null;
+//        }
+//
+//        Double flashPrice = null;
+//        Date curr = new Date();
+//
+//        if (null != goods.getIsFlashSale()
+//                && null != goods.getFlashSaleStartTime()
+//                && null != goods.getFlashSaleStopTime()
+//                && null != goods.getFlashSalePrice() && goods.getIsFlashSale()
+//                && goods.getFlashSaleStopTime().after(curr)
+//                && goods.getFlashSaleStartTime().before(curr)) {
+//            // 剩余毫秒数
+//            long ts = goods.getFlashSaleStopTime().getTime() - curr.getTime();
+//            // 总共毫秒数
+//            long allts = goods.getFlashSaleStopTime().getTime()
+//                    - goods.getFlashSaleStartTime().getTime();
+//
+//            flashPrice = goods.getFlashSalePrice() * ts / allts;
+//
+//            BigDecimal b = new BigDecimal(flashPrice);
+//
+//            flashPrice = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+//        }
+//
+//        return flashPrice;
+//    }
     
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    public TdGoods findByCode(String code){
+    	if(null != code){
+    		return repository.findByCode(code);
+    	}
+    	return null;
+    }
+    
+    public TdGoods findByCodeAndIdNot(String code,Long id){
+    	if(null == code || null == id){
+    		return null;
+    	}
+    	return repository.findByCodeAndAndIdNot(code, id);
+    }
+    
     
     
 }

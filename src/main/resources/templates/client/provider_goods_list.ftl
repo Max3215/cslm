@@ -21,16 +21,15 @@
                         </td>
                         <td>
                             <a href="javascript:;" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.goodsCoverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle}</p>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" >${dg.goodsTitle}</p>
                              </a>
-                             <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" />  
                         </td>
-                        <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
-                        <td class="tb02"><span id="code${dg.id?c}">${dg.code!''}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber}</span></td>
+                        <td class="tb01">￥<span>${dg.outFactoryPrice?string('0.00')}</span></td>
+                        <td class="tb02"><span>${dg.code!''}</span></td>
+                        <td><span>${dg.leftNumber?c!"0"}</span></td>
                         <td>
-                                <p><a href="javascript:goodsOnSale(false,${dg.id?c},${page})">取消批发</a></p>
-                                <p><a href="javascript:showSubForm(${dg.id?c},${page})">编辑信息</a></p>
+                                <p><a onclick="goodsOnSale(false,${dg.id?c})">取消批发</a></p>
+                                <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c})">编辑信息</a></p>
                       </tr>
                  <#else>
                        <tr id="tr_1424195166">
@@ -40,38 +39,18 @@
                         </td>
                         <td>
                             <a href="javascript:;" target="_blank" class="pic"><strong><img width="80" height="80" src="${dg.goodsCoverImageUri!''}"  /></strong>
-                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" id="title${dg.id?c}">${dg.goodsTitle}</p>
+                                <p class="fr" style="width:170px;text-align:left;padding-top:20px;" >${dg.goodsTitle}</p>
                              </a>
-                             <input type="hidden" value="${dg.subGoodsTitle!''}" id="subTitle${dg.id?c}" />  
                         </td>
-                        <td class="tb01">￥<span id="price${dg.id?c}">${dg.outFactoryPrice?string('0.00')}</span></td>
-                        <td class="tb02"><span id="code${dg.id?c}">${dg.code!''}</span></td>
-                        <td><span id="number${dg.id?c}">${dg.leftNumber}</span></td>
+                        <td class="tb01">￥<span>${dg.outFactoryPrice?string('0.00')}</span></td>
+                        <td class="tb02"><span>${dg.code!''}</span></td>
+                        <td><span >${dg.leftNumber?c!''}</span></td>
                         <td>
-                                <p><a href="javascript:goodsOnSale(true,${dg.id?c},${page})">继续批发</a></p>
-                                <p><a href="javascript:showSubForm(${dg.id?c},${page})">编辑信息</a></p>
+                                <p><a onclick="goodsOnSale(true,${dg.id?c})">继续批发</a></p>
+                                <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c})">编辑信息</a></p>
                                 <p><a href="javascript:deleteGoods(${dg.id?c})">删除</a></p>
                       </tr>
                  </#if>
             </#list>
         </#if>
 </table>
-<script type="text/javascript">
-
-function showSubForm(pgId,page){
-    var price = $("#price"+pgId).html();
-    var title = $("#title"+pgId).html();
-    var subTitle = $("#subTitle"+pgId).val();
-    var code = $("#code"+pgId).html();
-    var number = $("#number"+pgId).html();
-    
-    $("#goodsId").attr("value",pgId);
-    $("#page").attr("value",page);
-    $("#goodsTitle").attr("value",title);
-    $("#subTitle").attr("value",subTitle);
-    $("#code").attr("value",code);
-    $("#outFactoryPrice").attr("value",price);
-    $("#leftNumber").attr("value",number);
-    $('.sub_form').css('display','block')
-}
-</script>

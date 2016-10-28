@@ -146,7 +146,7 @@ DD_belatedPNG.fix('.,img,background');
                                 </#if>
                             </td>
                             <td class="td003">
-                                <a href="">查看</a>          
+                                <a href="/provider/order?id=${order.id?c}">查看</a>          
                             </td>
                         </tr>
                     </#if>
@@ -165,7 +165,7 @@ DD_belatedPNG.fix('.,img,background');
       <li>账号：${provider.virtualAccount!''}</li>
       <li>电话：${provider.mobile!''}</li>
       <li>地址：${provider.address!''}</li>
-        <a href="/provider/edit" class="quit_btn" >修改信息</a><a href="/logout" class="quit_btn">退出登陆</a>
+        <a href="/provider/edit" class="quit_btn" >修改信息</a><a href="/logout" class="quit_btn">退出登录</a>
     </ul>
   </div>
 

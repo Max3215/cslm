@@ -13,23 +13,11 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+
 <script src="/client/js/supply_goods.js"></script>
-<script type="text/javascript" src="/client/js/Validform_v5.3.2_min.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    $("#sub_form").Validform({
-        tiptype:4, 
-        ajaxPost:true,
-        callback:function(data){
-            alert(data.msg);
-            if(data.code==1)
-            {
-                 $('.sub_form').css('display','none');
-                //  window.location.href="/supply/goods/list/${isDistribution?c}?page=${page?c}&dir=${dir!'0'}<#if categoryId??>&categoryId=${categoryId?c}</#if>"
-                window.location.reload();
-            }
-        }
-    });
 
     $(".click_a").click(function(){
         if($(this).next().is(":visible")==false){
@@ -41,7 +29,6 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-  //  adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -57,29 +44,6 @@ function deleteCheck(){
 
 function searchGoods(){
     $("#form1").submit();
-}
-
-function editPrice(dgId,page){
-    var goodsTitle = $("#title"+dgId).html();
-    var subTitle = $("#subTitle"+dgId).val();
-    var code = $("#code"+dgId).val();
-    var unit = $("#unit"+dgId).val();
-    var marketPrice = $("#marketPrice"+dgId).val();
-    var outFactoryPrice = $("#price"+dgId).html();
-    var shopReturnRation = $("#ration"+dgId).html();
-    var leftNumber = $("#number"+dgId).html();
-    
-    $("#goodsId").attr("value",dgId);
-    $("#page").attr("value",page);
-    $("#goodsTitle").attr("value",goodsTitle);
-    $("#subTitle").attr("value",subTitle);
-    $("#code").attr("value",code);
-    $("#unit").attr("value",unit);
-    $("#marketPrice").attr("value",marketPrice);
-    $("#outFactoryPrice").attr("value",outFactoryPrice);
-    $("#shopReturnRation").attr("value",shopReturnRation);
-    $("#leftNumber").attr("value",leftNumber);
-    $('.sub_form').css('display','block');
 }
 
 </script>
@@ -169,54 +133,8 @@ DD_belatedPNG.fix('.,img,background');
 <div class="clear"></div>
     <#include "/client/common_footer.ftl">
     
-    <aside class="sub_form">
-    <p class="tit">商品修改<a  onclick="$('.sub_form').css('display','none')">×</a></p>
-    <form id="sub_form" action="/supply/goods/editOnSale" method="post">
-    <div class="info_tab">
-      <table>
-        <tr>
-           <p> 编辑商品信息：</p>
-            <input type="hidden" id="goodsId" name="goodsId"/>
-            <input type="hidden" id="page" name="page"/>
-        </tr>
-        <tr>
-          <th>*商品名称：</th>
-          <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
-        </tr>
-        <tr>
-          <th>*商品副标题：</th>
-          <td><input type="text" class="add_width" name="subTitle" id="subTitle" datatype="*" sucmsg=" "></td>
-        </tr>
-        <tr>
-          <th>*编码：</th>
-          <td><input type="text" class="add_width" name="code" id="code" datatype="*" sucmsg=" "></td>
-        </tr>
-        <tr>
-          <th>商品原价：</th>
-          <td><input type="text"  name="goodsMarketPrice" id="marketPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" "></td>
-        </tr>
-         <tr>
-          <th>*商品售价：</th>
-          <td>
-            <input type="text" name="outFactoryPrice" id="outFactoryPrice" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/" sucmsg=" " >&emsp;
-            单位：<input type="text" name="unit" id="unit">
-          </td>
-        </tr>
-        <tr>
-          <th>*返利比：</th>
-          <td><input type="text" name="shopReturnRation" id="shopReturnRation" datatype="/(^[0]+(.[0-9]{2})?$)/" sucmsg=" " ></td>
-        </tr>
-        <tr>
-          <th>*库存：</th>
-          <td><input type="text" name="leftNumber" id="leftNumber" datatype="n" sucmsg=" "></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td><input type="submit" class="sub" value="确认提交"></td>
-        </tr>
-      </table>
-    </div>
-    </form>
+    <aside class="sub_form" style="display:none" id="detail_div">
+    	<#include "/client/supply_goods_detail.ftl">
   </aside>
 </body>
 </html>

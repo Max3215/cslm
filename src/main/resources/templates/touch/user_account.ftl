@@ -17,9 +17,12 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/search.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
+	var url = "/touch/user/search/more/virtualPage";
+    $('#virtualPage_lsit').refresh(url,"#virtualPage_lsit",0);	
 });
 </script>
 </head>
@@ -44,6 +47,27 @@ $(document).ready(function(){
         <a href="/touch/user/draw1">提现</a>
       </div>
     </div>
+    
+    <section class="my_integral">
+    <div class="detail">
+    <table id="virtualPage_lsit">
+        <tr>
+          <th>日期</th>
+          <th>金额</th>
+          <th>说明</th>
+        </tr>
+        <#if virtualPage?? && virtualPage.content??>
+            <#list virtualPage.content as re>
+                <tr>
+                  <td>${re.createTime?string('yyyy-MM-dd')}</td>
+                  <td><span><#if re.realPrice??>${re.realPrice?string('0.00')}<#else>0.00</#if></span></td>
+                  <td>${re.cont!''}</td>
+                </tr>
+            </#list>
+        </#if>
+      </table>
+      </div>
+     </section>
   </section>
   <!-- 账户管理 END -->
   

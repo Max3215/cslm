@@ -150,7 +150,84 @@ function menuCheckShow(menuid,mname,sumid,sname,_hover,_starnum){
 
 
 
-
+//横向左右滑动
+function listInfeedMove(boxid,_sum,_name,_num){
+	var startX,startY,endX,endY;//定义判断变量
+	var _box = $("#"+boxid);
+	var _thesum = _box.find(_sum);
+	var _arr = _box.find(_name);
+	var _length = _arr.length;
+	var _width = _box.width();
+	var _index = 0;
+	var _out = document.getElementById(boxid);
+	
+	//设置必要属性
+	_box.css({"overflow":"hidden"});
+	_thesum.css({"width":"99999px","position":"relative","left":"0"});
+	_arr.css({"float":"left","display":"block"});
+	
+	var widthwin = function(){
+		_width = _box.width()/_num;
+		_arr.width(_width);
+		var _mm = -_index*_width;
+		_thesum.css({"left":_mm+"px"});
+	};
+	widthwin();
+	$(window).resize(function(){widthwin();});
+	
+	//移动的主要方法
+	var movenav = function(){
+		if(_thesum.is(":animated")){_thesum.stop(true,true);}
+		var _mm = -_index*_width;
+		_thesum.animate({left:_mm+"px"},300);
+	};
+	
+	var _nextnav = function(){
+		_index++;
+		if(_index > _length-_num){_index = _length-_num;}
+		if(_length > _num){
+			movenav();
+			}
+		};
+	var _lastnav = function(){
+		_index--;
+		if(_index < 0){_index = 0;}
+		if(_length > _num){
+			movenav();
+			}
+		};
+	
+	var touchStart = function(event){
+		var touch = event.touches[0];
+		endX = 0;
+		endY = 0;
+        startX = touch.pageX;
+		startY = touch.pageY;
+		};
+	var touchMove = function(event){
+		var touch = event.touches[0];
+		var endPos = {x:startX-touch.pageX,y:startY-touch.pageY};
+		var isScrolling = Math.abs(endPos.x)< Math.abs(endPos.y) ? 1:0;//isScrolling为1时，表示纵向滑动，0为横向滑动
+		if(isScrolling === 0){
+			event.preventDefault();//这里很重要！！！
+			endX = (startX-touch.pageX);
+		    //endY = (startY-touch.pageY);
+			}
+		};
+	var touchEnd = function(event){
+		if(endX > 50){
+			_nextnav();
+			}
+		if(endX < -50){
+			_lastnav();
+			}
+		};
+	
+	_out.addEventListener("touchstart", touchStart, false);
+    _out.addEventListener("touchmove", touchMove, false);
+    _out.addEventListener("touchend", touchEnd, false);
+	
+}
 
 
 

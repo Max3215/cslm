@@ -1,5 +1,6 @@
 package com.ynyes.cslm.controller.management;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +106,7 @@ public class TdManagerBrandController {
     public String setting(Integer page,
                           Integer size,
                           String keywords,
+                          Long categoryId,
                           String __EVENTTARGET,
                           String __EVENTARGUMENT,
                           String __VIEWSTATE,
@@ -159,17 +161,41 @@ public class TdManagerBrandController {
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
-
-        Page<TdBrand> brandPage = null;
         
-        if (null == keywords || "".equalsIgnoreCase(keywords))
-        {
-            brandPage = tdBrandService.findAllOrderBySortIdAsc(page, size);
+        List<TdProductCategory> categortList = tdProductCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categortList);
+
+//        Page<TdBrand> brandPage = null;
+//        if (null == keywords || "".equalsIgnoreCase(keywords))
+//        {
+//            brandPage = tdBrandService.findAllOrderBySortIdAsc(page, size);
+//        }
+//        else
+//        {
+//            brandPage = tdBrandService.searchAndOrderBySortIdAsc(keywords, page, size);
+//        }
+        if(null != categoryId){
+        	 TdProductCategory category = tdProductCategoryService.findOne(categoryId);
+             for (TdProductCategory tdProductCategory : categortList) {
+             	
+             	if(category.getParentTree().contains("["+tdProductCategory.getId()+"]"))
+             	{
+             		List<TdProductCategory> cateList = tdProductCategoryService.findByParentIdOrderBySortIdAsc(tdProductCategory.getId());
+             		map.addAttribute("cateList", cateList);
+             		
+             		for (TdProductCategory productCategory : cateList) {
+             			if(category.getParentTree().contains("["+productCategory.getId()+"]"))
+             			{
+             				map.addAttribute("categoryList", tdProductCategoryService.findByParentIdOrderBySortIdAsc(productCategory.getId()));
+             			}
+             		}
+             		
+             	}
+             }
+             map.addAttribute("category", category);
         }
-        else
-        {
-            brandPage = tdBrandService.searchAndOrderBySortIdAsc(keywords, page, size);
-        }
+        
+       Page<TdBrand> brandPage = tdBrandService.findAll(categoryId, keywords, page, size); 
         
         map.addAttribute("brand_page", brandPage);
         
@@ -238,6 +264,7 @@ public class TdManagerBrandController {
             tdManagerLogService.addLog("edit", "用户修改品牌"+tdBrand.getTitle(), req);
         }
         
+        tdBrand.setCreateTime(new Date());
         tdBrandService.save(tdBrand);
         
         return "redirect:/Verwalter/brand/list";

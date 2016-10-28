@@ -113,8 +113,8 @@ DD_belatedPNG.fix('.,img,background');
                              <tr>
                                 <th>收货人：</th>
                                 <td>
-                                    <input class="mytext" type="text" name="receiverName" datatype="*2-128" errormsg="最少两个字符！" value="<#if address??>${address.receiverName!''}</#if>"/>
-                                    <span class="Validform_checktip">*收货人姓名</span>
+                                    <input class="mytext" type="text" name="receiverName" datatype="*2-128" errormsg="最少两个字符！" sucmsg=" " value="<#if address??>${address.receiverName!''}</#if>"/>
+                                    <span class="Validform_checktip"></span>
                                 </td>
                              </tr>
                              <tr>
@@ -130,22 +130,22 @@ DD_belatedPNG.fix('.,img,background');
                              <tr>
                                 <th>地址：</th>
                                 <td>
-                                    <input class="mytext" name="detailAddress" datatype="*2-128" errormsg="最少两个字符！" value="<#if address??>${address.detailAddress!''}</#if>" type="text">
-                                    <span class="Validform_checktip">*详细地址</span>
+                                    <input class="mytext" name="detailAddress" datatype="*2-128" errormsg="最少两个字符！" sucmsg=" " value="<#if address??>${address.detailAddress!''}</#if>" type="text">
+                                    <span class="Validform_checktip"></span>
                                 </td>
                              </tr>
                              <tr>
                                 <th>邮政编码：</th>
                                 <td>
-                                    <input class="mytext" name="postcode" datatype="p" errormsg="邮政编码为6位数字！" value="<#if address??>${address.postcode!''}</#if>" type="text">
-                                    <span class="Validform_checktip">*邮政编码</span>
+                                    <input class="mytext" name="postcode" datatype="p" errormsg="邮政编码为6位数字！" sucmsg=" " value="<#if address??>${address.postcode!''}</#if>" type="text">
+                                    <span class="Validform_checktip"></span>
                                 </td>
                              </tr>
                              <tr>
                                 <th>手机号码：</th>
                                 <td>
-                                    <input class="mytext" name="receiverMobile" datatype="m" errormsg="请输入正确的电话号码格式！" value="<#if address??>${address.receiverMobile!''}</#if>" type="text">
-                                    <span class="Validform_checktip">*手机号码</span>
+                                    <input class="mytext" name="receiverMobile" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" errormsg="请输入正确的电话号码格式！" sucmsg=" " value="<#if address??>${address.receiverMobile!''}</#if>" type="text">
+                                    <span class="Validform_checktip"></span>
                                 </td>
                              </tr>
                              <tr>

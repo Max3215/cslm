@@ -18,6 +18,7 @@
 <link href="/client/style/common.css" rel="stylesheet" type="text/css" />
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
   $(".click_a").click(function(){

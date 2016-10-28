@@ -54,7 +54,9 @@ function clear1(){
 function clear2(){
     $(".public_modify .edit2 .text").val("");
 }
-
+function clear3(){
+    $(".public_modify .edit3 .text").val("");
+}
 </script>
 </head>
 
@@ -71,7 +73,7 @@ function clear2(){
         <#elseif type="payPassword">
               <p>支付密码</p>
         <#else>
-              <p>真实姓名</p>
+              <p>账号信息</p>
         </#if>
 		<a href="/touch" class="c_home"></a>
 	</header>
@@ -131,13 +133,40 @@ function clear2(){
         <#else>
                 <div class="edit">
               		<span>昵称：</span>
-              		<input type="text" class="text" name="realName" placeholder="请输入名称" nullmsg="请输入名称" datatype="*2-6"/>
+              		<input type="text" class="text" value="${user.nickname!''}" name="nickname" placeholder="请输入名称" nullmsg="请输入名称" datatype="*2-6"/>
               		<a href="javascript:clear();" ></a>
+                </div>
+                <div class="edit1">
+              		<span>真实姓名：</span>
+              		<input type="text" class="text" value="${user.realName!''}" name="realName" placeholder="请输入名称" />
+              		<a href="javascript:clear1();" ></a>
+                </div>
+                <div class="edit2">
+              		<span>身份证号：</span>
+              		<input type="text" class="text" value="${user.identity!''}" name="identity" placeholder="请输入身份证号" />
+              		<a href="javascript:clear2();" ></a>
+                </div>
+                <div class="edit3">
+              		<span>家庭住址：</span>
+              		<input type="text" class="text" value="${user.homeAddress!''}" name="homeAddress" placeholder="请输入家庭地址" />
+              		<a href="javascript:clear3();" ></a>
                 </div>
         </#if>
   	     <input type="submit" class="sub" value="保存">
   </section>
   </form>
   
+  
+  <!-- 底部 -->
+  <div style="height:0.88rem;"></div>
+  <section class="comfooter tabfix">
+    	<menu>
+	        <a class="a1" href="/touch/disout">平台首页</a>
+            <a class="a2" href="/touch/category/list">商品分类</a>
+            <a class="a3" href="/touch/cart">购物车</a>
+            <a class="a4 sel" href="/touch/user">会员中心</a>
+      </menu>
+  </section>
+  <!-- 底部 END -->
 </body>
 </html>

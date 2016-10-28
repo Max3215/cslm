@@ -134,7 +134,7 @@ DD_belatedPNG.fix('.,img,background');
                                 <#if order.orderGoodsList??>
                                     <#list order.orderGoodsList as og>  
                                         <#if og_index < 1>
-                                            <a href="/goods/${og.goodsId}"><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
+                                            <a href="/goods/${og.goodsId?c}"><img src="${og.goodsCoverImageUri!''}" alt="${og.goodsTitle!''}"  width="50" height="50px" align="left" /></a>
                                         </#if>
                                     </#list>
                                 </#if>

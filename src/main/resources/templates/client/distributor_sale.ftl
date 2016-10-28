@@ -61,8 +61,15 @@ DD_belatedPNG.fix('.,img,background');
         <div class="mymember_order_search"> 
           <h3>已售的商品</h3>
           <form action ="/distributor/sale" method="POST" id="form1">
-              
-              &nbsp;时间&nbsp;&nbsp;
+              <select name="shipAddressId" onchange="javascript:__doPostBack('shipAddressId',0);" style=" width: 220px;">
+                    <option value="" >所有地址</option>
+                    <#if addressList??>
+                    <#list addressList as addr>
+                    	<option value="${addr.id?c}" <#if shipAddressId?? &&shipAddressId ==addr.id>selected="selected"</#if>>${addr.detailAddress!''}</option>
+                    </#list>
+                    </#if>
+                </select>
+              		&nbsp;时间&nbsp;&nbsp;
                     <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
                                     &nbsp;&nbsp;至&nbsp;&nbsp;
                     <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
@@ -90,7 +97,7 @@ DD_belatedPNG.fix('.,img,background');
                         }
                     }
                 </script>
-              <input class="mysub" type="button" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
+              <input class="mysub" type="button" value="导出" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
               <input class="mysub" type="submit" value="查询" />
             </form>
         </div>

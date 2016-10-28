@@ -160,14 +160,7 @@ function search(type){
             </td>
             <td><a href="/Verwalter/parameter/edit?id=${content.id?c!""}">${content.title!""}</a></td>
             <td>
-                <#if parameter_category_list?? && content.categoryId??>
-                    <#list parameter_category_list as cat>
-                        <#if cat.id == content.categoryId>
-                            ${cat.title!""}
-                            <#break>
-                        </#if>
-                    </#list>
-                </#if>
+                ${content.categoryTitle!''}
             </td>
             <td><#if content.isSearchable?? && content.isSearchable>显示<#else>隐藏</#if></td>
             <td>

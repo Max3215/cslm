@@ -35,6 +35,9 @@ public class TdCartGoods {
     // 商品标题
     private String goodsTitle;
     
+    @Column
+    private String goodsSubTitle;
+    
     // 商品封面
     private String goodsCoverImageUri;
     
@@ -75,7 +78,14 @@ public class TdCartGoods {
     // 单位
     @Column
     private String unit;
+    
+    // 规格Id
+    @Column
+    private Long specificaId;
 
+    @Column
+    private String specName;
+    
     public Long getId() {
         return id;
     }
@@ -195,6 +205,31 @@ public class TdCartGoods {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+
+	public String getGoodsSubTitle() {
+		return goodsSubTitle;
+	}
+
+	public void setGoodsSubTitle(String goodsSubTitle) {
+		this.goodsSubTitle = goodsSubTitle;
+	}
+
+	public Long getSpecificaId() {
+		return specificaId;
+	}
+
+	public void setSpecificaId(Long specificaId) {
+		this.specificaId = specificaId;
+	}
+
+	public String getSpecName() {
+		return specName;
+	}
+
+	public void setSpecName(String specName) {
+		this.specName = specName;
+	}
+
 
 	
     

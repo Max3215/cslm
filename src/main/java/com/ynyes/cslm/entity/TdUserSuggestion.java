@@ -50,6 +50,10 @@ public class TdUserSuggestion {
 	// 排序号
     @Column
     private Long sortId;
+    
+    // 处理状态    1-新提交     2-已处理
+    @Column
+    private Integer status;
 	
     public String getName() {
 		return name;
@@ -115,4 +119,14 @@ public class TdUserSuggestion {
 		this.sortId = sortId;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	
+	
 }

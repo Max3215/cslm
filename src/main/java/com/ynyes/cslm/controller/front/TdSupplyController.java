@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +17,7 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -43,18 +43,15 @@ import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCountSale;
-import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
 import com.ynyes.cslm.entity.TdOrder;
-import com.ynyes.cslm.entity.TdOrderGoods;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
-import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUser;
-import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
@@ -69,10 +66,13 @@ import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
+import com.ynyes.cslm.util.FileDownUtils;
+import com.ynyes.cslm.util.SMSUtil;
 import com.ynyes.cslm.util.SiteMagConstant;
 import com.ynyes.cslm.util.StringUtils;
 
@@ -132,6 +132,9 @@ public class TdSupplyController extends AbstractPaytypeController{
 	
 	@Autowired
 	private TdUserReturnService tdUserReturnService;
+	
+	@Autowired
+	private TdSpecificatService tdSpecificatService;
 	
 	@RequestMapping(value="/index")
 	public String Index(HttpServletRequest req,ModelMap map)
@@ -371,78 +374,186 @@ public class TdSupplyController extends AbstractPaytypeController{
 		return "/client/supply_goods_onsale";
 	}
 	
+	/**
+     * 商品信息
+     * @author Max
+     * 2016-10-21
+     */
+   @RequestMapping(value="/goods/detail",method=RequestMethod.POST)
+	public String saleGoodsDetail(Long sup_id,Long goodsId,HttpServletRequest req,ModelMap map){
+		
+		if(null != sup_id){
+			TdProviderGoods goods = tdProviderGoodsService.findOne(sup_id);
+			map.addAttribute("sup_goods", goods);
+			map.addAttribute("goodsId", goods.getGoodsId());
+		}else if(null != goodsId){
+			map.addAttribute("goods", tdGoodsService.findOne(goodsId));
+			map.addAttribute("goodsId", goodsId);
+		}
+		return "/client/supply_goods_detail";
+	}
+   
+   /**
+	 * 根据ID查找商品规格
+	 * @author Max
+	 * 2016-10-21
+	 */
+	@RequestMapping(value="/search/specifica",method=RequestMethod.POST)
+	public String specificaSearch(Long goodsId,Long id,HttpServletRequest req,ModelMap map)
+	{
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null != goodsId && null != username){
+			map.addAttribute("goodsId", goodsId);
+			TdProvider tdProvider = tdProviderService.findByUsername(username);
+			map.addAttribute("spec_list", tdSpecificatService.findByShopIdAndGoodsIdAndType(tdProvider.getId(),goodsId, 3));
+			if(null != id){
+				map.addAttribute("specifica", tdSpecificatService.findOne(id));
+			}
+		}
+		return "/client/supply_goods_spec";
+	}
+	
+	/**
+	 * 保存规格
+	 * @author Max
+	 * 2016-10-21
+	 */
+	@RequestMapping(value="/specifica/save",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> specificaSave(TdSpecificat tdSpecificat,HttpServletRequest req,ModelMap map){
+		Map<String,Object> res = new HashMap<String, Object>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username){
+			res.put("msg", "登录超时");
+			return res;
+		}
+		if(null != tdSpecificat){
+			if(null == tdSpecificat.getSpecifict() || "".equals(tdSpecificat.getSpecifict().trim()) || null == tdSpecificat.getLeftNumber()){
+				res.put("msg", "规格填写错误");
+				return res;
+			}
+			if(null == tdSpecificat.getId()){
+				TdProvider supply = tdProviderService.findByUsername(username);
+				
+				tdSpecificat.setShopId(supply.getId());//　设置超市id
+				tdSpecificat.setType(3); //设置类型-分销商
+			}
+			tdSpecificatService.save(tdSpecificat);
+			res.put("code", 1);
+			res.put("goodsId", tdSpecificat.getGoodsId());
+		}else{
+			res.put("msg", "参数错误");
+		}
+		return res;
+	}
+	
+	/**
+	 * 删除规格
+	 * @author Max
+	 * 2016-10-21
+	 * 
+	 */
+	@RequestMapping(value="/specifica/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> deleteSpecifica(Long id,HttpServletRequest req){
+		Map<String,Object> res = new HashMap<String, Object>();
+		res.put("code", 0);
+		
+		String username = (String)req.getSession().getAttribute("supply");
+		if(null == username){
+			res.put("msg", "登录超时");
+			return res;
+		}
+		if(null != id){
+			tdSpecificatService.delete(id);
+			res.put("code", 1);
+		}
+		
+		return res;
+	}
+	
+	/**
+	 * 信息修改保存
+	 * @author Max
+	 * 2016-10-21
+	 */
 	@RequestMapping(value="/distribution",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> wholesaling(Long goodsId,
-			String goodsTitle,
-			String subTitle,
-			Double outFactoryPrice,
-			Double marketPrice,
+	public Map<String,Object> wholesaling(
+			Long sup_goodsId,
+			Long goodsId,
+			String subGoodsTitle,
+			Double goodsPrice,
+			Double goodsMarketPrice,
 			Double shopReturnRation,
 			Long leftNumber,
+			String code,
 			String unit,
 			HttpServletRequest req)
 	{
 		Map<String,Object> res =new HashMap<>();
+		res.put("code", 0);
+		
 		String username =(String)req.getSession().getAttribute("supply");
 		if(null == username )
 		{
-			res.put("msg", "请先登录！");
+			res.put("msg", "登录超时！");
 			return res;
 		}
-		if(null ==goodsId)
-		{
-			res.put("msg","选择的商品无效！");
-			return res;
-		}
-		TdProvider provider = tdProviderService.findByUsername(username);
-		TdProviderGoods proGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(provider.getId(), goodsId);
-		TdGoods goods = tdGoodsService.findOne(goodsId);
 		
-		if(null == proGoods)
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
+		if(null == provider){
+			res.put("msg", "参数错误!");
+			return res;
+		}
+		
+		if(null == leftNumber || leftNumber <=0)
 		{
-			proGoods=new TdProviderGoods();
-			proGoods.setGoodsId(goods.getId());
-			proGoods.setGoodsTitle(goodsTitle);
-			proGoods.setSubGoodsTitle(subTitle);
-			proGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
-			proGoods.setOutFactoryPrice(outFactoryPrice);
-			proGoods.setGoodsMarketPrice(marketPrice);
-			proGoods.setLeftNumber(leftNumber);
-			proGoods.setOnSaleTime(new Date());
-			proGoods.setCode(goods.getCode());
+			res.put("msg", "库存输入错误");
+			return res;
+		}
+		
+		TdProviderGoods tdProviderGoods =null;
+		
+		// 判断是选择分销还是修改信息
+		if(null == sup_goodsId){
+			TdGoods goods = tdGoodsService.findOne(goodsId);
 			
-			proGoods.setCategoryId(goods.getCategoryId());
-			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
-			proGoods.setUnit(goods.getSaleType());
-			proGoods.setShopReturnRation(shopReturnRation);
-			proGoods.setIsDistribution(true);
-			proGoods.setIsAudit(true);
-			proGoods.setUnit(unit);
-			proGoods.setProId(provider.getId());
+			tdProviderGoods = new TdProviderGoods();
+			
+			tdProviderGoods.setGoodsId(goods.getId());
+			tdProviderGoods.setGoodsTitle(goods.getTitle());
+			tdProviderGoods.setGoodsCoverImageUri(goods.getCoverImageUri());
+			tdProviderGoods.setOnSaleTime(new Date());
+			tdProviderGoods.setCategoryId(goods.getCategoryId());
+			tdProviderGoods.setCategoryIdTree(goods.getCategoryIdTree());
+			
+			tdProviderGoods.setIsDistribution(true);
+			tdProviderGoods.setIsAudit(true);
+			tdProviderGoods.setProId(provider.getId());
+			
+		}else{
+			tdProviderGoods= tdProviderGoodsService.findOne(sup_goodsId);
 		}
-		else
-		{
-			proGoods.setGoodsTitle(goodsTitle);
-			proGoods.setSubGoodsTitle(subTitle);
-			proGoods.setLeftNumber(leftNumber);
-			proGoods.setOutFactoryPrice(outFactoryPrice);
-			proGoods.setGoodsMarketPrice(marketPrice);
-			proGoods.setOnSaleTime(new Date());
-			proGoods.setShopReturnRation(shopReturnRation);
-			proGoods.setCategoryId(goods.getCategoryId());
-			proGoods.setCategoryIdTree(goods.getCategoryIdTree());
-			proGoods.setUnit(unit);
-			proGoods.setIsDistribution(true);
-			proGoods.setIsAudit(true);
-			proGoods.setProId(provider.getId());
-		}
-		proGoods.setProviderTitle(provider.getTitle());
-		provider.getGoodsList().add(proGoods);
+		
+		tdProviderGoods.setSubGoodsTitle(subGoodsTitle);
+		tdProviderGoods.setOutFactoryPrice(goodsPrice);
+		tdProviderGoods.setGoodsMarketPrice(goodsMarketPrice);
+		tdProviderGoods.setLeftNumber(leftNumber);
+		tdProviderGoods.setCode(code);
+		tdProviderGoods.setShopReturnRation(shopReturnRation);
+		tdProviderGoods.setUnit(unit);
+		
+		tdProviderGoods.setProviderTitle(provider.getTitle());
+		
+		provider.getGoodsList().add(tdProviderGoods);
 		tdProviderService.save(provider);
 		
-		res.put("msg", "分销商品成功");
-		
+		res.put("msg", "操作成功");
+		res.put("code",1);
 		return res;
 	}
 	
@@ -513,94 +624,72 @@ public class TdSupplyController extends AbstractPaytypeController{
 	}
 	
 	//  分销、取消
-	@RequestMapping(value="/goods/onsale/{pgId}")
-	public String providerGoodsDelete(@PathVariable Long pgId,
-			Boolean type,Integer page,
+	@RequestMapping(value="/goods/onsale",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,Object> providerGoodsDelete(Long pgId,
+			Boolean type,
 			HttpServletRequest req,ModelMap map)
 	{
+		Map<String,Object> res= new HashMap<String, Object>();
+		res.put("code",0);
+		
 		String username = (String)req.getSession().getAttribute("supply");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg","登录超时");
+			return res;
 		}
-		if(null == pgId)
+		if(null != pgId)
 		{
-			tdCommonService.setHeader(map, req);
-			return "/client/error_404";
-		}
-		if(null == page)
-		{
-			page = 0;
-		}
-		map.addAttribute("page", page);
-		map.addAttribute("type",type);
-		TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
-		TdProvider provider = tdProviderService.findByUsername(username);
-		
-		if(type)
-		{
-			providerGoods.setIsDistribution(type);
-			tdProviderGoodsService.save(providerGoods);
-			map.addAttribute("isDistribution", false);
-			map.addAttribute("supply_goods_page",
-					tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),false,true, page, ClientConstant.pageSize));
-		}else{
-			// 取消分销后 超市商品库删除分销商品
-			List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),providerGoods.getGoodsId());
-			if(null != list && list.size() >0){
-				for (TdDistributorGoods tdDistributorGoods : list) {
-					tdDistributorGoodsService.delete(tdDistributorGoods);
-				}
+			TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+			if(null != type && null != providerGoods){
+				providerGoods.setIsDistribution(type);
+				tdProviderGoodsService.save(providerGoods);
+				res.put("code", 1);
+				res.put("msg", "操作成功");
+				return res;
 			}
-			
-			providerGoods.setIsDistribution(type);
-			tdProviderGoodsService.save(providerGoods);
-			map.addAttribute("isDistribution", true);
-			map.addAttribute("supply_goods_page",
-					tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),true,true, page, ClientConstant.pageSize));
 		}
-		
-		map.addAttribute("provider", provider);
-		return "/client/supply_goods_list";
+		res.put("msg","参数错误");
+		return res;
 	}
 	
-	// 删除
-	@RequestMapping(value="/goods/delete/{pgId}")
-	public String deleteGoods(@PathVariable Long pgId,
-			Boolean type,Integer page,
+	/**
+	 * 删除分销商品
+	 * 
+	 */
+	@RequestMapping(value="/goods/delete",method=RequestMethod.POST)
+	@ResponseBody
+	public  Map<String,Object> deleteGoods(Long pgId,
 			HttpServletRequest req,ModelMap map){
+		Map<String,Object> res  = new HashMap<String, Object>();
+		res.put("code", 0);
+		
 		String username = (String)req.getSession().getAttribute("supply");
 		if(null == username)
 		{
-			return "redirect:/login";
+			res.put("msg", "登录超时");
+			return res;
 		}
-		if(null == pgId)
+		if(null != pgId)
 		{
-			tdCommonService.setHeader(map, req);
-			return "/client/error_404";
+			TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
+			if(null != providerGoods){
+				// 查找删除商品规格 
+				List<TdSpecificat> list = tdSpecificatService.findByShopIdAndGoodsIdAndType(providerGoods.getProId(), providerGoods.getGoodsId(), 3);
+				if(null != list){
+					tdSpecificatService.delete(list);
+				}
+				
+			}
+			tdProviderGoodsService.delete(pgId);
+			res.put("code", 1);
+			res.put("msg", "操作成功");
+		}else{
+			res.put("msg", "参数错误");
 		}
-		if(null == page)
-		{
-			page = 0;
-		}
-		TdProviderGoods goods = tdProviderGoodsService.findOne(pgId);
 		
-		TdProvider provider = tdProviderService.findByUsername(username);
-		
-//		List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),goods.getGoodsId());
-//		if(null != list && list.size() >0){
-//			for (TdDistributorGoods tdDistributorGoods : list) {
-//				tdDistributorGoodsService.delete(tdDistributorGoods);
-//			}
-//		}
-		
-		tdProviderGoodsService.delete(pgId);
-		
-		map.addAttribute("supply_goods_page",
-				tdProviderGoodsService.findByProviderIdAndIsDistributionAndIsAudit(provider.getId(),type,true, page, ClientConstant.pageSize));
-		map.addAttribute("page", page);
-		
-		return "/client/supply_goods_list";
+		return res;
 	}
 	
 	@RequestMapping(value="/goods/editOnSale",method=RequestMethod.POST)
@@ -979,27 +1068,127 @@ public class TdSupplyController extends AbstractPaytypeController{
 	
 	/**
 	 * 交易记录
+	 * @throws ParseException 
 	 * 
 	 */
 	@RequestMapping(value="/pay/record")
-    public String payRecord(Integer page,String cont, HttpServletRequest req,ModelMap map){
+    public String payRecord(Integer page,
+    		String cont, 
+    		String startTime,
+			String endTime,
+			String eventTarget,
+			String eventArgument,
+    		HttpServletRequest req,HttpServletResponse resp,
+    		ModelMap map) throws ParseException{
     	String username = (String)req.getSession().getAttribute("supply");
     	if (null == username) {
             return "redirect:/login";
         }
+    	
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date start = null;
+		Date end = null ;
+		
+		if(null != startTime && !"".equals(startTime.trim()))
+		{
+			start = sdf.parse(startTime);
+		}
+		if(null != endTime && !"".equals(endTime.trim()))
+		{
+			end = sdf.parse(endTime);
+		}
+		
+		String exportUrl ="";
+		if(null != eventTarget){
+			if(eventTarget.equalsIgnoreCase("excel")){
+				exportUrl = SiteMagConstant.backupPath;
+			}else if (eventTarget.equalsIgnoreCase("btnPage"))
+			{
+				if (null != eventArgument)
+				{
+					page = Integer.parseInt(eventArgument);
+				} 
+			}
+		}
     	if(null == page ){
     		page = 0;
     	}
     	map.addAttribute("page", page);
+    	map.addAttribute("cont", cont);
+    	map.addAttribute("startTime", start);
+    	map.addAttribute("endTime", end);
     	tdCommonService.setHeader(map, req);
     	
+    	
     	TdProvider provider = tdProviderService.findByUsername(username);
-    	if(null == cont || "".equals(cont)){
-    		map.addAttribute("pay_record_page",
-    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
-    	}else{
-    		map.addAttribute("pay_record_page",
-    				tdPayRecordService.searchByProviderId(provider.getId(),cont, page, ClientConstant.pageSize));
+    	map.addAttribute("pay_record_page",tdPayRecordService.findAll("pro", provider.getId(), cont, start, end, page, ClientConstant.pageSize));
+//    	
+//    	if(null == cont || "".equals(cont)){
+//    		map.addAttribute("pay_record_page",
+//    				tdPayRecordService.findByProviderId(provider.getId(), page, ClientConstant.pageSize));
+//    	}else{
+//    		map.addAttribute("pay_record_page",
+//    				tdPayRecordService.searchByProviderId(provider.getId(),cont, page, ClientConstant.pageSize));
+//    	}
+    	
+    	if(null != exportUrl && !"".equals(exportUrl)){
+    		/**
+			 * 导出表格
+			 */
+			// 创建一个webbook 对于一个Excel
+			HSSFWorkbook wb = new HSSFWorkbook();
+			// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+			HSSFSheet sheet = wb.createSheet("payRecord"); 
+			// 设置每个单元格宽度根据字多少自适应
+			sheet.autoSizeColumn(1);
+			// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+	        HSSFRow row = sheet.createRow((int) 0);
+	        // 创建单元格，并设置值表头 设置表头居中 
+	        HSSFCellStyle style = wb.createCellStyle();  
+	        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+	        
+	        HSSFCell cell = row.createCell((short) 0);  
+	        cell.setCellValue("订单编号");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 1);  
+	        cell.setCellValue("商家");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 2);  
+	        cell.setCellValue("服务费");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 3);  
+	        cell.setCellValue("物流费");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 4);  
+	        cell.setCellValue("商品总额");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 5);  
+	        cell.setCellValue("商家返利");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 6);  
+	        cell.setCellValue("实际金额");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 7);  
+	        cell.setCellValue("交易时间");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 8);  
+	        cell.setCellValue("交易类型");  
+	        cell.setCellStyle(style); 
+	        
+        	Page<TdPayRecord> record_Page = tdPayRecordService.findAll("pro", provider.getId(), cont, start, end, page, Integer.MAX_VALUE);
+        	
+			if(payRecordImportData(record_Page,row,cell,sheet))
+        	{
+        		FileDownUtils.download("payRecord", wb, exportUrl, resp);
+        	}
     	}
     	return "/client/supply_record";
     }
@@ -1105,7 +1294,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 			end = sdf.parse(endTime);
 		}
 		
-		List<TdOrder> list = tdOrderService.searchOrderGoods(null, supply.getId(),"supply",statusId,start, end);
+		List<TdOrder> list = tdOrderService.searchOrderGoods(null, supply.getId(),null,"supply",statusId,start, end);
 		List<TdCountSale> countList = tdOrderService.sumOrderGoods(supply.getId(),2L,list);
 		
 		String excelUrl=null;
@@ -1361,6 +1550,13 @@ public class TdSupplyController extends AbstractPaytypeController{
 		cash.setStatus(1L);
 		
 		tdCashService.save(cash);
+		
+		// 新加银行卡信息记录
+		supply.setBankCardCode(card);
+		supply.setBankTitle(bank);
+		supply.setBankName(name);
+		tdProviderService.save(supply);
+		
 		res.put("msg", "提交成功");
 		res.put("code", 1);
 		return res;
@@ -1431,7 +1627,7 @@ public class TdSupplyController extends AbstractPaytypeController{
 	@RequestMapping(value="/return/param/edit")
     @ResponseBody
     public Map<String,Object> returnedit(Long id,
-    		Long statusId,String suppDetail,
+    		Long statusId,String suppDetail,Double realPrice,
     		HttpServletRequest req){
     	Map<String,Object> res =new HashMap<>();
     	res.put("code",1);
@@ -1454,7 +1650,8 @@ public class TdSupplyController extends AbstractPaytypeController{
 				{
 					e.setStatusId(statusId);
 					e.setSuppDetail(suppDetail);
-					tdUserReturnService.save(e);
+					e.setRealPrice(realPrice);
+					e = tdUserReturnService.save(e);
 					
 					if(statusId ==3){
 						if(null != supply.getVirtualMoney()&&  supply.getVirtualMoney() > e.getGoodsPrice()*e.getReturnNumber())
@@ -1477,13 +1674,133 @@ public class TdSupplyController extends AbstractPaytypeController{
     }
 	
 	/**
+     * 找回支付密码
+     * 第一步
+     */
+    @RequestMapping("/retrieve_step1")
+    public String retrieve1(String username,String mobile,Integer errCode,HttpServletRequest req,ModelMap map){
+    	String supply = (String)req.getSession().getAttribute("supply");
+    	if(null == supply)
+    	{
+    		return "redirect:/login";
+    	}
+    	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("supply", tdProviderService.findByUsername(supply));
+    	
+    	if (null != errCode)
+	     {
+	         if (errCode.equals(1))
+	         {
+	             map.addAttribute("error", "验证码错误");
+	         }
+	         
+	         map.addAttribute("errCode", errCode);
+	     }
+		
+		map.addAttribute("username", username);
+		map.addAttribute("mobile", mobile);
+    	
+    	return "/client/supply_retrieve_one";
+    	
+    }
+    
+    /**
+     * 找回支付密码
+     * 第二步，账号、手机号验证码验证
+     */
+    @RequestMapping(value = "/retrieve_step2", method = RequestMethod.POST)
+	public String Step2(String username,String mobile,String smsCode,HttpServletRequest req, ModelMap map){
+    	String supply = (String)req.getSession().getAttribute("supply");
+    	if(null == supply)
+    	{
+    		return "redirect:/login";
+    	}
+    	if (null == smsCode) {
+			return "redirect:/supply/retrieve_step1?errCode=4&username="+username+"&mobile="+mobile;
+		}
+		String smsCodeSave = (String) req.getSession().getAttribute("SMSCODE");
+		if(null == smsCodeSave){
+			return "redirect:/supply/retrieve_step1?errCode=3&username="+username+"&mobile="+mobile;
+		}
+		
+		if (!smsCodeSave.equalsIgnoreCase(smsCode)) {
+			return "redirect:/supply/retrieve_step1?errCode=4&username="+username+"&mobile="+mobile;
+		}
+		tdCommonService.setHeader(map, req);
+		
+		map.addAttribute("supply", tdProviderService.findByUsername(supply));
+		map.addAttribute("username", username);
+		map.addAttribute("mobile", mobile);
+		
+		return "/client/supply_retrieve_two";
+	}
+    /**
+     * 找回支付密码
+     * 第三步，设置新密码
+     */
+   @RequestMapping(value = "/retrieve_step3", method = RequestMethod.POST)
+	public String Step3(String username,String payPassword, HttpServletRequest req, ModelMap map){
+	   TdProvider supply = tdProviderService.findByUsername(username);
+		tdCommonService.setHeader(map, req);
+		if (null != supply) {
+			supply.setPayPassword(payPassword);
+			tdProviderService.save(supply);
+			
+			return "/client/supply_retrieve_three";
+		}
+		
+		return "/client/error_404";
+	}
+	
+    /**
+     * 验证账号手机号，发送短信验证码
+     * 
+     */
+     @RequestMapping(value = "/smscode",method = RequestMethod.POST)
+     @ResponseBody
+     public Map<String, Object> smsCode(String username,String mobile, HttpServletResponse response, HttpServletRequest request) {
+     	HashMap<String, Object> map = new HashMap<>();
+     	map.put("code", 1);
+     	
+     	TdProvider provider =  tdProviderService.findByUsername(username);
+     	if(null == provider)
+     	{
+     			map.put("msg", "账号不存在");
+     			return map;
+     	}
+     	
+     	if(null == mobile || !mobile.equals(provider.getMobile())){
+     		map.put("msg", "账号和手机号不匹配");
+     		return map;
+     	}
+     	
+     	Random random = new Random();
+         
+         String smscode = String.format("%04d", random.nextInt(9999));
+         
+         HttpSession session = request.getSession();
+         
+         session.setAttribute("SMSCODE", smscode);
+         session.setMaxInactiveInterval(60*10*1000);
+         
+         map = SMSUtil.send(mobile, "73697" ,new String[]{smscode});
+         map.put("status", "0");
+         map.put("msg" ,"验证码发送成功!");
+         map.put("code", smscode);
+         return map;
+         
+     }
+    
+	
+	/**
      * 分销商同意普通商品退货，
      * 退还商品货款，扣除超市相应余额
      */
     public void turnGoods(TdUserReturn userRturn,TdProvider supply){
     	Double turnPrice =0.0; // 退款金额
     	
-    	turnPrice = userRturn.getGoodsPrice()*userRturn.getReturnNumber();
+    	turnPrice = userRturn.getRealPrice();
     	if(null != supply.getVirtualMoney()&&  supply.getVirtualMoney() > turnPrice)
 		{
     		
@@ -1626,6 +1943,29 @@ public class TdSupplyController extends AbstractPaytypeController{
 		}
 		return true;
 	}
+	
+	// 交易記錄
+		@SuppressWarnings("deprecation")
+		public Boolean payRecordImportData(Page<TdPayRecord> recordPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)
+		{
+			if(null != recordPage && recordPage.getContent().size() > 0){
+				for (int i = 0; i < recordPage.getContent().size(); i++) {
+					row = sheet.createRow((int)i+1);
+					TdPayRecord record = recordPage.getContent().get(i);
+					// 获取用户信息
+					row.createCell((short) 0).setCellValue(record.getOrderNumber());
+					row.createCell((short) 1).setCellValue(record.getProviderTitle());
+					row.createCell((short) 2).setCellValue(StringUtils.scale(record.getServicePrice()));
+					row.createCell((short) 3).setCellValue(StringUtils.scale(record.getPostPrice()));
+					row.createCell((short) 4).setCellValue(StringUtils.scale(record.getTotalGoodsPrice()));
+					row.createCell((short) 5).setCellValue(StringUtils.scale(record.getTurnPrice()));
+					row.createCell((short) 6).setCellValue(StringUtils.scale(record.getRealPrice()));
+					row.createCell((short) 7).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(record.getCreateTime()));
+					row.createCell((short) 8).setCellValue(record.getCont());
+				}
+			}
+			return true;
+		}
 	
 	public Boolean download(HSSFWorkbook wb,String name, String exportUrl, HttpServletResponse resp){
 	   	 try  

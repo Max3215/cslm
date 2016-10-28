@@ -98,6 +98,10 @@ public class TdUser {
 	@Column
 	private String identity;
 	
+	// 家庭住址
+	@Column
+	private String homeAddress;
+	
 	// 手机号码
 	@Column
 	private String mobile;
@@ -202,6 +206,10 @@ public class TdUser {
     @Column
     private String bankTitle;
     
+    // 新加银行卡开户名
+    @Column
+    private String bankName;
+    
     // 分销商银行卡已审核
     @Column
     private Boolean isBankCardVerified;
@@ -217,6 +225,9 @@ public class TdUser {
     // 今日通过分享商品获得的积分
     @Column
     private Long pointGetByShareGoods;
+    
+    @Column
+    private Boolean isUpdatePay;
     
     public Long getId() {
         return id;
@@ -338,7 +349,15 @@ public class TdUser {
         this.identity = identity;
     }
 
-    public String getMobile() {
+    public String getHomeAddress() {
+		return homeAddress;
+	}
+
+	public void setHomeAddress(String homeAddress) {
+		this.homeAddress = homeAddress;
+	}
+
+	public String getMobile() {
         return mobile;
     }
 
@@ -537,8 +556,16 @@ public class TdUser {
     public void setBankTitle(String bankTitle) {
         this.bankTitle = bankTitle;
     }
+    
+    public String getBankName() {
+		return bankName;
+	}
 
-    public Boolean getIsBankCardVerified() {
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public Boolean getIsBankCardVerified() {
         return isBankCardVerified;
     }
 
@@ -592,6 +619,14 @@ public class TdUser {
 
 	public void setPayPassword(String payPassword) {
 		this.payPassword = payPassword;
+	}
+
+	public Boolean getIsUpdatePay() {
+		return isUpdatePay;
+	}
+
+	public void setIsUpdatePay(Boolean isUpdatePay) {
+		this.isUpdatePay = isUpdatePay;
 	}
     
     

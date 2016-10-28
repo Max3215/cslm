@@ -16,6 +16,8 @@ import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserLevel;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.repository.TdUserRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdUser 服务类
@@ -139,6 +141,7 @@ public class TdUserService {
         user.setTotalReturns(0L);
         user.setTotalSpendCash(0.0);
         user.setVirtualMoney(new Double(0));
+        user.setIsUpdatePay(false);
         
         TdSetting setting = tdSettingService.findTopBy();
         
@@ -202,18 +205,18 @@ public class TdUserService {
         
         user.setTotalSpendCash(total + spend);
         
-        Long levelId = tdUserLevelService.getLevelId(user.getTotalSpendCash());
-        
-        if (null != levelId)
-        {
-            TdUserLevel level = tdUserLevelService.findByLevelId(levelId);
-            if (null != level)
-            {
-                user.setUserLevelId(level.getLevelId());
-                user.setUserLevelTitle(level.getTitle());
-            }
-        }
-        
+//        Long levelId = tdUserLevelService.getLevelId(user.getTotalSpendCash());
+//        
+//        if (null != levelId)
+//        {
+//            TdUserLevel level = tdUserLevelService.findByLevelId(levelId);
+//            if (null != level)
+//            {
+//                user.setUserLevelId(level.getLevelId());
+//                user.setUserLevelTitle(level.getTitle());
+//            }
+//        }
+//        
         return repository.save(user);
     }
     
@@ -448,4 +451,17 @@ public class TdUserService {
         
         return (List<TdUser>) repository.save(entities);
     }
+    
+    public Page<TdUser> findAll(String keywords,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "lastLoginTime"));
+    	Criteria<TdUser> c = new Criteria<TdUser>();
+    	
+    	if(null != keywords && !"".equals(keywords)){
+    		c.add(Restrictions.or(Restrictions.like("username", keywords, true),Restrictions.like("mobile", keywords, true)));
+    	}
+    	
+    	return repository.findAll(c, pageRequest);
+    }
+    
+    
 }

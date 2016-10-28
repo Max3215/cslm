@@ -242,8 +242,9 @@ DD_belatedPNG.fix('.,img,background');
                 <td>支付总额：<font color="#ff1000">￥<#if order??>${order.totalPrice?string("0.00")}</#if></font>
                     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     运费：<font color="#ff1000">￥<#if order.postPrice??>${order.postPrice?string("0.00")}<#else>0</#if></font>
-                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+             <#--       &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     使用积分：<font color="#ff1000"><#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if></font></td>
+                    -->
             </tr>
             <tr>
                 <th>联系方式</th>
@@ -280,8 +281,9 @@ DD_belatedPNG.fix('.,img,background');
                 <td width="60" class="td001">
                     <a href=""><img src="${og.goodsCoverImageUri}" /></a>
                 </td>
-                <td>
+                <td width="40%" style="text-align: left;">
                     <a href="">${og.goodsTitle}</a>
+                     <#if og.specName??><p style="color:#999;">规格：${og.specName!''}</p></#if>
                 </td>
                 <td>
                     ${order.shippingName!''}

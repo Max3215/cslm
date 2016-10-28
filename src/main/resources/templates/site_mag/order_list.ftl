@@ -70,9 +70,11 @@ function __doPostBack(eventTarget, eventArgument) {
                     <li>
                         <a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a>
                     </li>
+                    <#--
                     <li>
                         <a onclick="return ExePostBack('btnConfirm','确认后将进入待发货状态，是否继续？');" class="save" href="javascript:__doPostBack('btnConfirm','')"><i></i><span>确认订单</span></a>
                     </li>
+                    -->
                     <#if tdManagerRole?? && tdManagerRole.isSys>
                     <li>
                         <a onclick="return ExePostBack('btnDelete','删除后订单将无法恢复，是否继续？');" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除订单</span></a>
@@ -116,7 +118,7 @@ function __doPostBack(eventTarget, eventArgument) {
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
 <tbody>
     <tr class="odd_bg">
-        <th width="8%">
+        <th width="4%">
             选择
         </th>
         <th align="left">
@@ -125,10 +127,16 @@ function __doPostBack(eventTarget, eventArgument) {
         <th align="left" width="12%">
             会员账号
         </th>
-        <th align="left" width="10%">
+        <th align="left" >
+            商家
+        </th>
+        <th align="left" >
+            分销商家
+        </th>
+        <th align="left" width="8%">
             支付方式
         </th>
-        <th align="left" width="10%">
+        <th align="left" width="8%">
             配送方式
         </th>
         <th width="8%">
@@ -137,10 +145,10 @@ function __doPostBack(eventTarget, eventArgument) {
         <th width="10%">
             总金额
         </th>
-        <th align="left" width="16%">
+        <th align="left" width="12%">
             下单时间
         </th>
-        <th width="8%">
+        <th width="5%">
             操作
         </th>
     </tr>
@@ -157,6 +165,8 @@ function __doPostBack(eventTarget, eventArgument) {
                 <td>
                     <a href="/Verwalter/order/edit?id=${order.id?c}&statusId=${statusId!'0'}">${order.orderNumber!""}</a></td>
                 <td>${order.username!""}</td>
+                <td>${order.shopTitle!""}</td>
+                <td>${order.providerTitle!""}</td>
                 <td>${order.payTypeTitle!""}</td>
                 <td><#if order.deliveryMethod?? && order.deliveryMethod == 1>门店自提<#else>送货上门</#if></td>
                 <td align="center">

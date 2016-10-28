@@ -598,7 +598,7 @@ public class TdProviderGoodsService {
 			c.add(Restrictions.eq("proId", proId, true));
 		}
 		if(null != catId && catId != 0L){
-			c.add(Restrictions.like("categoryIdTree", "%[" + catId + "]%", true));
+			c.add(Restrictions.like("categoryIdTree", "[" + catId + "]", true));
 		}
 		if(null != keyword && !"".equals(keyword.trim())){
 			c.add(Restrictions.or(Restrictions.like("goodsTitle", keyword, true),Restrictions.like("code", keyword, true)));

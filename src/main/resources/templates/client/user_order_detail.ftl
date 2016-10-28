@@ -130,7 +130,7 @@ DD_belatedPNG.fix('.,img,background');
                 <#elseif order.statusId==2>
                     亲爱的客户，此订单还未支付，您可以<a href="/order/dopay/${order.id?c}" style="color: #F00;" target="_blank">去支付</a>
                 <#elseif order.statusId==3>
-                    亲爱的客户，您以成功支付，我们将尽快为您发货。
+                    亲爱的客户，您已成功支付，我们将尽快为您发货。
                 <#elseif order.statusId==4>
                     亲爱的客户，已经为您发货，请您&nbsp;<span><a style="color:#F00;" id="orderService">确认收货</a></span>。
                 <#elseif order.statusId==5>
@@ -180,13 +180,24 @@ DD_belatedPNG.fix('.,img,background');
                 <td><#if order??>${order.orderNumber!''}</#if></td>
             </tr>
             <tr>
+                <th width="100">商家</th>
+                <td><#if order??>${order.shopTitle!''}</#if></td>
+            </tr>
+            <#if order.typeId?? && order.typeId ==2>
+            <tr>
+                <th width="100">分销商家</th>
+                <td><#if order??>${order.providerTitle!''}</#if></td>
+            </tr>
+            </#if>
+            <tr>
                 <th>支付明细</th>
                 <td>
                     支付总额：<font color="#ff1000">￥<#if order??>${order.totalPrice?string("0.00")}</#if></font>
                     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     运费：<font color="#ff1000">￥<#if order.postPrice??>${order.postPrice?string("0.00")}<#else>0</#if></font>
-                    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+              <#--      &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
                     使用积分：<font color="#ff1000"><#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if></font>
+                    -->
                 </td>
             </tr>
             <tr>
@@ -216,8 +227,9 @@ DD_belatedPNG.fix('.,img,background');
                 <td width="60" class="td001">
                     <a href="/goods/${og.goodsId?c}"><img src="${og.goodsCoverImageUri}" /></a>
                 </td>
-                <td width="40%">
+                <td width="40%" style="text-align: left;">
                     <a href="/goods/${og.goodsId?c}">${og.goodsTitle}</a>
+                    <#if og.specName??><p style="color:#999;">规格：${og.specName!''}</p></#if>
                 </td>
                 <td>
                     ${order.shippingName!''}

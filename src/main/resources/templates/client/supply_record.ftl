@@ -14,7 +14,8 @@
 
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script src="/client/js/mymember.js"></script>
-
+<script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
+<link href="/mag/style/pagination.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 $(document).ready(function(){
   $(".click_a").click(function(){
@@ -49,19 +50,38 @@ DD_belatedPNG.fix('.,img,background');
   <div class="mymember_main">
         <#include "/client/common_supply_menu.ftl">
     <div class="mymember_mainbox">    
+    <form action="/supply/pay/record" id="form1" method="post">
     <div class="mymember_info mymember_info02">
         <div class="mymember_order_search">
-                交易记录  
-                <form action="/supply/pay/record" id="form">
-                    <input type="hidden" value="${page!'0'}" name="page"/>
-                    <select  id="cont" name="cont" class="myselect" onchange="subRecord()">
+                	<p> 交易记录</p> 
+                	&nbsp;时间&nbsp;&nbsp;
+                    <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                                    &nbsp;&nbsp;至&nbsp;&nbsp;
+                    <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                    <select  id="cont" name="cont" style="float:left" class="myselect" onchange="javascript:__doPostBack('cont',0);">
                         <option value="">全部记录</option>
                         <option value="充值" <#if cont?? && cont=="充值">selected="selected"</#if>>充值记录</option>
                         <option value="提现" <#if cont?? && cont=="提现">selected="selected"</#if>>提现记录</option>
-                        <option value="销售" <#if cont?? && cont=="销售">selected="selected"</#if>>销售记录</option>
                         <option value="分销" <#if cont?? && cont=="分销">selected="selected"</#if>>分销记录</option>
                     </select>
-               </form>
+                    <input type="hidden" name="eventTarget" value="" id="eventTarget">
+                    <input type="hidden" name="eventArgument" value="" id="eventArgument">
+	                <script type="text/javascript">
+	                    var theForm = document.forms['form1'];
+	                    if (!theForm) {
+	                        theForm = document.form1;
+	                    }
+	                    function __doPostBack(eventTarget, eventArgument) {
+	                        if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+	                            theForm.eventTarget.value = eventTarget;
+	                            theForm.eventArgument.value = eventArgument;
+	                            theForm.submit();
+	                        }
+	                    }
+	                </script>
+	                <input class="mysub" type="button" value="导出全部" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
+              		<input class="mysub" type="submit" value="查询" />
+               
             <div class="clear"></div>
         </div>
         <table style="table-layout: fixed;">
@@ -111,7 +131,7 @@ DD_belatedPNG.fix('.,img,background');
                         <#if page == pay_record_page.number+1>
                             <a class="mysel" href="javascript:;">${page}</a>
                         <#else>
-                            <a href="/supply/pay/record?page=${page-1}">${page}</a>
+                            <a href="javascript:__doPostBack('btnPage','${(page-1)?c}')">${page}</a>
                         </#if>
                         <#assign continueEnter=false>
                     <#else>
@@ -125,7 +145,7 @@ DD_belatedPNG.fix('.,img,background');
         </#if>
       </div>
     </div><!--mymember_info END-->   
-    
+    </form>
   </div>
     <!--mymember_center END-->
  

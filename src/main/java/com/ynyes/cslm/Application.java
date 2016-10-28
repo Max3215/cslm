@@ -23,6 +23,7 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdUserService;
 
 @Configuration
 @ComponentScan
@@ -34,6 +35,9 @@ public class Application extends SpringBootServletInitializer implements Command
 	
 	@Autowired
 	private TdDistributorGoodsService tdDistributorGoodsService;
+	
+	@Autowired
+	private TdUserService tdUserService;
 	
 	@Bean
 	public CharacterEncodingFilter encodingFilter() {
@@ -84,6 +88,10 @@ public class Application extends SpringBootServletInitializer implements Command
             				{
             					order.setStatusId(6L);
             					tdOrderService.save(order);
+            					if(order.getTypeId() ==0 || order.getTypeId() ==2){
+                                	tdOrderService.addUserPoint(order,order.getUsername()); // 添加积分记录
+                                	tdUserService.addTotalSpend(order.getUsername(), order.getTotalPrice()); // 增加累计使用金额
+                                }
             				}
 						}
 					}

@@ -69,7 +69,7 @@ DD_belatedPNG.fix('.,img,background');
   <div class="mymember_mainbox">
         <div class="mymember_info">
             <div class="mymember_order_search">
-                <a class="a001" >商品评价/晒单</a>
+                <a class="a001" style="margin-right: 10px;">商品评价/晒单</a>
                 <select id="commentTypeSelect" onchange="javascript:commentJump();">
                     <option value="5" <#if statusId==5>selected="selected"</#if>>待评价订单</option>
                     <option value="6" <#if statusId==6>selected="selected"</#if>>已评价订单</option> 
@@ -139,9 +139,9 @@ DD_belatedPNG.fix('.,img,background');
                                         <input type="hidden" name="goodsId" value=${item.goodsId?c} />
                                         <input type="hidden" name="quantity" value=${item.quantity} />
                                             <div class="pb20 lh25">
-                                                <input class="ml20" type="radio" name="stars" value="3" datatype="n" nullmsg="请点击进行评价"/><span class="mr20"> 好评</span>
-                                                <input type="radio" name="stars" value="2" datatype="n" nullmsg="请点击进行评价"/><span class="mr20"> 中评</span>
-                                                <input type="radio" name="stars" value="1" datatype="n" nullmsg="请点击进行评价"/><span class="mr20"> 差评</span>
+                                                <input class="ml20" type="radio" name="stars" value="3" datatype="n" nullmsg="请点击进行评价"  sucmsg=" "/><span class="mr20"> 好评</span>
+                                                <input type="radio" name="stars" value="2" datatype="n" nullmsg="请点击进行评价"  sucmsg=" "/><span class="mr20"> 中评</span>
+                                                <input type="radio" name="stars" value="1" datatype="n" nullmsg="请点击进行评价"  sucmsg=" "/><span class="mr20"> 差评</span>
                                             </div>
                                             <span style="position:absolute;right:88px;top:-13px;"><img src="/client/images/mymember/arrow06.gif" /></span>
                                             <div class="mymember_eva_div">
@@ -156,7 +156,7 @@ DD_belatedPNG.fix('.,img,background');
                                             </div>
                                             <div class="mymember_eva_div">
                                                 <b><font>* </font>评价：</b>
-                                                <textarea name="content" datatype="*5-255" nullmsg="请输入评价内容"></textarea>
+                                                <textarea name="content" datatype="*5-255" nullmsg="请输入评价内容"  sucmsg=" "></textarea>
                                             </div>
                                             <div class="mymember_eva_div">
                                               <input class="mysub" type="submit" value="发表评论">

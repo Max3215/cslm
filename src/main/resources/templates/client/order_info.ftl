@@ -104,12 +104,12 @@ function checkNumber(){
     
 function subPrice(){
     var postPrice = parseFloat($("#post_price").val());
-    var totalUse = parseFloat($("#totalUse").val());
+   // var totalUse = parseFloat($("#totalUse").val());
     var totalPrice = parseFloat(${totalPrice})
     
     $("#postprice").html(postPrice.toFixed(2))
-    $("#pointprice").html(totalUse.toFixed(2))
-    $("#totalPrice").html((totalPrice+postPrice-totalUse).toFixed(2));
+ //   $("#pointprice").html(totalUse.toFixed(2))
+    $("#totalPrice").html((totalPrice+postPrice).toFixed(2));
 }
 </script>
 </head>
@@ -130,7 +130,7 @@ function subPrice(){
     background: url(/client/images/win_outbd.png);
 }
 .win_out dl{
-    background: #39BEE9;
+    background: #fff;
     margin: auto;
     width: 450px;
     height:140px;
@@ -184,7 +184,7 @@ function subPrice(){
     height: 40px;
 }
 .win_out dd span{
-    width: 60px;
+    width: 105px;
     background: #f79100;
     color: white;
     font-size: 18px;
@@ -196,7 +196,7 @@ function subPrice(){
     border-radius: 4px;
 }
 .win_out dd .submit{
-    width: 60px;
+    width: 105px;
     background: #f79100;
     color: white;
     font-size: 18px;
@@ -251,8 +251,16 @@ function checkPassword(){
                     <label>支付密码：</label>
                     <input class="text" id="payPwd" type="password" name="payPassword"  value="" />
                 </div>
-                <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="button" name="password" onclick="checkPassword();" value="确定"  />
-                <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+                
+                <#if user.isUpdatePay?? && user.isUpdatePay == true>
+	            <a href="/login/password_retrieve?type=paypwd" style="display:block;margin:10px 0 10px 90px;">忘记密码</a>
+	            <#else>
+	            <p style="display:block;margin:10px 0 10px 90px;">*初始支付密码默认为注册登录密码</p>
+	            </#if>
+                
+                
+                <input style="margin-top: 6px;float: left;margin-left:90px;background: #ff5b7d;" class="submit" type="button" name="password" onclick="checkPassword();" value="确定"  />
+                <span style="margin-top: 6px;float: right;margin-right: 5px;background: #39bee9;" onclick="win_hide();">取消</span>
             </dd>
         </dl>
     </div> 
@@ -308,9 +316,9 @@ function checkPassword(){
                   <th>地区：</th>
                   <td>
                     <div id="pcd">
-                        <select name="province" id="province" class="prov" style="width: 100px;" ></select>
-                        <select name="city" class="city" id="newcity" style="width: 100px;" ></select>
-                        <select name="disctrict" class="dist" id="disctrict" style="width: 100px;" ></select>
+                        <select name="province" id="province" class="prov"></select>
+                        <select name="city" class="city" id="newcity"></select>
+                        <select name="disctrict" class="dist" id="disctrict"></select>
                      </div>
                   </td>
                 </tr>
@@ -340,11 +348,11 @@ function checkPassword(){
     <div class="del_mode">
         <p>配送方式</p>
         <div >
-            <span><input type="radio" value="0" name="deliveryType" checked="checked"  datatype="n" id="delive_post" nullmsg="请选择配送方式!" />送货上门</span>
+            <span><label><input type="radio" value="0" name="deliveryType" checked="checked"  datatype="n" id="delive_post" nullmsg="请选择配送方式!" />&nbsp;送货上门</label></span>
             <#if post??>&emsp;&emsp;${post!''}</#if>
         </div>
         <div  style="margin-top:15px;">
-            <span><input type="radio" name="deliveryType" value="1" datatype="n" id="delive_u" nullmsg="请选择配送方式!" />门店自提</span>
+            <span><label><input type="radio" name="deliveryType" value="1" datatype="n" id="delive_u" nullmsg="请选择配送方式!" />&nbsp;门店自提</label></span>&nbsp;&nbsp;
             <#if addressList??>
             <select name="shipAddressId">
                 <#list addressList as addr>
@@ -363,22 +371,17 @@ function checkPassword(){
     <section class="paybox">
         <h3>选择支付方式</h3>
         <div class="pay_balance">
-            <input type="radio" datatype="n" value="0" onclick="showPwdBtn()" checked="checked" name="payTypeId" nullmsg="请选择支付方式!"/>余额支付
+            <label><input type="radio" datatype="n" value="0" onclick="showPwdBtn()" checked="checked" name="payTypeId" nullmsg="请选择支付方式!"/>&nbsp;余额支付</label>
             <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
           </div>
 
           <p class="alipay_tit">快捷支付</p>
           <div class="alipay">
-              <ul>
-              <li><input type="radio" value="1" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="/client/images/ali.png" width="148px"></li>
-              <li><input type="radio" value="2" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="/client/images/wx.png" width="148px"></li>
-              <#--
-              <#if pay_type_list_third??>
-                <#list pay_type_list_third as pay_type>
-                <li><input type="radio" value="${pay_type.id?c}" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="${pay_type.coverImageUri!''}" width="148px"></li>
-                </#list>
-            </#if>-->
-              </ul>
+              
+              <label><input type="radio" value="1" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="/client/images/ali.png" width="148px"></label>
+              <label><input type="radio" value="2" onclick="showSub()"  name="payTypeId" datatype="n" nullmsg="请选择支付方式!"><img src="/client/images/wx.png" width="148px"></label>
+        
+              
               <div class="clear"></div>
            </div>
     </section>
@@ -398,6 +401,7 @@ function checkPassword(){
     <div class="clear h20"></div>
     
      <!-- add 积分抵扣 -->
+     <#--
     <div class="use_integral">
       <p class="fl fs18">积分抵扣</p>
       <input type="text" class="text" name="pointUse"  value="0"  onblur="checkNumber()" onfocus="if(value==''||value=='0') {value='0'}" onkeyup="value=value.replace(/[^0-9]/g,'')" id="pointUse"/>
@@ -406,7 +410,7 @@ function checkPassword(){
       <input type="hidden" value="0" id="totalUse">
       <p class="notice">可使用积分总额：${user.totalPoints!'0'}&nbsp;&nbsp;&nbsp;&nbsp;<span>*</span>${site.registerSharePoints!'1'}积分可抵消1元</p>
     </div>
-   
+   -->
     <!-- add -->
     <div class="clear h20"></div>
     
@@ -429,8 +433,9 @@ function checkPassword(){
         <a class="ml20 fc" href="javascript:history.go(-1);">返回上一页</a>
          <span>&emsp;&emsp;&emsp;商品总额：￥<b class="red fs18" id="goodsPrice">${totalPrice?string('0.00')}</b>&nbsp;<b>＋</b>
                 &nbsp; 邮费：￥<b class="red fs18" id="postprice"><#if postprice??>${postprice?string('0.00')}</#if></b>&nbsp;
-                <b>-</b>
+                <#--<b>-</b>
                 &nbsp; 积分抵消：￥<b class="red fs18" id="pointprice">0.00</b>
+                -->
                 <b>＝</b>
                 &emsp;&emsp;
                 应付总额：￥<b class="red fs18" id="totalPrice">${price?string('0.00')}</b></span>

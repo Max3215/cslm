@@ -469,7 +469,7 @@ $(function () {
             <dt>积分抵现比例</dt>
             <dd>
                 <input name="registerSharePoints" type="text" value="<#if setting??>${setting.registerSharePoints!"10"}<#else>10</#if>" class="input normal" datatype="n" sucmsg=" ">
-                <span class="Validform_checktip">下单时可使用积分抵现比例，如10积分抵现1元则此处填“10”，不填则默认为1:1</span>
+                <span class="Validform_checktip">使用积分换现比例，如10积分抵现1元则此处填“10”，不填则默认为10:1</span>
             </dd>
         </dl>
         <#--

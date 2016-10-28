@@ -75,7 +75,7 @@ function selectDeliveryTyp(tag,type){
 
     <div class="dis_ways down_ways">
     <p class="tit">配送方式<span></span></p>
-    <menu class="down">
+    <menu class="down" style="display: block;">
        <input type="hidden" id="postPrice" value="0">
         <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
       <a href="javascript:void(0)" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流
@@ -123,7 +123,7 @@ function showSub(){
     
     <div class="pay_ways down_ways">
         <p class="tit">选择支付方式<span></span></p>
-        <div class="down">
+        <div class="down" style="display: block;">
            <input type="hidden" value="0" name="payTypeId" id="payTypeId" datatype="n" nullmsg="请选择支付方式!">
           <a href="javascript:void(0)" class="choose act" onclick="selectPayType($(this),0)" id="vir">余额支付</a>
           <span>余额：<#if user.virtualMoney??>${user.virtualMoney?string('0.00')}<#else>0</#if></span>
@@ -133,13 +133,6 @@ function showSub(){
             <#if app?? >
             <a href="javascript:void(0)" class="choose" onclick="selectType($(this),2)"><img src="/client/images/wx.png" style=" height: 0.65rem;" /></a>
             </#if>
-            <#--
-            <#if pay_type_list??>
-            <#list pay_type_list as pay_type>
-              <a href="javascript:void(0)" class="choose" onclick="selectType($(this),${pay_type.id?c})"><img src="${pay_type.coverImageUri!''}" width="90" /></a>
-            </#list>
-            </#if>
-            -->
         </div>
       </div>
       
@@ -149,51 +142,13 @@ $(".down_ways .tit").click(function(){
   $(this).next(".down").slideToggle(100);
 })
 
-function checkNumber()
-{
-   var registerSharePoints = ${site.registerSharePoints?c!'1'}; // 兑换比
-   var totalPoints = ${user.totalPoints?c!'0'}; // 可使用积分
-   var pointUse = parseFloat($("#pointUse").val());
-   var goodsPrice = ${totalPrice?string('0.00')};
-   var totalUse = registerSharePoints*goodsPrice;
-
-    if (pointUse==''|| pointUse=='0' || isNaN(pointUse)) 
-    {
-        $("#pointUse").val(0);
-        return ;
-    }
-
-   if (pointUse > totalPoints){
-        alert("积分不足")
-        $("#pointUse").val(0);
-        return ;
-   }
-   if(pointUse > totalUse){
-        alert("最多可使用"+totalUse+"积分")
-        $("#pointUse").val(0);
-        return ;
-   }
-   $("#totalUse").val(pointUse/registerSharePoints);
-   subPrice();
-}
-
 function subPrice(){
     var postPrice = parseFloat($("#postPrice").val());
-    var totalUse = parseFloat($("#totalUse").val());
     var totalPrice = parseFloat(${totalPrice})
     
-    $("#totalPrice").html((totalPrice+postPrice-totalUse).toFixed(2));
+    $("#totalPrice").html((totalPrice+postPrice).toFixed(2));
 }
 </script>
-    
-    <div class="use_integral">
-        <span>积分抵扣</span>
-        <input type="text" class="text" name="pointUse"  value="0"  onblur="checkNumber()" onfocus="if(value==''||value=='0') {value='0'}" onkeyup="value=value.replace(/[^0-9]/g,'')" id="pointUse"/>
-        <div class="clear"></div>
-        <input type="hidden" value="0" id="totalUse">
-        <p>可使用积分总额：${user.totalPoints!'0'}&nbsp;&nbsp;&nbsp;&nbsp;${site.registerSharePoints!'1'}积分兑换1元</p>
-     </div>
-    
   <div class="pay_massege"><textarea placeholder="给商家留言" name="userMessage"></textarea></div>
 
   <section class="order_list" style="margin-bottom:0.4rem;border:none;">
@@ -204,6 +159,7 @@ function subPrice(){
                     <a href="/touch/goods/${cg.distributorGoodsId?c}" class="pic"><img src="${cg.goodsCoverImageUri!''}"></a>
                     <div class="info">
                       <a href="/touch/goods/${cg.distributorGoodsId?c}">${cg.goodsTitle!''}</a>
+                      <p>规格：${cg.specName!''}</p>
                       <p>价格：￥${cg.price?string("0.00")}</p>
                       <p>数量：${cg.quantity!''}</p>
                     </div>
@@ -241,6 +197,7 @@ function subPrice(){
       </menu>
   </section>
   <!-- 底部 END -->
+  <script src="/layer/layer.js"></script>
  <script>
  function showPwd(){
     $("#pwd_div").css("display","block");
@@ -258,7 +215,7 @@ function subPrice(){
             data : {"paypwd" : paypwd},
             success : function(data){
                 if(data.code == 0){
-                    alert(data.msg);
+                    layer.msg(data.msg,  {icon: 2,time: 2000});
                     return;
                 }else{
                     $("#form1").submit();

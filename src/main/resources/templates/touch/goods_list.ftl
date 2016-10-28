@@ -18,7 +18,11 @@
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
 <script src="/touch/js/search.js"></script>
+
+<script src="/layer/layer.js"></script>
+<script src="/touch/js/goods.js"></script>
 <script type="text/javascript">
+var pageIdx = 0;
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
    
@@ -27,28 +31,7 @@ $(document).ready(function(){
     
 });
 
-var pageIdx = 0;
 
-
-
-  //  function loadMore()
-  //  {
-  //      $.ajax({
-  //          type:"post",
-  //          url:"/touch/list/more/${categoryId?c!'1'}-${brandIndex?c!'0'}<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-${orderId?c!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-" + pageIdx,
-  //          success:function(data){
-  //              if ("" == data)
-  //              {
-  //                  $("#a-more").css("display", "none");
-  //              }
-  //              else
-  //              {
-  //                  $("#goods-menu").append(data);
-  //                  pageIdx++;
-  //              }
-  //          }
-  //      });
-  //  }
 
 </script>
 </head>
@@ -95,53 +78,69 @@ var pageIdx = 0;
     <a href="javascript:void(0);" onclick="$(this).parent().fadeOut(300);" class="close"></a>
     <div class="content">
       <p class="top">商品筛选</p>
-      <menu>
-        <p>品牌：</p>
+      <dl>
+        <dt>品牌：</dt>
+        <dd>
         <#if brand_list??>
           <a href="${categoryId?c!'0'}-0<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if brandIndex==0>class="sel"</#if>>全部</a>
           <#list brand_list as brand>
                 <a href="${categoryId?c!'0'}-${(brand_index+1)?c}<#list param_index_list as pindex>-${pindex?c!'0'}</#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if brandIndex==brand_index+1>class="act"</#if>>${brand.title?trim!''}</a>
           </#list>
-      </#if>
-      </menu>
+      	</#if>
+      	</dd>
+      </dl>
       <#if param_list??>
         <#list param_list as param>
-          <menu>
+          <dl>
                 <#if param.valueList?? && param.valueList?contains(",")>
-                <p>${param.title!""}：</p>
-                    <#list param.valueList?split(",") as value>
+                <dt>${param.title!""}：</dt>
+                <dd>
+                	<#list param.valueList?split(",") as value>
                         <#if value!="">
                             <a href="${categoryId?c!'0'}-${brandIndex?c!'0'}<#list param_index_list as pindex><#if param_index==pindex_index>-${(value_index+1)?c}<#else>-${pindex?c!'0'}</#if></#list>-${orderId!'0'}<#if sort_id_list??><#list sort_id_list as sortId>-${sortId!'0'}</#list></#if>-${pageId!'0'}-${leftId!'0'}<#if priceLow?? && priceHigh??>_${priceLow?string("#.##")}-${priceHigh?string("#.##")}</#if>" <#if param_index_list[param_index]==value_index+1>class="act"</#if>>${value?trim!""}</a>
                         </#if>
                     </#list>
-                 </#if>
-          </menu>
+	          	</dd>
+             	</#if>
+	      </dl>
            </#list>
         </#if>
     </div>
   </aside>
   <!-- 弹出筛选 END -->
-
+<script type="text/javascript">
+    //选择下拉
+    $(".screen_box dl dt").click(function(){
+      $(this).toggleClass("cur");
+      $(this).parent("dl").siblings("dl").find("dt").removeClass("cur");
+      $(this).siblings("dd").slideToggle(200);
+      $(this).parent("dl").siblings("dl").find("dd").slideUp(200)
+    });
+  </script>
+  
   <!-- 商品类表 -->
-  <section class="pro_hot">
-  	<menu id="goods-menu">
+  <section class="product_list">
+  	<ul id="goods-menu">
   	     <#if goods_page?? && goods_page.content?size gt 0>
             <#list goods_page.content as goods>
-                    <a href="/touch/goods/${goods.id?c}" class="a1">
-                        <img src="${goods.coverImageUri!''}"/>
-                        <p>${goods.goodsTitle!""}</p>
-                        <p >￥${goods.goodsPrice?string("#.##")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
-                    </a>
+        		<li>
+			        <a href="/touch/goods/${goods.id?c}"><img src="${goods.coverImageUri!''}" /></a>
+			        <a href="/touch/goods/${goods.id?c}" class="name">${goods.goodsTitle!""}</a>
+			        <p class="price">¥ ${goods.goodsPrice?string("0.00")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
+			        <div class="bot">
+			         <#if goods.isDistribution?? && goods.isDistribution == true>
+				          <i><img src="/touch/images/yg_icon.png" /></i>
+				          <a href="javascript:;" onclick="addCart(${goods.id?c})" class="yg">加入购物车</a>
+			         <#else>
+			         	<a href="javascript:;" onclick="addCart(${goods.id?c})">加入购物车</a>
+			         </#if>
+			        </div>
+		        </li>
             </#list>
           <#else>
           <div style="text-align: center; padding: 15px;">此类商品正在扩充中，敬请期待！</div>
         </#if> 
-  	</menu>
-  	<#--
-  	<#if goods_page?? && goods_page.content?size gt 0>
-   <a id="a-more" class="grey_more" href="javascript:loadMore();"><img src="/touch/images/load.png" /></a>
-   </#if>
-   -->
+  	</ul>
   </section>
   <!-- 商品类表 END -->
 <style>
@@ -162,7 +161,7 @@ var pageIdx = 0;
   <div style="height:0.88rem;"></div>
   <section class="comfooter tabfix">
     	<menu>
-	        <a class="a1 sel" href="/touch/disout">平台首页</a>
+	        <a class="a1" href="/touch/disout">平台首页</a>
 	        <a class="a2" href="/touch/category/list">商品分类</a>
 	        <a class="a3" href="/touch/cart">购物车</a>
 	        <a class="a4" href="/touch/user">会员中心</a>

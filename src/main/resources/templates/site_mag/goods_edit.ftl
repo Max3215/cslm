@@ -448,7 +448,7 @@ function del_goods_comb(obj) {
         <dl>
             <dt>商品编码</dt>
             <dd>
-                <input name="code" type="text" value="<#if goods??>${goods.code!""}</#if>" class="input normal" datatype="*0-255" sucmsg=" ">
+                <input name="code" type="text" value="<#if goods??>${goods.code!""}</#if>" class="input normal" datatype="*0-255" ajaxurl="/Verwalter/goods/check<#if goods??>?id=${goods.id?c}</#if>" sucmsg=" ">
                 <span class="Validform_checktip">*编码最多255个字符</span>
             </dd>
         </dl>

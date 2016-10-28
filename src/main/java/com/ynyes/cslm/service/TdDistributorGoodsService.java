@@ -1,5 +1,6 @@
 package com.ynyes.cslm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoodsParameter;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdProductCategory;
+import com.ynyes.cslm.entity.TdRelevance;
 import com.ynyes.cslm.repository.TdDistributorGoodsRepo;
 import com.ynyes.cslm.util.Criteria;
 import com.ynyes.cslm.util.Restrictions;
@@ -48,6 +50,9 @@ public class TdDistributorGoodsService {
 	
 	@Autowired
 	TdDistributorService tdDistributorService;
+	
+	@Autowired
+	TdRelevanceService tdRelevanceService;
 	
 	/**
 	 * 删除
@@ -91,10 +96,6 @@ public class TdDistributorGoodsService {
     {
     	return repository.findByDistributorIdAndGroupCategoryId(distributorId);
     }
-//    public List<Long> findByDistributorIdAndIsAudit(Long distributorId)
-//    {
-//    	return repository.findByDistributorIdAndIsAuditAndGroupCategoryId(distributorId);
-//    }
     
     
     public List<TdDistributorGoods> findByGoodsId(Long goodsId)
@@ -173,11 +174,6 @@ public class TdDistributorGoodsService {
 		return repository.findByUsernameAndIsOnSale(username,onsale, pageRequest);
 	}
     
-//    public Page<TdDistributorGoods> findByDistributorIdAndIsOnSale(Long disId,Boolean onsale ,int page ,int size)
-//	{
-//		PageRequest pageRequest = new PageRequest(page, size);
-//		return repository.findByDistributorIdAndIsOnSale(disId,onsale,pageRequest);
-//	}
     
     public TdDistributorGoods findOne(Long id)
     {
@@ -206,13 +202,8 @@ public class TdDistributorGoodsService {
     
     public TdDistributorGoods findByDistributorIdAndGoodsId(Long distributorId,Long goodsId)
     {
-    	return repository.findByDistributorIdAndGoodsId(distributorId,goodsId);
+    	return repository.findByDisIdAndGoodsId(distributorId,goodsId);
     }
-    
-//    public TdDistributorGoods findByDistributorIdAndGoodsIdAndIsAudit(Long distributorId,Long goodsId)
-//    {
-//    	return repository.findByDistributorIdAndGoodsIdAndIsAudit(distributorId,goodsId,true);
-//    }
     
     public Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleTrueBySoldNumberDesc(Long disId,int page ,int size)
     {
@@ -264,24 +255,6 @@ public class TdDistributorGoodsService {
                         paramStr, pageRequest);
     }
     
-//    public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndGoodsPriceBetweenAndParamsLikeAndIsOnSaleTrue(
-//            long distributorId,long catId, long brandId, double priceLow, double priceHigh,
-//            List<String> paramValueList, Pageable pageRequest) {
-//        String paramStr = "%";
-//
-//        for (int i = 0; i < paramValueList.size(); i++) {
-//            String value = paramValueList.get(i);
-//            if (!"".equals(value)) {
-//                paramStr += value;
-//                paramStr += "%";
-//            }
-//        }
-//
-//        return repository
-//                .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndGoodsPriceBetweenAndParamValueCollectLikeAndIsOnSaleTrue(
-//                        distributorId,"[" + catId + "]", brandId, priceLow, priceHigh,
-//                        paramStr, pageRequest);
-//    }
     
     public Page<TdDistributorGoods> findByCategoryIdAndParamsLikeAndIsOnSaleTrue(
             long catId, List<String> paramValueList, Pageable pageRequest) {
@@ -302,24 +275,6 @@ public class TdDistributorGoodsService {
                         "[" + catId + "]", paramStr, pageRequest);
     }
     
-//    public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndParamsLikeAndIsOnSaleTrue(
-//           long distributorId, long catId, List<String> paramValueList, Pageable pageRequest) {
-//        String paramStr = "%";
-//
-//        if (null != paramValueList) {
-//            for (int i = 0; i < paramValueList.size(); i++) {
-//                String value = paramValueList.get(i);
-//                if (!"".equals(value)) {
-//                    paramStr += value;
-//                    paramStr += "%";
-//                }
-//            }
-//        }
-//
-//        return repository
-//                .findByDistributorIdAndCategoryIdTreeLikeAndParamValueCollectLikeAndIsOnSaleTrue(
-//                       distributorId, "[" + catId + "]", paramStr, pageRequest);
-//    }
     
     public Page<TdDistributorGoods> findByCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
             long catId, long brandId,
@@ -338,24 +293,6 @@ public class TdDistributorGoodsService {
                 .findByCategoryIdTreeContainingAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrue(
                         "[" + catId + "]", brandId, paramStr, pageRequest);
     }
-    
-//    public Page<TdDistributorGoods> findByDistributorIdAndCategoryIdAndBrandIdAndParamsLikeAndIsOnSaleTrue(
-//            long distributorId, long catId, long brandId,
-//            List<String> paramValueList, Pageable pageRequest) {
-//        String paramStr = "%";
-//
-//        for (int i = 0; i < paramValueList.size(); i++) {
-//            String value = paramValueList.get(i);
-//            if (!"".equals(value)) {
-//                paramStr += value;
-//                paramStr += "%";
-//            }
-//        }
-//
-//        return repository
-//                .findByDistributorIdAndCategoryIdTreeLikeAndBrandIdAndParamValueCollectLikeAndIsOnSaleTrue(
-//                       distributorId, "[" + catId + "]", brandId, paramStr, pageRequest);
-//    }
     
     
     public Page<TdDistributorGoods> findByCategoryIdAndIsOnSaleTrueOrderBySoldNumberDesc(Long catId, int page, int size)
@@ -1246,7 +1183,6 @@ public class TdDistributorGoodsService {
 	 */
 	public Page<TdDistributorGoods> searchAndDistributorIdAndIsOnSaleOrderBy(Long distributorId,String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
 	{
-//		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		if (null == keywords || null == sortName) {
             return null;
         }
@@ -1258,7 +1194,6 @@ public class TdDistributorGoodsService {
 	
 	public Page<TdDistributorGoods> searchGoodsAndIsOnSaleOrderBy(String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
 	{
-//		PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "id"));
 		if (null == keywords || null == sortName) {
             return null;
         }
@@ -1334,6 +1269,13 @@ public class TdDistributorGoodsService {
 	                       						disId,"[" + catId + "]", brandId, paramStr, pageable);
 	   }
 	
+	public List<TdDistributorGoods> findByDisIdAndIsOnSaleTrue(Long disId){
+		if(null != disId){
+			return repository.findByDisIdAndIsOnSaleTrue(disId);
+		}
+		return null;
+	}
+	
 	public Page<TdDistributorGoods> findByDisId(Long disId,Long catId,Long brandId,
 					Integer priceLow,Integer priceHigh,List<String> paramValueList,Pageable pageable)
 	{
@@ -1376,7 +1318,7 @@ public class TdDistributorGoodsService {
 	
 	
 	
-	public Page<TdDistributorGoods> findAll(Long disId,Boolean isOnsSale,Long catId,String keywords,PageRequest pageRequest)
+	public Page<TdDistributorGoods> findAll(Long disId,Boolean isOnsSale,Boolean isDistribution,Long catId,String keywords,PageRequest pageRequest)
 	{
 		Criteria<TdDistributorGoods> c = new Criteria<>();
 		if(null != disId)
@@ -1391,6 +1333,10 @@ public class TdDistributorGoodsService {
 		{
 			c.add(Restrictions.like("categoryIdTree", "[" + catId + "]", true));
 		}
+		if(null != isDistribution){
+			c.add(Restrictions.eq("isDistribution", isDistribution, true));
+		}
+		
 		if(null != keywords && !"".equals(keywords.trim()))
 		{
 			c.add(Restrictions.or(Restrictions.like("goodsTitle", keywords, true),Restrictions.like("code", keywords, true)));
@@ -1453,4 +1399,45 @@ public class TdDistributorGoodsService {
         return repository.findAll(c, pageRequest);
 	}
 	
+	/**
+	 * 查询商品关联的其他商品
+	 * @param goodsId
+	 * @return
+	 */
+	public List<TdDistributorGoods> findRelevanceGoods(Long goodsId){
+		if(null == goodsId){
+			return null;
+		}
+//		List<TdDistributorGoods> goodsList = new ArrayList<TdDistributorGoods>();
+		List<Long> idList = new ArrayList<Long>();
+		
+		// 查询商品作为主商品的关联记录
+		List<TdRelevance> reList = tdRelevanceService.findAll(goodsId, null);
+		if(null != reList){
+			for (TdRelevance tdRelevance : reList) {
+				idList.add(tdRelevance.getGoodsId2());
+			}
+		}
+		
+		// 商品作为被关联存在的关联记录
+		List<TdRelevance> subList = tdRelevanceService.findAll(null, goodsId);
+		if(null != subList){
+			for (TdRelevance tdRelevance : subList) {
+				//ID集合是否存在关联的主商品
+				if(!idList.contains(tdRelevance.getGoodsId1())){
+					idList.add(tdRelevance.getGoodsId1());
+				}
+			}
+		}
+		
+		return this.findIds(idList);
+	}
+	
+	
+	public List<TdDistributorGoods> findIds(List<Long> ids){
+		if(null != ids){
+			return (List<TdDistributorGoods>) repository.findAll(ids);
+		}
+		return null;
+	}
 }

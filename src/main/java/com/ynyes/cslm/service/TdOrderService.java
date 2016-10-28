@@ -23,6 +23,8 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdUser;
+import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.repository.TdOrderRepo;
 import com.ynyes.cslm.util.Criteria;
 import com.ynyes.cslm.util.Restrictions;
@@ -60,6 +62,12 @@ public class TdOrderService {
     
     @Autowired
     TdPayRecordService tdPayRecordService;
+    
+    @Autowired
+    TdUserService tdUserService;
+    
+    @Autowired
+    TdUserPointService tdUserPointService;
     
     /**
      * 删除
@@ -450,7 +458,10 @@ public class TdOrderService {
     		c.add(Restrictions.lte("orderTime", endTime, true));
     	}
     	if(null != keywords && !keywords.isEmpty()){
-    		c.add(Restrictions.or(Restrictions.like("orderNumber", keywords, true),Restrictions.like("username", keywords, true)));
+    		c.add(Restrictions.or(Restrictions.like("orderNumber", keywords, true),
+    							  Restrictions.like("username", keywords, true),
+    							  Restrictions.like("shopTitle", keywords, true),
+    							  Restrictions.like("providerTitle", keywords, true)));
     	}
     	
     	return repository.findAll(c,pageRequest);
@@ -568,11 +579,13 @@ public class TdOrderService {
     																						keywords, statusId, typeId, time, pageRequest);
     }
     
-    public List<TdOrder> searchOrderGoods(Long shopId,Long providerId, String type,Long statusId, Date begin, Date end
-    		//,int page,
-			//int size
+    public List<TdOrder> searchOrderGoods(Long shopId,
+    		Long providerId, 
+    		Long shipAddressId,
+    		String type,
+    		Long statusId, 
+    		Date begin, Date end
     		) {
-	//	PageRequest pageRequest = new PageRequest(page, size, new Sort(Direction.DESC, "orderTime"));
 		Criteria<TdOrder> c = new Criteria<>();
 		if(null != shopId)
 		{
@@ -581,6 +594,9 @@ public class TdOrderService {
 		if(null != providerId)
 		{
 			c.add(Restrictions.eq("providerId", providerId, true));
+		}
+		if(null != shipAddressId){
+			c.add(Restrictions.eq("shipAddressId", shipAddressId, true));
 		}
 		if(null != type)
 		{
@@ -601,6 +617,7 @@ public class TdOrderService {
 		if (end != null) {
 			c.add(Restrictions.lte("orderTime", end, true));
 		}
+		
 		return repository.findAll(c);
 	}
     
@@ -804,11 +821,51 @@ public class TdOrderService {
 		record.setRealPrice(servicePrice + aliPrice);
 
 		tdPayRecordService.save(record);
+		
+		TdUser user = tdUserService.findByUsername(tdOrder.getUsername());
+		
+		if(null != user){
+			if(null == user.getTotalSpendCash()){
+				user.setTotalSpendCash(price);
+			}else{
+				user.setTotalSpendCash(user.getTotalSpendCash() + price);
+			}
+			tdUserService.save(user);
+		}
 	}
     
     
     
-    
+    // 添加会员积分
+  	public void addUserPoint(TdOrder order,String username){
+  		
+  		TdUser user = tdUserService.findByUsername(username);
+  		
+  		 // 添加积分使用记录
+  		 if (null != user) {
+  			 if (null == user.getTotalPoints())
+  			 {
+  				 user.setTotalPoints(0L);
+  				 user = tdUserService.save(user);
+  			 }
+  		
+  			 if(null != order.getTotalPrice()){
+ 				 Long turnPoint = Math.round(order.getTotalPrice());
+  				 
+ 				 TdUserPoint userPoint = new TdUserPoint();
+ 				 userPoint.setDetail("购买商品获得积分");
+ 				 userPoint.setOrderNumber(order.getOrderNumber());
+ 				 userPoint.setPoint(turnPoint);
+ 				 userPoint.setPointTime(new Date());
+ 				 userPoint.setUsername(username);
+ 				 userPoint.setTotalPoint(user.getTotalPoints() + turnPoint);
+ 				 tdUserPointService.save(userPoint);
+ 				 
+ 				 user.setTotalPoints(user.getTotalPoints() + turnPoint);
+ 				 tdUserService.save(user);
+ 			 }
+  		 }
+  	}
     
     
     

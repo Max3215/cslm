@@ -208,6 +208,11 @@ public class TdManagerSettingController {
                 btnDeleteSuggesiton( listId, listChkId);
                 tdManagerLogService.addLog("delete", "删除投诉", req);
             }
+            else if (__EVENTTARGET.equalsIgnoreCase("btnVerify"))
+            {
+                btnEditSuggesiton( listId, listChkId);
+                tdManagerLogService.addLog("delete", "处理投诉", req);
+            }
             
         }
   
@@ -236,7 +241,8 @@ public class TdManagerSettingController {
         return "/site_mag/suggestion_list";
     }
     
-    /**
+
+	/**
      * 后台“车友还想团购”查看页面跳转
      * @author Zhangji
      * 
@@ -518,7 +524,7 @@ public class TdManagerSettingController {
     public void getModel(@RequestParam(value = "id", required = false) Long id,
                             @RequestParam(value = "serviceItemId", required = false) Long serviceItemId,
                             Model model) {
-    	System.err.println(id);
+  
         if (null != id) {
         	model.addAttribute("tdSetting", tdSettingService.findOne(id));
         }
@@ -655,10 +661,6 @@ public class TdManagerSettingController {
     
     /**
      * 删除投诉
-     * @author Zhangji
-     * 2015年7月30日13:29:18
-     * @param ids
-     * @param chkIds
      */
     private void btnDeleteSuggesiton(Long[] ids, Integer[] chkIds)
     {
@@ -678,6 +680,27 @@ public class TdManagerSettingController {
             }
         }
     }
+    
+    private void btnEditSuggesiton(Long[] ids, Integer[] chkIds) {
+    	if (null == ids || null == chkIds
+                || ids.length < 1 || chkIds.length < 1)
+        {
+            return;
+        }
+        
+        for (int chkId : chkIds)
+        {
+            if (chkId >=0 && ids.length > chkId)
+            {
+                Long id = ids[chkId];
+                
+                TdUserSuggestion suggestion = tdUserSuggestionService.findOne(id);
+                suggestion.setStatus(2);
+                tdUserSuggestionService.save(suggestion);
+            }
+        }
+		
+	}
     
     public Boolean download(HSSFWorkbook wb, String exportUrl,String name, HttpServletResponse resp){
    	 try  

@@ -12,11 +12,15 @@
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 <!--<link href="css/member.css" rel="stylesheet" type="text/css" />-->
 <script src="/client/js/jquery-1.9.1.min.js"></script>
-<script src="/client/js/distributor_goods.js"></script>
 <script src="/client/js/mymember.js"></script>
+
+<script src="/client/js/distributor_goods.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function(){
+	searchCart();
+
   $(".click_a").click(function(){
     if($(this).next().is(":visible")==false){
       $(this).next().slideDown(300);
@@ -32,8 +36,6 @@ $(document).ready(function(){
     $(this).next().hide();
   })
 })
-
-
 
 </script>
 <!--[if IE]>
@@ -59,7 +61,7 @@ DD_belatedPNG.fix('.,img,background');
     background: url(/client/images/win_outbd.png);
 }
 .win_out dl{
-    background: #39BEE9;
+    background: #fff;
     margin: auto;
     width: 450px;
     height:140px;
@@ -190,8 +192,9 @@ $(document).ready(function(){
                         <label>支付密码：</label>
                         <input class="text" id="payPwd" type="password" name="payPassword"  value="" />
                     </div>
-                        <input style="margin-top: 30px;float: left;margin-left: 30px;" class="submit" type="submit" name="password"  value="确定"  />
-                        <span style="margin-top: 30px;float: right;margin-right: 30px;" onclick="win_hide();">取消</span>
+                        <input style="margin-top: 20px;float: left;margin-left: 30px;background: #ff5b7d;" class="submit" type="submit" name="password"  value="确定"  />
+                        <span style="margin-top: 20px;float: right;margin-right: 30px;background: #39bee9;" onclick="win_hide();">取消</span>
+                		<dd><a href="/distributor/retrieve_step1" style="display:block;margin:10px 0 10px 28px;">忘记密码</a></dd>
                 </form>
             </dd>
         </dl>
@@ -218,39 +221,12 @@ $(document).ready(function(){
   <div class="myclear"></div>
 </div>
 <!--mymember END-->
-
-     <aside class="sub_form">
-        <p class="tit">进货清单<a  onclick="$('.sub_form').css('display','none')">×</a></p>
-        <div class="info_tab">
-          <table>
-                <input type="hidden" id="goodsId" name="goodsId"/>
-                <input type="hidden" id="leftNumber" name="leftNumber">
-            <tr>
-              <th>商品名称：</th>
-              <td><input type="text" class="add_width" name="goodsTitle" id="goodsTitle" readonly="readonly"></td>
-            </tr>
-            <tr>
-              <th>商品副标题：</th>
-              <td><input type="text" class="add_width" name="subGoodsTitle" id="subTitle" readonly="readonly"></td>
-            </tr>
-             <tr>
-              <th>批发价：</th>
-              <td><input type="text" name="goodsMarketPrice" readonly="readonly" id="outFactoryPrice" ></td>
-            </tr>
-             <tr>
-              <th>供货商：</th>
-              <td><input type="text" name="providerTitle" class="add_width" readonly="readonly" id="providerTitle"></td>
-            </tr>
-            <tr>
-              <th>进货数量：</th>
-              <td><input type="number" name="shopReturnRation"  id="quantity" min="1" ></td>
-            </tr>
-            <tr>
-              <th></th>
-              <td><input type="submit" class="sub" onclick="addGoods();" value="确认提交"></td>
-            </tr>
-          </table>
-        </div>
+	
+	<aside class="sub_form" style="display:none" id="detail_div">
+    	<#include "/client/distributor_ingoods_progoods.ftl">
+  	</aside>
+     <aside class="sub_form" style="display:none">
+        
       </aside>
 
 

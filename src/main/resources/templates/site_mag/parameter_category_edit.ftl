@@ -51,7 +51,21 @@ function change2cn(en, cninput) {
     var channel_name = "news_";
     cninput.value = channel_name + getSpell(en, "");
 }
-   
+
+function cateChange(){
+	var categoryId = $("#proCatId").val();
+	var url = "/Verwalter/parameter/category/subCate";
+	var loadData ={"categoryId":categoryId};
+	$("#two_div").load(url,loadData);
+	var url = "/Verwalter/parameter/category/check?parentId=" + categoryId + "<#if cat??>&id=${cat.id?c}</#if>";
+    $("#idCatTitle").attr("ajaxurl", url);
+}
+
+function twoChange(){
+	var categoryId = $("#twoCat").val();
+	var url = "/Verwalter/parameter/category/check?parentId=" + categoryId + "<#if cat??>&id=${cat.id?c}</#if>";
+    $("#idCatTitle").attr("ajaxurl", url);
+}  
 </script>
 
 <body class="mainbody"><form method="post" action="/Verwalter/parameter/category/save" id="form1">
@@ -86,16 +100,27 @@ function change2cn(en, cninput) {
   <dl>
     <dt>所属父类别</dt>
     <dd>
-      <div class="rule-single-select single-select">
-        <select id="proCatId" name="parentId">
+      <div style="float:left;">
+        <select id="proCatId" name="parentId" onchange="cateChange()">
             <option value="" <#if cat?? && cat.parentId?? && cat.parentId==0>selected="selected"</#if>>无父级分类</option>
         	<#if category_list??>
         	   <#list category_list as c>
-        	       <option value="${c.id?c!""}" <#if cat?? && cat.parentId?? && cat.parentId==c.id || fatherCat?? && fatherCat.id==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+        	       <option value="${c.id?c!""}" <#if cat?? && cat.parentTree?? && cat.parentTree?contains("["+c.id+"]")>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
         	   </#list>
         	</#if>
         </select>
       </div>
+	  
+      <div style="float:left;" id="two_div">
+        	<#include "/site_mag/paramter_category_two.ftl">
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>类别名称</dt>
+    <dd>
+        <input id="idCatTitle" name="title" type="text" value="<#if cat??>${cat.title!""}</#if>" class="input normal" datatype="*1-100" sucmsg=" " ajaxurl="/Verwalter/parameter/category/check<#if cat??>?id=${cat.id?c}<#elseif fatherCat??>?parentId=${fatherCat.id?c}</#if>" >
+        <span class="Validform_checktip">*类别中文名称，100字符内</span>
     </dd>
   </dl>
   <dl>
@@ -103,14 +128,6 @@ function change2cn(en, cninput) {
     <dd>
       <input name="sortId" type="text" value="<#if cat??>${cat.sortId!"99"}<#else>99</#if>" id="txtSortId" class="input small" datatype="n" sucmsg=" ">
       <span class="Validform_checktip">*数字，越小越向前</span>
-    </dd>
-  </dl>
-  
-  <dl>
-    <dt>类别名称</dt>
-    <dd>
-        <input id="idCatTitle" name="title" type="text" value="<#if cat??>${cat.title!""}</#if>" class="input normal" datatype="*1-100" sucmsg=" " ajaxurl="/Verwalter/parameter/category/check<#if cat??>?id=${cat.id?c}<#elseif fatherCat??>?parentId=${fatherCat.id?c}</#if>" >
-        <span class="Validform_checktip">*类别中文名称，100字符内</span>
     </dd>
   </dl>
   <#--

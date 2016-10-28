@@ -16,6 +16,7 @@
 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="${__EVENTTARGET!""}">
 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="${__EVENTARGUMENT!""}">
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="${__VIEWSTATE!""}" >
+<input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
 </div>
 
 <script type="text/javascript">
@@ -27,6 +28,21 @@ var theForm = document.forms['form1'];
         if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
             theForm.__EVENTTARGET.value = eventTarget;
             theForm.__EVENTARGUMENT.value = eventArgument;
+            
+            if(null != eventTarget && eventTarget=="oneCat")
+		    {
+		        // theForm.categoryId.value = $("#oneCat").val(); 
+		        $("#categoryId").val($("#oneCat").val());
+		    }else if(null != eventTarget && eventTarget=="twoCat")
+		    {
+		       // theForm.categoryId.value =  $("#twoCat").val();
+		       $("#categoryId").val($("#twoCat").val());
+		    }else if(null != eventTarget && eventTarget=="categoryId")
+		    {
+		         // theForm.categoryId.value = $("#categoryId").val();
+		        $("#categoryId").val($("#category").val());
+		    }
+            
             theForm.submit();
         }
     }
@@ -51,6 +67,38 @@ var theForm = document.forms['form1'];
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>
+    </div>
+    <div class="menu-list">
+        <div class="rule-single-select">
+             <select id="oneCat" onchange="javascript:setTimeout(__doPostBack('oneCat',''), 0)">
+                <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
+                <#if category_list??>
+                    <#list category_list as c>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
+        <div class="rule-single-select">
+             <select id="twoCat" onchange="javascript:setTimeout(__doPostBack('twoCat',''), 0)">
+                <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
+                <#if cateList??>
+                    <#list cateList as c>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
+        <div class="rule-single-select">
+             <select id="category" onchange="javascript:setTimeout(__doPostBack('categoryId',''), 0)">
+                <option <#if !category??>selected="selected"</#if> value="">所有类别</option>
+                <#if categoryList??>
+                    <#list categoryList as c>
+                        <option value="${c.id?c}" <#if category?? && category.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
     </div>
     <div class="r-list">
       <input name="keywords" type="text" class="keyword" value="${keywords!""}">

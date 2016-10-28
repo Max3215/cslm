@@ -58,6 +58,17 @@ function __doPostBack(eventTarget, eventArgument) {
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>
+      <div class="menu-list">
+        <div class="rule-single-select">
+             <select id="oneCat" name="parentId" onchange="javascript:setTimeout(__doPostBack('oneCat',''), 0)">
+                <option <#if !parentid??>selected="selected"</#if> value="">所有类别</option>
+                <#if category_list??>
+                    <#list category_list as c>
+                        <option value="${c.id?c}" <#if parameter?? && parameter.parentTree?contains("["+c.id?c+"]")>selected="selected"</#if>>${c.title!""}</option>
+                    </#list>
+                </#if>
+            </select>
+        </div>
     </div>
     <div class="r-list">
           <input name="keywords" type="text" value="${keywords!''}" class="keyword">

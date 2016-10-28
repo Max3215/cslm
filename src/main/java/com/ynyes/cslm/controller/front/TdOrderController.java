@@ -16,11 +16,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
@@ -40,7 +40,6 @@ import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.cslm.payment.alipay.core.AlipayConfirmGoods;
 import com.cslm.payment.alipay.core.AlipayConfirmGoodsHandler;
 import com.cslm.payment.alipay.core.AlipayNotify;
-import com.ynyes.cslm.dao.MD5;
 import com.ynyes.cslm.dao.WxPayReturnData;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdCash;
@@ -55,6 +54,7 @@ import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdProviderGoods;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdCartGoodsService;
@@ -73,12 +73,11 @@ import com.ynyes.cslm.service.TdProviderGoodsService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdShippingAddressService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.service.TdWeiXinPayService;
 import com.ynyes.cslm.util.QRCodeUtils;
-
-import net.sf.json.JSONObject;
 
 /**
  * 订单
@@ -151,12 +150,9 @@ public class TdOrderController extends AbstractPaytypeController {
 	@Autowired
 	private TdWeiXinPayService tdWeiXinPayService;
 
-	// @Autowired
-	// private PaymentChannelCEB payChannelCEB;
-	//
-//	 @Autowired
-//	 private PaymentChannelAlipay paymentChannelAlipay;
-
+	@Autowired
+	private TdSpecificatService tdSpecificatService;
+	
 
 	@RequestMapping(value = "/info")
 	public String orderInfo(Long code, HttpServletRequest req, HttpServletResponse resp, ModelMap map) {
@@ -175,6 +171,7 @@ public class TdOrderController extends AbstractPaytypeController {
 			for (TdCartGoods cartGoods : cartGoodsList) {
 				cartGoods.setUsername(username);
 				cartGoods.setIsLoggedIn(true);
+				cartGoods.setIsSelected(false);
 			}
 			tdCartGoodsService.save(cartGoodsList);
 		}
@@ -254,68 +251,56 @@ public class TdOrderController extends AbstractPaytypeController {
 		return "/client/order_info";
 	}
 
-	/**
-	 * 购物车数量加减
-	 * 
-	 * @param req
-	 * @param resp
-	 * @param type
-	 *            加减标志位
-	 * @param gid
-	 *            商品ID
-	 * @param map
-	 * @return
-	 */
-	@RequestMapping(value = "/goods/{type}")
-	public String orderEdit(HttpServletRequest req, HttpServletResponse resp, @PathVariable String type, Long gid,
-			ModelMap map) {
-		String username = (String) req.getSession().getAttribute("username");
-
-		if (null == username) {
-			return "redirect:/login";
-		}
-
-		// 把所有的购物车项转到该登陆用户下
-		List<TdCartGoods> cgList = tdCartGoodsService.findByUsernameAndIsSelectedTrue(username);
-
-		if (null != cgList && null != type && null != gid) {
-			for (TdCartGoods cg : cgList) {
-				if (gid.equals(cg.getGoodsId())) {
-					TdGoods goods = tdGoodsService.findOne(cg.getGoodsId());
-
-					if (null != goods) {
-						if (type.equalsIgnoreCase("plus")) {
-							// 闪购
-							if (goods.getIsFlashSale() && goods.getFlashSaleStartTime().before(new Date())
-									&& goods.getFlashSaleStopTime().after(new Date())
-									&& cg.getPrice().equals(goods.getFlashSalePrice())) {
-								if (cg.getQuantity().compareTo(goods.getFlashSaleLeftNumber()) < 0) {
-									cg.setQuantity(cg.getQuantity() + 1L);
-								}
-							} else {
-								if (cg.getQuantity().compareTo(goods.getLeftNumber()) < 0) {
-									cg.setQuantity(cg.getQuantity() + 1L);
-								}
-							}
-						} else {
-							if (cg.getQuantity().compareTo(1L) > 0) {
-								cg.setQuantity(cg.getQuantity() - 1L);
-							}
-						}
-
-						tdCartGoodsService.save(cg);
-						break;
-					}
-				}
-			}
-		}
-		//
-		// List<TdCartGoods> selectedGoodsList =
-		// tdCartGoodsService.findByUsernameAndIsSelectedTrue(username);
-		// map.addAttribute("selected_goods_list", selectedGoodsList);
-
-		return "redirect:/order/info";
-	}
+//	/**
+//	 * 购物车数量加减
+//	 * 
+//	 */
+//	@RequestMapping(value = "/goods/{type}")
+//	public String orderEdit(HttpServletRequest req, HttpServletResponse resp, @PathVariable String type, Long gid,
+//			ModelMap map) {
+//		String username = (String) req.getSession().getAttribute("username");
+//
+//		if (null == username) {
+//			return "redirect:/login";
+//		}
+//
+//		// 把所有的购物车项转到该登陆用户下
+//		List<TdCartGoods> cgList = tdCartGoodsService.findByUsernameAndIsSelectedTrue(username);
+//
+//		if (null != cgList && null != type && null != gid) {
+//			for (TdCartGoods cg : cgList) {
+//				if (gid.equals(cg.getGoodsId())) {
+//					TdGoods goods = tdGoodsService.findOne(cg.getGoodsId());
+//
+//					if (null != goods) {
+//						if (type.equalsIgnoreCase("plus")) {
+//							// 闪购
+//							if (goods.getIsFlashSale() && goods.getFlashSaleStartTime().before(new Date())
+//									&& goods.getFlashSaleStopTime().after(new Date())
+//									&& cg.getPrice().equals(goods.getFlashSalePrice())) {
+//								if (cg.getQuantity().compareTo(goods.getFlashSaleLeftNumber()) < 0) {
+//									cg.setQuantity(cg.getQuantity() + 1L);
+//								}
+//							} else {
+//								if (cg.getQuantity().compareTo(goods.getLeftNumber()) < 0) {
+//									cg.setQuantity(cg.getQuantity() + 1L);
+//								}
+//							}
+//						} else {
+//							if (cg.getQuantity().compareTo(1L) > 0) {
+//								cg.setQuantity(cg.getQuantity() - 1L);
+//							}
+//						}
+//
+//						tdCartGoodsService.save(cg);
+//						break;
+//					}
+//				}
+//			}
+//		}
+//
+//		return "redirect:/order/info";
+//	}
 
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	public String submit(Long addressId, // 送货地址
@@ -465,6 +450,11 @@ public class TdOrderController extends AbstractPaytypeController {
 
 				// 单位
 				orderGoods.setUnit(distributorGoods.getUnit());
+				
+				// 规格
+				orderGoods.setSpecId(cartGoods.getSpecificaId());
+				orderGoods.setSpecName(cartGoods.getSpecName());
+				
 				// 数量
 				long quantity = Math.min(cartGoods.getQuantity(), distributorGoods.getLeftNumber());
 
@@ -517,6 +507,19 @@ public class TdOrderController extends AbstractPaytypeController {
 				if (!distributorGoods.getIsDistribution()) {
 					// 更新库存
 					Long leftNumber = distributorGoods.getLeftNumber();
+					
+					if(null != cartGoods.getSpecificaId()){
+						TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
+						if(null != specificat && null != specificat.getLeftNumber()){
+							if(specificat.getLeftNumber() >= quantity){
+								specificat.setLeftNumber(specificat.getLeftNumber()-quantity);
+							}else{
+								specificat.setLeftNumber(0L);
+							}
+							tdSpecificatService.save(specificat);
+						}
+					}
+					
 					if (leftNumber >= quantity) {
 						leftNumber = leftNumber - quantity;
 					}
@@ -526,6 +529,35 @@ public class TdOrderController extends AbstractPaytypeController {
 						distributorGoods.setIsOnSale(false);
 					}
 				} else {
+					
+					if(null != cartGoods.getSpecificaId()){
+						TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
+						// 如果有规格
+						if(null != specificat && null != specificat.getOldId()){
+							// 更新分销商规格记录
+							TdSpecificat spec = tdSpecificatService.findOne(specificat.getOldId());
+							if(spec.getLeftNumber() >= quantity){
+								spec.setLeftNumber(spec.getLeftNumber()-quantity);
+							}else{
+								spec.setLeftNumber(0L);
+							}
+							tdSpecificatService.save(spec);
+							
+							// 更新代理商品规格
+							List<TdSpecificat> list = tdSpecificatService.findByOldId(specificat.getOldId());
+							if(null != list && list.size() > 0){
+								for (TdSpecificat tdSpecificat : list) {
+									if(tdSpecificat.getLeftNumber() >= quantity){
+										tdSpecificat.setLeftNumber(tdSpecificat.getLeftNumber()-quantity);
+									}else{
+										tdSpecificat.setLeftNumber(0L);
+									}
+								}
+								tdSpecificatService.save(list);
+							}
+						}
+					}
+					
 					TdProviderGoods providerGoods = tdProviderGoodsService.findByProviderIdAndGoodsId(
 							distributorGoods.getProviderId(), distributorGoods.getGoodsId());
 					providerGoods.setLeftNumber(providerGoods.getLeftNumber() - quantity);
@@ -653,6 +685,7 @@ public class TdOrderController extends AbstractPaytypeController {
 							tdOrder.setShipMobile(shippingAddress.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(shippingAddress.getReceiverName());
 							tdOrder.setDeliveryPerson(appenAddress(shippingAddress).toString());
+							tdOrder.setShipAddressId(shipAddressId);
 						}
 					} 
 					else if (list.size() > 1) // 多家超市
@@ -671,8 +704,8 @@ public class TdOrderController extends AbstractPaytypeController {
 							tdOrder.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
 							tdOrder.setShipMobile(newShipping.getReceiverMobile()); // 添加自提点联系方式
 							tdOrder.setShipAddressTitle(newShipping.getReceiverName());
-							
 							tdOrder.setDeliveryPerson(appenAddress(newShipping).toString());
+							tdOrder.setShipAddressId(newShipping.getId());
 						} else {
 							tdOrder.setShippingAddress(newAddress.toString()); // 超市地址
 							tdOrder.setShipAddressTitle(distributor.getTitle()); // 超市名称
@@ -852,6 +885,7 @@ public class TdOrderController extends AbstractPaytypeController {
 							order.setShipAddress(appenAddress(shippingAddress).toString()); // 添加自提点地址
 							order.setShipMobile(shippingAddress.getReceiverMobile()); // 添加自提点联系方式
 							order.setShipAddressTitle(shippingAddress.getReceiverName());
+							order.setShipAddressId(shippingAddress.getId());
 						}
 					} 
 					else if (list.size() > 1) // 多家超市
@@ -870,6 +904,7 @@ public class TdOrderController extends AbstractPaytypeController {
 							order.setShipAddress(appenAddress(newShipping).toString()); // 添加自提点地址
 							order.setShipMobile(newShipping.getReceiverMobile()); // 添加自提点联系方式
 							order.setShipAddressTitle(newShipping.getReceiverName());
+							order.setShipAddressId(newShipping.getId());
 						} else {
 							// 超市未设置自提点 取超市地址
 							StringBuffer newAddress = new StringBuffer();
@@ -1476,54 +1511,54 @@ public class TdOrderController extends AbstractPaytypeController {
 		return "/client/order_pay_failed";
 	}
 
-	/*
-	 * 
-	 */
-	@RequestMapping(value = "/pay/result_cebpay")
-	public String payResultCEBPay(ModelMap map, HttpServletRequest req, HttpServletResponse resp) {
-		tdCommonService.setHeader(map, req);
-
-		String plainData = req.getParameter("Plain");
-		String signature = req.getParameter("Signature");
-
-		// 计算得出通知验证结果
-		boolean verify_result = CebMerchantSignVerify.merchantVerifyPayGate_ABA(signature, plainData);
-		String plainObjectStr = "";
-
-		if (plainData.endsWith("~|~")) {
-			plainObjectStr = plainData.substring(0, plainData.length() - 3);
-		}
-
-		plainObjectStr = plainObjectStr.replaceAll("=", "\":\"").replaceAll("~\\|~", "\",\"");
-		plainObjectStr = "{\"" + plainObjectStr + "\"}";
-
-		JSONObject paymentResult = JSONObject.fromObject(plainObjectStr);
-
-		String orderNo = paymentResult.getString("orderId");
-		orderNo = (orderNo == null) ? ""
-				: (orderNo.length() < 6) ? orderNo : orderNo.substring(0, orderNo.length() - 6);
-		TdOrder order = tdOrderService.findByOrderNumber(orderNo);
-		if (order == null) {
-			// 订单不存在
-			return "/client/order_pay_failed";
-		}
-
-		map.put("order", order);
-
-		if (verify_result) {// 验证成功
-			String trade_status = paymentResult.getString("respCode");
-			if ("".equals(trade_status) || "AAAAAAA".equals(trade_status)) {
-				// 订单支付成功
-
-				afterPaySuccess(order);
-
-				return "/client/order_pay_success";
-			}
-
-		}
-		// 验证失败或者支付失败
-		return "/client/order_pay_failed";
-	}
+//	/*
+//	 * 
+//	 */
+//	@RequestMapping(value = "/pay/result_cebpay")
+//	public String payResultCEBPay(ModelMap map, HttpServletRequest req, HttpServletResponse resp) {
+//		tdCommonService.setHeader(map, req);
+//
+//		String plainData = req.getParameter("Plain");
+//		String signature = req.getParameter("Signature");
+//
+//		// 计算得出通知验证结果
+//		boolean verify_result = CebMerchantSignVerify.merchantVerifyPayGate_ABA(signature, plainData);
+//		String plainObjectStr = "";
+//
+//		if (plainData.endsWith("~|~")) {
+//			plainObjectStr = plainData.substring(0, plainData.length() - 3);
+//		}
+//
+//		plainObjectStr = plainObjectStr.replaceAll("=", "\":\"").replaceAll("~\\|~", "\",\"");
+//		plainObjectStr = "{\"" + plainObjectStr + "\"}";
+//
+//		JSONObject paymentResult = JSONObject.fromObject(plainObjectStr);
+//
+//		String orderNo = paymentResult.getString("orderId");
+//		orderNo = (orderNo == null) ? ""
+//				: (orderNo.length() < 6) ? orderNo : orderNo.substring(0, orderNo.length() - 6);
+//		TdOrder order = tdOrderService.findByOrderNumber(orderNo);
+//		if (order == null) {
+//			// 订单不存在
+//			return "/client/order_pay_failed";
+//		}
+//
+//		map.put("order", order);
+//
+//		if (verify_result) {// 验证成功
+//			String trade_status = paymentResult.getString("respCode");
+//			if ("".equals(trade_status) || "AAAAAAA".equals(trade_status)) {
+//				// 订单支付成功
+//
+//				afterPaySuccess(order);
+//
+//				return "/client/order_pay_success";
+//			}
+//
+//		}
+//		// 验证失败或者支付失败
+//		return "/client/order_pay_failed";
+//	}
 
 	
 	@RequestMapping(value = "/payqrcode", method = RequestMethod.GET)
@@ -1537,6 +1572,7 @@ public class TdOrderController extends AbstractPaytypeController {
 		String url = (String) request.getSession().getAttribute("WXPAYURLSESSEION");
 		qr.getQRCode(url, 300, response);
 	}
+	
 	@RequestMapping(value = "/remind", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> remind(Long id, HttpServletRequest req) {
@@ -1565,27 +1601,27 @@ public class TdOrderController extends AbstractPaytypeController {
 		return "/client/order_pay_success";
 
 	}
-	/**
-	 * 订单支付成功后步骤
-	 * 
-	 * @param tdOrder
-	 *            订单
-	 */
-	private void afterPaySuccess(TdOrder tdOrder) {
-		if (null == tdOrder) {
-			return;
-		}
-
-		// 用户
-		// TdUser tdUser = tdUserService.findByUsername(tdOrder.getUsername());
-
-		if (tdOrder.getStatusId().equals(2L)) {
-			// 待发货
-			tdOrder.setStatusId(3L);
-			tdOrder = tdOrderService.save(tdOrder);
-		}
-		tdOrderService.addVir(tdOrder);
-	}
+//	/**
+//	 * 订单支付成功后步骤
+//	 * 
+//	 * @param tdOrder
+//	 *            订单
+//	 */
+//	private void afterPaySuccess(TdOrder tdOrder) {
+//		if (null == tdOrder) {
+//			return;
+//		}
+//
+//		// 用户
+//		// TdUser tdUser = tdUserService.findByUsername(tdOrder.getUsername());
+//
+//		if (tdOrder.getStatusId().equals(2L)) {
+//			// 待发货
+//			tdOrder.setStatusId(3L);
+//			tdOrder = tdOrderService.save(tdOrder);
+//		}
+//		tdOrderService.addVir(tdOrder);
+//	}
 
 	/**
 	 * 立即购买
@@ -1600,7 +1636,7 @@ public class TdOrderController extends AbstractPaytypeController {
 		String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
-			return "redirect:/login";
+			return "redirect:/login?goodsId="+dGoodsId;
 		}
 		if (null == quantity) {
 			quantity = 1L;
@@ -1660,7 +1696,7 @@ public class TdOrderController extends AbstractPaytypeController {
 		String username = (String) req.getSession().getAttribute("username");
 
 		if (null == username) {
-			return "redirect:/login";
+			return "redirect:/login?goodsId="+dGoodsId;
 		}
 
 		tdCommonService.setHeader(map, req);

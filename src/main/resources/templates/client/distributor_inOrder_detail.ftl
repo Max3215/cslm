@@ -190,7 +190,7 @@ DD_belatedPNG.fix('.,img,background');
             <tr class="mymember_infotab_tit01">
                   <th colspan="2">订单信息</th>
                   <th width="70">收货人</th>
-                  <th width="80">商品单价/th>
+                  <th width="80">商品单价</th>
                   <th>数量</th>
                   <th width="80">时间</th>
                   <th width="80">状态</th>
@@ -201,8 +201,9 @@ DD_belatedPNG.fix('.,img,background');
                 <td width="60" class="td001">
                     <a href=""><img src="${og.goodsCoverImageUri}" /></a>
                 </td>
-                <td>
-                    <a href="">${og.goodsTitle}</a>
+                <td style="text-align: left;">
+                    <a>${og.goodsTitle}</a>
+                    <#if og.specName??><p style="color:#999;">规格：${og.specName!''}</p></#if>
                 </td>
                 <td>
                     ${order.shippingName!''}

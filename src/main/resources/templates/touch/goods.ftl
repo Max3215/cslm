@@ -17,137 +17,14 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/layer/layer.js"></script>
+<script src="/touch/js/goods.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	indexBanner("pro_box","pro_sum",300,5000,"pro_num");//Banner
   menuCheckShow("check_menu","a","check_con",".text","act","")//选项卡
 });
 
-// 收藏商品
-function addCollect(goodsId)
-{
-    if (undefined == goodsId)
-    {
-        return;
-    }
-    
-    $.ajax({
-        type:"post",
-        url:"/touch/user/collect/add",
-        data:{"disgId": goodsId},
-        dataType: "json",
-        success:function(res){
-            // 需登录
-            if (res.code==1)
-            {
-                alert(res.message);
-                setTimeout(function(){
-                    window.location.href = "/touch/login";
-                }, 1000); 
-            }
-        }
-    });
-}
-// 收藏店铺
-function collectShop(disId){
-    if(undefined == disId){
-        return ;
-    }
-    
-    $.ajax({
-        type:"post",
-        url:"/touch/user/collect/shop",
-        data:{"disId": disId},
-        dataType: "json",
-        success:function(res){
-            alert(res.message);
-            // 需登录
-            if (res.code==1)
-            {
-                setTimeout(function(){
-                    window.location.href = "/touch/login";
-                }, 1000); 
-            }
-        }
-    });
-    
-}
-<!-- 减少商品数量的方法 -->
-function minusNum(){
-    var q = parseInt($("#quantity").val());
-        
-    if (q > 1){
-        $("#quantity").val(q-1);
-        $("#number").val(q-1);
-    }
-    $("#addCart").attr("href", "/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
-}
-
-function addNum(){
-    var q = parseInt($("#quantity").val());
-    var ln = parseInt($("#leftNumber").val());
-//    <#if dis_goods?? && dis_goods.leftNumber??>
-        if (q < ln)
-        {
-            $("#quantity").val(q+1);
-        }
-        else
-        {
-            alert("已达到库存最大值");
-        }
-//   <#else>
-//        $("#quantity").val(q+1);
-//        $("#number").val(q+1);
- //  </#if>
-    $("#addCart").attr("href", "/touch/cart/init?id=${dis_goods.id?c}&quantity=" + $("#quantity").val());
-}
-
-<!--  加入购物车   -->
-function cartInit(dId){
-    var quantity = document.getElementById("quantity").value;
-    if(quantity==0){
-        return;
-    }
- <!--   var newTab=window.open('about:blank');-->
-    $.ajax({
-        type: "get",
-        url: "/touch/goods/incart",
-        data: {"id":dId,"quantity":quantity},
-        success: function (data) { 
-            if(data.msg){
-                alert(data.msg);
-                return;
-            }
-            window.location.href="/touch/cart/init?id="+dId+"&quantity="+quantity;
-        }
-    });
-}
-
-<!--  立即购买   -->
-function byNow(dId){
-    var quantity = document.getElementById("quantity").value;
-    var leftNumber = parseInt($("#leftNumber").val());
-    
-    if(quantity <= 0 || "" == quantity || quantity > leftNumber){
-        alert("请选择正确的数量");
-        return;
-    }
-  //  window.open("/order/byNow/"+dId+"?quantity="+quantity);
-    window.location.href = "/touch/order/byNow/"+dId+"?quantity="+quantity;
-}
-
-
-function proGoods(dId){
-    var quantity = document.getElementById("quantity").value;
-    var leftNumber = parseInt($("#leftNumber").val());
-    
-    if(quantity <= 0 || "" == quantity || quantity > leftNumber){
-        alert("请选择正确的数量");
-        return;
-    }
-  //  window.open("/order/byNow/"+dId+"?quantity="+quantity);
-    window.location.href = "/touch/order/proGoods/"+dId+"?quantity="+quantity;
-}
 </script>
 </head>
 
@@ -156,12 +33,6 @@ function proGoods(dId){
 	<header class="com_top">
 		<a href="javascript:history.go(-1);" class="back"></a>
 		<p>商品详情</p>
-		<!--
-		<div class="search_box">
-          <input type="text" class="text" placeholder="搜索" />  
-        </div>
-		<a href="javascript:void(0)" class="ser" onclick="$('.pop_search').show();"></a>
-        -->
         <a href="/touch/" class="c_home"></a>
 	</header>
 	<div style="height:0.88rem;"></div>
@@ -190,13 +61,22 @@ function proGoods(dId){
       <p class="num">商品编号：${goods.code!''}&nbsp;&nbsp;&nbsp;&nbsp;商品品牌：${goods.brandTitle!''}</p>
       <p class="price">￥<#if dis_goods??>${dis_goods.goodsPrice?string('0.00')}</#if><#if dis_goods.unit??><label style="font-size: 0.3rem;color: #999">/${dis_goods.unit!''}</label></#if><span>￥<#if dis_goods?? && dis_goods.goodsMarketPrice??>${dis_goods.goodsMarketPrice?string('0.00')}<#else>${goods.marketPrice?string("0.00")}</#if></span></p>
        
+       <#if !spec_list?? || spec_list?size == 0> 
        <div class="buy_number" >
           <p class="fl">购买数量（库存${dis_goods.leftNumber?c!'0'}）</p>
-            <a id="id-minus" href="javascript:addNum();">+</a>
+            <a id="id-minus" onclick="addNum();">+</a>
             <input class="text" type="text" id="quantity" value="1" onfocus="if(value=='1'||value=='0') {value='1'}" onblur="checkNumber(this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
-            <a id="id-plus"  href="javascript:minusNum();">-</a>
+            <a id="id-plus" onclick="minusNum();">-</a>
             <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">
         </div>
+        <input type="hidden" value="false" id="isSpec">
+       </#if>
+       
+       
+       <#if spec_list?? && spec_list?size gt 0>
+       <input type="hidden" value="true" id="isSpec">
+    	<a href="javascript:void(0)" class="choose" onclick="$('.pro_eject').fadeIn(300);">选择 规格 数量</a>
+    	</#if>
        
         <div class="sc_shop">
             <p>商品来源：</p>
@@ -213,62 +93,31 @@ function proGoods(dId){
        </div>
        </#if>
     </div>
-    <#--
-    <a href="javascript:void(0)" class="choose" onclick="$('.pro_eject').fadeIn(300);">选择   数量</a>
-    -->
-    
+    <input type="hidden" value="" id="specId">
   </section>
   <!-- 商品信息 END -->
-<script>
-function checkNumber(num)
-{
-    if (num==''|| num=='0') 
-    {
-        $("#quantity").val(1);
-        return ;
-    }
-    // 验证手动输入数量库存
-    $.ajax({
-            type: "get",
-            url: "/goods/incart",
-            data: {"id":${dis_goods.id?c},"quantity":num},
-            success: function (data) { 
-                if(data.code== 0 ){
-                    alert(data.msg);
-                    $("#quantity").val(1);
-                    return;
-                }else{
-                    $("#quantity").val(num);
-                    $("#addCart").attr("href", "/touch/cart/init?id=${dis_goods.id?c}&quantity=" +num);
-                }
-            }
-        });
-}
-
-</script>
   <!-- 选择商品参数弹出 -->
-   <#--<aside class="pro_eject">
+  <#if spec_list?? && spec_list?size gt 0>
+   <aside class="pro_eject">
     <div class="part">
       <a href="javascript:void(0)" class="close" onclick="$(this).parent().parent().fadeOut(300);"></a>
      
-      <dl>
-        <dt>商品来源：</dt>
-        <dd>${dis_goods.distributorTitle!''}</dd>
+       <dl>
+        <dt>选择规格</dt>
+        <#list spec_list as item> 
+        <dd> <a  onclick="chooseSpec($(this),${item.id?c})">${item.specifict!''}</a> </dd>
+        </#list>
       </dl>
-      <dl>
-        <dt>邮费说明</dt>
-        <dd>邮费：${distributor.postPrice?string('0.00')}元/满${distributor.maxPostPrice?string('0.00')}包邮</dd>
-      </dl>
-      
-      <div class="number" style="margin-top: 0.7em;">
-        <span>购买数量（库存：${dis_goods.leftNumber?c!'0'}）</span>
-        <a id="id-minus" href="javascript:addNum();">+</a>
-        <input class="text" type="text" id="quantity" value="1" />
-        <a id="id-plus"  href="javascript:minusNum();">-</a>
+      <div class="number">
+        <span>购买数量<font style="color:#999" id="left_font">（库存：${dis_goods.leftNumber?c!'0'}）</font></span>
+        <a onclick="addNum();">+</a>
+        <input type="text" class="text" value="1" id="quantity" onfocus="if(value=='1'||value=='0') {value='1'}" onblur="checkNumber(this.value)" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
+        <a onclick="minusNum();">-</a>
         <input type="hidden" id="leftNumber" value="${dis_goods.leftNumber?c!'0'}">
       </div>
     </div>
-  </aside>-->
+  </aside>
+  </#if>
   <!-- 选择商品参数弹出 END -->
 
   <!-- 详情和评价 -->
@@ -284,7 +133,8 @@ function checkNumber(num)
         <#if comment_page?? && comment_page.content?size gt 0>
             <#list comment_page.content as item>
               <li>
-                    <p>${item.username!''}<span>${item.commentTime?string("yyyy-MM-dd HH:hh:ss")}</span></p>
+              	<#assign len = item.username?length>	
+                    <p>${item.username?substring(0,2)}****${item.username?substring(len-2,len)}<span>${item.commentTime?string("yyyy-MM-dd HH:hh:ss")}</span></p>
                     <p>${item.content!''}</p>
                     <#if item.isReplied?? && item.isReplied>
                         <p >商家回复：${item.reply!''}</p>
@@ -297,17 +147,39 @@ function checkNumber(num)
     </ul>
   </section>
   <!-- 详情和评价 END -->
-
+  
+	<#if rele_list?? && rele_list?size gt 0>
+  	<section class="product_list">
+  		<p class="top">关联商品</p>
+  	 	<ul id="goods-menu">
+            <#list rele_list as goods>
+            <#if goods_index lt 6>
+        		<li>
+			        <a href="/touch/goods/${goods.id?c}"><img src="${goods.coverImageUri!''}" /></a>
+			        <a href="/touch/goods/${goods.id?c}" class="name">${goods.goodsTitle!""}</a>
+			        <p class="price">¥ ${goods.goodsPrice?string("0.00")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
+			        <div class="bot">
+			        </div>
+		        </li>
+	        </#if>
+            </#list>
+  		</ul>
+  	</section>
+    </#if> 
+	<style>
+		.product_list{margin-top:0.1rem;}
+		.product_list .top{height:0.7rem;background:#fff;padding-left:4%;line-height:0.7rem;color:#ff5b7d;margin-bottom:0.1rem;}
+	</style>
   <!-- 底部 -->
   <div style="height:0.78rem;"></div>
   <section class="pro_foot">
     <a href="javascript:addCollect(${dis_goods.id?c})" <#if collect??>class="ed"</#if> onclick="$(this).toggleClass('ed')"></a>
     <#if dis_goods.isDistribution?? && dis_goods.isDistribution>
-       <a href="javascript:proGoods(${dis_goods.id?c});" target="_blank" title="立即购买" >立即预购</a>
+       <a onclick="byGoodsNow(${dis_goods.id?c})" title="立即购买" >立即预购</a>
    <#else>
-    <a href="javascript:byNow(${dis_goods.id?c});" target="_blank" title="立即购买" >立即购买</a>
+    <a onclick="byGoodsNow(${dis_goods.id?c})" title="立即购买" >立即购买</a>
    </#if>
-    <a href="/touch/cart/init?id=${dis_goods.id?c}"  id="addCart">加入购物车</a>
+    <a onclick="addCart(${dis_goods.id?c});"  id="addCart">加入购物车</a>
   </section>
   <!-- 底部 END -->
   

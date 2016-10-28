@@ -1,6 +1,6 @@
 <div class="mymember_head">
         <h2><a href="/distributor/index"><img src="<#if site??>${site.logoUri!''}</#if>" /></a></h2>
-        <div class="mymember_head_part">
+        <div class="mymember_head_part" style="overflow: hidden;">
             <a class="a001" href="/distributor/index">超市中心</a>
         </div> 
          <div class="mymember_head_part">

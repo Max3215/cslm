@@ -133,7 +133,9 @@ DD_belatedPNG.fix('.,img,background');
                   <tr>
                       <td class="td001">
                           <#list order.orderGoodsList as og>
+                          <#if og_index lt 7>
                                 <a href=""><img src="${og.goodsCoverImageUri!''}" width="50px;" height="50px;" alt="${og.goodsTitle!''}"/></a>
+                          </#if>
                           </#list>
                       </td>
                       <td>${order.username!''}</td>

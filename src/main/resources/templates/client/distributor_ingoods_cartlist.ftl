@@ -16,17 +16,20 @@
                     <#assign totalPrice=0>
                   <#list cart_goods_list as cg>
                     <tr>
-                    <td width="20"><input type="checkbox" onclick="javascript:toggleSelect(${cg.id?c});" <#if cg.isSelected?? && cg.isSelected>checked="checked"<#else><#assign allChecked=false></#if>/></td>
-                    <td width="110"><a><img src="${cg.goodsCoverImageUri!''}" width="100" height="100"/></a></td>
-                    <td width="230" style="text-align:left;"><a >${cg.goodsTitle!''}</a></td>
-                          <td class="red" width="150">￥${cg.price?string("0.00")}</td>
-                          <td width="170" class="num">
-                            <a href="javascript:minusNum(${cg.goodsId?c});"> - </a>
-                            <input class="text" id="number${cg.goodsId?c}" type="text" value="${cg.quantity!''}" onblur="changeNumber(${cg.goodsId?c})"/>
-                            <a href="javascript:addNum(${cg.goodsId?c});"> + </a>
-                          </td>
-                          <td class="red" width="150">￥${(cg.price*cg.quantity)?string("0.00")}</td>
-                          <td><a class="del" href="javascript:delCartItem(${cg.id?c});">删除</a></td>
+                    	<td width="20"><input type="checkbox" onclick="javascript:toggleSelect(${cg.id?c});" <#if cg.isSelected?? && cg.isSelected>checked="checked"<#else><#assign allChecked=false></#if>/></td>
+                    	<td width="110"><a><img src="${cg.goodsCoverImageUri!''}" width="100" height="100"/></a></td>
+                    	<td width="230" style="text-align:left;">
+                    		<a >${cg.goodsTitle!''}</a>
+                    		<#if cg.specName??><p style="color:#999;">规格：${cg.specName!''}</p></#if>
+                   		</td>
+                      	<td class="red" width="150">￥${cg.price?string("0.00")}</td>
+                      	<td width="170" class="num">
+                            <a onclick="minusNum(${cg.id?c});"> - </a>
+                            <input class="text" type="text" onblur="changeNumber(this.value,${cg.id?c})" value="${cg.quantity!''}" onkeyup="value=value.replace(/[^0-9]/g,'')"/>
+                            <a onclick="addNum(${cg.id?c});"> + </a>
+                      	</td>
+                      	<td class="red" width="150">￥${(cg.price*cg.quantity)?string("0.00")}</td>
+                      	<td><a class="del" href="javascript:delCartItem(${cg.id?c});">删除</a></td>
                             <#if cg.isSelected>
                                 <#assign totalGoods=totalGoods+cg.quantity>
                                 <#assign totalPrice=totalPrice+cg.price*cg.quantity>

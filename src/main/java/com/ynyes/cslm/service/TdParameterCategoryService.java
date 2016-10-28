@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.cslm.entity.TdParameterCategory;
+import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.repository.TdParameterCategoryRepo;
 
 /**
@@ -237,6 +238,57 @@ public class TdParameterCategoryService {
     public List<TdParameterCategory> findByParentIdOyderBySortIdAsc(Long parentId)
     {
     	return repository.findByParentIdOrderBySortIdAsc(parentId);
+    }
+    
+    public List<TdParameterCategory> findByParentId(Long parentId){
+    	List<TdParameterCategory> resList = new ArrayList<TdParameterCategory>();
+    	if(null != parentId)
+    	{
+    		TdParameterCategory category = repository.findOne(parentId);
+    		resList.add(category);
+            
+            List<TdParameterCategory> childList = repository.findByParentIdOrderBySortIdAsc(category.getId());
+            
+            if (null != childList && childList.size() > 0)
+            {
+                for (TdParameterCategory child : childList)
+                {
+                    resList.add(child);
+                    
+                    List<TdParameterCategory> grandChildList = repository.findByParentIdOrderBySortIdAsc(child.getId());
+                    
+                    if (null != grandChildList && grandChildList.size() > 0)
+                    {
+                        resList.addAll(grandChildList);
+                    }
+                }
+            }
+    	}
+    	return resList;
+    }
+    
+    public List<TdParameterCategory> findByParentIdAll(Long parentId){
+    	List<TdParameterCategory> resList = new ArrayList<TdParameterCategory>();
+    	if(null != parentId)
+    	{
+            List<TdParameterCategory> childList = repository.findByParentIdOrderBySortIdAsc(parentId);
+            
+            if (null != childList && childList.size() > 0)
+            {
+                for (TdParameterCategory child : childList)
+                {
+                    resList.add(child);
+                    
+                    List<TdParameterCategory> grandChildList = repository.findByParentIdOrderBySortIdAsc(child.getId());
+                    
+                    if (null != grandChildList && grandChildList.size() > 0)
+                    {
+                        resList.addAll(grandChildList);
+                    }
+                }
+            }
+    	}
+    	return resList;
     }
     
     /**

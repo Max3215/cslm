@@ -9,7 +9,13 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdDemand;
 import com.ynyes.cslm.entity.TdDistributor;
+import com.ynyes.cslm.entity.TdOrder;
 import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdUser;
@@ -50,7 +57,9 @@ import com.ynyes.cslm.service.TdUserRecentVisitService;
 import com.ynyes.cslm.service.TdUserReturnService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.service.TdUserSuggestionService;
+import com.ynyes.cslm.util.FileDownUtils;
 import com.ynyes.cslm.util.SiteMagConstant;
+import com.ynyes.cslm.util.StringUtils;
 
 /**
  * 后台用户管理控制器
@@ -180,11 +189,14 @@ public class TdManagerUserController {
                           Long[] listId,
                           Integer[] listChkId,
                           ModelMap map,
-                          HttpServletRequest req){
+                          HttpServletRequest req,
+                          HttpServletResponse resp){
         String username = (String) req.getSession().getAttribute("manager");
         if (null == username) {
             return "redirect:/Verwalter/login";
         }
+        
+        String exportUrl ="";
         if (null != __EVENTTARGET)
         {
             if (__EVENTTARGET.equalsIgnoreCase("btnPage"))
@@ -198,6 +210,11 @@ public class TdManagerUserController {
             {
                 btnDelete("user", listId, listChkId);
                 tdManagerLogService.addLog("delete", "删除用户", req);
+            }
+            else if (__EVENTTARGET.equalsIgnoreCase("exportAll"))
+            {
+            	exportUrl = SiteMagConstant.backupPath;
+            	tdManagerLogService.addLog("edit", "导出会员", req);
             }
         }
         
@@ -224,32 +241,91 @@ public class TdManagerUserController {
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
 
-        Page<TdUser> userPage = null;
+        Page<TdUser> userPage = tdUserService.findAll(keywords, page, size);
         
-        if (null == roleId)
-        {
-            if (null == keywords || "".equalsIgnoreCase(keywords))
-            {
-                userPage = tdUserService.findAllOrderBySortIdAsc(page, size);
-            }
-            else
-            {
-                userPage = tdUserService.searchAndOrderByIdDesc(keywords, page, size);
-            }
-        }
-        else
-        {
-            if (null == keywords || "".equalsIgnoreCase(keywords))
-            {
-                userPage = tdUserService.findByRoleIdOrderByIdDesc(roleId, page, size);
-            }
-            else
-            {
-                userPage = tdUserService.searchAndFindByRoleIdOrderByIdDesc(keywords, roleId, page, size);
-            }
-        }
+        
+//        if (null == roleId)
+//        {
+//            if (null == keywords || "".equalsIgnoreCase(keywords))
+//            {
+//                userPage = tdUserService.findAllOrderBySortIdAsc(page, size);
+//            }
+//            else
+//            {
+//                userPage = tdUserService.searchAndOrderByIdDesc(keywords, page, size);
+//            }
+//        }
+//        else
+//        {
+//            if (null == keywords || "".equalsIgnoreCase(keywords))
+//            {
+//                userPage = tdUserService.findByRoleIdOrderByIdDesc(roleId, page, size);
+//            }
+//            else
+//            {
+//                userPage = tdUserService.searchAndFindByRoleIdOrderByIdDesc(keywords, roleId, page, size);
+//            }
+//        }
         
         map.addAttribute("user_page", userPage);
+        
+        if(null != exportUrl && !"".equals(exportUrl)){
+        	// 第一步，创建一个webbook，对应一个Excel文件  
+  	      HSSFWorkbook wb = new HSSFWorkbook();  
+  	      // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
+  	      HSSFSheet sheet = wb.createSheet("user");  
+  	      // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+  	      HSSFRow row = sheet.createRow((int) 0);  
+  	      // 第四步，创建单元格，并设置值表头 设置表头居中  
+  	      HSSFCellStyle style = wb.createCellStyle();  
+  	      style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+  	      
+  	      HSSFCell cell = row.createCell((short) 0);  
+  	      cell.setCellValue("会员ID");  
+  	      cell.setCellStyle(style);  
+  	      cell = row.createCell((short) 1);  
+  	      cell.setCellValue("会员账号");  
+  	      cell.setCellStyle(style);  
+  	      cell = row.createCell((short) 2);  
+  	      cell.setCellValue("姓名");  
+  	      cell.setCellStyle(style);  
+  	      cell = row.createCell((short) 3);  
+  	      cell.setCellValue("昵称");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 4);  
+  	      cell.setCellValue("性别");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 5);  
+  	      cell.setCellValue("注册时间");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 6);  
+  	      cell.setCellValue("身份证号");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 7);  
+	      cell.setCellValue("手机号");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 8);  
+  	      cell.setCellValue("邮箱");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 9);  
+	      cell.setCellValue("家庭地址");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 10);  
+  	      cell.setCellValue("积分");  
+  	      cell.setCellStyle(style);
+  	      cell = row.createCell((short) 11);  
+	      cell.setCellValue("余额");  
+	      cell.setCellStyle(style);
+	      cell = row.createCell((short) 12);  
+  	      cell.setCellValue("累计消费金额");  
+  	      cell.setCellStyle(style);
+  	      
+  	      userPage = tdUserService.findAll(keywords, page, Integer.MAX_VALUE);
+  			
+  			if (ImportData(userPage, row, cell, sheet)) {
+  				FileDownUtils.download("user", wb, exportUrl, resp);
+  			}                          	                          
+        }
         
         return "/site_mag/user_list";
     }
@@ -321,7 +397,7 @@ public class TdManagerUserController {
         			return res;
         		}
     		}
-        	else if(type.equalsIgnoreCase("virtualMoney")) // 充值
+        	else if(type.equalsIgnoreCase("virtualMoneyAdd")) // 充值
         	{
         		if(null != virtualMoney)
         		{
@@ -404,6 +480,81 @@ public class TdManagerUserController {
                 	cash.setStatus(2L); // 状态 完成
                 	
                 	tdCashService.save(cash);
+                    
+                    res.put("code", 0);
+        			return res;
+        		}
+        	}
+        	else if(type.equalsIgnoreCase("virtualMoneyDel")) // 充值
+        	{
+        		if(null != virtualMoney)
+        		{
+        			if(null == tdUser.getVirtualMoney())
+        			{
+        				res.put("msg", "余额不足");
+        				return res;
+        			}else{
+        				tdUser.setVirtualMoney(tdUser.getVirtualMoney()-virtualMoney);
+        			}
+        			tdUserService.save(tdUser);
+        			
+        			Date current = new Date();
+        	        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        	        String curStr = sdf.format(current);
+        	        Random random = new Random();
+        	        
+        			// 添加会员虚拟账户金额记录
+                	TdPayRecord record = new TdPayRecord();
+                	
+                	record.setAliPrice(0.0);
+                	record.setPostPrice(0.0);
+                	record.setRealPrice(virtualMoney);
+                	record.setTotalGoodsPrice(virtualMoney);
+                	record.setServicePrice(0.0);
+                	record.setProvice(virtualMoney);
+                	
+                	String number = "K" + curStr
+                        	+ leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+                        record.setOrderNumber(number);
+                        
+                	record.setCreateTime(new Date());
+                	record.setUsername(tdUser.getUsername());
+                	record.setType(2L);
+                	record.setCont("平台扣款");
+                	record.setStatusCode(1);
+                	
+                	tdPayRecordService.save(record); // 保存会员虚拟账户记录
+                	
+                	TdSetting setting = tdSettingService.findTopBy();
+             		
+             		if( null != setting.getVirtualMoney())
+                    {
+                    	setting.setVirtualMoney(setting.getVirtualMoney()+virtualMoney);
+                    }else{
+                    	setting.setVirtualMoney(virtualMoney);
+                    }
+                    tdSettingService.save(setting); // 更新平台虚拟余额
+                    
+                 // 记录平台支出
+                    record = new TdPayRecord();
+                    record.setCont("手动给会员"+tdUser.getUsername()+"扣款");
+                    record.setCreateTime(new Date());
+                    record.setUsername(tdUser.getUsername());
+                    record.setOrderNumber(number);
+                    record.setStatusCode(1);
+                    record.setType(1L); // 类型 区分平台记录
+                    
+                    record.setProvice(virtualMoney); // 订单总额
+                    record.setPostPrice(0.0); // 邮费
+                    record.setAliPrice(0.0);	// 第三方费
+                    record.setServicePrice(0.0);	// 平台费
+                    record.setTotalGoodsPrice(virtualMoney); // 商品总价
+                    // 
+                    record.setRealPrice(virtualMoney);
+                    
+                    tdPayRecordService.save(record);
+                    
+                    tdManagerLogService.addLog("add", "手动给会员"+tdUser.getUsername()+"扣款"+data, req);
                     
                     res.put("code", 0);
         			return res;
@@ -1271,5 +1422,39 @@ public class TdManagerUserController {
                 }
             }
         }
+    }
+    
+    
+    @SuppressWarnings("deprecation")
+	public boolean ImportData(Page<TdUser> userPage, HSSFRow row, HSSFCell cell, HSSFSheet sheet){
+    	if(null != userPage && userPage.getContent().size() > 0){
+    		for (int i = 0; i < userPage.getContent().size(); i++)  
+    		{  
+    			row = sheet.createRow((int) i + 1);  
+    			TdUser user = userPage.getContent().get(i); 
+    			
+    			// 第四步，创建单元格，并设置值  
+    			row.createCell((short) 0).setCellValue(user.getId());  
+    			row.createCell((short) 1).setCellValue(user.getUsername());  
+    			row.createCell((short) 2).setCellValue(user.getRealName());
+    			row.createCell((short) 3).setCellValue(user.getNickname());
+    			row.createCell((short) 4).setCellValue(user.getSex());
+    			if(null != user.getRegisterTime()){
+    				cell = row.createCell((short) 5);  
+    				cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(user.getRegisterTime()));                                
+    			}
+    			row.createCell((short) 6).setCellValue(user.getIdentity());
+    			row.createCell((short) 7).setCellValue(user.getMobile());
+    			row.createCell((short) 8).setCellValue(user.getEmail());
+    			row.createCell((short) 9).setCellValue(user.getHomeAddress());
+    			if(null != user.getTotalPoints()){
+    				row.createCell((short) 10).setCellValue(user.getTotalPoints());
+    			}
+    			row.createCell((short) 11).setCellValue(StringUtils.scale(user.getVirtualMoney()));
+    			row.createCell((short) 12).setCellValue(StringUtils.scale(user.getTotalSpendCash()));
+    			
+    		} 
+    	}
+    	return true;
     }
 }

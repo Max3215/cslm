@@ -12,7 +12,8 @@
 <script src="/mag/js/jquery.cityselect.js"></script>
 <script type="text/javascript">
 $(function () {
-    $("#btnEditRemark").click(function () { EditOrderRemark(); }); 
+    $("#btnEditRemark").click(function () { addVirtualMoney(); }); 
+     $("#btnEditMoney").click(function () { delVirtualMoney(); }); 
     //初始化表单验证
     $("#form1").initValidform();
     
@@ -26,7 +27,7 @@ $(function () {
 });
 
 // 充值
-    function EditOrderRemark() {
+    function addVirtualMoney() {
         var dialog = $.dialog({
             title: '输入充值记录：',
             content: '<input id="orderRemark" name="txtOrderRemark"  class="input"></input>',
@@ -41,7 +42,7 @@ $(function () {
                     return false;
                 }
                 var id = $.trim($("#id").val());
-                var postData = { "id": id,  "data": mon };
+                var postData = { "id": id,  "data": mon ,"type":"add"};
                 //发送AJAX请求
                 sendAjaxUrl(dialog, postData, "/Verwalter/provider/virtualMoney/edit");
                 return false;
@@ -49,6 +50,31 @@ $(function () {
             cancel: true
         });
     }
+    
+    // 扣款
+ function delVirtualMoney() {
+        var dialog = $.dialog({
+            title: '输入扣款金额：',
+            content: '<input id="virtualMoney" name="txtOrderRemark"  class="input"></input>',
+            min: false,
+            max: false,
+            lock: true,
+            ok: function () {
+                var mon = $("#virtualMoney", parent.document).val();
+                var num = /^\d+(\.\d{2})?$/;
+                if (mon == "" || !num.test(mon)) {
+                    $.dialog.alert('对不起，输入的金额有误！', function () { }, dialog);
+                    return false;
+                }
+                var id = $.trim($("#id").val());
+                var postData = { "id": id,  "data": mon ,"type":"del"};
+                //发送AJAX请求
+                sendAjaxUrl(dialog, postData, "/Verwalter/provider/virtualMoney/edit");
+                return false;
+            },
+            cancel: true
+        });
+    }   
    //发送AJAX请求
     function sendAjaxUrl(winObj, postData, sendUrl) {
         $.ajax({
@@ -157,7 +183,11 @@ $(function () {
         <dt>账号余额</dt>
         <dd>
             <input name="virtualMoney" type="text" value="<#if provider?? && provider.virtualMoney??>${provider.virtualMoney?string('0.00')}<#else>0</#if>" <#if provider?? && provider.virtualMoney??>readonly="readonly"</#if> class="input normal"   sucmsg=" ">
-            <span class="Validform_checktip"></span><#if provider??>&emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a></#if>
+            <span class="Validform_checktip"></span>
+            <#if provider??>
+            &emsp;&emsp;&emsp;<a id="btnEditRemark" style="color:red">充值</a>
+            &emsp;&emsp;&emsp;<a id="btnEditMoney" style="color:red">扣款</a>
+            </#if>
         </dd>
     </dl>
     <dl>

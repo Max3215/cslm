@@ -67,6 +67,9 @@ public class TdProductCategory {
     @Column
     private String imgUrl;
     
+    @Column
+    private String imgUrl1;
+    
     // 层级
     @Column
     private Long layerCount;
@@ -229,6 +232,14 @@ public class TdProductCategory {
 
 	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
+	}
+
+	public String getImgUrl1() {
+		return imgUrl1;
+	}
+
+	public void setImgUrl1(String imgUrl1) {
+		this.imgUrl1 = imgUrl1;
 	}
     
     

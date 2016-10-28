@@ -52,12 +52,11 @@ $(document).ready(function(){
 	</header>
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
-  
   <section class="online_ma">
     <form action="/touch/suggestion/add" method="post" id="form">
   	<p class="tit">请输入反馈内容：</p>
-    <textarea name="content" datatype="*" nullmsg="请输入内容"></textarea>
-    <input type="submit" class="sub" value="提交" />
+    <textarea name="content" datatype="*" id="cont" nullmsg="请输入内容"></textarea>
+   	<p style="overflow:hidden;"><input type="submit" class="sub" value="提交" /></p>
     </form>
   </section>
   <!-- 底部 -->

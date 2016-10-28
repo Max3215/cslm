@@ -55,6 +55,7 @@ import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
+import com.ynyes.cslm.service.TdPayRecordService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
@@ -137,6 +138,9 @@ public class TdTouchUserController {
     
     @Autowired
     private TdCouponTypeService tdCouponTypeService;
+    
+    @Autowired
+    private TdPayRecordService tdPayRecordService;
     
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, String username, ModelMap map) {
@@ -849,6 +853,39 @@ public class TdTouchUserController {
         }
     }
     
+    @RequestMapping(value = "/user/collect/list/{type}/more")
+    public String collectListMore(@PathVariable Integer type,
+    					HttpServletRequest req, 
+                        Integer page,
+                        ModelMap map){
+		String username = (String) req.getSession().getAttribute("username");
+        if (null == username)
+        {
+            return "redirect:/touch/login";
+        }
+        
+        if (null == page)
+        {
+            page = 0;
+        }
+        
+        
+        if(null == type){
+        	type = 1;
+        }
+        
+        map.addAttribute("type", type);
+        
+        map.addAttribute("collect_page", tdUserCollectService.findByUsername(username,type, page, ClientConstant.pageSize));
+        
+        if(type==1)
+        {
+        	return "/touch/user_collect_more";
+        }else{
+        	return "/touch/user_collect_shop";
+        }
+    }
+    
     @RequestMapping(value="/user/collect/select")
     public String select(Long id,HttpServletRequest req,ModelMap map){
     	String username = (String) req.getSession().getAttribute("username");
@@ -1538,6 +1575,10 @@ public class TdTouchUserController {
                 if (allIsCommented) {
                     tdOrder.setStatusId(6L);
                     tdOrder = tdOrderService.save(tdOrder);
+                    if(tdOrder.getTypeId() ==0 || tdOrder.getTypeId() ==2){
+                    	tdOrderService.addUserPoint(tdOrder,tdOrder.getUsername()); // 添加积分记录
+                    	tdUserService.addTotalSpend(tdOrder.getUsername(), tdOrder.getTotalGoodsPrice()); // 增加累计使用金额
+                    }
                 }
             }
         }
@@ -2424,7 +2465,35 @@ public class TdTouchUserController {
     			return "/touch/user_account_index";
     		}
     	}
+    	
+    	map.addAttribute("virtualPage", tdPayRecordService.findByUsername(username, 2L, 0, ClientConstant.pageSize));
+    	
+    	
     	return "/touch/user_account";
+    }
+    
+    /**
+     * 加载更多。。。
+     * virtualPage 交易记录
+     * point 积分
+     * @return
+     */
+    @RequestMapping(value="/user/search/more/{type}")
+    public String searchMore(@PathVariable String type,Integer page,
+    		HttpServletRequest req,ModelMap map){
+    	String username = (String) req.getSession().getAttribute("username");
+    	
+    	if(null == page){
+    		page =0;
+    	}
+    	
+    	if("virtualPage".equals(type)){
+    		map.addAttribute("virtualPage", tdPayRecordService.findByUsername(username, 2L, page, ClientConstant.pageSize));
+    		return "/touch/user_account__more";
+    	}else if("point".equals(type)){
+    		map.addAttribute("point_page", tdUserPointService.findByUsername(username, page,ClientConstant.pageSize));
+    	}
+    	return "/touch/user_point_more";
     }
     
     /**
@@ -2593,6 +2662,12 @@ public class TdTouchUserController {
 		
 		cash = tdCashService.save(cash);
     	
+		// 新加银行卡信息记录
+		user.setBankCardCode(card);
+		user.setBankTitle(bank);
+		user.setBankName(name);
+		tdUserService.save(user);
+		
     	map.addAttribute("cash", cash);
     	
     	return "/touch/user_draw_end";
@@ -2625,7 +2700,8 @@ public class TdTouchUserController {
     @RequestMapping(value="/user/account/save/{type}",method=RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> accountSave(@PathVariable String type,
-    									String realName,String email,
+    									String realName,String nickname,
+    									String email,String identity,String homeAddress,
     									String mobile,String password,
     									String newPwd,String payPassword,
     									String newPayPwd,HttpServletRequest req){
@@ -2661,6 +2737,7 @@ public class TdTouchUserController {
     			}else{
     				if(null != payPassword && payPassword.equalsIgnoreCase(user.getPayPassword())){
         				user.setPayPassword(newPayPwd);
+        				user.setIsUpdatePay(true);
         			}else {
         				res.put("msg", "原密码错误");
         				return res;
@@ -2668,6 +2745,9 @@ public class TdTouchUserController {
     			} 
     		}else{
     			user.setRealName(realName);
+    			user.setNickname(nickname);
+    			user.setIdentity(identity);
+    			user.setHomeAddress(homeAddress);
     		}
     		tdUserService.save(user);
     		res.put("msg", "修改成功");
@@ -2713,7 +2793,8 @@ public class TdTouchUserController {
         	tdSuggestion.setMail("");
         	tdSuggestion.setMobile("");
         }
-
+        
+        tdSuggestion.setStatus(1);
         tdUserSuggestionService.save(tdSuggestion);
         res.put("code", 0);
         res.put("msg", "提交成功");

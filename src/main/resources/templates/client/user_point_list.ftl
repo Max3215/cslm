@@ -14,6 +14,8 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
   $(".click_a").click(function(){
@@ -33,6 +35,36 @@ $(document).ready(function(){
     $(this).next().hide();
   })
 })
+
+
+function convert(){
+	var totalPoint = ${user.totalPoints!'0'};
+	var point = $("#point").val();
+	
+	if(!/^\+?[1-9][0-9]*$/.test(point)){
+		layer.msg('请输入正确的兑换积分数');
+	}
+	if(totalPoint < point){
+		layer.msg('可兑换积分不足'+point);
+	}
+	
+	$.ajax({
+            url : "/user/convert",
+            async : true,
+            type : 'post',
+            data : {"point" : point},
+            success : function(data){
+            	layer.open({
+					  title: '提示',
+					  content: data.msg,
+					  time: 3000
+					});
+				if(data.code==1){
+					window.location.reload();
+				} 
+            }
+      })
+}
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -52,7 +84,20 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_out">
   <div class="mymember_main">
         <#include "/client/common_user_menu.ftl">
-    <div class="mymember_mainbox">    
+    <div class="mymember_mainbox">  
+    	<div class="integral_show">
+          <div class="fl">
+            <p class="p1">我的积分</p>
+            <p class="p2">${user.totalPoints!'0'}</p>
+          </div>
+          <div class="fr">
+            <div class="con">
+              <p class="p1">积分兑换现金</p>
+              <div class="oh"><input type="text" class="text" id="point" placeholder="输入兑换的积分值" /><a href="javascript:;" onclick="convert()">我要兑换</a></div>
+              <p class="p2">*兑换规则：<#if site??>${site.registerSharePoints!'10'}</#if>积分=1元</p>
+            </div>
+          </div>
+        </div>  
     <div class="mymember_info mymember_info02">
         <div class="mymember_order_search">
                 积分记录 

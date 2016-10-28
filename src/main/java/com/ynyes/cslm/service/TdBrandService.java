@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ynyes.cslm.entity.TdBrand;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.repository.TdBrandRepo;
+import com.ynyes.cslm.util.Criteria;
+import com.ynyes.cslm.util.Restrictions;
 
 /**
  * TdBrand 服务类
@@ -222,4 +224,24 @@ public class TdBrandService {
         
         return (List<TdBrand>) repository.save(entities);
     }
+    
+    public Page<TdBrand> findAll(Long catId,String keywords,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size);
+    	
+    	Criteria<TdBrand> c = new Criteria<TdBrand>();
+    	if(null != catId){
+    		c.add(Restrictions.like("productCategoryTree", "["+catId+"]", true));
+    	}
+    	if(null != keywords && !"".equals(keywords)){
+    		c.add(Restrictions.like("title", keywords, true));
+    	}
+    	
+    	return repository.findAll(c, pageRequest);
+    	
+    	
+    }
+    
+    
+    
 }
+

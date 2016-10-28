@@ -18,6 +18,10 @@
 $(document).ready(function(){
   
 });
+
+function weixinpay(orderId){
+   document.location =  "weixinpay?orderId="+orderId;
+}
 </script>
 </head>
 
@@ -37,7 +41,14 @@ $(document).ready(function(){
     <p>支付方式：${order.payTypeTitle!''}</p>
     <p>应付金额：<span>¥${order.totalPrice?string('0.00')}</span></p>
     <menu class="btns">
-      <a href="/touch/order/dopay/${order.id?c}">立即支付</a>
+    	<#if order.payTypeId == 2 && isIOS?? && isIOS==true>
+        <a href="javascript:;" onclick="weixinpay(${order.id?c})" >立即支付</a>
+        <#else>
+        <a href="/touch/order/dopay/${order.id?c}" >立即支付</a>
+        </#if>
+        <#--
+      	<a href="/touch/order/dopay/${order.id?c}"></a>
+      -->
       <span>您还可以</span>
       <a href="/touch/user/order?id=${order.id?c!''}">查看订单详情</a>
     </menu>

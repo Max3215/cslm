@@ -1,6 +1,7 @@
 package com.ynyes.cslm.controller.management;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,6 +97,7 @@ public class TdManagerParameterCategoryController {
     public String setting(String __EVENTTARGET,
                           String __EVENTARGUMENT,
                           String __VIEWSTATE,
+                          Long parentId,
                           Long[] listId,Long id,
                           Integer[] listChkId,
                           Long[] listSortId,
@@ -122,17 +124,25 @@ public class TdManagerParameterCategoryController {
             }
         }
         
+        map.addAttribute("category_list", tdParameterCategoryService.findByParentIdIsNullOrderBySortIdAsc());
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);
         map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
         map.addAttribute("id", id);
         map.addAttribute("keywords", keywords);
+        map.addAttribute("parentid", parentId);
         
         if(null == keywords || keywords.isEmpty()){
-        	map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+        	if(null != parentId){
+        		map.addAttribute("parameter", tdParameterCategoryService.findOne(parentId));
+        		map.addAttribute("parameter_category_list", tdParameterCategoryService.findByParentId(parentId));
+        	}else{
+        		map.addAttribute("parameter_category_list", tdParameterCategoryService.findAll());
+        	}
         }else{
         	map.addAttribute("parameter_category_list", tdParameterCategoryService.searchAll(keywords));
         }
+        
         
         return "/site_mag/parameter_category_list";
     }
@@ -150,7 +160,9 @@ public class TdManagerParameterCategoryController {
         }
         
         map.addAttribute("__VIEWSTATE", __VIEWSTATE);
-        map.addAttribute("category_list", tdParameterCategoryService.findAll());
+//        map.addAttribute("category_list", tdParameterCategoryService.findAll());
+        List<TdParameterCategory> categoryList = tdParameterCategoryService.findByParentIdIsNullOrderBySortIdAsc();
+        map.addAttribute("category_list", categoryList);
 
         if (null != id)
         {
@@ -160,15 +172,36 @@ public class TdManagerParameterCategoryController {
             }
             else
             {
-                map.addAttribute("cat", tdParameterCategoryService.findOne(id));
+            	TdParameterCategory category = tdParameterCategoryService.findOne(id);
+                map.addAttribute("cat", category);
+                
+                for (TdParameterCategory tdParameterCategory : categoryList) {
+    				if(null != category.getParentTree() && category.getParentTree().contains("["+tdParameterCategory.getId()+"]"))
+    				{
+    					List<TdParameterCategory> cateList = tdParameterCategoryService.findByParentIdOyderBySortIdAsc(tdParameterCategory.getId());
+    					if(null != cateList && cateList.size() > 0)
+    					{
+    						map.addAttribute("cateList", cateList);
+    					}
+    				}
+    			}
             }
         }
         
         return "/site_mag/parameter_category_edit";
     }
     
+    @RequestMapping(value="/subCate",method=RequestMethod.POST)
+    public String subCategory(Long categoryId,HttpServletRequest req,ModelMap map){
+    	if(null != categoryId){
+    		map.addAttribute("cateList", tdParameterCategoryService.findByParentIdOyderBySortIdAsc(categoryId));
+    	}
+    	 return "/site_mag/paramter_category_two";
+    }
+    
     @RequestMapping(value="/save")
     public String orderEdit(TdParameterCategory tdParameterCategory,
+    					Long parent,
                         String __VIEWSTATE,
                         ModelMap map,
                         HttpServletRequest req){
@@ -187,6 +220,10 @@ public class TdManagerParameterCategoryController {
         else
         {
         	tdManagerLogService.addLog("edit", "用户修改参数类型"+tdParameterCategory.getTitle(), req);
+        }
+        
+        if(null != parent){
+        	tdParameterCategory.setParentId(parent);
         }
         
         tdParameterCategory = tdParameterCategoryService.save(tdParameterCategory);

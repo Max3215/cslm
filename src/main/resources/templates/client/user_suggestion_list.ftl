@@ -94,19 +94,19 @@ DD_belatedPNG.fix('.,img,background');
             </div>
             <div class="mymember_eva_div">
               <b><font>* </font>内容：</b>
-              <textarea id="content" name="content" datatype="*" errormsg=""></textarea>
+              <textarea id="content" name="content" datatype="*" errormsg="" sucmsg=" "></textarea>
             </div>
             <div class="mymember_eva_div">
               <b><font>* </font>称呼：</b>
-              <input type="text" id="name" name="name" datatype="*2-6" errormsg="" />
+              <input type="text" id="name" name="name" datatype="*2-6" errormsg="" sucmsg=" "/>
             </div>
             <div class="mymember_eva_div">
               <b><font>* </font>邮箱：</b>
-              <input type="text" id="email" name="mail" datatype="e" errormsg=""/>
+              <input type="text" id="email" name="mail" datatype="e" errormsg="" sucmsg=" "/>
             </div>
             <div class="mymember_eva_div">
               <b><font>* </font>联系方式：</b>
-              <input type="text" id="mobile" name="mobile" datatype="m" errormsg="请输入联系方式，以便进行联系"/>
+              <input type="text" id="mobile" name="mobile" datatype="m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" errormsg="请输入联系方式，以便进行联系"/>
             </div>         
             <div class="mymember_eva_div">
               <input class="mysub" type="submit" value="提交我的留言" />

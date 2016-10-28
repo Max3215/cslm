@@ -84,7 +84,7 @@
                         <#list order.orderGoodsList as og>
                             <tr>
                                 <td  width="55%">
-                                    ${og.goodsTitle!''} ${og.goodsColor!''} ${og.goodsCapacity!''} ${og.goodsVersion!''}
+                                    ${og.goodsTitle!''} (${og.specName!''}) 
                                 </td>
                                 <td>${og.goodsCode!''}</td>
                                 <td align="center">${og.price?string("0.00")}<#if og.unit??>/${og.unit!''}</#if></td>
@@ -144,7 +144,8 @@
                                  <#if order.postPrice??>  + 配送费：￥${order.postPrice?string("0.00")}</#if>
                               <#--      + 支付手续费：￥${order.payTypeFee?string("0.00")}
                           -->   
-                                = 订单总额：${order.totalPrice?string("0.00")}（使用积分： <#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if>）
+                                = 订单总额：${order.totalPrice?string("0.00")}
+                                		<#--（使用积分： <#if order.pointUse??>${order.pointUse!'0'}<#else>0</#if>） -->
                                 </td>
                             </tr>
                     </tbody></table>

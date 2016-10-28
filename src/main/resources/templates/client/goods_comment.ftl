@@ -4,7 +4,8 @@
             <#if comment_page??>
                 <#list comment_page.content as item>
                     <li>
-                        <p class="p1">${item.content!''}<span></span>用户：${item.username!''}</p>
+                    	<#assign len = item.username?length>
+                        <p class="p1">${item.content!''}<span></span>用户：${item.username?substring(0,2)}****${item.username?substring(len-2,len)}</p>
                         <p class="p2">${item.commentTime!''}</p>
                          <#if item.isReplied?? && item.isReplied>
                             <p class="p3">商家回复：${item.reply!''}</p>

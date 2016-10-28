@@ -17,6 +17,7 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/touch/js/order.js"></script>
 
 <script src="/touch/js/message.js"></script>
 <link href="/touch/css/message.css" rel="stylesheet" type="text/css" />
@@ -74,7 +75,9 @@ function orderReceive(id)
         });
 }
 
-
+function weixinpay(orderId){
+   document.location =  "weixinpay?orderId="+orderId;
+}
 </script>
 </head>
 
@@ -108,6 +111,7 @@ function orderReceive(id)
         <a href="/touch/goods/${og.goodsId?c}" class="pic"><img src="${og.goodsCoverImageUri!''}" /></a>
         <div class="info">
           <a href="/touch/goods/${og.goodsId?c}">${og.goodsTitle!''}</a>
+          <#if og.specName??><p>规格：${og.specName!''}</p></#if>
           <p>价格：￥${og.price?string('0.00')}</p>
           <p>数量：${og.quantity!'0'}</p>
         </div>
@@ -130,7 +134,14 @@ function orderReceive(id)
            <menu>
                 <a href="/touch/user/cancel/direct?id=${order.id?c}" onClick="cancelConfirm()" id="">取消订单</a>
                 <a href="/touch/user/order?id=${order.id?c}" id="">查看订单</a>
+                <#if order.payTypeId == 2 && isIOS?? && isIOS==true>
+                <a href="javascript:;" onclick="weixinpay(${order.id?c})" class="cur">去付款</a>
+                <#else>
                 <a href="/touch/order/dopay/${order.id?c}" class="cur">去付款</a>
+                </#if>
+                <#--
+                <a href="javascript:;" onclick="gopay(${order.id?c})" class="cur">去付款</a>
+                -->
            </menu>
       <#break>
       <#case 3>

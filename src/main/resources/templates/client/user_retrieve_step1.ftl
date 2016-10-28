@@ -63,6 +63,7 @@
         
           <!-- 第一步 -->
           <dl class="fondpassstep1 active">
+          	<input type="hidden" value="${type!''}" name="type">
           	<dd class="fpsitem">
               <span class="spsititle">账号：</span>
               <input type="text" name="username" id="username" class="fstext r3 bd" value="${username!''}" placeholder="请输入账号">
@@ -117,7 +118,7 @@ $("#smsCodeBtn").bind("click", function() {
         	alert("请输入账号");
         	return ;
         }
-        console.debug(mobile);
+       
         if (!re.test(mobile)) {
             alert("请输入正确的手机号");
             return;

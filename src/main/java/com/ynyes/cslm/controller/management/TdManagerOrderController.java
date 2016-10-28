@@ -47,6 +47,7 @@ import com.ynyes.cslm.entity.TdPayRecord;
 import com.ynyes.cslm.entity.TdPayType;
 import com.ynyes.cslm.entity.TdProvider;
 import com.ynyes.cslm.entity.TdSetting;
+import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserPoint;
 import com.ynyes.cslm.service.TdArticleService;
@@ -62,6 +63,7 @@ import com.ynyes.cslm.service.TdPayTypeService;
 import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdProviderService;
 import com.ynyes.cslm.service.TdSettingService;
+import com.ynyes.cslm.service.TdSpecificatService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.SiteMagConstant;
@@ -123,6 +125,9 @@ public class TdManagerOrderController {
     
     @Autowired
     TdCashService tdCashService;
+    
+    @Autowired
+    private TdSpecificatService tdSpecificatService;
     
     // 订单设置
     @RequestMapping(value="/setting/{type}/list")
@@ -762,6 +767,7 @@ public class TdManagerOrderController {
     @RequestMapping(value="/diy_site/edit",method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> diySiteEdit(Long diysiteId,
+    		String type,
     		Double data,HttpServletRequest req)
     {
     	Map<String,Object> res = new HashMap<>();
@@ -781,45 +787,69 @@ public class TdManagerOrderController {
     	}
     	
     	TdDistributor distributor = TdDistributorService.findOne(diysiteId);
-    	if(null != distributor.getVirtualMoney())
-    	{
-    		distributor.setVirtualMoney(distributor.getVirtualMoney()+data);
-    	}else{
-    		distributor.setVirtualMoney(data);
+    	if("add".equals(type)){
+	    	if(null != distributor.getVirtualMoney())
+	    	{
+	    		distributor.setVirtualMoney(distributor.getVirtualMoney()+data);
+	    	}else{
+	    		distributor.setVirtualMoney(data);
+	    	}
+    	}else if("del".equals(type)){
+    		if(null == distributor.getVirtualMoney() || distributor.getVirtualMoney() < data){
+    			res.put("msg","账号余额不足");
+    			return res;
+    		}
+    		distributor.setVirtualMoney(distributor.getVirtualMoney()-data);
     	}
-    	
     	TdDistributorService.save(distributor);
+    	
+    	TdPayRecord record = new TdPayRecord();
     	
     	Date current = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String curStr = sdf.format(current);
         Random random = new Random();
-        
-    	TdPayRecord record = new TdPayRecord();
-        record.setCont("平台充值");
+        String number="";
+        if("add".equals(type)){
+	        number = "CZ" + curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+	        record.setCont("平台充值");
+        }else if("del".equals(type)){
+        	number = "K" + curStr + leftPad(Integer.toString(random.nextInt(999)), 3, "0");
+        	record.setCont("平台扣款");
+        }
         record.setCreateTime(new Date());
         record.setDistributorId(distributor.getId());
         record.setDistributorTitle(distributor.getTitle());
         record.setStatusCode(1);
         record.setProvice(data);
-        String number = "CZ" + curStr
-        	+ leftPad(Integer.toString(random.nextInt(999)), 3, "0");
         record.setOrderNumber(number);
         tdPayRecordService.save(record);
         
         TdSetting setting = tdSettingService.findTopBy();
- 		
- 		if( null != setting.getVirtualMoney())
-        {
-        	setting.setVirtualMoney(setting.getVirtualMoney()-data);
-        }else{
-        	setting.setVirtualMoney(0-data);
+        if("add".equals(type)){
+			if( null != setting.getVirtualMoney())
+		    {
+		    	setting.setVirtualMoney(setting.getVirtualMoney()-data);
+		    }else{
+		    	setting.setVirtualMoney(0-data);
+		    }
+        }else if("del".equals(type)){
+        	if( null != setting.getVirtualMoney())
+		    {
+		    	setting.setVirtualMoney(setting.getVirtualMoney()+data);
+		    }else{
+		    	setting.setVirtualMoney(data);
+		    }
         }
         tdSettingService.save(setting); // 更新平台虚拟余额
         
      // 记录平台支出
         record = new TdPayRecord();
-        record.setCont("手动给"+distributor.getTitle()+"充值");
+        if("add".equals(type)){
+        	record.setCont("手动给"+distributor.getTitle()+"充值");
+        }else if("del".equals(type)){
+        	record.setCont("手动给"+distributor.getTitle()+"扣款");
+        }
         record.setCreateTime(new Date());
         record.setDistributorTitle(distributor.getTitle());
         record.setOrderNumber(number);
@@ -837,20 +867,22 @@ public class TdManagerOrderController {
         tdPayRecordService.save(record);
         
         // 充值记录
-        TdCash cash = new TdCash();
-    	cash.setCashNumber("平台代充："+number);
-    	cash.setShopTitle(distributor.getTitle());
-    	cash.setUsername(distributor.getUsername());
-    	cash.setCreateTime(new Date());
-    	cash.setPrice(data); // 金额
-    	cash.setShopType(1L); // 类型-超市
-    	cash.setType(1L); // 类型-充值
-    	cash.setStatus(2L); // 状态 完成
-    	
-    	tdCashService.save(cash);
+        if("add".equals(type)){
+	        TdCash cash = new TdCash();
+	    	cash.setCashNumber("平台代充："+number);
+	    	cash.setShopTitle(distributor.getTitle());
+	    	cash.setUsername(distributor.getUsername());
+	    	cash.setCreateTime(new Date());
+	    	cash.setPrice(data); // 金额
+	    	cash.setShopType(1L); // 类型-超市
+	    	cash.setType(1L); // 类型-充值
+	    	cash.setStatus(2L); // 状态 完成
+	    	
+	    	tdCashService.save(cash);
+	        
+	        tdManagerLogService.addLog("add", "手动给"+distributor.getTitle()+"充值"+data, req);
+        }
         
-        tdManagerLogService.addLog("add", "手动给"+distributor.getTitle()+"充值"+data, req);
-    	
         res.put("code", 0);
         res.put("message", "充值成功！");
     	return res;
@@ -1041,10 +1073,85 @@ public class TdManagerOrderController {
                     order.setFinishTime(new Date());
                     
                     if(order.getTypeId() ==0 || order.getTypeId() ==2){
-                    	addUserPoint(order,order.getUsername());
+                    	tdOrderService.addUserPoint(order,order.getUsername());
+                    	tdUserService.addTotalSpend(order.getUsername(), order.getTotalGoodsPrice());
+                    }else{ // 超市进货单
+                    	TdDistributor distributor = tdDistributorService.findbyUsername(order.getUsername());
+    					List<TdOrderGoods> goodsList = order.getOrderGoodsList();
+    					for (TdOrderGoods tdOrderGoods : goodsList) {
+    						
+    						
+    						TdDistributorGoods distributorGoods = tdDistributorGoodsService.findByDistributorIdAndGoodsId(distributor.getId(), tdOrderGoods.getGoodsId());
+    						
+    						if(null == distributorGoods && !distributor.getGoodsList().contains(distributorGoods))
+    						{
+    							TdGoods goods = tdGoodsService.findOne(tdOrderGoods.getGoodsId());
+//    							tdProviderGoodsService.findByProviderIdAndGoodsId(, goodsId)
+    							distributorGoods = new TdDistributorGoods();
+    							
+    							distributorGoods.setDistributorTitle(distributor.getTitle());
+    							distributorGoods.setGoodsId(goods.getId());
+    							distributorGoods.setGoodsTitle(goods.getTitle());
+    							distributorGoods.setSubGoodsTitle(goods.getSubTitle());
+    							distributorGoods.setBrandId(goods.getBrandId());
+    							distributorGoods.setBrandTitle(goods.getBrandTitle());
+    							distributorGoods.setCategoryId(goods.getCategoryId());
+    							distributorGoods.setCategoryIdTree(goods.getCategoryIdTree());
+    							distributorGoods.setCode(goods.getCode());
+    							distributorGoods.setCoverImageUri(goods.getCoverImageUri());
+    							distributorGoods.setGoodsMarketPrice(tdOrderGoods.getPrice());
+    							distributorGoods.setIsDistribution(false);
+    							distributorGoods.setReturnPoints(goods.getReturnPoints());
+    							distributorGoods.setParamValueCollect(goods.getParamValueCollect());
+    							distributorGoods.setIsOnSale(false);
+    							distributorGoods.setLeftNumber(tdOrderGoods.getQuantity());
+    							distributorGoods.setUnit(goods.getSaleType());
+    							distributorGoods.setDisId(distributor.getId());
+    							
+    							distributorGoods = tdDistributorGoodsService.save(distributorGoods);
+    							// 没有此商品，新加商品规格
+    							if(null != tdOrderGoods.getSpecId()){
+    								TdSpecificat specificat = tdSpecificatService.findOne(tdOrderGoods.getSpecId());
+    								if(null != specificat){
+    									TdSpecificat tdSpecificat = new TdSpecificat();
+    									tdSpecificat.setGoodsId(goods.getId());
+    									tdSpecificat.setLeftNumber(tdOrderGoods.getQuantity());
+    									tdSpecificat.setOldId(specificat.getId());
+    									tdSpecificat.setShopId(distributor.getId());
+    									tdSpecificat.setType(1);
+    									tdSpecificat.setSpecifict(specificat.getSpecifict());
+    									tdSpecificatService.save(tdSpecificat);
+    								}
+    							}
+    						}else{
+    							distributorGoods.setDisId(distributor.getId());
+    							distributorGoods.setLeftNumber(distributorGoods.getLeftNumber()+tdOrderGoods.getQuantity());
+    							// 查看是否有此规格
+    							if(null != tdOrderGoods.getSpecId()){
+    								TdSpecificat specificat = tdSpecificatService.findByShopIdAndOldId(distributor.getId(), tdOrderGoods.getSpecId());
+    								if(null != specificat){
+    									// 在原规格基础上加库存
+    									specificat.setLeftNumber(specificat.getLeftNumber()+tdOrderGoods.getQuantity());
+    									tdSpecificatService.save(specificat);
+    								}else{
+    									TdSpecificat tdSpecificat = new TdSpecificat();
+    									tdSpecificat.setGoodsId(tdOrderGoods.getGoodsId());
+    									tdSpecificat.setLeftNumber(tdOrderGoods.getQuantity());
+    									tdSpecificat.setOldId(tdOrderGoods.getSpecId());
+    									tdSpecificat.setShopId(distributor.getId());
+    									tdSpecificat.setType(1);
+    									tdSpecificat.setSpecifict(tdOrderGoods.getSpecName());
+    									tdSpecificatService.save(tdSpecificat);
+    								}
+    							}
+    						}
+    						
+    						distributor.getGoodsList().add(distributorGoods);
+    					}
+    					distributor.setGoodsList(distributor.getGoodsList());
+    					tdDistributorService.save(distributor);
                     }
                     
-                    tdUserService.addTotalSpend(order.getUsername(), order.getTotalPrice());
                 }
             }
             // 确认取消
@@ -1352,34 +1459,34 @@ public class TdManagerOrderController {
     }
     
     
-	// 添加会员积分
-	public void addUserPoint(TdOrder order,String username){
-		
-		TdUser user = tdUserService.findByUsername(username);
-		
-		 // 添加积分使用记录
-		 if (null != user) {
-			 if (null == user.getTotalPoints())
-			 {
-				 user.setTotalPoints(0L);
-				 user = tdUserService.save(user);
-			 }
-			 if(null != order.getPoints() && order.getPoints()!= 0L){
-				 
-				 TdUserPoint userPoint = new TdUserPoint();
-				 userPoint.setDetail("购买商品获得积分");
-				 userPoint.setOrderNumber(order.getOrderNumber());
-				 userPoint.setPoint(order.getPoints());
-				 userPoint.setPointTime(new Date());
-				 userPoint.setUsername(username);
-				 userPoint.setTotalPoint(user.getTotalPoints() + order.getPoints());
-				 tdUserPointService.save(userPoint);
-				 
-				 user.setTotalPoints(user.getTotalPoints() + order.getPoints());
-				 tdUserService.save(user);
-			 }
-		 }
-	}
+//	// 添加会员积分
+//	public void addUserPoint(TdOrder order,String username){
+//		
+//		TdUser user = tdUserService.findByUsername(username);
+//		
+//		 // 添加积分使用记录
+//		 if (null != user) {
+//			 if (null == user.getTotalPoints())
+//			 {
+//				 user.setTotalPoints(0L);
+//				 user = tdUserService.save(user);
+//			 }
+//			 if(null != order.getPoints() && order.getPoints()!= 0L){
+//				 
+//				 TdUserPoint userPoint = new TdUserPoint();
+//				 userPoint.setDetail("购买商品获得积分");
+//				 userPoint.setOrderNumber(order.getOrderNumber());
+//				 userPoint.setPoint(order.getPoints());
+//				 userPoint.setPointTime(new Date());
+//				 userPoint.setUsername(username);
+//				 userPoint.setTotalPoint(user.getTotalPoints() + order.getPoints());
+//				 tdUserPointService.save(userPoint);
+//				 
+//				 user.setTotalPoints(user.getTotalPoints() + order.getPoints());
+//				 tdUserService.save(user);
+//			 }
+//		 }
+//	}
     
 //    // 商家销售单记录
 //    public void addVir(TdOrder tdOrder)

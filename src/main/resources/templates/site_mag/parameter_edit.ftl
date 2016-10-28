@@ -17,6 +17,8 @@
 <link href="/mag/style/WdatePicker.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/default.css" rel="stylesheet">
+
+<script type="text/javascript"  src="/mag/js/paramter.js"></script>
 <script type="text/javascript">
 $(function () {
     //初始化表单验证
@@ -68,12 +70,36 @@ $(function () {
         }
     });
     
+    
     // 选择类型后修改ajaxurl
-    $("#paramCatId").change(function(){
+    $("#twoCat").change(function(){
         var url = "/Verwalter/parameter/check?categoryId=" + $(this).val() + "<#if parameter??>&id=${parameter.id?c}</#if>";
         $("#idParamTitle").attr("ajaxurl", url);
     });
 });
+
+ function cateChange(){
+		var categoryId = $("#oneCat").val();
+		$.ajax({
+			type : "post",
+			url : "/Verwalter/parameter/category",
+			data : {"categoryId":categoryId,"type":"two"},
+			success : function(data){
+				$("#threeCatDiv").css({"display": "none"});
+				$("#twoCatDiv").html(data);
+				// 选择类型后修改ajaxurl
+		        var url = "/Verwalter/parameter/check?categoryId=" + categoryId + "<#if parameter??>&id=${parameter.id?c}</#if>";
+		        $("#idParamTitle").attr("ajaxurl", url);
+			}
+		})
+	}
+	
+	function twoChange(){
+		var categoryId = $("#twoCat").val();
+		// 选择类型后修改ajaxurl
+        var url = "/Verwalter/parameter/check?categoryId=" + categoryId + "<#if parameter??>&id=${parameter.id?c}</#if>";
+        $("#idParamTitle").attr("ajaxurl", url);
+	}
 </script>
 </head>
 <body class="mainbody">
@@ -112,23 +138,44 @@ $(function () {
         <dl>
             <dt>所属类别</dt>
             <dd>
-                <div class="rule-single-select">
-                    <select id="paramCatId" name="categoryId" id="ddlCategoryId" datatype="*" sucmsg=" " nullmsg="请选择！" class="Validform_error" style="display: none;">
-                    	<#if parameter??>
-                    	<#else>
-                    	<option value="">请选择类别...</option>
-                    	</#if>
+            	<#if parameter??>
+	                <div  style="float:left;">
+	                    <select id="oneCat" name="categoryId" datatype="*" sucmsg=" " onchange="cateChange();">
+	                        <#if !parameter??>
+	                        <option value="">请选择类别...</option>
+	                        </#if>
+	                        <#if category_list??>
+	                            <#list category_list as c>
+	                                <option value="${c.id?c}" <#if parameter?? && parameter.categoryTree?contains("["+c.id+"]")>selected="selected"</#if>>${c.title!""}</option>
+	                            </#list>
+	                        </#if>
+	                    </select>
+	                </div>
+	                <#if cateList?? && cateList?size gt 0>
+	                <div style="float:left;"  id="twoCatDiv">
+	                    <select name="category" datatype="*" sucmsg=" " id="twoCat" onchange="twoChange();">
+	                        <option value="">请选择类别...</option>
+	                            <#list cateList as c>
+	                            	<option value="${c.id?c}" <#if parameter?? && parameter.categoryTree?contains("["+c.id+"]")>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+	                            </#list>
+	                    </select>
+	                </div>
+	                </#if>
+                <#else>
+                    <div style="float:left;">
+                    <select id="oneCat" name="categoryId" datatype="*" sucmsg=" " onchange="cateChange();">
+                        <option value="">请选择类别...</option>
                         <#if category_list??>
                             <#list category_list as c>
-                                <option value="${c.id?c!""}" <#if parameter?? && parameter.categoryId==c.id>selected="selected"</#if>><#if c.layerCount?? && c.layerCount gt 1><#list 1..(c.layerCount-1) as a>　</#list>├ </#if>${c.title!""}</option>
+                                <option value="${c.id?c}" >${c.title!""}</option>
                             </#list>
                         </#if>
                     </select>
                 </div>
-                <#if parameter??>
-                    <span class="Validform_checktip Validform_right"> </span>
-                <#else>
-                    <span class="Validform_checktip Validform_wrong">请选择！</span>
+                <div id="twoCatDiv" style="float:left;">
+                </div>
+                <div id="threeCatDiv" style="float:left;">
+                </div>
                 </#if>
             </dd>
         </dl>

@@ -27,6 +27,7 @@ public interface TdCartGoodsRepo extends
     List<TdCartGoods> findByDistributorGoodsIdAndUsername(Long goodsId, String username);
     
     List<TdCartGoods> findByGoodsIdAndUsernameAndProviderId(Long goodsId, String username,Long providerId);
+    List<TdCartGoods> findByGoodsIdAndUsernameAndProviderIdAndSpecificaId(Long goodsId, String username,Long providerId,Long specId);
     
     List<TdCartGoods> findByUsernameOrderByIdDesc(String username);
     
@@ -35,4 +36,10 @@ public interface TdCartGoodsRepo extends
     // 查询用户选择商品所属超市ID
     @Query(value="select cg.distributorId from TdCartGoods cg where cg.username =?1 and cg.isSelected =true group by cg.distributorId")
     List<Long> findByUsernameAndIsSelectedTrue(String username);
+    
+    // 根据ID，规格ID查询
+    List<TdCartGoods> findByUsernameAndDistributorGoodsIdAndSpecificaId(String username,Long dis_goodsId,Long specId);
+    List<TdCartGoods> findByUsernameAndDistributorGoodsId(String username,Long dis_id);
+    
+    
 }

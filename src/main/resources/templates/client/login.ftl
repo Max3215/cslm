@@ -18,6 +18,7 @@
 <link href="/client/style/cartoon.css" rel="stylesheet" type="text/css" />
 <link href="/client/style/style.css" rel="stylesheet" type="text/css" />
 
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
     
 var seed=60;    //60秒  
@@ -50,7 +51,7 @@ $(function(){
             success : function(data){
             
                 if(data.msg){
-                    alert(data.msg);
+                    layer.alert(data.msg);
                     return;
                 }
                <!-- 验证手机号 --> 
@@ -59,7 +60,7 @@ $(function(){
                 var re = /^1\d{10}$/;
             
                 if (!re.test(mob)) {
-                    alert("请输入正确的手机号");
+                    layer.msg('请输入正确的手机号',  {icon: 2,time: 2000});
                     return;
                 }
             
@@ -112,7 +113,7 @@ function login(){
     
      if (username.length < 6 || password.length < 6)
      {
-          alert("用户名或密码长度输入不足");
+          layer.msg('用户名或密码长度输入不足',  {icon: 2,time: 2000});
           return;
       }
      $.ajax({
@@ -137,7 +138,7 @@ function login(){
                         window.location.href = url; 
                     }
                } else {
-                    alert(data.msg);
+                    layer.msg(data.msg,  {icon: 2,time: 2000});
                }
           }
       });
@@ -203,6 +204,7 @@ function chooseMoreShow(){
   
     <p>请输入用户名</p>
     <input class="text" type="text" id="txt_loginId"/>
+    <div class="h20"></div>
     <p>请输入密码</p>
     <input class="text" type="password" id="txt_loginPwd"/>   
     <#-- 
@@ -221,7 +223,7 @@ function chooseMoreShow(){
     <p class="pb10">
       <input id="rmbUser" type="checkbox" />
       <span>记住密码</span>
-      <span class="absolute-r"><a href="/login/password_retrieve">忘记密码</a> | <a href="/reg">免费注册</a></span>
+      <span class="absolute-r"><a href="/login/password_retrieve">忘记密码</a> | <a href="/reg<#if goodsId??>?goodsId=${goodsId?c}</#if>">免费注册</a></span>
     </p>
     <div class="clear h40"></div>
     <input type="submit" class="sub" id="btn_login" value="登录" />

@@ -18,6 +18,9 @@
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
 <script src="/touch/js/search.js"></script>
+
+<script src="/layer/layer.js"></script>
+<script src="/touch/js/goods.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
@@ -25,26 +28,6 @@ $(document).ready(function(){
 	var url = '/touch/search?keywords=${keywords!''}';
     $('#goods-menu').refresh(url,"#goods-menu",0);
 });
-
- //   var pageIdx = 1;
- //   function loadMore()
- //   {
- //       $.ajax({
- //           type:"post",
- //           url:"/touch/search?keywords=${keywords!''}&page=" + pageIdx,
- //           success:function(data){
- //               if ("" == data)
- //               {
- //                   $("#a-more").css("display", "none");
- //               }
- //               else
- //               {
- //                   $("#goods-menu").append(data);
- //                   pageIdx++;
- //               }
- //           }
- //       });
- //   }
 
 </script>
 </head>
@@ -67,20 +50,28 @@ $(document).ready(function(){
     <div style="height:0.6rem;"></div>
     
   <!-- 商品类表 -->
-  <section class="pro_hot">
-  	<menu id="goods-menu">
+  <section class="product_list">
+  	<ul id="goods-menu">
   	     <#if goods_page?? && goods_page.content?size gt 0>
             <#list goods_page.content as goods>
-                    <a href="/touch/goods/${goods.id?c}" class="a1">
-                        <img src="${goods.coverImageUri!''}"/>
-                        <p>${goods.goodsTitle!""}</p>
-                        <p >￥${goods.goodsPrice?string("#.##")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
-                    </a>
+                    <li>
+				        <a href="/touch/goods/${goods.id?c}"><img src="${goods.coverImageUri!''}" /></a>
+				        <a href="/touch/goods/${goods.id?c}" class="name">${goods.goodsTitle!""}</a>
+				        <p class="price">¥ ${goods.goodsPrice?string("0.00")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
+				        <div class="bot">
+				         <#if goods.isDistribution?? && goods.isDistribution == true>
+					          <i><img src="/touch/images/yg_icon.png" /></i>
+					          <a href="javascript:;" onclick="addCart(${goods.id?c})" class="yg">加入购物车</a>
+				         <#else>
+				         	<a href="javascript:;" onclick="addCart(${goods.id?c})">加入购物车</a>
+				         </#if>
+				        </div>
+			        </li>
             </#list>
           <#else>
           <div style="text-align: center; padding: 15px;">此类商品正在扩充中，敬请期待！</div>
         </#if> 
-  	</menu>
+  	</ul>
   	<#--
   	<#if goods_page?? && goods_page.content?size gt 0>
    <a id="a-more" class="grey_more" href="javascript:loadMore();"><img src="/touch/images/load.png" /></a>

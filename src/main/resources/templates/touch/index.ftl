@@ -18,11 +18,17 @@
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
 <script type="text/javascript" src="/touch/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="/touch/js/index.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	indexBanner("box","sum",300,5000,"num");//Banner
 });
 
+$(function(){
+		<#if top_cat_list??>
+	    categoryGoods($("#one_cat"),${top_cat_list[0].id?c});
+	    </#if>
+});
 </script>
 </head>
 
@@ -108,8 +114,6 @@ $(document).ready(function(){
   			<img src="/touch/images/index03.png" />
   			<p>帮助中心</p>
   		</a>
-  	</nav>
-  	<nav>
   		<a href="/touch/user">
   			<img src="/touch/images/index04.png" />
   			<p>会员中心</p>
@@ -175,8 +179,55 @@ $(document).ready(function(){
   </section>
   
   <!-- 新品推荐广告位 END -->
+	<!-- 精品推荐 -->
+  <section class="jp_recommen">
+    <p class="tit">精品推荐</p>
+    <div class="top" id="slide_check">
+      <menu>
+      	<#if top_cat_list?? && top_cat_list?size gt 0 >
+            <#list top_cat_list as item>
+              		<#--<a href="/touch/list/${item.id?c}">
+              			<img src="${item.imgUrl!''}" />
+              			<p class="p1">${item.title!''}</p>
+              		</a>-->
+              		<a onclick="categoryGoods($(this),${item.id?c})" <#if item_index==0>class="cur" id="one_cat"</#if>>
+			          <img src="${item.imgUrl!''}">
+			          <img src="${item.imgUrl1!''}">
+			          <p>${item.title!''}</p>
+			        </a>
+            </#list>
+         </#if>
+      </menu>
+    </div>
+    <script>
+    $(document).ready(function(){
+	var _arr = $(".jp_recommen .top"),
+    	_arrtop = _arr.offset().top; 
+  	$(window).scroll(function () {
+     
+    	if($(window).scrollTop() > _arrtop) {
+      	_arr.addClass("float");
+	    }else {
+	      	_arr.removeClass("float");
+	    }
+  	});	  
+	 
+});
+    </script>
+    
+
+    <menu class="list" id="cateGoods">
+     
+    </menu>
+  </section>
+
+  <script type="text/javascript">
+    listInfeedMove("slide_check","menu","a",4);//横向滑动
+  </script>
+  <!-- 精品推荐 end -->
 
   <!-- 楼层part -->
+  <#--
   <section class="index_part">
   	<div class="top">
   	     <#if top_category_list?? && top_category_list?size gt 0 >
@@ -191,19 +242,6 @@ $(document).ready(function(){
          </#if>
   	</div>
   	<menu>
-  	     <#--
-  	     <#if top_cat_goods_page0?? && top_cat_goods_page0.content?size gt 0 >
-      	    <#list top_cat_goods_page0.content as item>
-                 <#if item_index lt 4 > 
-              		<a href="/touch/goods/${item.id?c!''}">
-              			<img src="${item.coverImageUri!''}" />
-              			<p>${item.goodsTitle!''}</p>
-              			<p>¥ ${item.goodsPrice?string('0.00')}</p>
-              		</a>
-          		</#if>
-            </#list>
-         </#if>
-         -->
          <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
             <#list category_recommend_page.content as item>
                  <#if item_index lt 4 > 
@@ -217,9 +255,7 @@ $(document).ready(function(){
          </#if>
   	</menu>
   </section>
-  <!-- 楼层part END -->
-
-  <!-- 楼层part -->
+  
   <section class="index_part">
   	<div class="top plus">
   	 <#if top_category_list?? && top_category_list?size gt 0 >
@@ -234,19 +270,6 @@ $(document).ready(function(){
          </#if>
   	</div>
   	<menu>
-  	 <#--
-  	 <#if top_cat_goods_page2?? && top_cat_goods_page2.content?size gt 0 >
-        <#list top_cat_goods_page2.content as item>
-             <#if item_index lt 4 > 
-                <a href="/touch/goods/${item.id?c!''}">
-                    <img src="${item.coverImageUri!''}" />
-                    <p>${item.goodsTitle!''}</p>
-                    <p>¥ ${item.goodsPrice?string('0.00')}</p>
-                </a>
-            </#if>
-        </#list>
-     </#if>
-     -->
      <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
             <#list category_recommend_page.content as item>
                  <#if item_index gt 3 && item_index lt 8 > 
@@ -260,9 +283,7 @@ $(document).ready(function(){
          </#if>
   	</menu>
   </section>
-  <!-- 楼层part END -->
-
-  <!-- 楼层part -->
+  
   <section class="index_part">
   	<div class="top plus">
   	     <#if top_category_list?? && top_category_list?size gt 0 >
@@ -277,19 +298,6 @@ $(document).ready(function(){
          </#if>
   	</div>
   	<menu>
-  	     <#--
-  	     <#if top_cat_goods_page5?? && top_cat_goods_page5.content?size gt 0 >
-            <#list top_cat_goods_page5.content as item>
-                 <#if item_index lt 4 > 
-                    <a href="/touch/goods/${item.id?c!''}">
-                        <img src="${item.coverImageUri!''}" />
-                        <p>${item.goodsTitle!''}</p>
-                        <p>¥ ${item.goodsPrice?string('0.00')}</p>
-                    </a>
-                </#if>
-            </#list>
-         </#if>
-         -->
          <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
             <#list category_recommend_page.content as item>
                  <#if item_index gt 7 && item_index lt 12> 
@@ -303,9 +311,11 @@ $(document).ready(function(){
          </#if>
   	</menu>
   </section>
+  -->
   <!-- 楼层part END -->
   
   <!-- 热卖商品 -->
+  <#--
   <section class="pro_hot">
     <#if DISTRIBUTOR_ID??>
   	     <p class="tit">热卖商品</p>
@@ -326,6 +336,7 @@ $(document).ready(function(){
      </#if>
   	</menu>
   </section>
+  -->
   <!-- 热卖商品 END -->
 
   <!-- 底部 -->
