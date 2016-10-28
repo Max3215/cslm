@@ -442,21 +442,21 @@ function del_goods_comb(obj) {
             <dt>商品副标题</dt>
             <dd>
                 <input name="subTitle" type="text" value="<#if goods??>${goods.subTitle!""}</#if>" class="input normal" >
-                <span class="Validform_checktip">*标题最多255个字符</span>
+                <span class="Validform_checktip">标题最多255个字符</span>
             </dd>
         </dl>
         <dl>
             <dt>商品编码</dt>
             <dd>
                 <input name="code" type="text" value="<#if goods??>${goods.code!""}</#if>" class="input normal" datatype="*0-255" ajaxurl="/Verwalter/goods/check<#if goods??>?id=${goods.id?c}</#if>" sucmsg=" ">
-                <span class="Validform_checktip">*编码最多255个字符</span>
+                <span class="Validform_checktip">编码最多255个字符</span>
             </dd>
         </dl>
         <dl>
             <dt>市场价</dt>
             <dd>
                 <input name="marketPrice" type="text" value="<#if goods?? && goods.marketPrice??>${goods.marketPrice?string("0.00")}<#else>0</#if>" class="input normal"  sucmsg=" ">
-                <span class="Validform_checktip">*市场价格</span>
+                <span class="Validform_checktip">市场价格</span>
             </dd>
         </dl>
         <dl>
@@ -467,6 +467,7 @@ function del_goods_comb(obj) {
             </dd>
         </dl>
         
+         <#--
         <dl>
             <dt>赠送积分</dt>
             <dd>
@@ -474,7 +475,6 @@ function del_goods_comb(obj) {
                 <span class="Validform_checktip">购买该商品赠送的积分</span>
             </dd>
         </dl>
-        <#--
         <dl>
             <dt>积分购买限额</dt>
             <dd>

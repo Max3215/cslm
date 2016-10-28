@@ -1472,8 +1472,10 @@ public class TdDistributorController extends AbstractPaytypeController{
 		
 		Page<TdOrder> orderPage=tdOrderService.findAll(distributor.getUsername(), statusId, 1,start, end, page, ClientConstant.pageSize);
 		
-	      if(null != excelUrl)
-	      {
+		map.addAttribute("orderList",tdOrderService.findAll(distributor.getUsername(), statusId, 1,start, end));
+		
+	    if(null != excelUrl)
+	    {
     	  
 	    	/**
 	  		 * 导出表格

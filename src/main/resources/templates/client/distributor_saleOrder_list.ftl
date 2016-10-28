@@ -18,6 +18,7 @@
 <script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
 
 <script src="/client/js/jquery.diysiteselect.js"></script>
+<script src="/client/js/com.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".click_a").click(function(){
@@ -84,26 +85,32 @@ DD_belatedPNG.fix('.,img,background');
         </script>
         <div class="mymember_info mymember_info02">
             <div class="mymember_order_search">
-                  <input class="mysub" type="submit" value="查询" onclick="javascript:setTimeout(__doPostBack('submit',''), 0)" />
-                  <p class="fr pl10 c3">时间&nbsp;&nbsp;
-                        <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
-                                        &nbsp;&nbsp;至&nbsp;&nbsp;
-                        <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
-                   </p>
-              <div class="clear"></div>
-                <#if typeId?? && typeId==2>
-                    <a class="a001" >分销订单</a>
+            <#if typeId?? && typeId==2>
+                    <h3>分销订单</h3>
                 <#else>
-                    <a class="a001" >销售订单</a>
+                    <h3>销售订单</h3>
                 </#if>
+                 
+                  时间&nbsp;&nbsp;
+                        <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                                        &nbsp;&nbsp;至&nbsp;&nbsp;
+                        <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                   <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
+                        <option value="0" <#if !status_id?? || status_id==0>selected="selected"</#if>>所有订单</option>
+                        <option value="1" <#if status_id==1>selected="selected"</#if>>待确认</option>
+                        <option value="2" <#if status_id==2>selected="selected"</#if>>待付款</option>
+                        <option value="3" <#if status_id==3>selected="selected"</#if>>待发货</option>
+                        <option value="4" <#if status_id==4>selected="selected"</#if>>待收货</option>
+                        <option value="5" <#if status_id==5>selected="selected"</#if>>待评价</option>
+                        <option value="6" <#if status_id==6>selected="selected"</#if>>已完成</option>
+                        <option value="7" <#if status_id==7>selected="selected"</#if>>已取消</option>
+                    </select>
+                
             <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
             <input class="mysub" type="submit" value="导出全部" name="excel" onclick="javascript:setTimeout(__doPostBack('excelAll',''), 0)"/>
-            <#--
-            <input class="mytext" type="text" onFocus="if(value=='商品名称、订单编号') {value=''}" onBlur="if (value=='') {value='商品名称、订单编号'}"  value="商品名称、订单编号" />
-            -->
-                <div class="clear"></div>
+             <input class="mysub" type="submit" value="查询" onclick="javascript:setTimeout(__doPostBack('submit',''), 0)" />
             </div>
-            <table>
+            <table id="list">
                 <tr class="mymember_infotab_tit01">
                     <th>订单信息</th>
                     <th width="70">购买用户</th>
@@ -112,26 +119,21 @@ DD_belatedPNG.fix('.,img,background');
                         订单时间
                     </th>
                     <th width="80">
-                        <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
-                            <option value="0" <#if !status_id?? || status_id==0>selected="selected"</#if>>所有订单</option>
-                            <option value="1" <#if status_id==1>selected="selected"</#if>>待确认</option>
-                            <option value="2" <#if status_id==2>selected="selected"</#if>>待付款</option>
-                            <option value="3" <#if status_id==3>selected="selected"</#if>>待发货</option>
-                            <option value="4" <#if status_id==4>selected="selected"</#if>>待收货</option>
-                            <option value="5" <#if status_id==5>selected="selected"</#if>>待评价</option>
-                            <option value="6" <#if status_id==6>selected="selected"</#if>>已完成</option>
-                            <option value="7" <#if status_id==7>selected="selected"</#if>>已取消</option>
-                        </select>
+                        订单状态
                     </th>
                     <th width="60">操作</th>
                 </tr>
                 <#if order_page??>
                 <#list order_page.content as order>
                 <tr>
-                      <th colspan="7">订单编号：<a href="/distributor/order?id=${order.id?c}">${order.orderNumber!''}</a></th>
+                      <th colspan="7">
+                        <#--<input id="yu_1424195166" name="listChkId" type="checkbox" value="${order_index?c}" class="check""/>
+                        <input type="hidden" name="listId" id="listId" value="${order.id?c}">-->
+                        订单编号：<a href="/distributor/order?id=${order.id?c}">${order.orderNumber!''}</a>
+                      </th>
                   </tr>
                   <tr>
-                      <td class="td001">
+                      <td class="td001" >
                           <#list order.orderGoodsList as og>
                           <#if og_index lt 7>
                                 <a href=""><img src="${og.goodsCoverImageUri!''}" width="50px;" height="50px;" alt="${og.goodsTitle!''}"/></a>

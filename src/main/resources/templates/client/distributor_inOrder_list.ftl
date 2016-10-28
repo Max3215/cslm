@@ -81,17 +81,27 @@ DD_belatedPNG.fix('.,img,background');
         </script>
         <div class="mymember_info mymember_info02">
             <div class="mymember_order_search">
-                <a class="a001" >进货订单</a>
-                  <input class="mysub" type="submit" value="查询" onclick="javascript:setTimeout(__doPostBack('submit',''), 0)" />
-                  <p class="fr pl10 c3">时间&nbsp;&nbsp;
-                        <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                <h3>进货订单</h3>
+                    <#assign totalPrice =0.0>
+                    <#if orderList??>
+                    <#list orderList as order>
+                        <#assign totalPrice = totalPrice+order.totalPrice>
+                    </#list>
+                    </#if>
+                  时间&nbsp;&nbsp;
+                        <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
                                         &nbsp;&nbsp;至&nbsp;&nbsp;
-                        <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
-                   </p>
-                   <div class="clear"></div>
+                        <input name="endTime" type="text" value="<#if endTime??>${endTime?string('yyyy-MM-dd HH:mm')}</#if>" class="input date" style="height:25px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',lang:'zh-cn'})">
+                   <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
+                            <option value="0" <#if !statusId?? || statusId==0>selected="selected"</#if>>所有订单</option>
+                            <option value="3" <#if statusId==3>selected="selected"</#if>>待发货</option>
+                            <option value="4" <#if statusId==4>selected="selected"</#if>>待收货</option>
+                            <option value="6" <#if statusId==6>selected="selected"</#if>>已完成</option>
+                    </select>
+                    共计订单：<#if orderList??>${orderList?size}<#else>0</#if>个,订单总金额：￥${totalPrice?string('0.00')}
                 <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
                 <input class="mysub" type="submit" value="导出全部" name="excel" onclick="javascript:setTimeout(__doPostBack('excelAll',''), 0)"/>
-                
+                <input class="mysub" type="submit" value="查询" onclick="javascript:setTimeout(__doPostBack('submit',''), 0)" />
             </div>
             <table>
                 <tr class="mymember_infotab_tit01">
@@ -102,12 +112,7 @@ DD_belatedPNG.fix('.,img,background');
                         订单时间
                     </th>
                     <th width="80">
-                        <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
-                            <option value="0" <#if !statusId?? || statusId==0>selected="selected"</#if>>所有订单</option>
-                            <option value="3" <#if statusId==3>selected="selected"</#if>>待发货</option>
-                            <option value="4" <#if statusId==4>selected="selected"</#if>>待收货</option>
-                            <option value="6" <#if statusId==6>selected="selected"</#if>>已完成</option>
-                        </select>
+                        订单状态
                     </th>
                     <th width="60">操作</th>
                 </tr>

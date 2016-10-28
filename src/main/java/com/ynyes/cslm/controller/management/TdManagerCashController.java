@@ -256,7 +256,7 @@ public class TdManagerCashController {
         map.addAttribute("type", type);
         map.addAttribute("startime", startTime);
         map.addAttribute("endTime", endTime);
-        
+        map.addAttribute("status", status);
         map.addAttribute("page", page);
         map.addAttribute("size", size);
         map.addAttribute("__EVENTTARGET", __EVENTTARGET);

@@ -59,18 +59,19 @@ function delCartItem(id)
     }
     layer.confirm('确定要把此商品移除购物车？',{
 		btn: ['确定','取消'] //按钮
-	}, function(){
-		    $.ajax({
-		        type:"post",
-		        url:"/touch/cart/del",
-		        data:{"id": id},
-		        success:function(data){
-		            $("#main").html(data);
-		        }
-		    });
-    }, function(){
-		layer.closeAll();
-	});
+		}, function(){
+			    $.ajax({
+			        type:"post",
+			        url:"/touch/cart/del",
+			        data:{"id": id},
+			        success:function(data){
+			        	layer.closeAll();
+			            $("#main").html(data);
+			        }
+			    });
+	    }, function(){
+			layer.closeAll();
+		});
 }
 
 function goNext(goodsNum)

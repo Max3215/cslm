@@ -69,6 +69,7 @@ public class TdOrderService {
     @Autowired
     TdUserPointService tdUserPointService;
     
+    
     /**
      * 删除
      * 
@@ -491,6 +492,29 @@ public class TdOrderService {
     	return repository.findAll(c,pageRequest);
     }
     
+    public List<TdOrder> findAll(String username,int statusId,int typeId,Date startTime,Date endTime){
+    	Criteria<TdOrder> c = new Criteria<>();
+    	
+    	if(null != username){
+    		c.add(Restrictions.eq("username", username, true));
+    	}
+    	
+    	if(statusId != 0 ){
+    		c.add(Restrictions.eq("statusId", statusId, true));
+    	}
+    	
+    	if(null != startTime){
+    		c.add(Restrictions.gte("orderTime", startTime, true));
+    	}
+    	
+    	if(null != endTime){
+    		c.add(Restrictions.lte("orderTime", endTime, true));
+    	}
+    	c.add(Restrictions.eq("typeId", typeId, true));
+    	
+    	return repository.findAll(c);
+    }
+    
     public Page<TdOrder> findByProviderId(Long providerId,int statusId,int typeId,Date startTime,Date endTime,int page,int size){
     	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "orderTime"));
     	Criteria<TdOrder> c = new Criteria<>();
@@ -841,6 +865,13 @@ public class TdOrderService {
   		
   		TdUser user = tdUserService.findByUsername(username);
   		
+  		Long settingPoints =1L;
+  		TdSetting setting = tdSettingService.findTopBy();
+		if (null != setting.getGoodsSharePoints()) {
+			settingPoints = setting.getGoodsSharePoints();
+		}
+		
+		tdSettingService.save(setting); // 更新平台虚拟余额
   		 // 添加积分使用记录
   		 if (null != user) {
   			 if (null == user.getTotalPoints())
@@ -850,7 +881,8 @@ public class TdOrderService {
   			 }
   		
   			 if(null != order.getTotalPrice()){
- 				 Long turnPoint = Math.round(order.getTotalPrice());
+  				
+ 				 Long turnPoint = Math.round( (double)order.getTotalPrice()/settingPoints);
   				 
  				 TdUserPoint userPoint = new TdUserPoint();
  				 userPoint.setDetail("购买商品获得积分");

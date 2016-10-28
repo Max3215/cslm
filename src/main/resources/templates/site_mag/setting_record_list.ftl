@@ -51,6 +51,16 @@ var theForm = document.forms['form1'];
         <li><a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a></li>
         <li><a class="all" href="javascript:__doPostBack('exportAll','')"><span>导出全部</span></a></li>
       </ul>
+      <div class="menu-list">
+        <div class="rule-single-select single-select">
+        <select name="cont" onchange="javascript:setTimeout(__doPostBack('cont',''), 0)" style="display: none;">
+            <option <#if !cont??>selected="selected"</#if> value="">所有交易</option>
+            <option <#if cont?? && cont=="销售抽取">selected="selected"</#if> value="销售抽取">销售抽取</option>
+            <option <#if cont?? && cont=="批发单抽取">selected="selected"</#if> value="批发单抽取">批发单抽取</option>
+            <option <#if cont?? && cont=="充值">selected="selected"</#if> value="充值">手动充值</option>
+        </select>
+        </div>
+      </div>
       <ul class="icon-list">
             <li>
                 <input name="startTime" type="text" value="<#if startTime??>${startTime?string('yyyy-MM-dd')}</#if>" class="input date" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',lang:'zh-cn'})">
@@ -61,6 +71,7 @@ var theForm = document.forms['form1'];
             </li>
         </ul>
     </div>
+    
     <div class="a-list">
         <a id="lbtnSearch" class="btn-search" href="javascript:__doPostBack('btnSearch','')">查询</a>
     </div>

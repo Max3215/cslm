@@ -131,7 +131,7 @@ public class TdPayRecordService {
     	}
     }
     
-    public Page<TdPayRecord> findAll(Long typy,Date startTime,Date endTime,int page,int size){
+    public Page<TdPayRecord> findAll(Long typy,Date startTime,Date endTime,String cont,int page,int size){
     	
     	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"createTime"));
     	Criteria<TdPayRecord> c = new Criteria<>();
@@ -146,6 +146,9 @@ public class TdPayRecordService {
     	
     	if(null != endTime){
     		c.add(Restrictions.lte("createTime", endTime, true));
+    	}
+    	if(null != cont && !cont.isEmpty()){
+    		c.add(Restrictions.like("cont", cont, true));
     	}
     	
     	return repository.findAll(c, pageRequest);

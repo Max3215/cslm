@@ -362,6 +362,7 @@ public class TdManagerSettingController {
 						        String __EVENTARGUMENT,
 						        String __VIEWSTATE,
 						        String startTime,String endTime,
+						        String cont,
 						        Long[] listId,
 						        Integer[] listChkId,
 						        String exportUrl,
@@ -422,7 +423,7 @@ public class TdManagerSettingController {
 			end = sdf.parse(endTime);
 		}
         
-		map.addAttribute("record_page", tdPayRecordService.findAll(1L, start, end, page, size));
+		map.addAttribute("record_page", tdPayRecordService.findAll(1L, start, end,cont, page, size));
         
         if (null != exportUrl) {
         	Page<TdPayRecord> recordPage = null;
@@ -480,6 +481,7 @@ public class TdManagerSettingController {
 			}   
         }
 		
+        map.addAttribute("cont",cont);
         map.addAttribute("startTime", start);
 		map.addAttribute("endTime", end);
         map.addAttribute("page", page);

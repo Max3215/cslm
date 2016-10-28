@@ -49,7 +49,7 @@ $(function () {
 </dl>
 </#if>
 <#if param_list??>
-    <#list param_list as param>s
+    <#list param_list as param>
         <#if param.inputType?? && param.inputType==1>
             <#if param.isMultiple?? && param.isMultiple==true>
                 <dl>
