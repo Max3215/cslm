@@ -23,7 +23,7 @@ function selectAll(){
 function goodsOnSale(type,disId){
     $.ajax({
         url : "/distributor/goods/onsale",
-        data : {"type":type,"page":disId},
+        data : {"type":type,"disId":disId},
         type : "post",
        success:function(data){
     	   if(data.code==1){

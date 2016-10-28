@@ -84,14 +84,9 @@ public class TdTouchIndexController {
     		} 
     	}
     	
-//    	if((null != app && 1== app) || (null != isIOS && isIOS ==true)){
-//    		map.addAttribute("shop_list",tdDistributorService.findByIsEnableTrue());
-//    		map.addAttribute("index", true);
-//    	}else{
-    		if(null != lng && null != lat){
-    			tdCommonService.mapdistance(lng, lat, req, map);
-    		}
-//    	}
+		if(null != lng && null != lat){
+			tdCommonService.mapdistance(lng, lat, req, map);
+		}
     	
     	// 超市快讯
         List<TdArticleCategory> catList = tdArticleCategoryService
@@ -118,25 +113,6 @@ public class TdTouchIndexController {
                  }
              }
          	
-//         	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIdAndIsOnSaleOrderByLeftNumberDesc(distributorId,true, 0, 40));
-//         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAll(distributorId, "isTouchHot", null, 0, 40));
-         	
-         	// 一级分类
-//             List<TdProductCategory> topCatList = tdProductCategoryService .findByParentIdIsNullOrderBySortIdAsc();
-//             if (null != topCatList && topCatList.size() > 0) {
-//                 map.addAttribute("top_category_list", topCatList);
-//
-//                 map.addAttribute("category_recommend_page", tdDistributorGoodsService.findAll(distributorId, "isTouchRecommendType", null, 0, 12));
-//                 for (int i = 0; i < topCatList.size(); i++) {
-//                     TdProductCategory topCat = topCatList.get(i);
-//
-//                     if (null != topCat) {
-//                         map.addAttribute( "top_cat_goods_page" + i,
-//                         		tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSale(distributorId, topCat.getId(), true, 0, 10));
-//                     }
-//                 }
-//             }
-             
              // 首页新品广告
              adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
 
@@ -187,27 +163,7 @@ public class TdTouchIndexController {
          			
          		}
          	}
-//         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByIsOnSaleTrueAndIsTouchHotTrueOrderByOnSaleTimeDesc(0, 40));
-//         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAll(null, "isSetTouchHot", null, 0, 40));
-         			
-         	// 一级分类
-//             List<TdProductCategory> topCatList = tdProductCategoryService
-//                     .findByParentIdIsNullOrderBySortIdAsc();
-//             if (null != topCatList && topCatList.size() > 0) {
-//                 map.addAttribute("top_category_list", topCatList);
-//
-//                 map.addAttribute("category_recommend_page", tdDistributorGoodsService.findAll(null, "isSetRecommendType", null, 0, 12));
-//                 for (int i = 0; i < topCatList.size(); i++) {
-//                     TdProductCategory topCat = topCatList.get(i);
-//
-//                     if (null != topCat) {
-//                         map.addAttribute( "top_cat_goods_page" + i,
-//                         		tdDistributorGoodsService.findByCategoryIdAndIsOnSale(topCat.getId(), true, 0, 10));
-//                     }
-//                 }
-//             }
          	
-          // 新品推荐
           // 首页新品广告
              adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
 
@@ -265,7 +221,11 @@ public class TdTouchIndexController {
     public String categoryGoods(Long catId,HttpServletRequest req,ModelMap map){
     	
     	Long disId = (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
-    	map.addAttribute("goodsPage",tdDistributorGoodsService.findAll(disId, "isSetTouchHot", catId, 0, 40));
+    	if(null == disId){
+    		map.addAttribute("goodsPage",tdDistributorGoodsService.findAll(disId, "isRecommendCategory", catId, 0, 40));
+    	}else{
+    		map.addAttribute("goodsPage",tdDistributorGoodsService.findAll(disId, "isRecommendType", catId, 0, 40));
+    	}
     
     	return "/touch/index_goods";
     }

@@ -30,17 +30,18 @@
                         <td class="tb02"><p>￥<span ><#if dg.goodsPrice??>${dg.goodsPrice?string('0.00')}</#if></span></p></td>
                         <td><span >${dg.leftNumber?c!'0'}</span></td>
                         <td>
-                            <p>PC：<a href="javascript:recommed(${dg.id?c},${page},'cat');" <#if dg.isRecommendType?? &&dg.isRecommendType ==true>style="color:#ff5b7d"</#if>>分类</a>
+                            <p><a href="javascript:recommed(${dg.id?c},${page},'cat');" <#if dg.isRecommendType?? &&dg.isRecommendType ==true>style="color:#ff5b7d"</#if>>分类</a>
                                 &nbsp;/&nbsp;
                                 <a href="javascript:recommed(${dg.id?c},${page},'index');" <#if dg.isRecommendIndex?? &&dg.isRecommendIndex==true>style="color:#ff5b7d"</#if>>推荐</a>
                              </p>
-                             <p>触屏：
-                             	<#--
+                             <p>
+                             	<#--触屏：
                              	<a href="javascript:recommed(${dg.id?c},${page},'touchcat');" <#if dg.isTouchRecommendType?? &&dg.isTouchRecommendType==true>style="color:#ff5b7d"</#if>>分类</a>
                                 &nbsp;/&nbsp;
-                                -->
+                                
                                 <a href="javascript:recommed(${dg.id?c},${page},'hot');" <#if dg.isTouchHot?? &&dg.isTouchHot==true>style="color:#ff5b7d"</#if>>精品</a>
                                 &nbsp;/&nbsp;
+                                -->
                                 <a href="/distributor/relevance/list?goodsId=${dg.id?c}" >关联其他</a>
                              </p>
                             <p><a onclick="editGoods(${dg.id?c},${dg.goodsId?c});">修改信息</a></p>

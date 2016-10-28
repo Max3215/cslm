@@ -105,10 +105,10 @@ public class Application extends SpringBootServletInitializer implements Command
 						{
 							Calendar calendar = Calendar.getInstance();
             				calendar.setTime(order.getOrderTime());
-            				calendar.add(Calendar.MONTH,+1 );
+            				calendar.add(Calendar.DAY_OF_YEAR,+1 );
             				
             				Date receiveTime = calendar.getTime();
-            				// 一个月未付款的订单自动取消
+            				// 一天未付款的订单自动取消
             				if(now.getTime() > receiveTime.getTime())
             				{
             					order.setStatusId(7L);

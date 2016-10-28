@@ -102,7 +102,6 @@ public class TdIndexController {
                 }
             }
         	
-//        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findByDistribuorIdAndIsRecommendIndexTrueOrderByOnSaleTime(distributorId, 0, 10));
         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAll(distributorId, "isRecommendIndex", null, 0, 10));
         	
         	// 一级分类
@@ -116,7 +115,6 @@ public class TdIndexController {
 
                     if (null != topCat) {
                         map.addAttribute( "top_cat_goods_page" + i,tdDistributorGoodsService.findAll(distributorId, "isRecommendType", topCat.getId(), 0, 10));
-//                        		tdDistributorGoodsService.findByDistributorIdAndCategoryIdAndIsOnSaleAndIsRecommendCategory(distributorId, topCat.getId(), 0, 10));
                     }
                 }
             }
@@ -151,7 +149,6 @@ public class TdIndexController {
         			
         		}
         	}
-//        	 map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAllByIsSetRecommendTrueOrderByOnSaleTime(0, 10));
         	map.addAttribute("recommed_index_page",tdDistributorGoodsService.findAll(null, "isSetRecommend", null, 0, 10));
         	
         	// 一级分类
@@ -164,8 +161,6 @@ public class TdIndexController {
                     TdProductCategory topCat = topCatList.get(i);
 
                     if (null != topCat) {
-//                        map.addAttribute( "top_cat_goods_page" + i,
-//                        		tdDistributorGoodsService.findByCategoryIdAndIsOnSaleAndIsRecommendTypeTrue(topCat.getId(), true, 0, 10));
                     	map.addAttribute( "top_cat_goods_page" + i,tdDistributorGoodsService.findAll(null, "isRecommendCategory", topCat.getId(), 0, 10));
                     }
                 }
