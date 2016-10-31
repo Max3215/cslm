@@ -81,14 +81,45 @@ DD_belatedPNG.fix('.,img,background');
        <#include "/client/common_distributor_menu.ftl">
     
         <div class="mymember_mainbox">
+             <form action="/distributor/goods/supply" id="form1" method="post">
+             <input type="hidden" name="eventTarget" value="" id="eventTarget">
+             <input type="hidden" name="eventArgument" value="" id="eventArgument">
+                    <script type="text/javascript">
+                        var theForm = document.forms['form1'];
+                        if (!theForm) {
+                            theForm = document.form1;
+                        }
+                        function __doPostBack(eventTarget, eventArgument) {
+                            if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                                if(null != eventTarget && eventTarget=="oneCat")
+                                {
+                                    $("#categoryId").attr("value",$("#oneCat").val());
+                                }else if(null != eventTarget && eventTarget=="twoCat")
+                                {
+                                   $("#categoryId").attr("value",$("#twoCat").val());
+                                }else if(null != eventTarget && eventTarget=="categoryId")
+                                {
+                                    $("#categoryId").attr("value",$("#category").val());
+                                }else if(null != eventTarget && eventTarget=="btnPage")
+                                {
+                                    theForm.page.value = eventArgument;
+                                }
+                                
+                                theForm.eventTarget.value = eventTarget;
+                                theForm.eventArgument.value = eventArgument;
+                                theForm.submit();
+                            }
+                        }
+                    </script> 
             <div class="mymember_info mymember_info02">
                 <div class="mymember_order_search"> 
                     <h3>代理的商品</h3>
-                         <form action="/distributor/goods/supply" id="form1"> 
+                          <input class="mysub" type="button" value="导出全部"  onclick="javascript:setTimeout(__doPostBack('excel',''), 0)" />
                           <input class="mysub" type="submit" value="查询" />
                           <input type="hidden" name="categoryId" id="categoryId" value="<#if category??>${category.id?c}</#if>" />
+                          <input type="hidden" name="page" id="page" value="" />
                           <input class="mytext" type="text" name="keywords"  value="${keywords!''}" id="keywords" />
-                          <select id="oneCat" onchange="javascript:search('oneCat')" >
+                          <select id="oneCat" onchange="javascript:__doPostBack('oneCat',0);" >
                                 <option value="">所有类别</option>
                                 <#if category_list??>
                                     <#list category_list as c>
@@ -96,7 +127,7 @@ DD_belatedPNG.fix('.,img,background');
                                     </#list>
                                 </#if>
                             </select>
-                             <select id="twoCat" onchange="javascript:search('twoCat')">
+                             <select id="twoCat" onchange="javascript:__doPostBack('twoCat',0)">
                                 <option value="">所有类别</option>
                                 <#if cateList??>
                                     <#list cateList as c>
@@ -104,7 +135,7 @@ DD_belatedPNG.fix('.,img,background');
                                     </#list>
                                 </#if>
                             </select>
-                             <select id="category" onchange="javascript:search('categoryId')">
+                             <select id="category" onchange="javascript:__doPostBack('categoryId',0)">
                                 <option  value="">所有类别</option>
                                 <#if categoryList??>
                                     <#list categoryList as c>
@@ -112,21 +143,16 @@ DD_belatedPNG.fix('.,img,background');
                                     </#list>
                                 </#if>
                             </select>
-                          </form>
                     <div class="clear"></div>
                 </div>
                 
-                <form action="/distributor/deleteAll" method="post" id="form">
-                <input type="hidden" name="categoryId" value="${categoryId!''}"/>
-                <input type="hidden" name="keywords" value="${keywords!''}"/>
                 <div id="dis_goods_list">
                     <#include "/client/distributor_goods_supply.ftl">
                 </div>
-                </form>
             <div class="myclear" style="height:10px;"></div>
 
             <div class="mymember_page">
-                    <a href="javascript:deleteAll();" class="fl">删除选中的商品</a>
+                    <a href="javascript:__doPostBack('btnDelete','')" class="fl">删除选中的商品</a>
                 
                 <#if dis_goods_page??>
                 <#assign continueEnter=false>
@@ -136,7 +162,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == dis_goods_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/goods/supply?page=${page-1}&keywords=${keywords!''}&categoryId=${categoryId!''}">${page}</a>
+                                <a onclick="javascript:__doPostBack('btnPage','${(page-1)?c}')">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -152,6 +178,7 @@ DD_belatedPNG.fix('.,img,background');
         </div>
      </div>
  
+    </form>
     <div class="myclear"></div>
   </div>
   <!--mymember_main END-->

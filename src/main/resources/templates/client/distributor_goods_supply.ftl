@@ -4,6 +4,7 @@
         <th width="300">商品名称</th>
         <th width="170">商品编码</th>
         <th>价格</th>
+        <th>库存</th>
         <th>供货商</th>
         <th>操作</th>
      </tr>
@@ -21,6 +22,7 @@
                         </td>
                         <td class="tb01">${dg.code!''}</td>
                         <td class="tb02">￥${dg.goodsPrice?string('0.00')}</td>
+                        <td class="tb01">${dg.leftNumber!''}</td>
                         <td>${dg.providerTitle!''}</td>
                         <td>
                             <#--
@@ -29,7 +31,7 @@
                                 <a href="javascript:recommed(${dg.id?c},'index');" <#if dg.isRecommendIndex?? &&dg.isRecommendIndex>style="color:#ff5b7d"</#if>>首页推荐</a>
                              </p>
                              -->
-                             <p>PC：<a href="javascript:recommed(${dg.id?c},'cat');" <#if dg.isRecommendType?? &&dg.isRecommendType ==true>style="color:#ff5b7d"</#if>>分类</a>
+                             <p><a href="javascript:recommed(${dg.id?c},'cat');" <#if dg.isRecommendType?? &&dg.isRecommendType ==true>style="color:#ff5b7d"</#if>>分类</a>
                                 &nbsp;/&nbsp;
                                 <a href="javascript:recommed(${dg.id?c},'index');" <#if dg.isRecommendIndex?? &&dg.isRecommendIndex==true>style="color:#ff5b7d"</#if>>推荐</a>
                              </p>

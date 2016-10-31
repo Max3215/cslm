@@ -5,9 +5,9 @@
         <th width="170">商品编码</th>
         <th>价格</th>
         <#if sort?? &&  sort==1>
-        <th><a href="/distributor/goods/sale/${isOnSale?c}?keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>&dir=2">库存↓↑</a></th>
+        <th><a onclick = "javascript:__doPostBack('dir',2)">库存↓↑</a></th>
         <#else>
-        <th><a href="/distributor/goods/sale/${isOnSale?c}?keywords=${keywords!''}<#if categoryId??>&categoryId=${categoryId?c!''}</#if>&dir=1">库存↓↑</a></th>
+        <th><a onclick = "javascript:__doPostBack('dir',1)">库存↓↑</a></th>
         </#if>
         
         <th>操作</th>

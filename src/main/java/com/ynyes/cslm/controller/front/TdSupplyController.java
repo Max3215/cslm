@@ -440,7 +440,19 @@ public class TdSupplyController extends AbstractPaytypeController{
 				tdSpecificat.setShopId(supply.getId());//　设置超市id
 				tdSpecificat.setType(3); //设置类型-分销商
 			}
-			tdSpecificatService.save(tdSpecificat);
+			tdSpecificat = tdSpecificatService.save(tdSpecificat);
+			
+			// 查看引用规格记录
+			List<TdSpecificat> list = tdSpecificatService.findByOldId(tdSpecificat.getId());
+			
+			if(null != list && list.size() > 0){
+				for (TdSpecificat tdSpecificat2 : list) {
+					tdSpecificat2.setSpecifict(tdSpecificat.getSpecifict());
+					tdSpecificat2.setLeftNumber(tdSpecificat.getLeftNumber());
+				}
+				tdSpecificatService.save(list);
+			}
+			
 			res.put("code", 1);
 			res.put("goodsId", tdSpecificat.getGoodsId());
 		}else{
@@ -467,7 +479,13 @@ public class TdSupplyController extends AbstractPaytypeController{
 			return res;
 		}
 		if(null != id){
+			
+			List<TdSpecificat> list = tdSpecificatService.findByOldId(id);
+			if(null != list && list.size() > 0){
+				tdSpecificatService.delete(list);
+			}
 			tdSpecificatService.delete(id);
+			
 			res.put("code", 1);
 		}
 		
