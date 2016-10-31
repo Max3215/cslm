@@ -68,6 +68,7 @@ DD_belatedPNG.fix('.,img,background');
                         <option value="充值" <#if cont?? && cont=="充值">selected="selected"</#if>>充值记录</option>
                         <option value="提现" <#if cont?? && cont=="提现">selected="selected"</#if>>提现记录</option>
                         <option value="批发" <#if cont?? && cont=="批发">selected="selected"</#if>>销售记录</option>
+                        <option value="返款" <#if cont?? && cont=="返款">selected="selected"</#if>>返款记录</option>
                     </select>
               		<input type="hidden" name="eventTarget" value="" id="eventTarget">
                     <input type="hidden" name="eventArgument" value="" id="eventArgument">

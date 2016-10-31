@@ -178,4 +178,29 @@ public class TdUserReturnService {
     	
     	return repository.findAll(c, pageRequest);
     }
+    
+    
+    public Page<TdUserReturn> findAll(String shop,Long disId,Long type,Long statusId,int page,int size){
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "returnTime"));
+    	Criteria<TdUserReturn> c = new Criteria<>();
+    	
+    	if(null != shop){
+    		if("dis".equalsIgnoreCase(shop)){
+    			if(null != disId){
+    	    		c.add(Restrictions.eq("distributorId", disId, true));
+    	    	}
+    		}else if("pro".equalsIgnoreCase(shop)){
+    			c.add(Restrictions.eq("shopId", disId, true));
+    		}
+    	}
+    	if(null != type){
+    		c.add(Restrictions.eq("type", type, true));
+    	}
+    	if(null != statusId){
+    		c.add(Restrictions.eq("statusId", statusId, true));
+    	}
+    	return repository.findAll(c, pageRequest);
+    }
+    
+    
 }

@@ -32,7 +32,7 @@ $(document).ready(function(){
 
     navDownList("nav_down","li",".nav_show");
     menuDownList("mainnavdown","#nav_down",".a2","sel");
-    adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
+   // adChange("n_banner_box","n_banner_sum","n_banner_num",3000,1000);
 
     $(".float_box .ewm").hover(function(){
         $(this).next().show();
@@ -41,35 +41,6 @@ $(document).ready(function(){
     })
 })
 
-function returnEdit(id){
-    var dialog = $.dialog.confirm('操作提示信息：<br />确定已处理此次退货？', function () {
-        var postData = { "id": id};
-        //发送AJAX请求
-        sendAjaxUrl(dialog, postData, "/provider/return/param/edit");
-        return false;
-    });
-}
-
-function sendAjaxUrl(winObj, postData, sendUrl) {
-        $.ajax({
-            type: "post",
-            url: sendUrl,
-            data: postData,
-            dataType: "json",
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                $.dialog.alert('尝试发送失败，错误信息：' + errorThrown, function () { }, winObj);
-            },
-            success: function (data) {
-            
-                if (data.code == 0) {
-                    winObj.close();
-                    $.dialog.tips(data.msg, 2, '32X32/succ.png', function () { location.reload(); }); //刷新页面
-                } else {
-                    $.dialog.alert('错误提示：' + data.message, function () { }, winObj);
-                }
-            }
-        });
-    }
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -91,10 +62,38 @@ DD_belatedPNG.fix('.,img,background');
     <#-- 左侧菜单结束 -->
     
     <div class="mymember_mainbox">
-      <div class="mymember_info mymember_info02">
+       <form name="form1" action="/provider/return/list" method="POST">
+        <input type="hidden" value="${page!'0'}" name="page" id="page">
+        <input type="hidden" name="eventTarget" value="" id="eventTarget">
+        <script type="text/javascript">
+            var theForm = document.forms['form1'];
+            if (!theForm) {
+                theForm = document.form1;
+            }
+            function __doPostBack(eventTarget, eventArgument) {
+                if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                    if(eventTarget=='page'){
+                        
+                        theForm.page.value = eventArgument;
+                    }else{
+                        theForm.page.value = 0;
+                        theForm.eventTarget.value = eventTarget;
+                    }
+                    
+                    theForm.submit();
+                }
+            }
+        </script>
+        <div class="mymember_info mymember_info02">
         <div class="mymember_order_search"> 
-            <a class="a001" href="/user/return/list">退货列表</a>
-            <div class="clear"></div>
+            <h3>退货列表</h3>
+            &nbsp;&nbsp;
+            <select name="statusId" onchange="javascript:setTimeout(__doPostBack('statusId',''), 0)">
+                <option value="" >全部记录</option>
+                <option value="0" <#if status_id?? && status_id==0>selected="selected"</#if>>新提交</option>
+                <option value="1" <#if status_id?? && status_id==1>selected="selected"</#if>>已同意</option>
+                <option value="2" <#if status_id?? && status_id==2>selected="selected"</#if>>已取消</option>
+            </select>
         </div>
         
         <table align="left">
@@ -105,6 +104,7 @@ DD_belatedPNG.fix('.,img,background');
                 <th width="120">处理商</th>
                 <th width="120">申请时间</th>
                 <th width="50">状态</th>
+                <th width="50">操作</th>
             </tr>
             <#if return_page??>
                 <#list return_page.content as return>
@@ -117,12 +117,13 @@ DD_belatedPNG.fix('.,img,background');
                       <td>${return.shopTitle!''}</td>
                       <td class="td003">${return.returnTime!''}</td>
                       <td >
-                            <#if return.statusId==0>
-                            <a href="javascript:returnEdit(${return.id?c});">处理退货</a>
-                            <#else>
-                            已处理
-                            </#if>     
+                            <#switch return.statusId>
+                                <#case 0>新提交<#break>
+                                <#case 1>已同意</span><#break>
+                                <#case 2>已拒绝</span><#break>
+                            </#switch> 
                        </td>
+                       <td ><a href="/provider/return/detail?id=${return.id?c}">详情</a></td>
                     </tr>
                 </#list>
             </#if>
@@ -137,7 +138,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == return_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/distributor/return/list?page=${page-1}">${page}</a>
+                                <a onclick="javascript:setTimeout(__doPostBack('page',${(page-1)?c}), 0)">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>
@@ -151,7 +152,7 @@ DD_belatedPNG.fix('.,img,background');
             </#if>
         </div>
       </div>
-      
+      </form>
     </div>
     <!--mymember_center END-->
   </div>

@@ -1325,7 +1325,10 @@ public class TdProviderController extends AbstractPaytypeController{
     }
     
     @RequestMapping(value="/return/list")
-    public String returnList(Integer page,HttpServletRequest req,ModelMap map){
+    public String returnList(Integer page,
+    		Long statusId,
+    		String eventTarget,
+    		HttpServletRequest req,ModelMap map){
     	String username = (String)req.getSession().getAttribute("provider");
     	if (null == username) {
             return "redirect:/login";
@@ -1335,17 +1338,35 @@ public class TdProviderController extends AbstractPaytypeController{
     	}
     	
     	tdCommonService.setHeader(map, req);
+    	
+    	map.addAttribute("status_id",statusId);
+    	map.addAttribute("page", page);
+    	
     	TdProvider provider = tdProviderService.findByUsername(username);
     	
-    	map.addAttribute("return_page",
-    			tdUserReturnService.findByShopIdAndType(provider.getId(), 2L, page, ClientConstant.pageSize));
+    	map.addAttribute("return_page",tdUserReturnService.findAll("pro", provider.getId(), 2L, statusId, page, ClientConstant.pageSize));
     	
     	return "/client/provider_return_list";
     }
     
+    @RequestMapping(value="/return/detail")
+    public String turnDetail(Long id,HttpServletRequest req,ModelMap map){
+    	tdCommonService.setHeader(map, req);
+    	
+    	if(null != id){
+    		map.addAttribute("turn", tdUserReturnService.findOne(id));
+    	}
+    	
+    	return "/client/provider_return_detail";
+    }
+    
     @RequestMapping(value="/return/param/edit")
     @ResponseBody
-    public Map<String,Object> returnedit(Long id,HttpServletRequest req){
+    public Map<String,Object> returnedit(Long id,
+    		Long statusId,String handleDetail,
+    		Double realPrice,
+    		HttpServletRequest req){
+    	
     	Map<String,Object> res =new HashMap<>();
     	res.put("code",1);
 		String username = (String)req.getSession().getAttribute("provider");
@@ -1355,23 +1376,43 @@ public class TdProviderController extends AbstractPaytypeController{
             res.put("message", "请重新登录！");
             return res;
         }
-		if(null != id)
-		{
-			TdUserReturn tdReturn = tdUserReturnService.findOne(id);
-			if(null != tdReturn && tdReturn.getStatusId()==0)
+		
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
+		if(null != provider){
+			if(null != id)
 			{
-				tdReturn.setStatusId(1L);
-				tdUserReturnService.save(tdReturn);
-				res.put("message", "已处理此次退货！");
-				res.put("code", 0);
-				return res;
+				TdUserReturn tdReturn = tdUserReturnService.findOne(id);
+				if(null != tdReturn && tdReturn.getStatusId()==0)
+				{
+					tdReturn.setStatusId(statusId);
+					tdReturn.setHandleDetail(handleDetail);
+					tdReturn.setRealPrice(realPrice);
+					
+					if(null != statusId){
+						if(statusId ==1){
+							if(null == provider.getVirtualMoney() || provider.getVirtualMoney() < tdReturn.getRealPrice()){
+								res.put("msg", "余额不足");
+								return res;
+							}
+							editShopReturn(tdReturn,provider);
+						}
+					}
+					
+					tdReturn = tdUserReturnService.save(tdReturn);
+					
+					res.put("message", "已处理此次退货！");
+					res.put("code", 0);
+					return res;
+				}
 			}
 		}
 		
 		res.put("message", "参数错误！");
     	return res;
     }
-    /**
+
+	/**
      * 销售统计
      * @author Max
      * 
@@ -1955,6 +1996,57 @@ public class TdProviderController extends AbstractPaytypeController{
 			 return true;	
 	   }
 	
-	
+	// 超市同意退货
+	private void editShopReturn(TdUserReturn tdReturn,TdProvider provider) {
+		Double turnPrice = 0.0;
+		
+		if(null != tdReturn.getRealPrice()){
+			
+			turnPrice = tdReturn.getRealPrice();
+		}
+		
+		// 退回超市款
+		TdDistributor distributor = tdDistributorService.findOne(tdReturn.getDistributorId());
+		if(null != distributor){
+			distributor.setVirtualMoney(distributor.getVirtualMoney() + turnPrice);
+			tdDistributorService.save(distributor);
+		}
+		
+		// 扣除批发商款项
+		provider.setVirtualMoney(provider.getVirtualMoney() - turnPrice);
+		tdProviderService.save(provider);
+		
+		TdPayRecord record = new TdPayRecord();
+    	
+    	record.setAliPrice(0.0);
+    	record.setPostPrice(0.0);
+    	record.setRealPrice(turnPrice);
+    	record.setTotalGoodsPrice(turnPrice);
+    	record.setServicePrice(0.0);
+    	record.setProvice(tdReturn.getGoodsPrice());
+    	record.setOrderNumber(tdReturn.getOrderNumber());
+    	record.setCreateTime(new Date());
+    	record.setCont("退货返款");
+    	record.setDistributorId(tdReturn.getDistributorId());
+    	record.setDistributorTitle(distributor.getTitle());
+    	record.setStatusCode(1);
+    	tdPayRecordService.save(record); // 保存超市退款记录
+    	
+    	record = new TdPayRecord();
+        record.setCont("超市退货返款");
+        record.setCreateTime(new Date());
+        record.setDistributorTitle(distributor.getTitle());
+        record.setProviderId(provider.getId());
+        record.setProviderTitle(provider.getTitle());
+        record.setOrderNumber(tdReturn.getOrderNumber());
+        record.setStatusCode(1);
+        record.setProvice(turnPrice); // 订单总额
+        record.setTotalGoodsPrice(turnPrice); // 商品总额
+        record.setPostPrice(0.0); // 
+        record.setServicePrice(0.0);
+        record.setRealPrice(turnPrice);
+        tdPayRecordService.save(record); // 保存批发商返款记录
+		
+	}
 	
 }

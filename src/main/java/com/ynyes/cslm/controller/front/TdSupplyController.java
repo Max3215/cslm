@@ -552,6 +552,25 @@ public class TdSupplyController extends AbstractPaytypeController{
 		provider.getGoodsList().add(tdProviderGoods);
 		tdProviderService.save(provider);
 		
+		if(null != sup_goodsId){ // 修改信息，同步超市代理商品信息
+			List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),tdProviderGoods.getGoodsId());
+			if(null != list && list.size() >0){
+				for (TdDistributorGoods tdDistributorGoods : list) {
+					if(null != tdDistributorGoods)
+					{
+						tdDistributorGoods.setGoodsPrice(goodsPrice);
+						tdDistributorGoods.setSubGoodsTitle(subGoodsTitle);
+						tdDistributorGoods.setLeftNumber(leftNumber);
+						tdDistributorGoods.setUnit(unit);
+						tdDistributorGoods.setGoodsMarketPrice(goodsMarketPrice);
+						
+						
+						tdDistributorGoodsService.save(tdDistributorGoods);
+					}
+				}
+			}
+		}
+		
 		res.put("msg", "操作成功");
 		res.put("code",1);
 		return res;
@@ -639,12 +658,25 @@ public class TdSupplyController extends AbstractPaytypeController{
 			res.put("msg","登录超时");
 			return res;
 		}
+		TdProvider provider = tdProviderService.findByUsername(username);
+		
 		if(null != pgId)
 		{
 			TdProviderGoods providerGoods = tdProviderGoodsService.findOne(pgId);
 			if(null != type && null != providerGoods){
 				providerGoods.setIsDistribution(type);
 				tdProviderGoodsService.save(providerGoods);
+				
+				if(null != type && type ==false){
+					// 取消分销后 超市商品库删除分销商品
+					List<TdDistributorGoods> list = tdDistributorGoodsService.findByProviderIdAndGoodsIdAndIsDistributionTrue(provider.getId(),providerGoods.getGoodsId());
+					if(null != list && list.size() >0){
+						for (TdDistributorGoods tdDistributorGoods : list) {
+							tdDistributorGoodsService.delete(tdDistributorGoods);
+						}
+					}
+				}
+				
 				res.put("code", 1);
 				res.put("msg", "操作成功");
 				return res;

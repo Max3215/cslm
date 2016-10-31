@@ -2754,7 +2754,6 @@ public class TdDistributorController extends AbstractPaytypeController{
             record.setOrderId(tdOrder.getId());
             record.setOrderNumber(tdOrder.getOrderNumber());
             record.setStatusCode(1);
-            record.setProvice(totalPrice);
             record.setProvice(totalPrice); // 订单总额
             record.setTotalGoodsPrice(totalGoodsPrice); // 商品总额
             record.setPostPrice(postPrice); // 邮费
@@ -3185,7 +3184,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 					e.setStatusId(statusId);
 					e.setHandleDetail(handleDetail);
 					e.setRealPrice(realPrice);
-					e = tdUserReturnService.save(e);
 					
 					// 普通商品退
 					if(null == e.getTurnType() || e.getTurnType() ==1 ){
@@ -3216,8 +3214,11 @@ public class TdDistributorController extends AbstractPaytypeController{
 							}else if(trunCode ==3){
 								
 							}
+					
 						}
 					}
+					
+					e = tdUserReturnService.save(e);
 					
 	            	res.put("message", "已处理此次退货！");
 	            	res.put("code", 0);
@@ -3263,12 +3264,20 @@ public class TdDistributorController extends AbstractPaytypeController{
     		tdReturn.setShopTitle(provider.getTitle());
     	}
     	
+    	Date current = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    	String curStr = sdf.format(current);
+    	Random random = new Random();
+    	
+    	tdReturn.setOrderNumber("T"+curStr+leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
     	tdReturn.setDistributorId(distributor.getId());
     	tdReturn.setReturnTime(new Date());
     	tdReturn.setTelephone(distributor.getMobile());
     	tdReturn.setUsername(distributor.getTitle());
     	tdReturn.setType(2L);
     	tdReturn.setStatusId(0L);
+    	tdReturn.setRealPrice(tdReturn.getGoodsPrice());
+    	tdReturn.setReturnNumber(1L);
     	
     	tdUserReturnService.save(tdReturn);
     	map.addAttribute("distributor", distributor);
@@ -3276,8 +3285,16 @@ public class TdDistributorController extends AbstractPaytypeController{
     	return "/client/distributor_return_end";
     }
     
+    /**
+     * 超市退货记录
+     * @author Max
+     * 
+     */
     @RequestMapping(value="/list/return")
-    public String returnLIst(Integer page,HttpServletRequest req,ModelMap map){
+    public String returnLIst(Integer page,
+    		Long statusId,
+    		String eventTarget,
+    		HttpServletRequest req,ModelMap map){
     	String username = (String)req.getSession().getAttribute("distributor");
     	if (null == username) {
             return "redirect:/login";
@@ -3286,14 +3303,40 @@ public class TdDistributorController extends AbstractPaytypeController{
     		page = 0;
     	}
     	tdCommonService.setHeader(map, req);
+    	map.addAttribute("status_id",statusId);
+    	map.addAttribute("page", page);
+    	
     	TdDistributor distributor = tdDistributorService.findbyUsername(username);
     	
     	map.addAttribute("distributor", distributor);
-    	map.addAttribute("return_page", 
-    			tdUserReturnService.findByDistributorIdAndType(distributor.getId(), 2L, page, ClientConstant.pageSize));
+    	map.addAttribute("return_page", tdUserReturnService.findAll("dis",distributor.getId(), 2L, statusId, page, ClientConstant.pageSize));
     	
     	return "/client/distributor_return_list";
     }
+    
+    /**
+     * 退货详情
+     * 
+     */
+    @RequestMapping(value="/return/detail")
+    public String returnDetal(Long id,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if (null == username) {
+            return "redirect:/login";
+        }
+    	
+    	TdDistributor distributor = tdDistributorService.findbyUsername(username);
+    	
+    	map.addAttribute("distributor", distributor);
+    	
+    	tdCommonService.setHeader(map, req);
+    	if(null != id){
+    		map.addAttribute("turn", tdUserReturnService.findOne(id));
+    	}
+    	
+    	return "/client/distributor_return_detail";
+    }
+    
     
     /**
      * 分销商品
