@@ -20,13 +20,14 @@
 <script src="/touch/js/Validform_v5.3.2_min.js"></script>
 <script src="/touch/js/jquery.cityselect.js"></script>
 <script src="/touch/js/jquery.diysiteselect.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
 	
 	 //初始化表单验证
     $("#form1").Validform({
-        tiptype: 1
+        tiptype: 1,
     });
 	
 	$("#pcd").citySelect({
@@ -63,7 +64,7 @@ $(document).ready(function(){
     </div>
     <div>
     <p>联系电话：</p>
-    <input type="text" class="text" name="receiverMobile" datatype="m" errormsg="请输入正确的电话号码格式！" value="<#if address??>${address.receiverMobile!''}</#if>"/>
+    <input type="text" class="text" name="receiverMobile" "m|/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/" errormsg="请输入正确的电话号码格式！" value="<#if address??>${address.receiverMobile!''}</#if>"/>
     </div>
     <div>
     <p>邮政编码：</p>
@@ -78,6 +79,7 @@ $(document).ready(function(){
           <p>详细地址</p>
           <textarea name="detailAddress"><#if address??>${address.detailAddress!''}</#if></textarea>
     </div>
+    <div class="default"><label><input type="checkbox" name="isDefaultAddress" <#if address.isDefaultAddress?? && address.isDefaultAddress =true>checked=true</#if> value="true"/>&nbsp;设为默认</label></div>
     <input type="submit" class="sub" value="保存" />
   </section>
   </form>

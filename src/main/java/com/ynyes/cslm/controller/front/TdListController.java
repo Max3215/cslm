@@ -399,7 +399,7 @@ public class TdListController {
 	                  Direction.ASC, sortName[orderId]));
 	      }
           
-	      goodsPage = tdDistributorGoodsService.findByDisId(distributorId, categoryId, brandId, priceLow, priceHigh, paramValueList, pageRequest);
+	      goodsPage = tdDistributorGoodsService.findByDisId(distributorId, categoryId, brandId, true,priceLow, priceHigh, paramValueList, pageRequest);
           
        // 列表页轮播广告
           TdAdType adType = tdAdTypeService.findByTitle("列表页轮播广告");
@@ -432,7 +432,7 @@ public class TdListController {
 	                  Direction.ASC, sortName[orderId]));
 	      }
          
-	      goodsPage = tdDistributorGoodsService.findByDisId(null, categoryId, brandId, priceLow, priceHigh, paramValueList, pageRequest);
+	      goodsPage = tdDistributorGoodsService.findByDisId(null, categoryId, brandId,true, priceLow, priceHigh, paramValueList, pageRequest);
         }
         
         map.addAttribute("goods_page", goodsPage);  

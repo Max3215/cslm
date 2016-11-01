@@ -17,6 +17,8 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
+<script src="/layer/layer.js"></script>
+<script src="/touch/js/user.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
@@ -44,9 +46,13 @@ $(document).ready(function(){
           <section class="address_list">
             <div class="tit">
               <p>收货人信息</p>
-              <a href="/touch/user/address/default?id=${address.id?c}" <#if address.isDefaultAddress?? && address.isDefaultAddress>class="on"</#if>>默认</a>
+              <#if address.isDefaultAddress?? && address.isDefaultAddress =true>
+              <a  class="on">默认</a>
+              <#else>
+              <a onclick="defaultAddr(${address.id?c})">设为默认</a>
+              </#if>
               <a href="/touch/user/address/update?id=${address.id?c}"></a>
-              <a href="/touch/user/address/delete?id=${address.id?c}"></a>
+              <a onclick="deleteAddr(${address.id?c})" ></a>
             </div>
             <p class="name">${address.receiverName!''}&nbsp;&nbsp;&nbsp;&nbsp;${address.receiverMobile!''}</p>
             <p class="add">${address.province!''}${address.city!''}${address.disctrict!''}${address.detailAddress!''}</p>

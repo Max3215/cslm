@@ -25,7 +25,8 @@ $(document).ready(function(){
     
     $("#form1").Validform({
          btnSubmit:"#btn_sub",
-         tiptype: 1
+         tiptype: 1,
+        // postonce:true
     });
     
     <#if msg??>

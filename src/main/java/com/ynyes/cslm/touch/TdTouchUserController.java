@@ -2096,8 +2096,8 @@ public class TdTouchUserController {
                         {
                             if (add.getId().equals(id))
                             {
-                                addressList.remove(id);
-                                user.setShippingAddressList(addressList);
+                            	addressList.remove(id);
+                            	user.setShippingAddressList(addressList);
                                 tdShippingAddressService.delete(add);
                                 
                                 if(null != type && !"".equals(type))
@@ -2111,6 +2111,18 @@ public class TdTouchUserController {
                 }
                 else if (method.equalsIgnoreCase("save"))
                 {
+                	if(null != addressList && addressList.size() > 0){
+                		if(null != tdShippingAddress.getIsDefaultAddress() && tdShippingAddress.getIsDefaultAddress() ==true){
+                			for (TdShippingAddress address : addressList) {
+                				if(!address.getId().equals(tdShippingAddress.getId())){
+                					address.setIsDefaultAddress(false);
+                					tdShippingAddressService.save(address);}
+                			}
+                		}
+                	}else{
+                		tdShippingAddress.setIsDefaultAddress(true);
+                	}
+                	
                     // 修改
                     if (null != tdShippingAddress.getId())
                     {

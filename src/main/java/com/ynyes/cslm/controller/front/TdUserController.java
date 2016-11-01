@@ -1448,14 +1448,25 @@ public class TdUserController extends AbstractPaytypeController{
                         }
                     }
                 } else if (method.equalsIgnoreCase("save")) {
+                	
+                	if(null != addressList && addressList.size() > 0){
+                		if(null != tdShippingAddress.getIsDefaultAddress() && tdShippingAddress.getIsDefaultAddress() ==true){
+                			for (TdShippingAddress address : addressList) {
+                				if(!address.getId().equals(tdShippingAddress.getId())){
+                					address.setIsDefaultAddress(false);
+                					tdShippingAddressService.save(address);}
+                			}
+                		}
+                	}else{
+                		tdShippingAddress.setIsDefaultAddress(true);
+                	}
                     // 修改
                     if (null != tdShippingAddress.getId()) {
                         tdShippingAddressService.save(tdShippingAddress);
                     }
                     // 新增
                     else {
-                        addressList.add(tdShippingAddressService
-                                .save(tdShippingAddress));
+                        addressList.add(tdShippingAddressService .save(tdShippingAddress));
                         user.setShippingAddressList(addressList);
                         tdUserService.save(user);
                     }

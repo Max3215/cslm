@@ -17,6 +17,9 @@
 <script src="/client/js/jquery.cityselect.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+
+<script src="/client/js/user.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
      //初始化表单验证
@@ -96,10 +99,10 @@ DD_belatedPNG.fix('.,img,background');
                                 <#if address.isDefaultAddress?? && address.isDefaultAddress>
                                     <p><a style="color:red;">默认地址</a></p>
                                 <#else>
-                                    <p><a href="/user/address/default?id=${address.id?c}">设为默认</a></p>
+                                    <p><a onclick="defaultAddr(${address.id?c});">设为默认</a></p>
                                 </#if>
                                 <p><a href="/user/address/update?id=${address.id?c}">修改</a></p>
-                                <p><a href="/user/address/delete?id=${address.id?c}">删除</a></p>
+                                <p><a onclick="deleteAddr(${address.id?c})">删除</a></p>
                             </td>
                          </tr>
                          </#list>
@@ -107,8 +110,9 @@ DD_belatedPNG.fix('.,img,background');
                     </table>
         
                     <div class="h20"></div>
-                    <form method="post" action="/user/address/save" id="form1">
+                    <form method="post" action="/user/address/save" id="form1" >
                         <input class="mytext" name="addressId" type="hidden" value="<#if address??>${address.id?c}</#if>">
+                        <input  name="isDefaultAddress" type="hidden" value="" id="defaultAddr">
                         <table class="mymember_address">
                              <tr>
                                 <th>收货人：</th>
@@ -121,9 +125,9 @@ DD_belatedPNG.fix('.,img,background');
                                 <th>地区：</th>
                                 <td>
                                     <div id="pcd">
-                                    <select name="province" class="prov" style="width: 100px;" datatype="*"></select>
-                                    <select name="city" class="city" style="width: 100px;" datatype="*"></select>
-                                    <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10"></select>
+                                    <select name="province" class="prov" style="width: 100px;" datatype="*" sucmsg=" "></select>
+                                    <select name="city" class="city" style="width: 100px;" datatype="*" sucmsg=" "></select>
+                                    <select name="disctrict" class="dist" style="width: 100px;" datatype="*0-10" sucmsg=" "></select>
                                     </div>
                                 </td>
                              </tr>
@@ -150,7 +154,7 @@ DD_belatedPNG.fix('.,img,background');
                              </tr>
                              <tr>
                                 <th></th>
-                                <td><input class="mysub" type="submit" value="保存" /></td>
+                                <td><input class="mysub" type="button" onclick="subAddress();" value="保存" /></td>
                              </tr>
                         </table>
                     </form>

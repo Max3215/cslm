@@ -1181,16 +1181,16 @@ public class TdDistributorGoodsService {
 	/**
 	 * 检索
 	 */
-	public Page<TdDistributorGoods> searchAndDistributorIdAndIsOnSaleOrderBy(Long distributorId,String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
-	{
-		if (null == keywords || null == sortName) {
-            return null;
-        }
-
-        PageRequest pageRequest = new PageRequest(page, size, new Sort(dir,sortName));
-		return repository.findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSale(
-													distributorId,"%"+keywords+"%",isOnSale,pageRequest);
-	}
+//	public Page<TdDistributorGoods> searchAndDistributorIdAndIsOnSaleOrderBy(Long distributorId,String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
+//	{
+//		if (null == keywords || null == sortName) {
+//            return null;
+//        }
+//
+//        PageRequest pageRequest = new PageRequest(page, size, new Sort(dir,sortName));
+//		return repository.findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSale(
+//													distributorId,"%"+keywords+"%",isOnSale,pageRequest);
+//	}
 	
 	public Page<TdDistributorGoods> searchGoodsAndIsOnSaleOrderBy(String keywords,Boolean isOnSale,int page,int size,String sortName, Direction dir)
 	{
@@ -1276,7 +1276,7 @@ public class TdDistributorGoodsService {
 		return null;
 	}
 	
-	public Page<TdDistributorGoods> findByDisId(Long disId,Long catId,Long brandId,
+	public Page<TdDistributorGoods> findByDisId(Long disId,Long catId,Long brandId,Boolean isOnSale,
 					Integer priceLow,Integer priceHigh,List<String> paramValueList,Pageable pageable)
 	{
 		Criteria<TdDistributorGoods> c = new Criteria<>();
@@ -1300,6 +1300,9 @@ public class TdDistributorGoodsService {
 		if(null != priceHigh)
 		{
 			c.add(Restrictions.lte("goodsPrice", priceHigh, true));
+		}
+		if(null != isOnSale){
+			c.add(Restrictions.eq("isOnSale", isOnSale, true));
 		}
 		
 		String paramStr = "%";

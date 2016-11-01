@@ -19,6 +19,7 @@
 
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script src="/client/js/com.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".click_a").click(function(){
@@ -38,6 +39,25 @@ $(document).ready(function(){
         $(this).next().hide();
     })
 })
+
+function editParam(){
+    layer.confirm('此操作会将选中订单状态调整进入下一流程，确定继续吗？',{
+        btn: ['确定','取消'] //按钮
+        }, function(){
+            setTimeout(__doPostBack('editParam',''), 0)
+        }, function(){
+            layer.closeAll();
+        });
+}
+function deleteOrder(){
+    layer.confirm('确定要删除选中的订单（已取消状态）吗？',{
+        btn: ['确定','取消'] //按钮
+        }, function(){
+            setTimeout(__doPostBack('btnDelete',''), 0)
+        }, function(){
+            layer.closeAll();
+        });
+}
 </script>
 <!--[if IE]>
    <script src="/client/js/html5.js"></script>
@@ -60,7 +80,7 @@ DD_belatedPNG.fix('.,img,background');
   <#include "/client/common_distributor_menu.ftl" />
   
   <div class="mymember_mainbox">
-    <form name="form1" action="/distributor/outOrder/list" method="POST">
+    <form name="form1" action="/distributor/outOrder/list" method="post">
         <input type="hidden" value="${typeId!'0'}" name="typeId">
         <input type="hidden" value="${page!'0'}" name="page" id="page">
         <input type="hidden" name="eventTarget" value="" id="eventTarget">
@@ -105,14 +125,18 @@ DD_belatedPNG.fix('.,img,background');
                         <option value="6" <#if status_id==6>selected="selected"</#if>>已完成</option>
                         <option value="7" <#if status_id==7>selected="selected"</#if>>已取消</option>
                     </select>
-                
-            <input class="mysub" type="submit" value="导出本页" name="excel" onclick="javascript:setTimeout(__doPostBack('excel',''), 0)"/>
-            <input class="mysub" type="submit" value="导出全部" name="excel" onclick="javascript:setTimeout(__doPostBack('excelAll',''), 0)"/>
-             <input class="mysub" type="submit" value="查询" onclick="javascript:setTimeout(__doPostBack('submit',''), 0)" />
+                    
+                <input class="mysub" type="button" value="批量删除"  onclick="deleteOrder()"/>
+                <input class="mysub" type="button" value="批量操作" onclick="editParam();"/>
+                <input class="mysub" type="submit" value="导出全部"  onclick="javascript:setTimeout(__doPostBack('excelAll',''), 0)"/>
+                <input class="mysub" type="submit" value="查询" onclick="javascript:setTimeout(__doPostBack('submit',''), 0)" />
             </div>
             <table id="list">
                 <tr class="mymember_infotab_tit01">
-                    <th>订单信息</th>
+                    <th width="80"><input id="checkAll" name="r" type="checkbox" class="check" onclick="selectAll();"> 全选 / <a id="reverse">反选</a></th>
+                    <th> 
+                    订单信息
+                    </th>
                     <th width="70">购买用户</th>
                     <th width="80">订单金额</th>
                     <th width="80">
@@ -125,15 +149,15 @@ DD_belatedPNG.fix('.,img,background');
                 </tr>
                 <#if order_page??>
                 <#list order_page.content as order>
-                <tr>
-                      <th colspan="7">
-                        <#--<input id="yu_1424195166" name="listChkId" type="checkbox" value="${order_index?c}" class="check""/>
-                        <input type="hidden" name="listId" id="listId" value="${order.id?c}">-->
+                <tr class="list">
+                      <th colspan="8">
+                        <input  name="listChkId" type="checkbox" value="${order_index?c}" class="check""/>
+                        <input type="hidden" name="listId" id="listId" value="${order.id?c}">
                         订单编号：<a href="/distributor/order?id=${order.id?c}">${order.orderNumber!''}</a>
                       </th>
                   </tr>
                   <tr>
-                      <td class="td001" >
+                      <td class="td001" colspan="2">
                           <#list order.orderGoodsList as og>
                           <#if og_index lt 7>
                                 <a href=""><img src="${og.goodsCoverImageUri!''}" width="50px;" height="50px;" alt="${og.goodsTitle!''}"/></a>

@@ -179,12 +179,12 @@ public interface TdDistributorGoodsRepo extends
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=?2 and g.isAudit=?3")
 		Page<TdDistributorGoods> findByDistributorIdAndIsOnSaleAndIsAudit(Long distributorId,Boolean isOnSale,Boolean isAudit,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2% and g.isOnSale=?3 and g.isAudit=?4 or "
-																	+ "d.id=?1 and g.subGoodsTitle like ?2% and g.isOnSale=?3 and g.isAudit=?4 or "
-																	+ "d.id=?1 and g.code like ?2% and g.isOnSale=?3 and g.isAudit=?4 ")
-		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCodeLikeAndIsOnSaleAndIsAudit(
-																									Long disId1,String keywords1,
-																									Boolean isOnSale1,Boolean isAudit1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2% and g.isOnSale=?3 and g.isAudit=?4 or "
+//																	+ "d.id=?1 and g.subGoodsTitle like ?2% and g.isOnSale=?3 and g.isAudit=?4 or "
+//																	+ "d.id=?1 and g.code like ?2% and g.isOnSale=?3 and g.isAudit=?4 ")
+//		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCodeLikeAndIsOnSaleAndIsAudit(
+//																									Long disId1,String keywords1,
+//																									Boolean isOnSale1,Boolean isAudit1,Pageable page);
 		
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isOnSale=?2 ")
 		Page<TdDistributorGoods> findByDistributorIdAndIsOnSale(Long distributorId,Boolean isOnSale,Pageable page);
@@ -196,94 +196,94 @@ public interface TdDistributorGoodsRepo extends
 																									Long disId1,String keywords1,
 																									Boolean isOnSale1,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2 and g.isOnSale=?3 or "
-																	+ "d.id=?1 and g.subGoodsTitle like ?2 and g.isOnSale=?3 or "
-																	+ "d.id=?1 and g.code like ?2 and g.isOnSale=?3 order by g.leftNumber desc ")
-		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSaleOrderByLeftNumberDesc(
-																	Long disId1,String keywords1,
-																	Boolean isOnSale1,Pageable page);
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2 and g.isOnSale=?3 or "
-																	+ "d.id=?1 and g.subGoodsTitle like ?2 and g.isOnSale=?3 or "
-																	+ "d.id=?1 and g.code like ?2 and g.isOnSale=?3 order by g.leftNumber asc ")
-		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSaleOrderByLeftNumberasc(
-																			Long disId1,String keywords1,
-																			Boolean isOnSale1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2 and g.isOnSale=?3 or "
+//																	+ "d.id=?1 and g.subGoodsTitle like ?2 and g.isOnSale=?3 or "
+//																	+ "d.id=?1 and g.code like ?2 and g.isOnSale=?3 order by g.leftNumber desc ")
+//		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSaleOrderByLeftNumberDesc(
+//																	Long disId1,String keywords1,
+//																	Boolean isOnSale1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2 and g.isOnSale=?3 or "
+//																	+ "d.id=?1 and g.subGoodsTitle like ?2 and g.isOnSale=?3 or "
+//																	+ "d.id=?1 and g.code like ?2 and g.isOnSale=?3 order by g.leftNumber asc ")
+//		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCodeLikeAndIsOnSaleOrderByLeftNumberasc(
+//																			Long disId1,String keywords1,
+//																			Boolean isOnSale1,Pageable page);
 		
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isAudit=?2")
 		Page<TdDistributorGoods> findByDistributorIdAndIsAudit(Long distributorId,Boolean isAudit,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2%  and g.isAudit=?3 or "
-																	+ "d.id=?1 and g.subGoodsTitle like ?2%  and g.isAudit=?3 or "
-																	+ "d.id=?1 and g.code like ?2%  and g.isAudit=?3 ")
-		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsAuditOrDistributorIdAndSubGoodsTitleLikeAndIsAuditOrDistributorIdAndCodeLikeAndIsAudit(
-																									Long disId1,String keywords1,
-																									Boolean isAudit1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2%  and g.isAudit=?3 or "
+//																	+ "d.id=?1 and g.subGoodsTitle like ?2%  and g.isAudit=?3 or "
+//																	+ "d.id=?1 and g.code like ?2%  and g.isAudit=?3 ")
+//		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeAndIsAuditOrDistributorIdAndSubGoodsTitleLikeAndIsAuditOrDistributorIdAndCodeLikeAndIsAudit(
+//																									Long disId1,String keywords1,
+//																									Boolean isAudit1,Pageable page);
 		
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 ")
 		Page<TdDistributorGoods> findByDistributorId(Long distributorId,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2%  or "
-																	+ "d.id=?1 and g.subGoodsTitle like ?2%  or "
-																	+ "d.id=?1 and g.code like ?2%   ")
-		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeOrDistributorIdAndSubGoodsTitleLikeOrDistributorIdAndCodeLike(
-																									Long disId1,String keywords1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsTitle like ?2%  or "
+//																	+ "d.id=?1 and g.subGoodsTitle like ?2%  or "
+//																	+ "d.id=?1 and g.code like ?2%   ")
+//		Page<TdDistributorGoods> findByDistributorIdAndGoodsTitleLikeOrDistributorIdAndSubGoodsTitleLikeOrDistributorIdAndCodeLike(
+//																									Long disId1,String keywords1,Pageable page);
 		
 		// =========== 超市→分类 .....  =======================================
 		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 and g.isAudit=?4")
 		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleAndIsAudit(Long distributorId,String catId,Boolean isOnSale,Boolean isAudit,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 and g.isAudit=?5 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 and g.isAudit=?5 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4 and g.isAudit=?5 ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleAndIsAudit(
-																									Long disId1,String catId1,String keywords1,
-																									Boolean isOnSale1,Boolean isAudit1,Pageable page);
-		
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 and g.isAudit=?5 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 and g.isAudit=?5 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4 and g.isAudit=?5 ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleAndIsAudit(
+//																									Long disId1,String catId1,String keywords1,
+//																									Boolean isOnSale1,Boolean isAudit1,Pageable page);
+//		
 		Page<TdDistributorGoods> findByDisIdAndCategoryIdTreeLikeAndIsOnSale(Long distributorId,String catId,Boolean isOnSale,Pageable page);
 		Page<TdDistributorGoods> findByDisIdAndCategoryIdTreeLikeAndIsOnSaleTrueAndIsRecommendCategoryTrue(Long distributorId,String catId,Pageable page);
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 order by g.leftNumber desc ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleOrderByLeftNumberDesc(Long distributorId,String catId,Boolean isOnSale,Pageable page);
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 order by g.leftNumber asc ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleOrderByLeftNumberAsc(Long distributorId,String catId,Boolean isOnSale,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 order by g.leftNumber desc ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleOrderByLeftNumberDesc(Long distributorId,String catId,Boolean isOnSale,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isOnSale=?3 order by g.leftNumber asc ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsOnSaleOrderByLeftNumberAsc(Long distributorId,String catId,Boolean isOnSale,Pageable page);
 		
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4  ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
-																									Long disId1,String catId1,
-																									String keywords1,Boolean isOnSale1,Pageable page);
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4  order by g.leftNumber desc  ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleOrderByLeftNumberDesc(
-																		Long disId1,String catId1,
-																		String keywords1,Boolean isOnSale1,Pageable page);
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4  order by g.leftNumber asc  ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleOrderByLeftNumberAsc(
-																				Long disId1,String catId1,
-																				String keywords1,Boolean isOnSale1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4  ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSale(
+//																									Long disId1,String catId1,
+//																									String keywords1,Boolean isOnSale1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4  order by g.leftNumber desc  ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleOrderByLeftNumberDesc(
+//																		Long disId1,String catId1,
+//																		String keywords1,Boolean isOnSale1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3% and g.isOnSale=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3% and g.isOnSale=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3% and g.isOnSale=?4  order by g.leftNumber asc  ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsOnSaleOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsOnSaleOrderByLeftNumberAsc(
+//																				Long disId1,String catId1,
+//																				String keywords1,Boolean isOnSale1,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isAudit=?3")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsAudit(Long distributorId,String catId,Boolean isAudit,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.isAudit=?3")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndIsAudit(Long distributorId,String catId,Boolean isAudit,Pageable page);
+//		
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3%  and g.isAudit=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3%  and g.isAudit=?4 or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3%  and g.isAudit=?4 ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsAudit(
+//																									Long disId1,String catId1,
+//																									String keywords1,Boolean isAudit1,Pageable page);
 		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3%  and g.isAudit=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3%  and g.isAudit=?4 or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3%  and g.isAudit=?4 ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeAndIsAuditOrDistributorIdAndCategoryIdTreeLikeAndCodeLikeAndIsAudit(
-																									Long disId1,String catId1,
-																									String keywords1,Boolean isAudit1,Pageable page);
-		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2%")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLike(Long distributorId,String catId,Pageable page);
-		
-		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3%  or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3%  or "
-																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3%   ")
-		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndCodeLike(
-																									Long disId1,String catId1,String keywords1,Pageable page);
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2%")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLike(Long distributorId,String catId,Pageable page);
+//		
+//		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.categoryIdTree like ?2% and g.goodsTitle like ?3%  or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.subGoodsTitle like ?3%  or "
+//																	+ "d.id=?1 and g.categoryIdTree like ?2% and g.code like ?3%   ")
+//		Page<TdDistributorGoods> findByDistributorIdAndCategoryIdTreeLikeAndGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndSubGoodsTitleLikeOrDistributorIdAndCategoryIdTreeLikeAndCodeLike(
+//																									Long disId1,String catId1,String keywords1,Pageable page);
 		
 //		@Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.isDistribution=?2 and g.isAudit=?3")
 //		Page<TdDistributorGoods> findByDistributorIdAndIsDistributionAndIsAudit(Long distributorId,Boolean isDistribution,Boolean isAudit,Pageable page);

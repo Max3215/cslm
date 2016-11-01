@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1337,6 +1336,8 @@ public class TdDistributorController extends AbstractPaytypeController{
 			String keywords,
 			Integer page,
 			Integer typeId,
+			Long[] listId,
+			Integer[] listChkId,
 			String startTime,String endTime,
 			String eventTarget,
 			HttpServletRequest req,
@@ -1380,12 +1381,15 @@ public class TdDistributorController extends AbstractPaytypeController{
 		
 		if(null != eventTarget)
 		{
-			if("excel".equalsIgnoreCase(eventTarget))
-			{
-				excelUrl=SiteMagConstant.backupPath;
-			}
-			if("excelAll".equalsIgnoreCase(eventTarget))
-			{
+//			if("excel".equalsIgnoreCase(eventTarget))
+//			{
+//				excelUrl=SiteMagConstant.backupPath;
+//			}
+			if("editParam".equalsIgnoreCase(eventTarget)){
+				edirOrderStatusId(listId,listChkId);
+			}else if("btnDelete".equalsIgnoreCase(eventTarget)){
+				deleteOrder(listId, listChkId);
+			}else if("excelAll".equalsIgnoreCase(eventTarget)){
 				excelUrl=SiteMagConstant.backupPath;
 				size =  Integer.MAX_VALUE;
 			}
@@ -1481,6 +1485,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 		return "/client/distributor_saleOrder_list";
 	}
 	
+
 	/**
 	 * 超市进货订单
 	 * @author libiao
@@ -4943,6 +4948,70 @@ public class TdDistributorController extends AbstractPaytypeController{
                 supply(username, id);
             }
         }
+	}
+	
+	/**
+	 * 订单状态批量修改
+	 * @author Max
+	 * 2016-10-31
+	 * 
+	 */
+	private void edirOrderStatusId(Long[] ids, Integer[] chkIds) {
+		if (null == ids || null == chkIds
+                || ids.length < 1 || chkIds.length < 1)
+        {
+            return;
+        }
+		
+		for (int chkId : chkIds)
+        {
+            if (chkId >=0 && ids.length > chkId)
+            {
+                Long id = ids[chkId];
+                TdOrder order = tdOrderService.findOne(id);
+                if(null != order && null != order.getStatusId()){
+                	if(order.getStatusId() ==1L){
+                		order.setStatusId(2L);
+                	}else if(order.getStatusId() ==2L){
+                		order.setStatusId(3L);
+                	}else if(order.getStatusId() ==3L){
+                		order.setStatusId(4L);
+                	}else if(order.getStatusId() ==4L){
+                		order.setStatusId(5L);
+                	}else if(order.getStatusId() ==5L){
+                		order.setStatusId(6L);
+                	}
+                	tdOrderService.save(order);
+                }
+            }
+        }
+	}
+	
+	/**
+	 * 批量删除订单
+	 * @author Max
+	 * 2016-10-31
+	 * 
+	 */
+	public void deleteOrder(Long[] ids,Integer[] chkIds)
+	{
+		 if (null == ids || null == chkIds
+	                || ids.length < 1 || chkIds.length < 1)
+	        {
+	            return;
+	        }
+	        
+	        for (int chkId : chkIds)
+	        {
+	            if (chkId >=0 && ids.length > chkId)
+	            {
+	                Long id = ids[chkId];
+	                TdOrder order = tdOrderService.findOne(id);
+	                if(order.getStatusId() == 7L){
+	                	tdOrderService.delete(id);
+	                }
+	            }
+	        }
 	}
 	
 	// 超市分销商品
