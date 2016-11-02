@@ -27,7 +27,19 @@
       <th>*商品售价：</th>
       <td><input type="text" value="<#if dis_goods?? && dis_goods.goodsPrice??>${dis_goods.goodsPrice?string('0.00')}</#if>" id="goodsPrice"></td>
     </tr>
-     <tr>
+    <tr>
+          <th>标签：</th>
+          <td>
+                <input type="hidden" value="<#if dis_goods??>${dis_goods.tagId!'0'}</#if>" id="tagId" >
+                <a class="type  <#if !dis_goods?? || !dis_goods.tagId?? || dis_goods.tagId==0>sel</#if>" onclick="sheckTag($(this),null)">无标签</a>
+                <#if tag_list??>
+                <#list tag_list as tag>
+                <a class="type <#if dis_goods?? && dis_goods.tagId?? && dis_goods.tagId==tag.id>sel</#if>" onclick="sheckTag($(this),${tag.id?c})" >${tag.title!''}</a>
+                </#list>
+                </#if>
+          </td>
+        </tr>
+    <tr>
       <th>单位：</th>
       <td><input type="text" value="<#if dis_goods??>${dis_goods.unit!''}<#elseif goods??>${goods.unit!''}</#if>" id="unit"></td>
     </tr>
@@ -58,3 +70,9 @@
 	});
 	</#if>
 </script>
+<style>
+.sub_form table td .type{padding: 4px 10px;
+    border: 1px solid #ddd;
+    margin-right: 10px;color:#666;}
+.sub_form table td .type.sel{border-color:#ff5b7d;color:#ff5b7d;}
+</style>

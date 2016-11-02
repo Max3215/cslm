@@ -1468,4 +1468,21 @@ public class TdDistributorGoodsService {
 		return repository.findAll(c, pageRequest);
 	}
 	
+	public List<TdDistributorGoods> findAll(Long disId){
+		
+		if(null != disId && disId != 0L)
+		{
+			return repository.findByDisIdAndTagIdNotNullAndIsOnSaleTrueOrderByOnSaleTimeDesc(disId);
+		}else{
+			return repository.findByTagIdNotNullAndIsOnSaleTrueOrderByOnSaleTimeDesc();
+		}
+	}
+	
+	public List<TdDistributorGoods> findByTagId(Long tagId){
+		if(null != tagId){
+			return repository.findByTagId(tagId);
+		}
+		return null;
+	}
+	
 }

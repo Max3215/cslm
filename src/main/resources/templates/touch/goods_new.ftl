@@ -42,27 +42,13 @@ $(document).ready(function(){
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
 	
-	<#--
-	<section class="pro_screen">
-        <a <#if st==0>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=0&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>销量</span></a>
-         <a <#if st==1>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=1&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>价格</span></a>
-         <a <#if st==2>class="act"</#if> href="/touch/search?keywords=${keywords!''}&page=0&st=2&<#if sd?? && sd==0>sd=1<#else>sd=0</#if>"><span>上架时间</span></a>
-    </section>
-    -->
-    
   <!-- 商品类表 -->
   <section class="product_list">
   	<ul id="goods-menu">
   	     <#if goods_page?? && goods_page.content?size gt 0>
             <#list goods_page.content as goods>
-                   <#-- 
-                   <a href="/touch/goods/${goods.id?c}" class="a1">
-                        <img src="${goods.coverImageUri!''}"/>
-                        <p>${goods.goodsTitle!""}</p>
-                        <p >￥${goods.goodsPrice?string("#.##")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>
-                    </a>
-                    -->
                     <li>
+                        <#if goods.tagId??><i><img src="${goods.tagImg!''}" /></i></#if>
 				        <a href="/touch/goods/${goods.id?c}"><img src="${goods.coverImageUri!''}" /></a>
 				        <a href="/touch/goods/${goods.id?c}" class="name">${goods.goodsTitle!""}</a>
 				        <p class="price">¥ ${goods.goodsPrice?string("0.00")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>

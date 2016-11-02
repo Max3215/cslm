@@ -81,6 +81,7 @@ function showmsg(){
 					<div class="propic_main">
 					   <#if goods.coverImageUri??>
 						    <img src="${goods.coverImageUri!''}" width="498px" height="498px">
+					         <#if dis_goods.tagId??><i><img src="${dis_goods.tagImg!''}" /></i></#if>
 					   </#if>
 					</div>
 					<span class="spe_leftBtn">&lt;</span>

@@ -1,6 +1,7 @@
 <#if goods_page??>
     <#list goods_page.content as goods>
           <li>
+            <#if goods.tagId??><i><img src="${goods.tagImg!''}" /></i></#if>
 		        <a href="/touch/goods/${goods.id?c}"><img src="${goods.coverImageUri!''}" /></a>
 		        <a href="/touch/goods/${goods.id?c}" class="name">${goods.goodsTitle!""}</a>
 		        <p class="price">¥ ${goods.goodsPrice?string("0.00")}<#if goods.unit?? && goods.unit != ''><span>/${goods.unit!''}</span></#if></p>

@@ -324,6 +324,7 @@ function editSaveGoods(){
     var goodsPrice = $("#goodsPrice").val();
     var unit = $("#unit").val();
     var leftNumber = $("#leftNumber").val();
+    var tagId = $("#tagId").val();
     
     var reg = /(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/;
     var num = /^\+?[1-9][0-9]*$/;
@@ -351,7 +352,8 @@ function editSaveGoods(){
     			"subGoodsTitle":subGoodsTitle,
     			"code":code,
     			"unit":unit,
-    			"leftNumber":leftNumber},
+    			"leftNumber":leftNumber,
+    			"tagId":tagId},
 		success : function(data){
 			  if(data.code==1){
 				  layer.msg(data.msg, {icon: 1 ,time: 1000});
@@ -443,3 +445,9 @@ function deleteRelevance(goodsId1,goodsId2){
 		});
 }
 
+function sheckTag(tag,id){
+	$(".info_tab  a").removeClass("sel");
+	$(tag).addClass("sel");
+	$("#tagId").val(id);
+		
+}

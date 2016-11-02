@@ -44,7 +44,7 @@ $(document).ready(function(){
     <#if goods.showPictures??>
         <#list goods.showPictures?split(",") as uri>
             <#if ""!=uri>
-                <li><img src="${uri!''}"/></li>
+                <li><#if uri_index ==0><#if dis_goods.tagId??><i><img src="${dis_goods.tagImg!''}" /></i></#if></#if><img src="${uri!''}"/></li>
             </#if>
         </#list>
     </#if>

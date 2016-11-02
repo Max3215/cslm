@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ynyes.cslm.entity.TdKeywords;
 import com.ynyes.cslm.entity.TdTag;
 import com.ynyes.cslm.service.TdManagerLogService;
 import com.ynyes.cslm.service.TdTagService;
@@ -51,12 +50,12 @@ public class TdManagerTagController {
             if (__EVENTTARGET.equalsIgnoreCase("btnDelete"))
             {
                 btnDelete(listId, listChkId);
-                tdManagerLogService.addLog("delete", "用户删除关键词", req);
+                tdManagerLogService.addLog("delete", "用户删除标签", req);
             }
             else if (__EVENTTARGET.equalsIgnoreCase("btnSave"))
             {
                 btnSave(listId, listSortId);
-                tdManagerLogService.addLog("edit", "用户修改关键词", req);
+                tdManagerLogService.addLog("edit", "用户修改标签", req);
             }
             else if (__EVENTTARGET.equalsIgnoreCase("btnPage"))
             {

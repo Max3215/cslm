@@ -62,6 +62,7 @@ import com.ynyes.cslm.entity.TdRelevance;
 import com.ynyes.cslm.entity.TdSetting;
 import com.ynyes.cslm.entity.TdShippingAddress;
 import com.ynyes.cslm.entity.TdSpecificat;
+import com.ynyes.cslm.entity.TdTag;
 import com.ynyes.cslm.entity.TdUser;
 import com.ynyes.cslm.entity.TdUserCollect;
 import com.ynyes.cslm.entity.TdUserReturn;
@@ -86,6 +87,7 @@ import com.ynyes.cslm.service.TdRelevanceService;
 import com.ynyes.cslm.service.TdSettingService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdSpecificatService;
+import com.ynyes.cslm.service.TdTagService;
 import com.ynyes.cslm.service.TdUserCollectService;
 import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserReturnService;
@@ -176,6 +178,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 	@Autowired
 	TdRelevanceService tdRelevanceService;
 	
+	@Autowired
+	TdTagService tdTagService;
+	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
 	{
@@ -212,309 +217,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 	}
 	
 	
-//	@RequestMapping(value = "/order/rebateincome")
-//	public String rebateincome(Integer page,
-//	                        Integer timeId, 
-//	                        HttpServletRequest req,
-//	                        ModelMap map) {
-//		String username = (String) req.getSession().getAttribute("diysiteUsername");
-//		if (null == username) {
-//            return "redirect:/login";
-//        }
-//        
-//        tdCommonService.setHeader(map, req);
-//
-//        if (null == page) {
-//            page = 0;
-//        }
-//
-//        if (null == timeId) {
-//            timeId = 0;
-//        }
-//
-//        TdDistributor TdDistributor = tdDistributorService.findbyUsername(username);
-//        Double rebates = new Double(0.00);
-//        
-//        List<TdUser> tdUserlist = tdUserService.findByUpperDiySiteIdAndIsEnabled(TdDistributor.getId());
-//        List<String> tdUsers = new ArrayList<>();
-//        for(int i = 0; i < tdUserlist.size(); i++){
-//        	tdUsers.add(tdUserlist.get(i).getUsername());
-//        }
-//        if (timeId.equals(0)) {
-//        	if (null != tdUsers) {
-//        		List<TdOrder> list = tdOrderService.findByUsernameIn(tdUsers);
-//            	rebates = countrebates(list);
-//            	map.addAttribute("order_page", tdOrderService.findByUsernameIn(tdUsers, page, SiteMagConstant.pageSize));
-//			}     	
-//		}else if (timeId.equals(1)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//          //  calendar.add(Calendar.MONTH, -1);// 月份减一
-//          //  calendar.add(Calendar.DAY_OF_MONTH, -1);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            
-//            if (null != tdUsers) {
-//        		List<TdOrder> list = tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time);
-//            	rebates = countrebates(list);
-//            	map.addAttribute("order_page", tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time, page, SiteMagConstant.pageSize));
-//			}   
-//		}else if (timeId.equals(2)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//          //  calendar.add(Calendar.MONTH, -1);// 月份减一
-//            calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            if (null != tdUsers) {
-//        		List<TdOrder> list = tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time);
-//            	rebates = countrebates(list);
-//            	map.addAttribute("order_page", tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time, page, SiteMagConstant.pageSize));
-//			}   
-//		}else if (timeId.equals(3)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -1);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            if (null != tdUsers) {
-//        		List<TdOrder> list = tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time);
-//            	rebates = countrebates(list);
-//            	map.addAttribute("order_page", tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time, page, SiteMagConstant.pageSize));
-//			}   
-//		}else if (timeId.equals(4)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -3);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            if (null != tdUsers) {
-//        		List<TdOrder> list = tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time);
-//            	rebates = countrebates(list);
-//            	map.addAttribute("order_page", tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time, page, SiteMagConstant.pageSize));
-//			}   
-//		}else if (timeId.equals(6)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -6);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            if (null != tdUsers) {
-//        		List<TdOrder> list = tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time);
-//            	rebates = countrebates(list);
-//            	map.addAttribute("order_page", tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time, page, SiteMagConstant.pageSize));
-//			}   
-//		}else if (timeId.equals(12)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -12);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            if (null != tdUsers) {
-//        		List<TdOrder> list = tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time);
-//            	rebates = countrebates(list);
-//            	map.addAttribute("order_page", tdOrderService.findByUsernameInAndOrderTimeAfter(tdUsers, time, page, SiteMagConstant.pageSize));
-//			}   
-//		}
-//        map.addAttribute("time_id", timeId);
-//        map.addAttribute("rebates",rebates);
-//        map.addAttribute("page", page);
-//        
-//        return "/client/diysite_rebate_income";
-//	}
-//	/**
-//	 * @author lc
-//	 * @注释：计算返利总额
-//	 */
-//	public Double countrebates(List<TdOrder> list){
-//    	Double rebates = new Double(0.00);       
-//    	for (int i = 0; i < list.size(); i++) {
-//    		if (null != list.get(i).getRebate()) {
-//    			rebates += list.get(i).getRebate();
-//			}  		
-//    	}
-//    	return rebates;
-//    }
-//	/**
-//	 * @author lc
-//	 * @注释：订单收入
-//	 */
-//	@RequestMapping(value = "/order/orderincome")
-//	public String orderincome(Integer page,
-//	                        Integer timeId, 
-//	                        HttpServletRequest req,
-//	                        ModelMap map) {
-//		String username = (String) req.getSession().getAttribute("diysiteUsername");
-//
-//        if (null == username) {
-//            return "redirect:/login";
-//        }
-//        
-//        tdCommonService.setHeader(map, req);
-//
-//        if (null == page) {
-//            page = 0;
-//        }
-//
-//        if (null == timeId) {
-//            timeId = 0;
-//        }
-//        
-//        
-//        Double sales = new Double(0.00);
-//
-//        TdDistributor TdDistributor = tdDistributorService.findbyUsername(username);        
-//        
-//        if (timeId.equals(0)) {
-//        	List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitle(TdDistributor.getTitle());
-//        	sales = countsales(list);
-//        	map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleOrderByIdDesc(TdDistributor.getTitle(), page, SiteMagConstant.pageSize));
-//		}else if (timeId.equals(1)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//          //  calendar.add(Calendar.MONTH, -1);// 月份减一
-//          //  calendar.add(Calendar.DAY_OF_MONTH, -1);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            
-//            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
-//            sales = countsales(list);
-//            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
-//            
-//		}else if (timeId.equals(2)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//          //  calendar.add(Calendar.MONTH, -1);// 月份减一
-//            calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            
-//            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
-//            sales = countsales(list);
-//            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
-//		}else if (timeId.equals(3)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -1);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            
-//            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
-//            sales = countsales(list);
-//            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
-//		}else if (timeId.equals(4)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -3);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            
-//            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
-//            sales = countsales(list);
-//            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
-//		}else if (timeId.equals(6)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -6);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            
-//            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
-//            sales = countsales(list);
-//            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
-//		}else if (timeId.equals(12)) {
-//			Date cur = new Date(); 
-//            Calendar calendar = Calendar.getInstance();// 日历对象
-//            calendar.setTime(cur);// 设置当前日期
-//            calendar.add(Calendar.MONTH, -12);// 月份减一
-//            //calendar.add(Calendar.DAY_OF_MONTH, -7);
-//            Date time = calendar.getTime();
-//            time.setHours(0);
-//            time.setMinutes(0);
-//            
-//            List<TdOrder> list = tdOrderService.findAllVerifyBelongShopTitleAndTimeAfter(TdDistributor.getTitle(), time);
-//            sales = countsales(list);
-//            map.addAttribute("order_page", tdOrderService.findAllVerifyBelongShopTitleTimeAfterOrderByIdDesc(TdDistributor.getTitle(), time, page, SiteMagConstant.pageSize));
-//		}
-//        map.addAttribute("time_id", timeId);
-//        map.addAttribute("sales",sales);
-//        map.addAttribute("page", page);
-//        
-//        return "/client/diysite_order_income";
-//	}
-//	/**
-//	 * @author lc
-//	 * @注释：计算总额和销售额
-//	 */
-//    public Double countprice(List<TdOrder> list){
-//    	Double price = new Double(0.00);       
-//    	for (int i = 0; i < list.size(); i++) {
-//    		price += list.get(i).getTotalPrice();
-//    	}
-//    	return price;
-//    }
-//    public Double countsales(List<TdOrder> list){
-//    	Double sales = new Double(0.00);
-//    	for(int i = 0; i < list.size(); i++){
-//    		if (list.get(i).getStatusId().equals(2L) || list.get(i).getStatusId().equals(7L)) {	
-//    			
-//			}
-//    		else{
-//    			sales += list.get(i).getTotalPrice();
-//    		}
-//    	}
-//    	return sales;
-//    }
-	
-//========================================================================================================================================================================================
-//========================================================================================================================================================================================
-//	/**
-//   	 * @注释：通过地区获取同盟店列表
-//   	 */
-//     @RequestMapping(value="/getdiysites", method = RequestMethod.POST)
-//     @ResponseBody
-//     public Map<String, Object> getdiysites(String disctrict){
-//       Map<String, Object> res = new HashMap<String, Object>();         
-//       res.put("code", 1);
-//            
-//       if (null != disctrict) {
-//   			List<TdDistributor> TdDistributor = tdDistributorService.findBydisctrict(disctrict);
-//   			
-//   			res.put("tdDiySites", TdDistributor);
-//   			res.put("code", 0);
-//       }
-//            
-//       return res;
-//    }
 	
 	@RequestMapping(value="/save", method = RequestMethod.GET)
 	public String distributorSave(HttpServletRequest req,ModelMap map)
@@ -897,6 +599,8 @@ public class TdDistributorController extends AbstractPaytypeController{
 			map.addAttribute("goods", tdGoodsService.findOne(goodsId));
 			map.addAttribute("goodsId", goodsId);
 		}
+		map.addAttribute("tag_list", tdTagService.findAll());
+		
 		return "/client/distributor_goods_detail";
 	}
 	
@@ -1175,7 +879,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 					Double goodsMarketPrice,
 					String subGoodsTitle,
 					String code,String unit,
-					Long leftNumber,HttpServletRequest req)
+					Long leftNumber,
+					Long tagId,
+					HttpServletRequest req)
 	{
 		Map<String,Object> res = new HashMap<>();
 		res.put("code", 0);
@@ -1243,6 +949,17 @@ public class TdDistributorController extends AbstractPaytypeController{
 		distributorGoods.setSubGoodsTitle(subGoodsTitle);
 		distributorGoods.setUnit(unit);
 		distributorGoods.setCode(code);
+		distributorGoods.setTagId(tagId);
+		if(null != tagId){
+			TdTag tag = tdTagService.findByIdAndIsEnableTrue(tagId);
+			if(null != tag){
+				distributorGoods.setTagImg(tag.getImgUrl());
+			}else{
+				distributorGoods.setTagImg(null);
+			}
+		}else{
+			distributorGoods.setTagImg(null);
+		}
 		
 		tdDistributorGoodsService.save(distributorGoods);
 		

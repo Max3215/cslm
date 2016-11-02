@@ -12,7 +12,7 @@ function subAddress(){
 }
 
 function calDefault(id){
-	layer.confirm('确定要将这个地址取消默认地址吗？',{
+	layer.confirm('确定要讲这个地址取消默认地址吗？',{
         btn: ['确定','取消'] //按钮
     }, function(){
     	window.location.href="/touch/user/address/calDefault?id="+id

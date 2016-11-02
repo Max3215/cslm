@@ -406,7 +406,8 @@
     white-space: nowrap;
     text-overflow: ellipsis;}
 .pro_list li .a1 p{padding-top:6px;height: 20px;width: 100%;overflow: hidden;}
-
+.pro_list li .a1 i{display: block;position: absolute;top:0;right:0;width: 50px;height: 50px;z-index: 5;}
+.pro_list li .a1 i img{width: 100%;}
 
 .pro_list li .btn{width: 160px;height: 30px;margin: 0 auto;}
 .pro_list li .btn .car{display: block;width: 80px;height: 30px;background:url(../images/car03.png) no-repeat center center #39bee9;float: left;}
@@ -435,6 +436,10 @@
 .proinfo_left{width: 500px;float: left;z-index: 10;}
 .proinfo_left .propic_main{width: 498px;height: 498px;border:1px solid #e4e4e4;overflow: hidden;}
 .proinfo_left .propic_main img{width: 100%;}
+
+.proinfo_left .propic_main i{display: block; position: absolute; top: 0; right: 0; width: 100px;height: 100px;z-index: 10;}
+.proinfo_left .propic_main i img{width: 100%;}
+
 .propic_num{position: relative;width: 440px;height: 80px;overflow: hidden;padding-top: 10px;margin: 0 auto;}
 .propic_num ul{width: 500%;position: absolute;top: 10px;left: 0;}
 .propic_num ul *{-webkit-transition: all .3s;

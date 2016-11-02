@@ -17,4 +17,6 @@ public interface TdTagRepo extends
 	List<TdTag> findByTypeId(Long id);
 	
 	Page<TdTag> findByTypeId(Long typeId,Pageable page);
+	
+	TdTag findByIdAndIsEnableTrue(Long id);
 }

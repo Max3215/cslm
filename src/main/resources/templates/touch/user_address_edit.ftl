@@ -79,7 +79,7 @@ $(document).ready(function(){
           <p>详细地址</p>
           <textarea name="detailAddress"><#if address??>${address.detailAddress!''}</#if></textarea>
     </div>
-    <div class="default"><label><input type="checkbox" name="isDefaultAddress" <#if address.isDefaultAddress?? && address.isDefaultAddress =true>checked=true</#if> value="true"/>&nbsp;设为默认</label></div>
+    <div class="default"><label><input type="checkbox" name="isDefaultAddress" <#if address?? && address.isDefaultAddress?? && address.isDefaultAddress =true>checked=true</#if> value="true"/>&nbsp;设为默认</label></div>
     <input type="submit" class="sub" value="保存" />
   </section>
   </form>

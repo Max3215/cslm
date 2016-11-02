@@ -41,6 +41,13 @@ public class TdTag {
     // 排序号
     @Column
     private Long sortId;
+    
+    // 启用状态
+    @Column
+    private Boolean isEnable;
+    
+    @Column
+    private String imgUrl;
 
 
 
@@ -83,4 +90,23 @@ public class TdTag {
 	public void setSortId(Long sortId) {
 		this.sortId = sortId;
 	}
+
+	public Boolean getIsEnable() {
+		return isEnable;
+	}
+
+	public void setIsEnable(Boolean isEnable) {
+		this.isEnable = isEnable;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+	
+	
+	
 }

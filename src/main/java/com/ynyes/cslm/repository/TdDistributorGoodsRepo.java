@@ -330,4 +330,9 @@ public interface TdDistributorGoodsRepo extends
 		TdDistributorGoods findByIdAndIsOnSaleTrue(Long id);
 		
 		List<TdDistributorGoods> findByDisIdAndIsOnSaleTrue(Long disId);
+		
+		List<TdDistributorGoods> findByDisIdAndTagIdNotNullAndIsOnSaleTrueOrderByOnSaleTimeDesc(Long disId);
+		List<TdDistributorGoods> findByTagIdNotNullAndIsOnSaleTrueOrderByOnSaleTimeDesc();
+		
+		List<TdDistributorGoods> findByTagId(Long tagId);
 }

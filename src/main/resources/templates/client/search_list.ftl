@@ -121,6 +121,7 @@ $(document).ready(function(){
                     <#list goods_page.content as goods>
         				<li>
                             <a href="/goods/${goods.id?c}" class="a1" target="_blank">
+                                <#if goods.tagId??><i><img src="${goods.tagImg!''}" /></i></#if>
                                 <img src="${goods.coverImageUri!''}" width="200" height="201" title="${goods.goodsTitle!''}"/>
                                 <p>${goods.goodsTitle!""}</p>
                             </a>

@@ -179,6 +179,29 @@ $(function(){
   </section>
   
   <!-- 新品推荐广告位 END -->
+  <#if tag_goodsList?? && tag_goodsList?size gt 0>
+  <section class="cx_area">
+    <p class="tit">促销专区</p>
+    <div class="list" id="pic_move">
+      <menu>
+        <#list tag_goodsList as goods>
+        <a href="/touch/goods/${goods.id?c}">
+          <div class="content">
+            <img  src="${goods.coverImageUri!''}" title="${goods.goodsTitle!''}" />
+            <b>¥ ${goods.goodsPrice?string("0.00")}</b>
+            <#if goods?? && goods.goodsMarketPrice??><p>¥ ${goods.goodsMarketPrice?string('0.00')}</p></#if>
+          </div>
+        </a>
+        </#list>
+      </menu>
+    </div>
+  </section>
+  </#if>
+  <script type="text/javascript">
+    listInfeedMove("pic_move","menu","a",3);//横向滑动
+  </script>
+  <!-- 促销专区 end -->
+  
 	<!-- 精品推荐 -->
   <section class="jp_recommen">
     <p class="tit">精品推荐</p>
@@ -186,10 +209,6 @@ $(function(){
       <menu>
       	<#if top_cat_list?? && top_cat_list?size gt 0 >
             <#list top_cat_list as item>
-              		<#--<a href="/touch/list/${item.id?c}">
-              			<img src="${item.imgUrl!''}" />
-              			<p class="p1">${item.title!''}</p>
-              		</a>-->
               		<a onclick="categoryGoods($(this),${item.id?c})" <#if item_index==0>class="cur" id="one_cat"</#if>>
 			          <img src="${item.imgUrl!''}">
 			          <img src="${item.imgUrl1!''}">
@@ -203,16 +222,16 @@ $(function(){
     $(document).ready(function(){
 	var _arr = $(".jp_recommen .top"),
     	_arrtop = _arr.offset().top; 
-  	$(window).scroll(function () {
-     
-    	if($(window).scrollTop() > _arrtop) {
-      	_arr.addClass("float");
-	    }else {
-	      	_arr.removeClass("float");
-	    }
-  	});	  
-	 
-});
+      	$(window).scroll(function () {
+         
+        	if($(window).scrollTop() > _arrtop) {
+          	_arr.addClass("float");
+    	    }else {
+    	      	_arr.removeClass("float");
+    	    }
+      	});	  
+    	 
+    });
     </script>
     
 
@@ -226,118 +245,6 @@ $(function(){
   </script>
   <!-- 精品推荐 end -->
 
-  <!-- 楼层part -->
-  <#--
-  <section class="index_part">
-  	<div class="top">
-  	     <#if top_category_list?? && top_category_list?size gt 0 >
-            <#list top_cat_list as item>
-                <#if item_index lt 2>
-              		<a href="/touch/list/${item.id?c}">
-              			<img src="${item.imgUrl!''}" />
-              			<p class="p1">${item.title!''}</p>
-              		</a>
-                </#if>
-            </#list>
-         </#if>
-  	</div>
-  	<menu>
-         <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
-            <#list category_recommend_page.content as item>
-                 <#if item_index lt 4 > 
-                    <a href="/touch/goods/${item.id?c!''}">
-                        <img src="${item.coverImageUri!''}" />
-                        <p>${item.goodsTitle!''}</p>
-                        <p>¥ ${item.goodsPrice?string('0.00')}</p>
-                    </a>
-                </#if>
-            </#list>
-         </#if>
-  	</menu>
-  </section>
-  
-  <section class="index_part">
-  	<div class="top plus">
-  	 <#if top_category_list?? && top_category_list?size gt 0 >
-            <#list top_cat_list as item>
-                <#if item_index gt 1 && item_index lt 5>
-                    <a href="/touch/list/${item.id?c}">
-                        <img src="${item.imgUrl!''}" />
-                        <p class="p1">${item.title!''}</p>
-                    </a>
-                </#if>
-            </#list>
-         </#if>
-  	</div>
-  	<menu>
-     <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
-            <#list category_recommend_page.content as item>
-                 <#if item_index gt 3 && item_index lt 8 > 
-                    <a href="/touch/goods/${item.id?c!''}">
-                        <img src="${item.coverImageUri!''}" />
-                        <p>${item.goodsTitle!''}</p>
-                        <p>¥ ${item.goodsPrice?string('0.00')}</p>
-                    </a>
-                </#if>
-            </#list>
-         </#if>
-  	</menu>
-  </section>
-  
-  <section class="index_part">
-  	<div class="top plus">
-  	     <#if top_category_list?? && top_category_list?size gt 0 >
-            <#list top_cat_list as item>
-                <#if item_index gt 4 && item_index lt 8>
-                    <a href="/touch/list/${item.id?c}">
-                        <img src="${item.imgUrl!''}" />
-                        <p class="p1">${item.title!''}</p>
-                    </a>
-                </#if>
-            </#list>
-         </#if>
-  	</div>
-  	<menu>
-         <#if category_recommend_page?? && category_recommend_page.content?size gt 0 >
-            <#list category_recommend_page.content as item>
-                 <#if item_index gt 7 && item_index lt 12> 
-                    <a href="/touch/goods/${item.id?c!''}">
-                        <img src="${item.coverImageUri!''}" />
-                        <p>${item.goodsTitle!''}</p>
-                        <p>¥ ${item.goodsPrice?string('0.00')}</p>
-                    </a>
-                </#if>
-            </#list>
-         </#if>
-  	</menu>
-  </section>
-  -->
-  <!-- 楼层part END -->
-  
-  <!-- 热卖商品 -->
-  <#--
-  <section class="pro_hot">
-    <#if DISTRIBUTOR_ID??>
-  	     <p class="tit">热卖商品</p>
-  	<#else>
-  	     <p class="tit">推荐商品</p>
-  	</#if>
-  	<menu>
-  	 <#if recommed_index_page?? && recommed_index_page.content?size gt 0 >
-         <#list recommed_index_page.content as item>
-         <#if item_index lt 40>
-            <a href="/touch/goods/${item.id?c}">
-                <img src="${item.coverImageUri!''}"" />
-                <p>${item.goodsTitle!""}</p>
-                <p>￥${item.goodsPrice?string('0.00')}</p>
-            </a> 
-         </#if>
-         </#list>
-     </#if>
-  	</menu>
-  </section>
-  -->
-  <!-- 热卖商品 END -->
 
   <!-- 底部 -->
   <div style="height:0.88rem;"></div>

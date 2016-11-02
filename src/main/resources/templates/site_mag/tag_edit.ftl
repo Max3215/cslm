@@ -7,6 +7,9 @@
 <script type="text/javascript" src="/mag/js/Validform_v5.3.2_min.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
+<script type="text/javascript" src="/mag/js/swfupload.js"></script>
+<script type="text/javascript" src="/mag/js/swfupload.queue.js"></script>
+<script type="text/javascript" src="/mag/js/swfupload.handlers.js"></script>
 <link href="/mag/style/WdatePicker.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
 <link href="/mag/style/default.css" rel="stylesheet">
@@ -14,6 +17,25 @@
 $(function () {
     //初始化表单验证
     $("#form1").initValidform();
+    
+    //初始化上传控件
+    $(".upload-img").each(function () {
+        $(this).InitSWFUpload({ 
+            sendurl: "/Verwalter/upload", 
+            flashurl: "/mag/js/swfupload.swf"
+        });
+    });
+    
+    //（缩略图）
+    var txtPic = $("#txtImgUrl").val();
+    if (txtPic == "" || txtPic == null) {
+        $(".thumb_ImgUrl_show").hide();
+    }
+    else {
+        $(".thumb_ImgUrl_show").html("<ul><li><div class='img-box1'><img src='" + txtPic + "' bigsrc='" + txtPic + "' /></div></li></ul>");
+        $(".thumb_ImgUrl_show").show();
+    }
+    
 });
 </script>
 </head>
@@ -53,16 +75,31 @@ $(function () {
         </dd>
     </dl>
     <dl>
-        <dt>类型</dt>
+        <dt>图片</dt>
         <dd>
-            <div class="rule-single-select">
-            <select name="typeId" datatype="*" sucmsg=" ">
-                <option value="" <#if !tag?? || !tag.typeId??>selected="selected"</#if>>请选择</option>
-                <option value="1" <#if tag?? && tag.typeId == 1>selected="selected"</#if>>商品分类标签</option>
-                <option value="2" <#if tag?? && tag.typeId == 2>selected="selected"</#if>>商品标签</option>
-                <option value="3" <#if tag?? && tag.typeId == 3>selected="selected"</#if>>用户标签</option>
-                <option value="4" <#if tag?? && tag.typeId == 4>selected="selected"</#if>>评价标签</option>
-            </select>
+            <input id="txtImgUrl" name="imgUrl" type="text" datatype="*" value="<#if tag??>${tag.imgUrl!""}</#if>" class="input normal upload-path">
+            <div class="upload-box upload-img"></div>
+            <div class="photo-list thumb_ImgUrl_show">
+                <ul>
+                    <li>
+                        <div class="img-box1"></div>
+                    </li>
+                </ul>
+            </div>
+            <span class="Validform_checktip">最佳尺寸100*100，底色透明</span>
+        </dd>
+    </dl>
+    <dl>
+        <dt>启用状态</dt>
+        <dd>
+            <div class="rule-multi-radio multi-radio">
+                <span>
+                    <input type="radio" name="isEnable" value="1" <#if tag?? && tag.isEnable?? && tag.isEnable ==true>checked="checked"</#if>>
+                    <label>正常</label>
+                    <input type="radio" name="isEnable" value="0" <#if !tag?? || !tag.isEnable?? || !tag.isEnable>checked="checked"</#if>>
+                    <label>停用</label>
+                </span>
+                
             </div>
         </dd>
     </dl>

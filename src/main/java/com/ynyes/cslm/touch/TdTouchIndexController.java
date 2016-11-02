@@ -93,9 +93,10 @@ public class TdTouchIndexController {
                 .findByMenuId(10L);
         TdAdType adType = new TdAdType();
     	
+        Long distributorId =0L;
     	 if(null != req.getSession().getAttribute("DISTRIBUTOR_ID"))
          {
-         	Long distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
+         	distributorId= (Long)req.getSession().getAttribute("DISTRIBUTOR_ID");
          	
          	map.addAttribute("distributor", tdDistributorService.findOne(distributorId));
          	
@@ -105,50 +106,11 @@ public class TdTouchIndexController {
                      if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
                      {
                          map.addAttribute("news_page", tdArticleService
-                                 .findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,
-                                         tdCat.getId(),distributorId, 0, 5));
+                                 .findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,tdCat.getId(),distributorId, 0, 5));
                          break;
                      }
-                     
                  }
              }
-         	
-             // 首页新品广告
-             adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
-
-             if (null != adType) {
-                 map.addAttribute("recommend_right_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
-             }
-             adType = tdAdTypeService.findByTitle("触屏新品推荐上侧广告");
-
-             if (null != adType) {
-                 map.addAttribute("recommend_top_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
-             }
-             adType = tdAdTypeService.findByTitle("触屏新品推荐下侧广告");
-
-             if (null != adType) {
-                 map.addAttribute("recommend_bot_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
-             }
-             
-          // 超市快讯广告
-             adType = tdAdTypeService.findByTitle("触屏超市快讯图");
-
-             if (null != adType) {
-                 map.addAttribute("news_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
-             }
-             
-             // 触屏首页轮播广告
-             adType = tdAdTypeService.findByTitle("触屏首页轮播广告");
-
-             if (null != adType) {
-                 map.addAttribute("banner_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
-             }
-         	
          }else{ // 为选择超市
          	if (null != catList && catList.size() > 0) {
          		for (TdArticleCategory tdCat : catList)
@@ -156,51 +118,88 @@ public class TdTouchIndexController {
          			if (null != tdCat.getTitle() && tdCat.getTitle().equals("超市快讯"))
          			{
          				map.addAttribute("news_page", tdArticleService
-                                 .findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,
-                                         tdCat.getId(),null, 0, 5));
+                                 .findByMenuIdAndCategoryIdAndDistributorIdAndIsEnableOrderByIdDesc(10L,tdCat.getId(),null, 0, 5));
          				break;
          			}
          			
          		}
          	}
+         }	
+    	 
+    	 map.addAttribute("tag_goodsList", tdDistributorGoodsService.findAll(distributorId));
+	     	 // 首页新品广告
+	        adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
+	
+	        if (null != adType) {
+	            map.addAttribute("recommend_right_ad_list", tdAdService
+	                    .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+	        }
+	        adType = tdAdTypeService.findByTitle("触屏新品推荐上侧广告");
+	
+	        if (null != adType) {
+	            map.addAttribute("recommend_top_ad_list", tdAdService
+	                    .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+	        }
+	        adType = tdAdTypeService.findByTitle("触屏新品推荐下侧广告");
+	
+	        if (null != adType) {
+	            map.addAttribute("recommend_bot_ad_list", tdAdService
+	                    .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+	        }
+	        
+	     // 超市快讯广告
+	        adType = tdAdTypeService.findByTitle("触屏超市快讯图");
+	
+	        if (null != adType) {
+	            map.addAttribute("news_ad_list", tdAdService
+	                    .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+	        }
+	        
+	        // 触屏首页轮播广告
+	        adType = tdAdTypeService.findByTitle("触屏首页轮播广告");
+	
+	        if (null != adType) {
+	            map.addAttribute("banner_ad_list", tdAdService
+	                    .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),distributorId));
+	        }
          	
-          // 首页新品广告
-             adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
-
-             if (null != adType) {
-                 map.addAttribute("recommend_right_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
-             }
-             adType = tdAdTypeService.findByTitle("触屏新品推荐上侧广告");
-
-             if (null != adType) {
-                 map.addAttribute("recommend_top_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
-             }
-             adType = tdAdTypeService.findByTitle("触屏新品推荐下侧广告");
-
-             if (null != adType) {
-                 map.addAttribute("recommend_bot_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
-             }
-             
-          // 超市快讯广告
-             adType = tdAdTypeService.findByTitle("触屏超市快讯图");
-
-             if (null != adType) {
-                 map.addAttribute("news_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
-             }
-             
-             // 新品推荐广告
-             adType = tdAdTypeService.findByTitle("触屏首页轮播广告");
-
-             if (null != adType) {
-                 map.addAttribute("banner_ad_list", tdAdService
-                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
-             }
-             
-         }
+//          // 首页新品广告
+//             adType = tdAdTypeService.findByTitle("触屏新品推荐右侧广告");
+//
+//             if (null != adType) {
+//                 map.addAttribute("recommend_right_ad_list", tdAdService
+//                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
+//             }
+//             adType = tdAdTypeService.findByTitle("触屏新品推荐上侧广告");
+//
+//             if (null != adType) {
+//                 map.addAttribute("recommend_top_ad_list", tdAdService
+//                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
+//             }
+//             adType = tdAdTypeService.findByTitle("触屏新品推荐下侧广告");
+//
+//             if (null != adType) {
+//                 map.addAttribute("recommend_bot_ad_list", tdAdService
+//                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
+//             }
+//             
+//          // 超市快讯广告
+//             adType = tdAdTypeService.findByTitle("触屏超市快讯图");
+//
+//             if (null != adType) {
+//                 map.addAttribute("news_ad_list", tdAdService
+//                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
+//             }
+//             
+//             // 新品推荐广告
+//             adType = tdAdTypeService.findByTitle("触屏首页轮播广告");
+//
+//             if (null != adType) {
+//                 map.addAttribute("banner_ad_list", tdAdService
+//                         .findByTypeIdAndDistributorIdAndIsValidTrueOrderBySortIdAsc(adType.getId(),0L));
+//             }
+//             
+//         }
     	
            
         // app标志位

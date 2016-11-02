@@ -194,6 +194,14 @@ public class TdDistributorGoods {
     private Date isSetTouchHotTime;
     
     
+    // 标签
+    @Column
+    private Long tagId;
+    
+    // 标签图
+    @Column
+    private String tagImg;
+    
     
 	public Long getId() {
 		return id;
@@ -561,6 +569,22 @@ public class TdDistributorGoods {
 
 	public void setIsSetTouchHotTime(Date isSetTouchHotTime) {
 		this.isSetTouchHotTime = isSetTouchHotTime;
+	}
+
+	public Long getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(Long tagId) {
+		this.tagId = tagId;
+	}
+
+	public String getTagImg() {
+		return tagImg;
+	}
+
+	public void setTagImg(String tagImg) {
+		this.tagImg = tagImg;
 	}
 
 

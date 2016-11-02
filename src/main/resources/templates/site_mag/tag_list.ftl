@@ -40,9 +40,9 @@ function __doPostBack(eventTarget, eventArgument) {
   <a href="javascript:history.back(-1);" class="back"><i></i><span>返回上一页</span></a>
   <a href="/Verwalter/center" class="home"><i></i><span>首页</span></a>
   <i class="arrow"></i>
-  <span>关键词管理</span>
+  <span>标签管理</span>
   <i class="arrow"></i>
-  <span>关键词列表</span>  
+  <span>标签列表</span>  
 </div>
 <!--/导航栏-->
 
@@ -52,10 +52,11 @@ function __doPostBack(eventTarget, eventArgument) {
           <div class="l-list">
               <ul class="icon-list">
                 <li><a class="add" href="/Verwalter/tag/edit"><i></i><span>新增</span></a></li>
-                <li><a class="save" href="javascript:__doPostBack('btnSave','')"><i></i><span>保存</span></a></li>
+                <#--<li><a class="save" href="javascript:__doPostBack('btnSave','')"><i></i><span>保存</span></a></li>-->
                 <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
                 <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
               </ul>
+              <#--
               <div class="menu-list">
                     <div class="rule-single-select">
                         <select name="typeId" onchange="javascript:setTimeout(__doPostBack('typeId', ''), 0)">
@@ -67,6 +68,7 @@ function __doPostBack(eventTarget, eventArgument) {
                         </select>
                     </div>
               </div>
+              -->
           </div>
      </div>
 </div>
@@ -79,8 +81,9 @@ function __doPostBack(eventTarget, eventArgument) {
   <tr class="odd_bg">
     <th width="8%">选择</th>
     <th align="center">标签</th>
-    <th align="center" width="10%">类型</th>
+    <th align="center" width="10%">图片</th>
     <th align="center" width="25%">发布时间</th>
+    <th align="center" width="8%">状态</th>
     <th width="8%">排序</th>
     <th width="6%">操作</th>
   </tr>
@@ -95,18 +98,11 @@ function __doPostBack(eventTarget, eventArgument) {
                     <input type="hidden" name="listId" id="listId" value="${tag.id?c}">
                 </td>
                 <td align="center"><a href="/Verwalter/tag/edit?id=${tag.id?c}">${tag.title!""}</a></td>
-                <#if tag.typeId?? && tag.typeId==1>
-                    <td align="center">商品分类标签</td>
-                <#elseif tag.typeId?? && tag.typeId==2>
-                    <td align="center">商品标签</td>
-                <#elseif tag.typeId?? && tag.typeId==3>
-                    <td align="center">用户标签</td>
-                <#elseif tag.typeId?? && tag.typeId==4>
-                    <td align="center">评价标签</td>
-                </#if>    
+                <td align="center"><img src="${tag.imgUrl!''}" width="80" /></td>
                 <td align="center">${tag.createTime!""}</td>
+                <td align="center"><#if tag.isEnable?? && tag.isEnable==true>启用<#else>停用</#if></td>
                 <td align="center">
-                    <input name="listSortId" type="text" value="${tag.sortId!""}" class="sort" onkeydown="return checkNumber(event);">
+                    <input name="listSortId" type="text" value="${tag.sortId!""}" class="sort" >
                 </td>
                 <td align="center">
                     <a href="/Verwalter/tag/edit?id=${tag.id?c}">修改</a>

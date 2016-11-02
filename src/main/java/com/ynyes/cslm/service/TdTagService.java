@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdKeywords;
 import com.ynyes.cslm.entity.TdTag;
 import com.ynyes.cslm.repository.TdTagRepo;
@@ -27,15 +28,9 @@ public class TdTagService{
 	@Autowired
 	TdTagRepo repository;
 	
-//	/**
-//	 * 查找所有
-//	 * @author libiao
-//	 * @return
-//	 */
-//	public List<TdTag> findAll()
-//	{
-//		return (List<TdTag>)repository.findAll();
-//	}
+	@Autowired
+	TdDistributorGoodsService tdDistributorGoodsService;
+	
 	
 	/**
 	 * 删除
@@ -99,6 +94,9 @@ public class TdTagService{
 	}
 	
 	
+	public List<TdTag> findAll(){
+		return (List<TdTag>) repository.findAll();
+	}
 	
 	public TdTag save(TdTag e)
 	{
@@ -106,7 +104,28 @@ public class TdTagService{
 		{
 			e.setCreateTime(new Date());
 		}
+		// 修改
+		if(null != e.getId()){
+			// 查找使用标签的所有商品
+			List<TdDistributorGoods> goodList = tdDistributorGoodsService.findByTagId(e.getId());
+			
+			// 如果有使用此标签的商品，同步修改商品图片
+			if(null != goodList && goodList.size() > 0){
+				for (TdDistributorGoods tdDistributorGoods : goodList) {
+					tdDistributorGoods.setTagImg(e.getImgUrl());
+				}
+				tdDistributorGoodsService.save(goodList);
+			}
+		}
+		
 		return repository.save(e);
+	}
+	
+	public TdTag findByIdAndIsEnableTrue(Long id){
+		if(null != id){
+			return repository.findByIdAndIsEnableTrue(id);
+		}
+		return null;
 	}
 	
 }
