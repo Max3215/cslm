@@ -1016,7 +1016,7 @@ a,button,input{
 /*10.17*/
 .product_list ul{overflow: hidden;}
 .product_list ul li{display: block;width: 49%;background: #fff;padding-bottom: 0.1rem;margin-bottom: 0.1rem;}
-.product_list ul li i{display: block;position: absolute;top:0;right:0;width: 0.6rem;z-index: 5;}
+.product_list ul li i.icon{display: block;position: absolute;top:0;right:0;width: 0.6rem;z-index: 5;}
 .product_list ul li i img{width: 100%;}
 
 .product_list ul li:nth-child(odd){float: left;}
