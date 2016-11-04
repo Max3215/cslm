@@ -618,11 +618,62 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 
 
 
+/*add 11.4 积分商城*/
+.integralmall_top{margin-bottom: 20px;}
+.integralmall_top .user{width: 200px;height: 260px;background: #ffd701;position: absolute;left:20px;top:0;}
+.integralmall_top .user .pic{width: 94px;height: 94px;background: #eeeeee;padding:3px;border-radius: 50%;-webkit-border-radius: 50%;overflow: hidden;margin:28px auto 0;}
+.integralmall_top .user .pic img{width: 100%;height: 100%;border-radius: 50%;-webkit-border-radius: 50%;}
+.integralmall_top .user .name{text-align: center;margin-top: 10px;font-size: 14px;color:#333;}
+.integralmall_top .user .name a{color:#333333;font-size: 14px;}
+.integralmall_top .user .name a:hover{text-decoration: underline;}
+.integralmall_top .user .number{font-size: 30px;text-align: center;font-weight: bold;color:#f10000;margin-top: 40px;line-height: 34px;}
+.integralmall_top .user .text{text-align: center;font-size: 14px;color:#333;}
+
+
+.pro_list li .number{margin-top:10px;text-align: center;font-size: 14px;color:#8275cf;}
+.pro_list li .number b{font-size: 18px;}
+.pro_list li .dh_btn{display: block;width: 120px;height: 32px;background: #8275cf;text-align: center;line-height: 32px;color:#fff;font-size: 14px;margin:10px auto 0;}
+.pro_list li .dh_btn:hover{background: #756ab9;}
+
+.left_list.change .tit .sort a.sel{background: #8275cf;}
+.left_list.change .tit .price .sub{background: #8275cf;}
+.left_list.change .tit .page a:hover{background: #8275cf;border-color:#8275cf;}
+.left_list.change .tit .page span b{color:#8275cf;}
+
+
+.scshop_list .pro_list{}
+.scshop_list .pro_list li{border:1px solid #cccccc;width: 197px;}
+.scshop_list .pro_list li .dh_btn{background: #39bee9;}
+.scshop_list .pro_list li .dh_btn:hover{color:#fff;}
+
+
+.integralpro_info{overflow: hidden;margin-bottom: 20px;}
+.integralpro_info .lfpic{width: 420px;height: 420px;float:left;overflow: hidden;border:1px solid #e4e4e4;}
+.integralpro_info .lfpic img{width: 420px;height: 420px;}
+.integralpro_info .midinfo{width: 500px;float:left;margin-left:30px;}
+.integralpro_info .midinfo h2{font-size:18px; color: #2f4047; font-weight: 400; line-height: 30px;}
+.integralpro_info .midinfo .subtitle{font-size: 14px; color:#8275cf; padding: 10px 0;}
+.integralpro_info .midinfo .price{padding: 12px; background: #f3f3f3; margin-top: 16px;}
+.integralpro_info .midinfo .price p{font-size: 14px;color:#666666;line-height: 30px;}
+.integralpro_info .midinfo .price p span{color:#fe6508;font-size: 24px;}
+.integralpro_info .midinfo .btn{display: block; width: 150px; height: 40px; color: #fff;background: #8275cf;margin-top: 30px;text-align: center;line-height: 40px;font-size: 16px;border-radius: 4px;-webkit-border-radius: 4px;}
+.integralpro_info .midinfo .btn:hover{background: #602489;}
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+.integralpro_info .lrtext{width: 180px;padding:0 16px 0 16px;background: #f9f1ff;float:right;border-top:3px solid #8275cf;min-height: 200px;font-size: 14px;color:#666;}
+.integralpro_info .lrtext .tit{font-size: 16px;color:#602489;padding: 16px 0;}
 
 
 

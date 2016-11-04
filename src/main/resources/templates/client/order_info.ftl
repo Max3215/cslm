@@ -59,56 +59,23 @@ $(document).ready(function(){
         <#else>
             $("#post_price").val('0');
         </#if>
+      $("#input-address-id").attr("datatype","n");
      subPrice();
   }) 
   
   $("#delive_u").click(function(){
        $("#post_price").val('0');
+       $("#input-address-id").removeAttr("datatype");
       subPrice();
   })  
   
 })
-
-function checkNumber(){
-   var registerSharePoints = ${site.registerSharePoints?c!'1'}; // 兑换比
-   var totalPoints = ${user.totalPoints?c!'0'}; // 可使用积分
-   var pointUse = parseFloat($("#pointUse").val());
-   var goodsPrice = ${totalPrice?string('0.00')};
-   var totalUse = registerSharePoints*goodsPrice;
-
-    if (pointUse==''|| pointUse=='0' || isNaN(pointUse)) 
-    {
-        $("#pointUse").val(0);
-        $("#totalUse").val(0);
-        subPrice();
-        return ;
-    }
-
-   if (pointUse > totalPoints){
-        alert("积分不足")
-        $("#pointUse").val(0);
-        $("#totalUse").val(0);
-        subPrice();
-        return ;
-   }
-   if(pointUse > totalUse){
-        alert("最多可使用"+totalUse+"积分")
-        $("#pointUse").val(0);
-        $("#totalUse").val(0);
-        subPrice();
-        return ;
-   }
-   $("#totalUse").val(pointUse/registerSharePoints);
-   subPrice();
-}
     
 function subPrice(){
     var postPrice = parseFloat($("#post_price").val());
-   // var totalUse = parseFloat($("#totalUse").val());
     var totalPrice = parseFloat(${totalPrice})
     
     $("#postprice").html(postPrice.toFixed(2))
- //   $("#pointprice").html(totalUse.toFixed(2))
     $("#totalPrice").html((totalPrice+postPrice).toFixed(2));
 }
 </script>
@@ -400,19 +367,6 @@ function checkPassword(){
     <div class="clear h20"></div>
     <div class="clear h20"></div>
     
-     <!-- add 积分抵扣 -->
-     <#--
-    <div class="use_integral">
-      <p class="fl fs18">积分抵扣</p>
-      <input type="text" class="text" name="pointUse"  value="0"  onblur="checkNumber()" onfocus="if(value==''||value=='0') {value='0'}" onkeyup="value=value.replace(/[^0-9]/g,'')" id="pointUse"/>
-      <input type="hidden" value="${site.registerSharePoints?c!'1'}" id="points">
-      <input type="hidden" value="${user.totalPoints?c!'0'}" id="totalPoints">
-      <input type="hidden" value="0" id="totalUse">
-      <p class="notice">可使用积分总额：${user.totalPoints!'0'}&nbsp;&nbsp;&nbsp;&nbsp;<span>*</span>${site.registerSharePoints!'1'}积分可抵消1元</p>
-    </div>
-   -->
-    <!-- add -->
-    <div class="clear h20"></div>
     
     <h3 class="car_tit">给商家留言：</h3>
     <div class="car_pay">
