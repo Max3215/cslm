@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.ynyes.cslm.entity.TdDistributorGoods;
-import com.ynyes.cslm.entity.TdKeywords;
 import com.ynyes.cslm.entity.TdTag;
 import com.ynyes.cslm.repository.TdTagRepo;
 
