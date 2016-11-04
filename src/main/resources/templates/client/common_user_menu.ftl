@@ -30,7 +30,8 @@
     <div class="mymember_menu_part">
         <a class="mymember_menu_tit" title="我的收藏"><img src="/client/images/mymember/menu02.png" />我的收藏</a>
         <div>
-            <a href="/user/collect/list" title="收藏商品">收藏的商品</a>
+            <a href="/user/collect/list/1" title="收藏商品">收藏的商品</a>
+            <a href="/user/collect/list/2" title="收藏商品">收藏的店铺</a>
             <a href="/user/recent/list" title="浏览历史">浏览历史</a>
         </div>
     </div><!--mymember_menu_part END-->

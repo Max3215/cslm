@@ -15,6 +15,8 @@
 <script src="/client/js/mymember.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
+<script src="/client/js/user.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 
@@ -93,8 +95,8 @@ DD_belatedPNG.fix('.,img,background');
                 </td>
                 <td class="tb02">￥${cg.goodsSalePrice?string("#.##")}</td>
                 <td>
-                    <p><a href="/cart/init?id=${cg.distributorId?c}" target="_blank">加入购物车</a></p>
-                    <p><a href="/user/collect/del?id=${cg.distributorId?c!''}">取消关注</a></p>
+                    <#--><p><a href="/cart/init?id=${cg.distributorId?c}" target="_blank">加入购物车</a></p>-->
+                    <p><a onclick="deleteCollect(${cg.id?c})">取消关注</a></p>
                 </td>
             </tr>
             </#list>
@@ -111,7 +113,7 @@ DD_belatedPNG.fix('.,img,background');
                             <#if page == collect_page.number+1>
                                 <a class="mysel" href="javascript:;">${page}</a>
                             <#else>
-                                <a href="/user/collect/list?page=${page-1}&keywords=${keywords!''}">${page}</a>
+                                <a href="/user/collect/list/${type}?page=${page-1}&keywords=${keywords!''}">${page}</a>
                             </#if>
                             <#assign continueEnter=false>
                         <#else>

@@ -488,8 +488,9 @@ public class TdUserController extends AbstractPaytypeController{
          return "/client/diysite_member_list";
     }
 
-    @RequestMapping(value = "/user/collect/list")
-    public String collectList(HttpServletRequest req, Integer page,
+    @RequestMapping(value = "/user/collect/list/{type}")
+    public String collectList(@PathVariable Integer type,
+    		HttpServletRequest req, Integer page,
             String keywords, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 
@@ -499,58 +500,66 @@ public class TdUserController extends AbstractPaytypeController{
 
         tdCommonService.setHeader(map, req);
 
-        if (null == page) {
+        if (null == page)
+        {
             page = 0;
+        }
+        
+        
+        if(null == type){
+        	type = 1;
         }
 
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
 
         map.addAttribute("user", tdUser);
+        map.addAttribute("type", type);
+        
 
-        Page<TdUserCollect> collectPage = null;
-
-        if (null == keywords || keywords.isEmpty()) {
-            collectPage = tdUserCollectService.findByUsername(username,1, page,
-                    ClientConstant.pageSize);
-        } else {
-            collectPage = tdUserCollectService.findByUsernameAndSearch(
-                    username, keywords,1, page, ClientConstant.pageSize);
-        }
-
-        map.addAttribute("collect_page", collectPage);
+//        Page<TdUserCollect> collectPage = null;
+//
+//        if (null == keywords || keywords.isEmpty()) {
+//            collectPage = tdUserCollectService.findByUsername(username,1, page,
+//                    ClientConstant.pageSize);
+//        } else {
+//            collectPage = tdUserCollectService.findByUsernameAndSearch(
+//                    username, keywords,1, page, ClientConstant.pageSize);
+//        }
+//
+//        map.addAttribute("collect_page", collectPage);
+        map.addAttribute("collect_page", tdUserCollectService.findByUsername(username,type, page, ClientConstant.pageSize));
         map.addAttribute("keywords", keywords);
 
-        return "/client/user_collect_list";
+        if(type==1)
+        {
+        	return "/client/user_collect_list";
+        }else{
+        	return "/client/user_collect_shop";
+        }
     }
 
-    @RequestMapping(value = "/user/collect/del")
-    public String collectDel(HttpServletRequest req, Long id, ModelMap map) {
-        String username = (String) req.getSession().getAttribute("username");
+    @RequestMapping(value = "/user/collect/del",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> collectDel(HttpServletRequest req, Long id, ModelMap map) {
+        Map<String,Object> res = new HashMap<>();
+    	res.put("code", 0);
+        
+    	String username = (String) req.getSession().getAttribute("username");
 
         if (null == username) {
-            return "redirect:/login";
+            res.put("msg", "登录超时");
+            return res;
         }
 
         if (null != id) {
-            TdUserCollect collect = tdUserCollectService
-                    .findByUsernameAndDistributorId(username, id,1);
-
-            // 删除收藏
-            if (null != collect) {
-                tdUserCollectService.delete(collect);
-                
-                TdGoods goods = tdGoodsService.findOne(collect.getGoodsId());
-                
-                if (null != goods && null != goods.getTotalCollects())
-                {
-                    goods.setTotalCollects(goods.getTotalCollects() - 1L);
-                    
-                    tdGoodsService.save(goods);
-                }
-            }
+                tdUserCollectService.delete(id);
+                res.put("msg", "取消成功");
+                res.put("code", 1);
+                return res;
+        }else{
+        	res.put("msg", "参数错误");
         }
-
-        return "redirect:/user/collect/list";
+        return res;
     }
 
     @RequestMapping(value = "/user/collect/add", method = RequestMethod.POST)

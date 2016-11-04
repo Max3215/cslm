@@ -47,9 +47,31 @@ $(document).ready(function(){
 	<div style="height:0.88rem;"></div>
 	<!-- 顶部 END -->
 <form id="form1" action="/touch/order/submit" method="post">  
+    <div class="dis_ways down_ways">
+    <p class="tit">选择配送方式<span></span></p>
+    <menu class="down" style="display: block;">
+       <input type="hidden" id="postPrice" value="0">
+        <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
+      <a href="javascript:void(0)" class="choose act" onclick="selectDeliveryTyp($(this),0)">送货上门
+        <#if postPrice??><span style="font-size:0.15rem;line-height:0.58rem;">&nbsp;￥${postPrice?string("0.00")}</span></#if>
+        <#if post??>&emsp;&emsp;<span style="font-size:0.15rem;line-height:0.58rem;">${post!''}</span></#if>
+      </a>
+      <a href="javascript:void(0)" class="choose" onclick="selectDeliveryTyp($(this),1)">门店取货
+        <span style="font-size:0.15rem;line-height:0.58rem;">&nbsp;（邮费：0）</span>
+      </a>
+      <#if addressList??>
+        <select name="shipAddressId">
+            <#list addressList as addr>
+          <option value="${addr.id?c}">${addr.disctrict!''}${addr.detailAddress!''}</option>
+            </#list>
+        </select>
+    </#if>
+    </menu>
+  </div>
   <!-- 购物车确认 -->
+  <div id="address_list">
   <#include "/touch/order_info_addr.ftl">
-  
+  </div>
 <script type="text/javascript">
 
 function selectDeliveryTyp(tag,type){
@@ -66,33 +88,18 @@ function selectDeliveryTyp(tag,type){
     {
         //$("#totalPrice").html(price+postPrice);
         $("#postPrice").val(postPrice);
+        $("#address_list").css("display","block");
+        $("#addressId").attr("datatype","n");
     }else{
-        //$("#totalPrice").html(price);
+         $("#address_list").css("display","none");
+        $("#addressId").removeAttr("datatype");
         $("#postPrice").val(0);
     }
     subPrice();
 }
 </script>
 
-    <div class="dis_ways down_ways">
-    <p class="tit">配送方式<span></span></p>
-    <menu class="down" style="display: block;">
-       <input type="hidden" id="postPrice" value="0">
-        <input type="hidden" value="0" id="deliveryType" name="deliveryType" datatypr="n" nullmsg="请选择配送方式!">
-      <a href="javascript:void(0)" class="choose act" onclick="selectDeliveryTyp($(this),0)">物流
-        <#if postPrice??><span style="font-size:0.15rem;line-height:0.58rem;">&nbsp;￥${postPrice?string("0.00")}</span></#if>
-        <#if post??>&emsp;&emsp;<span style="font-size:0.15rem;line-height:0.58rem;">${post!''}</span></#if>
-      </a>
-      <a href="javascript:void(0)" class="choose" onclick="selectDeliveryTyp($(this),1)">自提</a>
-      <#if addressList??>
-        <select name="shipAddressId">
-            <#list addressList as addr>
-          <option value="${addr.id?c}">${addr.disctrict!''}${addr.detailAddress!''}</option>
-            </#list>
-        </select>
-    </#if>
-    </menu>
-  </div>
+    
 
 <script type="text/javascript">
 function selectPayType(tag,type)

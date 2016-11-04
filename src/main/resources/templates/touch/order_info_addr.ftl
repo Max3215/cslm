@@ -1,9 +1,8 @@
-<div id="address_list">
 <#assign defaul = false>
 <#if user.shippingAddressList?? && user.shippingAddressList?size gt 0>
 <#list user.shippingAddressList as address>
       <#if address.isDefaultAddress?? && address.isDefaultAddress>
-        <input type="hidden" value="${address.id?c}" name="addressId"  datatype="n" nullmsg="请选择地址!">
+        <input type="hidden" value="${address.id?c}" name="addressId"  id="addressId" datatype="n"  nullmsg="请选择地址!">
       <#assign defaul = true>
       </#if>
     <section class="address_list">
@@ -23,10 +22,10 @@
 </#list>
 </#if>
 <#if defaul == false>
-    <input type="hidden" value="" name="addressId"  datatype="n" nullmsg="请选择地址!">
+    <input type="hidden" value="" name="addressId"   id="addressId" datatype="n"  nullmsg="请选择地址!">
 </#if>
 <p class="add_btn_box"><a href="/touch/user/address/update?type=order" class="add_btn">添加收货地址</a></p>
-</div>
+
 <script type="text/javascript">
 function addrDefault(id){
     $.ajax({

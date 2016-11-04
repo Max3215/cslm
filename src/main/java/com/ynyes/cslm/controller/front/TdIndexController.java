@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ynyes.cslm.entity.TdAdType;
 import com.ynyes.cslm.entity.TdArticleCategory;
+import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdProductCategory;
 import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
@@ -260,6 +261,17 @@ public class TdIndexController {
         return "/client/index";
     }
     
-    
+    @RequestMapping(value="/index")
+    public String index(Long id,HttpServletRequest req,ModelMap map){
+    	if(null != id){
+    		TdDistributor distributor = tdDistributorService.findOne(id);
+    		if(null != distributor)
+    		{
+    			req.getSession().setAttribute("DISTRIBUTOR_ID", distributor.getId());
+    			req.getSession().setAttribute("distributorTitle", distributor.getTitle());
+    		}
+    	}
+    	return "redirect:/";
+    }
     
 }

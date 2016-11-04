@@ -29,3 +29,27 @@ function deleteAddr(id){
     	layer.closeAll();
     });
 }
+
+function deleteCollect(id){
+	layer.confirm('确定要取消收藏吗？',{
+        btn: ['确定','取消'] //按钮
+    }, function(){
+    	$.ajax({
+    		type:"post",
+    		url:"/user/collect/del",
+    		data:{"id":id},
+    		success:function(data){
+    			if(data.code==1){
+    				if(data.code==1){
+    		  			  layer.msg(data.msg, {icon: 1 ,time: 1000});
+    		  			  window.location.reload();
+    		      	   }else{
+    		  			  layer.msg(data.msg, {icon: 2 ,time: 1000});
+    		      	   }
+    			}
+    		}
+    	});
+    }, function(){
+    	layer.closeAll();
+    });
+}

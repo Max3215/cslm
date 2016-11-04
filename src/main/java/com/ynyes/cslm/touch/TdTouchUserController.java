@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cslm.payment.alipay.AlipayConfig;
 import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdCash;
-import com.ynyes.cslm.entity.TdCoupon;
 import com.ynyes.cslm.entity.TdDistributor;
 import com.ynyes.cslm.entity.TdDistributorGoods;
 import com.ynyes.cslm.entity.TdGoods;
@@ -48,15 +47,12 @@ import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.entity.TdUserSuggestion;
 import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
-import com.ynyes.cslm.service.TdCouponService;
-import com.ynyes.cslm.service.TdCouponTypeService;
 import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdDistributorService;
 import com.ynyes.cslm.service.TdGoodsService;
 import com.ynyes.cslm.service.TdOrderGoodsService;
 import com.ynyes.cslm.service.TdOrderService;
 import com.ynyes.cslm.service.TdPayRecordService;
-import com.ynyes.cslm.service.TdProductCategoryService;
 import com.ynyes.cslm.service.TdShippingAddressService;
 import com.ynyes.cslm.service.TdUserCashRewardService;
 import com.ynyes.cslm.service.TdUserCollectService;
@@ -103,9 +99,6 @@ public class TdTouchUserController {
     @Autowired
     private TdUserCommentService tdUserCommentService;
     
-    @Autowired  
-    private TdCouponService tdCouponService;
-    
     @Autowired
     private TdUserRecentVisitService tdUserRecentVisitService;
     
@@ -122,9 +115,6 @@ public class TdTouchUserController {
     private TdCommonService tdCommonService;
     
     @Autowired
-    private TdProductCategoryService tdProductCategoryService;
-    
-    @Autowired
     private TdDistributorGoodsService tdDistributorGoodsService;
     
     @Autowired
@@ -136,8 +126,6 @@ public class TdTouchUserController {
     @Autowired
     private TdDistributorService tdDistributorService;
     
-    @Autowired
-    private TdCouponTypeService tdCouponTypeService;
     
     @Autowired
     private TdPayRecordService tdPayRecordService;
@@ -1221,128 +1209,127 @@ public class TdTouchUserController {
          }
          else
          {
-        	 TdUserRecentVisit recent = tdUserRecentVisitService.findOne(id);
         	 tdUserRecentVisitService.delete(id);
          }
     	 return "redirect:/touch/user/recent/list";
     }
     
-    //listId 0-全部，1-未使用，2-已使用，3-已过期 
-    @RequestMapping(value = "/user/coupon/list/{listId}")
-    public String couponList(HttpServletRequest req, Integer page,@PathVariable Integer listId, String username, Integer app,
-                        ModelMap map){
-    	if (null == username) {
-    		username = (String) req.getSession().getAttribute("username");
-            if (null == username)
-            {
-                return "redirect:/touch/login";
-            }
-		}
-        
-        tdCommonService.setHeader(map, req);
-        
-        if (null == page)
-        {
-            page = 0;
-        }
-        
-         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-        
-        map.addAttribute("user", tdUser);
-        
-        List<TdCoupon> coupanList = null;
-        
-        
-        //取得剩余天数  
-        Date today = new Date();
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.setTime(today);
-        
-        for (TdCoupon cl:coupanList)
-        {
-        	Date deadline = cl.getExpireTime();
-            Calendar calendar2 = Calendar.getInstance();
-            calendar2.setTime(deadline);
-            Long num = calendar2.getTimeInMillis() - calendar1.getTimeInMillis();
-            Double hourLeft = new Double(num/(1000*60*60)).doubleValue();
-            Long dateLeft = new Long(num/(1000*24*60*60)).longValue();
-//            cl.setHourLeft(hourLeft);
-//        	cl.setDateLeft(dateLeft);       
-        }
-        
-        
-		map.addAttribute("listId", listId);  
-        map.addAttribute("coupan_list", coupanList);
-        
-        //判断是否为app链接
-        if (null == app) {
-   			Integer isApp = (Integer) req.getSession().getAttribute("app");
-   	        if (null != isApp) {
-   	        	map.addAttribute("app", isApp);
-   			}
-		}else {
-			map.addAttribute("app", app);
-		}
-        
-        return "/touch/user_coupon_list";
-    }
-    
-    /*
-     * 删除优惠券记录
-     * 
-     */
-    @RequestMapping(value = "/user/coupon/del")
-    public String couponDel(HttpServletRequest req, Integer listId,Long id, Integer app,
-                        ModelMap map){
-        String username = (String) req.getSession().getAttribute("username");
-        
-        if (null == username)
-        {
-            return "redirect:/touch/login";
-        }
-        
-        tdCommonService.setHeader(map, req);
-        
-         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-        
-        map.addAttribute("user", tdUser);
-        
-        tdCouponService.delete(id);
-        
-        List<TdCoupon> coupanList = null;
-        
-        
-        //取得剩余天数 
-        Date today = new Date();
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.setTime(today);
-        
-        for (TdCoupon cl:coupanList)
-        {
-        	Date deadline = cl.getExpireTime();
-            Calendar calendar2 = Calendar.getInstance();
-            calendar2.setTime(deadline);
-            Long num = calendar2.getTimeInMillis() - calendar1.getTimeInMillis();
-            Double hourLeft = new Double(num/(1000*60*60)).doubleValue();
-            Long dateLeft = new Long(num/(1000*24*60*60)).longValue();
-//            cl.setHourLeft(hourLeft);
-//        	cl.setDateLeft(dateLeft);       
-        }
-        
-        map.addAttribute("coupan_list", coupanList);
-        
-        //判断是否为app链接
-        if (null == app) {
-   			Integer isApp = (Integer) req.getSession().getAttribute("app");
-   	        if (null != isApp) {
-   	        	map.addAttribute("app", isApp);
-   			}
-		}else {
-			map.addAttribute("app", app);
-		}
-        
-        return "/touch/user_coupon_list_detail";
-    }
+//    //listId 0-全部，1-未使用，2-已使用，3-已过期 
+//    @RequestMapping(value = "/user/coupon/list/{listId}")
+//    public String couponList(HttpServletRequest req, Integer page,@PathVariable Integer listId, String username, Integer app,
+//                        ModelMap map){
+//    	if (null == username) {
+//    		username = (String) req.getSession().getAttribute("username");
+//            if (null == username)
+//            {
+//                return "redirect:/touch/login";
+//            }
+//		}
+//        
+//        tdCommonService.setHeader(map, req);
+//        
+//        if (null == page)
+//        {
+//            page = 0;
+//        }
+//        
+//         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
+//        
+//        map.addAttribute("user", tdUser);
+//        
+//        List<TdCoupon> coupanList = null;
+//        
+//        
+//        //取得剩余天数  
+//        Date today = new Date();
+//        Calendar calendar1 = Calendar.getInstance();
+//        calendar1.setTime(today);
+//        
+//        for (TdCoupon cl:coupanList)
+//        {
+//        	Date deadline = cl.getExpireTime();
+//            Calendar calendar2 = Calendar.getInstance();
+//            calendar2.setTime(deadline);
+//            Long num = calendar2.getTimeInMillis() - calendar1.getTimeInMillis();
+//            Double hourLeft = new Double(num/(1000*60*60)).doubleValue();
+//            Long dateLeft = new Long(num/(1000*24*60*60)).longValue();
+////            cl.setHourLeft(hourLeft);
+////        	cl.setDateLeft(dateLeft);       
+//        }
+//        
+//        
+//		map.addAttribute("listId", listId);  
+//        map.addAttribute("coupan_list", coupanList);
+//        
+//        //判断是否为app链接
+//        if (null == app) {
+//   			Integer isApp = (Integer) req.getSession().getAttribute("app");
+//   	        if (null != isApp) {
+//   	        	map.addAttribute("app", isApp);
+//   			}
+//		}else {
+//			map.addAttribute("app", app);
+//		}
+//        
+//        return "/touch/user_coupon_list";
+//    }
+//    
+//    /*
+//     * 删除优惠券记录
+//     * 
+//     */
+//    @RequestMapping(value = "/user/coupon/del")
+//    public String couponDel(HttpServletRequest req, Integer listId,Long id, Integer app,
+//                        ModelMap map){
+//        String username = (String) req.getSession().getAttribute("username");
+//        
+//        if (null == username)
+//        {
+//            return "redirect:/touch/login";
+//        }
+//        
+//        tdCommonService.setHeader(map, req);
+//        
+//         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
+//        
+//        map.addAttribute("user", tdUser);
+//        
+//        tdCouponService.delete(id);
+//        
+//        List<TdCoupon> coupanList = null;
+//        
+//        
+//        //取得剩余天数 
+//        Date today = new Date();
+//        Calendar calendar1 = Calendar.getInstance();
+//        calendar1.setTime(today);
+//        
+//        for (TdCoupon cl:coupanList)
+//        {
+//        	Date deadline = cl.getExpireTime();
+//            Calendar calendar2 = Calendar.getInstance();
+//            calendar2.setTime(deadline);
+//            Long num = calendar2.getTimeInMillis() - calendar1.getTimeInMillis();
+//            Double hourLeft = new Double(num/(1000*60*60)).doubleValue();
+//            Long dateLeft = new Long(num/(1000*24*60*60)).longValue();
+////            cl.setHourLeft(hourLeft);
+////        	cl.setDateLeft(dateLeft);       
+//        }
+//        
+//        map.addAttribute("coupan_list", coupanList);
+//        
+//        //判断是否为app链接
+//        if (null == app) {
+//   			Integer isApp = (Integer) req.getSession().getAttribute("app");
+//   	        if (null != isApp) {
+//   	        	map.addAttribute("app", isApp);
+//   			}
+//		}else {
+//			map.addAttribute("app", app);
+//		}
+//        
+//        return "/touch/user_coupon_list_detail";
+//    }
         
     @RequestMapping(value = "/user/point/list")
     public String pointList(HttpServletRequest req, Integer page, String username, Integer app,

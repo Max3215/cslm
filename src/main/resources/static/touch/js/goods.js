@@ -46,7 +46,7 @@ function collectShop(disId){
 					layer.closeAll();
 				});
             }else{
-            	layer.msg(res.message,  {icon: 2,time: 2000});
+            	layer.msg(res.message);
             }
         }
     });
