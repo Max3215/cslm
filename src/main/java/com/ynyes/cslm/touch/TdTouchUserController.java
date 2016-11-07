@@ -144,6 +144,8 @@ public class TdTouchUserController {
         map.addAttribute("server_ip", req.getLocalName());
         map.addAttribute("server_port", req.getLocalPort());
         TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
+        
+        
         if (null == tdUser)
         {
             return "/touch/error_404";

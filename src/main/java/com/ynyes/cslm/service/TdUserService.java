@@ -276,8 +276,11 @@ public class TdUserService {
         {
             return null;
         }
-        
-        return repository.findByUsernameAndStatusIdOrUsernameAndStatusId(username, 0L, username, 1L);
+        TdUser  user = repository.findByUsernameAndStatusIdOrUsernameAndStatusId(username, 0L, username, 1L);
+        if(null == user){
+        	user = repository.findByMobile(username);
+        }
+        return user;
     }
     
     public TdUser findByUsername(String username)
