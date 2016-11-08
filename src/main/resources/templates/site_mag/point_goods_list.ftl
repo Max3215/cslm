@@ -137,7 +137,10 @@ function __doPostBack(eventTarget, eventArgument) {
             <i class="absbg"></i>
             </#if>
             <h1><span><a href="/Verwalter/pointGoods/edit?cid=${cid!""}&mid=${mid!""}&id=${goods.id?c}&__VIEWSTATE=${__VIEWSTATE!""}">${goods.goodsTitle!""}</a></span></h1>
-            <div class="remark" style="height: 55px;">${goods.subGoodsTitle!""}</div>
+            <div class="remark" >${goods.subGoodsTitle!""}</div>
+            <div class="tools">
+               <input type="text" style="border:none;color:skyblue;" value="${goods.code!""}" readonly="readonly" >
+            </div>
             <div class="foot">
                 <p class="time"><#if goods.onSaleTime??>${goods.onSaleTime?string("yyyy-MM-dd HH:mm:ss")}</#if></p>
                 <a href="/Verwalter/pointGoods/edit?cid=${cid!""}&mid=${mid!""}&id=${goods.id?c}&__VIEWSTATE=${__VIEWSTATE!""}" title="编辑" class="edit">编辑</a>

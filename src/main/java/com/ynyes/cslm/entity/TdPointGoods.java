@@ -33,6 +33,10 @@ public class TdPointGoods {
 	@Column
 	private String subGoodsTitle;
 	
+	// 编码
+	@Column
+	private String code;
+	
 	@Column
 	private String imgUrl;
 	
@@ -91,6 +95,14 @@ public class TdPointGoods {
 
 	public void setSubGoodsTitle(String subGoodsTitle) {
 		this.subGoodsTitle = subGoodsTitle;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getImgUrl() {

@@ -15,7 +15,6 @@
 
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
-<script type="text/javascript" src="/client/js/big_photo.js"></script>
 <script type="text/javascript" src="/client/js/goods_comment_consult.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 <script type="text/javascript" src="/client/js/point_goods.js"></script>
@@ -71,9 +70,9 @@ $(document).ready(function(){
 				<p class="subtitle">${goods.subGoodsTitle!''}</p>
 				<div class="price">
 					<p>所需积分：<span>${goods.point!'0'}积分</span></p>
-					<p>（您当前的可用积分为：<#if user??>${goods.totalPoints!'0'}<#else>0</#if>）</p>
+					<p>（您当前的可用积分为：<#if user??>${user.totalPoints!'0'}<#else>0</#if>）</p>
 				</div>
-				<a href="#" class="btn">立即兑换</a>
+				<a onclick="addPoint(${goods.id?c})" class="btn">立即兑换</a>
 			</div>
 			<div class="lrtext">
 				<p class="tit">兑换说明</p>

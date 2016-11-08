@@ -60,11 +60,25 @@ public class TdPointGoodsService {
 		return null;
 	}
 	
+	public TdPointGoods findByCode(String code){
+    	if(null != code){
+    		return repository.findByCode(code);
+    	}
+    	return null;
+    }
+    
+    public TdPointGoods findByCodeAndIdNot(String code,Long id){
+    	if(null == code || null == id){
+    		return null;
+    	}
+    	return repository.findByCodeAndAndIdNot(code, id);
+    }
+	
 	public Page<TdPointGoods> findAll(String keywords,Boolean isEnable,PageRequest pageRequest){
 		Criteria<TdPointGoods> c = new Criteria<>();
 		
 		if(null != keywords && !keywords.isEmpty()){
-			c.add(Restrictions.or(Restrictions.like("goodsTitle", keywords, true),Restrictions.like("subGoodsTitle", keywords, true)));
+			c.add(Restrictions.or(Restrictions.like("goodsTitle", keywords, true),Restrictions.like("code", keywords, true),Restrictions.like("subGoodsTitle", keywords, true)));
 		}
 		
 		if(null != isEnable){

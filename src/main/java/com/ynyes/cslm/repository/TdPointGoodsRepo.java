@@ -11,4 +11,7 @@ public interface TdPointGoodsRepo extends
 
 	TdPointGoods findByIdAndIsEnableTrue(Long id);
 	
+	TdPointGoods findByCode(String code);
+	TdPointGoods findByCodeAndAndIdNot(String code,Long id);
+	
 }

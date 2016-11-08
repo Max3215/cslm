@@ -118,10 +118,16 @@ $(function(){
   			<img src="/touch/images/index04.png" />
   			<p>会员中心</p>
   		</a>
+  		<#--
   		<a href="/touch/cart">
   			<img src="/touch/images/index05.png" />
   			<p>购物车</p>
   		</a>
+  		-->
+  		<a href="/touch/point/goods/list">
+            <img src="/touch/images/jifen.png" />
+            <p>积分兑换</p>
+        </a>
   		<a href="/touch/user/suggestion/list">
   			<img src="/touch/images/index06.png" />
   			<p>投诉建议</p>

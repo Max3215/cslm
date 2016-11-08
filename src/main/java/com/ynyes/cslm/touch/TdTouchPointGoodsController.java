@@ -1,4 +1,4 @@
-package com.ynyes.cslm.controller.front;
+package com.ynyes.cslm.touch;
 
 import static org.apache.commons.lang3.StringUtils.leftPad;
 
@@ -32,7 +32,6 @@ import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdPointGoodsService;
 import com.ynyes.cslm.service.TdPointOrderService;
 import com.ynyes.cslm.service.TdShippingAddressService;
-import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 
@@ -43,7 +42,8 @@ import com.ynyes.cslm.util.ClientConstant;
  * 
  */
 @Controller
-public class TdPointGoodsController {
+@RequestMapping("/touch")
+public class TdTouchPointGoodsController {
 
 	
 	@Autowired
@@ -74,7 +74,7 @@ public class TdPointGoodsController {
 	 * 兑换商品列表
 	 * 
 	 */
-	@RequestMapping("/pointGoods/list")
+	@RequestMapping("/point/goods/list")
 	public String list(Integer page,HttpServletRequest req,ModelMap map){
 		String username =(String)req.getSession().getAttribute("username");
 		
@@ -85,7 +85,7 @@ public class TdPointGoodsController {
     	map.addAttribute("hot_sale_list",tdDistributorGoodsService.findByIsOnSaleTrueBySoldNumberDesc(0,10).getContent());
 		
 		 // 列表页轮播广告
-        TdAdType adType = tdAdTypeService.findByTitle("积分兑换列表页广告");
+        TdAdType adType = tdAdTypeService.findByTitle("触屏积分兑换列表页广告");
 
         if (null != adType) {
             map.addAttribute("point_ad_list", tdAdService
@@ -102,7 +102,19 @@ public class TdPointGoodsController {
 		
 		map.addAttribute("goods_page", tdPointGoodsService.findAll(null, true, pageRequest));
 		
-		return "/client/point/goood_list";
+		return "/touch/point/goood_list";
+	}
+	
+	@RequestMapping("/point/oods/list/more")
+	public String more(Integer page,HttpServletRequest req,ModelMap map){
+		if (null == page || page < 0) {
+            page = 0;
+        }
+		PageRequest pageRequest = new PageRequest(page, ClientConstant.pageSize, new Sort(Direction.DESC, "onSaleTime"));
+		
+		map.addAttribute("goods_page", tdPointGoodsService.findAll(null, true, pageRequest));
+		
+		return "/touch/point/goood_list_more";
 	}
 	
 	/**
@@ -123,7 +135,7 @@ public class TdPointGoodsController {
 		
 		map.addAttribute("goods", tdPointGoodsService.findOne(id));
 		
-		return "/client/point/goods_detail";
+		return "/touch/point/goods_detail";
 	}
 	
 	/**
@@ -176,11 +188,11 @@ public class TdPointGoodsController {
 		TdPointGoods goods = tdPointGoodsService.findOne(id);
 		
 		if(null == goods){
-			return "/client/error_404";
+			return "/touch/error_404";
 		}
 		map.addAttribute("goods", goods);
 		
-		return "/client/point/chang_order";
+		return "/touch/point/chang_order";
 	}
 	
 	@RequestMapping(value="/point/order/submit",method=RequestMethod.POST)
@@ -197,7 +209,7 @@ public class TdPointGoodsController {
 		tdCommonService.setHeader(map, req);
 		
 		if(null == user || null == address || null == goods){
-			return "/client/error_404";
+			return "/touch/error_404";
 		}
 		
 		 Date current = new Date();
@@ -256,7 +268,7 @@ public class TdPointGoodsController {
 		
 		map.addAttribute("order_page", tdPointOrderService.findAll(username, keywords,null,null, statusId, page, ClientConstant.pageSize));
 		
-		return "/client/point/order_list";
+		return "/touch/point/order_list";
 	}
 	
 	@RequestMapping(value="/user/point/order/detail")
@@ -270,7 +282,7 @@ public class TdPointGoodsController {
 		
 		map.addAttribute("order", tdPointOrderService.findOne(id));
 		
-		return "/client/point/order_detail";
+		return "/touch/point/order_detail";
 	}
 	
 	@RequestMapping(value="/point/order/param",method=RequestMethod.POST)

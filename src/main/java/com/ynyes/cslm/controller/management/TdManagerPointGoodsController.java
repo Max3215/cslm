@@ -1,5 +1,8 @@
 package com.ynyes.cslm.controller.management;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.cslm.entity.TdPointGoods;
 import com.ynyes.cslm.service.TdManagerLogService;
@@ -140,6 +145,37 @@ public class TdManagerPointGoodsController {
         return "redirect:/Verwalter/pointGoods/list";
 	}
 	
+	
+	@RequestMapping(value="/check",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,String> checkGoods(String param,Long id){
+		Map<String, String> res = new HashMap<String, String>();
+        
+        res.put("status", "n");
+        
+        if (null == id)
+        {
+            if (null != tdPointGoodsService.findByCode(param))
+            {
+                res.put("info", "已存在同编号商品");
+                return res;
+            }
+        }
+        else
+        {
+            if (null != tdPointGoodsService.findByCodeAndIdNot(param, id))
+            {
+                res.put("info", "已存在同编号商品");
+                return res;
+            }
+        }
+        
+        
+        res.put("status", "y");
+        
+        return res;
+		
+	}
 	
 	
 	@ModelAttribute

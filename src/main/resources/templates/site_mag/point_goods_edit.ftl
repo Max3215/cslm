@@ -141,6 +141,13 @@ $(function () {
             </dd>
         </dl>
         <dl>
+            <dt>商品副标题</dt>
+            <dd>
+                <input name="code" type="text" value="<#if goods??>${goods.code!""}</#if>" class="input normal" datatype="*0-255" ajaxurl="/Verwalter/pointGoods/check<#if goods??>?id=${goods.id?c}</#if>">
+                <span class="Validform_checktip"></span>
+            </dd>
+        </dl>
+        <dl>
             <dt>市场价</dt>
             <dd>
                 <input name="goodsPrice" type="text" value="<#if goods?? && goods.goodsPrice??>${goods.goodsPrice?string("0.00")}<#else>0</#if>" class="input normal"  sucmsg=" ">
