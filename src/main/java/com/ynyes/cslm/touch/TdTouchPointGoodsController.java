@@ -105,7 +105,7 @@ public class TdTouchPointGoodsController {
 		return "/touch/point/goood_list";
 	}
 	
-	@RequestMapping("/point/oods/list/more")
+	@RequestMapping(value="/point/goods/list/more",method=RequestMethod.POST)
 	public String more(Integer page,HttpServletRequest req,ModelMap map){
 		if (null == page || page < 0) {
             page = 0;
@@ -114,7 +114,7 @@ public class TdTouchPointGoodsController {
 		
 		map.addAttribute("goods_page", tdPointGoodsService.findAll(null, true, pageRequest));
 		
-		return "/touch/point/goood_list_more";
+		return "/touch/point/goods_list_more";
 	}
 	
 	/**
@@ -139,38 +139,6 @@ public class TdTouchPointGoodsController {
 	}
 	
 	/**
-	 * 兑换前验证
-	 * 
-	 */
-	@RequestMapping(value="/point/goods/check",method=RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> chkedAdd(Long id,HttpServletRequest req,ModelMap map){
-		Map<String,Object> res = new HashMap<String, Object>();
-		map.addAttribute("code", 0);
-		
-		String username = (String)req.getSession().getAttribute("username");
-		if(null == username){
-			res.put("code",1);
-			res.put("msg", "请先登录");
-			return res;
-		}
-		
-		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		TdPointGoods pointGoods = tdPointGoodsService.findOne(id);
-		if(null != user && null != pointGoods){
-			if(null == user.getTotalPoints() || user.getTotalPoints() < pointGoods.getPoint()){
-				res.put("msg", "积分不足");
-				return res;
-			}
-		}else{
-			res.put("msg", "参数错误");
-			return res;
-		}
-		res.put("code", 2);
-		return res;
-	}
-	
-	/**
 	 * 跳转兑换信息页面
 	 * 
 	 */
@@ -179,7 +147,7 @@ public class TdTouchPointGoodsController {
 		
 		String username = (String)req.getSession().getAttribute("username");
 		if(null == username){
-			return "redirect:/login";
+			return "redirect:/touch/login";
 		}
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		
@@ -192,14 +160,14 @@ public class TdTouchPointGoodsController {
 		}
 		map.addAttribute("goods", goods);
 		
-		return "/touch/point/chang_order";
+		return "/touch/point/change_order";
 	}
 	
 	@RequestMapping(value="/point/order/submit",method=RequestMethod.POST)
 	public String orderSubmit(Long addressId,Long goodsId,String userRemarke, HttpServletRequest req,ModelMap map){
 		String username = (String)req.getSession().getAttribute("username");
 		if(null == username){
-			return "redirect:/login";
+			return "redirect:/touch/login";
 		}
 		
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
@@ -242,17 +210,16 @@ public class TdTouchPointGoodsController {
 		
 		tdPointOrderService.exChangeGoods(user, pointOrder);
 		
-		return "redirect:/user/point/order/detail?id="+pointOrder.getId();
+		return "redirect:/touch/user/point/order/detail?id="+pointOrder.getId();
 	}
 	
 	@RequestMapping(value="/user/point/order/list")
-	public String orderlist(Integer statusId,
-			String keywords,
+	public String orderlist(
 			Integer page,
 			HttpServletRequest req,ModelMap map){
 		String username = (String)req.getSession().getAttribute("username");
 		if(null == username){
-			return "redirect:/login";
+			return "redirect:/touch/login";
 		}
 		
 		tdCommonService.setHeader(map, req);
@@ -262,20 +229,35 @@ public class TdTouchPointGoodsController {
 			page = 0;
 		}
 		
-		map.addAttribute("statusId", statusId);
 		map.addAttribute("page", page);
-		map.addAttribute("keywords", keywords);
 		
-		map.addAttribute("order_page", tdPointOrderService.findAll(username, keywords,null,null, statusId, page, ClientConstant.pageSize));
+		map.addAttribute("order_page", tdPointOrderService.findAll(username, null,null,null, null, page, ClientConstant.pageSize));
 		
 		return "/touch/point/order_list";
+	}
+	
+	@RequestMapping(value="/user/point/order/more",method=RequestMethod.POST)
+	public String orderlistMore(
+			Integer page,
+			HttpServletRequest req,ModelMap map){
+		String username = (String)req.getSession().getAttribute("username");
+		
+		if (null == page || page < 0) {
+            page = 0;
+        }
+		
+		map.addAttribute("page", page);
+		
+		map.addAttribute("order_page", tdPointOrderService.findAll(username, null,null,null, null, page, ClientConstant.pageSize));
+		
+		return "/touch/point/order_list_more";
 	}
 	
 	@RequestMapping(value="/user/point/order/detail")
 	public String orderDetail(Long id,HttpServletRequest req,ModelMap map){
 		String username = (String)req.getSession().getAttribute("username");
 		if(null == username){
-			return "redirect:/login";
+			return "redirect:/touch/login";
 		}
 		
 		tdCommonService.setHeader(map, req);
@@ -287,20 +269,24 @@ public class TdTouchPointGoodsController {
 	
 	@RequestMapping(value="/point/order/param",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> orderParam(Long orderId,HttpServletRequest req,ModelMap map){
+	public Map<String,Object> orderParam(Long orderId,Integer statusId,HttpServletRequest req,ModelMap map){
 		Map<String, Object> res = new HashMap<>();
 		
 		res.put("code", 0);
 		
+		if(null == statusId){
+			statusId =1;
+		}
+		
 		TdPointOrder pointOrder = tdPointOrderService.findOne(orderId);
 		if(null != pointOrder){
 			
-			if(pointOrder.getStatusId() ==2){ // 待收货
-				
-				pointOrder.setStatusId(3);
+			pointOrder.setStatusId(statusId);
+			tdPointOrderService.save(pointOrder);
+			if(statusId == 4){
+				tdPointOrderService.orderCancel(pointOrder);
 			}
 			
-			tdPointOrderService.save(pointOrder);
 			res.put("code", 1);
 			res.put("msg", "操作成功");
 		}else{

@@ -23,7 +23,7 @@
             <a href="/user/order/list/0"  title="我的订单">我的订单</a>
             <a href="/user/comment/list"  title="评价订单">评价订单</a>
             <a href="/user/order/list/7" title="取消订单记录">取消订单记录</a>
-            <a href="/user/point/order/list" title="取消订单记录">积分兑换</a>
+            <a href="/user/point/order/list" title="取消订单记录">积分订单</a>
             <a href="/user/suggestion/list" title="留言">留言</a>
             <a href="/user/return/list" title="">退货列表</a>
           </div>

@@ -103,7 +103,7 @@ function weixinpay(orderId){
     <div  id="order_list">
   <#if order_page??>
     <#list order_page.content as order>
-  <section class="order_list" id="order_list">
+  <section class="order_list" >
     <ul>
       <a href="/touch/user/order?id=${order.id?c}"> <p class="number">订单号：${order.orderNumber!''}</p></a>
       <#list order.orderGoodsList as og>

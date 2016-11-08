@@ -5,15 +5,9 @@ function addPoint(id){
 		data:{"id":id},
 		success : function(data){
 			if(data.code==1){
-				layer.confirm(data.msg,{
-            		btn: ['确定','取消'] //按钮
-				}, function(){
-					window.location.href = "/login";
-				}, function(){
-					layer.closeAll();
-				});
+					window.location.href = "/touch/login";
 			}else if(data.code==2){
-				window.location.href = "/point/goods/exChange?id="+id;
+				window.location.href = "/touch/point/goods/exChange?id="+id;
 			}else{
 				layer.msg(data.msg,  {icon: 2,time: 2000});
 			}
@@ -21,12 +15,6 @@ function addPoint(id){
 	})
 }
 
-function selectAddress(self, id)
-{
-    $(self).siblings().removeClass("sel");
-    $(self).addClass("sel");
-    $("#addressId").val(id);
-}
 // 提交兑换
 function subForm(){
 	var addressId = $("#addressId").val();
@@ -41,16 +29,18 @@ function subForm(){
 }
 
 // 兑换订单状态修改
-function orderFinish(orderId){
-	
+function orderFinish(orderId,statusId){
 	var msg ="确定已收到兑换商品？";
+	if(statusId ==4){
+		msg="确定取消兑换此商品，取消后积分将返回。";
+	}
 	layer.confirm(msg,{
 		btn: ['确定','取消'] //按钮
 	}, function(){
 		$.ajax({
-			url :"/point/order/param",
+			url :"/touch/point/order/param",
 			type : "post",
-			data:{"orderId":orderId},
+			data:{"orderId":orderId,"statusId":statusId},
 			success : function(data){
 					if(data.code ==1){
 						layer.msg(data.msg, {icon: 1 ,time: 2000});

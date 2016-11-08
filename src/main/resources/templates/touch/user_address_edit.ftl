@@ -56,6 +56,7 @@ $(document).ready(function(){
   <!-- 收货人信息填写 -->
   <form id="form1" action="/touch/user/address/save">
   <input type="hidden" value="${type!''}" name="type">
+  <input type="hidden" value="${pointId!''}" name="pointId">
   <section class="add_consignee">
     <input class="mytext" name="addressId" type="hidden" value="<#if address??>${address.id?c}</#if>">  
     <div>

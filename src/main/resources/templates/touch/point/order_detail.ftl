@@ -17,7 +17,8 @@
 
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
-
+<script type="text/javascript" src="/touch/js/point_goods.js"></script>
+<script src="/layer/layer.js"></script>
 </head>
 
 <body>
@@ -31,11 +32,19 @@
 	<!-- 顶部 END -->
   	
   	<ul class="order_detail">
-		<li>订单日期：<span><#if order??>${order.orderTime?string('yyyy-MM-dd')}</#if></span></li>
-		<li>订单总价：<span>￥<#if order??>${order.totalPrice?string("0.00")}</#if></span></li>
+		<li>订单日期：<span>${order.createTime!''}</span></li>
+		<li>使用积分：<span>${order.point}</span></li>
 		<li>订单编号：<span><#if order??>${order.orderNumber!''}</#if></span></li>
-		<li>支付方式：<span>${order.payTypeTitle!""}</span></li>
-		<li>配送方式：<span><#if order?? && order.deliveryMethod?? && order.deliveryMethod==1>门店自提：${order.shipAddress!''}<#else>送货上门</#if></span></li>
+		<li>订单状态：<span>
+		          <#if order.statusId?? && order.statusId == 1>     
+                         待发货
+                    <#elseif order.statusId?? && order.statusId == 2>
+                            待收货
+                    <#elseif order.statusId?? && order.statusId == 3>
+                        已完成
+                    <#elseif order.statusId?? && order.statusId == 4>
+                        已取消
+                    </#if></span></li>
 	</ul>
   	<ul class="order_detail">
 		<li>收货人：<span><#if order??>${order.shippingName!''}</#if></span></li>
@@ -46,33 +55,24 @@
 
 	<section class="order_list" style="margin-bottom:0.4rem;border:none;">
     <ul>
-        <#if order?? && order.orderGoodsList??>
-            <#list order.orderGoodsList as og> 
-              <li>
-                    <a href="/touch/goods/${og.goodsId?c}" class="pic"><img src="${og.goodsCoverImageUri!''}" /></a>
-                    <div class="info">
-                      <a href="/touch/goods/${og.goodsId?c}">${og.goodsTitle!''}</a>
-                      <#if og.specName??><p>规格：${og.specName!''}</p></#if>
-                      <p>价格：￥${og.price?string('0.00')}</p>
-                      <p>数量：${og.quantity!'0'}</p>
-                      <#if order.statusId==5 && og.isReturnApplied?? && og.isReturnApplied== false>
-                      <a href="/touch/user/return/${order.id?c}?id=${og.id?c}" class="sqth">申请退货</a>
-                      </#if>
-                    </div>
-                    <div class="clear"></div>  
-              </li>
-              </#list>
-         </#if>
+          <li>
+                <a href="/touch/point/goods/detail?id=${order.pointId?c}" class="pic"><img src="${order.goodsImg!''}" /></a>
+                <div class="info">
+                  <a href="/touch/point/goods/detail?id=${order.pointId?c}">${order.goodsTitle}</a>
+                  <p>积分：${order.point}</p>
+                </div>
+                <div class="clear"></div>  
+          </li>
     </ul>  
   </section>
+   <section class="cart_foot">
+   <#if order.statusId==1>
+   <a  id="btn_show" onclick="orderFinish(${order.id?c},4);" class="btn">取消兑换</a>
+   <#elseif order.statusId==2>
+    <a  id="btn_show" onclick="orderFinish(${order.id?c},3);" class="btn">确定收货</a>
+    </#if>
+  </section>
 
-  <ul class="order_detail">
-		<li>商品价格：<span>￥<#if order?? && order.totalGoodsPrice??>${order.totalGoodsPrice?string('0.00')}</#if></span></li>
-		<li>邮费：<span>￥<#if order.postPrice??>${order.postPrice?string("0.00")}<#else>0</#if></span></li>
-		<li style="height:20px;"></li>
-		<li>实付总额：<span style="color:#d64532;">￥<#if order??>${order.totalPrice?string("0.00")}</#if></span></li>
-		
-	</ul>
 	<div style="height:0.88rem;"></div>
 <section class="comfooter tabfix">
         <menu>

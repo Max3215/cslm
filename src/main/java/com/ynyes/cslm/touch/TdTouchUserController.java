@@ -2041,6 +2041,7 @@ public class TdTouchUserController {
     public String address(HttpServletRequest req, 
                         @PathVariable String method,
                         Long id,String type,
+                        Long pointId,
                         TdShippingAddress tdShippingAddress, Integer app,
                         ModelMap map){
         String username = (String) req.getSession().getAttribute("username");
@@ -2056,6 +2057,7 @@ public class TdTouchUserController {
 
         map.addAttribute("user", user);
         map.addAttribute("type", type);
+        map.addAttribute("pointId", pointId);
         
         if (null != user)
         {
@@ -2092,6 +2094,8 @@ public class TdTouchUserController {
                                 if(null != type && !"".equals(type))
                                 {
                                 	return "redirect:/touch/order/info";
+                                }else if(null != pointId){
+                                	return "redirect:/touch/point/goods/exChange?id="+pointId;
                                 }
                                 return "redirect:/touch/user/address/list";
                             }
@@ -2127,6 +2131,8 @@ public class TdTouchUserController {
                     if(null != type && !"".equals(type))
                     {
                     	return "redirect:/touch/order/info";
+                    }else if(null != pointId){
+                    	return "redirect:/touch/point/goods/exChange?id="+pointId;
                     }
                     return "redirect:/touch/user/address/list";
                 }else if(method.equalsIgnoreCase("default")){

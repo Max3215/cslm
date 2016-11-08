@@ -28,7 +28,7 @@ $(document).ready(function(){
 });
 
 function convert(){
-	var totalPoint = ${user.totalPoints!'0'};
+	var totalPoint = ${user.totalPoints?c!'0'};
 	var point = $("#point").val();
 	
 	if(!/^\+?[1-9][0-9]*$/.test(point)){

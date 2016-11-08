@@ -7,6 +7,7 @@
 <meta name="keywords" content="<#if productCategory??>${productCategory.seoKeywords!''}</#if>" />
 <meta name="description" content="<#if productCategory??>${productCategory.seoDescription!''}</#if>" />
 <meta name="copyright" content="<#if site??>${site.copyright!''}</#if>" /> 
+<link href="/touch/images/cslm.ico" rel="shortcut icon">
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,minimum-scale=1">
 <meta content="yes" name="apple-mobile-web-app-capable">
 <meta content="black" name="apple-mobile-web-app-status-bar-style">
@@ -59,7 +60,6 @@ $(document).ready(function(){
     <#if goods_page?? && goods_page.content?size gt 0>
         <#list goods_page.content as goods>
           <li>
-            <i><img src="images/jing_icon.png" /></i>
             <a href="/touch/point/goods/detail?id=${goods.id?c}"><img src="${goods.imgUrl!''}" /></a>
             <a href="/touch/point/goods/detail?id=${goods.id?c}" class="name">${goods.goodsTitle!''}</a>
             <p class="jf_num">${goods.point!'0'}分</p>

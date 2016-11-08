@@ -275,20 +275,24 @@ public class TdPointGoodsController {
 	
 	@RequestMapping(value="/point/order/param",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> orderParam(Long orderId,HttpServletRequest req,ModelMap map){
+	public Map<String,Object> orderParam(Long orderId,Integer statusId,HttpServletRequest req,ModelMap map){
 		Map<String, Object> res = new HashMap<>();
 		
 		res.put("code", 0);
 		
+		if(null == statusId){
+			statusId =1;
+		}
+		
 		TdPointOrder pointOrder = tdPointOrderService.findOne(orderId);
 		if(null != pointOrder){
 			
-			if(pointOrder.getStatusId() ==2){ // 待收货
-				
-				pointOrder.setStatusId(3);
+			pointOrder.setStatusId(statusId);
+			tdPointOrderService.save(pointOrder);
+			if(statusId == 4){
+				tdPointOrderService.orderCancel(pointOrder);
 			}
 			
-			tdPointOrderService.save(pointOrder);
 			res.put("code", 1);
 			res.put("msg", "操作成功");
 		}else{

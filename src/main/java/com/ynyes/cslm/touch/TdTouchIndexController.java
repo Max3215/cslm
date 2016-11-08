@@ -74,7 +74,7 @@ public class TdTouchIndexController {
     	String username = (String) req.getSession().getAttribute("username");
     	Double lng = (Double)req.getSession().getAttribute("lng");
     	Double lat = (Double)req.getSession().getAttribute("lat");
-//    	Boolean isIOS = (Boolean)req.getSession().getAttribute("isIOS");
+    	Boolean ISF = (Boolean)req.getSession().getAttribute("ISF");
     	
     	if(null == username ){
     		try {
@@ -82,6 +82,12 @@ public class TdTouchIndexController {
     		} catch (Exception e) {
     			e.printStackTrace();
     		} 
+    	}
+    	
+    	if(null == ISF){
+    		req.getSession().setAttribute("ISF", true);
+    	}else{
+    		req.getSession().setAttribute("ISF", false);
     	}
     	
 		if(null != lng && null != lat){

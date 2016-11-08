@@ -130,7 +130,7 @@ DD_belatedPNG.fix('.,img,background');
     </div><!--mymember_info END-->
     
     <div class="mymember_info mymember_info04">
-        <h3>订单详细信息<a id="mymember_order01" href="javascript:myOrderShow('mymember_order01','mymember_ordersum01');">展开</a></h3>
+        <h3>订单详细信息<a id="mymember_order01" href="javascript:myOrderShow('mymember_order01','mymember_ordersum01');">收起</a></h3>
       
         <table id="mymember_ordersum01" class="mymember_sq_tab" style="display: table">
             <tr>
@@ -196,8 +196,10 @@ DD_belatedPNG.fix('.,img,background');
             </tr>
             <tr>
                 <div class="btn-list">
-                    <#if order.statusId==2>
-                        <input type="button" id="btnOrderService" onclick="orderFinish(${order.id?c})" value="确认收货" class="btn green">
+                    <#if order.statusId==1>
+                        <input type="button"  onclick="orderFinish(${order.id?c},4)" value="取消兑换" class="btn green">
+                    <#elseif order.statusId==2>
+                        <input type="button"  onclick="orderFinish(${order.id?c},3)" value="确认收货" class="btn green">
                     </#if>
                 </div>
             </tr>

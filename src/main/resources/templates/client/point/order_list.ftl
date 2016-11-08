@@ -18,8 +18,8 @@
 <script type="text/javascript" src="/mag/js/WdatePicker.js"></script>
 
 <script src="/client/js/jquery.diysiteselect.js"></script>
-<script src="/client/js/com.js"></script>
 <script src="/layer/layer.js"></script>
+<script type="text/javascript" src="/client/js/point_goods.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $(".click_a").click(function(){
@@ -139,9 +139,11 @@ DD_belatedPNG.fix('.,img,background');
                       <td>
                             <#if order.statusId?? && order.statusId == 1>     
                                  <p>待发货</p>
+                                 <a  onclick="orderFinish(${order.id?c},4)">取消兑换</a>
                             </#if>
                             <#if order.statusId?? && order.statusId == 2>
                                 <p>待收货</p>
+                                <a  onclick="orderFinish(${order.id?c},3)">确认收货</a>
                             </#if>
                             <#if order.statusId?? && order.statusId == 3>
                                 <p>已完成</p>

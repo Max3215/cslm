@@ -29,6 +29,14 @@ $(function(){
 	    categoryGoods($("#one_cat"),${top_cat_list[0].id?c});
 	    </#if>
 });
+
+function hidenStart(){
+    $(".start_pop").css("display","none");
+}
+function showShop(){
+    $('.infp_eject').fadeIn(300)
+    $(".start_pop").css("display","none");
+}
 </script>
 </head>
 
@@ -263,6 +271,16 @@ $(function(){
       </menu>
   </section>
   <!-- 底部 END -->
+  
+  <!-- 提示弹出 -->
+  <#if ISF?? && ISF ==true>
+  <aside class="start_pop">
+    <menu>
+        <a onclick="showShop();" class="a1"></a>
+        <a onclick="hidenStart();" class="a2"></a>
+    </menu>
+  </aside>
+  </#if>
   
 </body>
 </html>

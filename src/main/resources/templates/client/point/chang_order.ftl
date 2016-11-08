@@ -13,7 +13,6 @@
 <script src="/client/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/client/js/common.js"></script>
 <script src="/client/js/order_info.js"></script>
-<script src="/client/js/Validform_v5.3.2_min.js"></script>
 <script src="/client/js/jquery.diysiteselect.js"></script>
 
 <link href="/client/css/main.css" rel="stylesheet" type="text/css">
@@ -24,10 +23,6 @@
 <script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    
-    $("#form1").Validform({
-         tiptype: 1,
-    });
     
   $(".click_a").click(function(){
     if($(this).next().is(":visible")==false){
