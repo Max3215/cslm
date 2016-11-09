@@ -212,10 +212,10 @@ public class TdDistributorService {
 		
     	return (repository.findByUsernameAndIsEnableTrue(username)); 	
     }
-    
-	public TdDistributorGoods findByIdAndGoodId(Long id,Long goodsId)
-	{
-		return repository.findByIdAndGoodsId(id, goodsId);
-	}
+//    
+//	public TdDistributorGoods findByIdAndGoodId(Long id,Long goodsId)
+//	{
+//		return repository.findByIdAndGoodsId(id, goodsId);
+//	}
 
 }

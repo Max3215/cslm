@@ -136,10 +136,29 @@ $(document).ready(function(){
             </div>
       
       
-    <div class="clear h20"></div>
-    <div class="clear h20"></div>
-    
+    <!-- add 11.9 -->
+<div class="clear h20"></div>
+<div class="clear h20"></div>
+<table class="car_list" style="border:1px solid #eee;">
     <input type="hidden" name="goodsId"  value="${goods.id?c}">
+    <tr>
+      <th colspan="3">商品信息</th>
+      <th>编码</th>
+      <th>数量</th>
+      <th>积分</th>
+    </tr>
+    <tr>
+      <td width="20"></td>
+      <td width="110"><a href="/point/goods/detail?id=${goods.id?c}"><img src="${goods.imgUrl!''}" width="100"></a></td>
+      <td width="400" style="text-align:left;"><a href="/point/goods/detail?id=${goods.id?c}">${goods.goodsTitle!''}</a></td>
+      <td class="red">${goods.code!''}</td>
+      <td width="150">1</td>
+      <td class="red">${goods.point!'0'}</td>
+    </tr>
+  </table>
+<!-- add 11.9 -->
+    <div class="clear h20"></div>
+<div class="clear h20"></div>
     
     <h3 class="car_tit">留言：</h3>
     <div class="car_pay">

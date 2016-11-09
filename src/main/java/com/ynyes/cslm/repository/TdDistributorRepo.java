@@ -42,8 +42,8 @@ public interface TdDistributorRepo extends
     
 //    List<TdDistributor> findByProvinceAndIsEnableTrueOrderByCityAndDisctrict(String province,Sort sort);
     
-    @Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsId=?2")
-    TdDistributorGoods findByIdAndGoodsId(Long id, Long goodsId);
+//    @Query("select g from TdDistributor d join d.goodsList g where d.id=?1 and g.goodsId=?2")
+//    TdDistributorGoods findByIdAndGoodsId(Long id, Long goodsId);
     
    
     

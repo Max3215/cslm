@@ -32,7 +32,6 @@ import com.ynyes.cslm.service.TdDistributorGoodsService;
 import com.ynyes.cslm.service.TdPointGoodsService;
 import com.ynyes.cslm.service.TdPointOrderService;
 import com.ynyes.cslm.service.TdShippingAddressService;
-import com.ynyes.cslm.service.TdUserPointService;
 import com.ynyes.cslm.service.TdUserService;
 import com.ynyes.cslm.util.ClientConstant;
 

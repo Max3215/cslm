@@ -38,6 +38,9 @@ public class TdCartGoodsService {
     
     @Autowired
     TdSpecificatService tdSpecificatService;
+    
+    @Autowired
+    TdDistributorGoodsService tdDistributorGoodsService;
     /**
      * 删除
      * 
@@ -164,7 +167,8 @@ public class TdCartGoodsService {
         {
             if (null != cartGoods)
             {
-                TdDistributorGoods goods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), cartGoods.getGoodsId());
+//                TdDistributorGoods goods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), cartGoods.getGoodsId());
+            	TdDistributorGoods goods = tdDistributorGoodsService.findByIdAndIsInSaleTrue(cartGoods.getDistributorGoodsId());
                 
                 if (null != goods)
                 {
@@ -172,12 +176,14 @@ public class TdCartGoodsService {
                     cartGoods.setGoodsTitle(goods.getGoodsTitle());
                     cartGoods.setUnit(goods.getUnit());
                     cartGoods.setPrice(goods.getGoodsPrice());
-                }
-                if(null != cartGoods.getSpecificaId()){
-                	TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
-                	if(null != specificat){
-                		cartGoods.setSpecName(specificat.getSpecifict());
-                	}
+                    if(null != cartGoods.getSpecificaId()){
+                    	TdSpecificat specificat = tdSpecificatService.findOne(cartGoods.getSpecificaId());
+                    	if(null != specificat){
+                    		cartGoods.setSpecName(specificat.getSpecifict());
+                    	}
+                    }
+                }else{
+                	repository.delete(cartGoods);
                 }
             }
         }

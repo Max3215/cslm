@@ -326,6 +326,9 @@ a,button,input{
 .comfooter a.a3.sel {color:#39bee9;background-image:url(../images/footer03-1.png);}
 .comfooter a.a4.sel {color:#39bee9;background-image:url(../images/footer04-1.png);}
 
+.comfooter a.a5{background-image:url(../images/top01.png);}
+.comfooter a.a5.sel{color:#39bee9;background-image:url(../images/top01-1.png);}
+
 
 /*商品列表*/
 .pro_screen{height: 0.6rem;background: #fff;border-bottom:1px solid #ddd;overflow: hidden;position: fixed;left:0;top:0.88rem;z-index: 100;width: 100%;}
