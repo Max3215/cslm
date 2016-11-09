@@ -167,7 +167,6 @@ public class TdCartGoodsService {
         {
             if (null != cartGoods)
             {
-//                TdDistributorGoods goods = tdDistributorService.findByIdAndGoodId(cartGoods.getDistributorId(), cartGoods.getGoodsId());
             	TdDistributorGoods goods = tdDistributorGoodsService.findByIdAndIsInSaleTrue(cartGoods.getDistributorGoodsId());
                 
                 if (null != goods)
@@ -182,8 +181,6 @@ public class TdCartGoodsService {
                     		cartGoods.setSpecName(specificat.getSpecifict());
                     	}
                     }
-                }else{
-                	repository.delete(cartGoods);
                 }
             }
         }

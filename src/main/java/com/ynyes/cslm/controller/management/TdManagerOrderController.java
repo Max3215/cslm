@@ -495,37 +495,65 @@ public class TdManagerOrderController {
           
 		if (null != exportUrl) {
         	  
-        	// 第一步，创建一个webbook，对应一个Excel文件  
-	      HSSFWorkbook wb = new HSSFWorkbook();  
-	      // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet  
-	      HSSFSheet sheet = wb.createSheet("order");  
-	      // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
-	      HSSFRow row = sheet.createRow((int) 0);  
-	      // 第四步，创建单元格，并设置值表头 设置表头居中  
-	      HSSFCellStyle style = wb.createCellStyle();  
-	      style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
-	      
-	      HSSFCell cell = row.createCell((short) 0);  
-	      cell.setCellValue("订单号");  
-	      cell.setCellStyle(style);  
-	      cell = row.createCell((short) 1);  
-	      cell.setCellValue("会员账号");  
-	      cell.setCellStyle(style);  
-	      cell = row.createCell((short) 2);  
-	      cell.setCellValue("支付方式");  
-	      cell.setCellStyle(style);  
-	      cell = row.createCell((short) 3);  
-	      cell.setCellValue("配送方式");  
-	      cell.setCellStyle(style);
-	      cell = row.createCell((short) 4);  
-	      cell.setCellValue("订单状态");  
-	      cell.setCellStyle(style);
-	      cell = row.createCell((short) 5);  
-	      cell.setCellValue("总金额");  
-	      cell.setCellStyle(style);
-	      cell = row.createCell((short) 6);  
-	      cell.setCellValue("下单时间");  
-	      cell.setCellStyle(style);
+			// 创建一个webbook 对于一个Excel
+			HSSFWorkbook wb = new HSSFWorkbook();
+			// 在webbook中添加一个sheet,对应Excel文件中的sheet 
+			HSSFSheet sheet = wb.createSheet("order"); 
+			// 设置每个单元格宽度根据字多少自适应
+			sheet.autoSizeColumn(1);
+			// 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short  
+	        HSSFRow row = sheet.createRow((int) 0);
+	        // 创建单元格，并设置值表头 设置表头居中 
+	        HSSFCellStyle style = wb.createCellStyle();  
+	        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  // 居中
+	        
+	        HSSFCell cell = row.createCell((short) 0);  
+	        cell.setCellValue("订单编号");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 1);  
+	        cell.setCellValue("会员账户");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 2);  
+	        cell.setCellValue("收件人");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 3);  
+	        cell.setCellValue("收件地址");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 4);  
+	        cell.setCellValue("收件人号码");  
+	        cell.setCellStyle(style);
+	        
+	        cell = row.createCell((short) 5);  
+	        cell.setCellValue("订单总额");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 6);  
+	        cell.setCellValue("下单时间");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 7);  
+	        cell.setCellValue("订单状态");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 8);  
+	        cell.setCellValue("支付方式");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 9);  
+	        cell.setCellValue("配送方式");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 10);  
+	        cell.setCellValue("商家地址");  
+	        cell.setCellStyle(style); 
+	        
+	        cell = row.createCell((short) 11);  
+	        cell.setCellValue("用户备注");  
+	        cell.setCellStyle(style); 
 	      
 	      Page<TdOrder> tdOrderPage = null;
 	      if (__EVENTTARGET.equalsIgnoreCase("export"))
@@ -566,34 +594,42 @@ public class TdManagerOrderController {
 	public boolean ImportData(Page<TdOrder> tdOrderPage, HSSFRow row, HSSFCell cell, HSSFSheet sheet){
     	for (int i = 0; i < tdOrderPage.getContent().size(); i++)  
         {  
-            row = sheet.createRow((int) i + 1);  
-            TdOrder tdOrder = tdOrderPage.getContent().get(i);  
-            // 第四步，创建单元格，并设置值  
-            row.createCell((short) 0).setCellValue(tdOrder.getOrderNumber());  
-            row.createCell((short) 1).setCellValue(tdOrder.getUsername());  
-            row.createCell((short) 2).setCellValue(tdOrder.getPayTypeTitle());
-            row.createCell((short) 3).setCellValue(tdOrder.getDeliverTypeTitle());
-            if (tdOrder.getStatusId().equals(2L)) {
-            	row.createCell((short) 4).setCellValue("待付款");
-			}else if (tdOrder.getStatusId().equals(3L)) {
-				row.createCell((short) 4).setCellValue("待付尾款");
-			}else if (tdOrder.getStatusId().equals(4L)) {
-				row.createCell((short) 4).setCellValue("待服务");
-			}else if (tdOrder.getStatusId().equals(5L)) {
-				row.createCell((short) 4).setCellValue("待评价 ");
-			}else if (tdOrder.getStatusId().equals(6L)) {
-				row.createCell((short) 4).setCellValue("已完成");
-			}else if (tdOrder.getStatusId().equals(7L)) {
-				row.createCell((short) 4).setCellValue("已取消");
-			}else if (tdOrder.getStatusId().equals(8L)) {
-				row.createCell((short) 4).setCellValue("支付取消(失败)");
-			}else if (tdOrder.getStatusId().equals(9L)) {
-				row.createCell((short) 4).setCellValue("已删除");
+    		row = sheet.createRow((int)i+1);
+			TdOrder order = tdOrderPage.getContent().get(i);
+			row.createCell((short) 0).setCellValue(order.getOrderNumber());
+			row.createCell((short) 1).setCellValue(order.getUsername());
+			row.createCell((short) 2).setCellValue(order.getShippingName());
+			row.createCell((short) 3).setCellValue(order.getShippingAddress());
+			row.createCell((short) 4).setCellValue(order.getShippingPhone());
+			row.createCell((short) 5).setCellValue(StringUtils.scale(order.getTotalPrice()));
+			row.createCell((short) 6).setCellValue(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(order.getOrderTime()));
+			if(order.getStatusId() ==2)
+			{
+				row.createCell((short) 7).setCellValue("待付款");
+			}else if(order.getStatusId() ==3)
+			{
+				row.createCell((short) 7).setCellValue("待发货");
+			}else if(order.getStatusId() ==4)
+			{
+				row.createCell((short) 7).setCellValue("待收货");
+			}else if(order.getStatusId() ==5)
+			{
+				row.createCell((short) 7).setCellValue("待评价");
+			}else if(order.getStatusId() ==6)
+			{
+				row.createCell((short) 7).setCellValue("已完成");
+			}else if(order.getStatusId() ==7)
+			{
+				row.createCell((short) 7).setCellValue("已取消");
 			}
-            
-            row.createCell((short) 5).setCellValue(StringUtils.scale(tdOrder.getTotalPrice()));
-            cell = row.createCell((short) 6);  
-            cell.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(tdOrder.getOrderTime()));                                
+			row.createCell((short) 8).setCellValue(order.getPayTypeTitle());
+			if(order.getDeliveryMethod()==1){
+				row.createCell((short) 9).setCellValue("门店自提");
+			}else{
+				row.createCell((short) 9).setCellValue("送货上门");
+			}
+			row.createCell((short) 10).setCellValue(order.getShipAddress());
+			row.createCell((short) 11).setCellValue(order.getRemarkInfo());                                
       
         } 
     	return true;

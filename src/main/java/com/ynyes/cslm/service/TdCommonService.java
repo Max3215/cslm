@@ -92,35 +92,6 @@ public class TdCommonService {
         // 网站基本信息
         TdSetting setting = tdSettingService.findTopBy();
         
-        // 统计访问量
-//        if (null != setting && null == req.getSession().getAttribute("countedTotalVisits"))
-//        {
-//            req.getSession().setAttribute("countedTotalVisits", "yes");
-//            if (null == setting.getTotalVisits())
-//            {
-//                setting.setTotalVisits(1L);
-//            }
-//            else
-//            {
-//                setting.setTotalVisits(setting.getTotalVisits() + 1L);
-//            }
-//            setting = tdSettingService.save(setting);
-//        }
-        
-        // 统计在线人数
-//        if (null != setting && null == req.getSession().getAttribute("countedTotalOnlines"))
-//        {
-//            req.getSession().setAttribute("countedTotalOnlines", "yes");
-//            if (null == setting.getTotalOnlines())
-//            {
-//                setting.setTotalOnlines(1L);
-//            }
-//            else
-//            {
-//                setting.setTotalOnlines(setting.getTotalOnlines() + 1L);
-//            }
-//            setting = tdSettingService.save(setting);
-//        }
 
         map.addAttribute("site", setting);
         map.addAttribute("keywords_list",

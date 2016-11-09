@@ -47,7 +47,7 @@ $(document).ready(function(){
         </#if>
     <div class="user">
       <p class="pic"><img src="<#if user??>${user.username!''}<#else>/client/images/headimg.jpg</#if>" /></p>
-      <p class="name"><#if user??>${user.username!''}<#else><a href="/touch">请登录</a></#if></p>
+      <p class="name"><#if user??>${user.username!''}<#else><a href="/touch/login">请登录</a></#if></p>
       <div class="num">
         <p><#if user??>${user.totalPoints!'0'}<#else>0</#if></p>
         <p>可用积分</p>
