@@ -131,7 +131,7 @@ public class TdTouchLoginController {
 	             
 	            tdUserService.save(user);
 	            
-	            request.getSession().setAttribute("username", username);
+	            request.getSession().setAttribute("username", user.getUsername());
 	            request.getSession().setAttribute("usermobile", user.getMobile());
 	            CookieUtil.saveCookie(user, response);
 	            res.put("code", 0);

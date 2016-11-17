@@ -72,7 +72,11 @@ $(document).ready(function(){
 					<p>所需积分：<span>${goods.point!'0'}积分</span></p>
 					<p>（您当前的可用积分为：<#if user??>${user.totalPoints!'0'}<#else>0</#if>）</p>
 				</div>
+				<#if goods.leftNumber?? && goods.leftNumber gt 0>
 				<a onclick="addPoint(${goods.id?c})" class="btn">立即兑换</a>
+				<#else>
+                <a  class="btn ed">已兑换完</a>
+                </#if>
 			</div>
 			<div class="lrtext">
 				<p class="tit">兑换说明</p>

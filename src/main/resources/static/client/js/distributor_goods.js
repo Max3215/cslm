@@ -10,14 +10,6 @@ function selectAll(){
      }     
 }
 
-//function selectAll(){  
-//    if ($("#checkAll").attr("checked")) {  
-//        $(":checkbox").attr("checked", true);  
-//    } else {  
-//        $(":checkbox").attr("checked", false);  
-//    }  
-//} 
-
 
 //超市中心商品上下架
 function goodsOnSale(type,disId){
@@ -451,3 +443,41 @@ function sheckTag(tag,id){
 	$("#tagId").val(id);
 		
 }
+
+// 信息填写加载
+function drawFrom(bankId){
+	var url = "/distributor/draw/from";
+	var loadData = {"bankId":bankId};
+	$("#draw_from").load(url,loadData);
+}
+
+// 卡号记录加载
+function searchBank(){
+	var url = "/distributor/search/bank";
+	var loadData = null;
+	$("#bank_list").load(url,loadData);
+}
+
+// 卡号删除
+function deleteBank(bankId){
+	layer.confirm('确定要删除这张卡的信息记录？',{
+		btn: ['确定','取消'] //按钮
+		}, function(){
+			$.ajax({
+		        url : "/distributor/delete/bank",
+		        data : {"bankId":bankId},
+		        type :"post",
+		        success:function(data){
+		        	if(data.code == 1 ){
+		        		searchBank();
+		        		layer.closeAll();
+		            }else{
+		            	layer.msg(data.msg, {icon: 2 ,time: 1000});
+		            }
+		        }
+		    })
+		}, function(){
+			layer.closeAll();
+		});
+}
+

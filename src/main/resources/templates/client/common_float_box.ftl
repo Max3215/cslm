@@ -2,7 +2,7 @@
     <aside class="float_box">
         <a href="/user" class="user" title="个人中心"></a>
         <a href="/cart" class="car" title="购物车">购物车<span><#if cart_goods_list??>${cart_goods_list?size}<#else>0</#if></span></a>
-        <a href="/user/collect/list" class="col" title="收藏"></a>
+        <a href="/user/collect/list/1" class="col" title="收藏"></a>
         <a href="/user/recent/list" class="history" title="浏览记录"></a>
         <a  class="ewm" title=""></a>
         <div class="ewm_show"><img src="${site.androidQrCode!''}"></div>

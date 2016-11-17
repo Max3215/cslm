@@ -1056,3 +1056,35 @@ select{font-family: "微软雅黑";}
 
 
 
+
+/*add 11.17*/
+.with_history{background: #fff;margin-top: 16px;padding-left: 100px;}
+.with_history .tit{font-size: 18px;color:#333;height:60px;line-height:60px;}
+.with_history ul{overflow:hidden;}
+.with_history ul li{display: block;float:left;width: 238px;height: 118px;border:1px solid #dddddd;margin-right: 14px;margin-bottom: 18px;}
+.with_history ul li .con{padding:10px 16px 0 16px;line-height: 24px;}
+.with_history ul li .num{font-size: 18px;color:#333;overflow: hidden;white-space: nowrap;text-overflow:ellipsis;margin-bottom: 4px;}
+.with_history ul li .txt{font-size: 12px;color:#999;}
+.with_history ul li menu{overflow: hidden;background: #dddddd;width: 100%;position: absolute;left:0;bottom:0;}
+.with_history ul li menu a{display: block;float:left;width: 50%;height: 30px;line-height: 30px;text-align: center;font-size: 14px;color:#333333;}
+.with_history ul li menu a:hover{background: #ff5b7d;color:#fff;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

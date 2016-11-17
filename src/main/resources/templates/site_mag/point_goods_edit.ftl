@@ -164,7 +164,7 @@ $(function () {
         <dl>
             <dt>总数量</dt>
             <dd>
-                <input name="leftNumber" type="text" value="<#if goods??>${goods.leftNumber!'100'}<#else>100</#if>" class="input normal"  sucmsg=" " datatype="n">
+                <input name="leftNumber" type="text" value="<#if goods??>${goods.leftNumber!'0'}<#else>100</#if>" class="input normal"  sucmsg=" " datatype="n">
                 <span class="Validform_checktip"></span>
             </dd>
         </dl>

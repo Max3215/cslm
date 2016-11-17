@@ -80,7 +80,7 @@ $(document).ready(function(){
        
         <div class="sc_shop">
             <p>商品来源：</p>
-            <p class="name">${dis_goods.distributorTitle!''}<a href="javascript:collectShop(${dis_goods.disId?c});">收藏店铺</a></p>
+            <p class="name">${dis_goods.distributorTitle!''}<a href="javascript:collectShop(${dis_goods.disId?c},${dis_goods.id?c});">收藏店铺</a></p>
        </div>
        <div class="postage">
             <p>邮费说明：</p>

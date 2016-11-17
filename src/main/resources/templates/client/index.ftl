@@ -65,7 +65,7 @@ $(document).ready(function(){
                 <a href="/cart">我的购物车<span>丨</span></a>
                 <a href="/user">超市会员<span>丨</span></a>
                 <a href="<#if site.qq1??>http://wpa.qq.com/msgrd?v=3&uin=${site.qq1!''}&site=qq&menu=yes<#else>#</#if>">客户服务<span>丨</span></a>
-                <a href="/user/collect/list">我的收藏</a>
+                <a href="/user/collect/list/1">我的收藏</a>
             </menu>
 			<div class="clear"></div>
 		</div>

@@ -2668,6 +2668,8 @@ public class TdTouchUserController {
 		cash.setStatus(1L);
 		
 		cash = tdCashService.save(cash);
+		
+		tdCashService.beforeCash(cash); // 提现先扣余额
     	
 		// 新加银行卡信息记录
 		user.setBankCardCode(card);

@@ -45,6 +45,7 @@ import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdAd;
 import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
+import com.ynyes.cslm.entity.TdBank;
 import com.ynyes.cslm.entity.TdCartGoods;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCountSale;
@@ -70,6 +71,7 @@ import com.ynyes.cslm.service.TdAdService;
 import com.ynyes.cslm.service.TdAdTypeService;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
+import com.ynyes.cslm.service.TdBankService;
 import com.ynyes.cslm.service.TdCartGoodsService;
 import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
@@ -180,6 +182,9 @@ public class TdDistributorController extends AbstractPaytypeController{
 	
 	@Autowired
 	TdTagService tdTagService;
+	
+	@Autowired
+	TdBankService tdBankService;
 	
 	@RequestMapping(value="/index")
 	public String distributroindex(HttpServletRequest req, ModelMap map)
@@ -1407,7 +1412,7 @@ public class TdDistributorController extends AbstractPaytypeController{
             //确认付款
             else if(type.equalsIgnoreCase("orderPay"))
             {
-            	 tdOrderService.addVir(order);
+            	 tdOrderService.shopEditOrder(order);
                  order.setStatusId(3L);
                  order.setPayTime(new Date());
             }
@@ -3493,6 +3498,60 @@ public class TdDistributorController extends AbstractPaytypeController{
     	return "/client/distributor_draw_one";
     }
     
+    /**
+     * 加载信息录入
+     * 
+     */
+    @RequestMapping(value="/draw/from")
+    public String drawFrom(Long bankId,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	
+    	map.addAttribute("distributor", tdDistributorService.findbyUsername(username));
+    	
+    	if(null != bankId){
+    		map.addAttribute("bank", tdBankService.findOne(bankId));
+    	}
+    	return "/client/distributor_draw_from";
+    }
+    
+    /**
+     * 加载卡号信息
+     * 
+     */
+    @RequestMapping(value="/search/bank")
+    public String bankList(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	
+    	
+    	if(null != username){
+    		map.addAttribute("bankList", tdBankService.findAll(username, 2));
+    	}
+    	return "/client/distributor_draw_list";
+    }
+    
+    @RequestMapping(value="/delete/bank",method =RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> deleteBank(Long bankId,HttpServletRequest req){
+    	Map<String,Object> res = new HashMap<>();
+    	res.put("code", 0);
+    	
+    	String username = (String)req.getSession().getAttribute("distributor");
+    	if(null == username)
+    	{
+    		res.put("msg", "请重新登录");
+    		return res;
+    	}
+    	
+    	if(null != bankId){
+    		tdBankService.delete(bankId);
+    		res.put("code", 1);
+    	}else{
+    		res.put("msg", "参数错误");
+    	}
+    	
+    	return res;
+    }
+    
     @RequestMapping(value="/drwa2",method=RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> userDrwa(String card,Double price,
@@ -3559,12 +3618,36 @@ public class TdDistributorController extends AbstractPaytypeController{
 		
 		tdCashService.save(cash);
 		
+		tdCashService.beforeCash(cash); // 提现先扣余额
+		
 		// 新加银行卡信息记录
 		distributor.setBankCardCode(card);
 		distributor.setBankTitle(bank);
 		distributor.setBankName(name);
 		tdDistributorService.save(distributor);
-				
+		
+		boolean bankUser = true;
+		List<TdBank> bankList = tdBankService.findAll(username, 2);
+		if(null != bank){
+			for (TdBank tdBank : bankList) {
+				if(null == tdBank || card.equals(tdBank.getBankCard())){
+					bankUser = false;
+				}
+			}
+		}
+		// 如果卡号为使用，添加记录
+		if(bankUser){
+			TdBank tdBank = new TdBank();
+			
+			tdBank.setUsername(username);
+			tdBank.setType(2);
+			tdBank.setBankCard(card);
+			tdBank.setBankName(bank);
+			tdBank.setName(name);
+			
+			tdBankService.save(tdBank);
+		}
+		
 		res.put("msg", "提交成功");
 		res.put("code", 1);
 		return res;

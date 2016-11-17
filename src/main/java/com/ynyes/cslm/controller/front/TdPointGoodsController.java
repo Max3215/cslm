@@ -149,6 +149,10 @@ public class TdPointGoodsController {
 				res.put("msg", "积分不足");
 				return res;
 			}
+			if(null == pointGoods.getLeftNumber() || pointGoods.getLeftNumber() < 1){
+				res.put("msg","此商品已兑换完");
+				return res;
+			}
 		}else{
 			res.put("msg", "参数错误");
 			return res;

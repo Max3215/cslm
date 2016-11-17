@@ -858,6 +858,61 @@ public class TdOrderService {
 		}
 	}
     
+    public void shopEditOrder(TdOrder tdOrder) {
+		Double price = 0.0; // 交易总金额
+		Double postPrice = 0.0; // 物流费
+		Double aliPrice = 0.0; // 第三方使用费
+		Double servicePrice = 0.0; // 平台服务费
+		Double totalGoodsPrice = 0.0; // 商品总额
+		Double turnPrice = 0.0; // 分销单超市返利
+
+		price += tdOrder.getTotalPrice();
+		postPrice += tdOrder.getPostPrice();
+		aliPrice += tdOrder.getAliPrice();
+		servicePrice += tdOrder.getTrainService();
+		totalGoodsPrice += tdOrder.getTotalGoodsPrice();
+
+		
+		TdSetting setting = tdSettingService.findTopBy();
+		if (null != setting.getVirtualMoney()) {
+			setting.setVirtualMoney(setting.getVirtualMoney() + servicePrice + aliPrice);
+		} else {
+			setting.setVirtualMoney(servicePrice + aliPrice);
+		}
+		tdSettingService.save(setting); // 更新平台虚拟余额
+
+		// 记录平台收益
+		TdPayRecord record = new TdPayRecord();
+		record.setCont("商家销售抽取");
+		record.setCreateTime(new Date());
+		record.setDistributorTitle(tdOrder.getShopTitle());
+		record.setOrderId(tdOrder.getId());
+		record.setOrderNumber(tdOrder.getOrderNumber());
+		record.setStatusCode(1);
+		record.setType(1L); // 类型 区分平台记录
+
+		record.setProvice(price); // 订单总额
+		record.setPostPrice(postPrice); // 邮费
+		record.setAliPrice(aliPrice); // 第三方费
+		record.setServicePrice(servicePrice); // 平台费
+		record.setTotalGoodsPrice(totalGoodsPrice); // 商品总价
+		record.setTurnPrice(turnPrice); // 超市返利
+		// 实际获利 =平台服务费+第三方费
+		record.setRealPrice(servicePrice + aliPrice);
+
+		tdPayRecordService.save(record);
+		
+		TdUser user = tdUserService.findByUsername(tdOrder.getUsername());
+		
+		if(null != user){
+			if(null == user.getTotalSpendCash()){
+				user.setTotalSpendCash(price);
+			}else{
+				user.setTotalSpendCash(user.getTotalSpendCash() + price);
+			}
+			tdUserService.save(user);
+		}
+	}
     
     
     // 添加会员积分

@@ -163,3 +163,40 @@ function editSaveGoods(){
     })
 	
 }
+
+
+
+
+function drawFrom(bankId){
+	var url = "/supply/draw/from";
+	var loadData = {"bankId":bankId};
+	$("#draw_from").load(url,loadData);
+}
+
+function searchBank(){
+	var url = "/supply/search/bank";
+	var loadData = null;
+	$("#bank_list").load(url,loadData);
+}
+
+function deleteBank(bankId){
+	layer.confirm('确定要删除这张卡的信息记录？',{
+		btn: ['确定','取消'] //按钮
+		}, function(){
+			$.ajax({
+		        url : "/supply/delete/bank",
+		        data : {"bankId":bankId},
+		        type :"post",
+		        success:function(data){
+		        	if(data.code == 1 ){
+		        		layer.closeAll();
+		        		searchBank();
+		            }else{
+		            	layer.msg(data.msg, {icon: 2 ,time: 1000});
+		            }
+		        }
+		    })
+		}, function(){
+			layer.closeAll();
+		});
+}

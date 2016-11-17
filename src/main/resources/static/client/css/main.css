@@ -475,6 +475,10 @@
 .proinfo_right h2{font-size: 24px;color: #2f4047;font-weight: 400;line-height: 30px;}
 .proinfo_right .subtitle{font-size: 18px;color:#ff5b7d;padding: 10px 0;}
 .proinfo_right .num{color:#878686;padding-top: 5px;}
+.proinfo_right .num .scdp{display: inline-block;width:100px;height:26px;text-align: center;line-height: 26px;color:#fff;background: #ff5b7d;margin:0 4px;border-radius: 5px;}
+
+
+
 .proinfo_right .num span{color:#424957;}
 .proinfo_right .price{padding: 15px 0;border-top:1px solid #e4e4e4;border-bottom:1px solid #e4e4e4;margin:10px 0;}
 .proinfo_right .price p{color:#919090;}
@@ -484,7 +488,7 @@
 .proinfo_right .choose span{display: inline-block;_display:inline-block;padding:5px 0;}
 .proinfo_right .choose a{display: inline-block;color:#878686;padding:3px 10px;border:1px solid #ddd;}
 .proinfo_right .choose a:hover,.proinfo_right .choose a.sel{border-color:#ff5b7d;}
-.proinfo_right .digital{color:#878686;padding-top: 20px;line-height: 30px;}
+.proinfo_right .digital{color:#878686;padding-top: 20px;line-height: 30px;overflow: hidden;}
 .proinfo_right .digital label{padding-left: 10px;}
 .proinfo_right .digital span{display: block;float: left;line-height: 30px;padding-right: 10px;}
 .proinfo_right .digital a{display: block;float: left;width: 28px;height: 28px;background: #f7f6f6;border:1px solid #e4e4e4;color:#424957;text-align:center;line-height:28px;}
@@ -632,8 +636,12 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 
 .pro_list li .number{margin-top:10px;text-align: center;font-size: 14px;color:#8275cf;}
 .pro_list li .number b{font-size: 18px;}
+.pro_list li .number.ed{color:#999;}
+
 .pro_list li .dh_btn{display: block;width: 120px;height: 32px;background: #8275cf;text-align: center;line-height: 32px;color:#fff;font-size: 14px;margin:10px auto 0;}
 .pro_list li .dh_btn:hover{background: #756ab9;}
+
+.pro_list li .dh_btn.ed{background: #999;cursor: no-drop;}
 
 .left_list.change .tit .sort a.sel{background: #8275cf;}
 .left_list.change .tit .price .sub{background: #8275cf;}
@@ -659,7 +667,7 @@ cursor: move;-moz-border-top-left-radius: 4px;-webkit-border-top-left-radius: 4p
 .integralpro_info .midinfo .btn{display: block; width: 150px; height: 40px; color: #fff;background: #8275cf;margin-top: 30px;text-align: center;line-height: 40px;font-size: 16px;border-radius: 4px;-webkit-border-radius: 4px;}
 .integralpro_info .midinfo .btn:hover{background: #602489;}
 
-
+.integralpro_info .midinfo .btn.ed{background: #999;cursor: no-drop;}
 
 
 

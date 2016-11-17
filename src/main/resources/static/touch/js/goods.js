@@ -26,7 +26,7 @@ function addCollect(goodsId)
     });
 }
 // 收藏店铺
-function collectShop(disId){
+function collectShop(disId,goodsId){
     if(undefined == disId){
         return ;
     }
@@ -41,7 +41,7 @@ function collectShop(disId){
             	layer.confirm(res.message,{
             		btn: ['确定','取消'] //按钮
 				}, function(){
-					window.location.href = "/login?goodsId="+goodsId;
+					window.location.href = "/touch/login?goodsId="+goodsId;
 				}, function(){
 					layer.closeAll();
 				});

@@ -307,9 +307,14 @@ public class TdManagerCashController {
             type = "edit";
         }
         
-        if(null != tdCash.getStatus() && tdCash.getStatus() ==2){
-        	afterCash(tdCash);
+        if(null != tdCash.getStatus() && tdCash.getType()==1){
+        	if(tdCash.getStatus() ==2){
+        		tdCashService.afterCash(tdCash);
+        	}
+        }else{
+        	tdCashService.editDrawCash(tdCash);
         }
+        
         tdCashService.save(tdCash);
         
         tdManagerLogService.addLog(type, "修改充值提现单号："+tdCash.getCashNumber(), req);
@@ -368,163 +373,19 @@ public class TdManagerCashController {
                 	cash.setStatus(2L);
                 	tdCashService.save(cash);
                 	
-                	afterCash(cash);
+                	if(null != cash.getStatus() && cash.getType()==1){
+                    	if(cash.getStatus() ==2){
+                    		tdCashService.afterCash(cash);
+                    	}
+                    }else{
+                    	tdCashService.editDrawCash(cash);
+                    }
+//                	afterCash(cash);
                 }
             }
         }
     }
     
-    private void afterCash(TdCash cash) {
-		if(null != cash)
-		{
-			TdPayRecord record = new TdPayRecord();
-			
-			if(cash.getCashNumber().contains("CS") && cash.getShopType() ==1) // 超市充值
-			{
-				TdDistributor distributor = tdDistributorService.findbyUsername(cash.getUsername());
-				if(null != distributor)
-				{
-					if(null != distributor)
-		        	{
-		        		if(cash.getType()==1){
-		        			distributor.setVirtualMoney(distributor.getVirtualMoney()+cash.getPrice()); 
-		        			tdDistributorService.save(distributor);
-		        			
-		        			record.setCont("商家充值");
-		        		}else{
-		        			distributor.setVirtualMoney(distributor.getVirtualMoney()-cash.getPrice()); 
-		        			tdDistributorService.save(distributor);
-		        			
-		        			record.setCont("商家提现");
-		        		}
-		        		record.setCreateTime(new Date());
-		        		record.setDistributorId(distributor.getId());
-		        		record.setDistributorTitle(distributor.getTitle());
-//		        		record.setOrderId(cash.getId());
-		        		record.setOrderNumber(cash.getCashNumber());
-		        		record.setStatusCode(1);
-		        		
-		        		record.setProvice(cash.getPrice()); // 订单总额
-		                record.setPostPrice(0.00); // 邮费
-		                record.setAliPrice(0.00);	// 第三方费
-		                record.setServicePrice(0.00);	// 平台费
-		                record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
-		                record.setTurnPrice(0.00); // 超市返利
-		                record.setRealPrice(cash.getPrice()); // 实际获利
-		        		tdPayRecordService.save(record);
-		        		
-		        	}
-				}
-			}else if(cash.getCashNumber().contains("USE") && cash.getShopType()==4){
-				TdUser user = tdUserService.findByUsername(cash.getUsername());
-				if(null != user)
-				{
-					if(cash.getType()==1){
-						user.setVirtualMoney(user.getVirtualMoney()+cash.getPrice());
-						tdUserService.save(user);
-						
-						record.setCont("会员充值");
-	        		}else{
-	        			user.setVirtualMoney(user.getVirtualMoney()-cash.getPrice());
-						tdUserService.save(user);
-						
-						record.setCont("会员提现");
-	        		}
-					
-					record.setType(2L);
-	        		record.setCreateTime(new Date());
-//	        		record.setDistributorId(distributor.getId());
-//	        		record.setDistributorTitle(distributor.getTitle());
-//	        		record.setOrderId(cash.getId());
-	        		record.setOrderNumber(cash.getCashNumber());
-	        		record.setStatusCode(1);
-	        		record.setUsername(cash.getUsername());
-	        		
-	        		record.setProvice(cash.getPrice()); // 订单总额
-	                record.setPostPrice(0.00); // 邮费
-	                record.setAliPrice(0.00);	// 第三方费
-	                record.setServicePrice(0.00);	// 平台费
-	                record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
-	                record.setTurnPrice(0.00); // 超市返利
-	                record.setRealPrice(cash.getPrice()); // 实际获利
-	        		tdPayRecordService.save(record);
-				}
-			}else {
-				TdProvider provider = tdProviderService.findByUsername(cash.getUsername());
-				if(null != provider)
-	        	{
-					if(cash.getType()==1){
-						provider.setVirtualMoney(provider.getVirtualMoney()+cash.getPrice());
-		        		tdProviderService.save(provider);
-						
-		                record.setCont("商家充值");
-	        		}else{
-	        			provider.setVirtualMoney(provider.getVirtualMoney()-cash.getPrice());
-		        		tdProviderService.save(provider);
-	        			
-		                record.setCont("商家提现");
-	        		}
-	        		
-	                record.setCreateTime(new Date());
-//	                record.setDistributorId(distributor.getId());
-//	                record.setDistributorTitle(distributor.getTitle());
-	                record.setProviderId(provider.getId());
-	                record.setProviderTitle(provider.getTitle());
-//	                record.setOrderId(tdOrder.getId());
-	                record.setOrderNumber(cash.getCashNumber());
-	                record.setStatusCode(1);
-	                
-	                record.setProvice(cash.getPrice()); // 订单总额
-	                record.setPostPrice(0.00); // 邮费
-	                record.setAliPrice(0.00);	// 第三方费
-	                record.setServicePrice(0.00);	// 平台费
-	                record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
-	                record.setTurnPrice(0.00); // 超市返利
-	                record.setRealPrice(cash.getPrice()); // 实际获利
-	                tdPayRecordService.save(record);
-	        	}
-			}
-			
-			// 平台支出
-			TdSetting setting = tdSettingService.findTopBy();
-	        if( null != setting.getVirtualMoney())
-	        {
-	        	setting.setVirtualMoney(setting.getVirtualMoney()-cash.getPrice());
-	        }
-	        tdSettingService.save(setting); // 更新平台虚拟余额
-	        
-	        // 记录平台收益
-	        record = new TdPayRecord();
-	        if(cash.getType()==1)
-	        {
-	        	record.setCont("商家充值");
-	        }else{
-	        	record.setCont("商家提现");
-	        }
-	        record.setCreateTime(new Date());
-	        record.setDistributorTitle(cash.getShopTitle());
-//	        record.setOrderId(tdOrder.getId());
-	        record.setOrderNumber(cash.getCashNumber());
-	        record.setStatusCode(1);
-	        record.setType(1L); // 类型 区分平台记录
-	        
-	        record.setProvice(cash.getPrice()); // 订单总额
-            record.setPostPrice(0.00); // 邮费
-            record.setAliPrice(0.00);	// 第三方费
-            record.setServicePrice(0.00);	// 平台费
-            record.setTotalGoodsPrice(cash.getPrice()); // 商品总价
-            record.setTurnPrice(0.00); // 超市返利
-            record.setRealPrice(cash.getPrice()); 
-	        
-	        tdPayRecordService.save(record);
-	        
-	        cash.setStatus(2L); // 已完成
-	        tdCashService.save(cash);
-		}
-		
-	}
-	
-	
 	
 	@SuppressWarnings("deprecation")
 	public Boolean cashImportData(Page<TdCash> casgPage,HSSFRow row, HSSFCell cell, HSSFSheet sheet)

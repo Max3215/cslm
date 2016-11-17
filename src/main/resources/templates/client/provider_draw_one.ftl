@@ -16,24 +16,22 @@
 <script src="/client/js/mymember.js"></script>
 <script src="/client/js/Validform_v5.3.2_min.js"></script>
 
+<script src="/client/js/provider_goods.js"></script>
+<script src="/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 
-     //初始化表单验证
-    $("#form1").Validform({
-        tiptype:4, 
-        ajaxPost:true,
-        callback:function(data){
-            alert(data.msg);
-            
-        }
-    });
+    drawFrom(null);
+        searchBank();
   
   $(".float_box .ewm").hover(function(){
     $(this).next().show();
   },function(){
     $(this).next().hide();
   })
+  
+   drawFrom(null);
+    searchBank();
 })
 </script>
 <!--[if IE]>
@@ -53,43 +51,14 @@ DD_belatedPNG.fix('.,img,background');
 <div class="mymember_main">
   <#include "/client/common_provider_menu.ftl">
   
-  <form id="form1" action="/provider/drwa2" method="post">
   <div class="mymember_center add_width">
-    <div class="with_money">
-      <p class="tit">提现余额到银行卡</p>
-      <table>
-        <tr>
-          <th>输入银行卡号：</th>
-          <td><input type="text" name="card"  value="<#if provider??>${provider.bankCardCode!''}</#if>"class="text long" placeholder="请输入您的银行卡号" datatype="/^(\d{16}|\d{19})$/" errormsg="请输入正确的银行卡号" sucmsg=" " nullmsg="请输入账号"/>&nbsp;<lable style="color:red;">*</lable></td>
-        </tr>
-        <tr>
-          <th>开户行：</th>
-          <td><input type="text" name="bank" value="<#if provider??>${provider.bankTitle!''}</#if>" class="text short" placeholder="请输入开户行" datatype="*" errormsg="请输入开户行" sucmsg=" " nullmsg="请输入开户行"/>&nbsp;<lable style="color:red;">*</lable></td>
-        </tr>
-        <tr>
-          <th>开户姓名：</th>
-          <td><input type="text" name="name" value="<#if provider??>${provider.bankName!''}</#if>" class="text short" placeholder="请输入账号姓名" datatype="*2-6" errormsg="请输入姓名" sucmsg=" " nullmsg="请输入姓名"/>&nbsp;<lable style="color:red;">*</lable></td>
-        </tr>
-        <tr>
-          <th>提现金额：</th>
-          <td><input type="text" name="price" class="text short" datatype="/(^[-+]?[1-9]\d*(\.\d{1,2})?$)|(^[-+]?[0]{1}(\.\d{1,2})?$)/" sucmsg=" " nullmsg="请填写提现金额"/></td>
-        </tr>
-        <tr>
-          <th>输入支付密码：</th>
-          <td><input type="password" name="payPassword" class="text long" datatype="s6-20" errormsg="请输入密码！" sucmsg=" " nullmsg = "请输入密码"/></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td><span style="color:red;">*每次提现最小金额100元，提交前请仔细核对信息是否有误</span></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td><input type="submit" class="sub" value="确定" /></td>
-        </tr>
-      </table>
+    <div class="with_money" id="draw_from">
     </div>
+    
+    <div class="with_history" id="bank_list">
+    </div>
+    
   </div>
-  </form>
 
 
 <div class="clear"></div>

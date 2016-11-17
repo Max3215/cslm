@@ -87,32 +87,29 @@ public class TdPointOrderService {
 	 * 
 	 */
 	public void exChangeGoods(TdUser user,TdPointOrder pointOrder){
-		
-		if(null != user.getTotalPoints() && user.getTotalPoints() > pointOrder.getPoint()){
 			
-			TdUserPoint userPoint = new TdUserPoint();
-			 userPoint.setDetail("积分兑换商品");
-			 userPoint.setOrderNumber(pointOrder.getOrderNumber());
-			 userPoint.setPoint(pointOrder.getPoint());
-			 userPoint.setPointTime(new Date());
-			 userPoint.setUsername(user.getUsername());
-			 userPoint.setTotalPoint(user.getTotalPoints() - pointOrder.getPoint());
-			 tdUserPointService.save(userPoint);
-			 
-			 user.setTotalPoints(user.getTotalPoints() - pointOrder.getPoint());
-			 tdUserService.save(user);
-			 
-			 TdPointGoods goods = tdPointGoodsService.findOne(pointOrder.getId());
-			 
-			 if(null != goods){
-				 if(null != goods.getSaleNumber()){
-					 goods.setSaleNumber(1);
-				 }else{
-					 goods.setSaleNumber(goods.getSaleNumber()+1);
-				 }
-				 tdPointGoodsService.save(goods);
+		TdUserPoint userPoint = new TdUserPoint();
+		 userPoint.setDetail("积分兑换商品");
+		 userPoint.setOrderNumber(pointOrder.getOrderNumber());
+		 userPoint.setPoint(pointOrder.getPoint());
+		 userPoint.setPointTime(new Date());
+		 userPoint.setUsername(user.getUsername());
+		 userPoint.setTotalPoint(user.getTotalPoints() - pointOrder.getPoint());
+		 tdUserPointService.save(userPoint);
+		 
+		 user.setTotalPoints(user.getTotalPoints() - pointOrder.getPoint());
+		 tdUserService.save(user);
+		 
+		 TdPointGoods goods = tdPointGoodsService.findOne(pointOrder.getId());
+		 
+		 if(null != goods){
+			 if(null != goods.getSaleNumber()){
+				 goods.setSaleNumber(1);
+			 }else{
+				 goods.setSaleNumber(goods.getSaleNumber()+1);
 			 }
-		}
+			 tdPointGoodsService.save(goods);
+		 }
 	}
 	
 	public void orderCancel(TdPointOrder pointOrder){

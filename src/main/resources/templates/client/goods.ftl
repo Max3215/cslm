@@ -141,7 +141,7 @@ function showmsg(){
 					<div class="clear"></div>
 				
                 <p>&nbsp;  </p>
-                <p class="num"><#if distributor.postPrice??>本店（${distributor.title!''}）配送费<span style="color:#ff5b7d">￥${distributor.postPrice?string('0.00')}</span>&nbsp;</#if>
+                <p class="num"><#if distributor.postPrice??>本店（${distributor.title!''}）<a onclick="collectShop(${dis_goods.disId?c},${dis_goods.id?c});" class="scdp">收藏店铺</a>配送费<span style="color:#ff5b7d">￥${distributor.postPrice?string('0.00')}</span>&nbsp;</#if>
                     <#if distributor.maxPostPrice??>满<span style="color:#ff5b7d">￥${distributor.maxPostPrice?string('0.00')}</span>&nbsp;包邮</#if></p>
                  <p ><span style="color:#ff5b7d"><#if distributor.postInfo??>${distributor.postInfo!''}</#if></span></p>
 				<div class="buy_btn">

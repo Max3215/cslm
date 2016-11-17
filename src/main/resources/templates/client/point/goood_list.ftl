@@ -125,7 +125,11 @@ $(document).ready(function(){
                                 <p>${goods.goodsTitle!''}</p>
                             </a>
                             <p class="number"><b>${goods.point!'0'}</b>积分</p>
+                            <#if goods.leftNumber?? && goods.leftNumber gt 0>
                             <a onclick="addPoint(${goods.id?c})" class="dh_btn">立即兑换</a>
+                            <#else>
+                            <a  class="dh_btn ed">已兑换完</a>
+                            </#if>
                         </li>
                     </#list>
                   <#else>

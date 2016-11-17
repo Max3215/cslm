@@ -289,8 +289,12 @@ public class TdUserService {
         {
             return null;
         }
+        TdUser user = repository.findByUsernameIgnoreCase(username);
+        if(null == user){
+        	user = repository.findByMobile(username);
+        }
         
-        return repository.findByUsernameIgnoreCase(username);
+        return user;
     }
     
     public TdUser findByUsernameAndIdNot(String username, Long id)

@@ -41,6 +41,7 @@ import com.cslm.payment.alipay.AlipayConfig;
 import com.cslm.payment.alipay.PaymentChannelAlipay;
 import com.ynyes.cslm.entity.TdArticle;
 import com.ynyes.cslm.entity.TdArticleCategory;
+import com.ynyes.cslm.entity.TdBank;
 import com.ynyes.cslm.entity.TdCash;
 import com.ynyes.cslm.entity.TdCountSale;
 import com.ynyes.cslm.entity.TdDemand;
@@ -57,6 +58,7 @@ import com.ynyes.cslm.entity.TdSpecificat;
 import com.ynyes.cslm.entity.TdUserReturn;
 import com.ynyes.cslm.service.TdArticleCategoryService;
 import com.ynyes.cslm.service.TdArticleService;
+import com.ynyes.cslm.service.TdBankService;
 import com.ynyes.cslm.service.TdCashService;
 import com.ynyes.cslm.service.TdCommonService;
 import com.ynyes.cslm.service.TdDemandService;
@@ -138,6 +140,9 @@ public class TdProviderController extends AbstractPaytypeController{
 	
 	@Autowired
 	private TdSpecificatService tdSpecificatService;
+	
+	@Autowired
+	private TdBankService tdBankService;
 	
 	@RequestMapping(value="/index")
 	public String providerIndex(HttpServletRequest req,ModelMap map)
@@ -1645,6 +1650,60 @@ public class TdProviderController extends AbstractPaytypeController{
     	return "/client/provider_draw_one";
     }
     
+    /**
+     * 加载信息录入
+     * 
+     */
+    @RequestMapping(value="/draw/from")
+    public String drawFrom(Long bankId,HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	
+    	map.addAttribute("provider", tdProviderService.findByUsername(username));
+    	
+    	if(null != bankId){
+    		map.addAttribute("bank", tdBankService.findOne(bankId));
+    	}
+    	return "/client/provider_draw_from";
+    }
+    
+    /**
+     * 加载卡号信息
+     * 
+     */
+    @RequestMapping(value="/search/bank")
+    public String bankList(HttpServletRequest req,ModelMap map){
+    	String username = (String)req.getSession().getAttribute("provider");
+    	
+    	
+    	if(null != username){
+    		map.addAttribute("bankList", tdBankService.findAll(username, 3));
+    	}
+    	return "/client/provider_draw_list";
+    }
+    
+    @RequestMapping(value="/delete/bank",method =RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> deleteBank(Long bankId,HttpServletRequest req){
+    	Map<String,Object> res = new HashMap<>();
+    	res.put("code", 0);
+    	
+    	String username = (String)req.getSession().getAttribute("provider");
+    	if(null == username)
+    	{
+    		res.put("msg", "请重新登录");
+    		return res;
+    	}
+    	
+    	if(null != bankId){
+    		tdBankService.delete(bankId);
+    		res.put("code", 1);
+    	}else{
+    		res.put("msg", "参数错误");
+    	}
+    	
+    	return res;
+    }
+    
     @RequestMapping(value="/drwa2",method=RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> userDrwa(String card,Double price,
@@ -1711,11 +1770,35 @@ public class TdProviderController extends AbstractPaytypeController{
 		
 		tdCashService.save(cash);
 		
+		tdCashService.beforeCash(cash); // 提现先扣余额
+		
 		// 新加银行卡信息记录
 		provider.setBankCardCode(card);
 		provider.setBankTitle(bank);
 		provider.setBankName(name);
 		tdProviderService.save(provider);
+		
+		boolean bankUser = true;
+		List<TdBank> bankList = tdBankService.findAll(username, 3);
+		if(null != bank){
+			for (TdBank tdBank : bankList) {
+				if(null == tdBank || card.equals(tdBank.getBankCard())){
+					bankUser = false;
+				}
+			}
+		}
+		// 如果卡号为使用，添加记录
+		if(bankUser){
+			TdBank tdBank = new TdBank();
+			
+			tdBank.setUsername(username);
+			tdBank.setType(3);
+			tdBank.setBankCard(card);
+			tdBank.setBankName(bank);
+			tdBank.setName(name);
+			
+			tdBankService.save(tdBank);
+		}
 				
 		res.put("msg", "提交成功");
 		res.put("code", 1);
