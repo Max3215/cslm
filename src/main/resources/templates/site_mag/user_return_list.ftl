@@ -47,7 +47,9 @@ var theForm = document.forms['form1'];
   <div id="floatHead" class="toolbar" style="position: static; top: 42px;">
     <div class="l-list">
       <ul class="icon-list">
+        <#--
         <li><a onclick="return ExePostBack('btnVerify','通过审核后退换货将生效，是否继续？');" class="save" href="javascript:__doPostBack('btnVerify','')"><i></i><span>审核</span></a></li>
+        -->
         <li><a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a></li>
         <li><a onclick="return ExePostBack('btnDelete');" id="btnDelete" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除</span></a></li>
       </ul>

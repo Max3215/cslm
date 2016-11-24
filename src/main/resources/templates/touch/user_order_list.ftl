@@ -78,6 +78,10 @@ function orderReceive(id)
 function weixinpay(orderId){
    document.location =  "weixinpay?orderId="+orderId;
 }
+
+function getUrl(){
+       document.location = "http://www.chinacslm.cc/touch/user";
+}
 </script>
 </head>
 

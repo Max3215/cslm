@@ -114,22 +114,6 @@
                 <#case 2><span style="line-height:26px;color:red;">已拒绝</span><#break>
             </#switch>
         </#if>
-        <#--
-        <span style="display: none;">
-            <input type="radio" name="statusId" value="0" <#if !user_return?? || !user_return.statusId?? || user_return.statusId==0>checked="checked"</#if>>
-            <label>待审核</label>
-            <input type="radio" name="statusId" value="1" <#if user_return?? && user_return.statusId?? && user_return.statusId==1>checked="checked"</#if>>
-            <label>超市同意</label>
-            <input type="radio" name="statusId" value="2" <#if user_return?? && user_return.statusId?? && user_return.statusId==2>checked="checked"</#if>>
-            <label>超市拒绝</label>
-            <#if user_return.turnType?? && user_return.turnType ==2>
-                <input type="radio" name="statusId" value="3" <#if user_return?? && user_return.statusId?? && user_return.statusId==3>checked="checked"</#if>>
-                <label>分销商同意</label>
-                <input type="radio" name="statusId" value="4" <#if user_return?? && user_return.statusId?? && user_return.statusId==4>checked="checked"</#if>>
-                <label>分销商拒绝</label>
-            </#if>
-        </span>
-        -->
       </div>
     </dd>
   </dl>

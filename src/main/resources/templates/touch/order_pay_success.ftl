@@ -18,6 +18,11 @@
 <script src="/touch/js/jquery-1.9.1.min.js"></script>
 <script src="/touch/js/common.js"></script>
 
+<script>
+function getUrl(){
+       document.location = "http://www.chinacslm.cc/touch/user/order/list/0";
+}
+</script>
 </head>
 
 <body>

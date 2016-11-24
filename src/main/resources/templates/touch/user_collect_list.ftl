@@ -26,6 +26,9 @@ $(document).ready(function(){
     $('#collect_page').refresh(url,"#collect_page",0);	
 });
 
+function getUrl(){
+       document.location = "http://www.chinacslm.cc/touch/user";
+}
 </script>
 </head>
 

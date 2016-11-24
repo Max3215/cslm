@@ -131,7 +131,7 @@ public class TdTouchUserController {
     private TdPayRecordService tdPayRecordService;
     
     @RequestMapping(value = "/user")
-    public String user(HttpServletRequest req, String username, ModelMap map) {
+    public String user(HttpServletRequest req, String username, ModelMap map,Integer app) {
     	if (null == username) {
     		username = (String) req.getSession().getAttribute("username");
             if (null == username)
@@ -173,6 +173,18 @@ public class TdTouchUserController {
         {
         	map.addAttribute("total_finished",total_finished);
         }
+        
+        Integer isApp = (Integer) req.getSession().getAttribute("app");
+        if (null == isApp) {
+        	// app标志位
+            if (null != app) {
+            	map.addAttribute("app", app);
+            	req.getSession().setAttribute("app", app);
+            	if(app == 1){
+            		req.getSession().setAttribute("isIOS", true);
+            	}
+    		}
+		}
         return "/touch/user_index";
     }
     

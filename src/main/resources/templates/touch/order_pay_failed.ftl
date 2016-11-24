@@ -18,6 +18,9 @@
 $(document).ready(function(){
   
 });
+function getUrl(){
+       document.location = "http://www.chinacslm.cc/touch/user/order/list/0";
+}
 </script>
 <style>
 .zhifushibai{background:}

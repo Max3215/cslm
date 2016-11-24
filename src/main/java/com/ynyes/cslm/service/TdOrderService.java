@@ -364,7 +364,7 @@ public class TdOrderService {
     
     public Page<TdOrder> findByShopIdAndGoodId(Long shopId,Long gid,int page,int size)
     {
-    	PageRequest pageRequest = new PageRequest(page, size);
+    	PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC, "orderTime"));
     	return repository.findByShopIdAndGoodsId(shopId, gid,pageRequest);
     }
     

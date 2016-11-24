@@ -2419,9 +2419,6 @@ public class TdDistributorController extends AbstractPaytypeController{
         		 // 是否退货
         		 orderGoods.setIsReturnApplied(false);
         		 
-        		 // 销售方式
-//			orderGoods.setGoodsSaleType(goodsSaleType);
-        		 
         		 // 批发价
         		 orderGoods.setPrice(providerGoods.getOutFactoryPrice());
         		 
@@ -2473,6 +2470,7 @@ public class TdDistributorController extends AbstractPaytypeController{
 
              // 基本信息
              tdOrder.setUsername(username);
+             tdOrder.setMobile(distributor.getMobile());
              tdOrder.setOrderTime(current);
              tdOrder.setShopId(provider.getId());
              tdOrder.setShopTitle(provider.getTitle());
@@ -2608,7 +2606,6 @@ public class TdDistributorController extends AbstractPaytypeController{
 		// 删除已生成订单的购物车项
         tdCartGoodsService.delete(cartSelectedGoodsList);
         
-//    	return "redirect:/distributor/inOrder/list/0";
         res.put("msg", "提交成功！");
         res.put("code", 1);
         return res;

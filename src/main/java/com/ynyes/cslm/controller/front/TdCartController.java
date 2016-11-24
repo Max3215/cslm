@@ -598,6 +598,7 @@ public class TdCartController {
     		if(null != cartLisst && cartLisst.size() != 0){
     			// 购物车已有
              	cartLisst.get(0).setQuantity(quantity);
+             	cartLisst.get(0).setIsSelected(true);;
              	tdCartGoodsService.save(cartLisst.get(0));
     		}else{
     			// 购物车没有此（规格）商品

@@ -107,7 +107,7 @@ public class TdUserCommentService {
             return null;
         }
         
-        PageRequest pageRequest = new PageRequest(page, size);
+        PageRequest pageRequest = new PageRequest(page, size,new Sort(Direction.DESC,"commentTime"));
         
         return repository.findByGoodsIdAndStatusIdOrderByIdDesc(goodsId, 1L, pageRequest);
     }

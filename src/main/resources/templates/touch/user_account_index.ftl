@@ -21,13 +21,17 @@
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
 });
+
+function getUrl(){
+       document.location = "http://www.chinacslm.cc/touch/user";
+}
 </script>
 </head>
 
 <body>
 	<!-- 顶部 -->
 	<header class="com_top">
-		<a href="javascript:history.go(-1);" class="back"></a>
+		<a href="/touch/use" class="back"></a>
 		<p>账户安全</p>
 		<a href="/touch" class="c_home"></a>
 	</header>

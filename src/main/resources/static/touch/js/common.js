@@ -230,7 +230,4 @@ function listInfeedMove(boxid,_sum,_name,_num){
 }
 
 
-function getUrl(){
-	   document.location = "http://www.chinacslm.cc/touch";
-}
 

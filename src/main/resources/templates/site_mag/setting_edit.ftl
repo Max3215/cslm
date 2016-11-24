@@ -289,7 +289,7 @@ $(function () {
             </dd>
         </dl>
          <dl>
-            <dt>售后QQ（一）</dt>
+            <dt>售后QQ（四）</dt>
             <dd>
                 <input name="qq4" type="text" value="<#if setting??>${setting.qq4!""}</#if>" class="input normal" datatype="n0-100" sucmsg=" ">
                 <span class="Validform_checktip"></span>

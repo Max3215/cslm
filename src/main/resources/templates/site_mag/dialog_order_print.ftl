@@ -111,7 +111,7 @@
                         </#if>
                         <tr>
                             <td width="44%">会员账户：
-                                ${order.username}
+                                ${order.username}（注册手机：${order.mobile!''}）
                             </td>
                             </td>
                             <td width="56%">姓名：${order.shippingName!''}<br>                          

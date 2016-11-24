@@ -262,8 +262,15 @@ public class TdTouchOrderController {
 
       //判断是否为app链接
         Integer isApp = (Integer) req.getSession().getAttribute("app");
-        if (null != isApp) {
-        	map.addAttribute("app", isApp);
+        if (null == isApp) {
+        	// app标志位
+            if (null != app) {
+            	map.addAttribute("app", app);
+            	req.getSession().setAttribute("app", app);
+            	if(app == 1){
+            		req.getSession().setAttribute("isIOS", true);
+            	}
+    		}
 		}
         
         return "/touch/order_info";
@@ -439,7 +446,7 @@ public class TdTouchOrderController {
         
        
         if(null == cartGoodsMap || cartGoodsMap.size() <= 0){
-        	return "//touch/error_404";
+        	return "/touch/error_404";
         }
         
         if(null != payTypeId && payTypeId ==0)
@@ -640,7 +647,6 @@ public class TdTouchOrderController {
 				Double aliPrice = 0.0; // 第三方使用费
 				Double postPrice = 0.0;// 配送费
 				Double totalPrice = 0.0;// 订单总价
-//				double point_price = 0.0; // 积分抵消金额
 				Double servicePrice = 0.0;// 平台服务费
 				
 				// order= new TdOrder();
@@ -651,6 +657,7 @@ public class TdTouchOrderController {
 
 				// 基本信息
 				tdOrder.setUsername(user.getUsername());
+				tdOrder.setMobile(user.getMobile());
 				tdOrder.setOrderTime(current);
 
 				// 发货信息
@@ -702,14 +709,10 @@ public class TdTouchOrderController {
 				// 积分奖励
 				tdOrder.setPoints(disPointReturn);
 
-				// 保存订单商品及订单
-				// tdOrderGoodsService.save(orderGoodsList);
-
 				// 添加订单超市信息
 				tdOrder.setShopId(distributor.getId());
 				tdOrder.setShopTitle(distributor.getTitle());
 
-				// if(null != type && type.equals("pro")){
 
 				tdOrder.setDeliveryMethod(deliveryType); // 配送方式 0、送货上门 1、门店自提
 				List<Long> list = tdCartGoodsService.countByDistributorId(username);
@@ -720,7 +723,6 @@ public class TdTouchOrderController {
 					{
 						// 使用积分
 						tdOrder.setPointUse(pointUse);
-//						point_price = (double)pointUse/point_limt;
 						
 						TdShippingAddress shippingAddress = tdShippingAddressService.findOne(shipAddressId);
 						if (null != shippingAddress) {
@@ -856,7 +858,6 @@ public class TdTouchOrderController {
 				Double aliPrice = 0.0; // 第三方使用费
 				Double postPrice = 0.0;// 配送费
 				Double totalPrice = 0.0;// 订单总价
-//				double point_price = 0.0; // 积分抵消金额
 				Double servicePrice = 0.0;// 平台服务费
 
 				order = new TdOrder();
@@ -867,6 +868,7 @@ public class TdTouchOrderController {
 
 				// 基本信息
 				order.setUsername(user.getUsername());
+				order.setMobile(user.getMobile());
 				order.setOrderTime(current);
 
 				// 发货信息
@@ -915,14 +917,10 @@ public class TdTouchOrderController {
 				// 粮草奖励
 				order.setPoints(totalPointReturn);
 
-				// 保存订单商品及订单
-				// tdOrderGoodsService.save(orderGoodsList);
-
 				// 添加订单超市信息
 				order.setShopId(distributor.getId());
 				order.setShopTitle(distributor.getTitle());
 
-				// if(null != type && type.equals("pro")){
 
 				order.setDeliveryMethod(deliveryType); // 配送方式 0、送货上门 1、门店自提
 				List<Long> list = tdCartGoodsService.countByDistributorId(username);
@@ -933,7 +931,6 @@ public class TdTouchOrderController {
 					{
 						// 使用积分
 						order.setPointUse(pointUse);
-//						point_price = (double)pointUse/point_limt;
 						
 						TdShippingAddress shippingAddress = tdShippingAddressService.findOne(shipAddressId);
 						if (null != shippingAddress) {
@@ -996,7 +993,6 @@ public class TdTouchOrderController {
 
 				// 订单商品
 				order.setOrderGoodsList(orderGoodsList);
-//				order.setTotalGoodsPrice(totalGoodsPrice);
 
 				tdOrderGoodsService.save(orderGoodsList);
 				order.setOrderNumber("P" + curStr + leftPad(Integer.toString(random.nextInt(999)), 3, "0"));
@@ -1072,31 +1068,8 @@ public class TdTouchOrderController {
         	return "redirect:/touch/user/order?id="+order.getId();
         }
          return "redirect:/touch/order/pay?orderId=" + order.getId();
-        // return "redirect:/order/success?orderId=" + tdOrder.getId();
     }
     
-//	public void pointUse(TdOrder order,String username){
-//		TdUser user = tdUserService.findByUsername(username);
-//		if(null != user){
-//			if (null == user.getTotalPoints())
-//			 {
-//				 user.setTotalPoints(0L);
-//				 user = tdUserService.save(user);
-//			 }
-//			 TdUserPoint userPoint = new TdUserPoint();
-//			 userPoint.setDetail("购买商品积分抵现");
-//			 userPoint.setOrderNumber(order.getOrderNumber());
-//			 userPoint.setPoint(order.getPointUse());
-//			 userPoint.setPointTime(new Date());
-//			 userPoint.setUsername(username);
-//			 userPoint.setTotalPoint(user.getTotalPoints() - order.getPointUse());
-//			 tdUserPointService.save(userPoint);
-//			
-//			 user.setTotalPoints(user.getTotalPoints() - order.getPointUse());
-//			 tdUserService.save(user);
-//		}
-//		
-//	}
 	
     
     /**

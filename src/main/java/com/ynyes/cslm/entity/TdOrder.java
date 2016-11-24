@@ -198,6 +198,10 @@ public class TdOrder {
     @Column
     private String username;
     
+    // 会员手机号
+    @Column
+    private String mobile;
+    
     // 发货时间
     @Column
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -576,7 +580,15 @@ public class TdOrder {
         this.username = username;
     }
 
-    public String getExpressCampany() {
+    public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getExpressCampany() {
         return expressCampany;
     }
 

@@ -21,6 +21,10 @@
 $(document).ready(function(){
 	//indexBanner("box","sum",300,5000,"num");//Banner
 });
+
+function getUrl(){
+       document.location = "http://www.chinacslm.cc/touch";
+}
 </script>
 </head>
 

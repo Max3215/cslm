@@ -22,6 +22,10 @@ $(document).ready(function(){
 function weixinpay(orderId){
    document.location =  "weixinpay?orderId="+orderId;
 }
+
+function getUrl(){
+       document.location = "http://www.chinacslm.cc/touch/user/order/list/0";
+}
 </script>
 </head>
 

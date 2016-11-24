@@ -591,6 +591,7 @@ public class TdOrderController extends AbstractPaytypeController {
 
 				// 基本信息
 				tdOrder.setUsername(user.getUsername());
+				tdOrder.setMobile(user.getMobile());
 				tdOrder.setOrderTime(current);
 
 				// 发货信息
@@ -803,6 +804,7 @@ public class TdOrderController extends AbstractPaytypeController {
 
 				// 基本信息
 				order.setUsername(user.getUsername());
+				order.setMobile(user.getMobile());
 				order.setOrderTime(current);
 
 				// 发货信息
